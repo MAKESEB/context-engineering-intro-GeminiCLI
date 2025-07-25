@@ -1,0 +1,1916 @@
+{
+  "rev": 10,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.ApplicationAccessKey"
+      ]
+    },
+    "baseUrl": "https://api.appsheet.com/api/v2/apps/{{connection.appId}}/tables",
+    "headers": {
+      "ApplicationAccessKey": "{{connection.apiKey}}"
+    },
+    "response": {
+      "error": {
+        "message": "[{{statusCode}}] {{body.message || body.Message}}."
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "appsheet",
+  "_rpcs": {
+    "locales": {
+      "api": {
+        "response": {
+          "output": [
+            {
+              "label": "af-ZA",
+              "value": "af-ZA"
+            },
+            {
+              "label": "am-ET",
+              "value": "am-ET"
+            },
+            {
+              "label": "ar-AE",
+              "value": "ar-AE"
+            },
+            {
+              "label": "ar-BH",
+              "value": "ar-BH"
+            },
+            {
+              "label": "ar-DZ",
+              "value": "ar-DZ"
+            },
+            {
+              "label": "ar-EG",
+              "value": "ar-EG"
+            },
+            {
+              "label": "ar-IQ",
+              "value": "ar-IQ"
+            },
+            {
+              "label": "ar-JO",
+              "value": "ar-JO"
+            },
+            {
+              "label": "ar-KW",
+              "value": "ar-KW"
+            },
+            {
+              "label": "ar-LB",
+              "value": "ar-LB"
+            },
+            {
+              "label": "ar-LY",
+              "value": "ar-LY"
+            },
+            {
+              "label": "ar-MA",
+              "value": "ar-MA"
+            },
+            {
+              "label": "arn-CL",
+              "value": "arn-CL"
+            },
+            {
+              "label": "ar-OM",
+              "value": "ar-OM"
+            },
+            {
+              "label": "ar-QA",
+              "value": "ar-QA"
+            },
+            {
+              "label": "ar-SA",
+              "value": "ar-SA"
+            },
+            {
+              "label": "ar-SY",
+              "value": "ar-SY"
+            },
+            {
+              "label": "ar-TN",
+              "value": "ar-TN"
+            },
+            {
+              "label": "ar-YE",
+              "value": "ar-YE"
+            },
+            {
+              "label": "as-IN",
+              "value": "as-IN"
+            },
+            {
+              "label": "az-Cyrl-AZ",
+              "value": "az-Cyrl-AZ"
+            },
+            {
+              "label": "az-Latn-AZ",
+              "value": "az-Latn-AZ"
+            },
+            {
+              "label": "ba-RU",
+              "value": "ba-RU"
+            },
+            {
+              "label": "be-BY",
+              "value": "be-BY"
+            },
+            {
+              "label": "bg-BG",
+              "value": "bg-BG"
+            },
+            {
+              "label": "bn-BD",
+              "value": "bn-BD"
+            },
+            {
+              "label": "bn-IN",
+              "value": "bn-IN"
+            },
+            {
+              "label": "bo-CN",
+              "value": "bo-CN"
+            },
+            {
+              "label": "br-FR",
+              "value": "br-FR"
+            },
+            {
+              "label": "bs-Cyrl-BA",
+              "value": "bs-Cyrl-BA"
+            },
+            {
+              "label": "bs-Latn-BA",
+              "value": "bs-Latn-BA"
+            },
+            {
+              "label": "ca-ES",
+              "value": "ca-ES"
+            },
+            {
+              "label": "co-FR",
+              "value": "co-FR"
+            },
+            {
+              "label": "cs-CZ",
+              "value": "cs-CZ"
+            },
+            {
+              "label": "cy-GB",
+              "value": "cy-GB"
+            },
+            {
+              "label": "da-DK",
+              "value": "da-DK"
+            },
+            {
+              "label": "de-AT",
+              "value": "de-AT"
+            },
+            {
+              "label": "de-CH",
+              "value": "de-CH"
+            },
+            {
+              "label": "de-DE",
+              "value": "de-DE"
+            },
+            {
+              "label": "de-LI",
+              "value": "de-LI"
+            },
+            {
+              "label": "de-LU",
+              "value": "de-LU"
+            },
+            {
+              "label": "dsb-DE",
+              "value": "dsb-DE"
+            },
+            {
+              "label": "dv-MV",
+              "value": "dv-MV"
+            },
+            {
+              "label": "el-GR",
+              "value": "el-GR"
+            },
+            {
+              "label": "en-029",
+              "value": "en-029"
+            },
+            {
+              "label": "en-AU",
+              "value": "en-AU"
+            },
+            {
+              "label": "en-BZ",
+              "value": "en-BZ"
+            },
+            {
+              "label": "en-CA",
+              "value": "en-CA"
+            },
+            {
+              "label": "en-GB",
+              "value": "en-GB"
+            },
+            {
+              "label": "en-IE",
+              "value": "en-IE"
+            },
+            {
+              "label": "en-IN",
+              "value": "en-IN"
+            },
+            {
+              "label": "en-JM",
+              "value": "en-JM"
+            },
+            {
+              "label": "en-MY",
+              "value": "en-MY"
+            },
+            {
+              "label": "en-NZ",
+              "value": "en-NZ"
+            },
+            {
+              "label": "en-PH",
+              "value": "en-PH"
+            },
+            {
+              "label": "en-SG",
+              "value": "en-SG"
+            },
+            {
+              "label": "en-TT",
+              "value": "en-TT"
+            },
+            {
+              "label": "en-US",
+              "value": "en-US"
+            },
+            {
+              "label": "en-ZA",
+              "value": "en-ZA"
+            },
+            {
+              "label": "en-ZW",
+              "value": "en-ZW"
+            },
+            {
+              "label": "es-AR",
+              "value": "es-AR"
+            },
+            {
+              "label": "es-BO",
+              "value": "es-BO"
+            },
+            {
+              "label": "es-CL",
+              "value": "es-CL"
+            },
+            {
+              "label": "es-CO",
+              "value": "es-CO"
+            },
+            {
+              "label": "es-CR",
+              "value": "es-CR"
+            },
+            {
+              "label": "es-DO",
+              "value": "es-DO"
+            },
+            {
+              "label": "es-EC",
+              "value": "es-EC"
+            },
+            {
+              "label": "es-ES",
+              "value": "es-ES"
+            },
+            {
+              "label": "es-GT",
+              "value": "es-GT"
+            },
+            {
+              "label": "es-HN",
+              "value": "es-HN"
+            },
+            {
+              "label": "es-MX",
+              "value": "es-MX"
+            },
+            {
+              "label": "es-NI",
+              "value": "es-NI"
+            },
+            {
+              "label": "es-PA",
+              "value": "es-PA"
+            },
+            {
+              "label": "es-PE",
+              "value": "es-PE"
+            },
+            {
+              "label": "es-PR",
+              "value": "es-PR"
+            },
+            {
+              "label": "es-PY",
+              "value": "es-PY"
+            },
+            {
+              "label": "es-SV",
+              "value": "es-SV"
+            },
+            {
+              "label": "es-US",
+              "value": "es-US"
+            },
+            {
+              "label": "es-UY",
+              "value": "es-UY"
+            },
+            {
+              "label": "es-VE",
+              "value": "es-VE"
+            },
+            {
+              "label": "et-EE",
+              "value": "et-EE"
+            },
+            {
+              "label": "eu-ES",
+              "value": "eu-ES"
+            },
+            {
+              "label": "fa-IR",
+              "value": "fa-IR"
+            },
+            {
+              "label": "fi-FI",
+              "value": "fi-FI"
+            },
+            {
+              "label": "fil-PH",
+              "value": "fil-PH"
+            },
+            {
+              "label": "fo-FO",
+              "value": "fo-FO"
+            },
+            {
+              "label": "fr-BE",
+              "value": "fr-BE"
+            },
+            {
+              "label": "fr-CA",
+              "value": "fr-CA"
+            },
+            {
+              "label": "fr-CH",
+              "value": "fr-CH"
+            },
+            {
+              "label": "fr-FR",
+              "value": "fr-FR"
+            },
+            {
+              "label": "fr-LU",
+              "value": "fr-LU"
+            },
+            {
+              "label": "fr-MC",
+              "value": "fr-MC"
+            },
+            {
+              "label": "fy-NL",
+              "value": "fy-NL"
+            },
+            {
+              "label": "ga-IE",
+              "value": "ga-IE"
+            },
+            {
+              "label": "gd-GB",
+              "value": "gd-GB"
+            },
+            {
+              "label": "gl-ES",
+              "value": "gl-ES"
+            },
+            {
+              "label": "gsw-FR",
+              "value": "gsw-FR"
+            },
+            {
+              "label": "gu-IN",
+              "value": "gu-IN"
+            },
+            {
+              "label": "ha-Latn-NG",
+              "value": "ha-Latn-NG"
+            },
+            {
+              "label": "he-IL",
+              "value": "he-IL"
+            },
+            {
+              "label": "hi-IN",
+              "value": "hi-IN"
+            },
+            {
+              "label": "hr-BA",
+              "value": "hr-BA"
+            },
+            {
+              "label": "hr-HR",
+              "value": "hr-HR"
+            },
+            {
+              "label": "hsb-DE",
+              "value": "hsb-DE"
+            },
+            {
+              "label": "hu-HU",
+              "value": "hu-HU"
+            },
+            {
+              "label": "hy-AM",
+              "value": "hy-AM"
+            },
+            {
+              "label": "id-ID",
+              "value": "id-ID"
+            },
+            {
+              "label": "ig-NG",
+              "value": "ig-NG"
+            },
+            {
+              "label": "ii-CN",
+              "value": "ii-CN"
+            },
+            {
+              "label": "is-IS",
+              "value": "is-IS"
+            },
+            {
+              "label": "it-CH",
+              "value": "it-CH"
+            },
+            {
+              "label": "it-IT",
+              "value": "it-IT"
+            },
+            {
+              "label": "iu-Cans-CA",
+              "value": "iu-Cans-CA"
+            },
+            {
+              "label": "iu-Latn-CA",
+              "value": "iu-Latn-CA"
+            },
+            {
+              "label": "ja-JP",
+              "value": "ja-JP"
+            },
+            {
+              "label": "ka-GE",
+              "value": "ka-GE"
+            },
+            {
+              "label": "kk-KZ",
+              "value": "kk-KZ"
+            },
+            {
+              "label": "kl-GL",
+              "value": "kl-GL"
+            },
+            {
+              "label": "km-KH",
+              "value": "km-KH"
+            },
+            {
+              "label": "kn-IN",
+              "value": "kn-IN"
+            },
+            {
+              "label": "kok-IN",
+              "value": "kok-IN"
+            },
+            {
+              "label": "ko-KR",
+              "value": "ko-KR"
+            },
+            {
+              "label": "ky-KG",
+              "value": "ky-KG"
+            },
+            {
+              "label": "lb-LU",
+              "value": "lb-LU"
+            },
+            {
+              "label": "lo-LA",
+              "value": "lo-LA"
+            },
+            {
+              "label": "lt-LT",
+              "value": "lt-LT"
+            },
+            {
+              "label": "lv-LV",
+              "value": "lv-LV"
+            },
+            {
+              "label": "mi-NZ",
+              "value": "mi-NZ"
+            },
+            {
+              "label": "mk-MK",
+              "value": "mk-MK"
+            },
+            {
+              "label": "ml-IN",
+              "value": "ml-IN"
+            },
+            {
+              "label": "mn-MN",
+              "value": "mn-MN"
+            },
+            {
+              "label": "mn-Mong-CN",
+              "value": "mn-Mong-CN"
+            },
+            {
+              "label": "moh-CA",
+              "value": "moh-CA"
+            },
+            {
+              "label": "mr-IN",
+              "value": "mr-IN"
+            },
+            {
+              "label": "ms-BN",
+              "value": "ms-BN"
+            },
+            {
+              "label": "ms-MY",
+              "value": "ms-MY"
+            },
+            {
+              "label": "mt-MT",
+              "value": "mt-MT"
+            },
+            {
+              "label": "nb-NO",
+              "value": "nb-NO"
+            },
+            {
+              "label": "ne-NP",
+              "value": "ne-NP"
+            },
+            {
+              "label": "nl-BE",
+              "value": "nl-BE"
+            },
+            {
+              "label": "nl-NL",
+              "value": "nl-NL"
+            },
+            {
+              "label": "nn-NO",
+              "value": "nn-NO"
+            },
+            {
+              "label": "nso-ZA",
+              "value": "nso-ZA"
+            },
+            {
+              "label": "oc-FR",
+              "value": "oc-FR"
+            },
+            {
+              "label": "or-IN",
+              "value": "or-IN"
+            },
+            {
+              "label": "pa-IN",
+              "value": "pa-IN"
+            },
+            {
+              "label": "pl-PL",
+              "value": "pl-PL"
+            },
+            {
+              "label": "prs-AF",
+              "value": "prs-AF"
+            },
+            {
+              "label": "ps-AF",
+              "value": "ps-AF"
+            },
+            {
+              "label": "pt-BR",
+              "value": "pt-BR"
+            },
+            {
+              "label": "pt-PT",
+              "value": "pt-PT"
+            },
+            {
+              "label": "qut-GT",
+              "value": "qut-GT"
+            },
+            {
+              "label": "quz-BO",
+              "value": "quz-BO"
+            },
+            {
+              "label": "quz-EC",
+              "value": "quz-EC"
+            },
+            {
+              "label": "quz-PE",
+              "value": "quz-PE"
+            },
+            {
+              "label": "rm-CH",
+              "value": "rm-CH"
+            },
+            {
+              "label": "ro-RO",
+              "value": "ro-RO"
+            },
+            {
+              "label": "ru-RU",
+              "value": "ru-RU"
+            },
+            {
+              "label": "rw-RW",
+              "value": "rw-RW"
+            },
+            {
+              "label": "sah-RU",
+              "value": "sah-RU"
+            },
+            {
+              "label": "sa-IN",
+              "value": "sa-IN"
+            },
+            {
+              "label": "se-FI",
+              "value": "se-FI"
+            },
+            {
+              "label": "se-NO",
+              "value": "se-NO"
+            },
+            {
+              "label": "se-SE",
+              "value": "se-SE"
+            },
+            {
+              "label": "si-LK",
+              "value": "si-LK"
+            },
+            {
+              "label": "sk-SK",
+              "value": "sk-SK"
+            },
+            {
+              "label": "sl-SI",
+              "value": "sl-SI"
+            },
+            {
+              "label": "sma-NO",
+              "value": "sma-NO"
+            },
+            {
+              "label": "sma-SE",
+              "value": "sma-SE"
+            },
+            {
+              "label": "smj-NO",
+              "value": "smj-NO"
+            },
+            {
+              "label": "smj-SE",
+              "value": "smj-SE"
+            },
+            {
+              "label": "smn-FI",
+              "value": "smn-FI"
+            },
+            {
+              "label": "sms-FI",
+              "value": "sms-FI"
+            },
+            {
+              "label": "sq-AL",
+              "value": "sq-AL"
+            },
+            {
+              "label": "sr-Cyrl-BA",
+              "value": "sr-Cyrl-BA"
+            },
+            {
+              "label": "sr-Cyrl-CS",
+              "value": "sr-Cyrl-CS"
+            },
+            {
+              "label": "sr-Cyrl-ME",
+              "value": "sr-Cyrl-ME"
+            },
+            {
+              "label": "sr-Cyrl-RS",
+              "value": "sr-Cyrl-RS"
+            },
+            {
+              "label": "sr-Latn-BA",
+              "value": "sr-Latn-BA"
+            },
+            {
+              "label": "sr-Latn-CS",
+              "value": "sr-Latn-CS"
+            },
+            {
+              "label": "sr-Latn-ME",
+              "value": "sr-Latn-ME"
+            },
+            {
+              "label": "sr-Latn-RS",
+              "value": "sr-Latn-RS"
+            },
+            {
+              "label": "sv-FI",
+              "value": "sv-FI"
+            },
+            {
+              "label": "sv-SE",
+              "value": "sv-SE"
+            },
+            {
+              "label": "sw-KE",
+              "value": "sw-KE"
+            },
+            {
+              "label": "syr-SY",
+              "value": "syr-SY"
+            },
+            {
+              "label": "ta-IN",
+              "value": "ta-IN"
+            },
+            {
+              "label": "te-IN",
+              "value": "te-IN"
+            },
+            {
+              "label": "tg-Cyrl-TJ",
+              "value": "tg-Cyrl-TJ"
+            },
+            {
+              "label": "th-TH",
+              "value": "th-TH"
+            },
+            {
+              "label": "tk-TM",
+              "value": "tk-TM"
+            },
+            {
+              "label": "tn-ZA",
+              "value": "tn-ZA"
+            },
+            {
+              "label": "tr-TR",
+              "value": "tr-TR"
+            },
+            {
+              "label": "tt-RU",
+              "value": "tt-RU"
+            },
+            {
+              "label": "tzm-Latn-DZ",
+              "value": "tzm-Latn-DZ"
+            },
+            {
+              "label": "ug-CN",
+              "value": "ug-CN"
+            },
+            {
+              "label": "uk-UA",
+              "value": "uk-UA"
+            },
+            {
+              "label": "ur-PK",
+              "value": "ur-PK"
+            },
+            {
+              "label": "uz-Cyrl-UZ",
+              "value": "uz-Cyrl-UZ"
+            },
+            {
+              "label": "uz-Latn-UZ",
+              "value": "uz-Latn-UZ"
+            },
+            {
+              "label": "vi-VN",
+              "value": "vi-VN"
+            },
+            {
+              "label": "wo-SN",
+              "value": "wo-SN"
+            },
+            {
+              "label": "xh-ZA",
+              "value": "xh-ZA"
+            },
+            {
+              "label": "yo-NG",
+              "value": "yo-NG"
+            },
+            {
+              "label": "zh-CN",
+              "value": "zh-CN"
+            },
+            {
+              "label": "zh-HK",
+              "value": "zh-HK"
+            },
+            {
+              "label": "zh-MO",
+              "value": "zh-MO"
+            },
+            {
+              "label": "zh-SG",
+              "value": "zh-SG"
+            },
+            {
+              "label": "zh-TW",
+              "value": "zh-TW"
+            },
+            {
+              "label": "zu-ZA",
+              "value": "zu-ZA"
+            }
+          ]
+        }
+      },
+      "rev": 3,
+      "name": "locales",
+      "label": "Locales",
+      "appName": "appsheet",
+      "apiJsonc": "{\n    \"response\": {\n        \"output\": [\n            {\n                \"label\": \"af-ZA\",\n                \"value\": \"af-ZA\"\n            },\n            {\n                \"label\": \"am-ET\",\n                \"value\": \"am-ET\"\n            },\n            {\n                \"label\": \"ar-AE\",\n                \"value\": \"ar-AE\"\n            },\n            {\n                \"label\": \"ar-BH\",\n                \"value\": \"ar-BH\"\n            },\n            {\n                \"label\": \"ar-DZ\",\n                \"value\": \"ar-DZ\"\n            },\n            {\n                \"label\": \"ar-EG\",\n                \"value\": \"ar-EG\"\n            },\n            {\n                \"label\": \"ar-IQ\",\n                \"value\": \"ar-IQ\"\n            },\n            {\n                \"label\": \"ar-JO\",\n                \"value\": \"ar-JO\"\n            },\n            {\n                \"label\": \"ar-KW\",\n                \"value\": \"ar-KW\"\n            },\n            {\n                \"label\": \"ar-LB\",\n                \"value\": \"ar-LB\"\n            },\n            {\n                \"label\": \"ar-LY\",\n                \"value\": \"ar-LY\"\n            },\n            {\n                \"label\": \"ar-MA\",\n                \"value\": \"ar-MA\"\n            },\n            {\n                \"label\": \"arn-CL\",\n                \"value\": \"arn-CL\"\n            },\n            {\n                \"label\": \"ar-OM\",\n                \"value\": \"ar-OM\"\n            },\n            {\n                \"label\": \"ar-QA\",\n                \"value\": \"ar-QA\"\n            },\n            {\n                \"label\": \"ar-SA\",\n                \"value\": \"ar-SA\"\n            },\n            {\n                \"label\": \"ar-SY\",\n                \"value\": \"ar-SY\"\n            },\n            {\n                \"label\": \"ar-TN\",\n                \"value\": \"ar-TN\"\n            },\n            {\n                \"label\": \"ar-YE\",\n                \"value\": \"ar-YE\"\n            },\n            {\n                \"label\": \"as-IN\",\n                \"value\": \"as-IN\"\n            },\n            {\n                \"label\": \"az-Cyrl-AZ\",\n                \"value\": \"az-Cyrl-AZ\"\n            },\n            {\n                \"label\": \"az-Latn-AZ\",\n                \"value\": \"az-Latn-AZ\"\n            },\n            {\n                \"label\": \"ba-RU\",\n                \"value\": \"ba-RU\"\n            },\n            {\n                \"label\": \"be-BY\",\n                \"value\": \"be-BY\"\n            },\n            {\n                \"label\": \"bg-BG\",\n                \"value\": \"bg-BG\"\n            },\n            {\n                \"label\": \"bn-BD\",\n                \"value\": \"bn-BD\"\n            },\n            {\n                \"label\": \"bn-IN\",\n                \"value\": \"bn-IN\"\n            },\n            {\n                \"label\": \"bo-CN\",\n                \"value\": \"bo-CN\"\n            },\n            {\n                \"label\": \"br-FR\",\n                \"value\": \"br-FR\"\n            },\n            {\n                \"label\": \"bs-Cyrl-BA\",\n                \"value\": \"bs-Cyrl-BA\"\n            },\n            {\n                \"label\": \"bs-Latn-BA\",\n                \"value\": \"bs-Latn-BA\"\n            },\n            {\n                \"label\": \"ca-ES\",\n                \"value\": \"ca-ES\"\n            },\n            {\n                \"label\": \"co-FR\",\n                \"value\": \"co-FR\"\n            },\n            {\n                \"label\": \"cs-CZ\",\n                \"value\": \"cs-CZ\"\n            },\n            {\n                \"label\": \"cy-GB\",\n                \"value\": \"cy-GB\"\n            },\n            {\n                \"label\": \"da-DK\",\n                \"value\": \"da-DK\"\n            },\n            {\n                \"label\": \"de-AT\",\n                \"value\": \"de-AT\"\n            },\n            {\n                \"label\": \"de-CH\",\n                \"value\": \"de-CH\"\n            },\n            {\n                \"label\": \"de-DE\",\n                \"value\": \"de-DE\"\n            },\n            {\n                \"label\": \"de-LI\",\n                \"value\": \"de-LI\"\n            },\n            {\n                \"label\": \"de-LU\",\n                \"value\": \"de-LU\"\n            },\n            {\n                \"label\": \"dsb-DE\",\n                \"value\": \"dsb-DE\"\n            },\n            {\n                \"label\": \"dv-MV\",\n                \"value\": \"dv-MV\"\n            },\n            {\n                \"label\": \"el-GR\",\n                \"value\": \"el-GR\"\n            },\n            {\n                \"label\": \"en-029\",\n                \"value\": \"en-029\"\n            },\n            {\n                \"label\": \"en-AU\",\n                \"value\": \"en-AU\"\n            },\n            {\n                \"label\": \"en-BZ\",\n                \"value\": \"en-BZ\"\n            },\n            {\n                \"label\": \"en-CA\",\n                \"value\": \"en-CA\"\n            },\n            {\n                \"label\": \"en-GB\",\n                \"value\": \"en-GB\"\n            },\n            {\n                \"label\": \"en-IE\",\n                \"value\": \"en-IE\"\n            },\n            {\n                \"label\": \"en-IN\",\n                \"value\": \"en-IN\"\n            },\n            {\n                \"label\": \"en-JM\",\n                \"value\": \"en-JM\"\n            },\n            {\n                \"label\": \"en-MY\",\n                \"value\": \"en-MY\"\n            },\n            {\n                \"label\": \"en-NZ\",\n                \"value\": \"en-NZ\"\n            },\n            {\n                \"label\": \"en-PH\",\n                \"value\": \"en-PH\"\n            },\n            {\n                \"label\": \"en-SG\",\n                \"value\": \"en-SG\"\n            },\n            {\n                \"label\": \"en-TT\",\n                \"value\": \"en-TT\"\n            },\n            {\n                \"label\": \"en-US\",\n                \"value\": \"en-US\"\n            },\n            {\n                \"label\": \"en-ZA\",\n                \"value\": \"en-ZA\"\n            },\n            {\n                \"label\": \"en-ZW\",\n                \"value\": \"en-ZW\"\n            },\n            {\n                \"label\": \"es-AR\",\n                \"value\": \"es-AR\"\n            },\n            {\n                \"label\": \"es-BO\",\n                \"value\": \"es-BO\"\n            },\n            {\n                \"label\": \"es-CL\",\n                \"value\": \"es-CL\"\n            },\n            {\n                \"label\": \"es-CO\",\n                \"value\": \"es-CO\"\n            },\n            {\n                \"label\": \"es-CR\",\n                \"value\": \"es-CR\"\n            },\n            {\n                \"label\": \"es-DO\",\n                \"value\": \"es-DO\"\n            },\n            {\n                \"label\": \"es-EC\",\n                \"value\": \"es-EC\"\n            },\n            {\n                \"label\": \"es-ES\",\n                \"value\": \"es-ES\"\n            },\n            {\n                \"label\": \"es-GT\",\n                \"value\": \"es-GT\"\n            },\n            {\n                \"label\": \"es-HN\",\n                \"value\": \"es-HN\"\n            },\n            {\n                \"label\": \"es-MX\",\n                \"value\": \"es-MX\"\n            },\n            {\n                \"label\": \"es-NI\",\n                \"value\": \"es-NI\"\n            },\n            {\n                \"label\": \"es-PA\",\n                \"value\": \"es-PA\"\n            },\n            {\n                \"label\": \"es-PE\",\n                \"value\": \"es-PE\"\n            },\n            {\n                \"label\": \"es-PR\",\n                \"value\": \"es-PR\"\n            },\n            {\n                \"label\": \"es-PY\",\n                \"value\": \"es-PY\"\n            },\n            {\n                \"label\": \"es-SV\",\n                \"value\": \"es-SV\"\n            },\n            {\n                \"label\": \"es-US\",\n                \"value\": \"es-US\"\n            },\n            {\n                \"label\": \"es-UY\",\n                \"value\": \"es-UY\"\n            },\n            {\n                \"label\": \"es-VE\",\n                \"value\": \"es-VE\"\n            },\n            {\n                \"label\": \"et-EE\",\n                \"value\": \"et-EE\"\n            },\n            {\n                \"label\": \"eu-ES\",\n                \"value\": \"eu-ES\"\n            },\n            {\n                \"label\": \"fa-IR\",\n                \"value\": \"fa-IR\"\n            },\n            {\n                \"label\": \"fi-FI\",\n                \"value\": \"fi-FI\"\n            },\n            {\n                \"label\": \"fil-PH\",\n                \"value\": \"fil-PH\"\n            },\n            {\n                \"label\": \"fo-FO\",\n                \"value\": \"fo-FO\"\n            },\n            {\n                \"label\": \"fr-BE\",\n                \"value\": \"fr-BE\"\n            },\n            {\n                \"label\": \"fr-CA\",\n                \"value\": \"fr-CA\"\n            },\n            {\n                \"label\": \"fr-CH\",\n                \"value\": \"fr-CH\"\n            },\n            {\n                \"label\": \"fr-FR\",\n                \"value\": \"fr-FR\"\n            },\n            {\n                \"label\": \"fr-LU\",\n                \"value\": \"fr-LU\"\n            },\n            {\n                \"label\": \"fr-MC\",\n                \"value\": \"fr-MC\"\n            },\n            {\n                \"label\": \"fy-NL\",\n                \"value\": \"fy-NL\"\n            },\n            {\n                \"label\": \"ga-IE\",\n                \"value\": \"ga-IE\"\n            },\n            {\n                \"label\": \"gd-GB\",\n                \"value\": \"gd-GB\"\n            },\n            {\n                \"label\": \"gl-ES\",\n                \"value\": \"gl-ES\"\n            },\n            {\n                \"label\": \"gsw-FR\",\n                \"value\": \"gsw-FR\"\n            },\n            {\n                \"label\": \"gu-IN\",\n                \"value\": \"gu-IN\"\n            },\n            {\n                \"label\": \"ha-Latn-NG\",\n                \"value\": \"ha-Latn-NG\"\n            },\n            {\n                \"label\": \"he-IL\",\n                \"value\": \"he-IL\"\n            },\n            {\n                \"label\": \"hi-IN\",\n                \"value\": \"hi-IN\"\n            },\n            {\n                \"label\": \"hr-BA\",\n                \"value\": \"hr-BA\"\n            },\n            {\n                \"label\": \"hr-HR\",\n                \"value\": \"hr-HR\"\n            },\n            {\n                \"label\": \"hsb-DE\",\n                \"value\": \"hsb-DE\"\n            },\n            {\n                \"label\": \"hu-HU\",\n                \"value\": \"hu-HU\"\n            },\n            {\n                \"label\": \"hy-AM\",\n                \"value\": \"hy-AM\"\n            },\n            {\n                \"label\": \"id-ID\",\n                \"value\": \"id-ID\"\n            },\n            {\n                \"label\": \"ig-NG\",\n                \"value\": \"ig-NG\"\n            },\n            {\n                \"label\": \"ii-CN\",\n                \"value\": \"ii-CN\"\n            },\n            {\n                \"label\": \"is-IS\",\n                \"value\": \"is-IS\"\n            },\n            {\n                \"label\": \"it-CH\",\n                \"value\": \"it-CH\"\n            },\n            {\n                \"label\": \"it-IT\",\n                \"value\": \"it-IT\"\n            },\n            {\n                \"label\": \"iu-Cans-CA\",\n                \"value\": \"iu-Cans-CA\"\n            },\n            {\n                \"label\": \"iu-Latn-CA\",\n                \"value\": \"iu-Latn-CA\"\n            },\n            {\n                \"label\": \"ja-JP\",\n                \"value\": \"ja-JP\"\n            },\n            {\n                \"label\": \"ka-GE\",\n                \"value\": \"ka-GE\"\n            },\n            {\n                \"label\": \"kk-KZ\",\n                \"value\": \"kk-KZ\"\n            },\n            {\n                \"label\": \"kl-GL\",\n                \"value\": \"kl-GL\"\n            },\n            {\n                \"label\": \"km-KH\",\n                \"value\": \"km-KH\"\n            },\n            {\n                \"label\": \"kn-IN\",\n                \"value\": \"kn-IN\"\n            },\n            {\n                \"label\": \"kok-IN\",\n                \"value\": \"kok-IN\"\n            },\n            {\n                \"label\": \"ko-KR\",\n                \"value\": \"ko-KR\"\n            },\n            {\n                \"label\": \"ky-KG\",\n                \"value\": \"ky-KG\"\n            },\n            {\n                \"label\": \"lb-LU\",\n                \"value\": \"lb-LU\"\n            },\n            {\n                \"label\": \"lo-LA\",\n                \"value\": \"lo-LA\"\n            },\n            {\n                \"label\": \"lt-LT\",\n                \"value\": \"lt-LT\"\n            },\n            {\n                \"label\": \"lv-LV\",\n                \"value\": \"lv-LV\"\n            },\n            {\n                \"label\": \"mi-NZ\",\n                \"value\": \"mi-NZ\"\n            },\n            {\n                \"label\": \"mk-MK\",\n                \"value\": \"mk-MK\"\n            },\n            {\n                \"label\": \"ml-IN\",\n                \"value\": \"ml-IN\"\n            },\n            {\n                \"label\": \"mn-MN\",\n                \"value\": \"mn-MN\"\n            },\n            {\n                \"label\": \"mn-Mong-CN\",\n                \"value\": \"mn-Mong-CN\"\n            },\n            {\n                \"label\": \"moh-CA\",\n                \"value\": \"moh-CA\"\n            },\n            {\n                \"label\": \"mr-IN\",\n                \"value\": \"mr-IN\"\n            },\n            {\n                \"label\": \"ms-BN\",\n                \"value\": \"ms-BN\"\n            },\n            {\n                \"label\": \"ms-MY\",\n                \"value\": \"ms-MY\"\n            },\n            {\n                \"label\": \"mt-MT\",\n                \"value\": \"mt-MT\"\n            },\n            {\n                \"label\": \"nb-NO\",\n                \"value\": \"nb-NO\"\n            },\n            {\n                \"label\": \"ne-NP\",\n                \"value\": \"ne-NP\"\n            },\n            {\n                \"label\": \"nl-BE\",\n                \"value\": \"nl-BE\"\n            },\n            {\n                \"label\": \"nl-NL\",\n                \"value\": \"nl-NL\"\n            },\n            {\n                \"label\": \"nn-NO\",\n                \"value\": \"nn-NO\"\n            },\n            {\n                \"label\": \"nso-ZA\",\n                \"value\": \"nso-ZA\"\n            },\n            {\n                \"label\": \"oc-FR\",\n                \"value\": \"oc-FR\"\n            },\n            {\n                \"label\": \"or-IN\",\n                \"value\": \"or-IN\"\n            },\n            {\n                \"label\": \"pa-IN\",\n                \"value\": \"pa-IN\"\n            },\n            {\n                \"label\": \"pl-PL\",\n                \"value\": \"pl-PL\"\n            },\n            {\n                \"label\": \"prs-AF\",\n                \"value\": \"prs-AF\"\n            },\n            {\n                \"label\": \"ps-AF\",\n                \"value\": \"ps-AF\"\n            },\n            {\n                \"label\": \"pt-BR\",\n                \"value\": \"pt-BR\"\n            },\n            {\n                \"label\": \"pt-PT\",\n                \"value\": \"pt-PT\"\n            },\n            {\n                \"label\": \"qut-GT\",\n                \"value\": \"qut-GT\"\n            },\n            {\n                \"label\": \"quz-BO\",\n                \"value\": \"quz-BO\"\n            },\n            {\n                \"label\": \"quz-EC\",\n                \"value\": \"quz-EC\"\n            },\n            {\n                \"label\": \"quz-PE\",\n                \"value\": \"quz-PE\"\n            },\n            {\n                \"label\": \"rm-CH\",\n                \"value\": \"rm-CH\"\n            },\n            {\n                \"label\": \"ro-RO\",\n                \"value\": \"ro-RO\"\n            },\n            {\n                \"label\": \"ru-RU\",\n                \"value\": \"ru-RU\"\n            },\n            {\n                \"label\": \"rw-RW\",\n                \"value\": \"rw-RW\"\n            },\n            {\n                \"label\": \"sah-RU\",\n                \"value\": \"sah-RU\"\n            },\n            {\n                \"label\": \"sa-IN\",\n                \"value\": \"sa-IN\"\n            },\n            {\n                \"label\": \"se-FI\",\n                \"value\": \"se-FI\"\n            },\n            {\n                \"label\": \"se-NO\",\n                \"value\": \"se-NO\"\n            },\n            {\n                \"label\": \"se-SE\",\n                \"value\": \"se-SE\"\n            },\n            {\n                \"label\": \"si-LK\",\n                \"value\": \"si-LK\"\n            },\n            {\n                \"label\": \"sk-SK\",\n                \"value\": \"sk-SK\"\n            },\n            {\n                \"label\": \"sl-SI\",\n                \"value\": \"sl-SI\"\n            },\n            {\n                \"label\": \"sma-NO\",\n                \"value\": \"sma-NO\"\n            },\n            {\n                \"label\": \"sma-SE\",\n                \"value\": \"sma-SE\"\n            },\n            {\n                \"label\": \"smj-NO\",\n                \"value\": \"smj-NO\"\n            },\n            {\n                \"label\": \"smj-SE\",\n                \"value\": \"smj-SE\"\n            },\n            {\n                \"label\": \"smn-FI\",\n                \"value\": \"smn-FI\"\n            },\n            {\n                \"label\": \"sms-FI\",\n                \"value\": \"sms-FI\"\n            },\n            {\n                \"label\": \"sq-AL\",\n                \"value\": \"sq-AL\"\n            },\n            {\n                \"label\": \"sr-Cyrl-BA\",\n                \"value\": \"sr-Cyrl-BA\"\n            },\n            {\n                \"label\": \"sr-Cyrl-CS\",\n                \"value\": \"sr-Cyrl-CS\"\n            },\n            {\n                \"label\": \"sr-Cyrl-ME\",\n                \"value\": \"sr-Cyrl-ME\"\n            },\n            {\n                \"label\": \"sr-Cyrl-RS\",\n                \"value\": \"sr-Cyrl-RS\"\n            },\n            {\n                \"label\": \"sr-Latn-BA\",\n                \"value\": \"sr-Latn-BA\"\n            },\n            {\n                \"label\": \"sr-Latn-CS\",\n                \"value\": \"sr-Latn-CS\"\n            },\n            {\n                \"label\": \"sr-Latn-ME\",\n                \"value\": \"sr-Latn-ME\"\n            },\n            {\n                \"label\": \"sr-Latn-RS\",\n                \"value\": \"sr-Latn-RS\"\n            },\n            {\n                \"label\": \"sv-FI\",\n                \"value\": \"sv-FI\"\n            },\n            {\n                \"label\": \"sv-SE\",\n                \"value\": \"sv-SE\"\n            },\n            {\n                \"label\": \"sw-KE\",\n                \"value\": \"sw-KE\"\n            },\n            {\n                \"label\": \"syr-SY\",\n                \"value\": \"syr-SY\"\n            },\n            {\n                \"label\": \"ta-IN\",\n                \"value\": \"ta-IN\"\n            },\n            {\n                \"label\": \"te-IN\",\n                \"value\": \"te-IN\"\n            },\n            {\n                \"label\": \"tg-Cyrl-TJ\",\n                \"value\": \"tg-Cyrl-TJ\"\n            },\n            {\n                \"label\": \"th-TH\",\n                \"value\": \"th-TH\"\n            },\n            {\n                \"label\": \"tk-TM\",\n                \"value\": \"tk-TM\"\n            },\n            {\n                \"label\": \"tn-ZA\",\n                \"value\": \"tn-ZA\"\n            },\n            {\n                \"label\": \"tr-TR\",\n                \"value\": \"tr-TR\"\n            },\n            {\n                \"label\": \"tt-RU\",\n                \"value\": \"tt-RU\"\n            },\n            {\n                \"label\": \"tzm-Latn-DZ\",\n                \"value\": \"tzm-Latn-DZ\"\n            },\n            {\n                \"label\": \"ug-CN\",\n                \"value\": \"ug-CN\"\n            },\n            {\n                \"label\": \"uk-UA\",\n                \"value\": \"uk-UA\"\n            },\n            {\n                \"label\": \"ur-PK\",\n                \"value\": \"ur-PK\"\n            },\n            {\n                \"label\": \"uz-Cyrl-UZ\",\n                \"value\": \"uz-Cyrl-UZ\"\n            },\n            {\n                \"label\": \"uz-Latn-UZ\",\n                \"value\": \"uz-Latn-UZ\"\n            },\n            {\n                \"label\": \"vi-VN\",\n                \"value\": \"vi-VN\"\n            },\n            {\n                \"label\": \"wo-SN\",\n                \"value\": \"wo-SN\"\n            },\n            {\n                \"label\": \"xh-ZA\",\n                \"value\": \"xh-ZA\"\n            },\n            {\n                \"label\": \"yo-NG\",\n                \"value\": \"yo-NG\"\n            },\n            {\n                \"label\": \"zh-CN\",\n                \"value\": \"zh-CN\"\n            },\n            {\n                \"label\": \"zh-HK\",\n                \"value\": \"zh-HK\"\n            },\n            {\n                \"label\": \"zh-MO\",\n                \"value\": \"zh-MO\"\n            },\n            {\n                \"label\": \"zh-SG\",\n                \"value\": \"zh-SG\"\n            },\n            {\n                \"label\": \"zh-TW\",\n                \"value\": \"zh-TW\"\n            },\n            {\n                \"label\": \"zu-ZA\",\n                \"value\": \"zu-ZA\"\n            }\n        ]\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "appsheet",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "timezones": {
+      "api": {
+        "qs": {},
+        "url": "/api/users",
+        "body": {},
+        "method": "GET",
+        "headers": {},
+        "response": {
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.users}}"
+        }
+      },
+      "rev": 3,
+      "name": "timezones",
+      "label": "Timezones",
+      "appName": "appsheet",
+      "apiJsonc": "{\n\t\"url\": \"/api/users\",\n\t\"method\": \"GET\",\n\t\"qs\": {},\n\t\"body\": {},\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.users}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "appsheet",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "universalUrl": {
+      "api": {
+        "response": {
+          "output": {
+            "help": "Enter a path relative to `https://api.appsheet.com/api/v2/apps/{{connection.appId}}/tables`. For example '/mytable/Action'.",
+            "name": "url",
+            "type": "text",
+            "label": "URL",
+            "required": true
+          }
+        }
+      },
+      "rev": 3,
+      "name": "universalUrl",
+      "label": "Universal URL",
+      "appName": "appsheet",
+      "apiJsonc": "{\n    \"response\": {\n        \"output\": {\n            \"name\": \"url\",\n            \"type\": \"text\",\n            \"label\": \"URL\",\n            \"help\": \"Enter a path relative to `https://api.appsheet.com/api/v2/apps/{{connection.appId}}/tables`. For example '/mytable/Action'.\",\n            \"required\": true\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "appsheet",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    }
+  },
+  "flags": {},
+  "label": "AppSheet",
+  "theme": "#4285f4",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Records",
+      "modules": [
+        "searchRecords",
+        "getRecord",
+        "createRecord",
+        "editRecord",
+        "deleteRecord"
+      ]
+    },
+    {
+      "label": "Actions",
+      "modules": [
+        "invokeAction"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "makeApiCall"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda793000002054944415458c3edd6cf8e0c511406f05fb5ce1064cc8e05c182889058908817e0096c3c83a7f000121b1baf606327b1b1343318246204e94462e24fc48c1064a6afc5bd15b76baaabab7a1636fd6d3a75efe973beef3bf79e2a6698e13fa3801042f97c1087cbf529729dc0fc98fdafb88ff5a2f897be9f05ecc1954420e88680a3b886fd6362b6701db743084a12bd2c6088cd2c6197e27d5c6c285ee6ff515dcc09fcc172faedd282205a7f6a42dc43dc83bc05bdcac21bbc4e04dab810b01797b0bb216e0337f1adc901629f16f1bd25898033383621ee2e1e54d58f10c836d6f02c11686ac5100b62ef7735c4bdc72db1b5db30e24046e269fa63137a388f43131cba83953af5ea146633610147c4135e54e2432a7c15076c6f55e9de07dcc05a5df15a02939008f67019e7c456d461280e9ee7e3d4333a88da16270e9dd34940b5ff21117c87d5a6e2a592ae98c3057172d6dd9202bff008bf27256b4d20537f12c753f1aab4726d158349eaa771605f52dfaf515f16dfc092f167a33b814cfd59f1f4d7a92f9f57f0b18dfaae0ecc89f6f71ad47f128758abe25d096ce1e798bd22ed2f892d688dae049e88273c9757aa1fe05517f5ad09640907785921505ebb452daedd4e1c209eec25f1f3aa7c5b1649f9a0abfa4e04b2c45ff03891e9615d876bb7230732122ff056b47c593cfd9dd533fdcb883894e6f1199bd3149f6106f80bf4d6827c58d328940000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000003f64944415478daeddadb8bdd5414c7f14f6686d23ad2e2ad6ab53e8ca0b58856a9a2e24bc13fc377ff1c45147c14047df54114df05ed65b458052f558469855aeba5e3746a67e6c4879dd06d983327c94e324af3834038e76467adef5a67adbd77c2a851a3468d1a356ad4a85b53d9b42ff23c2f4f173037b05d79615bd3fb6698e006f22ccb6a5d30cdf9453c83077701003c85270b184d34c119bc818bb013888529ce677811c777c1f11c77e165dcdd728c97701f5e11b261aaa64576114bc5f9a4306a886352dcf37882f3a54ee0d0ac1f4d03b089f54403da28c70338d6c158ab757c9806e03abe122232bb9274e7fc029ec3fe0ec67a0f971a03880ac6d7582900342d446d8d7e18473b18eb0cdeaef8530f40a4759cc4dffacf821cfbf002f6268e751dafe3e73a3fde164044ed477cabff2cc885c82fa50e848ff17ec58f6600226de114aef60821c7013c6f9bb6dc5057f02afeaa7bc1540011bd4b385b7edc83f38449cfcc965543efe2938afded005406395b80e83a0b721c14669ca970bfc79bd8aaebfc4c00915685bfc2660786c6cecfe159dc9938d616de12ea5523cd0410d1fc46288a5d65418e8784f97eaa3ec53b157bbb01106943688beb1d40c8b147687b8b89ceafe1355c6e73712d0011d5157c56c0982f40b439e0511c49741e3ec087153b6bab76dbc9b24c1e968a2785767304b7450e55ef5e851b7fbf0ff7e027db67d2344fb2caf955a1edb55eb73446166d94941b16758c8d3f9b08f3fd136e6e7cb4d11c4ee32335373fb653e3894774a35ca8be4de1dd81c78b6bdbd6910cbf0ad9d8daf95600da2aca9ca7850d8f94e8e7f842f82b266990adaec8f94342f4cb0d90368e67c242e71ced0adfe0000acd0b33bedbb58f7e2674a0d342fb4b56ef00a2e82fe19104e7cbeb7e10a6bdc9d11f0440a1bdc294778fb4c2774d98926f746558af00a2e83f86c3d20a5f266cd35da09be8f70ea0d07e6197775e5ae1fb0d9f4b6c7b830188a27f4c98f5a514be49e17c72db1b0c40a18378a264d2e2facedbde20008ae8cf09a97f407adb3b2514c0ced5398028f50f0b0ba6ff54dbeb1d40a4a3c26a3125f5cbb6b7d997917d0198979efabdb4bda1004cb4df398adbdeb28edbde5000727c273c9a6e6a7dd9f6960b08bdaa730051b4ce0b05ac491694d1bf28a47f6fa9df1b8048e526ea5a0308bdb7bd41004451bb802f23e7765219fdf3c5d17bf47b0350317e19bfd8390b4ae7d7f4dcf6060310e94fb39f2ac56d6fe68b4dff1b00359f2a95d1bf6280b637288048378482786d1b08f16aeff7c13c1f0a40e5a9d239ff7e3a3478db1b1c40e4542ebcbb73d9cd2c18bceded0a80487f082f30ac16f7de14fef7bdadf66669d03b466fa1de8bfb850eb1828ddd707ed4a851a3468d1a35ea96d63feea92ad1bbd490650000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-05-23T20:29:10.31984+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda7930000084d4944415478daed9d498f554514c77fb7110404d3288aa021e23ca02038c0c6a5ee7561e267f013f829d498688cc6981837ba30bad0688c71066c506819651e5ac3a8466868bafbba3855beea8234fdfad5bd35bcf34b3abde9be53fdcfb97586aa0b8aa2288aa2288aa2288aa2288aa2288aa2288aa2288aa2288aa2288aa2284af654bdfc735dd7c18e9519354055e57fcb5ddf8133e80b80bb8115c0fcd91c2b532ae061601946082d7001d8017c0dfc09e1c4d7d5519cc15f063c03dc0e5cd7e283884d0dac045e0416b77cee716008781911421011cc460083c073c072f340ea6e8f93293522f6e7813511af631ff002f02bf42e828119df7dc7fad7d0197ce88fc1c7dcefbdc00391afe33ee025604e8883cd580086eb8155ce03e9176a6021b0d13c83d83c8d1861cf742b80f9c08df48fdb87ce6b6e351df1c76610b829c481ba15c018709efe197c90c11f043610c8ed066014f837c481ba15c028702cf6ddb788f574eb81db625f8cc3366024c481662c0067b6398cc4a550fe3ca046067e3de978bd7f8077808b210ed6ad0700f8030941aa841e4a13d488cb7f0a5812fb621c3e06be84307980ae04e09c701b70121140a95ea006ee041e897d210ec781d7804ba13281b3f100007f2359a949caf4023512ee6d44c2bf14a8817711e30b46d7027094b70b3844995ea006ee47922ea9b01d781ba84316a166eb01002e015b90c948495ea0061621d63f37f6c518c680d781a3a10f3c2b01380a3c04ec36c729c10bd8a4cf1aa4e8930a5f011f41f812f4ac3d80b9901af10267294304357033f0642fcf2630e780579079577042dce469e017f29f10d6e6793c0edc1afb621c3e2460f9d7a727013817b41d6954c879425823cd2deb625f88c321e4dd7fb9a9eea3506eee02b009b84c9e5ec0d6fa3720c5ae14984466fdc34d9ea4670138cafc1dd84f9e5ea046dadb1e8e7d210e4348dcdf68ef61100f602e701cf10217c84b043552e6de687ea7c028f02a92766f94d033dd11f2ab13d4c04388074885cf814fa0f9cee36002f0ea04a7c8c30bd4c83b7f23320748815348d817a4de7f2d9a8875ff067e26fdb0d08af331a4bb39153e007e8076d61d0415406675821ab80578827484ba0f780398686bd14953d9aed4eb0436e9f32492f94b8109e04d606f9b270d2e00af4eb0873453c4768147ccfe7e9f1f81f7a1dd25678d7800af4ef0176989a006e621499f45b12fc6f02f32f13bd5f6899b2e789c027ea233214c4104a92cf070f914f80cda5f70da98009c1bf915f80e4913dbf3d9b26bdba4b6c00324d9f32a92fc699d4663dfaaaaa8eb7a0279bf9d441efc32a4d12296477814e9f54b85f790576594e5e68d273f8c08269110e728b2a4c9ae2af6cf5f31bd57aab8f6e28c395c3df2a891eede71e01ba68a6fa69e30e4df558851bc45e036af6e483144bb2ade6614ddde975de0f12c52ee9d48e01954c8abf17b88b7d9442ae9cf6bd2e5039aa216239e1574267e73a6fbfb1618a0533789bad3483602982d66f06dadff06ae9ea26e7b04c681adb494ef9f8e54fade1ac1796ddc8554fb62af6ab61948db4c1b7d9fa1a20560588058ff5ce2e7212aa45f620b121647a7580138d6ff201275a462fdbb812310dffaa160011806916a5fec54b41dfcb348a93c5ad8e753a400bcfd8c9612dffa6dd26b3bd2469f0c450ac0b01c584bbcb4b3c58a2f89b0cfa7380118eb1f403675584c1ad66fc3bef3b19f8f4f5102705cff2a24e913bb2dcdbefb0f22bd1149593f142600c33c6479d7f5a411f69d27a1b0cfa7180138d6ff10e20162bb7e7bfedd9865dda9593f142400c322a4d83387f8133f1bf60d9150d8e75384001ceb5f8becea15dbfa930dfb7c8a10806129d2ec11bbf52ce9b0cf277b0118ebaf908cdf12e2cffc2b64c23744673fc564c95a008eebbf0309fb62bb7eb7dab717d2b67ec85c00065beb5f481aaeff3cb09944c33e9f6c05e058ff3d4893676cebb72ba27763f6534eddfa2163011816205bb9ce230deb3f4762d5be6b91a5001ceb5f8df4faa560fd93c8665967a23e9c2ec952008625a453ebaf904db2b6431eaedf929d00bca4cf12d2b0fecbc8c42ff9b0cf273b01189623cd1ea9d4fa0f239b646565fd9099009c5aff3aa4c53ba6f5db735f4016c06611f6f9642500c35224f44bc1f5dbb0ef38e467fd90a7005622d61f1337ecdb4246619f4f360270267f8b893ff377c3beb3719f4c6f6423008749d278f76719f6f9e42a0088e7016cd8677745cd9a6c04e058d908d2651bc3ecacf51f22d3b0cf271b01388c10676b7a3fec1b8ffd204290a3004691c9d704ed7a011bf6ed024e40fed60f9909c079e07b905efbb6bc80b5feb3641ef6f964250087316412364a3b22b061df3624f62f86ec04e058de31e46b1a4d6f4d6fadff0f6087770dd9939d0060ca4ea44348fdbd492f5031d5e31445960270b0a9d8a63a81adf51f443e875394f543c60270066227528e0d9d1e769b3c375148d8e793ad001c2ed1ccb78aacc27622b987e2ac1f32178033208791810a352174c3bea4d7f6f54ad602802bb6a60f35212c36ecf3c95e000eb625bbd70ca1bbb66f18ca74fd962204e04d088fd09b17283aecf32942000e1791eedcd97eabc85aff01f353b4f5434102f0be55b48beebd805beddb0c8c973ef8509000e08a09e139bacb0dd808621813f6f5034509c0e10c267c6366af0237ecdb4ac1619f4f710270066e182918cde45560c3be210a0ffb7c8a1380c32832931f637a2f60adff04f01b943ff173295200ce001e60fa09a11d7cdbe4597cd8e753a400e07f114c22037b9ace67626ae7b755ca307d12f6f9142b008733c017c817baec57c706ccef4964f0bfa5c50f36a744f177ecac281a443e1eb10a988f7885fde667ac1f071ffa400016470803e667823e0af71445511445511445511445511445511445511445511445511445e907fe0333221ba969882c960000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda793000011744944415478daeddd6b8f5dd759c0f1ff195f12e76af7129a9492c4699a5bd3c4b9522a848a101f0024a4be2d6f78c16b3e08d7022aa082a0aaaa4a05545128b421f79b9d386e923671e24b9cbbedb1e3d8893d339b17cf59cc9ae3f164c6337bafb5f7f9ffa4286ed58e9fd9e7ac67adbd9e75014992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992866554e22f6d9a26fdf17260dbf8df570233a51f885ab309b88c617ec60df011700c380a9c049ad1a848f35a934e23cc1afe0ee016e04ee01ae00cb0b9eb78d4a95dc0d7812da50369c93cf13d7e15f819f043601f305f7322e82cb271e3df04dc07dc0b5c4df406cd3a7eacead7009f06be015c573a988e2c008780bf03fe0a78bfd624d04954e3c6bf05f875e0abc0d6f143d2b0354492ff1de0b798be11de39e007c09f100981da12c1e6b6ff82ace77f9048009b89e1525d4f426d6880cf0377339d9ff716e00fc67ffe63e0fdd2014d6a7542267be7bf99c5f7bf86e9fc324c9b8618e93d006c2f1d4c4123e0f7813f0266b23651852e66642f21def9d390dfc63f7ccdf89f9dc0eda583a9c066e00f81af940e64521709e00662185857ea53db2e235ef9b6950ea4123700bf074b46c6c5b59600b25ff246e24b50cf6fad36a5deff766204a0455f274ae0d5687b047009f029600e87fed3643bf1ee3fd49affc5ba09b8b67410b9b613c0a5c0e7b0f79f166982f76ee2b54f4b6d037ea57410b9b613c0880e4a8daa4643acecbc97612ef95daf192a1b15b5fd219d036671f83f0d1a22d9df077ca67430953a4bb4876ab49d004e03878904e06bc0b035c017a8b0d45591a3c091d241e45a4b00e3258f0db1436a01470143d61013be0f12bb3ab5bca780f74a0791ebe23ded252a5c02a90d93ca7e3703b7960ea6621f123b04cf960e24d7450238496c8bdc54fa97556bae2016fd5c523a908afd0cf809d4b521a8d50490fda22fb23819e85cc070a4cff2cbc0f5a583a9d851e0cf8013a50399d455a96616781817040d4d432cf4ba1fcbbd2bf93ef053a8abf7870e1240f60bff1c388087800c45daebbf8b58eca5e5ed07be059cadadf143472380f12f7e8e98054da3009340bf35c4b2d65db8e8e742e68853819e2f1dc88574fdc11d049ec3d780be6b88156d0f10af005ade33c077a8f880d0ce12c0f8012c10a380634455c05140ffa4b2df0dc01da583a9d869e02f80374a07b2921243b7634455c061637f6d23ca7e97970ea4623f06fe15ea9bf8cb75da08b307f134f13a6012e897d4fbdf027cb17430157b07f853620d4cd54a35c0d3c0e3c4c4a0fae52a62c9efd6d28154aa01be0b3c0a75f7fe502001640f643ff03ace05f445fa8cbe426cfad1f27e01fc0d70aef6c60f854600e307330f3c460c93ea7f526a886dbef7e1b2ee0b3907fc2d31c7d50ba5dfc18f00bbf10b55bb86f88cee250efcd0f21e07fe19ea1ffa27c51240f6805e20d648bb38a85ed37ec1c76a7c00fc39f076e940d6a2f40800629fc0ffe23e815aa50b3e1e24ee73d4f2fe1df811f4a7f787c20960629fc0eb380aa84d2afbdd04dc563a988a1d217aff0f4b07b256c54700d93e81a759bc33d024500f2ff8585903fc13f024f4abf7870a1240e620b169a25f4f70b8f20b3e6e2c1d4cc55e00be0dccf7adf143250920db27f024701cd706d4a0216eb17990ca8eb2aec859e0af81574a0772b1aa48009963c47c406d714d9bb4d7ff6ee0bad2c154ec21e07bd0bfa17f524d439bd82770080f0e29295df0710f157d472a334b1cf3d5eb036f6bfc704f132b04cfe27c4009e9828ffbf1828f95fc00f82fe86fef0f952580897d0207702ea08406f835e0ced28154ec00f097c0477d6efc50590200f70914e6051f9f6c1ef807604fe9403642750920e33e816ee5177cdc523a988aed2112c042df7b7fa83401b84fa0182ff858d91962e87fb074201ba5ca04909925ee13482b04d58e945cef24cefad3f27e424cfef57ae22f576d02c81ef03edc27d0b6fc820f5fb996f71e71cc5775b7fbac47b50900cebb4fc07d02ed488b7eeec10b3e56f23d62e1cf607a7fa83c01640e027bf135a00d0db1da6f173edf0b798558f2db8b63bed6a2fa0490ed137802f7096cb4fc828f1da583a9d41cb1d9675fe940da507d02c8b84f6063e5177cdc5e3a988a3d09fc2315dfeeb31ebd684cee13688d177cacec43e2769f374b07d2965e24804cda27700edf57d723f5feb7e2051f2bf911f06f30ac89bf5c6f1280f7096c382ff858d95bc4315fa74a07d2a6de2400386f9fc007380ab8182969de05fc6ae9602ad500ff427ccf06dbfb43cf124026df27e028606d1ae0b378c1c74a5e242ef8981b72e3871e2680ec03d94bacca724270f5f20b3e3e5b3a984a9d25aef67ab974205de85d02c8cce23e81b56a8861ff5df8cc2ee451e272cf410ffd935e2680897d026f1227d8380a5899177c7cb293c4315fef960ea42bbd4c00b0649fc07f131f9caf0217965ff0716be9602af643e03f603a7a7fe87102c81c212e65dc8a9b855672395ef0b192c3c4a29f33a503e952af13c0c40ac11f13135c6924602208e939dc0eec2c1d4ca51680ef00cfc0f4f4fe10efcebd361a8d689a6681180500fc268be5ad0627bbd2051f0f3080cfbb25cf037f4f4f6ff7598f5e8f0092f187d61049e0bbc01b4412c813c1344a7bfdefc20b3e2ee463e05bc40ad3a9338804004b92c041e0fbc4f14dc788e1dd16a673249016fddccb803eeb0df653e2fb325543ff6490bf71d3fc7f877f3951f7be09b896680ca7589c2b58cdf359ef335a6fc35b4f0c9b80df25aef85acddfb3916afe79e9997e007c93d8f4630218a22c195c469c763b47cc847fd2fbf068fcbf594f039e59c5dfd3560c0bc4c4df6f1307a9a49f77219bd898ef439a7799d9a09fb7d1f12533c492df6f33800b3e2ed6e02785b20ff6f4f81f88cc3f58e3a4b78d18fa1f62757320d3364fb299a8f94f6de34f0f4103928d78ee23aef89a63753de7b4b482b41fe245e28aafa9e6c4d0305d4d0cffa7ad575f8d11b18fe431a6b0ec37c9043020e3de7f441cf1fd29621e60babfe1e7db446c257fbb74203530010ccfe7593ce2db11c0a23439798218fe4fe5acff2413c0408c7bff4dc06f10e54f57412e4acf621e78847805102680a1d9491cf2e919094ba567b19ff1f9fef6fec1043000e3deff1262e6df6ff6f266806781b336fe4526809ecbca7e770237e27bffa4b41f621f03bad67ba3980086613bf1eeefc4dff946c44ac8c7b1ec771e13408f65bdffed44eddf89bff3cd1065bf774a0752231340ff5d4394fde64b075299940c67b1ec774126809e1af7fe33c4315f3b70e89f9b2cfb9d281d50ad4c00fd7603f0655cf137293d8b57b0f75f9109a087c6bdff16a2ece769c8cb1b017bb0ecb7221340cf64137f5f224600f6fe4b59f65b0313403f5d0e7c951805d8fb2f35228e82b3ecb70a26801ec97aff07884d3ff6fee74b65bfa9b9dd673d4c00fdb383b8ddc7b2df5269e6ff38f01238f1b71a26809ec8f6fadf4b240137fc2c4a8d7f0ecb7e6b6202e8972fb0ba137ea74d4a84af62d96f4d4c003d30b1d7ff325cf29bcb27417703e76cfcab6702a85c36f1b7931801acf690cf6992ca7e874a07d23726807eb8147890b801594b59f65b071340c5b2deff2ee07aacf92f2795fdde2b1d481f9900eab79de8fdddebbf549a07398a137f17cd0450a989937eaec2b25f2e35fe73c0a3c0c9d201f59509a06e9f23ca7eaef85b2a5deeb91f17fdac8b09a0421365bfed38f4cfa567b1401cf269d96f1d4c00f5ba1eb80d87fecb19012f60d96fdd4c0095c9f6faefc29e7f52daea7b0c780258b0f75f1f134045b289bfdb880b3ec024904beffecf01ef970e66084c00f5b99278f7df8c4b7e73e959bc8fb7fb6c18134025b2deff1ee2a45f67fe974a65bf47800f4a0733142680ba7c1ab803f7fa4f4aeffe078197c1de7fa398002a90edf5bf9fd8eb6fefbf283fe2fb2960cec6bf714c00f5b89e58f3efa4dff946c05e3ce473c399000a9b58f473294efce5d2d0ff3896fd5a610228289bf8bb09b89698e4f21bbed40cb1e8e768e94086c80450de36e288efd4fb2ba4deff6de2820f27fe5a60022824ebfd771127fd38f45f6a049c051e034e950e66a84c00656d2726fec0de3fd710f32287815f80bd7f5b4c00054c9cf463d96fa97cafff9358f66b9509a09ceb88e1bfce97d6fb5bf66b9909a06359d9ef6bc4ba7f87fe8bf2dd7e4f61d9af7526803276e25eff0b49477c1f2b1dc83430017468dcfb6f2586fe73a5e3a94ceafddfc2b25f674c001dc926feee2016fe68a911f03196fd3a6502e8d6d5c4bbff0cbefbe71ae214a4b7805f82bd7f574c001d98e8fd77e0a29f5c7a161f11b7fb58f6eb9009a03b9f218ef89ec7de7f39cf01074a07316d4c002d9bb8e063c7f8cf767121adf89b059ec6b25fe74c00ddb80ab8a57410959a212ef7b0ec578009a01b5f62f1dd5f2195fd8e108b7e9cf82bc004d0a2eca8af6b88a1ae0960519af87b0cf8b07430d3ca04d0be2b819b71c34f2e95fddec6b25f512680f66d220efd504865bf3344ef3f6fe32fc704d0be795cd9b69c3d58f62bce04d0beadc428408b65bfe3c0334063ef5f9609a07d6771e34f2e95fd8e970e4426802ecc0057940ea202a9ec7718cb7ed53001b46f0eefb283a565bfd3a583513001b4ef14f00ad35d02cc77fbbd0af6feb53001b428fb92bfcbf42e024a65bfd358f6ab8e09a01b0798ded780d4daf7e0219fd5310174e304e3b257e9403a961ff269d9af42268096655ff89f13f7db4ddb694023e04562cbaf2a6302e8ce49e292cbf44e3cf4249097fd9e0127fe6a6402e840f6c5df03ec4fff75e9b8dafeb5595cef6fd9af5226808e8c93c0478c17c18c0d7514d0009b813719273c7bff3a9900ba7700789ee18e00f2b2dfe358f6ab9a09a043e386b040348ce30cf39090d4da7703874a07a3959900ca38464c088e18d648204dfc1d059ec5b25ff54c001dcb1ac433c06ba5e3d9e85f8fc5b2df89d2c1e89399000a18278133c484e050ce0a48effe07b1ecd71b2680b25e03f6328cc541a9ecf7f8f8dfea01134021e3de719ea893cfd2ef09c154f63bc2f8b5c6debf1f4c00e5bd07eca3bf9f451afa7f8865bfdee9eb976e10b286f214f1eedcc7cf232ffb1d2e1d8cd6a68f5fb8213a0d3c41ff4a8279d96f3796fd7ac7045058d6605e250ecbecd384600a7e1f96fd7ac90450816c42f0116242b00f49202ffbedce7e0ff58809a02eef103b06fbb042d0b2df0098002a91f59ecf13bbe86a3e332095fd0e03af4fc4af1e3101d4e714f028708e7a4701a3719c4f60d9afd74c00159998107c8dba1707ed06de281d84d6c70450996c42f0516242b0a6ee352ffbedc1b25fef9900eaf516f03475258014cb5e2cfb0d8209a042132709bf473d13822362d26fcf449cea291340dd3e001e26ce12aca1b57d0c3c097c64e31f061340a5b206f64ba2dcb69972a38054f63bc8b8eca7613001546c6242f024e54601236234e26ebf813101f4c311e2949d529fd708cb7e836402a85cd6dbbe4094dfba9c104c65bf596285a2137f036302e88f13c484e059ba7b1548c9e659bcdb6f904c003d90f5ba2f13af035d4d08a6b2df73137168204c003d316e7c73c496e15374330a9827162359f61b281340ff1c2286e46dee1368c63f7f3fc3bbbb401913408f64bd705a8adbd6c121a9ecf71896fd06cd04d04fc78187686fcbf00c51f63b52fa1755bb4c003d33b14fe02d367642302ffbed9df8fb344026801eca26041f268ee3daa8563a226e2f7e0acb7e53c104d06f078909c18d9a0b48653f7bff296102e8a971e36c8877f563acaf2a90fe7f0b58f69b2a2680fe9b2536e97cccc52d134ec77bcf10f30aeef69b2226801e9b280bbe448c02d6920452e34f43ff87b0ec37554c003d976d197e0838407ca6ab69c179e33f02fc0f1ef335754cf503d1340dc015c0d7800788f7f93412981c11a4213fc44abfff04de0727fea68d9ff6808c93c02660277027f0c5f17fbe8cc51eff63622fc109e045e2f5e18c0d7f3af9a90fd038116c01ae066e00ae27560d6e05de258e199b25ce1ab4d797244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244953e8ff00ae2ae787e3327d2c0000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda79300001f684944415478daeddd7bb4de557de7f1f7c93d11424821918b888011529450ee200a012c11b553185b9dd57196ab3a2e454b8281604594b18c174045ab1de9c5b6b24657198b973ade900e82a4e5a66d0405d4222a02022910723927e79cf963c74563724ecef37b2edfdfdefbfd5a2b0bff329f40ced99fb39fbdf717244952758600c6c7c7a3734892a4011a72f19724a93ed3a2034892a4c1b300489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254a119d1015a6226f07c60cf6dbfe6460792d49511d2d7b5f2b201580f3c0afc1b301a1da864b5168021e024e0d5c0f1c075b81b2295e225c029c0ece820eaca06e04ee066e0b3c0bae840a5191a1f1f8fce3048cf02de0a6cdef6bf25956521a9d81f101d443db70ef830f069606b749812d45200a6016f26fd4430273a8ca4be390b38313a84faea5ee022d2ceadba50c3b6f701c0f5c01eb8f84b253b1038213a84fa6e09f0f7c0df91767cd450e93b002f267dc63f2b3a88a4be1a025e0f1c1c1d4403f543e04ce047d1417254f20ec0ab4807fd5cfca5f21d818b7f8d0e01be0d1c191d2447a516809381a5c0f4e82092fa6e267046740885590c7c9d5406d481120bc012e0b842ff6c92767412b0203a8442ed057c09ff1e74a4b4457206700d6efb4bb5d88d74ef5f3a14f85874889c947608f022ca2b359226f6bbc0d1d121d42a67e315c1292969b15c0c14d566244d6a11f05bd121d43a57e233d053525201b8100ffd49357939657d0f536f3c0f785d74881c94f2c5b30078243a84a48159421ae025edcc1ad2db109a442905e01cfce95faac534d2e32fd2449e4fba0da6499452007e3f3a80a481399a74e6479acc6ba303b45d09056016704374084903311b581e1d4259383d3a40db9550009615f2e790b46b2f05768f0ea12c1c0acc8f0ed166252c9cbe012dd5610f1cf5aba99b469a11a109945000f6890e2069207e1bef77ab33ae0f9328a100fc467400497db73ff0a2e810cacea2e8006d564201981d1d4052dfadc07bddea9cebc3244a28001ba20348eaabc38103a343284bae0f9328a1003c191d4052df4c075e161d42d97a2a3a409b955000ee8b0e20a96f4ec0733e6acef56112251480ef440790d417738153a243285ba3c05dd121daac8402700f30121d4252cf9d462a015213df0736468768b3120ac0283ef620956621706c740865edbae8006d57420100b8363a80a49e7a394ef854773e171da0ed4a29005f0536458790d413cf030e8b0ea1acdd01fc4b7488b62ba5006c01c6a24348eada10e9d11fa91b974507c841290500e06adc0590727724b05f7408656d1df0f9e8103928a9006c029e880e21a9b199a493ff52372e04c6a343e4a0a40200f0d7c0ef448790d4c8c9c082e810cada974867c23405a515803160657408491ddb0d78717408656d18581d1d2227a5150080b5c0a1d1212475e40c9cdca6ee5c05dc1b1d222743e3e3457e54b218781de9334549edf66ce05ccafc814483f108b004cf8175a4d42fb887f1111129172b28f77b9106e39db8f877ace42fba0f91760224b5d70b8043a243286bdf013e151d224725178061e0fae8109226340d38333a84b2b7923413461d2ab90040ba12e2c962a99d8e0116458750d63e0b7c2b3a44ae4a2f0000e7e133c152dbcc0696478750d63601174587c8590d05e03e60efe81092b6730ae9eebfd4d407819f4487c859a9d7007fddeec01b80b9d14124b107b00aafe9aab99f91de7b793a3a48ce6ad80100780a78323a8424201dfc73f157372ec4c5bf6bb5ec00402a3b6b812f4407912af61ce04da4b1bf52136b819370e04fd76ad90100e704486db002177f3537463ad8ede2df0335150048cdf1b0e81052a55e083c373a84b2f629e0b6e810a5a8ad00005c008c4487902a339d34f0476aea29e05dd1214a526301780898111d42aacc89c06f448750d6de0bfc223a44496a2c000057e29c006950e6012f8d0ea1acfd08f8687488d2d45a0086816f4687902a711abec1a1eeac02b64487284dad0500e08b382740eab7bd486ffe4b4d7d9334d7453d56730100381fe70448fdb4827400506a622be9a77ff541ed05e007388d4cea978348cfb54a4d7d0258171da25435bd043891f9a4390173a28348051902de0cec171d44d97a1c58023c161da454b5ef00409a11e09c00a9b78ec4c55fdd79172efe7de50e40e29c00a97766923eb7dd233a88b275377004e90c80fac41d80c4390152ef9c8c8bbfbab30a17ffbeb3003c632db0343a8494b9f9a4022035751df0f5e81035b0006c6f35ce0990ba713a302b3a84b2350cac890e510b0bc0f69c132035b70fe9f09fd4d495c07dd1216a6101d8d195c082e8105286cec4ef296aee61e0fdd1216ae217eb8e86816f4787903273287048740865ed22bc923d5016809dfb021e6492a66a1af0dbd12194b53b80bf8d0e511b0bc0c49c13204dcdb1f8a4b69a1b275dc3f6fbed80590026f67d60717408a9e56603a7468750d6ae016e8e0e51235f029c9c7302a4c99d891f97a9b98dc061c003d1416ae40ec0e49c13204d6c4fe084e810cadafb70f10fe30ec0ae4d03fe09f87c7410a9655e03bc303a84b2f553d2ed918dd1416ae50ec0ae8d01e74587905ae639c0e1d12194b5f371f10f6501981ae70448cf1802566cfba7d4c4cdc0e7a243d4ce0230756b703a9504e927ffe7468750b67e357dd5cf9f835900a6eee73827409a0ebc2c3a84b27635e9e11f05b30074e60a9c13a0ba9d042c8c0ea16cfd3b70497408251680ce382740357b16f0d2e810cadaa5c02fa34328f11a60335f016e8a0e210dd82b81e3a343285b3f005e048c440751e20e4033ce09506df6028e890ea1ac9d8f8b7fab58009a714e806ab3827400506ae2cba49d53b58805a0b977039ba34348037010e9c536a98911e0edd121b4230b40734f024f458790fa6c8834f0476aeaa3c03dd121b4230f0176c739012add51c0d9d12194ad47801790aeffa965dc01e88e730254b299c069d12194b58b71f16f2d0b40f7d602bf191d42ea8397007b448750b6be0bfc5574084dcc02d01b17e29c0095653ef0e2e810cada4a60343a84266601e88d9f93b64ba5529c01cc8a0ea16cfd1d706374084dce02d03b97e39c0095611fe0c8e810cad626d2f454b59c05a07786815ba243483db08274fd4f6ae272e0fee810da35af01f69e730294b3c3803f880ea16cfd9c74edefe9e820da3577007acf3901cad534e065d12194b50b71f1cf8605a0f7be0f3c3b3a84d4c071c0a2e810cad65ae033d12134751680feb804e704282f7381e5d12194ad31d2b53f3f53ce8805a03f9e04364487903a700a302f3a84b2f537c0add121d4190f01f68f7302948b3d493fbdcd880ea22c3d453af8f78be820ea8c3b00fdf3ab2d31a9edcec4c55fcd5d868b7f962c00fd750b707874086912cfc159166aeec7c047a243a8190b40ff5d807302d44e43c059f8e88f9a3b1fd8121d42cd5800facf39016aab17917600a4266e00be101d42cd590006e30a9c13a076990e9c1e1d42d91ac5334ed9b3000cc616d22319525b9c042c8c0ea16cfd19b02e3a84bae335c0c1fa2af0ade810aadeb3489fddce890ea22cad0796008f46075177dc0118ac55382740f14ec3c55fcd5d828b7f112c0083f57dd2ac7529cadec0d1d12194adbb814f4687506f580006ef3d786d467156900e004a4d9c0f8c4487506f5800066f3de9e94c69d00e263dd92a35f179e06bd121d43b1e028c310df867e0bae820aac610f01660dfe820cad230e955d3fba283a877dc018831069c171d4255390a177f35f7615cfc8b630188e39c000dca2c7cf447cd3d0cbc2f3a847acf0210cb39011a849700bb478750b6de013c111d42bd670188e59c00f5db7cd2ab7f521377027f131d42fd610188f701e077a343a8582f237d0420756a9cf4debf8f9715ca02106f2bf0df48c335a45eda0758161d42d9fadfc04dd121d43f168076b81b98111d42c55941bafe27756a13f0c7d121d45f1680f6f8007062740815e330d2c33f5213ef031e880ea1fef221a076990b7c13f887e820cada74e08f80bda283284b3f050e05364607517fb903d02e9b8057018ba383286bc7e2e2afe656e3e25f050b40fb3c4a7a756b69741065692eb03c3a84b2f56de0dae8101a0c0b403bdd0fbc0d5f6f53e74e05e645875096c648d7fefc5cb8121680f65a0f9c89d3db34750b80e3a243285b7f01dc1e1d4283e321c03cbc1a3800981d1d44adf65a9c2fa1669e24fdb0f15074100d8e3b0079b816f8343eeaa289ed0bfc66740865eb525cfcab6301c8c723c0ef01df024e880ea35619025e898ffea8991f021f8f0ea1c1b300e4e766d237fb1b49435efc0c4707923e22929a58096c890ea1c1f30c40fe1602af209d13b8057f0aac8d8ffea81bd703674487500c0b4059f6028e068edaf6eba7db7e390dae5c6793fe5b4b9dda4a3a5774577410c5b000d4630169b7a05776277e80d13ce26f46cc26eedefd5ce02da4cf706f23ed06ccd8f6cfa63b41b369f747836dcf378776efc2cd0436037b033f022e8e0ea4381600295fff13d8101d4259da0cfc39f0547410c56973939634b1fd8127a243285b8fe2e25f3d7700a43c7d0658171d42593a073886f4f4af2ae60e80949fe370f157732b71f1171600293743c095d12194adc3819ba243a81dfc0840cacb6b8083a243284ba3c067819f4407513bb80320e5630eb0383a84b2350f177ffd07d1f7b8254ddd2ada7dc75cedb509b82a3a84dac51d00290f8b482fb7494dfc12783a3a84dac53300521e3e89dbb76ae66ce0583cf9af5fe30e80d47e4b81fba343285b2b71f1d74e5800a4f6fb107ef6af66969246884b3bf02300a9ddce028e880ea12c8d925e8c7c203a88dac91d00a9bda6036f8c0ea16ccdc1c55f937007406aaf73813da243284b9b80abf1e4bf26e10e80d44e0b483fc1494d3c8c8bbf76c11d00a99d2e07d6478750965e099c08f8cd5d937207406a9f8380c7a243285be7e1e2af29b00048edf341fcda54338702b74687501efc2623b5cb09c09dd12194a551e0e2e810ca8705406a8f211cd8a2e666e1b53f75c04380527bbc0ed83f3a84b2b49174ed6f637410e5c31d00a91de6020ba343285b0fe1e2af0ecd880e2009800b70dcaf9a790570527408e5c71d0029de6260737408656b255efb5303160029defb70374ecd2cc16b7f6ac80220c55a06dc171d4259da0afc717408e5cb0220c5ba9c74fd4fead44ce0c1e810ca97d700a538ff09581a1d4259f2da9fbae60e80146326706a740865eb415cfcd5257700a418ab4877ffa54e9d05bc184ffeab4bee004883b727303d3a84b2348ed7fed423160069f0de437ab75dead421c06dd12154060b8034580703bf880ea12c6dc5697fea210b8034581fc2af3b35331dcba37ac8d7c7a4c13905f8e7e810cad246e07f45875059fc49441a8c69c015d12194ad9fe2bc08f598d700a5c1f843d2d01fa9532f074ec693ffea317700a4fedb0d981f1d4259f2da9ffac60220f5df1a7cf447cd1c04dc1e1d4265b20048fdb51fb0213a84b2b415b8243a84ca650190faebfdf8ea9f9af3da9ffac60220f5cf6f0177478750964681aba243a86c1600a97f3e020c45875096ee05b6448750d9bc0628f5c7ab81e747875096cec051d11a007700a4de9b051c111d42591a07564787501d2c0052efad243ddd2a75ea40e08ee810aa830540eaadbdf1d11635b31578777408d5c30220f5d6a5c0cce810cad218f0507408d5c30220f5ce61a4a12d52a746818f4587505d2c0052ef5c89d7fed4cc0ff0da9f06cc6b80526f9c061c171d42593a1d581e1d42f5710740eade74e01dd12194a55f4dfb9306ce022075ef8dc00dd12194a503807f8d0ea13a5900a4eeec0ecc8b0ea12c8d00ef890ea17a5900a4eebc1398131d42591a051e8e0ea17a5900a4e60e04d647875096a6031f8f0ea1ba5900a4e63e40fa462e75eabb78ed4fc12c005233c703ff121d42593a0df8527408c90220756e08b8223a84b2e4b53fb5860540eadc6b81ff1b1d4259da1f58171d42020b80d4a939a4897f52a74670da9f5a6446740029336fc771bf6a660478343a84f42bee004853b708188e0ea12ccd033e111d42fa8f2c00d2d45d06cc8c0ea12cadc5f2a896b1004853f322e0c7d12194a5e5c097a34348bfce02204dcde5a4eb7f5227bcf6a7d6b20048bbf60ae0c6e810cad2bec0f7a243483b63019026370378437408656918b8343a8434110b8034b93703b74687509686f1da9f5acc7700a4892d0066458750960e01de141d429a8c3b00d2c4de05cc8e0ea12c5d4b7af8476a2d0b80b4730701bf8c0ea12c9d0a7c253a84b42b160069e7aec0af0f75ce6b7fca86dfe0a41d9d08dc1e1d42595a0cdc151d429a0a0b80b4bd69c055d12194a561e0bdd121a4a9b20048dbfbafc075d12194a5cdc063d121a4a9f21aa0f48cb9c09ed12194a5a5c0eba343489db00048cf588313dbd4cc3578ed4f99f1230029d90fd8181d42593a01f86a7408a953160029b90c77c4d4b93160757408a9090b8004cb807ba243284b8bf0ef8e32650190d2a33f43d121949d61d2ce9194250b806a77367043740865e969bcf6a78c590054b359c0f1d12194a565c09f478790ba610150cdde0afc7b740865e92f81add121a46e580054ab3df1efbf9a390ef85a7408a95b7e0354ad2e257d042075620cb8203a84d40b1600d5e805c083d12194a5bd807ba34348bd6001508daec0bffbeadc16e04fa24348bde23741d5e654606d74086569031e1a55412c00aac934d24fff52a796914efe4bc5181a1f1f8fce200dca1b81bda343284bb7035f8f0e21f5923b00aac56edb7e499d3a06177f15c802a05abc03981b1d42d91903d6448790fac102a01aec0f3c191d42595a88d7fe54280b806af001607a74086567334efb53c12c002add71c05dd12194a5a78027a24348fde22d0095ee26e02bd121949d57012701a3d141a47eb100a864bf0f1c1c1d4259ba0df8467408a99ffc0840a59a052c890ea12c1d858bbf2a600150a956e1f6ad3a37065c141d421a040b804ab417e91bb9d4a93d81fba243488330233a80d407ab80a7a343283b9b818f47879006c51d0095660f9cd8a6669ec06b7faa883b002acddb70fb5f9d3b0738363a843448ee00a82433814dd12194a5f3f1d0a82a630150494e0566478750768e046e8c0e210d9a05402539273a80b233469a142955c702a0524c07ee890ea1eccc077e181d428ae0214095e228604e7408656533f0b1e81052147700548a23a303283beb4913ffa42ab903a0521c01fc2c3a84b2f19f81a3a3434891dc015029964507505656e27b11aa9c0540a5f85c7400656319f0ade81052340b804a31333a80b2300a5c181d426a030b804a301bff2e6b6a7603ee8f0e21b58187005582dda303280b9b813f8d0e21b5853f35a90416594dc5e3c093d121a4b6f01ba74af0787400b5de39c031d121a436710740251806b6468750abadc46b7fd2762c002ac5707400b5d6e1c04dd121a4b6b100a814674707502b8de2b43f69a72c002ac5edd101d44af3809f448790dac802a052dc161d40adb309f8607408a9ad2c002ac5add101d43a8f024f478790daca6b802ac58f818da42d5fe97780e3a343486de60e804a310eec1b1d42adf176d2df094913b000a8249f890ea056580adc1c1d426a3b0b804af21dd2a857d56b14786774082907160095c69ffcea3617affd495362015069ae261d06547d3601974787907261015069360323d12114e261bcf6274dd9d0f8b80765559cd9c09bf14a604d5e099c8827ffa52973074025da023c141d4203b51a177fa923160095eab3c069d12134108702df8e0e21e5c602a092bd0d67c0976e14b8383a8494230b804a7637b0283a84fa6a16f040740829471e0254e97607de40ba1faeb26cc46b9f5263ee00a8744f91a6c2a93c0fe1e22f35e60e806a3004fc23f0f5e820ea99570027e1c97fa9317700548371e0adb858946425fef794ba6201502dbe87e3824bb104b8353a84943b3f02504df6045e0fcc890ea2c6b602d7000f46079172e70e806ab21e78223a84ba3213177fa927dc01506da6915e8dfb52741075cc6b7f520fb903a0da8c01e7e201b21c3d888bbfd4331600d5e84ee0c0e810eac859c0b5d121a492580054ab7790a606aafdc6f1da9fd4731600d5ea71e0e9e8109a92e703b74587904ae32140d56c1ab016f84274104d682bf069e017d141a4d2b803a09a8de10b816d371d177fa92f2c00aadd6da497e5d43e1b810f4787904a650190600d30121d423bf819b0393a84542a0b80048fe08d80b67939f0b9e81052c93c042825d3492f047e313a881807be01dc1e1d442a993b0052320aac8e0e21000ec6c55fea3b0b80f48c9b81a5d1212ab71578577408a9061600697babf14060a421bcf6270d840540dade43f82e409451e0aae810522d2c00d28e3e022c8f0e51a1fbf0da9f3430de0290766e39707c74888a9c019c1a1d42aa893b00d2cedd002c8b0e518971bc81210d9c05409ad8f9a453e9eaafe701774487906a63019026f633d20341ea9fadc025d121a41a5900a4c95d093c273a44c1c649372f240d9805409adc30f0f7d1210a350a7c343a84542b0b80b46bdf008e890e51a07b70089314c66b80d2d41c00bc0698111da410a7e35b0b52287700a4a97900981b1da210e3c0cae81052ed2c00d2d4bd1f58101da2000700ff1a1d42aa9d05409aba2da489816a6e04b8343a84240b80d4a92f02274687c8d8185efb935ac1022075ee3cd2153675663af0a7d12124251600a9733f02768f0e91a1efe2b53fa935bc0628353317f8efc0b3a28364e2b46dbf24b5843b0052339b809f4787c884d7fea416b20048cdfd1fe0e4e81019d81f58171d42d2f62c005277fe8874b25d3b3702bc3b3a84a41d5900a4eedc072c8c0ed16223c0a3d12124edc8022075ef7f90ce04687bf3804f448790b4731600a97b1bf0719b9d594b1aa72ca985bc0628f5ce0dc0f5d1215a623969e29fa496720740ea9db7e1814048d7fe5645879034390b80d43b77018ba343b4c0be78ed4f6a3d3f02907a6b3ef087a497026b340cfc359efc975acf1d00a9b79e041e8f0e116818177f290bee0048bd3704fc3fe06bd14106ec10e04da4bbff925ace1d00a9f7c681b76efb674daec5c55fca860540ea8f75a437f06b712af095e81092a6ce0220f5cfc5c096e81003e0b43f29431600a97fd6930e0596eed9a42b909232e22140a9bfa601b7005f8c0ed227c3c0a780c7a28348ea8c3b00527f8d01e752ee81c0cdb8f84b59b20048fd7707705074883e580a7c323a84a4662c00d260aca1bcc978d7e0b53f295b160069301e07364687e8a11381af468790d49c8700a5c19906fc13f0f9e8205d1a271d6af4e4bf94317700a4c119a38cfbf28b70f197b267019006eb16604974882e0c037f121d4252f72c00d2e0ad21dfc3731bf1da9f548419d101a40a3d4c2a0033a383746819f05fa24348ea0d0f014a3166003793d70b817750df8863a9587e0420c5d80aac8e0ed181e371f1978a620190e2dc0c1c1e1d620ac6c8abac489a020b8014eb7cda7f20706fe0dee810927acb0220c57a283ac02e0c0397458790d47b160029de47488375da6803e919634985b10048f146804f4587d88965c05f448790d41f1600a91dbe495a70dbe4cf48b7152415c80220b5c7b9c0e6e810dbec07fc63740849fd630190dae397c0bf4587004649cf154b2a9805406a97eb808581bfff08f065d2e13f4905b30048ed73017070c0ef3b067c07f85ef4bf0049fd670190da671c781370d0007fcf11e056e0fae83fbca4c1b00048edb4157803e95060bf2776cd03fe01b821fa0f2d69709c0628b5df91c0d5a4f301bdf65ce0edf899bf541d0b80948719c05b48bb76f37af0ff771cf05ee0f6e83f98a4181600292f3381df03fe00b891ce3ec6db48fa89ffaf8075d17f1049b12c0052bee603a70047002f04f6219d17f832f06ae031e07ee04ed201bfefd2fff304923261019024a942de029024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922af4ff01b445461096169ac30000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "getRecord": {
+      "id": 34676,
+      "api": {
+        "url": "/{{parameters.tableName}}/Action",
+        "body": {
+          "Rows": "{{formatRows(parameters.Rows)}}",
+          "Action": "Find",
+          "Properties": {
+            "Locale": "{{connection.locale}}",
+            "Location": "{{connection.location}}",
+            "Selector": "Filter({{parameters.tableName}}, [_RowNumber] = {{parameters._RowNumber}})",
+            "Timezone": "{{connection.timezone}}",
+            "UserSettings": "{{toObject(parameters.UserSettings)}}",
+            "RunAsUserEmail": "{{parameters.RunAsUserEmail}}"
+          }
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{body[1]}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "getRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Record",
+      "scope": [],
+      "expect": [
+        {
+          "name": "tableName",
+          "type": "text",
+          "label": "Table Name",
+          "required": true
+        },
+        {
+          "name": "_RowNumber",
+          "type": "uinteger",
+          "label": "Row Number",
+          "required": true,
+          "validate": {
+            "min": 2
+          }
+        },
+        {
+          "help": "The user email address of the person taking the action. The action is performed under the user ID of the user email address you specify. If this value is not specified, the action is performed under the user ID of the application owner. If you are performing an action against a table that uses data partitions and the partition expression is based on a `USEREMAIL()` value, you should specify the user email value here.",
+          "name": "RunAsUserEmail",
+          "type": "email",
+          "label": "Run as User Email"
+        },
+        {
+          "help": "The user setting to be used when performing the action. If not specified, no user settings are used. If you are performing an action against a table that uses data partitions and the partition expression is based on `USERSETTINGS()` values, you should specify those values here.",
+          "name": "UserSettings",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Setting Option Name"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Setting Option Value"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "User Settings"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "appsheet",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/{{parameters.tableName}}/Action\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"Action\": \"Find\",\n        \"Properties\": {\n            \"Locale\": \"{{connection.locale}}\",\n            \"Location\": \"{{connection.location}}\",\n            \"Timezone\": \"{{connection.timezone}}\",\n            \"RunAsUserEmail\": \"{{parameters.RunAsUserEmail}}\",\n            \"UserSettings\": \"{{toObject(parameters.UserSettings)}}\",\n            \"Selector\": \"Filter({{parameters.tableName}}, [_RowNumber] = {{parameters._RowNumber}})\"\n        },\n        \"Rows\": \"{{formatRows(parameters.Rows)}}\"\n    },\n    \"response\": {\n        \"output\": \"{{body[1]}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "appsheet",
+      "description": "Retrieves a single record specified by the number of the row.",
+      "expectJsonc": "[\n    {\n        \"name\": \"tableName\",\n        \"type\": \"text\",\n        \"label\": \"Table Name\",\n        \"required\": true\n    },\n    {\n        \"name\": \"_RowNumber\",\n        \"label\": \"Row Number\",\n        \"required\": true,\n        \"type\": \"uinteger\",\n        \"validate\": {\n            \"min\": 2\n        }\n    },\n    {\n        \"name\": \"RunAsUserEmail\",\n        \"type\": \"email\",\n        \"label\": \"Run as User Email\",\n        \"help\": \"The user email address of the person taking the action. The action is performed under the user ID of the user email address you specify. If this value is not specified, the action is performed under the user ID of the application owner. If you are performing an action against a table that uses data partitions and the partition expression is based on a `USEREMAIL()` value, you should specify the user email value here.\"\n    },\n    {\n        \"name\": \"UserSettings\",\n        \"label\": \"User Settings\",\n        \"type\": \"array\",\n        \"help\": \"The user setting to be used when performing the action. If not specified, no user settings are used. If you are performing an action against a table that uses data partitions and the partition expression is based on `USERSETTINGS()` values, you should specify those values here.\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"label\": \"Setting Option Name\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"label\": \"Setting Option Value\",\n                    \"type\": \"text\"\n                }\n            ]\n        }\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "editRecord": {
+      "id": 34677,
+      "api": {
+        "url": "/{{parameters.tableName}}/Action",
+        "body": {
+          "Rows": [
+            "{{toObject(parameters.Record)}}"
+          ],
+          "Action": "Edit",
+          "Properties": {
+            "Locale": "{{connection.locale}}",
+            "Location": "{{connection.location}}",
+            "Timezone": "{{connection.timezone}}",
+            "UserSettings": "{{toObject(parameters.UserSettings)}}",
+            "RunAsUserEmail": "{{parameters.RunAsUserEmail}}"
+          }
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{body.Rows[1]}}"
+        }
+      },
+      "rev": 3,
+      "crud": "update",
+      "name": "editRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Edit a Record",
+      "scope": [],
+      "expect": [
+        {
+          "name": "tableName",
+          "type": "text",
+          "label": "Table Name",
+          "required": true
+        },
+        {
+          "help": "Each record to be added must include the key field values.\nIf some field is omitted it's value will not change.\nThe fields should be editable based on your table's settings.",
+          "name": "Record",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Key"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Value"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Record",
+          "required": true
+        },
+        {
+          "help": "The user email address of the person taking the action. The action is performed under the user ID of the user email address you specify. If this value is not specified, the action is performed under the user ID of the application owner. If you are performing an action against a table that uses data partitions and the partition expression is based on a `USEREMAIL()` value, you should specify the user email value here.",
+          "name": "RunAsUserEmail",
+          "type": "email",
+          "label": "Run as User Email"
+        },
+        {
+          "help": "The user setting to be used when performing the action. If not specified, no user settings are used. If you are performing an action against a table that uses data partitions and the partition expression is based on `USERSETTINGS()` values, you should specify those values here.",
+          "name": "UserSettings",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Setting Option Name"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Setting Option Value"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "User Settings"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "appsheet",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/{{parameters.tableName}}/Action\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"Action\": \"Edit\",\n        \"Properties\": {\n            \"Locale\": \"{{connection.locale}}\",\n            \"Location\": \"{{connection.location}}\",\n            \"Timezone\": \"{{connection.timezone}}\",\n            \"RunAsUserEmail\": \"{{parameters.RunAsUserEmail}}\",\n            \"UserSettings\": \"{{toObject(parameters.UserSettings)}}\"\n        },\n        \"Rows\": [\n            \"{{toObject(parameters.Record)}}\"\n        ]\n    },\n    \"response\": {\n        \"output\": \"{{body.Rows[1]}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "appsheet",
+      "description": "Updates a record specified by key fields.",
+      "expectJsonc": "[\n    {\n        \"name\": \"tableName\",\n        \"type\": \"text\",\n        \"label\": \"Table Name\",\n        \"required\": true\n    },\n    {\n        \"name\": \"Record\",\n        \"label\": \"Record\",\n        \"required\": true,\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"label\": \"Key\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"label\": \"Value\",\n                    \"type\": \"text\"\n                }\n            ]\n        },\n        \"help\": \"Each record to be added must include the key field values.\\nIf some field is omitted it's value will not change.\\nThe fields should be editable based on your table's settings.\"\n    },\n    {\n        \"name\": \"RunAsUserEmail\",\n        \"type\": \"email\",\n        \"label\": \"Run as User Email\",\n        \"help\": \"The user email address of the person taking the action. The action is performed under the user ID of the user email address you specify. If this value is not specified, the action is performed under the user ID of the application owner. If you are performing an action against a table that uses data partitions and the partition expression is based on a `USEREMAIL()` value, you should specify the user email value here.\"\n    },\n    {\n        \"name\": \"UserSettings\",\n        \"label\": \"User Settings\",\n        \"type\": \"array\",\n        \"help\": \"The user setting to be used when performing the action. If not specified, no user settings are used. If you are performing an action against a table that uses data partitions and the partition expression is based on `USERSETTINGS()` values, you should specify those values here.\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"label\": \"Setting Option Name\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"label\": \"Setting Option Value\",\n                    \"type\": \"text\"\n                }\n            ]\n        }\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "makeApiCall": {
+      "id": 34678,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://api.appsheet.com/api/v2/apps/{{connection.appId}}/tables/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "POST",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "makeApiCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "rpc://app%23appsheet@1/universalUrl",
+        {
+          "help": "For example: {\"Action\": \"Find\", \"Properties\": {}}",
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "appsheet",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"https://api.appsheet.com/api/v2/apps/{{connection.appId}}/tables/{{parameters.url}}\",\n    \"method\": \"POST\",\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"response\": {\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "appsheet",
+      "description": "Performs an arbitary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n        \"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n        \"default\": [\n            {\n                \"key\": \"Content-Type\",\n                \"value\": \"application/json\"\n            }\n        ]\n    },\n    \"rpc://universalUrl\",\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\",\n        \"help\": \"For example: {\\\"Action\\\": \\\"Find\\\", \\\"Properties\\\": {}}\"\n    },\n    {\n        \"name\": \"qs\",\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ]\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"body\",\n\t\t\"label\": \"Body\",\n\t\t\"type\": \"any\"\n\t},\n\t{\n\t\t\"name\": \"headers\",\n\t\t\"label\": \"Headers\",\n\t\t\"type\": \"collection\"\n\t},\n\t{\n\t\t\"name\": \"statusCode\",\n\t\t\"label\": \"Status code\",\n\t\t\"type\": \"number\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createRecord": {
+      "id": 34679,
+      "api": {
+        "url": "/{{parameters.tableName}}/Action",
+        "body": {
+          "Rows": [
+            "{{toObject(parameters.Record)}}"
+          ],
+          "Action": "Add",
+          "Properties": {
+            "Locale": "{{connection.locale}}",
+            "Location": "{{connection.location}}",
+            "Timezone": "{{connection.timezone}}",
+            "UserSettings": "{{toObject(parameters.UserSettings)}}",
+            "RunAsUserEmail": "{{parameters.RunAsUserEmail}}"
+          }
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{body.Rows[1]}}"
+        }
+      },
+      "rev": 3,
+      "crud": "create",
+      "name": "createRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Record",
+      "scope": [],
+      "expect": [
+        {
+          "name": "tableName",
+          "type": "text",
+          "label": "Table Name",
+          "required": true
+        },
+        {
+          "help": "Each record to be added must normally include the key field values. However, if the key field contains an `Initial value`, you can omit the key field value. For example, you should omit the key field value when the key field has an `Initial value` of `UNIQUEID()` or `RandBetween()`. The system will initialize the key field to the `Initial value`.\nAlso note, that the values should be of the right type and the keys should be existing column names for the records at this table.",
+          "name": "Record",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Key"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Value"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Record",
+          "required": true
+        },
+        {
+          "help": "The user email address of the person taking the action. The action is performed under the user ID of the user email address you specify. If this value is not specified, the action is performed under the user ID of the application owner. If you are performing an action against a table that uses data partitions and the partition expression is based on a `USEREMAIL()` value, you should specify the user email value here.",
+          "name": "RunAsUserEmail",
+          "type": "email",
+          "label": "Run as User Email"
+        },
+        {
+          "help": "The user setting to be used when performing the action. If not specified, no user settings are used. If you are performing an action against a table that uses data partitions and the partition expression is based on `USERSETTINGS()` values, you should specify those values here.",
+          "name": "UserSettings",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Setting Option Name"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Setting Option Value"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "User Settings"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "appsheet",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/{{parameters.tableName}}/Action\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"Action\": \"Add\",\n        \"Properties\": {\n            \"Locale\": \"{{connection.locale}}\",\n            \"Location\": \"{{connection.location}}\",\n            \"Timezone\": \"{{connection.timezone}}\",\n            \"RunAsUserEmail\": \"{{parameters.RunAsUserEmail}}\",\n            \"UserSettings\": \"{{toObject(parameters.UserSettings)}}\"\n        },\n        \"Rows\": [\"{{toObject(parameters.Record)}}\"]\n    },\n    \"response\": {\n        \"output\": \"{{body.Rows[1]}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "appsheet",
+      "description": "Adds a new record.",
+      "expectJsonc": "[\n    {\n        \"name\": \"tableName\",\n        \"type\": \"text\",\n        \"label\": \"Table Name\",\n        \"required\": true\n    },\n    {\n        \"name\": \"Record\",\n        \"label\": \"Record\",\n        \"required\": true,\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"label\": \"Key\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"label\": \"Value\",\n                    \"type\": \"text\"\n                }\n            ]\n        },\n        \"help\": \"Each record to be added must normally include the key field values. However, if the key field contains an `Initial value`, you can omit the key field value. For example, you should omit the key field value when the key field has an `Initial value` of `UNIQUEID()` or `RandBetween()`. The system will initialize the key field to the `Initial value`.\\nAlso note, that the values should be of the right type and the keys should be existing column names for the records at this table.\"\n    },\n    {\n        \"name\": \"RunAsUserEmail\",\n        \"type\": \"email\",\n        \"label\": \"Run as User Email\",\n        \"help\": \"The user email address of the person taking the action. The action is performed under the user ID of the user email address you specify. If this value is not specified, the action is performed under the user ID of the application owner. If you are performing an action against a table that uses data partitions and the partition expression is based on a `USEREMAIL()` value, you should specify the user email value here.\"\n    },\n    {\n        \"name\": \"UserSettings\",\n        \"label\": \"User Settings\",\n        \"type\": \"array\",\n        \"help\": \"The user setting to be used when performing the action. If not specified, no user settings are used. If you are performing an action against a table that uses data partitions and the partition expression is based on `USERSETTINGS()` values, you should specify those values here.\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"label\": \"Setting Option Name\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"label\": \"Setting Option Value\",\n                    \"type\": \"text\"\n                }\n            ]\n        }\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deleteRecord": {
+      "id": 34680,
+      "api": {
+        "url": "/{{parameters.tableName}}/Action",
+        "body": {
+          "Rows": [
+            "{{toObject(parameters.Record)}}"
+          ],
+          "Action": "Delete",
+          "Properties": {
+            "Locale": "{{connection.locale}}",
+            "Location": "{{connection.location}}",
+            "Timezone": "{{connection.timezone}}",
+            "UserSettings": "{{toObject(parameters.UserSettings)}}",
+            "RunAsUserEmail": "{{parameters.RunAsUserEmail}}"
+          }
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{body.Rows[1]}}"
+        }
+      },
+      "rev": 3,
+      "crud": "delete",
+      "name": "deleteRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Delete a Record",
+      "scope": [],
+      "expect": [
+        {
+          "name": "tableName",
+          "type": "text",
+          "label": "Table Name",
+          "required": true
+        },
+        {
+          "help": "Record must include the key field values of the record to be deleted.",
+          "name": "Record",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Key"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Value"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Record",
+          "required": true
+        },
+        {
+          "help": "The user email address of the person taking the action. The action is performed under the user ID of the user email address you specify. If this value is not specified, the action is performed under the user ID of the application owner. If you are performing an action against a table that uses data partitions and the partition expression is based on a `USEREMAIL()` value, you should specify the user email value here.",
+          "name": "RunAsUserEmail",
+          "type": "email",
+          "label": "Run as User Email"
+        },
+        {
+          "help": "The user setting to be used when performing the action. If not specified, no user settings are used. If you are performing an action against a table that uses data partitions and the partition expression is based on `USERSETTINGS()` values, you should specify those values here.",
+          "name": "UserSettings",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Setting Option Name"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Setting Option Value"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "User Settings"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "appsheet",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/{{parameters.tableName}}/Action\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"Action\": \"Delete\",\n        \"Properties\": {\n            \"Locale\": \"{{connection.locale}}\",\n            \"Location\": \"{{connection.location}}\",\n            \"Timezone\": \"{{connection.timezone}}\",\n            \"RunAsUserEmail\": \"{{parameters.RunAsUserEmail}}\",\n            \"UserSettings\": \"{{toObject(parameters.UserSettings)}}\"\n        },\n        \"Rows\": [\n            \"{{toObject(parameters.Record)}}\"\n        ]\n    },\n    \"response\": {\n        \"output\": \"{{body.Rows[1]}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "appsheet",
+      "description": "Deletes a record specified by key fields.",
+      "expectJsonc": "[\n    {\n        \"name\": \"tableName\",\n        \"type\": \"text\",\n        \"label\": \"Table Name\",\n        \"required\": true\n    },\n    {\n        \"name\": \"Record\",\n        \"label\": \"Record\",\n        \"required\": true,\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"label\": \"Key\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"label\": \"Value\",\n                    \"type\": \"text\"\n                }\n            ]\n        },\n        \"help\": \"Record must include the key field values of the record to be deleted.\"\n    },\n    {\n        \"name\": \"RunAsUserEmail\",\n        \"type\": \"email\",\n        \"label\": \"Run as User Email\",\n        \"help\": \"The user email address of the person taking the action. The action is performed under the user ID of the user email address you specify. If this value is not specified, the action is performed under the user ID of the application owner. If you are performing an action against a table that uses data partitions and the partition expression is based on a `USEREMAIL()` value, you should specify the user email value here.\"\n    },\n    {\n        \"name\": \"UserSettings\",\n        \"label\": \"User Settings\",\n        \"type\": \"array\",\n        \"help\": \"The user setting to be used when performing the action. If not specified, no user settings are used. If you are performing an action against a table that uses data partitions and the partition expression is based on `USERSETTINGS()` values, you should specify those values here.\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"label\": \"Setting Option Name\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"label\": \"Setting Option Value\",\n                    \"type\": \"text\"\n                }\n            ]\n        }\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "invokeAction": {
+      "id": 34681,
+      "api": {
+        "url": "/{{parameters.tableName}}/Action",
+        "body": {
+          "Rows": [
+            "{{toObject(parameters.Record)}}"
+          ],
+          "Action": "{{parameters.action}}",
+          "Properties": {
+            "Locale": "{{connection.locale}}",
+            "Location": "{{connection.location}}",
+            "Timezone": "{{connection.timezone}}",
+            "UserSettings": "{{toObject(parameters.UserSettings)}}",
+            "RunAsUserEmail": "{{parameters.RunAsUserEmail}}"
+          }
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{body.Rows[1]}}"
+        }
+      },
+      "rev": 3,
+      "crud": "create",
+      "name": "invokeAction",
+      "epoch": null,
+      "flags": {},
+      "label": "Invoke an Action",
+      "scope": [],
+      "expect": [
+        {
+          "name": "tableName",
+          "type": "text",
+          "label": "Table Name",
+          "required": true
+        },
+        {
+          "name": "action",
+          "type": "text",
+          "label": "Action",
+          "required": true
+        },
+        {
+          "help": "Record must include the key field values of the record to apply an action to.",
+          "name": "Record",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Key"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Value"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Record",
+          "required": true
+        },
+        {
+          "help": "The user email address of the person taking the action. The action is performed under the user ID of the user email address you specify. If this value is not specified, the action is performed under the user ID of the application owner. If you are performing an action against a table that uses data partitions and the partition expression is based on a `USEREMAIL()` value, you should specify the user email value here.",
+          "name": "RunAsUserEmail",
+          "type": "email",
+          "label": "Run as User Email"
+        },
+        {
+          "help": "The user setting to be used when performing the action. If not specified, no user settings are used. If you are performing an action against a table that uses data partitions and the partition expression is based on `USERSETTINGS()` values, you should specify those values here.",
+          "name": "UserSettings",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Setting Option Name"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Setting Option Value"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "User Settings"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "appsheet",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/{{parameters.tableName}}/Action\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"Action\": \"{{parameters.action}}\",\n        \"Properties\": {\n            \"Locale\": \"{{connection.locale}}\",\n            \"Location\": \"{{connection.location}}\",\n            \"Timezone\": \"{{connection.timezone}}\",\n            \"RunAsUserEmail\": \"{{parameters.RunAsUserEmail}}\",\n            \"UserSettings\": \"{{toObject(parameters.UserSettings)}}\"\n        },\n        \"Rows\": [\n            \"{{toObject(parameters.Record)}}\"\n        ]\n    },\n    \"response\": {\n        \"output\": \"{{body.Rows[1]}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "appsheet",
+      "description": "Invokes a custom action available for your table.",
+      "expectJsonc": "[\n    {\n        \"name\": \"tableName\",\n        \"type\": \"text\",\n        \"label\": \"Table Name\",\n        \"required\": true\n    },\n    {\n        \"name\": \"action\",\n        \"type\": \"text\",\n        \"label\": \"Action\",\n        \"required\": true\n    },\n    {\n        \"name\": \"Record\",\n        \"label\": \"Record\",\n        \"required\": true,\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"label\": \"Key\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"label\": \"Value\",\n                    \"type\": \"text\"\n                }\n            ]\n        },\n        \"help\": \"Record must include the key field values of the record to apply an action to.\"\n    },\n    {\n        \"name\": \"RunAsUserEmail\",\n        \"type\": \"email\",\n        \"label\": \"Run as User Email\",\n        \"help\": \"The user email address of the person taking the action. The action is performed under the user ID of the user email address you specify. If this value is not specified, the action is performed under the user ID of the application owner. If you are performing an action against a table that uses data partitions and the partition expression is based on a `USEREMAIL()` value, you should specify the user email value here.\"\n    },\n    {\n        \"name\": \"UserSettings\",\n        \"label\": \"User Settings\",\n        \"type\": \"array\",\n        \"help\": \"The user setting to be used when performing the action. If not specified, no user settings are used. If you are performing an action against a table that uses data partitions and the partition expression is based on `USERSETTINGS()` values, you should specify those values here.\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"label\": \"Setting Option Name\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"label\": \"Setting Option Value\",\n                    \"type\": \"text\"\n                }\n            ]\n        }\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "searchRecords": {
+      "id": 34682,
+      "api": {
+        "url": "/{{parameters.tableName}}/Action",
+        "body": {
+          "Rows": "{{formatRows(parameters.Rows)}}",
+          "Action": "Find",
+          "Properties": {
+            "Locale": "{{connection.locale}}",
+            "Location": "{{connection.location}}",
+            "Selector": "{{parameters.selector}}",
+            "Timezone": "{{connection.timezone}}",
+            "UserSettings": "{{toObject(parameters.UserSettings)}}",
+            "RunAsUserEmail": "{{parameters.RunAsUserEmail}}"
+          }
+        },
+        "method": "POST",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{item}}",
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "searchRecords",
+      "epoch": null,
+      "flags": {},
+      "label": "Search Records",
+      "scope": [],
+      "expect": [
+        {
+          "name": "tableName",
+          "type": "text",
+          "label": "Table Name",
+          "required": true
+        },
+        {
+          "help": "The user email address of the person taking the action. The action is performed under the user ID of the user email address you specify. If this value is not specified, the action is performed under the user ID of the application owner. If you are performing an action against a table that uses data partitions and the partition expression is based on a `USEREMAIL()` value, you should specify the user email value here.",
+          "name": "RunAsUserEmail",
+          "type": "email",
+          "label": "Run as User Email"
+        },
+        {
+          "help": "The user setting to be used when performing the action. If not specified, no user settings are used. If you are performing an action against a table that uses data partitions and the partition expression is based on `USERSETTINGS()` values, you should specify those values here.",
+          "name": "UserSettings",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Setting Option Name"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Setting Option Value"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "User Settings"
+        },
+        {
+          "help": "Selector expression. More info about which expressions are available can be found [here](https://help.appsheet.com/en/articles/961274-list-expressions).",
+          "name": "selector",
+          "type": "text",
+          "label": "Selector"
+        },
+        {
+          "help": "You can omit the Selector property and specify input Rows containing the key values of the records to be read. This will return all rows having matching key values from the table.",
+          "name": "Rows",
+          "spec": {
+            "spec": {
+              "spec": [
+                {
+                  "help": "All keys should be unique in one request.",
+                  "name": "name",
+                  "type": "text",
+                  "label": "Key"
+                },
+                {
+                  "name": "value",
+                  "type": "text",
+                  "label": "Value"
+                }
+              ],
+              "type": "collection"
+            },
+            "type": "array"
+          },
+          "type": "array",
+          "label": "Rows"
+        },
+        {
+          "help": "Maximum number of items to display.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "appsheet",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/{{parameters.tableName}}/Action\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"Action\": \"Find\",\n        \"Properties\": {\n            \"Locale\": \"{{connection.locale}}\",\n            \"Location\": \"{{connection.location}}\",\n            \"Timezone\": \"{{connection.timezone}}\",\n            \"RunAsUserEmail\": \"{{parameters.RunAsUserEmail}}\",\n            \"UserSettings\": \"{{toObject(parameters.UserSettings)}}\",\n            \"Selector\": \"{{parameters.selector}}\"\n        },\n        \"Rows\": \"{{formatRows(parameters.Rows)}}\"\n    },\n    \"response\": {\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": \"{{item}}\",\n        \"iterate\": \"{{body}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "appsheet",
+      "description": "Searches for records at the table or lists them all.",
+      "expectJsonc": "[\n    {\n        \"name\": \"tableName\",\n        \"type\": \"text\",\n        \"label\": \"Table Name\",\n        \"required\": true\n    },\n    {\n        \"name\": \"RunAsUserEmail\",\n        \"type\": \"email\",\n        \"label\": \"Run as User Email\",\n        \"help\": \"The user email address of the person taking the action. The action is performed under the user ID of the user email address you specify. If this value is not specified, the action is performed under the user ID of the application owner. If you are performing an action against a table that uses data partitions and the partition expression is based on a `USEREMAIL()` value, you should specify the user email value here.\"\n    },\n    {\n        \"name\": \"UserSettings\",\n        \"label\": \"User Settings\",\n        \"type\": \"array\",\n        \"help\": \"The user setting to be used when performing the action. If not specified, no user settings are used. If you are performing an action against a table that uses data partitions and the partition expression is based on `USERSETTINGS()` values, you should specify those values here.\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"label\": \"Setting Option Name\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"label\": \"Setting Option Value\",\n                    \"type\": \"text\"\n                }\n            ]\n        }\n    },\n    {\n        \"name\": \"selector\",\n        \"label\": \"Selector\",\n        \"type\": \"text\",\n        \"help\": \"Selector expression. More info about which expressions are available can be found [here](https://help.appsheet.com/en/articles/961274-list-expressions).\"\n    },\n    {\n        \"name\": \"Rows\",\n        \"label\": \"Rows\",\n        \"type\": \"array\",\n        \"help\": \"You can omit the Selector property and specify input Rows containing the key values of the records to be read. This will return all rows having matching key values from the table.\",\n        \"spec\": {\n            \"type\": \"array\",\n            \"spec\": {\n                \"type\": \"collection\",\n                \"spec\": [\n                    {\n                        \"name\": \"name\",\n                        \"label\": \"Key\",\n                        \"type\": \"text\",\n                        \"help\": \"All keys should be unique in one request.\"\n                    },\n                    {\n                        \"name\": \"value\",\n                        \"label\": \"Value\",\n                        \"type\": \"text\"\n                    }\n                ]\n            }\n        }\n    },\n    {\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 10,\n        \"help\": \"Maximum number of items to display.\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "appsheet": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.ApplicationAccessKey"
+          ]
+        },
+        "url": "https://api.appsheet.com/api/v2/apps/{{parameters.appId}}/tables/{{parameters.tableName}}/Action",
+        "body": {
+          "Action": "Find",
+          "Properties": {
+            "Locale": "{{parameters.locale}}",
+            "Location": "{{parameters.location}}",
+            "Timezone": "{{parameters.timezone}}"
+          }
+        },
+        "method": "POST",
+        "headers": {
+          "ApplicationAccessKey": "{{parameters.apiKey}}"
+        },
+        "response": {
+          "error": {
+            "message": "[{{statusCode}}] {{body.message || body.Message}}."
+          }
+        }
+      },
+      "rev": 7,
+      "name": "appsheet",
+      "type": "basic",
+      "label": "AppSheet",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "appsheet",
+      "install": {},
+      "apiJsonc": "{\n    \"url\": \"https://api.appsheet.com/api/v2/apps/{{parameters.appId}}/tables/{{parameters.tableName}}/Action\",\n    \"headers\": {\n        \"ApplicationAccessKey\": \"{{parameters.apiKey}}\"\n    },\n    \"method\": \"POST\",\n    \"body\": {\n        \"Action\": \"Find\",\n        \"Properties\": {\n            \"Locale\": \"{{parameters.locale}}\",\n            \"Location\": \"{{parameters.location}}\",\n            \"Timezone\": \"{{parameters.timezone}}\"\n        }\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.message || body.Message}}.\"\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.ApplicationAccessKey\"\n        ]\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "help": "Application Access Keys of your app are listed and can be created at Manage -> Integrations.",
+          "name": "apiKey",
+          "type": "password",
+          "label": "Application Access Key",
+          "editable": true,
+          "required": true
+        },
+        {
+          "help": "App ID can be found at your app's Manage -> Integrations.",
+          "name": "appId",
+          "type": "uuid",
+          "label": "App ID",
+          "editable": true,
+          "required": true
+        },
+        {
+          "name": "tableName",
+          "type": "text",
+          "label": "Table Name",
+          "editable": true,
+          "required": true
+        },
+        {
+          "help": "The Locale is used when validating Date, DateTime, Decimal, Percent, Price, and Time data values. For example, when Locale is en-US, date values must be entered in MM/DD/YYYY format; when Locale is en-GB, date values must be entered in DD/MM/YYYY format.",
+          "name": "locale",
+          "type": "select",
+          "label": "Locale",
+          "default": "en-GB",
+          "options": "rpc://app%23appsheet@1/locales",
+          "editable": true
+        },
+        {
+          "help": "This value is used for ChangeLocation columns. For example `47.623098, -122.330184` represents Seattle, Washington in the US.",
+          "name": "location",
+          "type": "text",
+          "label": "Location",
+          "default": "0.000000, 0.000000",
+          "editable": true
+        },
+        {
+          "help": "The timezone of the client making the request. For example, `Pacific Standard Time` indicates Pacific Standard Time in the United States and Canada.",
+          "name": "timezone",
+          "type": "text",
+          "label": "Timezone",
+          "default": "UTC",
+          "editable": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "installSpec": [],
+      "scopesJsonc": "{\n}",
+      "installJsonc": "{\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"apiKey\",\n        \"type\": \"password\",\n        \"label\": \"Application Access Key\",\n        \"required\": true,\n        \"help\": \"Application Access Keys of your app are listed and can be created at Manage -> Integrations.\",\n        \"editable\": true\n    },\n    {\n        \"name\": \"appId\",\n        \"type\": \"uuid\",\n        \"label\": \"App ID\",\n        \"required\": true,\n        \"help\": \"App ID can be found at your app's Manage -> Integrations.\",\n        \"editable\": true\n    },\n    {\n        \"name\": \"tableName\",\n        \"label\": \"Table Name\",\n        \"type\": \"text\",\n        \"required\": true,\n        \"editable\": true\n    },\n    {\n        \"name\": \"locale\",\n        \"label\": \"Locale\",\n        \"type\": \"select\",\n        \"default\": \"en-GB\",\n        \"options\": \"rpc://locales\",\n        \"help\": \"The Locale is used when validating Date, DateTime, Decimal, Percent, Price, and Time data values. For example, when Locale is en-US, date values must be entered in MM/DD/YYYY format; when Locale is en-GB, date values must be entered in DD/MM/YYYY format.\",\n        \"editable\": true\n    },\n    {\n        \"name\": \"location\",\n        \"label\": \"Location\",\n        \"type\": \"text\",\n        \"default\": \"0.000000, 0.000000\",\n        \"help\": \"This value is used for ChangeLocation columns. For example `47.623098, -122.330184` represents Seattle, Washington in the US.\",\n        \"editable\": true\n    },\n    {\n        \"name\": \"timezone\",\n        \"label\": \"Timezone\",\n        \"type\": \"text\",\n        \"default\": \"UTC\",\n        \"help\": \"The timezone of the client making the request. For example, `Pacific Standard Time` indicates Pacific Standard Time in the United States and Canada.\",\n        \"editable\": true\n    }\n]",
+      "installSpecJsonc": "[\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://api.appsheet.com/api/v2/apps/{{connection.appId}}/tables\",\n    \"headers\": {\n        \"ApplicationAccessKey\": \"{{connection.apiKey}}\"\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.message || body.Message}}.\"\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.ApplicationAccessKey\"\n        ]\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "toObject": {
+      "rev": 3,
+      "code": "function toObject(array) {\n    let result = {};\n    if (array && Array.isArray(array)) {\n        array.forEach(field => {\n            if (field.name && field.value) {\n                result[field.name] = field.value;\n            }\n        });\n    }\n    return result;\n}",
+      "name": "toObject",
+      "test": null,
+      "appName": "appsheet",
+      "arguments": "(array)",
+      "appVersion": 1
+    },
+    "formatRows": {
+      "rev": 3,
+      "code": "function formatRows(rows) {\n    if (rows && Array.isArray(rows)) {\n        return rows.map(iml.toObject);\n    }\n}",
+      "name": "formatRows",
+      "test": null,
+      "appName": "appsheet",
+      "arguments": "(rows)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-05-23T20:29:18.055516+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "AppSheet provides a no-code application development platform that allows users to create mobile, tablet, and web applications using data sources like Google Drive, DropBox, Office 365, and other cloud-based spreadsheet and database platforms.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "98c3edd301b9198e3be12ad3dbaf7dce",
+  "versionFull": "1.1.2",
+  "compiledName": "appsheet",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

@@ -1,0 +1,1973 @@
+{
+  "rev": 27,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "https://api.cohere.ai/v1",
+    "headers": {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer {{connection.apiKey}}"
+    },
+    "timeout": "{{common.timeout}}",
+    "response": {
+      "error": {
+        "429": {
+          "type": "RateLimitError",
+          "message": "[{{statusCode}}] {{body.message}}"
+        },
+        "message": "[{{statusCode}}] {{body.message}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "cohere",
+  "_rpcs": {
+    "labels": {
+      "api": {
+        "temp": {
+          "i": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "ID"
+            },
+            {
+              "name": "classifications",
+              "spec": {
+                "spec": [
+                  {
+                    "name": "id",
+                    "type": "text",
+                    "label": "ID"
+                  },
+                  {
+                    "name": "input",
+                    "type": "text",
+                    "label": "Input"
+                  },
+                  {
+                    "name": "prediction",
+                    "type": "text",
+                    "label": "Prediction"
+                  },
+                  {
+                    "name": "predictions",
+                    "spec": {
+                      "type": "text"
+                    },
+                    "type": "array",
+                    "label": "Predictions"
+                  },
+                  {
+                    "name": "confidence",
+                    "type": "number",
+                    "label": "Confidence"
+                  },
+                  {
+                    "name": "confidences",
+                    "spec": {
+                      "type": "number"
+                    },
+                    "type": "array",
+                    "label": "Confidences"
+                  },
+                  {
+                    "name": "labels",
+                    "spec": "{{classifyLabels(parameters)}}",
+                    "type": "collection",
+                    "label": "Labels"
+                  },
+                  {
+                    "name": "classification_type",
+                    "type": "text",
+                    "label": "Classification Type"
+                  }
+                ],
+                "type": "collection"
+              },
+              "type": "array",
+              "label": "Classifications"
+            },
+            {
+              "name": "meta",
+              "spec": [
+                {
+                  "name": "api_version",
+                  "spec": [
+                    {
+                      "name": "version",
+                      "type": "text",
+                      "label": "Version"
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Api Version"
+                },
+                {
+                  "name": "billed_units",
+                  "spec": [
+                    {
+                      "name": "classifications",
+                      "type": "number",
+                      "label": "Classifications"
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Billed Units"
+                }
+              ],
+              "type": "collection",
+              "label": "Meta"
+            }
+          ]
+        },
+        "response": {
+          "output": "{{temp.i}}"
+        }
+      },
+      "rev": 2,
+      "name": "labels",
+      "label": "classify labels",
+      "appName": "cohere",
+      "apiJsonc": "{\n\t\"temp\": {\n\t\t\"i\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"classifications\",\n\t\t\t\t\"type\": \"array\",\n\t\t\t\t\"spec\": {\n\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\"label\": \"ID\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"input\",\n\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\"label\": \"Input\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"prediction\",\n\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\"label\": \"Prediction\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"predictions\",\n\t\t\t\t\t\t\t\"type\": \"array\",\n\t\t\t\t\t\t\t\"spec\": {\n\t\t\t\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"label\": \"Predictions\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"confidence\",\n\t\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\t\"label\": \"Confidence\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"confidences\",\n\t\t\t\t\t\t\t\"type\": \"array\",\n\t\t\t\t\t\t\t\"spec\": {\n\t\t\t\t\t\t\t\t\"type\": \"number\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"label\": \"Confidences\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"labels\",\n\t\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\t\"spec\": \"{{classifyLabels(parameters)}}\",\n\t\t\t\t\t\t\t\"label\": \"Labels\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"classification_type\",\n\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\"label\": \"Classification Type\"\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t},\n\t\t\t\t\"label\": \"Classifications\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"meta\",\n\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"api_version\",\n\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"version\",\n\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\"label\": \"Version\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t],\n\t\t\t\t\t\t\"label\": \"Api Version\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"billed_units\",\n\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"classifications\",\n\t\t\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\t\t\"label\": \"Classifications\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t],\n\t\t\t\t\t\t\"label\": \"Billed Units\"\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"label\": \"Meta\"\n\t\t\t}\n\t\t]\n\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{temp.i}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": null,
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "models": {
+      "api": {
+        "qs": {
+          "endpoint": "{{ifempty(parameters.endpoint, undefined)}}",
+          "page_size": 100
+        },
+        "url": "/models",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.name}}"
+          },
+          "iterate": "{{body.models}}"
+        },
+        "pagination": {
+          "qs": {
+            "page_token": "{{body.next_page_token}}"
+          },
+          "condition": "{{body.next_page_token}}"
+        }
+      },
+      "rev": 2,
+      "name": "models",
+      "label": "models",
+      "appName": "cohere",
+      "apiJsonc": "{\n\t\"url\": \"/models\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"page_size\": 100,\n\t\t\"endpoint\": \"{{ifempty(parameters.endpoint, undefined)}}\"\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.models}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.name}}\"\n\t\t}\n\t},\n\t\"pagination\": {\n\t\t\"condition\": \"{{body.next_page_token}}\",\n\t\t\"qs\": {\n\t\t\t\"page_token\": \"{{body.next_page_token}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "endpoint",
+          "type": "text",
+          "label": "Endpoint"
+        }
+      ],
+      "accountName": "cohere",
+      "altAccountName": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"endpoint\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Endpoint\"\n\t}\n]"
+    },
+    "connectors": {
+      "api": {
+        "qs": {
+          "limit": 100
+        },
+        "url": "/connectors",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.connectors}}"
+        },
+        "pagination": {
+          "qs": {
+            "offset": "{{(pagination.page - 1) * 100}}"
+          },
+          "condition": "{{body.total_count < pagination.page}}"
+        }
+      },
+      "rev": 2,
+      "name": "connectors",
+      "label": "connectors",
+      "appName": "cohere",
+      "apiJsonc": "{\n\t\"url\": \"/connectors\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"limit\": 100\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.connectors}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t},\n\t\"pagination\": {\n\t\t\"condition\": \"{{body.total_count < pagination.page}}\",\n\t\t\"qs\": {\n\t\t\t\"offset\": \"{{(pagination.page - 1) * 100}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "cohere",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "jsonSchema": {
+      "api": {
+        "response": {
+          "output": {
+            "label": "JSON Schema",
+            "value": "{{parseJsonSchema(parameters.json_object)}}"
+          }
+        }
+      },
+      "rev": 2,
+      "name": "jsonSchema",
+      "label": "json schema",
+      "appName": "cohere",
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"label\": \"JSON Schema\",\n\t\t\t\"value\": \"{{parseJsonSchema(parameters.json_object)}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "cohere",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "examplesField": {
+      "api": {
+        "response": {
+          "output": {
+            "help": "Each example is a text string and its associated label/class. Each unique label requires at least 2 examples associated with it; the maximum number of examples is 2500, and each example has a maximum length of 512 tokens.",
+            "name": "examples",
+            "spec": {
+              "spec": [
+                {
+                  "name": "text",
+                  "type": "text",
+                  "label": "Text"
+                },
+                {
+                  "name": "label",
+                  "type": "text",
+                  "label": "Label"
+                }
+              ],
+              "type": "collection",
+              "label": "Example Input"
+            },
+            "type": "array",
+            "label": "Examples",
+            "labels": {
+              "add": "Add example input"
+            },
+            "required": "{{parameters._baseline}}",
+            "validate": {
+              "maxItems": 2500
+            }
+          }
+        }
+      },
+      "rev": 2,
+      "name": "examplesField",
+      "label": "examplesField",
+      "appName": "cohere",
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"name\": \"examples\",\n\t\t\t\"type\": \"array\",\n\t\t\t\"label\": \"Examples\",\n\t\t\t\"required\": \"{{parameters._baseline}}\",\n\t\t\t\"help\": \"Each example is a text string and its associated label/class. Each unique label requires at least 2 examples associated with it; the maximum number of examples is 2500, and each example has a maximum length of 512 tokens.\",\n\t\t\t\"validate\": { \"maxItems\": 2500 },\n\t\t\t\"labels\": { \"add\": \"Add example input\" },\n\t\t\t\"spec\": {\n\t\t\t\t\"label\": \"Example Input\",\n\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t// check example has a maximum length of 512 tokens - https://docs.cohere.com/reference/classify\n\t\t\t\t\t\t\"name\": \"text\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Text\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"label\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Label\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": null,
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {},
+  "label": "Cohere",
+  "theme": "#39594d",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "generate",
+        "chat",
+        "classify",
+        "summarize",
+        "makeAnApiCall"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda793000002fa4944415458c3c5d74f8856551806f0dff74dcd8c138a881999929960511b17d95fa208a2266c51142daa4db91017ed22085ad6ae20883605ae7451ab096aac2841836aa836114426428495336a36339a39f3b4b8e7da9d717066becf991e387c7fb8ef799efb9ef7df69990349a08db5b8060368e90c5318c5af3807add67f5bcdd8b410f7e11e3c81db8b80de0ec921388511bc8b03986a8a90a45e9b92bc93e47496062792bc98a4b7bcec0cf29b931c5c22e22626923c57f3d6e45727195e06f21adf27d99844bb9cc24e3cd8c5392f1637e15eaa48bf114feb3cca3b410f6ead053c50442c3756d402eed05d9a758adf6b011bff07f2717c550b58ceb3aff121beac051c5b66f22ff00a266b012338bf0cc4e3d88367f123a52724b925c991252c3a7f25194a3298a4ef4205ac91a495e4b525201e4db22fc94349062e226e0890644392439781f47c92c3495e4fb23da5e9cc493c4b8024db928c74e1e6cf93ec4ed5515b8d7d2f29a0558b28d88297f11856cd1354d3f805fbf19e2aadc671156ec3ddb8be3cf7330ee23bfc7d2100356a4043441feec2e3b813d7a926a236fec1187ec0c718c69142b201837812dbb17296e093f800af36b360ce22d410b312ebb1065760027f9475aefcb7ad90ee281eec99c773dfe2f9e28d1947706571dd7db8162770a8ac33b5e286b8757809cfa866c7c5e0333c85e37590ac49f246aa91a98989924a9b6605d5ea247b934c77912dbb5226a2be246f2699ba84c15011590b78a16cd20d86930c48b223c9c90528ded9f0d6d75d922755bdd8dcc6a3583dcf99f5e0e11233379460eb162b30d0c6e6051aac2f46abd07f19049cc1e462e681fab9d34a31e9123fe1b7368e2ed0e058213e8ac35d924f61a8f6c05079abf90cf697cf31ec2ddf3bc50155f926497f92b7e7c9e98f92accdcc3ab02f9dd5816f5235be8b6e466f253935ebe1c924ef27d99259dd2dc9ba54c5ebf802844c27194bb227c9d6343a64b314f7e37e3ca29a9447f1a96a80fc9399d7ea62d3abba410f626bf9ddecbd2d9c55359f4f541df36c73af7f014f4aca715f4cddbd0000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000006b64944415478dae59b6b88946514c77f33eb7abf6e6a6aba6a991742d342c36c250b892409b10b51448466145de88b748188cc8248fa2465494564d0451295c430cb2c0325b3a0d48455d7bbe6a6ee6eeeeaeebf0fe779779ed99d712efbcebce3f687617576f679ce39ef79ce73ceff9c81ff3962b9fe81a4e09f5d8001c020a002e801c401e5ba6607e517701e38091c05ce008ac5b2532dab4f794a9703e3805940153001180cf47206890acdc039a006f81158036c7386e152c6c86800a77c393003781498ed948e47a870269c0536006f01dbc9c123921477af3192de9154abcb0f87243d26a9dcf3e2ac958f4b9a2be9f7a8b5e820ea242dceda084ef92e9216493a19b5f421e19ca4054eb7247d636d95c7cef622e00da06fb10f6f017110980fec8044606c0d649e65e6014b3a99f20095c0b34057ffcd781be5af73ca57442d6d81300798d6ce000edd81c5c0f8a8a52c2006007741e2a1c7bda73f1b73ffce8e19409fe03f8107f4001600bda396ae081885257249069802cc8c5ab222a10f5e8c0b0c7007d03f6ac98a842e58bc6b35406fe096a8a52a229a8126df00c38131514b5544d403b5be0146d179effd54380c9cf00d3014e816b55445c476e01fdf007d81b2a8a52a12ea81b5fe1b71f2a0c52e636c02b6407231540fb4442d5911700478d3e9db8a38701cef5ae8a43807bc0c6c85648e300e1cc098d4ce8a5ae005e0c3b6ca0706a87146e88cd80d2c049603175311a371e034763574269c015662d5ed97404b3a5638a80536e238f4cb1cf5584fe05ee00960772c16bb745fc0f10115c03a607ad41ae4893ae05b6005b01968804b37440204dd9cd35890984ab41d9e5c518b79ef07d8fdfe6fb68a0788412b3d54017c06dc1eb55619202c9f5f0b7c82b1bc8db92a9eca00603dbf4f812ba3d632052e6051fd0be073602fd09c8fd229e19a0631494f4b6a88ba93e1e1aca40d921e91343455732334b8c5bb497a55d2f908956e96542d69b9a459927a1554f11446e821e92567fd62a24ed21649cfc89ab23e6b5d10a43c406ed32ec07d580e3db68032b460416d2376b6b761ededa4a0e6648a01fd8061589ceaedfefe0c361c71941caec0b406f036041b82780eebab0d0851f1066027b01a580feca34d50f364e803dc843535a60323311e23b8b21b3192e32fe03b2ca7f98d34e96f4e7047a25c5295a4f7241d9074314f17bfe0cef64a497324f54f75b69508c895b22ef5265987371bb4483a2e6985a489996247d6e6718b9401a3b1f19899c044e02af734ba91205884b96623e69e35c0af58b2b20d2bbed23ded6ec0642c9d9d0b5c43fe8c5535f01af031d094ca1bf2f20f25dae8fdb0b3380418889dc97212333bc1e0d231ec5cb71b55f1141f842561f73be38645d43600cb80d78186d0f2868ec273f3f1925e94f48ba4c602dd2e8d925e518a29916c82603f8c39be0273c5b3d8533d853de99c52506fddc1c0e3d8e0552585e726eb8127818f7c99db6dea9df5ebb173782bd63be8ed3edf88d1683bb05a7b13568d653484a7fc24cc2d6751dc69b3bdc0ddb832b99d70ee3558d25249c7b270ad06496b244dcd146dbdf5a748da592057cf066fcb8e5e4ae1c648fa5a968ae6826a49f32e6504f7bbe1b24c2f4a1c90c59d76c20d93b4b1030b1f9174a7d2dfeb65929645ac7c80a70239835cbb1c781e9b12c9174381a5589e900ad380870a77bc73c24c5c161904a0aa90849b8c8dd8b57a81e70d0f60777d29603c2ead8f6311ff41c21b90b887f65e3004b82d6aad3d0cc4255a71acb0a80a71f1513872d57bfa63dd3ea582ee40cfc00013b0f31b16ca801bdabc371a1ba92f25c402038cc0a6c4c2c40892139c0a4aab0b7d1ed7248d63ae10b670c1b747029492f26069fce9c000c5c0698afb559a4cd88d9b138a63ee10b670e7499e39a8c65155250001df031703031c22fcbee0e13606d88b8dab97020e02df80156f71e04facba0b0b2d18fbe3e318d6b32b05acc61e08601e500dfc14e20635c17a5ec9296015f077c4caef01dec563a6e2d8595885515861e02b8ce1a58d117ec67a7951a10eab55f624bdab443768650855d61f92c6294549ecf6a994b43582ea2f2d25e67301a33b28dc2949f3958613f0f6b951d2ae222a5f2f6989a49e4a47d878c24d94f4431e9b1c95f4b032b4b294cc0a6d56eec44baed82f69a1a4aecad462f384ab9435256bb3d8a0c929324b6d69a6ccfb0c9135616b64cd8cb0d022e984a4f7254d52ae8d112508929b318ebe0a6b7ef4709f6fc2a2f92eec4a59874b2bf3608783626c1ed613b81663a1cbb35ec86e9826ac35b60f4b72d663adb10b9964ca448bc7b15afe6af7b30c4b21f7630945c62f27676908b0fedf486c7c3f97f9e58b4ea643ee9515431de03f1f406c49270810d30000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2024-03-07T13:55:46.474279+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda79300000e554944415478daed9d79905c551587bfee4c3221090102244042580d8b84b00504a2582a3b28b14044404444b0042ca14444d9b44a4416a170c50d170c9b140109b26fa284206b9025404242d8c292c92499cc4ca68f7ffcde9bb9d3f3baa797d7fd5ef7dcafaa6b26e937dde7de7beebde72ee71cf0783c1ecf102553ef2f34b3f0d711c006c0786042f073036034d092846c09624007f03ef016f046f0b30db04ca6765551f34a761a7c38301198064c0f7e6e851a7e0c52886c3d644a3139a00b580e2c069e061e02fe0d2c017ae256869a5576d0f0196012f049e010604fa404adb5fade26a41b29c33dc02c602ed009108732c4ae0041c30f0776068e010e05b609fecf531dcb813b815f008f11c388109b02040d3f0cd80d3819f81cb0719cdfe1e96519f047e02ae04da87c34a8ba719c397e4be01bc097814d92aea121400e8d02e7223ba12225a84a0182c66f056602df03a656fb999eb2590a7c1fb80e585bae1254d4584eaf9f089c037c0559f29e6468032e027e0e7497a304652b80d3f87b009702fb55f2399ed859099c075c4d19c661590de734fea1c015c094a44bede9c772e00ce02f509a4d50b20238ebfaa351e36f9a74693d912c068e05fe05832b41490ae0f4fc2f0157a2e59d27bd3c88f660de1e4c01b2837d92d3f83381cbf18ddf087c023815c838ed174951f570fe7806f02760eba44be62999a5c011c013c54681414700d4e897e11bbfd198089c02b4141b050a2a40f047a3810b81bd922e8da7220e07762df640a402381a7302f085a44be1a99809c091d0af4dfb516c0a98069c853fba6d740ea2c8d9cc000570f6f7cfc4cffbcdc04780dd0bbdd94f019c61627f64417a1a9f75808f43f434103505ac8b8e75c7262db9273676438a30805e0570b4e353e80a97a779d81ad828ea8dfc11a015380e1895b4c49e5819470143305f0176c1f7fe66643405b6f0b3d06ff83f8c024385a7a119867c2e06e08e00e380039296d45313b2c0c8426f84ec0cec90b4a49efa927586ff7dd012d0d37c188133493ee10830027fe0d3ccf4002ba2de0815606360fba4a5f4d48c35c007516f840ab0393a39f234276dc03b516f840ab015fe5e7f33f32672271b40a80093d15ad1d39c3c8f468101840ae0af78372f39145f20f2464836788d4b5a4a4fcd780b2940a48f40a8007efddfbc3c022c28f466a800239296d25313560337a028239184368077ee6c4e1e01ee87c22e6259641cac4d5a524fecb42177f115c51eca222b7155d2d27a6267167037147710cda27de2e5494beb8995c7814b80ae529d43970df6899e8661098adab2a894874305589ab4d49e58780ff82ef00094162022548045e8c4c8d3b82c03be035c0fa5470c0b15e075e0c3a44be0a998c5c069c885bfacd8c2a102bc498973862775cc038e076ea482c0d2a102ac009e49ba249eb2e840d1428f061e86ca0245ba97421f454b424fba31e00534e49f062ccc643215878a6dc96432a15fc0e368353039e9127a0af21ef037b4c3b700aa8f18dee2fcbe1029815780f4b10298435f94f0b243c216c255806e60368af2ed43bba78395c0bdc0af5140e835104f9e8090de4f0aa68189281efdd4a44b3ec45909dc07fc166deaac86781b3ea425efdf4b819bf10a90142b50c3ff9e1a377c48bf4f0e4681ed803b50960f4f7df800b80bf8035a8d75406d1b3e244a0140a1e1cec75f14a92586eeeadf86823bcf23c65c40a532e09b0225d8021984d392aea526a407adb86e4167f6f389d1aa2f97420a008a11f82b0ac496f1944d17da6dbd1eb81529414d73029642e4b7074a300ab806851ef7544e3b0addfe5794fa6d19d477982f46310500398cde885f15948ba103b6bbd1cedd7f08aedda5a5e1430a4ae328c16781dfe1c3c4974237f03f34bfdf02bc4882f37b2994122e3e039c0e5c8c8f1e568836d4cbc38b986f43fa7a7b142dc5de0c0e8a0cf80d1a01cec63b9184f4a08b3477a2cdb379a474982f4639296346a1fd816f31b4956015f0246af43b90359f6ba44677293769d46874e3f44c86d674904346dd3dc04dc8d9b20d1aabb7475149dab856948fe607347f4cc10ee05964d0fd037899941b75e55269e2c82c0a2af963e0a34917226672c8a5fa7ed4db1f2588afd34c0d1f526dead81dd099c111140844d840ac019e43bb74b38197087c262b6d786715351605e1980c4c02c607ff370229dc6a742bfb4de4d8b1046d187555f3fda550f1273b4a301ae5133c139d2436523731b4647b0019758fa06b57d536fa301478eb632885dbaee87c65033485467db8a195c52a7448f4125a5a3e8c14734535721522cef4f1dba22c55c7a08b2569a693bede7e3bba64d90d9555b053076351c0cd99c0a7518fafe67695d17763fb567472f81a319e21c4a64e8e6d300d65139f8986bbb48c08e1f1eb83a8b73f443cbd3d837af721c051c074342ac64d0e2d39af07ae055ea946f690d81bc71902b743f70b8f007622b965633bb2e4e7204bfe45aa985b9dde3e1265e2381219c45b539f486b866e04ff12f833814757a58a50b3dee954d486a8571c8832904e4131896af5dd3d41a5bc80e6cf7b81a7a872ddee9467021ade8f0eca935480adeea06c17a2dbdc1595ad2ec3b333546e80560ebb07af29689e5c1ff5a8523299bae4d05afd7de41f371f6dc93e09bc8a7a7f1c8dde02ec8846b399c1ef69d90d7d1db8009d3a76975bd6bacfcf4ea586d1c9364146e3e668a9341e29caba48295a02397368a9d68ed6e5efd0b7640a974d2b89c14072645c1fd817f5f6cf04b2a6c5a671694789bd2f03569553fe5415c6a9f80c5210f767ce796948897949e418b25ba279fd2834cf37c2b67717b20bce07da4bad9b54294012384a370a4d4b47018722cbbed1c2e776035703e701ab4b518221ab004ec38f4306eab168b85f3f69d9aaa413f8118a1134e8b9c5905380bc1e7f18f2b0dd93e6ca91dc86927fce82e25365550a90b703b629b0195a26ad8b8cb74eb4247b07780378971af8b75520ef54e05c74ddad11e6f74a5880a6b367a0707d577a1a083a0ade1b651add13194eeba39e141a6ee1fef66ab4ebb6009daedd170856b71b3481dc2d68e3e68728a972b37313f0556065d50ae034fc1668597414dae12bf714d0d010f518f288994310a7b0568a10c8be0ebacd740eb05e4dbe287dac4153c1b55061fd9a59f85acfccbe6966cf9b598fc5c31a33bbc7cc0e36b3e151d9adab25907d94995d6c661d31c9dd483c61669b5554b7d6d7f8bb98d96c33ebac91901f9ad94fcd6c7cf89d3136fe0833bbc8a46c4391b5667646d9f51afc41c6cc0e37b397ea20688f99cd31b3edcb16b6b8f29e62662b936e8584996b661b5b449d660b551eb20f8e45410aa6c4d2258b93050e46b1ee7675e4a8a8f103f6433b63b5389e6d24a6112405cfafd3010ae03c70247005f54f27b727f243d8314ae032188f4eca36abb3fc69a4151dcd0ff003e9a7004e65cf002e253977b0e9e870a36ce573ca7012ba8ee5117ba303b77e444d019ba1dbbe5b242cf081c813a992d5c18ec0d728ff78b99999840eb6fad15b41d67712763a1a019226837af1418e7c45719e391eddd0f1f431028dacfdea32bf87ec059c487ace08d603be4d79b76eb6023e9fb4e029652a79671e59e8b74d7a32e9cb213c03edd9171d059cf7f64737943d03994cde2ea83b02ec8c6eb6a68de1c0719496dbb0152d25fddc1fcd46e88e662f59a7e71c4efa7a7fc874608f129edb9c0843c7d3cb2874ddae97b0a78c4577ded24aaf7c8318833ba17b7b9e685ac9cb121f2ac036281e509ad9870229ee1da5d889f4dcd64d2359a28c40e4e19bf604d2db523ccb7986a171c61f2ba1024c21fd86d3388a87b26fa5b8827874a3bacbfd8ff0e6cea4a4252b819114dfd71fc9d0b9e851295dc877a2972cbafa9cf6e13f94b5989c2d34d7c5ce5ab08a20d84548a8008d62380d76fd2c2d3b9869e5fde0d54b36ef67da29d6c06b09a26d7b0ab288bc3cd18dd2f0a5d0c920a9d23d3c4784110881af5d03504cce4e82089d9e48ba887023cf12b1344831c5e4cc1144cdf044b204c549e84716396eb4252d5d09e42890dfd8d1e8f904b17e3c03781429413fc211a011d2c777a1f87dc5780eb9a179fad389024c0dc80c1bda000b48bf1db09c080dcee375e0e9a4054d214fa1a05803bc834205789ef44f030b197ca45a03fc138d6a1ed183b295bc17f5a63b02a4dd809a4b11257534fb2eb4def5882781bf43b46f60a8001fa0689969a50345c42ac5c1f1551454d1a37abb9a22cbe3ac53a1b753c0ca4e01cf206fe2a2046531e45db43869a153c06d28d279c18ee3ee04ce4311b2d3460e45c77cbf8cbf791665e14cbb615b4b5e46fe1dab8a3de42ac01ae407983663f06914dab524ff76e7996b506287a1481b8a1df86c5e9d0c209bf7c003284d5c5ae800aea2b27d8ab7808b187afb029dc8adafa44ed33b02040f76a16083cf255d8a809b4b2d888bf3ecbd6818ec48ba2075622d8a15f8332ac96c627d3ef54798d9b2847dda1f37b36dabf00e0ecbd26a8a0ed29570796a4da7995d696663aba9b3b0d2b26676ba99b5275498056636c3e20b1431c6cc2eb7da4538499a7653149431d5d6975b69c3cdec6cabbf12bc62660758fca162469bd90566b622e9d68a99c566769229144e2cf595af04a79ad9db752acc7fcdece31663e34794e704335b9874abc540b799dd6d667bd7a2bedc4acb98d981a6393957a3c2ac31b3596636a56685a19f8db3bb99dd628d19382a671a25cf32b30d6b595ff99536d9cc2eb17847831e339b6f665fb760feaa6961fa97675dd36830d71ac340ec31b3d7ccec2766b69da963565d1fe5068a1c86226a9f88226a4fa4b27b855d2875cb0dc075e818b7aee1639dca1b8f1c63bf889c50c796532fb51693be9437b3d1d6ee2bc498aab6d250b1c3901bd6fec869732af22c8ecafa61683bb71dc50b9e87326c3f4470c123c9848c8e228c017641a16ff745398f36421146eb7179d64d1bf72e7d69e31e410a509354b571e40d1c815cb2b646f1823741bdc80d16bd14a53b5b84cea573b5284cb538655a2728c716c8e57c027d891ee3123a13bcd6d29738f22dd449dea04e89233d439cff030f7b1d9cd5085c190000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda79300001f194944415478daeddd79dc5d5575fff1771292401242208c0151269904051c50b182e2405bc0b14eb575b66aebcffab36aebd0566d7ffa73a8b3d63a15ad56b18a88130e15ab888a4c0a28220a222063c290e9c993db3fd6b9e4e4c933dcf99c7beffabc5ef79510eeb0cf397b7ff7da6badbd3649922449922449922449922449922449928c26f3aa6e405d68341acdbf2ec0c2d26b01e68b7b95f76bb4d95cbc268ad7c6e24ff3e68de6a31fcdab9a8562a0cfc712ec8855d8077b157fdf1d3b15af15d8c1d662908c2e13d880dbb11a37e37afc0e5715af9b8aff3f390aa230fc57300ba5597d3176c601381287e040ec8f5dc520df5e0ef0647a26b1560cfcdfe0125c841f0b51b81d8d611484e16bf11c9466f81562903f08c78a81bf0acbb15dd5ed4c869e09dc8acb700ebe2d84610dc3b364188e56ce4169d0ef82fbe19178180e164290033ee9279bc592e1429c85afe14a6caabb10d4bb75b35032ef97e0309c8c47e35031cb0fedb52543cd265c2d84e033b8001bea2a04f56cd52c9406fe2a9c88c7e121d84d58014952071ab81167e2a3420836d64d08ead59a592806fe02ec8753f1541c211c7c4952571ab8019fc58770b91a390cebd18a5928adef0fc233f16421020bab6e5b92b4410357e083384d38102b7716d656004aa6fe0178069e2e4420cdfc6498d9806fe2ffe15c155b03b51380d2c0df154fc28b70b88cd127a3c5d578a7f00fdc5e9508d44a008ac1bf5838f75e86e344824e928c22eb44a4e08d22a168e04b825a08c01473ff25f833acacba5d4932001a6229f02a7c9fc18a40e502500cfeed710a5e89a3e43a3f193fae10227026360f4a042a1380d2acbf37fe1acf131b7092645cb91e7f874f1a5016612502501afc0fc33fe0e1d2c99724c40ec4d7e12398e8b7080c5c004a26ffd38a0bdd6fd06d48929a73abb0043eaccfdb8e072a00c5e05f895788f05e9afc49323d378971f2097dcc15188800944cfe7df14f788acce44b92b9b8564c9467d19fe840df05a034f88fc05bc58ebdcaa30f4932245c866789e2233d1781be0ec4d2e07f00de238a732449d21edfc273704daf05a06ff1f6d2e03f0eff2a077f9274ca0978359694c6554fe88b00941af970b1fbe9a83ede9c241975e68b9db04f63abf1d5353d5f02941af7107c40d4e24b92a47bae1075302ea437fe809e5a00a5c17f7fbc5b0efe24e925f716a1c165bdfac29e094069f01f8c7fc13183bc334932269c8a27d29ba540af7d007be1cdc2f1972449ef598abfc43d7bf1653d11804289968bbcfe532aba3149322e1c25b6cccfebd60ae85a004ac53a5f54342ab7f226497f5920a2028776fb455d0dd692fa9c8a97cbea3d4932280e14b532e7776305742c00a51fbd2fde200ed54c926430cc1335330feae64bba35d757e035a26867922483e54071304ec711818e04a054abfff9d2e9972455315f8404f7ece60bda624a8eff4be5c93c495225878bca5a1d59019d2e01568a029efb547df54932e62c1107e3763411b7250085c2cc13e1be47557de5499220acf18e12833ab100ee8b176351d5579d2409a2b2f671b4bf0c6859008a2f5e84bf10dec72449eac122e10768bbcc5e4b025052951344ec3149927af1401de4e2b4b304582e8eedca23bb92a47eeca3837c9c3905a034fb3f4658004992d48fe5c23fd7961fa0550b60673c570f0b112449d2738ed0a6737e56012829c9a315c9064992d49643b0633b1f68c502d851ec3a5a52f5d52549322b7b63d7763e30a3009466ff07cbd93f49868165da4c089acb0258244a11afa8faca92249993edb1aa9d0fcc250087e2c4aaaf2a4992965824ea72b61c099856004a1f3e49ac2b9224190e7669e7cdb35900bbe28fe5419e49324cacc076adbe79360178a03cd82349868d1d752300a52dbf276a33a6982449e52cd2468aff4c6fdc03c7577d254992b4cd423d108063e496df241979b6128092f7ffa1d2fc4f9261642336b7fae6e92c809d706cd55791244947742d00fbe1b0aaaf2249928ed8a013012899ff476b3399204992da703b265a7df3540b609e88fdb75d5b2c49925a702b5aae08325500eeae2a9224c9d0d1100260debcd61278a70ac01e32fc9724c3ca06dcd8ce07a60ac001220a9024c9f0b11657b7f381f96ce5003c004babbe8a24493a620d7ed7ce07a65a0007eafec8f02449aae1b7220ad032e5c1be4487e78b2549520b7e8e3bdaf940590076d06639a124496ac3242e2efe6c99b2002c1551802449868f35b884d643806c2d00bb490760920c2bd7e097ed7ea82c002be591df4932ac7c1f37b5fba1b200ac9029c049328cacc577b0b91df39fad056027290049328c5c8d1f75f2c1b200b4554c304992da70b63613809a94056071d557912449dbdc863331d9aef90ff34b69c069fe27c9f0711eceeff4c3650b20052049868b75f80f6da6ff96993fc3df9324a93f3fc0d7682ff9a74c79d06faafa6a9224699975f8386ee9e64bca02d0721db124492ae75bf8129dcffe30bff4e1148024190e6ec2bbb0badb2f2a5b00ebb4514c3049924a68e0933887ee667fb61680b6ca09274952093fc47b31d1ede0675b0148476092d4971bf1265cd5ab2f2c0bc01a690124495dd92866feaec27e53290bc04da2ac709224f5a281cf0801e828e57726ca02700beeacfa4a9324d98673f0f7b8ad97839f6da300bfaffa4a9324d98a8bf14afcba1f5f3e5500aeabfa6a9324b99bcbf152fc98deadfbcb4c1580bea84c92246d73255e86efd29fc1cfb61b80aed26659e124497ace65f84b51e8a36f839f42004a3f7015eeaafaea93648c391f2fc0d7e9efe0675b0be04a3dc82f4e92a46d1af8269e2f2afcf67df0b3ad00dc842baabe13493266acc7c7f05c5cc460063fdb0ac0edf859d5772349c6885bf04f7839ae99376fdec0063fd35701be44a4046789b024e91f0d5c2872fbcfd2a3cd3ded72b70550faf10b74596524499259598b4fe0e9f8828a063fd35b00bf1161883d2bba394932aa34c4f97dff228a79de51d5c06f325d21d0353a3c6524499219b903ff8e27e3836a30f8996201cc9b374f714ec0f78a06ef5875039364c89910b1fd778ab5feda3a0cfc26331d05f61391137054d50d4c9221a5815fe1a3384d7174579d063f330bc08d220739052049daa3811b703a3e8c4b75706aefa098b655c532e0647c0acbaa6e64920c010d113dfb12fe4d58d11beb3af09bcc2600bbe28b7848d58d4c929ab31a5fc587c4597debeb3ef09bcc761cf8cdf80a1e6c06a1489231678dc8dfff28bea3660ebe5698b1b5851570b4387a78efaa1b9a2435628d3899e763f86fc50eda611bfccc6e01100e8c6fe2cfab6e6892d48035f8b62d33fe9d0ce7c06f329705008fc57f62a7aa1b9b2415b15accf81f372203bfc9ac575088c08e4200feb0eac626c900697af5bf21f2f6bf6b884dfd99986b094064049e86e3b1a4ea0627499f69883c98af8ad4dd1f8a7a992335f09bcc79458515b0029f16cb812419451a225bef4b62a3cef9d8308a83be4c2b1600b106fa081e86a555373a497ac8a4d8017b8698e42e51e1f6dc41d3d2551656c07261123daeea4627490f98c02fc4915ba78bbcfd4de332f09bb42300f048a192bb55ddf024e990f5a2e8cd6745a6ebd5688cdbc06fd2f2551722b010ef1035cb936458688818feb962023b5b38fa46d2b1d70e6d5d7d2102870bb3e9f0aa1b9f2473d0c0f5a2c6fea78547ff7672e037e9440088dae5efc20e555f40924cc38438e4e60c7c4e38f66abf33af0adabe23a5e4a00fe1a9555f4092945827eaea9f2ef6b0fc069339f067a6530120360a7d0a07577d11c958d35cdf7f4ff4c76fc9f57dcb7474874a22f06cb114c8da81c9a0d92c1277be2e3cfae789acd51cf86dd0f19d2a446007fc7fbcd8f4158693a4d76cc0cfc5fafe0bb85caeef3ba6abbb5688c0be627be423abbe9864642987f13e2bb6a85fafc6b5f686855e08003c5064091e52f5052523c524ae1566fee76418afe7747d174b22f044bc1fbb577d51c9d0b31e3f1526fe9744caeed8e4e70f929edcd1420416e045e2a4d3e5555f5832743470ab30f34f17fbf06f2067fb7ed2ea6ec059294e149a14e59077c5abb07dd517970c0513225eff5561e65f68842aeed49d9edee15292d01b44646051d51798d4928608d9fd4898f95f179b72c66e375ed5f4fc6e970a88bc112f9022906ca1e9d43b5b84f1ce15b52672b6af88bedcf542047616fe80e7895d84c9f872172e160ebdb3a453af36f4ed091422b00b5e8717ca8d43e3c666fc5ed4cdff1cfe471c3693b37d8de8eb9328f9045e5ebc323a30faac17e7499c2966fbcb8a7fcb815f43fafe440a11d85ef8035e2bab098d22cd4abadf1166feb745086f6c2bed0c0b03793a85086c8753845f2033064783f5623dff6531e35f62844b688f22037b4aa58cc107e12da2c2706e201a3e1ab8491c94f145b1c6cfbcfc2165a04fac2402fbe2d5782696557d13929668eec2fbb230f32fc15a72b61f662a797285102cc53344d6e07e55b5259995e6f158dfc3e7c5da7e2866fba28fcd1321e8c5c20fb5a8f8fb0ec57fcf17998893623973173616ffb65e88de480b5c6557567a40c7e06f71920c15d6858db8125f1166fe856a7c2e5ed197e68b88d3ee6242d9bff87355f16fbb89b0f442b16f6541f1f1cd42e8360bffc51ab127e106fc56242efd1abf144b9f3b8c5099b14aafa2b424d8097f8697496ba02a9ab3fd79224bef9ba2f3d7aeb397facd8e62a01f85fbe27e3850849b97e8cd5e9749b1d4592d0a8d5e8a9f88a3c3ae16db938736da518b5697ac81a3f15778bccc191814e5d9fe0c91b157bbcd38a541bf02470a27f2c38abfaf34d894f38dc24ab84c3843bf2db62fafa65ef76d2e6ad5d2e2212f11cb81978a88c1e2aadb358294b7de7e514d67fbd2a05f8c03f0189c2c66fb15ea1145da2c06fe4fc51e87b384b37428ca94d5ae85a587be87b0049e234cbbdc4fd03d13b65ddbd779b65f2966f927e0e1623ddf932dec7d6212d7098be074e13c5d43bdee6f997ab6ca569d601f3c45f8080e91bb0bdba52166a81f88f0ddd962ed5aabd99ead12c6ee853f1455a68e367ca1e2e676e7ef8b527967e336ea2704f56acd3494fc03f7109984cf101641161c999d8de2c4dbb34596de8fd5b06cf61487ded178121e8b7b1a0dab6fadb0043e28aa1cd5cae2aa472b5a60cad2e0d16279709ca8403434d7d1679a6bfba99efcda15da2885eef6c689c2cc7f88d8465eafc6f6863bf035bc575863b5d80e5d7d0bdaa424044b8507f809c269b8bff1cc23689a9b3f1333cc3744965e9d67fbc5b80f4e2d5e071b0f676f436c91fe98b008aea1da67549fded101a562a4abc4ec71a27016ddc3682f111a22fefc4bb103ef1b22367dab1ac6a44b037f37fc81b0de1e21acb93a78f207cda4c82378b3a885b8a1aa6756af9ed20545275b2806ffb178b0108503851369d83b5a33f67ca928aef13f22f474ab1a3af4d8caa97720fe480cfcfb09eb2d8967f76f78a78a2a20d7afd7f4809265b0ab5826dc5f38988ec49ea2032ee8f4fb07710962c0af1169a8cdccb39f880aba77a8e14ccf56b3fd727160cce385536f5ff50ee155c52611367cbd38f864a02250bf1ed4634a1d7207210887e0301c54fcfd40918abc44581083be270db1e9e44e916b7e9538efeea7622dff5b2104b573e46d75115b9c7afb88849dc70b2b6c2763d0cf7ac02f44f9bc2f18e0b31ecb0753b210960a51b8a798a19a7fee253690ec2a84619198bd16167fced7dabd6b08859f285e1bc52eb31bc5c9b6cdd755623d7fad1082bbd474869fe63e12e27a5f11a6fd63e1d4cb7c8df6b9451cb6fb3edc3588e75fef1e36404a9d793be1406c6e1bdd4564a4ed587a2d33bd284cda62beaf17bbcb9a1b496e15c920b70913bef9ff37532f6f7d1bf76a379c202231c70bd11c9e0ba92777e103f867dcd6ef7e910f2b699992a3f56091937f8af0ab2ca9ba6d23c6469c86d7e0c67e8a400a40322b53b66c3f4864ea3d5aacf5ebec481d7626f129bc421f452005209996929f645f31e09f840708ef7ef69bc130894fe095b8a91f22900f32b99bd26cbf4438f59e209c7afb4ba75e556cc24744e9bc35bd16811480a43cf077b7252fff0fe43e8bbab0016f1525f5d7f75204f2e18e31a59d96fb0aa7ded34479ad71dc535177eec0dfe1fd7a58943505600c29cdf87b8a41ff2c1c6a34b6df8e32d78b13b6cea237a1e3148031624a9aeec9789170ece5fa7e78b8509ca77129dd8b406d05a0d459e7d9927453cec0db6c4b96dd642f6ec6285332f7ef2fbcca27c94d39c3cae9e2c4edae13856a31624a79e4cb44d6ddbd6ca9e9be872800b95c64e72db025dbee2e91277fb3308fae1155706e28fe7d82f1168629d574ff5c145bcdd2ebc3cd469124f40e5dfa03aa3c198848b95d250e077990083d1d24924e968a59bfd536360f76b853e4d4ff5494b83e4f54695d6308f2eb7b49e93e1f8abf17c53746b94ec238718d288ff73d3a9fe4aa381bb0995cf2083c4a6c19dd5374cc5eb76752e4de5f2ab65c7e430843adeab2f583d2bd7e0cde28bcfba37bc1e3c959c2aabbb5b6023065c7d851a2d2eb49a2cefb209d4f9b6da997f7397c5d454518fa4d71cf178b92eaaf17029b8c1e1bf072111aeca81ff7b5e7171d7107b12ffcb962c6af4372c97a5c84ff10875e5ec768084171cf978963d65e219653c9e8f2333c193faf8d00944a411d8d178b74d25dfaf57b5db0111788028d67a8f9210e7351dcf71562bdff02b94b6f1c68e0ed78b50e4ac3f5b4a797ccfd55a2033e57947daefb885a2beae7bf5d946cae658dbdd928eefd72fca310dd8ced8f0fd788f4ed9f542600a559ff04bc5614e41cb61a70d78a620cff2aaab30c85355032fb5f2fc27ce350623bd99af7087f405be5c47ad2bb4ba6e78bc5e9bec3ec74da882f8b99f462ea2d02a5221daf12b9e299c73f9e5c2bea309edf4e7fedaa5476a3d16876c0fd84028d82c779111e27f6619f8cf9a5a54dad2865f73d5da87f0efef1651fe10c6cabbf762c00a51f390a1f164909a3627acec311f8109e8fc5751381527b1e25e2fc3b57dda6a4724e169371cb742400a5cef73051ace011eaefe8eb843df116fc3596d44d044449f3378ac35092e42071aab256fb6adb0250fae21344f8eca8aaafbacfec249c9aaf54131128dab054acfb1f50757b92dab09db00296b7fa81b604a0d4f91f8a778b0336c681a522a9e6ffa8783950faed3f156bff51b4bc92ce39461cbfd6122d0b40a9e31d21ce32bb4fd5573a609a33ee7354ef18bc8fc8f4cb449f642abb88fd1f2d2d03da5d02dc43d426bb7fd55759113b8948c7a9b4beceea15c5ef6d2f42ad87547d3392da72bcd8563f272d094029d1e435c2eb3cceec89378934e7818940e9771e8ba7547d13925a73881627883905a0146b7e96284534ecc76cf782c344a2d0ee03fedd5d44b2556ef049666367e1a79b73829a7530973e7cac4834c935e7161e2b06e3827e5b01a5efff231c57f58527b5679e28b033e7786d6536df45ec346a2bc1600cd84e6c787a3803590aec86e7c96cbfa435ee23c6eeaccc2800a50efd0c31db25dbb217fe468b0e974e283d87478bea4949d20abbe3de73bd692e0be060517d34b796cecc092207bb9f56c032fc89ace797b4ce7211b29fb55f4e2b00a57a72cf363ec93e9db2582c05eed5c7df78a05cfb27ed315fa406cf9feb4d337184083765a6d9dc1c2966e89e5a0125217e9c16d673493285fdcce108dc46004a35fa9fa6bfb3da28b140a4e5deb30fdfbd9758662449bbdccb1c87bfcc64011ca8c8764b5ae63011a6eb891550fa8e078be3b993a45d568ae8d18c6c2500a54e77921081a475168a92e72b7af89ddb89e3ba33ff22e984c5da11808215384598b5497b1ca3b7a1ba9522a123493a619128c33f23d309c051467f8f7fbfd849e44ccceb9133f050fdf12b24e3c16273e4a8dc2d00530a7d6479a9ce395e1c68da31a567f10099f79f74ce0273f49fa916c00a51e62be99c034458b05b168bc352330c9b74c36266764c4f1580fd84d99974ce72b179aadb68c0322da47226c91ccc9ac53b9f6d2afc66c249f71c6d8ef86b0bec214a3d274937cc5aa9bb6c01cc13a6ebc2aa5b3c021caefb0d420760c7aa2f24196dca02b04c9699ea152b75bf7d7a6fb9f537e99e89d9fe67590096cb8cb35eb14c878954a5e5d8ee321723e99e9605604fbdcd621b6716625f3a7604ced7652831490aee9aed7f9605602f6972f692553a3f1d799174c626dd338935cc7cc06d590076333a67fbd5816eeee70229c649f74c28046026ca02b04246007ac90a9ddfcff9b2fa4fd23d1b70d36c6f289f70d36ddc3ad99a653a5f022c90d658d23deb70dd6c6f285b0059f7afb72cd4dd190a99029c74cb6dc56b46ca1db4d3d92a999e853a1fc40d6caafa0292a1e737da880224f561121bab6e4432f45c893b677b430a403dd9843baa6e4432d46cc62f853539232900f56402abab6e4432d4dc8e9f32730e0029007565123757dd8864a8b9415800b3920250334a6a7dbd30e392a4132ec12d73bda92c00d9d97acba439d65f73f03b11c74d9276d98cf3b07eae3796056062ae37276d31a13b51fdb5394238493203b709019875fd0ff34b6f585b75ab478cb5c20ae894ebf0fbaa2f22194a2ec5cf5b7963d9025823934f7ac91add5955b7e3f2aa2f22194abe658e0cc0266501b845269ff4926eefe77ae1c8499276b85908c09ce63f5b0bc00d5a701a242d73bd0e05a0f4e02e940941497bfc481b13475900ae3347da60d2329b716d0fbee7921e7d4f321e4ce08bda9834ca02b01ad7547d0523c25df815ad9961b370a350f42469852bf00d5aef776501b8a3f882a47bd62804a04b36e2dba2b04392cc46035f103b005ba62c009b44ee704f4eb51c73aed46508afa4e0dfc76fabbea0a4f65c8dcfa1d18ed5399fad3adb45e6a82196b4c4457a771faf16564092ccc6e7f1b3763f34752fc0e5da3421926d5827b2b0da52e2e9283ebf0967ca68403233bfc669986cb7cf4d15809bf183aaaf66c8b91ee7f7f83bcfc58fabbeb0a4966cc6a7145b7fdb65aa004c0a7333d3823be75cbd0fdddd864fcb44ad645b2ec1c7b0b9138bf36e01287df83ce1c44ada673dbeae875efbd273f98af02d244993f578bf2e224ed3d503f81dbe56f5950d2957e01cba8eff4fc775f8b8b402922d7c059fa5f3feb69500145fd210d94437567d7543c897f52173aff470bf20138392e06abc5597d1a6992a025d806f567d8543c6b53a88c3b6c90d789f4cd91e77d6e35df821dd599b3309c07a7c4216a66c873375e8896d85d2433eab7825e3cbe7f1513d986cb61180d2177e5738b492b9f91dfe1d137d9cfd9bdc8977e0aaaa2f3aa9840bf026ace9455f9bad28e85a7c5056a5998b8608d15dd0ef1f2a3df0f3c55220f7088c17d7e1b57a5828665a01989287fe9f727fc06c5c8a0f63d30066ffb2a3f6a338a3ea8b4f06c61df8678555deabbe36a30550fcc084883366659ae9598777e31715fcf66a610ae6b3197d3608a7df477498f03313ad9c0b7005de2673d1a7e38bf80c7d89fbcf48e9b77e86d789e840329a6c12f91f6fc3fa5ef7b35905a0f463ff25a202b914d8c2a5c224bbbd8a1f9f121578b30c0d8e22cd3cffd7e991d36f2a735a00c58fae134907e7547d476ac22d78a316ce5eeb27c5ef6ec687f05e9925384a4c0ae7f2ab7053bffa583b4783fd467820c77d9f40733df679aa1bfc4d4a02fd16b146ccd2eec3cf84d8defb72dcd0cf3ed692004c890afcadf15d734e8af5d8bb0c26e6df12453b56e3f5a2e3a4080c2f6b4588f76f7063bffb585bdfde683408d1789e5877ee5cc92daa868648f57da93eab72c70d8ce7b3ab880e3c1b8baa6e53d216b789a5f67b70e740c2caed7ea0e8640bf162fc03560cf006554543a4fafe95a23e5f1d0580bb9fcfce780dfe024bab6e53d212bf12e3e9b3d838a8fed5d1af149d6c119e8f7fc4ca81b4b61a368bf5feff55944dafebe06f523c9fa578115e6db49fcfb03329d2ee5f2796d8830d2977fac19225f00ce111df6760ad1e1c1bf049f170aea7fe83bf49e9f93c1e6fc0c155b729d986db45359fb729b6910fba7f75f56b45279b8793444cfcc86ebfb346ac116bb1b763f5b00cfc32c5f3810708f3f2514214926ad98c8b45e4e64cacab2c94dced17943ad991c21278ace1773efd5238d23e830dc338f89b949ecf6e78095e883dab6ed71873b348aa7b9fde9c1ed5153df9e552275b299c832fc11e955d55e76cc0d942c87eccf098fc73515a121c27924b8ec7e2aadb3546ac154576de2b12ea06e6e89b8d9eb6a0e864dbe1e1228e79bce1e8640d515bfd03624d760ba333f8efbec82d42bd2b9e8a17e070ed258425edb14e54eef9b048db5e437dfa56cf5b314d277b210ec582aa2f76bae68ad8eb1942992fd2df925eb5a0f48c0ec233f134ec2f85a097dc29acc8d3c4c0bf99fa0cfc267d6bcd944ef6a7420cf6171642d53444e6dcd94299bfaf42474c6537614b62d721780a9e887b4b4761a76c160574be2bfc47e7e056ea37f09bf4bd55a54e768008493d1987618741fcfe1426455595b345a193731587a0d4f5010d82d233da5744744e1591839d8d4e54a75f3484597f9928a7ff95e2efeba87fbf1a58eb4a21c33df0509c221c527bebaf9f605298f9178b81ff5551c0a3164e983a51b2da96e37e3811278825dc0af55cc655c18498d92f13d6e37f8bfe75ab215b420ebca5a54eb648cc38c7e221b83fee253adfa22eda3629d65fbf17d572ce130fe9723573c0d4999260ef2c9605c7e21811ee5d856542b847fd664ee22e5110e72ad1a72ec24f8affbedd900dfa3295b7ba1439582104e1301c28c46095b018560851985fbc1a62bdb5493c9c9b44a6de6fc576e55f884a46371b1253acce94447bb17816f714cfe8009101ba0abb6327210c0b44dfaaeb4d6fb6ad614b5f9a147d65b598c96f107dea1a11afbf4af4b33b74700a6f5da9dd554cb110b62f5e8b456efb62e1a09a1466d85de2a16d106719ac37c46a3c4c949ed302e1cf693e9be6f36a0a761d5920269d4da21f4dd8d28726446195f5c59f397924499224493262fc2fd606f533e4020d920000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda793000033534944415478daeddd7798256599f7f16f4f8421c3004a1050899204319096455458c0c55d408c181017d4455ff7d55d5f5dd39add3527500c880103185650101328881224e7214ace9999e9f78fbb5b9bb14ff7e973aaeaaef0fd5c575f33025df5abb2fb3c773df5049024499d3302303a3a9a9d4392245568c4c65f92a4ee99951d40922455cf024092a40eb2009024a9832c002449ea200b0049923ac8024092a40eb2009024a9832c002449ea200b0049923ac8024092a40eb2009024a983e6640750adad0d3c015813586399af358185c04a63ffedcac06ca2a85c253bb8a4a1dc032c19fbba7decebb6097fbf015834f675fdd87fa7867133a06e9b036c0a6c066c086cb4cc9f0bb2034aaabd4781eb80cb81f380f3c7be2e061ec90ea7de2c00bae371c056c036637f6e056c01cccf0e26a9951e250a81d381df02a711bd05aa090b80769a036c0bec04ec38f6e7bad9a12475de75c0cf81938093813bb203759905403bcc077601760576069e0eac901d4a92a6b004f83df013e004e082ec405d6301d05c1b02cf05f6009e470cc293a4a6ba08f80ef06d62fc804a6601d01cb38927fc7d81bd88817b92d446e7014703c700776687692b0b807a9b45bcc33f60ecebf1d98124a9420f033f048e24c60ed86015c802a07e468067010702fbe3e03d4902b810f81fe058a230d0902c00ea6335e229ff0dc096d96124a9a66e013e077c8a58944803b200c8358b18c4f71ae0f9c0bcec4092d410f7019f063e8a85c0402c00722c040e050e2156dd93240de61ee0e3c4eb81bbb3c334890540b53606de041c8ccbec4a5291ee043e007c12c708f4c502a01adb0347002f26a6f34992ca7105f036624d014dc102a03c23c49cfdb701cfc80e23491df373e08db8c2604f1600e5d803783fb043761049eab0c5c07f03ef021eca0e53371600c5da19782fb05b761049d25f5c01bc1638353b489dccca0ed012cf227eb07e838dbf24d5cd93815380cfe000ecbfb0076038eb12a34e5f4abcf39724d5db25c04b80b3b38364b30760300b80b7123f482fc3c65f929a6233e04c625c40a76765d903303323c08b800f01eb658791240de5e7c467faadd941325800f46f0b6247aa9db28348920a731db1f1daefb38354cd5700d39b4b74f79f8d8dbf24b5cdfac0af89c5da3ac51e80a93d0b380a784a76104952e98e045e47ac1fd07af6004c6e01f041625a9f8dbf2475c3a1c089c02ad941aa600fc0dfda09380677e993a4aefa13b037707d769032d903f05773807703bfc2c65f92ba6c6be00c60abec2065b207206c483cf5ef9c1d4492541b77017b11c540ebd803000700e760e32f497aac55819381ddb38394a1cb05c002e0ebc071c4ffc992242d6b45e047c073b38314adabaf009e007c0f785a76104952233c023c1ff8697690a274b107e01f8073b1f19724f56f1ef07d6097ec2045e952013042ace8f72360b5ec3092a4c65940b421db67072942575e01ac047c03d8273b8824a9f16e257a022ecd0e328c2e1400eb1015db76d9412449ad7135b15cfccdd94106d5f657005b01bfc3c65f9254ac8d8887cb05d94106d5e602e039c45afe4fc80e22496aa51d80afd1d0b6b491a1fb7028f0133ab2a1832429cd3f03efc90e3188368e01f84f624d7f4992aa300abc00f841769099685b01f01ee01dd92124499d732ff00ce0e2ec20fd6a4b0130027c0c38223b8824a9b32e059e0edc931da41f6d1803301bf82236fe92a45c9b029fc80ed1afa6f700cc2536f439303b882449635e486c34576b4d2e0066138dff41d94124499ae02e605be09aec205369ea2b8011e0f3d8f84b92ea6755e018e241b5b69a58008c009f010ec90e2249520fbb00afcf0e319526be02f820b1ab9f244975f600b124fd55d94126d3b41e807761e32f496a8605448f752d35a900381c78677608499266604fe025d92126d39457007b134b2cd67a4085244993b805d804b83b3bc8444de801782af02d6cfc2549cdb416355ca6beee3d00eb026700eb6507912469088f1203022fcd0e32aece3d002b01ff8b8dbf24a9f9e6021fcd0e31515d0b80d9c4328adb64079124a920fb007b64871857d702e0bdc4c8494992dae403c48276e9ea3806e0f9c009d4e406499254b07d8857dca9ea56006c02fc1e58253b88244925391b781a90da00d7e915c08ac0f1d8f84b92da6d3b60bfec1075290046802f035b64079124a902ff911da02e05c061c0fed9212449aac80ec0ae9901ea30066073e00fc4a609922475c50f817fcc3a7976013017389da8842449ea9251604be0a28c9367bf02781f36fe92a46e1a01de9076f2c41e805d815371931f495277dd0bac03dc57f589b37a0056038ec5c65f92d46d2b0107649c38ab00f8086ef2234912c0211927cd7805b01bd1f5ef52bf9224852d810bab3c61d53d00cb034761e32f49d2442fadfa84551700ef069e5cf5454a9254732fa4e287e32a5f016c039c45ccfd9724498ff574a29dac44553d00b381a3b1f19724a99703ab3c595505c021c4ee47922469720752e16b802a5e01ac0c5c06ac5dd5454992d450db007faae24455f400bc0b1b7f4992fab16755272abb00783270785517234952c3ed55d589ca2e003e0eccafea6224496ab89d8055aa38519905c07381bdabb80849925a622ef0f7559ca8cc02e0bd555c8024492db34b152729ab00d88f58d0409224cdcc4e559ca48c698023c039c45406499234338f02ab020f947992327a000ec0c65f92a441cd057628fb24451700b38979ff922469703b967d82a20b8017019b971d5a92a496dbbaec131459008c00ff51766049923aa05105c0dec01665079624a9033601962bf3044516006f2ef75e4892d4197328f9957a5105c076c06e65df0d49923a64cb320f5e5401f06f15dc084992ba64a3320f5e4401b01eb07f35f74292a4ced8b0cc831751001c412c5a2049928a536a0fc0b04b01cf03ae07d6acf28e4892d4018b28b10818b607e005d8f84b925486f589d900a518b60038b4da7b21495267cc06562febe0c314004fc4a97f922495698db20e3c4c01f09a21bf5f92244d6d6159071eb4019f03bc3ce75e4892d419b5eb01d8135827e75e4892d419b5eb017861d28d9024a94b169475e0410a80e5807df3ee8524499d31bfac030f5200ec05ac92772f2449ea8c79651d789002e0c0c41b21495297d4a6005800ec937b2f2449ea8cdabc02d80b5831f75e4892d41923651d78a605c07eb9f74192a44e79a8ac03cfa40098053c37fb4e4892d4210f9775e0991400db036b65df0949923aa4163d007b65df0549923aa61605c09ed9774192a48e497f05b01af0f4ecbb204952c7a4f7003c17989d7d172449ea9807cb3a70bf05c0eed9774092a40ebaa5ac03f75b00ec947d072449eaa09bcb3af0c8e8e8e874ffcdaac0ed0cbe75b024491acccac0bd651cb89f467dc73eff3b4992549c0729a9f187fe1a76bbff2549aade9fcb3cb805802449f554dafb7f98be00980bec907d072449eaa0d402600b6041f61d9024a983ae28f3e0d31500db645fbd24491d757199079fae00d82afbea2549eaa8d40260ebecab9724a9a32e29f3e0f6004892543f370177967982a90a8085c0e3b3ef8024491d546af73f4c5d00f8f42f49528ed402608becab9724a9a3ce2afb045315001b655fbd24491d755ad927b0009024a95e6ea6e4458060ea0260c3ec3b204952079d5ec549ec019024a95e520b809581d5b2ef8024491d54fafb7fe85d00f8f42f4952f5ee07ceade244bd0a800db2ef8024491df453e0912a4ed4ab00583bfb0e4892d441c75775a25e05c01ad9774092a48e7914f8dfaa4e66012049523dfc8a9237009aa85701b030fb2e4892d431275479327b002449ca370afcb0ca13f62a0056cfbe13922475c8e9c075559eb05701b066f69d9024a9438eacfa8423a3a3a393fdf31b81c767df0d49923ae02e605de0812a4fdaab07605ef6dd9024a923be46c58d3f5800489294eda88c93f62a00e627de084992bae2b7c00519279eac001801e6a6de0e4992bae1f359279e6c10e03ce0e1d4db214952fb5d056c0a2cce38f9643d00beff9724a97cef27a9f187c97b005603eec8bc239224b5dc2260136203a01493f5002cc90a234952477c90c4c61f26ef01580e7830339424492d761db031c9e3ed26eb017824339024492df7016a30d8bed752c08f0273b2c34992d4321702db9238f86f5caf8580ec059024a978afa7068d3f5800489254956f02bfcc0e31aed72b809b81b5b2c34992d4120f009b03d7660719d7ab07e0feec609224b5c87ba951e30fbd0b0017029224a91817031fcb0eb1ac5e05c0edd9c124496a81c5c02ba8c1b4bf65d90320495279fe13f87d7688c9d803204952394e033e9c1da2177b0024492adeddc0cba8f1fe3a1600922415eff5c48e7fb5d5ab00b82d3b9824490df565e0ebd921a6d3ab00b83e3b9824490df43be0b0ec10fde855005c931d4c92a486b91138801a4ef99b4cafa580e7020f02b3b3034a92d4000f01bb02676507e957af1e8047819bb2c34992d400a3c0ab6850e30fbd0b00a8f9e84549926ae27dc44e7f8d32550150ab4d0b2449aaa1a389d5fe1a67aa02c081809224f5760cf01ae21540e34c55005c961d4e92a49a3a8178efbf343bc8a0a62a002ec80e2749520d9d0c1c44ecf4d758bda60102ac00dcc3d4458224495df26b602fe081ec20c39aaa71bf1f6702489234ee54601f5ad0f8c3f44ff7be069024098e07f606eecd0e52140b004992a6f639607f62b5bfd698ae00b8303ba02449893e041c4e8347fbf732679a7f7f7676404992122c05de047c323b4859a69a05003002dc06ac9e1d5492a48adc0b1c4cbcf76fade95e018c026766879424a92257023bd2f2c61ffa9be37f46764849922af05360073a3200be9f02e077d92125492ad991c41cff3bb3835465ba310000ab0077e08a8092a4f679003884066ee73bac7e1af5bb818bb2834a9254b00b8167d1c1c61ffa7faaff4d765049920a320a7c1cd81ef85376982cfd16002767079524a900b700fb1273fc1fce0e93a99f3100002b13eb01cccd0e2c49d2807e06bc02f87376903ae8b707e01e5c0f4092d44cf703af07f6c4c6ff2f6632b2dfd70092a4a6f905f054e033c4bb7f8d994901f0b3ecb09224f5e90ee0b5c0eec0e5d961eaa8df310000b389c113ee0b2049aab3ef103bf8dd961da4ce66d203b00438293bb024493d5c4e3cf11f888dffb466babadff7b2034b92b48cfb8077005b13effcd58799bc0200589e780db06276704952e78d02df05fe0db8363b4cd3ccb407e041e027d9a125499d7706b013d1dd6fe33f804136f8f96e76684952675d0b1c0cec88bbd50e65a6af000056205e032cc80e2f49ea8c3b800f009f041ec90ed30683f400dc0f9c981d5c92d409f702ef019e087c141bffc20c5200001c9b1d5c92d46a8f0047029b00ef24b6a65781067905003007b80e785cf60548925ae551e0cbc453ff0dd961da6cd01e80c5c031d9e12549adb19458c16f0b62095f1bff920dda0300d12d730930927d1192a4463b8598cb7f5e76902e19b40700e032e0f4ec0b902435d689c0d380e760e35fb9610a0080a3b32f4092d438a700cf04fe01f8637698ae1ae61500c49a003700ab645f8824a9f64e04de0d9c991d44c3f700dc0f7c31fb222449b536f189dfc6bf2686ed0100d800b882981a2849d2b85380b763a35f4bc3f600005c83db044b92fe6afc89ff39d8f8d756110500c0c7b22f4492946a14f85fe0e9d8f037425105c09938255092ba6829f063e019c03ec059d981d49fa20a00b0174092bae4516245d82d817db1e16f9c2206018e9b0d5c006c967d5192a4d23c44ac01f311605176180daec81e8025c4e60d92a4f6b90ff824f064e075d8f8375e913d001005c539c0d6d91726492ac43dc0e78827fedbb3c3a83845170000fb133b3a49929aeb26626cd7e7807bb3c3a87865140023c0d9c0b6d91727499ab1ab88aefe238107b3c3a83c65140000fb01c7675f9c24a96fe7124ffcc71263bad47265150023c019c4821092a47a1a057e067c08f845761855abac02006219c8df12c58024a93e96023f21666e397fbfa38a9c06b8ac33806f665fa024e92f1e2616efd91c17efe9bc327b0000d6032e0516645fa82475d86dc067814f03b76687513d94d90300703df0e1ec8b94a48eba027823b16dfb3bb1f1d70465f700002c0f5c4cfc004a92ca773af009e0fb38a25f3d94dd0300318ff42dd9172a492df730f065601b60676241361b7ff554450fc0b813807fccbe60496a995b89cd793e4dbc7695fa526501b00e7021b06af6454b520b5c4134fa47010f648751f354f10a60dc8dc0dbb22f58921aee74e0f9c026c47b7e1b7f0da4ca1e008845814e0176cfbe70496a9047806f031f05fe941d46ed5075010051b59e4bcc0e9024f536fe7eff53c00dd961d42e55be02187719f0aeec0b97a41abb183894983efdefd8f8ab04193d001085c7cf806767df0049aa91d3898d797e4c6cd4239526ab000058977815b030fb264852a2f1f7fb1f01cecf0ea3eec82c0000f6038ecfbe099294e046e00b635f37678751f7641700009f03fe253b842455e48fc02789dd521fcd0ea3eeaa4301b01c7026b0757610492ac9c3c00f818f01bfcb0e23413d0a00802d895f8a15b383485281ae217a39bf446cc92bd5465d0a0088f100df27160b92a4261bdf8def7860717618693219eb00f47202f081ec109234a087806378ec6e7c36feaaad3af5004014243f00f6c90e22497dba92d890e728e08eec3052bfea560000ac049c016c911d44927a18057e0e1c49bcba5c921d489aa93a1600009b1345c0cad9412469827b80af009f219635971aabae0500c06ec049c0fcec20923aef726224ff1780bbb2c34845a87301007010702cf51aac28a91b9602a7128bf6b836bf5a674e7680697c0b581ff8707610499d710bb105ef178045d961a4b2d4bd0760dcc78037668790d46a7f2406f51d033c981d462a5b530a8011e06bc04bb383486a957b8935f93f0b9c971d46aa52530a0088c180c7037b650791d478e7114bf41e0bdc971d46cad0a40200601e31e776efec20921a677c439e238153b2c348d99a560040f4047c0f8b0049fd195fa9ef68e0d6ec30525d34b10000581ef811f0ecec20926a697c0a9f2bf5493d34b5000058401401bb670791541b37015f053e8f53f8a42935b900005801f82eb0677610496946815f1283fa4e001ecd0e243541d30b0088c58c8e045e991d4452a5ee21160bfb34707e7618a969eabe12603f160387101f064764879154bab38855fabe093c901d466aaa36f4004c7404b16ae048761049851a5fb0e70bc0d9d961a436685b0100f07262d7ae36f46e485d7711b10ae891c09dd961a43669630100b15ae0378155b283489ab1fb8977fb5f20bafb2595a0ad0500c0c6c00f80cdb38348eacb25c05788457beec80e23b55d9b0b00809589b5bef7c90e2269522ecf2b25697b0100301b781ff0d6ec2092fee252e0cbc01781dbb3c3485dd4850260dc2b892d3f97cb0e2275d443c4c25d5f004ecb0e23755d970a00802d806f035b6607913ae47262668e9bf14835d2b50200604562e5b083b383482df630703cf1b4ff2b62b95e4935d2c50260dccb8857022b6607915ae40ae2bdfe97815bb2c348eaadcb0500c026c42b816db383480db6043811f804f0737cdaaf935588714f2b002b8dfd7da5b17fb798586171dc7dc4464a77e3c0cc4ee87a01003017f83fc07bc7fe2ea93fd713d36c3f035c971da66396073603d61ffb5a07586fec6b1de009c496e9835a0cdc36e1eb96b1afab89311d970357018f64df080dce02e0afb621ba2d9f9a1d44aab125c02f8879fbdf1ffbdf2acf5ca2a7f229c056c440e6ad802712539c332d01ae255efb5c02fc11f8c3d8dffdb968000b80c71aef0d780f302f3b8c542337005f27c6cd5c9b1da6c5560676027606760176a0795397ef23366c3a6beceb74a2b74835630130b9ad89de80edb28348899602a7124ffbc713ddc22ad6cac073805d89067f6bf29feccb700970f2d8d72f79ecd80325b100e86d1ef046e01d385340dd723d3192ff4bf8e45686f5817d817f0476a37bbd8d8b8133809f1185e505d981baca02607a8f073e04bc1418c90e2395c4a7fd726d4b34f8cfc79ec5655d047c07386eecefaa880540ff76053e4574d1496d7113f05562c19eabb3c3b4ccdac04b80571183f834bd0b8842e09bc4e04295c8026066e6008703ef0656cd0e230d6829d1fd7a24f0237cda2fd26ce0ef814381fd706af1304e27d6963881589f4005b30018cceac0bf123306561af25852556e06be4234fc57658769994d8946ffa5c05ad9615ae6266250f651d84b55280b80e1ac09bc99182c383f3b8c3489516275be23f149aa687388c17c8703cfc63142655b0a9c448cc9fa75769836b00028c606c0db8057d3ce293c6a9e3b8981559fc08155455b1b78057018f1bbafea9d0d7c90d85eda466c401600c5da8a9836f84f5808a87aa3c41ceb2f1023f95da6b558db13ddfc2fa7798bf3b4d5f9c047816fe0589619b30028c746c46b81d7106b764b65ba8b1839fd299c535db49588f7fa87035b6687514f57006f277e0f6cd4fa640150aeb5812388aec255b3c3a85546815f1103a3be073c9c1da86536055e493cf1af961d467dfb03f01662bf0a4dc302a01a2b03af055e87ef0c359cf191fc5f22766453716603ff40ccf071505fb39d420cd0fe5376903ab300a8d62c6077e2a9e205c42862693a1357e93b0147f2176d5da2403f8458f953edb0842894ff03b8233b4c1d5900e459077819d12bb07e7618d5d2f812a95fc5f9cf65d89978dadf0f17ec69b33b8822e0281c1ff0181600f9e6111f40af02f6c0d9035d770331a2f9ebd87d59869581838037e0a0beaef915f02fc4ce84c202a06ed6060e045e043c13df4176c52d44d7feb789697c4bb303b5d0e6c487ffab7077cf2e7b885848e8033870d602a0c69e408c137839ee1ed646b70127125dfc27e17bfd32cc07f627a6f0ed981d46b5721eb151d385d94132590034c3d6c436a2fb024f230613aa792e017e0cfc00f82d3ee997651d62a0ed61b82ebf7a7b087817f0113afabb6801d03c0b89ddc6f625f6175f393b907a5a0c9c49ecb8f743e0e2ec402de60c1b0dea646269e71bb38354cd02a0d9e603bb11739777230635d93b906794e852fcf9d8d72f817bb343b5dc2ac00b8905b7b6c80ea3c6ba95d8cbe547d941aa6401d02e6b00bb10c5c06ec4de041604e5ba0c388d68f04f25b62e55f9c6d7e57f29b0203b8c5a6114f830f0ff8835045acf02a0dd56270a829d890fcced8827260de651e01ce074a2d13f9d58994fd5984f8c853902d8293b8c5aeb24e0c5c48e9aad6601d03deb10c5c0f8d7b3889e033dd67dc0a5c4623c7f9cf0f56076b00e7a12b1b1d6ab89313052d9ae20c692b47a732d0b008d101fb09b111ba06c0a6c42cc9beeca08eaeb895ff4738927fc73890f804e8e0cae898983fadc5e5b19ee2306077e2f3b48592c0034955589626053628be3758875d3d71ffbfb9ad901fbf410702570558faf87b203ea2fd6249ef45f0b6c981d469d374a6c33fcfeec2065b000d03096230a827580f5886d53579df0b5da327fae4a3cd9cd21f6599fa925c03dc003c42a5e77128df7edc428de9bc6febc9578377fcb847fae7a1b1fd4f73260f9ec30d2323e43ec1bd1aa5e410b00659bc55f07268e1045c2bdc41cfa89eec3d5f2da663962e9eb3701db668791a6713c3138b0353d86160092aab631d1cdff1a62a68ad414bf200607de9d1da408160092aa308798c2773831b8cf8daed454e7007bd18229c0160092cab4363192fa306083ec3052412e25165b6bf4f8220b004965d89e58b0e720606e7618a904e713bd59b7650719940580a4a2ac04bc08781db183a5d476e701cf266622358e0580a4616d0abc9298c6b75a7618a962e71245c01dd94166ca0240d220e6122bf41d0eec9a1d464af67b600f1ab6fba70580a499783cf072a29b7ffdec30528d9c04eccbdfae61525b160092fab133b112da7e38a84feae54bc021d921fa650120a99705c4bbfd3710eff9254defffd190bd032c00242d6b21f07aa29bdfed77a59919050e068ec90e321d0b0049e39e04bc9958b8c70d79a4c13d0c3c0ff8557690a9580048da027837b1c6f9ecec30524bdc422c88757d76905e66650790946621f009623193fdb1f1978ab416f05d605e76905e2c00a4ee5900bc15b89218d93f273b90d452cf003e921da2175f0148dd310bf867e203c98d79a4eabc9c1a0e0ab40090ba612b628ef20ed941a40eba0f783a70717690897c0520b5db5ce09dc01fb0f197b2ac081c07cccf0e32913d00c3590ed88818ecb106b02631b06aa5b17fbfecc6284b807bc6fe7efbd8d76d637ffe19b80e7834fba2d41adb004703db65079104c087807fcf0e31ce02a03feb135da85b8ffdb9d1d8d7e30a3ecf1262cac822e072e002e04f635f8ddc6e522996233e64de86cbf64a75b214d80df84d7610b00098cc02a2ab74676047e099c0ead9a188de81df8e7d9d4e4cdd6acca613aaccc6c4d4a3adb383489ad45544efdc7dd9412c00c213895d9cf60176a166ef697a788028067e0c9c005c931d48e9fe11f80ab06a76104953fa1431053755570b8059c4d3fd81c49ee6eb66072ac005c493df71d46ca4a94a379778b7f84660243b8ca4698d027b00a76686e85a01b025f02ae00060bdec30253a1ff816f13478637618956a5de0dbc04ed94124cdc815c498b287b20274a100588ee8de3f147836dd7a425a4a54984702c7e39881b6d919f81e310b4552f3a46e1ddce602606de030622ff33a0ce2cbb608f83cf005e0aeec301ada7ec03770d73ea9c91e2036e34a19c3d5c602e029c05b8083a8f1260c89ee228a808f01376787d140de007c1c17f292dae038e08519276e5301b01131f7f9d5b8ab593f1e00be087c00b8293b8cfa3242aceaf7ceec20920ab527f0d3aa4fda8602607de0bdc04bb1e11fc4bdc496b01f1efbbbea691eb1aadf4bb283482adc45c0b654bc126c93bb10c7b734bd0838181bff41ad04bc1db8941828e97dac9ff9c45a0f36fe523b6d41b463956a6a0fc041c496a66d9eca97e50fc0eb8133b383088839fedf059e9f1d4452a9ae0536011eaeea844deb015807f83ef04d6cfccbf2346285c12ff0d74d8d946336f0356cfca52e7802704895276c4a0fc00870383160cd46a93ad700af2561708a98057c9518db22a91bfe0c3c9918a45dba26f400ac4dac77ff696cfcabb6017012f114ba4276980e19013e878dbfd4358f271eba2a51f71e801710abd82dcc0e222e2606a19d931da4033e46aceb2fa97b6e2136a8bbbfec13d5b507601ef1c4ff7d6cfceb6273e077c0bf640769b95763e32f75d95a543416a08e3d00eb00df2176eb533d7d9de8a6aae43d5587ec0a9c8c2b584a5d7735b031b0a4cc93d4ad076027e08fd8f8d7dd4b81df10a356558c27121bfbd8f84bda08d8a7ec93d4a900d89f78fa795c7610f5653be00c62daa086b33a7022beee92f45747947d82ba140047107b9abbb359b33c1ef825b1ddb206338778e5b549761049b5f2f7c4f2c0a5c92e0066019fc59dcd9a6c05e0782a5ec0a245de09ec9e1d42522d95da0b9039087036b11bdd2bb202a850a3c0bf01ff931da44176054ec5fd17244dee61605de0f6320e9ef5d43d0ff81636fe6d3202fc37f0c1ec200db12ab1c0928dbfa45ee6032f2cebe01905c05ce27dfffe09e756f9de8afbd5f7e3f3c44a8b923495979575e0aa5f01cc028e015e5ce54995e2adc087b343d4d46b88152e25a91f9b115bb617aaca1e80f1f5cd6dfcbbe183b86ae064362696fa95a47ebda48c8356d903f041e2a950ddb114388058d259e164608fec10921ae51a6271a0421becaa7a005e8d8d7f17cd22960d7e5676909a780936fe92666e0360e7a20f5a4501f03c62c093ba6979e087c41ed75db60a8e899034b8c207ce975d006c061c47ac76a6ee5a08fc0058313b48a20f121b5d49d2200a5f71b5cc31002b0267025b947947d4282700ff44c1efb11a600762df0457bb94348c2d808b8b3a58591f4823c0d1d8f8ebb1f603de9c1da262b388297f36fe928655e80e81657d28bd9118fd2d2deb03c02ed9212af4624aded0435267ec5de4c1ca7805f014e00fc07255dd1135cef5c0d6c09dd9414a3697e8ae7b52761049adb004580bb8a3888315dd03301ff80636fe9ada7a746325bc5762e32fa938b381e71475b0a20b800f134f76d274f6a7a4d5ad6a6239e0edd92124b5ce6e451da8c802e099c0eb2bbf156ab24f10dd596df42fc0fad92124b5ce8e451da8a83100f381b371d4bf66ee1bb4af276045e04ada5bdc48cab314580db867d80315d503f0766cfc35981703cfcf0e51b05763e32fa91cb3881ef7420e34ac8d81b7a4de0e35ddc769cfc0d111e0b0ec10925aad90d700451400ff0dcccbbd176ab88d8037658728c8dec0a6d92124b55a211bac0d3b066077e0e7d97742ad701fd170de981d64483f059e9b1d4252abdd0dac4e8c0718d8303d00b38951dc52115604fe2b3bc49036a1c039ba92d4c32ac086c31e649802e045c096d97741adf27260f3ec1043781331064092ca36f467e5a005c06c5ce444c59b0dfc67768801ad0cbc2c3b84a4ce187ae6dda005c0c138d049e53810d8263bc4005e00ac901d425267a4f400cc06de967de56aad5934f3e7eba0ec00923a65e80260905900fb03dfc9be72b5da12a287e9caec207d5a48cc5e989b1d445267dc03ac0a0c3c956f901e80ff937dd56abdd9c01bb243ccc001d8f84baad6cac0e38739c04c0b801d29680102691aaf26d6bb6e8217660790d449436d373ed302c0ddfe54951589c1a675b70eb04b7608499df4b861be792605c01ac44867a92aafa5fef3eaff9962b7d596a47e55f60ae060dab3618b9a6133eaffcac9657f2565a9ac07e0d5d957aa4e3a243bc014e600bb668790d45995f4006c4f01ab0e4903d81f583e3b440fcf2446e24a52864a0a8003b2af529db512f0bcec103dec911d4052a755f20a60ffecab54a71d981da08767670790d4696b0df3cdfdac04f834e0acecab54a7dd47fca03f981d64829580db7101204979ee2656031c483f3d00fb645fa13a6f4560b7ec10cbd8111b7f49b9861a1fd54f01b057f6154ac09ed90196b15d7600499d378f21d62199ee1b1712af00a46c752b00b6cd0e2049c0fc41bf71ba02e0397dfc3752153661c875af0bb66d7600496288d700d335eebb655f9934415d16dd591178727608496288157aa72b0076cabe326982bafc3c6e833d6392eaa19402605560f3ec2b9326d8393bc0986db20348d2985206013e6b98034b25d80458333b04b0557600491af3f0a0df385503bf7df65549cb18019e9a1d02d8203b80248d29a500f0294775b475760060fdec009234a69402a00e1fb4d2b2ea50985a0048aa8b4706fdc65e05c0f2c0c6d957254d22bb0058115825fb2648d298c20b802701b3b3af4a9ac426c458802c4fc8be019234e63e60c9a0dfdcab00d828fbaaa41e5620772680ddff92eae2b661beb95701b061f6554953c82c50d7c9be78491a73c730df6c01a026da30f1dcbeff975417b70ef3cdbd0a80f5b2af4a9a426637fc82ec8b97a431b70ff3cdbd0a803aacb626f5b230f1dc03afbb2d49052ba5005823fbaaa42964fe7cda0320a92eae1be69b7b1500994f58d274327f3e07de7b5b920a76f530dfdcab005835fbaaa429ac9e786e7b0024d545290580ef395567993f9ff60048aa8b45c37cf36405c05cdc0658f5362ff1dcae9029a90eeea5844180991fae523fe6279e7be075b725a940570d7b000b0035910580a4aefbd3b00798d5e73f93ea24f36774e0bdb725a940e70f7b001b7b6966ec01905407a5f40048eaedfeec0092045c30ec012c00a499196ad4ad2415e076e086610f620120cdcc50fb6f4b5201fe50c4412c00a499b1074052b6d38b388805803433f60048ca765a1107b1009066e6a6ec00923a6d31f0fb220e640120cdcc75c42fa02465388782662359004833b318b83e3b84a4ce2ae4fd3f5800488358941d405267fdb4a8034d5600d8bda9ba7b34f9fc8bb26f80a44e7a08f87551079bac0070a953d55df67afc9766df00499df44be081a20e36590190fde12a4d27bb481d7a0d6e491ac049451e6cb2026029b024fb2aa5296417a9160092329c58e4c17a0d02bc2ffb2aa529646fc8733dae0828a95a9700971579c05e0580ab9da9ce6ecd0e40013b7149d20c7cbbe803f62a007cba519dd5e1e7b39095b824a94fc7157d407b00d4447528000a5b8c4392a6713e7051d107ed5500d4a18b55eaa50e3f9fa703a3d921247542e1ddffd0bb00b826fb6aa5292cca0e40f4925d9e1d4252eb8d02df2ae3c0bd0a8045d9572c4de1eaec00630ad9925392a6f00be0ca320edcab00a8cb07ac3499baf450fd2c3b80a4d6fb6259071e191d9df435e606d80ba07aba19785c768831ab01b70073b283486aa5db81f5883d000ad7ab07e05ae09eec2b972651a7f9f777e2744049e53986921a7fe85d008c52af0f5a695cdd96e12d74694e491a330a1c55e609664df1efeaf6412b41cc87ad931f670790d44a2751c2dcff892c00d434752b00ce052ece0e21a9753e5af609a62a00ceccbe7a69190f52cfc2f4bbd90124b5ca79c4f4bf524d55009c07dc9b7d17a4097e0f3c921d621285afd12da9d33e4c052b8d4e55002cc111ceaa97baaebf7f0125bfab93d4198b80ef5471a259d3fcfbba7ee0aa9b7e9b1d600a5fc90e20a915fe0b78b48a13f55a0868dcdf01bfccbe1b12f10bb190faae4fb110b81e989f1d4452635d096c4e4505403f3d007767df11895877bfae8d3fc4e6403fca0e21a9d1de4d458d3f4c5f002c067e9e7a3ba4705276803e94ba6887a456bb0cf86695279cae0000573a533d34a1003805b708963498b7130fdd95e9a700f841d5a1a4655c453de7ff2f6b29f0b1ec10921ae7b724ac27d24f01702bf0ebca6f87f457dfca0e30035f25c60348523f96024750c1bcff65f55300800b9d28d7b7b303ccc003c0e7b243486a8ca3813f649c78ba6980e3d6046ec47dcf55bd4b81cdb243ccd0dac0d5c0f2d94124d5da3dc026c0cd1927efb707e056e07f3302aaf3be921d600037039fcf0e21a9f6de4552e30ffdf70000ec8d5b9faa5a8b810d88dea7a659480c5e5c293b88a45a3a0b7816b1ec7e8a7e7b0020a6035e9b15549df4639ad9f8430c04fc6c760849b5b418782d898d3fccac00584a0c5690aad2f485753e42bd572f9494e323c039d92166f20a00602d62a7220737a96c97025b10856793bd15f860760849b57119b02df060769099f40000dc021c9b1d5a9df0df34bff1875818c8d501254174fdbf821a34fe30f30200e0a3b4e38359f5750bf0f5ec10057904784b760849b5f01ee077d921c60d52005c8ab30154ae4f50930ab92027e0a65a52d79d06bc3f3bc444331d03306e2be05c062b20a4a9dc0e6c04dc9b1da4609b00e701cb65079154b9bb89f7fe8bb2834c3468037e3ef1542315ed43b4aff18718f8f3beec1092521c4acd1a7f18bc0700e029c40e6df602a828b7024f04eecb0e529239c0ef81a76607915499ff01de9c1d6232c334de17025fcbbe00b5ca7fd2dec61f6204f061242ffe21a932bf22a602d7d2303d00109b9e5c06ac9c7d216abc0b8977648bb38354e07dc0dbb243482ad54dc0f6d47835d361bbef6fc6454e548c37d18dc61f620390b3b243482acdc3c03f51e3c61f86ef018018d57c01f0a4ec8b51637d1738203b44c59e442c05ea664152bb8c020703c76407994e1103f81e025e3376d1d24cdd03bc313b44822b895e0f49edf20e1ad0f8437123f87f017c35fb62d4486f016ec80e91e44bb8c196d42647d3a0e9be45bc0218b70a7011b04ef645a9317e07ec4cb797965e9e58216cbbec209286f233601fe0d1ec20fd2a720effddc021f82a40fdb99fd814a3cb8d3fc492c72f006ecb0e2269606700fbd3a0c61f8a5fc4e744e0c8ec8b5223bc9e98422ab8167831dd990521b5c939c05e347005d3225f018c5b00fc11d82cfbe2545bdf23aa653dd6ab812f668790d4b7cb805d8929f18d53c632be0f104f336ddacd4dc5b99a9835a2bff5255c57436a8a2b81dd6968e30fe5ade37f0e7ec8eb6f3d44ccf7bf333b488dbd0d38363b84a4295d02ec46c3673095b991cfb1c0e7b22f50b57238f17a48bd8d12af024ece0e226952e7027f075c9f1d6458658c0198681e702ab053f6852adda7807fcd0ed1200b8841b5bb660791f417671103fe6ecf0e5284b20b00803580df029b645facd29c083c1f47b9cfd42ac029c0d3b28348e21462ca6e6b762c2df315c0b8db898ae996ec8b558ab38103b1f11fc4ddc09e4497a3a43c5f06fe811635fe504d01007015b133d203d917ac4a2d2256c66ad52f4dc56e07fe9e58355152b546817713e3721ab5c84f3faa780530d173801f01f3b32f5ca5bb85787f7d6976909658013801d8233b88d4118f100dffd7b38394a5aa1e8071270307617770dbdd46cc8fb5f12fcefdc4388a9f6407913ae0cfc0b36971e30fd51700104f3107034bb22f5ea5b883786f7d617690167a9028023e9b1d446ab1d38981b7a76507295b460100f00d6234e543d9374085ba9978f277ae7f799600af03de881b2949453b92f80cbb313b4815aa1e03b0acbd8875e197cfbe111adab5c4180f37f8a9ce81c057f0f7471ad6bdc061746c15ceec020062a0d809c06ad94134b08b882932d76407e9a06d8922fa89d941a4863a0b780970797690aa65bd0298e8d7c0d3e9e0cd6f895f102b3ddaf8e73817d80138293b88d4304b814f023bd3d1f6a70e0500c015c4ff09676607d18c7c8d18f0775776908ebb03d81bf82f1c1720f5e36a623dff2388e97e9d5497020062def8dfe17ee84db004f877e01574f897a7669602ef20d60968fc26255249961203fdb6a603a3fca753873100933994d83c665e7610fd8ddb801711eb62ab9e5621a60abe383b885423e713dbd4dbd33ca64e3d00131d49f4062cca0ea2c7380d782a36fe75773731a8e995c09dd961a4640f006f03b6c7c6ff31ea5a00009c016c431403cab598580f7b37ec5e6e92af009b03c764079192fc18780af0015ab896ffb0eafa0a60592f013e43746daa5a57022f250a3235d73ec46b81f5b3834815f823b15856e7dff34fa5ce3d00131d0b6c067c373b48872c26a6c86c8b8d7f1b8c3f097d0878383b8c549245c4e0e4a763e33fada6f4004cb42ff124b35e769016fb137008b14086da677de07dc0cbb2834805b91ef828f0792c70fbd6c40200626bd4ff4b4c45736be1e2dc49bcebff0ceed8d805bb03ef079e911d441ad04dc4fbfd23716f99196b6a0130eec9c407d801d9411a6e317034f076e0d6ec30aadc1ec487e8d3b283487dba92982a7e1431ca5f03687a0130eeef80f702bb64076998a5c0b780f70097668751aa116287ceffc04240f5f51ba2abffc7b8eae5d0da52008c7b0ed1983d333b48cd8d121bc8bc0bb8303b8c6a6737e0cdc4f2c223d961d479f701c711eff71d9754a0b61500e37606fe15f827607676981a7904f8363112dc865fd3d91c7803310d77e5ec30ea9cb388a5e1bf496cd7ab82b5b50018b739f02662e9da15b3c324ba89f845fa347073761835ce0ac081c4cc901db3c3a8d51601df21a67e9f971da6edda5e008c5b8978bff93262c053172c054e2546c79e80ab60a9185b107b0c1c086c9c1d46ad701dd1e81f07fc9e7845a90a74a50098684be085c407d826d9610a364aac757ddcd8d70dd981d46adb11bf47ff4cccc891fab18468e84f044e02fe808d7e8a2e1600133d95f8f0da93f8306be280a7478815af7e42ac94784d762075d2c6c4efd15ec4ac9c05d981542b97139f533f054e06eec80e240b8089d6069e47cc24d819d8303b500f4b89017cbf217e994e2546c94a75b11cb1b8d0cec498811d8155b343a9328f00e700bf251afdd371ec512d5900f4b62eb01331a5706b6267c2850939ae21f6b13e17f81df14b7557f6cd916660163176605b602be2f7692be2774ccd354abcbf3f7feceb4f637f5e8a638e1ac10260661e4f8c217822b011d14bb0c1d83f5f488c969ea9bb89d5f7fe0c5c4d8c82bd1ab802b8001b7bb5d76a3cf6776923e2f7698db1af35b1e720cbfdc0edc06d13beae253e9f16119f51d7e0bafb8d660150ace5880fae1588990710d30fe7020ff2d7b5aaef22baed6fc735f7a5a9cc217e97561afbfbf8ffd6ccad00cc1bfbfb287f7db87888f87c827820b91fd7d5ef040b0049923a685676004992543d0b0049923ac8024092a40eb2009024a983fe3fb3a2f1489613434f0000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": null,
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "chat": {
+      "id": 127863,
+      "api": {
+        "url": "/chat",
+        "body": {
+          "tools": "{{if(parameters.tools, parseJSON(parameters.tools), undefined)}}",
+          "{{...}}": "{{omit(parameters, 'projectNameForRequest', 'connectors', 'documents', 'tools', 'tool_results')}}",
+          "documents": "{{if(parameters.documents, restructure(parameters.documents), undefined)}}",
+          "connectors": "{{if(parameters.connectors, restructure(parameters.connectors, 'options'), undefined)}}",
+          "tool_results": "{{if(parameters.tool_results, parseJSON(parameters.tool_results), undefined)}}",
+          "response_format": "{{if(parameters.response_format, processResponseFormat(parameters.response_format), undefined)}}",
+          "force_single_step": "{{ifempty(parameters.force_single_step, if(parameters.message && parameters.tool_results, true, false))}}"
+        },
+        "method": "POST",
+        "headers": {
+          "X-Client-Name": "{{ifempty(parameters.projectNameForRequest, undefined)}}"
+        },
+        "response": {
+          "output": {
+            "text": "{{get(body, 'text')}}",
+            "{{...}}": "{{omit(body, 'text')}}"
+          }
+        }
+      },
+      "rev": 18,
+      "crud": "create",
+      "name": "chat",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Conversation",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Text input for the model to respond to.",
+          "name": "message",
+          "type": "text",
+          "label": "Message",
+          "required": true
+        },
+        {
+          "help": "Smaller, \"light\" models are faster, while larger models will perform better.",
+          "name": "model",
+          "type": "select",
+          "label": "Model",
+          "default": "command-r",
+          "options": "rpc://app%23cohere@1/models?endpoint=chat",
+          "validate": false
+        },
+        {
+          "help": "The maximum number of tokens the model will generate as part of the response.\nNote: Setting a low value may result in incomplete generations.",
+          "name": "max_tokens",
+          "type": "uinteger",
+          "label": "Max Tokens"
+        },
+        {
+          "help": "1. When using `{ \"type\": \"json_object\" }`, your prompt must explicitly instruct the model to return JSON (e.g., \"Generate a JSON ...\") to avoid infinite output.\n2. If no `json_schema` is provided, responses may include up to 5 levels of nested objects.\n3. This parameter is not compatible with `documents` or `tools`.",
+          "name": "response_format",
+          "spec": [
+            {
+              "name": "type",
+              "type": "select",
+              "label": "Type",
+              "options": [
+                {
+                  "label": "Text",
+                  "value": "text",
+                  "default": true
+                },
+                {
+                  "label": "JSON Object",
+                  "value": "json_object",
+                  "nested": [
+                    {
+                      "rpc": {
+                        "url": "rpc://app%23cohere@1/jsonSchema",
+                        "label": "Generate Schema",
+                        "parameters": [
+                          {
+                            "help": "Example JSON object representing the format you expect in the response. This will be automatically converted into a JSON Schema.\nFor instance, if you input `{ \"name\": \"Alice\", \"age\": 30 }`, it will generate a schema like: `{ \"type\": \"object\", \"properties\": { \"name\": { \"type\": \"string\" }, \"age\": { \"type\": \"integer\" } }, \"required\": [\"name\", \"age\"] }`.",
+                            "name": "json_object",
+                            "type": "text",
+                            "label": "Example JSON Object",
+                            "required": true
+                          }
+                        ]
+                      },
+                      "name": "json_schema",
+                      "type": "text",
+                      "label": "JSON Schema"
+                    }
+                  ]
+                }
+              ],
+              "mappable": false,
+              "required": true
+            }
+          ],
+          "type": "collection",
+          "label": "Response Format",
+          "advanced": true
+        },
+        {
+          "help": "When specified, the default Cohere preamble will be replaced with the provided one. Preambles are a part of the prompt used to adjust the model's overall behavior and conversation style.",
+          "name": "preamble",
+          "type": "text",
+          "label": "Preamble",
+          "advanced": true
+        },
+        {
+          "help": "A list of previous messages between the user and the model, meant to give the model conversational context for responding to the user's **Message** .",
+          "name": "chat_history",
+          "spec": {
+            "spec": [
+              {
+                "help": "Identifies who the message is coming from.",
+                "name": "role",
+                "type": "select",
+                "label": "Role",
+                "options": [
+                  {
+                    "label": "CHATBOT",
+                    "value": "CHATBOT"
+                  },
+                  {
+                    "label": "USER",
+                    "value": "USER"
+                  }
+                ],
+                "required": true
+              },
+              {
+                "help": "Contents of the chat message.",
+                "name": "message",
+                "type": "text",
+                "label": "Message",
+                "required": true
+              },
+              {
+                "help": "Unique identifier for the generated reply. Useful for submitting feedback.",
+                "name": "generation_id",
+                "type": "text",
+                "label": "Generation ID"
+              },
+              {
+                "help": "Unique identifier for the response.",
+                "name": "response_id",
+                "type": "text",
+                "label": "Response ID"
+              }
+            ],
+            "type": "collection",
+            "label": "Chat"
+          },
+          "type": "array",
+          "label": "Chat History",
+          "labels": {
+            "add": "Add chat"
+          },
+          "advanced": true
+        },
+        {
+          "help": "An alternative to **Chat History** .\nProviding a **Conversation ID** creates or resumes a persisted conversation with the specified ID. The ID can be any non empty string.",
+          "name": "conversation_id",
+          "type": "text",
+          "label": "Conversation ID",
+          "advanced": true
+        },
+        {
+          "help": "Tunes the degree of randomness in generation. Lower temperatures mean less random generations.\nSee [Temperature](https://docs.cohere.com/docs/temperature) for more details.",
+          "name": "temperature",
+          "type": "number",
+          "label": "Temperature",
+          "default": 0.75,
+          "advanced": true,
+          "validate": {
+            "max": 1,
+            "min": 0
+          }
+        },
+        {
+          "help": "Number of tokens considered for generation at each step.",
+          "name": "k",
+          "type": "uinteger",
+          "label": "Top K",
+          "default": 0,
+          "advanced": true,
+          "validate": {
+            "max": 500,
+            "min": 0
+          }
+        },
+        {
+          "help": "Ensures that only the most likely tokens, with the specified total probability mass, are considered for generation at each step.",
+          "name": "p",
+          "type": "number",
+          "label": "Top P",
+          "default": 0.75,
+          "advanced": true,
+          "validate": {
+            "max": 0.99,
+            "min": 0.01
+          }
+        },
+        {
+          "help": "Dictates how the prompt will be constructed.\nDefaults to `AUTO` when **Connectors** are specified and `OFF` in all other cases. Read more about [Prompt Truncation](https://docs.cohere.com/docs/retrieval-augmented-generation-rag#prompt-truncation).",
+          "name": "prompt_truncation",
+          "type": "select",
+          "label": "Prompt Truncation",
+          "options": [
+            {
+              "label": "AUTO",
+              "value": "AUTO"
+            },
+            {
+              "label": "AUTO_PRESERVE_ORDER",
+              "value": "AUTO_PRESERVE_ORDER"
+            },
+            {
+              "label": "OFF",
+              "value": "OFF"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "help": "When specified, the model's reply will be enriched with information found by quering each of the connectors (RAG).",
+          "name": "connectors",
+          "spec": {
+            "spec": [
+              {
+                "help": "Use `web-search`, or the \"id\" for a custom connector, if you've created one. Read more about [Creating and Deploying a Connector](https://docs.cohere.com/docs/creating-and-deploying-a-connector).",
+                "name": "id",
+                "type": "select",
+                "label": "ID",
+                "default": "web-search",
+                "options": "rpc://app%23cohere@1/connectors",
+                "required": true,
+                "validate": false
+              },
+              {
+                "help": "When specified, this user access token will be passed to the connector in the Authorization header instead of the Cohere generated one.",
+                "name": "user_access_token",
+                "type": "text",
+                "label": "User Access Token"
+              },
+              {
+                "help": "Allow the request to continue if this connector returns an error.",
+                "name": "continue_on_failure",
+                "type": "boolean",
+                "label": "Continue On Failure",
+                "default": false,
+                "required": true
+              },
+              {
+                "help": "Provides the connector with different settings at request time. The key/value pairs of this object are specific to each connector.",
+                "name": "options",
+                "spec": [
+                  {
+                    "name": "key",
+                    "type": "text",
+                    "label": "Key"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  }
+                ],
+                "type": "array",
+                "label": "Options"
+              }
+            ],
+            "type": "collection",
+            "label": "Connector"
+          },
+          "type": "array",
+          "label": "Connectors",
+          "labels": {
+            "add": "Add connector"
+          },
+          "advanced": true
+        },
+        {
+          "help": "When `true`, the response will only contain a list of generated search queries, but no search will take place, and no reply from the model to the **Message** will be generated.",
+          "name": "search_queries_only",
+          "type": "boolean",
+          "label": "Search Queries Only",
+          "default": false,
+          "advanced": true,
+          "required": true
+        },
+        {
+          "help": "A list of relevant documents that the model can cite to generate a more accurate reply. See [Document Mode](https://docs.cohere.com/docs/retrieval-augmented-generation-rag#document-mode) in the guide for more information",
+          "name": "documents",
+          "spec": {
+            "help": "Some suggested keys are `title`, `text`, `author`, and `date`. An `id` field (string) can be optionally supplied to identify the document in the citations. An `_excludes` field (array of strings) can be optionally supplied to omit some key-value pairs from being shown to the model.",
+            "spec": {
+              "spec": [
+                {
+                  "name": "key",
+                  "type": "text",
+                  "label": "Key",
+                  "required": true
+                },
+                {
+                  "name": "value",
+                  "type": "text",
+                  "label": "Value",
+                  "required": true
+                }
+              ],
+              "type": "collection",
+              "label": "Field"
+            },
+            "type": "array",
+            "label": "Document",
+            "labels": {
+              "add": "Add document field"
+            },
+            "required": true
+          },
+          "type": "array",
+          "label": "Documents",
+          "labels": {
+            "add": "Add document"
+          },
+          "advanced": true
+        },
+        {
+          "help": "The higher the value, the stronger a penalty is applied to previously present tokens, proportional to how many times they have already appeared in the prompt or prior generation.\nEither **Frequency Penalty** or **Presence Penalty** can be used.",
+          "name": "frequency_penalty",
+          "type": "number",
+          "label": "Frequency Penalty",
+          "default": 0,
+          "advanced": true,
+          "validate": {
+            "max": 1,
+            "min": 0
+          }
+        },
+        {
+          "help": "This penalty is applied equally to all tokens that have already appeared, regardless of their exact frequencies.\nEither **Frequency Penalty** or **Presence Penalty** can be used.",
+          "name": "presence_penalty",
+          "type": "number",
+          "label": "Presence Penalty",
+          "default": 0,
+          "advanced": true,
+          "validate": {
+            "max": 1,
+            "min": 0
+          }
+        },
+        {
+          "help": "A list of available tools (functions) that the model may suggest invoking before producing a text response.\nYou can use \"Parse JSON\" from JSON app to create input for this field. Read more about [Tool Use](https://docs.cohere.com/docs/tool-use).",
+          "name": "tools",
+          "type": "any",
+          "label": "Tools",
+          "advanced": true
+        },
+        {
+          "help": "A list of results from invoking tools recommended by the model in the previous chat turn.\nYou can use \"Parse JSON\" from JSON app to create input for this field. Read more about [Tool Use](https://docs.cohere.com/docs/tool-use).",
+          "name": "tool_results",
+          "type": "any",
+          "label": "Tool Results",
+          "advanced": true
+        },
+        {
+          "help": "Name of the project that is making the request.",
+          "name": "projectNameForRequest",
+          "type": "text",
+          "label": "Project Name",
+          "advanced": true
+        },
+        {
+          "help": "Forces the chat to be single step. For more information, see [Cohere Tool Use](https://docs.cohere.com/docs/tools).",
+          "name": "force_single_step",
+          "type": "boolean",
+          "label": "Force Single Step",
+          "advanced": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "cohere",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/chat\",\n\t\"method\": \"POST\",\n\t\"headers\": {\n\t\t\"X-Client-Name\": \"{{ifempty(parameters.projectNameForRequest, undefined)}}\"\n\t},\n\n\t\"body\": {\n\t\t\"{{...}}\": \"{{omit(parameters, 'projectNameForRequest', 'connectors', 'documents', 'tools', 'tool_results')}}\",\n\t\t\"connectors\": \"{{if(parameters.connectors, restructure(parameters.connectors, 'options'), undefined)}}\",\n\t\t\"documents\": \"{{if(parameters.documents, restructure(parameters.documents), undefined)}}\",\n\t\t\"response_format\": \"{{if(parameters.response_format, processResponseFormat(parameters.response_format), undefined)}}\",\n\t\t\"tools\": \"{{if(parameters.tools, parseJSON(parameters.tools), undefined)}}\",\n\t\t\"tool_results\": \"{{if(parameters.tool_results, parseJSON(parameters.tool_results), undefined)}}\",\n\t\t\"force_single_step\": \"{{ifempty(parameters.force_single_step, if(parameters.message && parameters.tool_results, true, false))}}\"\n\t},\n\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"text\": \"{{get(body, 'text')}}\",\t// the result's on top\n\t\t\t\"{{...}}\": \"{{omit(body, 'text')}}\"\n\t\t}\n\t}\n}\n",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "response_id",
+          "type": "text",
+          "label": "Response ID"
+        },
+        {
+          "name": "conversation_id",
+          "type": "text",
+          "label": "Conversation ID"
+        },
+        {
+          "name": "text",
+          "type": "text",
+          "label": "Text Response"
+        },
+        {
+          "name": "generation_id",
+          "type": "text",
+          "label": "Generation ID"
+        },
+        {
+          "name": "chat_history",
+          "spec": {
+            "spec": [
+              {
+                "name": "message",
+                "type": "text",
+                "label": "Message"
+              },
+              {
+                "name": "role",
+                "type": "text",
+                "label": "Role"
+              },
+              {
+                "name": "response_id",
+                "type": "text",
+                "label": "Response ID"
+              },
+              {
+                "name": "generation_id",
+                "type": "text",
+                "label": "Generation ID"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Chat History"
+        },
+        {
+          "name": "finish_reason",
+          "type": "text",
+          "label": "Finish Reason"
+        },
+        {
+          "name": "token_count",
+          "spec": [
+            {
+              "name": "prompt_tokens",
+              "type": "number",
+              "label": "Prompt Tokens"
+            },
+            {
+              "name": "response_tokens",
+              "type": "number",
+              "label": "Response Tokens"
+            },
+            {
+              "name": "total_tokens",
+              "type": "number",
+              "label": "Total Tokens"
+            },
+            {
+              "name": "billed_tokens",
+              "type": "number",
+              "label": "Billed Tokens"
+            }
+          ],
+          "type": "collection",
+          "label": "Token Count"
+        },
+        {
+          "name": "meta",
+          "spec": [
+            {
+              "name": "api_version",
+              "spec": [
+                {
+                  "name": "version",
+                  "type": "text",
+                  "label": "Version"
+                }
+              ],
+              "type": "collection",
+              "label": "Api Version"
+            },
+            {
+              "name": "billed_units",
+              "spec": [
+                {
+                  "name": "input_tokens",
+                  "type": "number",
+                  "label": "Input Tokens"
+                },
+                {
+                  "name": "output_tokens",
+                  "type": "number",
+                  "label": "Output Tokens"
+                }
+              ],
+              "type": "collection",
+              "label": "Billed Units"
+            },
+            {
+              "name": "tokens",
+              "spec": [
+                {
+                  "name": "input_tokens",
+                  "type": "number",
+                  "label": "Input Tokens"
+                },
+                {
+                  "name": "output_tokens",
+                  "type": "number",
+                  "label": "Output Tokens"
+                }
+              ],
+              "type": "collection",
+              "label": "Tokens"
+            }
+          ],
+          "type": "collection",
+          "label": "Meta"
+        },
+        {
+          "name": "citations",
+          "spec": {
+            "spec": [
+              {
+                "name": "start",
+                "type": "number",
+                "label": "Start"
+              },
+              {
+                "name": "end",
+                "type": "number",
+                "label": "End"
+              },
+              {
+                "name": "text",
+                "type": "text",
+                "label": "Text"
+              },
+              {
+                "name": "document_ids",
+                "spec": {
+                  "type": "text"
+                },
+                "type": "array",
+                "label": "Document IDs"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Citations"
+        },
+        {
+          "name": "documents",
+          "spec": {
+            "spec": [
+              {
+                "name": "id",
+                "type": "text",
+                "label": "ID"
+              },
+              {
+                "name": "title",
+                "type": "text",
+                "label": "Title"
+              },
+              {
+                "name": "text",
+                "type": "text",
+                "label": "Text"
+              },
+              {
+                "name": "summary",
+                "type": "text",
+                "label": "Summary"
+              },
+              {
+                "name": "tool_name",
+                "type": "text",
+                "label": "Tool Name"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Documents"
+        },
+        {
+          "name": "search_results",
+          "spec": {
+            "spec": [
+              {
+                "name": "search_query",
+                "spec": [
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "generation_id",
+                    "type": "text",
+                    "label": "Generation ID"
+                  }
+                ],
+                "type": "collection",
+                "label": "Search Query"
+              },
+              {
+                "name": "document_ids",
+                "type": "array",
+                "label": "Document IDs"
+              },
+              {
+                "name": "connector",
+                "spec": [
+                  {
+                    "name": "id",
+                    "type": "text",
+                    "label": "ID"
+                  }
+                ],
+                "type": "collection",
+                "label": "Connector"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Search Results"
+        },
+        {
+          "name": "search_queries",
+          "spec": {
+            "spec": [
+              {
+                "name": "text",
+                "type": "text",
+                "label": "Text"
+              },
+              {
+                "name": "generation_id",
+                "type": "text",
+                "label": "Generation ID"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Search Queries"
+        },
+        {
+          "name": "tool_calls",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Name"
+              },
+              {
+                "name": "parameters",
+                "type": "collection",
+                "label": "Parameters"
+              },
+              {
+                "name": "generation_id",
+                "type": "text",
+                "label": "Generation ID"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Tool Calls"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "cohere",
+      "description": "Generates a text response to a user message. Chat context may be provided via previous messages or a conversation ID specified in the input.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"message\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Message\",\n\t\t\"help\": \"Text input for the model to respond to.\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"model\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Model\",\n\t\t\"validate\": false,\n\t\t\"default\": \"command-r\",\n\t\t\"options\": \"rpc://models?endpoint=chat\",\n\t\t\"help\": \"Smaller, \\\"light\\\" models are faster, while larger models will perform better.\"\n\t},\n\t{\n\t\t\"name\": \"max_tokens\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Max Tokens\",\n\t\t\"help\": \"The maximum number of tokens the model will generate as part of the response.\\nNote: Setting a low value may result in incomplete generations.\"\n\t},\n\t{\n\t\t\"name\": \"response_format\",\n\t\t\"label\": \"Response Format\",\n\t\t\"advanced\": true,\n\t\t\"type\": \"collection\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"type\",\n\t\t\t\t\"label\": \"Type\",\n\t\t\t\t\"type\": \"select\",\n                \"mappable\": false,\n                \"required\": true,\n\t\t\t\t\"options\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Text\",\n\t\t\t\t\t\t\"value\": \"text\",\n\t\t\t\t\t\t\"default\": true\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"JSON Object\",\n\t\t\t\t\t\t\"value\": \"json_object\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"json_schema\",\n\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\"label\": \"JSON Schema\",\n\t\t\t\t\t\t\t\t\"rpc\": {\n\t\t\t\t\t\t\t\t\t\"label\": \"Generate Schema\",\n\t\t\t\t\t\t\t\t\t\"url\": \"rpc://jsonSchema\",\n\t\t\t\t\t\t\t\t\t\"parameters\": [\n\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\"name\": \"json_object\",\n\t\t\t\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Example JSON Object\",\n\t\t\t\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\t\t\t\"help\": \"Example JSON object representing the format you expect in the response. This will be automatically converted into a JSON Schema.\\nFor instance, if you input `{ \\\"name\\\": \\\"Alice\\\", \\\"age\\\": 30 }`, it will generate a schema like: `{ \\\"type\\\": \\\"object\\\", \\\"properties\\\": { \\\"name\\\": { \\\"type\\\": \\\"string\\\" }, \\\"age\\\": { \\\"type\\\": \\\"integer\\\" } }, \\\"required\\\": [\\\"name\\\", \\\"age\\\"] }`.\"\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n        \"help\": \"1. When using `{ \\\"type\\\": \\\"json_object\\\" }`, your prompt must explicitly instruct the model to return JSON (e.g., \\\"Generate a JSON ...\\\") to avoid infinite output.\\n2. If no `json_schema` is provided, responses may include up to 5 levels of nested objects.\\n3. This parameter is not compatible with `documents` or `tools`.\"\n\t},\n\t{\n\t\t\"name\": \"preamble\",\n\t\t\"help\": \"When specified, the default Cohere preamble will be replaced with the provided one. Preambles are a part of the prompt used to adjust the model's overall behavior and conversation style.\",\n\t\t\"type\": \"text\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"Preamble\"\n\t},\n\t{\n\t\t\"name\": \"chat_history\",\n\t\t\"type\": \"array\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"Chat History\",\n\t\t\"help\": \"A list of previous messages between the user and the model, meant to give the model conversational context for responding to the user's **Message** .\",\n\t\t\"labels\": {\n\t\t\t\"add\": \"Add chat\"\n\t\t},\n\t\t\"spec\": {\n\t\t\t\"label\": \"Chat\",\n\t\t\t\"type\": \"collection\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"role\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"label\": \"Role\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"help\": \"Identifies who the message is coming from.\",\n\t\t\t\t\t\"options\": [\n\t\t\t\t\t\t{ \"value\": \"CHATBOT\", \"label\": \"CHATBOT\" },\n\t\t\t\t\t\t{ \"value\": \"USER\", \"label\": \"USER\" }\n\t\t\t\t\t]\n\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"message\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"help\": \"Contents of the chat message.\",\n\t\t\t\t\t\"label\": \"Message\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"generation_id\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"help\": \"Unique identifier for the generated reply. Useful for submitting feedback.\",\n\t\t\t\t\t\"label\": \"Generation ID\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"response_id\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"help\": \"Unique identifier for the response.\",\n\t\t\t\t\t\"label\": \"Response ID\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"conversation_id\",\n\t\t\"type\": \"text\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"Conversation ID\",\n\t\t\"help\": \"An alternative to **Chat History** .\\nProviding a **Conversation ID** creates or resumes a persisted conversation with the specified ID. The ID can be any non empty string.\"\n\t},\n\t{\n\t\t\"name\": \"temperature\",\n\t\t\"advanced\": true,\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Temperature\",\n\t\t\"default\": 0.75,\n\t\t\"validate\": {\n\t\t\t\"min\": 0.0,\n\t\t\t\"max\": 1.0\n\t\t},\n\t\t\"help\": \"Tunes the degree of randomness in generation. Lower temperatures mean less random generations.\\nSee [Temperature](https://docs.cohere.com/docs/temperature) for more details.\"\n\t},\n\t{\n\t\t\"name\": \"k\",\n\t\t\"type\": \"uinteger\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"Top K\",\n\t\t\"help\": \"Number of tokens considered for generation at each step.\",\n\t\t\"default\": 0,\n\t\t\"validate\": {\n\t\t\t\"min\": 0,\n\t\t\t\"max\": 500\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"p\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Top P\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Ensures that only the most likely tokens, with the specified total probability mass, are considered for generation at each step.\",\n\t\t\"default\": 0.75,\n\t\t\"validate\": {\n\t\t\t\"min\": 0.01,\n\t\t\t\"max\": 0.99\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"prompt_truncation\",\n\t\t\"type\": \"select\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"Prompt Truncation\",\n\t\t\"help\": \"Dictates how the prompt will be constructed.\\nDefaults to `AUTO` when **Connectors** are specified and `OFF` in all other cases. Read more about [Prompt Truncation](https://docs.cohere.com/docs/retrieval-augmented-generation-rag#prompt-truncation).\",\n\t\t\"options\": [\n\t\t\t{ \"value\": \"AUTO\", \"label\": \"AUTO\" },\n\t\t\t{ \"value\": \"AUTO_PRESERVE_ORDER\", \"label\": \"AUTO_PRESERVE_ORDER\" },\n\t\t\t{ \"value\": \"OFF\", \"label\": \"OFF\" }\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"connectors\",\n\t\t\"type\": \"array\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"Connectors\",\n\t\t\"help\": \"When specified, the model's reply will be enriched with information found by quering each of the connectors (RAG).\",\n\t\t\"labels\": {\n\t\t\t\"add\": \"Add connector\"\n\t\t},\n\t\t\"spec\": {\n\t\t\t\"label\": \"Connector\",\n\t\t\t\"type\": \"collection\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": \"rpc://connectors\",\n\t\t\t\t\t\"help\": \"Use `web-search`, or the \\\"id\\\" for a custom connector, if you've created one. Read more about [Creating and Deploying a Connector](https://docs.cohere.com/docs/creating-and-deploying-a-connector).\",\n\t\t\t\t\t\"default\": \"web-search\",\n\t\t\t\t\t\"validate\": false,\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"label\": \"ID\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"user_access_token\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"help\": \"When specified, this user access token will be passed to the connector in the Authorization header instead of the Cohere generated one.\",\n\t\t\t\t\t\"label\": \"User Access Token\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"continue_on_failure\",\n\t\t\t\t\t\"type\": \"boolean\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"default\": false,\n\t\t\t\t\t\"help\": \"Allow the request to continue if this connector returns an error.\",\n\t\t\t\t\t\"label\": \"Continue On Failure\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"options\", // https://docs.cohere.com/reference/chat\n\t\t\t\t\t\"help\": \"Provides the connector with different settings at request time. The key/value pairs of this object are specific to each connector.\",\n\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"key\",\n\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\"label\": \"Key\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"value\",\n\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\"label\": \"Value\"\n\t\t\t\t\t\t}\n\t\t\t\t\t],\n\t\t\t\t\t\"type\": \"array\",\n\t\t\t\t\t\"label\": \"Options\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"search_queries_only\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Search Queries Only\",\n\t\t\"default\": false,\n\t\t\"required\": true,\n\t\t\"advanced\": true,\n\t\t\"help\": \"When `true`, the response will only contain a list of generated search queries, but no search will take place, and no reply from the model to the **Message** will be generated.\"\n\t},\n\t{\n\t\t\"name\": \"documents\",\n\t\t\"type\": \"array\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"Documents\",\n\t\t\"help\": \"A list of relevant documents that the model can cite to generate a more accurate reply. See [Document Mode](https://docs.cohere.com/docs/retrieval-augmented-generation-rag#document-mode) in the guide for more information\",\n\t\t\"labels\": {\n\t\t\t\"add\": \"Add document\"\n\t\t},\n\t\t\"spec\": {\n\t\t\t\"label\": \"Document\",\n\t\t\t\"required\": true,\n\t\t\t\"labels\": {\n\t\t\t\t\"add\": \"Add document field\"\n\t\t\t},\n\t\t\t\"type\": \"array\",\n\t\t\t\"help\": \"Some suggested keys are `title`, `text`, `author`, and `date`. An `id` field (string) can be optionally supplied to identify the document in the citations. An `_excludes` field (array of strings) can be optionally supplied to omit some key-value pairs from being shown to the model.\",\n\t\t\t\"spec\": {\n\t\t\t\t\"label\": \"Field\",\n\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"key\",\n\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Key\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"value\",\n\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Value\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"frequency_penalty\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Frequency Penalty\",\n\t\t\"help\": \"The higher the value, the stronger a penalty is applied to previously present tokens, proportional to how many times they have already appeared in the prompt or prior generation.\\nEither **Frequency Penalty** or **Presence Penalty** can be used.\",\n\t\t\"default\": 0.0,\n\t\t\"advanced\": true,\n\t\t\"validate\": {\n\t\t\t\"min\": 0.0,\n\t\t\t\"max\": 1.0\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"presence_penalty\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Presence Penalty\",\n\t\t\"help\": \"This penalty is applied equally to all tokens that have already appeared, regardless of their exact frequencies.\\nEither **Frequency Penalty** or **Presence Penalty** can be used.\",\n\t\t\"advanced\": true,\n\t\t\"default\": 0.0,\n\t\t\"validate\": {\n\t\t\t\"min\": 0.0,\n\t\t\t\"max\": 1.0\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"tools\",\n\t\t\"type\": \"any\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"A list of available tools (functions) that the model may suggest invoking before producing a text response.\\nYou can use \\\"Parse JSON\\\" from JSON app to create input for this field. Read more about [Tool Use](https://docs.cohere.com/docs/tool-use).\",\n\t\t\"label\": \"Tools\"\n\t},\n\t{\n\t\t\"name\": \"tool_results\",\n\t\t\"type\": \"any\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"Tool Results\",\n\t\t\"help\": \"A list of results from invoking tools recommended by the model in the previous chat turn.\\nYou can use \\\"Parse JSON\\\" from JSON app to create input for this field. Read more about [Tool Use](https://docs.cohere.com/docs/tool-use).\"\n\t},\n\n\t{\n\t\t\"name\": \"projectNameForRequest\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Project Name\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Name of the project that is making the request.\"\n\t},\n\t{\n\t\t\"name\": \"force_single_step\",\n\t\t\"label\": \"Force Single Step\",\n\t\t\"type\": \"boolean\",\n\t\t\"help\": \"Forces the chat to be single step. For more information, see [Cohere Tool Use](https://docs.cohere.com/docs/tools).\",\n\t\t\"advanced\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"response_id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Response ID\"\n\t},\n\t{\n\t\t\"name\": \"conversation_id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Conversation ID\"\n\t},\n\t{\n\t\t\"name\": \"text\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Text Response\"\n\t},\n\t{\n\t\t\"name\": \"generation_id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Generation ID\"\n\t},\n\t{\n\t\t\"name\": \"chat_history\",\n\t\t\"type\": \"array\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"collection\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"message\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Message\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"role\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Role\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"response_id\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Response ID\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"generation_id\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Generation ID\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"label\": \"Chat History\"\n\t},\n\t{\n\t\t\"name\": \"finish_reason\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Finish Reason\"\n\t},\n\t{\n\t\t\"name\": \"token_count\",\n\t\t\"type\": \"collection\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"prompt_tokens\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Prompt Tokens\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"response_tokens\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Response Tokens\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"total_tokens\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Total Tokens\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"billed_tokens\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Billed Tokens\"\n\t\t\t}\n\t\t],\n\t\t\"label\": \"Token Count\"\n\t},\n\t{\n\t\t\"name\": \"meta\",\n\t\t\"type\": \"collection\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"api_version\",\n\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"version\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Version\"\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"label\": \"Api Version\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"billed_units\",\n\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"input_tokens\",\n\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\"label\": \"Input Tokens\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"output_tokens\",\n\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\"label\": \"Output Tokens\"\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"label\": \"Billed Units\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"tokens\",\n\t\t\t\t\"label\": \"Tokens\",\n\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"input_tokens\",\n\t\t\t\t\t\t\"label\": \"Input Tokens\",\n\t\t\t\t\t\t\"type\": \"number\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"output_tokens\",\n\t\t\t\t\t\t\"label\": \"Output Tokens\",\n\t\t\t\t\t\t\"type\": \"number\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"label\": \"Meta\"\n\t},\n\t{\n\t\t\"name\": \"citations\",\n\t\t\"type\": \"array\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"collection\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"start\",\n\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\"label\": \"Start\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"end\",\n\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\"label\": \"End\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"text\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Text\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"document_ids\",\n\t\t\t\t\t\"type\": \"array\",\n\t\t\t\t\t\"spec\": {\n\t\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t\t},\n\t\t\t\t\t\"label\": \"Document IDs\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"label\": \"Citations\"\n\t},\n\t{\n\t\t\"name\": \"documents\",\n\t\t\"type\": \"array\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"collection\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"ID\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"title\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Title\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"text\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Text\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"summary\",\n\t\t\t\t\t\"label\": \"Summary\",\n\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"tool_name\",\n\t\t\t\t\t\"label\": \"Tool Name\",\n\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"label\": \"Documents\"\n\t},\n\t{\n\t\t\"name\": \"search_results\",\n\t\t\"type\": \"array\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"collection\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"search_query\",\n\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"text\",\n\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\"label\": \"Text\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"generation_id\",\n\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\"label\": \"Generation ID\"\n\t\t\t\t\t\t}\n\t\t\t\t\t],\n\t\t\t\t\t\"label\": \"Search Query\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"document_ids\",\n\t\t\t\t\t\"type\": \"array\",\n\t\t\t\t\t\"label\": \"Document IDs\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"connector\",\n\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\"label\": \"ID\"\n\t\t\t\t\t\t}\n\t\t\t\t\t],\n\t\t\t\t\t\"label\": \"Connector\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"label\": \"Search Results\"\n\t},\n\t{\n\t\t\"name\": \"search_queries\",\n\t\t\"type\": \"array\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"collection\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"text\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Text\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"generation_id\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Generation ID\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"label\": \"Search Queries\"\n\t},\n\t{\n        \"name\": \"tool_calls\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"type\": \"text\",\n                    \"label\": \"Name\"\n                },\n                {\n                    \"name\": \"parameters\",\n                    \"type\": \"collection\",\n                    \"label\": \"Parameters\"\n                },\n                {\n                    \"name\": \"generation_id\",\n                    \"type\": \"text\",\n                    \"label\": \"Generation ID\"\n                }\n            ]\n        },\n        \"label\": \"Tool Calls\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "classify": {
+      "id": 127864,
+      "api": {
+        "url": "/classify",
+        "body": {
+          "{{...}}": "{{omit(parameters, 'projectNameForRequest', '_baseline')}}"
+        },
+        "method": "POST",
+        "headers": {
+          "X-Client-Name": "{{ifempty(parameters.projectNameForRequest, undefined)}}"
+        },
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 12,
+      "crud": "create",
+      "name": "classify",
+      "epoch": null,
+      "flags": {},
+      "label": "Classify a Text",
+      "scope": [],
+      "expect": [
+        {
+          "help": "A list of up to 96 texts to be classified. Each one must be a non-empty string.",
+          "name": "inputs",
+          "spec": {
+            "type": "text",
+            "label": "Input"
+          },
+          "type": "array",
+          "label": "Inputs",
+          "labels": {
+            "add": "Add input"
+          },
+          "required": true,
+          "validate": {
+            "maxItems": 96
+          }
+        },
+        {
+          "help": "Type of the model you selected in the __Model__ field.\n[Fine-tuned Models](https://docs.cohere.com/docs/classify-fine-tuning) trained on classification examples don't require **Examples** parameter to be passed in explicitly.",
+          "name": "_baseline",
+          "type": "select",
+          "label": "Model Type",
+          "nested": "rpc://app%23cohere@1/examplesField",
+          "default": true,
+          "options": [
+            {
+              "label": "Baseline Model",
+              "value": true
+            },
+            {
+              "label": "Fine-tuned Model",
+              "value": false
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "Smaller \"light\" models are faster, while larger models will perform better. [Fine-tuned models](https://docs.cohere.com/docs/fine-tuning) can also be supplied with their full ID.",
+          "name": "model",
+          "type": "select",
+          "label": "Model",
+          "default": "embed-english-v2.0",
+          "options": "rpc://app%23cohere@1/models?endpoint=classify",
+          "validate": false
+        },
+        {
+          "help": "The ID of a custom playground preset. You can create presets in the [playground](https://dashboard.cohere.ai/playground/classify?model=large). If you use a preset, all other parameters become optional, and any included parameters will override the preset's parameters.",
+          "name": "preset",
+          "type": "text",
+          "label": "Preset",
+          "advanced": true
+        },
+        {
+          "help": "Handling of inputs longer than the maximum token length.",
+          "name": "truncate",
+          "type": "select",
+          "label": "Truncate Input",
+          "default": "END",
+          "options": [
+            {
+              "label": "NONE (return error)",
+              "value": "NONE"
+            },
+            {
+              "label": "START (discard the start of the input)",
+              "value": "START"
+            },
+            {
+              "label": "END (discard the end of the input - default)",
+              "value": "END"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "help": "Name of the project that is making the request.",
+          "name": "projectNameForRequest",
+          "type": "text",
+          "label": "Project Name",
+          "advanced": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "cohere",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/classify\",\n\t\"method\": \"POST\",\n\t\"headers\": {\n\t\t\"X-Client-Name\": \"{{ifempty(parameters.projectNameForRequest, undefined)}}\"\n\t},\n\n\t\"body\": {\n\t\t\"{{...}}\": \"{{omit(parameters, 'projectNameForRequest', '_baseline')}}\"\n\t},\n\n\t\"response\": {\n\t\t\"output\": \"{{body}}\"\n\t}\n\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23cohere@1/labels"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "cohere",
+      "description": "Classifies a text provided in the inputs to the labels specified in the examples.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"inputs\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Inputs\",\n\t\t\"help\": \"A list of up to 96 texts to be classified. Each one must be a non-empty string.\",\n\t\t\"required\": true,\n\t\t\"labels\": { \"add\": \"Add input\" },\n\t\t\"spec\": { \"label\": \"Input\", \"type\": \"text\" },\n\t\t\"validate\": { \"maxItems\": 96 }\n\t},\n\t{\n\t\t\"name\": \"_baseline\",\n\t\t\"type\": \"select\",\n\t\t\"options\": [ { \"label\": \"Baseline Model\", \"value\": true }, { \"label\": \"Fine-tuned Model\", \"value\": false } ],\n\t\t\"label\": \"Model Type\",\n\t\t\"help\": \"Type of the model you selected in the __Model__ field.\\n[Fine-tuned Models](https://docs.cohere.com/docs/classify-fine-tuning) trained on classification examples don't require **Examples** parameter to be passed in explicitly.\",\n\t\t\"required\": true,\n\t\t\"default\": true,\n\t\t\"nested\": \"rpc://examplesField\"\n\t},\n\t{\n\t\t\"name\": \"model\",\n\t\t\"type\": \"select\",\n\t\t\"validate\": false,\n\t\t\"label\": \"Model\",\n\t\t\"default\": \"embed-english-v2.0\",\n\t\t\"help\": \"Smaller \\\"light\\\" models are faster, while larger models will perform better. [Fine-tuned models](https://docs.cohere.com/docs/fine-tuning) can also be supplied with their full ID.\",\n\t\t\"options\": \"rpc://models?endpoint=classify\"\n\t},\n\t{\n\t\t\"name\": \"preset\",\n\t\t\"type\": \"text\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"Preset\",\n\t\t\"help\": \"The ID of a custom playground preset. You can create presets in the [playground](https://dashboard.cohere.ai/playground/classify?model=large). If you use a preset, all other parameters become optional, and any included parameters will override the preset's parameters.\"\n\t},\n\t{\n\t\t\"name\": \"truncate\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Truncate Input\",\n\t\t\"advanced\": true,\n\t\t\"default\": \"END\",\n\t\t\"options\": [\n\t\t\t{ \"label\": \"NONE (return error)\", \"value\": \"NONE\" },\n\t\t\t{ \"label\": \"START (discard the start of the input)\", \"value\": \"START\" },\n\t\t\t{ \"label\": \"END (discard the end of the input - default)\", \"value\": \"END\" }\n\n\t\t],\n\t\t\"help\": \"Handling of inputs longer than the maximum token length.\"\n\t},\n\t{\n\t\t\"name\": \"projectNameForRequest\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Project Name\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Name of the project that is making the request.\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://labels\"\n]\n",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "generate": {
+      "id": 127851,
+      "api": {
+        "url": "/generate",
+        "body": {
+          "{{...}}": "{{omit(parameters, 'projectNameForRequest')}}"
+        },
+        "method": "POST",
+        "headers": {
+          "X-Client-Name": "{{ifempty(parameters.projectNameForRequest, undefined)}}"
+        },
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "generate",
+      "epoch": null,
+      "flags": {},
+      "label": "Generate Text",
+      "scope": [],
+      "expect": [
+        {
+          "help": "The input text that serves as the starting point for generating the response.\nNote: The prompt will be pre-processed and modified before reaching the model.",
+          "name": "prompt",
+          "type": "text",
+          "label": "Prompt",
+          "required": false
+        },
+        {
+          "help": "Smaller, \"light\" models are faster, while larger models will perform better. Custom models can also be supplied with their full ID.",
+          "name": "model",
+          "type": "select",
+          "label": "Model",
+          "default": "command",
+          "options": [
+            {
+              "label": "command (default)",
+              "value": "command"
+            },
+            {
+              "label": "command-nightly (experimental)",
+              "value": "command-nightly"
+            },
+            {
+              "label": "command-light",
+              "value": "command-light"
+            },
+            {
+              "label": "command-light-nightly (experimental)",
+              "value": "command-light-nightly"
+            }
+          ],
+          "validate": false
+        },
+        {
+          "help": "The maximum number of generations that will be returned",
+          "name": "num_generations",
+          "type": "uinteger",
+          "label": "Maximum Generations",
+          "default": 1,
+          "validate": {
+            "max": 5,
+            "min": 1
+          }
+        },
+        {
+          "help": "The maximum number of tokens the model will generate as part of the response. Note: Setting a low value may result in incomplete generations.",
+          "name": "max_tokens",
+          "type": "uinteger",
+          "label": "Maximum Tokens",
+          "advanced": true
+        },
+        {
+          "help": "Specify how the API will handle inputs longer than the maximum token length.",
+          "name": "truncate",
+          "type": "select",
+          "label": "Truncate Input",
+          "default": "END",
+          "options": [
+            {
+              "label": "NONE (return error)",
+              "value": "NONE"
+            },
+            {
+              "label": "START (discard the start of the input)",
+              "value": "START"
+            },
+            {
+              "label": "END (discard the end of the input - default)",
+              "value": "END"
+            }
+          ]
+        },
+        {
+          "help": "The maximum number of tokens the model will generate as part of the response. Note: Setting a low value may result in incomplete generations.",
+          "name": "max_tokens",
+          "type": "uinteger",
+          "label": "Maximum Tokens",
+          "advanced": true
+        },
+        {
+          "help": "Tunes the degree of randomness in generation. Lower temperatures mean less random generations.\nSee [Temperature](https://docs.cohere.com/docs/temperature) for more details.",
+          "name": "temperature",
+          "type": "number",
+          "label": "Randomness",
+          "default": 0.75,
+          "validate": {
+            "max": 5,
+            "min": 0
+          }
+        },
+        {
+          "help": "Cut generated text at the beginning of the earliest occurrence of the sequence. The sequence will be excluded from the text.",
+          "name": "end_sequences",
+          "type": "text",
+          "label": "End Sequences"
+        },
+        {
+          "help": "Cut generated text at the end of the earliest occurrence of a stop sequence. The sequence will be included in the text.",
+          "name": "stop_sequences",
+          "type": "text",
+          "label": "Stop Sequences"
+        },
+        {
+          "help": "Number of tokens considered for generation at each step.",
+          "name": "k",
+          "type": "uinteger",
+          "label": "Token Number",
+          "default": 0,
+          "validate": {
+            "max": 500,
+            "min": 0
+          }
+        },
+        {
+          "help": "Ensures that only the most likely tokens, with the specified total probability mass, are considered for generation at each step.",
+          "name": "p",
+          "type": "number",
+          "label": "Token Total Probability Mass",
+          "default": 0.75,
+          "validate": {
+            "max": 0.99,
+            "min": 0.01
+          }
+        },
+        {
+          "help": "Used to reduce repetitiveness of generated tokens. The higher the value, the stronger a penalty is applied to previously present tokens, proportional to how many times they have already appeared in the prompt or prior generation.\nUsing **Frequency Penalty** in combination with **Presence Penalty** is not supported on newer models.",
+          "name": "frequency_penalty",
+          "type": "number",
+          "label": "Frequency Penalty"
+        },
+        {
+          "help": "Used to reduce repetitiveness of generated tokens, is applied equally to all tokens that have already appeared, regardless of their exact frequencies.\nUsing **Frequency Penalty** in combination with **Presence Penalty** is not supported on newer models.",
+          "name": "presence_penalty",
+          "type": "number",
+          "label": "Presence Penalty",
+          "default": 0,
+          "validate": {
+            "max": 1,
+            "min": 0
+          }
+        },
+        {
+          "help": "Specify how and if the token likelihoods are returned with the response.",
+          "name": "return_likelihoods",
+          "type": "select",
+          "label": "Return Likelihoods",
+          "default": "NONE",
+          "options": [
+            {
+              "label": "GENERATION (only for generated text)",
+              "value": "GENERATION"
+            },
+            {
+              "label": "ALL (both for the prompt and the generated text)",
+              "value": "ALL"
+            },
+            {
+              "label": "NONE (default)",
+              "value": "NONE"
+            }
+          ]
+        },
+        {
+          "help": "Send **Prompt** without any pre-processing.",
+          "name": "raw_prompting",
+          "type": "boolean",
+          "label": "Raw Prompt",
+          "default": false,
+          "required": true
+        },
+        {
+          "help": "Provide the name of the project that is making the request.",
+          "name": "projectNameForRequest",
+          "type": "text",
+          "label": "Project Name",
+          "advanced": true
+        }
+      ],
+      "public": false,
+      "typeId": 4,
+      "appName": "cohere",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/generate\",\n\t\"method\": \"POST\",\n\t\"headers\": {\n\t\t\"X-Client-Name\": \"{{ifempty(parameters.projectNameForRequest, undefined)}}\"\n\t},\n\n\t\"body\": {\n\t\t\"{{...}}\": \"{{omit(parameters, 'projectNameForRequest')}}\"\n\t},\n\n\t\"response\": {\n\t\t\"output\": \"{{body}}\"\n\t}\n}\n",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "generations",
+          "spec": {
+            "spec": [
+              {
+                "name": "id",
+                "type": "text",
+                "label": "ID"
+              },
+              {
+                "name": "text",
+                "type": "text",
+                "label": "Text"
+              },
+              {
+                "name": "finish_reason",
+                "type": "text",
+                "label": "Finish Reason"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Generations"
+        },
+        {
+          "name": "prompt",
+          "type": "text",
+          "label": "Prompt"
+        },
+        {
+          "name": "meta",
+          "spec": [
+            {
+              "name": "api_version",
+              "spec": [
+                {
+                  "name": "version",
+                  "type": "text",
+                  "label": "Version"
+                }
+              ],
+              "type": "collection",
+              "label": "Api Version"
+            },
+            {
+              "name": "warnings",
+              "spec": {
+                "type": "text"
+              },
+              "type": "array",
+              "label": "Warnings"
+            },
+            {
+              "name": "billed_units",
+              "spec": [
+                {
+                  "name": "input_tokens",
+                  "type": "number",
+                  "label": "Input Tokens"
+                },
+                {
+                  "name": "output_tokens",
+                  "type": "number",
+                  "label": "Output Tokens"
+                }
+              ],
+              "type": "collection",
+              "label": "Billed Units"
+            }
+          ],
+          "type": "collection",
+          "label": "Meta"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "cohere",
+      "description": "Generates realistic text conditioned on a given input.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"prompt\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Prompt\",\n\t\t\"required\": false,\n\t\t\"help\": \"The input text that serves as the starting point for generating the response.\\nNote: The prompt will be pre-processed and modified before reaching the model.\"\n\t},\n\t{\n\t\t\"name\": \"model\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Model\",\n\t\t\"validate\": false,\n\t\t\"default\": \"command\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"command (default)\",\n\t\t\t\t\"value\": \"command\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"command-nightly (experimental)\",\n\t\t\t\t\"value\": \"command-nightly\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"command-light\",\n\t\t\t\t\"value\": \"command-light\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"command-light-nightly (experimental)\",\n\t\t\t\t\"value\": \"command-light-nightly\"\n\t\t\t}\n\t\t],\n\t\t\"help\": \"Smaller, \\\"light\\\" models are faster, while larger models will perform better. Custom models can also be supplied with their full ID.\"\n\t},\n\t{\n\t\t\"name\": \"num_generations\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Maximum Generations\",\n\t\t\"help\": \"The maximum number of generations that will be returned\",\n\t\t\"default\": 1,\n\t\t\"validate\": {\n\t\t\t\"max\": 5,\n\t\t\t\"min\": 1\n\t\t}\n\t},\n\t// ignoring for now - does this parameter make sense for the Make app? - https://docs.cohere.com/reference/generate\n\t/* \t{\n\t\t\"name\": \"stream\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Stream\",\n\t\t\"help\": \"\"\n\t}, */\n\t{\n\t\t\"name\": \"max_tokens\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Maximum Tokens\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"The maximum number of tokens the model will generate as part of the response. Note: Setting a low value may result in incomplete generations.\"\n\t},\n\t{\n\t\t\"name\": \"truncate\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Truncate Input\",\n\t\t\"default\": \"END\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"NONE (return error)\",\n\t\t\t\t\"value\": \"NONE\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"START (discard the start of the input)\",\n\t\t\t\t\"value\": \"START\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"END (discard the end of the input - default)\",\n\t\t\t\t\"value\": \"END\"\n\t\t\t}\n\n\t\t],\n\t\t\"help\": \"Specify how the API will handle inputs longer than the maximum token length.\"\n\t},\n\t{\n\t\t\"name\": \"max_tokens\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Maximum Tokens\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"The maximum number of tokens the model will generate as part of the response. Note: Setting a low value may result in incomplete generations.\"\n\t},\n\t{\n\t\t\"name\": \"temperature\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Randomness\",\n\t\t\"default\": 0.75,\n\t\t\"validate\": {\n\t\t\t\"min\": 0.0,\n\t\t\t\"max\": 5.0\n\t\t},\n\t\t\"help\": \"Tunes the degree of randomness in generation. Lower temperatures mean less random generations.\\nSee [Temperature](https://docs.cohere.com/docs/temperature) for more details.\"\n\t},\n\t// {\n\t// \t\"name\": \"preset\", // How to provide preset, with ID, or name? Where do we get preset id??\n\t// \t\"type\": \"text\",\n\t// \t\"label\": \"Preset\",\n\t// \t\"help\": \"When specified, the **Prompt** becomes optional, and any included parameters will override the preset's parameters.\"\n\t// },\n\t{\n\t\t\"name\": \"end_sequences\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"End Sequences\",\n\t\t\"help\": \"Cut generated text at the beginning of the earliest occurrence of the sequence. The sequence will be excluded from the text.\"\n\t},\n\t{\n\t\t\"name\": \"stop_sequences\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Stop Sequences\",\n\t\t\"help\": \"Cut generated text at the end of the earliest occurrence of a stop sequence. The sequence will be included in the text.\"\n\t},\n\t{\n\t\t\"name\": \"k\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Token Number\",\n\t\t\"help\": \"Number of tokens considered for generation at each step.\",\n\t\t\"default\": 0,\n\t\t\"validate\": {\n\t\t\t\"min\": 0,\n\t\t\t\"max\": 500\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"p\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Token Total Probability Mass\",\n\t\t\"help\": \"Ensures that only the most likely tokens, with the specified total probability mass, are considered for generation at each step.\",\n\t\t\"default\": 0.75,\n\t\t\"validate\": {\n\t\t\t\"min\": 0.01,\n\t\t\t\"max\": 0.99\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"frequency_penalty\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Frequency Penalty\",\n\t\t\"help\": \"Used to reduce repetitiveness of generated tokens. The higher the value, the stronger a penalty is applied to previously present tokens, proportional to how many times they have already appeared in the prompt or prior generation.\\nUsing **Frequency Penalty** in combination with **Presence Penalty** is not supported on newer models.\"\n\t},\n\t{\n\t\t\"name\": \"presence_penalty\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Presence Penalty\",\n\t\t\"help\": \"Used to reduce repetitiveness of generated tokens, is applied equally to all tokens that have already appeared, regardless of their exact frequencies.\\nUsing **Frequency Penalty** in combination with **Presence Penalty** is not supported on newer models.\",\n\t\t\"default\": 0.0,\n\t\t\"validate\": {\n\t\t\t\"min\": 0.0,\n\t\t\t\"max\": 1.0\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"return_likelihoods\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Return Likelihoods\",\n\t\t\"default\": \"NONE\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"GENERATION (only for generated text)\",\n\t\t\t\t\"value\": \"GENERATION\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"ALL (both for the prompt and the generated text)\",\n\t\t\t\t\"value\": \"ALL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"NONE (default)\",\n\t\t\t\t\"value\": \"NONE\"\n\t\t\t}\n\t\t],\n\t\t\"help\": \"Specify how and if the token likelihoods are returned with the response.\"\n\t},\n\t{\n\t\t\"name\": \"raw_prompting\",\n\t\t\"type\": \"boolean\",\n\t\t\"required\": true,\n\t\t\"default\": false,\n\t\t\"label\": \"Raw Prompt\",\n\t\t\"help\": \"Send **Prompt** without any pre-processing.\"\n\t},\n\t{\n\t\t\"name\": \"projectNameForRequest\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Project Name\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Provide the name of the project that is making the request.\"\n\t}\n\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "/*\n// for \"stream\" response\n[\n\t{\n\t\t\"name\": \"event_type\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Event Type\"\n\t},\n\t{\n\t\t\"name\": \"text\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Text\"\n\t},\n\t{\n\t\t\"name\": \"index\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Index\"\n\t},\n\t{\n\t\t\"name\": \"is_finished\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Is Finished\"\n\t}\n]*/\n[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"ID\"\n\t},\n\t{\n\t\t\"name\": \"generations\",\n\t\t\"type\": \"array\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"collection\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"ID\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"text\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Text\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"finish_reason\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Finish Reason\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"label\": \"Generations\"\n\t},\n\t{\n\t\t\"name\": \"prompt\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Prompt\"\n\t},\n\t{\n\t\t\"name\": \"meta\",\n\t\t\"type\": \"collection\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"api_version\",\n\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"version\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Version\"\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"label\": \"Api Version\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"warnings\",\n\t\t\t\t\"type\": \"array\",\n\t\t\t\t\"spec\": {\n\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t},\n\t\t\t\t\"label\": \"Warnings\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"billed_units\",\n\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"input_tokens\",\n\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\"label\": \"Input Tokens\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"output_tokens\",\n\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\"label\": \"Output Tokens\"\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"label\": \"Billed Units\"\n\t\t\t}\n\t\t],\n\t\t\"label\": \"Meta\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "summarize": {
+      "id": 127865,
+      "api": {
+        "url": "/summarize",
+        "body": {
+          "{{...}}": "{{omit(parameters, 'projectNameForRequest')}}"
+        },
+        "method": "POST",
+        "headers": {
+          "X-Client-Name": "{{ifempty(parameters.projectNameForRequest, undefined)}}"
+        },
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "summarize",
+      "epoch": null,
+      "flags": {},
+      "label": "Summarize Text",
+      "scope": [],
+      "expect": [
+        {
+          "name": "text",
+          "type": "text",
+          "label": "Text",
+          "required": true,
+          "validate": {
+            "max": 100000
+          }
+        },
+        {
+          "help": " Indicates the approximate length of the summary. If `auto` is selected, the best option will be picked based on the input text.",
+          "name": "length",
+          "type": "select",
+          "label": "Length",
+          "default": "medium",
+          "options": [
+            {
+              "label": "short",
+              "value": "short"
+            },
+            {
+              "label": "medium (default)",
+              "value": "medium"
+            },
+            {
+              "label": "long",
+              "value": "long"
+            },
+            {
+              "label": "auto",
+              "value": "auto"
+            }
+          ]
+        },
+        {
+          "help": "Indicates the style in which the summary will be delivered - in a free form paragraph or in bullet points. If `auto` is selected, the best option will be picked based on the input text.",
+          "name": "format",
+          "type": "select",
+          "label": "Format",
+          "default": "paragraph",
+          "options": [
+            {
+              "label": "paragraph (default)",
+              "value": "paragraph"
+            },
+            {
+              "label": "bullets",
+              "value": "bullets"
+            },
+            {
+              "label": "auto",
+              "value": "auto"
+            }
+          ]
+        },
+        {
+          "help": "Smaller, \"light\" models are faster, while larger models will perform better.",
+          "name": "model",
+          "type": "select",
+          "label": "Model",
+          "default": "command",
+          "options": [
+            {
+              "label": "command (default)",
+              "value": "command"
+            },
+            {
+              "label": "command-nightly (experimental)",
+              "value": "command-nightly"
+            },
+            {
+              "label": "command-light",
+              "value": "command-light"
+            },
+            {
+              "label": "command-light-nightly (experimental)",
+              "value": "command-light-nightly"
+            }
+          ],
+          "validate": false
+        },
+        {
+          "help": "Controls how close to the original text the summary is.",
+          "name": "extractiveness",
+          "type": "select",
+          "label": "Extractiveness",
+          "default": "low",
+          "options": [
+            {
+              "label": "low (default)",
+              "value": "low"
+            },
+            {
+              "label": "medium",
+              "value": "medium"
+            },
+            {
+              "label": "high",
+              "value": "high"
+            },
+            {
+              "label": "auto",
+              "value": "auto"
+            }
+          ]
+        },
+        {
+          "help": "Tunes the degree of randomness in generation. Lower temperatures mean less random generations.\nSee [Temperature](https://docs.cohere.com/docs/temperature) for more details.",
+          "name": "temperature",
+          "type": "number",
+          "label": "Randomness",
+          "default": 0.75,
+          "validate": {
+            "max": 5,
+            "min": 0
+          }
+        },
+        {
+          "help": "A free-form instruction for modifying how the summaries get generated. Should complete the sentence \"Generate a summary _\". Eg. \"focusing on the next steps\" or \"written by Yoda\".",
+          "name": "additional_command",
+          "type": "text",
+          "label": "Additional Command"
+        },
+        {
+          "help": "Provide the name of the project that is making the request.",
+          "name": "projectNameForRequest",
+          "type": "text",
+          "label": "Project Name",
+          "advanced": true
+        }
+      ],
+      "public": false,
+      "typeId": 4,
+      "appName": "cohere",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/summarize\",\n\t\"method\": \"POST\",\n\t\"headers\": {\n\t\t\"X-Client-Name\": \"{{ifempty(parameters.projectNameForRequest, undefined)}}\"\n\t},\n\n\t\"body\": {\n\t\t\"{{...}}\": \"{{omit(parameters, 'projectNameForRequest')}}\"\n\t},\n\n\t\"response\": {\n\t\t\"output\": \"{{body}}\"\n\t}\n}\n",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "summary",
+          "type": "text",
+          "label": "Summary"
+        },
+        {
+          "name": "meta",
+          "spec": [
+            {
+              "name": "api_version",
+              "spec": [
+                {
+                  "name": "version",
+                  "type": "text",
+                  "label": "Version"
+                },
+                {
+                  "name": "is_deprecated",
+                  "type": "boolean",
+                  "label": "Is Deprecated"
+                },
+                {
+                  "name": "is_experimental",
+                  "type": "boolean",
+                  "label": "Is Experimental"
+                }
+              ],
+              "type": "collection",
+              "label": "Api Version"
+            },
+            {
+              "name": "billed_units",
+              "spec": [
+                {
+                  "name": "input_tokens",
+                  "type": "number",
+                  "label": "Input Tokens"
+                },
+                {
+                  "name": "output_tokens",
+                  "type": "number",
+                  "label": "Output Tokens"
+                },
+                {
+                  "name": "search_units",
+                  "type": "number",
+                  "label": "Search Units"
+                },
+                {
+                  "name": "classifications",
+                  "type": "number",
+                  "label": "Classifications"
+                }
+              ],
+              "type": "collection",
+              "label": "Billed Units"
+            },
+            {
+              "name": "warnings",
+              "spec": {
+                "type": "text"
+              },
+              "type": "array",
+              "label": "Warnings"
+            }
+          ],
+          "type": "collection",
+          "label": "Meta"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "cohere",
+      "description": "Generates a summary in English for a given text.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"text\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Text\",\n\t\t\"required\": true,\n\t\t\"validate\": {\n\t\t\t\"max\": 100000\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"length\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Length\",\n\t\t\"help\": \" Indicates the approximate length of the summary. If `auto` is selected, the best option will be picked based on the input text.\",\n\t\t\"default\": \"medium\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"value\": \"short\",\n\t\t\t\t\"label\": \"short\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"medium\",\n\t\t\t\t\"label\": \"medium (default)\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"long\",\n\t\t\t\t\"label\": \"long\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"auto\",\n\t\t\t\t\"label\": \"auto\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"format\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Format\",\n\t\t\"help\": \"Indicates the style in which the summary will be delivered - in a free form paragraph or in bullet points. If `auto` is selected, the best option will be picked based on the input text.\",\n\t\t\"default\": \"paragraph\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"value\": \"paragraph\",\n\t\t\t\t\"label\": \"paragraph (default)\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"bullets\",\n\t\t\t\t\"label\": \"bullets\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"auto\",\n\t\t\t\t\"label\": \"auto\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"model\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Model\",\n\t\t\"validate\": false,\n\t\t\"default\": \"command\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"command (default)\",\n\t\t\t\t\"value\": \"command\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"command-nightly (experimental)\",\n\t\t\t\t\"value\": \"command-nightly\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"command-light\",\n\t\t\t\t\"value\": \"command-light\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"command-light-nightly (experimental)\",\n\t\t\t\t\"value\": \"command-light-nightly\"\n\t\t\t}\n\t\t],\n\t\t\"help\": \"Smaller, \\\"light\\\" models are faster, while larger models will perform better.\"\n\t},\n\t\t{\n\t\t\"name\": \"extractiveness\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Extractiveness\",\n\t\t\"help\": \"Controls how close to the original text the summary is.\",\n\t\t\"default\": \"low\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"value\": \"low\",\n\t\t\t\t\"label\": \"low (default)\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"medium\",\n\t\t\t\t\"label\": \"medium\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"high\",\n\t\t\t\t\"label\": \"high\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"auto\",\n\t\t\t\t\"label\": \"auto\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"temperature\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Randomness\",\n\t\t\"default\": 0.75,\n\t\t\"validate\": {\n\t\t\t\"min\": 0.0,\n\t\t\t\"max\": 5.0\n\t\t},\n\t\t\"help\": \"Tunes the degree of randomness in generation. Lower temperatures mean less random generations.\\nSee [Temperature](https://docs.cohere.com/docs/temperature) for more details.\"\n\t},\n\t{\n\t\t\"name\": \"additional_command\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Additional Command\",\n\t\t\"help\": \"A free-form instruction for modifying how the summaries get generated. Should complete the sentence \\\"Generate a summary _\\\". Eg. \\\"focusing on the next steps\\\" or \\\"written by Yoda\\\".\"\n\t},\n\t{\n\t\t\"name\": \"projectNameForRequest\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Project Name\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Provide the name of the project that is making the request.\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"ID\"\n    },\n    {\n        \"name\": \"summary\",\n        \"type\": \"text\",\n        \"label\": \"Summary\"\n    },\n    {\n        \"name\": \"meta\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"api_version\",\n                \"type\": \"collection\",\n                \"spec\": [\n                    {\n                        \"name\": \"version\",\n                        \"type\": \"text\",\n                        \"label\": \"Version\"\n                    },\n                    {\n                        \"name\": \"is_deprecated\",\n                        \"type\": \"boolean\",\n                        \"label\": \"Is Deprecated\"\n                    },\n                    {\n                        \"name\": \"is_experimental\",\n                        \"type\": \"boolean\",\n                        \"label\": \"Is Experimental\"\n                    }\n                ],\n                \"label\": \"Api Version\"\n            },\n            {\n                \"name\": \"billed_units\",\n                \"type\": \"collection\",\n                \"spec\": [\n                    {\n                        \"name\": \"input_tokens\",\n                        \"type\": \"number\",\n                        \"label\": \"Input Tokens\"\n                    },\n                    {\n                        \"name\": \"output_tokens\",\n                        \"type\": \"number\",\n                        \"label\": \"Output Tokens\"\n                    },\n                    {\n                        \"name\": \"search_units\",\n                        \"type\": \"number\",\n                        \"label\": \"Search Units\"\n                    },\n                    {\n                        \"name\": \"classifications\",\n                        \"type\": \"number\",\n                        \"label\": \"Classifications\"\n                    }\n                ],\n                \"label\": \"Billed Units\"\n            },\n            {\n                \"name\": \"warnings\",\n                \"type\": \"array\",\n                \"spec\": {\n                    \"type\": \"text\"\n                },\n                \"label\": \"Warnings\"\n            }\n        ],\n        \"label\": \"Meta\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "makeAnApiCall": {
+      "id": 128326,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://api.cohere.ai/v1{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "makeAnApiCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://api.cohere.ai/v1`. For example, `/chat`.",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "cohere",
+      "samples": null,
+      "apiJsonc": "{\n\t\"qs\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n\t},\n\t\"url\": \"https://api.cohere.ai/v1{{parameters.url}}\",  // Defines the fixed base URL and maps the relative path URL from the user.\n\t\"body\": \"{{parameters.body}}\",\n\t\"type\": \"text\",\n\t\"method\": \"{{parameters.method}}\",\n\t\"headers\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"body\": \"{{body}}\",\n\t\t\t\"headers\": \"{{headers}}\",\n\t\t\t\"statusCode\": \"{{statusCode}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "cohere",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n\t{\n\t\t\"help\": \"Enter a path relative to `https://api.cohere.ai/v1`. For example, `/chat`.\",  // Gives instructions to the user about the relative path.\n\t\t\"name\": \"url\",                                                                        \n\t\t\"type\": \"text\",\n\t\t\"label\": \"URL\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"method\",          // Allows the user to select the method by themselves.\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Method\",\n\t\t\"default\": \"GET\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"GET\",\n\t\t\t\t\"value\": \"GET\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"POST\",\n\t\t\t\t\"value\": \"POST\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PUT\",\n\t\t\t\t\"value\": \"PUT\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PATCH\",\n\t\t\t\t\"value\": \"PATCH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"DELETE\",\n\t\t\t\t\"value\": \"DELETE\"\n\t\t\t}\n\t\t],\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n\t\t\"name\": \"headers\",         // Allows the user to add headers by themselves.\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"key\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Key\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"value\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Value\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Headers\",\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"qs\",              // Allows the user to set Query String by themselves.\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"key\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Key\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"value\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Value\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Query String\"\n\t},\n\t{\n\t\t\"name\": \"body\",            // Allows the user to set Body by themselves.\n\t\t\"type\": \"any\",\n\t\t\"label\": \"Body\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "cohere": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.authorization"
+          ]
+        },
+        "url": "https://api.cohere.ai/v1/models",
+        "headers": {
+          "Authorization": "Bearer {{parameters.apiKey}}"
+        },
+        "response": {
+          "error": {
+            "message": "[{{statusCode}}] {{body.message}}"
+          }
+        }
+      },
+      "rev": 6,
+      "name": "cohere",
+      "type": "basic",
+      "label": "Cohere",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "cohere",
+      "install": {},
+      "apiJsonc": "{\n\t\"url\": \"https://api.cohere.ai/v1/models\",\n\t\"headers\": {\n\t\t\"Authorization\": \"Bearer {{parameters.apiKey}}\"\n\t},\n\n\t\"response\": {\n\t\t\"error\": {                                        \n\t\t\t\"message\": \"[{{statusCode}}] {{body.message}}\"\n\t\t}\n\t},\n\n\t\"log\": {\n\t\t\"sanitize\": [\n\t\t\t\"request.headers.authorization\"\n\t\t]\n\t}\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "help": "Create one at [Cohere API Keys](https://dashboard.cohere.com/api-keys).",
+          "name": "apiKey",
+          "type": "password",
+          "label": "API Key",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "installSpec": [],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"apiKey\",\n        \"type\": \"password\",\n        \"label\": \"API Key\",\n        \"help\": \"Create one at [Cohere API Keys](https://dashboard.cohere.com/api-keys).\",\n        \"editable\": true,\n        \"required\": true\n    }\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n\t\"baseUrl\": \"https://api.cohere.ai/v1\",\n\t\"headers\": {\n\t\t\"Content-Type\": \"application/json\",\n\t\t\"Accept\": \"application/json\",\n\t\t// \"Cohere-Version\": \"2022-12-06\", // non stable versioning - https://docs.cohere.com/reference/versioning\n\t\t\"Authorization\": \"Bearer {{connection.apiKey}}\"\n\t},\n\t\"timeout\": \"{{common.timeout}}\",\n\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"message\": \"[{{statusCode}}] {{body.message}}\",\n\t\t\t\"429\": {\n\t\t\t\t\"type\": \"RateLimitError\",\n\t\t\t\t\"message\": \"[{{statusCode}}] {{body.message}}\"\n\t\t\t}\n\t\t}\n\t},\n\n\t\"log\": {\n\t\t\"sanitize\": [\n\t\t\t\"request.headers.authorization\"\n\t\t]\n\t}\n}",
+  "countries": null,
+  "_functions": {
+    "restructure": {
+      "rev": 3,
+      "code": "function restructure(arg, marker) {\n\tfunction reduceKeyValue(arr) {\n\t\t/*\n\t\tIN: \n\t\t\t[\n...                         {\n...                             \"key\": \"site\",\n...                             \"value\": \"youtube.com\"\n...                         },\n...                         {\n...                             \"key\": \"site2\",\n...                             \"value\": \"instagram.com\"\n...                         }\n...                     ]\n\n\t\tOUT:\n\t\t\t{ site: 'youtube.com', site2: 'instagram.com' }\n\n\t\t*/\n\t\treturn arr.reduce((acc, c) => ((acc[c.key] = c.value), acc), {});\n\t}\n\n\tfunction process(item) {\n\t\t// process the container of key-value objects\n\n\t\tif (Array.isArray(item)) {\t// as in `documents`\n\t\t\treturn reduceKeyValue(item);\n\t\t}\n\n\t\tif (Object.keys(item).includes(marker) && Array.isArray(item[marker])) {\t// as in `connections` and `tools`\n\t\t\tconst obj = { ...item };\n\t\t\tobj[marker] = reduceKeyValue(item[marker]);\n\t\t\treturn obj;\n\t\t}\n\t\treturn item;\n\t}\n\n\treturn Array.isArray(arg) ? arg.map(process) : process(arg);\n}",
+      "name": "restructure",
+      "test": null,
+      "appName": "cohere",
+      "arguments": "(arg, marker)",
+      "appVersion": 1
+    },
+    "classifyLabels": {
+      "rev": 2,
+      "code": "function classifyLabels(p) {\n\tif (p && p.examples) {\n\t\tconst visited = [];\n\t\treturn p.examples.map(c => {\n\t\t\tif (visited.includes(c.label)) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tvisited.push(c.label);\n\t\t\treturn {\n\t\t\t\t\"name\": c.label, \"type\": \"collection\",\n\t\t\t\t\"label\": c.label,\n\t\t\t\t\"spec\": [{ \"name\": \"confidence\", \"type\": \"number\", \"label\": \"Confidence\" }]\n\t\t\t};\n\t\t}).filter(i => i);\n\t}\n\treturn [];\n}",
+      "name": "classifyLabels",
+      "test": null,
+      "appName": "cohere",
+      "arguments": "(p)",
+      "appVersion": 1
+    },
+    "parseJsonSchema": {
+      "rev": 69,
+      "code": "function parseJsonSchema(jsonString) {\n    function defineType(value) {\n        if (Array.isArray(value)) {\n            if (value.length === 0) {\n                return { type: 'array', items: { type: 'string' } };\n            }\n        \n            const types = value.map(defineType);\n            const uniqueTypes = Array.from(new Set(types.map(JSON.stringify))).map(JSON.parse);\n        \n            return {\n                type: 'array',\n                items: uniqueTypes.length === 1 ? uniqueTypes[0] : { anyOf: uniqueTypes },\n            };\n        } else if (value === null) {\n\t\t\treturn { type: 'string' };\n\t\t}\n\n\t\tswitch (typeof value) {\n\t\t\tcase 'object':\n\t\t\t\treturn generateSchema(value);\n\t\t\tcase 'number':\n\t\t\t\treturn Number.isInteger(value) ? { type: 'integer' } : { type: 'number' };\n\t\t\tcase 'boolean':\n\t\t\t\treturn { type: 'boolean' };\n\t\t\tdefault:\n\t\t\t\treturn { type: 'string' };\n\t\t}\n\t}\n\n\tfunction generateSchema(obj) {\n\t\tconst schema = {\n\t\t\ttype: 'object',\n\t\t\tproperties: {},\n\t\t\trequired: [],\n\t\t\tadditionalProperties: false,\n\t\t};\n\n\t\tfor (const key in obj) {\n\t\t\tif (obj.hasOwnProperty(key)) {\n\t\t\t\tschema.properties[key] = defineType(obj[key]);\n\t\t\t\tschema.required.push(key);\n\t\t\t}\n\t\t}\n\n\t\treturn schema;\n\t}\n\n\ttry {\n\t\tconst parsed = JSON.parse(jsonString);\n        const schema = generateSchema(parsed);\n\t\treturn JSON.stringify(schema, null, 2);\n\t} catch (err) {\n\t\tthrow new Error('Invalid JSON input: ' + err.message);\n\t}\n}\n",
+      "name": "parseJsonSchema",
+      "test": "it(\"should return an empty schema for an empty object\", function () {\n    const input = \"{}\";\n    const expectedOutput =\n        \"{\\n\" +\n        '  \"type\": \"object\",\\n' +\n        '  \"properties\": {},\\n' +\n        '  \"required\": [],\\n' +\n        '  \"additionalProperties\": false\\n' +\n        \"}\";\n\n    assert.deepEqual(parseJsonSchema(input), expectedOutput);\n});\n\nit(\"should return a schema with one string property\", function () {\n    const input = '{\"name\": \"Alice\"}';\n    const expectedOutput =\n        \"{\\n\" +\n        '  \"type\": \"object\",\\n' +\n        '  \"properties\": {\\n' +\n        '    \"name\": {\\n' +\n        '      \"type\": \"string\"\\n' +\n        \"    }\\n\" +\n        \"  },\\n\" +\n        '  \"required\": [\\n' +\n        '    \"name\"\\n' +\n        \"  ],\\n\" +\n        '  \"additionalProperties\": false\\n' +\n        \"}\";\n\n    assert.deepEqual(parseJsonSchema(input), expectedOutput);\n});\n\nit(\"should return a schema with multiple properties of different types\", function () {\n    const input = '{\"name\": \"Alice\", \"age\": 25, \"isActive\": true}';\n    const expectedOutput =\n        \"{\\n\" +\n        '  \"type\": \"object\",\\n' +\n        '  \"properties\": {\\n' +\n        '    \"name\": {\\n' +\n        '      \"type\": \"string\"\\n' +\n        \"    },\\n\" +\n        '    \"age\": {\\n' +\n        '      \"type\": \"integer\"\\n' +\n        \"    },\\n\" +\n        '    \"isActive\": {\\n' +\n        '      \"type\": \"boolean\"\\n' +\n        \"    }\\n\" +\n        \"  },\\n\" +\n        '  \"required\": [\\n' +\n        '    \"name\",\\n' +\n        '    \"age\",\\n' +\n        '    \"isActive\"\\n' +\n        \"  ],\\n\" +\n        '  \"additionalProperties\": false\\n' +\n        \"}\";\n\n    assert.deepEqual(parseJsonSchema(input), expectedOutput);\n});\n\nit(\"should return a schema with a nested object\", function () {\n    const input = '{\"profile\": {\"bio\": \"developer\"}}';\n    const expectedOutput =\n        \"{\\n\" +\n        '  \"type\": \"object\",\\n' +\n        '  \"properties\": {\\n' +\n        '    \"profile\": {\\n' +\n        '      \"type\": \"object\",\\n' +\n        '      \"properties\": {\\n' +\n        '        \"bio\": {\\n' +\n        '          \"type\": \"string\"\\n' +\n        \"        }\\n\" +\n        \"      },\\n\" +\n        '      \"required\": [\\n' +\n        '        \"bio\"\\n' +\n        \"      ],\\n\" +\n        '      \"additionalProperties\": false\\n' +\n        \"    }\\n\" +\n        \"  },\\n\" +\n        '  \"required\": [\\n' +\n        '    \"profile\"\\n' +\n        \"  ],\\n\" +\n        '  \"additionalProperties\": false\\n' +\n        \"}\";\n\n    assert.deepEqual(parseJsonSchema(input), expectedOutput);\n});\n\nit(\"should return a schema with an array property\", function () {\n    const input = '{\"tags\": [\"developer\", \"coder\"]}';\n    const expectedOutput =\n        \"{\\n\" +\n        '  \"type\": \"object\",\\n' +\n        '  \"properties\": {\\n' +\n        '    \"tags\": {\\n' +\n        '      \"type\": \"array\",\\n' +\n        '      \"items\": {\\n' +\n        '        \"type\": \"string\"\\n' +\n        \"      }\\n\" +\n        \"    }\\n\" +\n        \"  },\\n\" +\n        '  \"required\": [\\n' +\n        '    \"tags\"\\n' +\n        \"  ],\\n\" +\n        '  \"additionalProperties\": false\\n' +\n        \"}\";\n\n    assert.deepEqual(parseJsonSchema(input), expectedOutput);\n});\n\nit(\"should return a schema with anyOf for different object types in an array\", function () {\n    const input = JSON.stringify({\n        \"entries\": [\n            { \"name\": \"Alice\", \"age\": 30 },\n            { \"title\": \"Engineer\", \"department\": \"R&D\" }\n        ]\n    });\n\n    const expectedOutput = `{\n  \"type\": \"object\",\n  \"properties\": {\n    \"entries\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"anyOf\": [\n          {\n            \"type\": \"object\",\n            \"properties\": {\n              \"name\": {\n                \"type\": \"string\"\n              },\n              \"age\": {\n                \"type\": \"integer\"\n              }\n            },\n            \"required\": [\n              \"name\",\n              \"age\"\n            ],\n            \"additionalProperties\": false\n          },\n          {\n            \"type\": \"object\",\n            \"properties\": {\n              \"title\": {\n                \"type\": \"string\"\n              },\n              \"department\": {\n                \"type\": \"string\"\n              }\n            },\n            \"required\": [\n              \"title\",\n              \"department\"\n            ],\n            \"additionalProperties\": false\n          }\n        ]\n      }\n    }\n  },\n  \"required\": [\n    \"entries\"\n  ],\n  \"additionalProperties\": false\n}`;\n\n    assert.deepEqual(parseJsonSchema(input), expectedOutput);\n});\n",
+      "appName": "cohere",
+      "arguments": "(jsonString)",
+      "appVersion": 1
+    },
+    "processResponseFormat": {
+      "rev": 42,
+      "code": "function processResponseFormat(responseFormat) {\n    if (!responseFormat || typeof responseFormat !== \"object\") return;\n\n    const { type, json_schema } = responseFormat;\n    \n    if (!type) {\n        return { type: 'text' };\n    } else if (!json_schema) {\n        return { type };\n    }\n\n    try {\n        const parsedSchema = JSON.parse(json_schema);\n\n        return {\n            ...responseFormat,\n            json_schema: parsedSchema,\n        };\n    } catch (err) {\n        throw new Error(\"Invalid JSON schema: \" + err.message);\n    }\n}\n",
+      "name": "processResponseFormat",
+      "test": "it(\"should return the input object when type is not 'json_object'\", function () {\n    const input = { type: \"text\" };\n    const expectedOutput = { type: \"text\" };\n    assert.deepEqual(processResponseFormat(input), expectedOutput);\n});\n\nit(\"should return the input object with a parsed json_schema when the type is 'json_object' and json_schema is valid\", function () {\n    const input = {\n        type: \"json_object\",\n        json_schema:\n            '{\"type\": \"object\", \"properties\": { \"name\": {\"type\": \"string\"}}}',\n    };\n    const expectedOutput = {\n        type: \"json_object\",\n        json_schema: {\n            type: \"object\",\n            properties: {\n                name: { type: \"string\" },\n            },\n        },\n    };\n    assert.deepEqual(processResponseFormat(input), expectedOutput);\n});\n\nit(\"should throw an error when the json_schema is invalid JSON\", function () {\n    const input = {\n        type: \"json_object\",\n        json_schema:\n            '{\"type\": \"object\", \"properties\": { \"name\": {\"type\": \"string\"}}',\n    };\n    assert.throws(() => processResponseFormat(input), /Invalid JSON schema/);\n});\n\nit(\"should throw an error when json_schema is an empty string\", function () {\n    const input = {\n        type: \"json_object\",\n        json_schema: \"\",\n    };\n    const expectedOutput = {\n        type: \"json_object\"\n    };\n    assert.deepEqual(processResponseFormat(input), expectedOutput);\n});\n\nit(\"should handle nested JSON schemas correctly\", function () {\n    const input = {\n        type: \"json_object\",\n        json_schema:\n            '{\"type\": \"object\", \"properties\": { \"profile\": {\"type\": \"object\", \"properties\": {\"bio\": {\"type\": \"string\"}}}}}',\n    };\n    const expectedOutput = {\n        type: \"json_object\",\n        json_schema: {\n            type: \"object\",\n            properties: {\n                profile: {\n                    type: \"object\",\n                    properties: {\n                        bio: { type: \"string\" },\n                    },\n                },\n            },\n        },\n    };\n    assert.deepEqual(processResponseFormat(input), expectedOutput);\n});\n\nit(\"should correctly return responseFormat when passed object is empty\", function () {\n    assert.deepEqual(processResponseFormat({}), { type: \"text\" });\n});\n\nit(\"should return undefined for undefined input\", function () {\n    assert.strictEqual(processResponseFormat(undefined), undefined);\n});\n\nit(\"should return undefined for null input\", function () {\n    assert.strictEqual(processResponseFormat(null), undefined);\n});\n\nit(\"should return undefined for non-object input\", function () {\n    assert.strictEqual(processResponseFormat(\"notAnObject\"), undefined);\n});\n\n\n",
+      "appName": "cohere",
+      "arguments": "(responseFormat)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2024-03-14T08:44:58.368338+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": null,
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "65f638c9d47467311c9b54651e633811",
+  "versionFull": "1.3.16",
+  "compiledName": "cohere",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": null,
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": null
+}

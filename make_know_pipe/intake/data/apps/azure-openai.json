@@ -1,0 +1,2023 @@
+{
+  "rev": 36,
+  "base": {
+    "qs": {
+      "api-version": "2023-05-15"
+    },
+    "log": {
+      "sanitize": [
+        "request.headers.api-key",
+        "request.headers.Authorization"
+      ]
+    },
+    "baseUrl": "{{if(connection.isApiKey, connection.baseUrl, connection.endpoints.`Base Endpoint`)}}/openai",
+    "headers": {
+      "api-key": "{{connection.azureOpenAiKey}}"
+    },
+    "timeout": "{{common.timeout || 40000}}",
+    "response": {
+      "error": {
+        "401": {
+          "message": "[{{statusCode}}] {{body.message}}"
+        },
+        "429": {
+          "type": "RateLimitError",
+          "message": "[{{statusCode}}] {{body.error.message || body.message}}"
+        },
+        "message": "[{{statusCode}}] {{body.error.message}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "azure-openai",
+  "_rpcs": {
+    "listResources": {
+      "api": {
+        "qs": {
+          "api-version": "2022-12-01"
+        },
+        "url": "https://management.azure.com/subscriptions/{{parameters.subscriptionId}}/resourcegroups/{{parameters.resourceGroup}}/providers/Microsoft.CognitiveServices/accounts",
+        "method": "GET",
+        "headers": {
+          "authorization": "Bearer {{connection.accessToken}}"
+        },
+        "response": {
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.name}}"
+          },
+          "iterate": {
+            "condition": "{{item.kind === 'OpenAI' || item.kind === 'AIServices'}}",
+            "container": "{{body.value}}"
+          }
+        }
+      },
+      "rev": 2,
+      "name": "listResources",
+      "label": "List Resources",
+      "appName": "azure-openai",
+      "apiJsonc": "{\n    \"url\": \"https://management.azure.com/subscriptions/{{parameters.subscriptionId}}/resourcegroups/{{parameters.resourceGroup}}/providers/Microsoft.CognitiveServices/accounts\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"api-version\": \"2022-12-01\"\n    },\n    \"headers\": {\n        \"authorization\": \"Bearer {{connection.accessToken}}\"\n    },\n    \"response\": {\n        \"iterate\": {\n            \"container\": \"{{body.value}}\",\n            \"condition\": \"{{item.kind === 'OpenAI' || item.kind === 'AIServices'}}\"\n        },\n        \"output\": {\n            \"label\": \"{{item.name}}\",\n            \"value\": \"{{item.name}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "azure-openai",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listDeployments": {
+      "api": [
+        {
+          "qs": {
+            "api-version": "2023-05-01"
+          },
+          "url": "https://management.azure.com/subscriptions/{{connection.subscriptionId}}/resourceGroups/{{connection.resourceGroup}}/providers/Microsoft.CognitiveServices/accounts/{{connection.azureOpenAiResource}}/deployments",
+          "method": "GET",
+          "headers": {
+            "authorization": "Bearer {{connection.accessToken}}"
+          },
+          "response": {
+            "output": [
+              {
+                "help": "Provide a unique name for the OpenAI deployment, enabling API calls to a base or custom model. For more information about model deployment, see the [Azure OpenAI model deployment guide](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model).",
+                "name": "deploymentName",
+                "type": "select",
+                "label": "OpenAI Deployment Name",
+                "options": "{{deploymentFiltering(body.value, parameters.modelType)}}",
+                "mappable": false,
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{!connection.isApiKey}}"
+        },
+        {
+          "response": {
+            "output": [
+              {
+                "help": "Type the name of your Azure OpenAI deployment. For more information about model deployment, see the [Azure OpenAI model deployment guide](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model) and [our Azure OpenAI documentation](https://www.make.com/en/help/app/azure-openai).",
+                "name": "deploymentName",
+                "type": "text",
+                "label": "OpenAI Deployment Name",
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{connection.isApiKey}}"
+        }
+      ],
+      "rev": 3,
+      "name": "listDeployments",
+      "label": "List Deployments",
+      "appName": "azure-openai",
+      "apiJsonc": "[\n\t{\n\t\t\"condition\": \"{{!connection.isApiKey}}\",\n\t\t\"url\": \"https://management.azure.com/subscriptions/{{connection.subscriptionId}}/resourceGroups/{{connection.resourceGroup}}/providers/Microsoft.CognitiveServices/accounts/{{connection.azureOpenAiResource}}/deployments\",\n\t\t\"method\": \"GET\",\n\t\t\"qs\": {\n\t\t\t\"api-version\": \"2023-05-01\"\n\t\t},\n\t\t\"headers\": {\n\t\t\t\"authorization\": \"Bearer {{connection.accessToken}}\"\n\t\t},\n\t\t\"response\": {\n\t\t\t\"output\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"deploymentName\",\n\t\t\t\t\t\"label\": \"OpenAI Deployment Name\",\n\t\t\t\t\t\"help\": \"Provide a unique name for the OpenAI deployment, enabling API calls to a base or custom model. For more information about model deployment, see the [Azure OpenAI model deployment guide](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model).\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"mappable\": false,\n\t\t\t\t\t\"options\": \"{{deploymentFiltering(body.value, parameters.modelType)}}\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t},\n\t{\n\t\t\"condition\": \"{{connection.isApiKey}}\",\n\t\t\"response\": {\n\t\t\t\"output\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"deploymentName\",\n\t\t\t\t\t\"label\": \"OpenAI Deployment Name\",\n\t\t\t\t\t\"help\": \"Type the name of your Azure OpenAI deployment. For more information about model deployment, see the [Azure OpenAI model deployment guide](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model) and [our Azure OpenAI documentation](https://www.make.com/en/help/app/azure-openai).\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"required\": true\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t}\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "azure-openai",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listSubscriptions": {
+      "api": {
+        "qs": {
+          "api-version": "2023-07-01"
+        },
+        "url": "https://management.azure.com/subscriptions",
+        "method": "GET",
+        "headers": {
+          "authorization": "Bearer {{connection.accessToken}}"
+        },
+        "response": {
+          "output": {
+            "label": "{{item.displayName}}",
+            "value": "{{item.subscriptionId}}"
+          },
+          "iterate": {
+            "condition": "{{item.state === 'Enabled'}}",
+            "container": "{{body.value}}"
+          }
+        }
+      },
+      "rev": 2,
+      "name": "listSubscriptions",
+      "label": "List Subscriptions",
+      "appName": "azure-openai",
+      "apiJsonc": "{\n    \"url\": \"https://management.azure.com/subscriptions\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"api-version\": \"2023-07-01\"\n    },\n    \"headers\": {\n        \"authorization\": \"Bearer {{connection.accessToken}}\"\n    },\n    \"response\": {\n        \"iterate\": {\n            \"container\": \"{{body.value}}\",\n            \"condition\": \"{{item.state === 'Enabled'}}\"\n        },\n        \"output\": {\n            \"label\": \"{{item.displayName}}\",\n            \"value\": \"{{item.subscriptionId}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "azure-openai",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listResourceGroups": {
+      "api": {
+        "qs": {
+          "api-version": "2023-07-01"
+        },
+        "url": "https://management.azure.com/subscriptions/{{parameters.subscriptionId}}/resourcegroups",
+        "method": "GET",
+        "headers": {
+          "authorization": "Bearer {{connection.accessToken}}"
+        },
+        "response": {
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.name}}"
+          },
+          "iterate": {
+            "container": "{{body.value}}"
+          }
+        }
+      },
+      "rev": 2,
+      "name": "listResourceGroups",
+      "label": "List Resource Groups",
+      "appName": "azure-openai",
+      "apiJsonc": "{\n    \"url\": \"https://management.azure.com/subscriptions/{{parameters.subscriptionId}}/resourcegroups\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"api-version\": \"2023-07-01\"\n    },\n    \"headers\": {\n        \"authorization\": \"Bearer {{connection.accessToken}}\"\n    },\n    \"response\": {\n        \"iterate\": {\n            \"container\": \"{{body.value}}\"\n        },\n        \"output\": {\n            \"label\": \"{{item.name}}\",\n            \"value\": \"{{item.name}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "azure-openai",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "interfaceGenerateAnImage": {
+      "api": [
+        {
+          "response": {
+            "output": [
+              {
+                "name": "created",
+                "type": "date",
+                "label": "Created"
+              },
+              {
+                "name": "revised_prompt",
+                "type": "text",
+                "label": "Revised Prompt"
+              },
+              {
+                "name": "url",
+                "type": "text",
+                "label": "URL"
+              }
+            ]
+          },
+          "condition": "{{parameters.response_format === 'url'}}"
+        },
+        {
+          "response": {
+            "output": [
+              {
+                "name": "created",
+                "type": "date",
+                "label": "Created"
+              },
+              {
+                "name": "revised_prompt",
+                "type": "text",
+                "label": "Revised Prompt"
+              },
+              {
+                "name": "filename",
+                "type": "filename",
+                "label": "File Name",
+                "semantic": "file:name"
+              },
+              {
+                "name": "data",
+                "type": "buffer",
+                "label": "File Data",
+                "semantic": "file:data"
+              }
+            ]
+          },
+          "condition": "{{parameters.response_format === 'imageFile'}}"
+        }
+      ],
+      "rev": 6,
+      "name": "interfaceGenerateAnImage",
+      "label": "Interface: Generate an Image",
+      "appName": "azure-openai",
+      "apiJsonc": "[\n    {\n        \"condition\": \"{{parameters.response_format === 'url'}}\",\n        \"response\": {\n            \"output\": [\n                {\n                    \"name\": \"created\",\n                    \"type\": \"date\",\n                    \"label\": \"Created\"\n                },\n                {\n                    \"name\": \"revised_prompt\",\n                    \"type\": \"text\",\n                    \"label\": \"Revised Prompt\"\n                },\n                {\n                    \"name\": \"url\",\n                    \"type\": \"text\",\n                    \"label\": \"URL\"\n                }\n            ]\n        }\n    },\n    {\n        \"condition\": \"{{parameters.response_format === 'imageFile'}}\",\n        \"response\": {\n            \"output\": [\n                {\n                    \"name\": \"created\",\n                    \"type\": \"date\",\n                    \"label\": \"Created\"\n                },\n                {\n                    \"name\": \"revised_prompt\",\n                    \"type\": \"text\",\n                    \"label\": \"Revised Prompt\"\n                },\n                {\n                    \"name\": \"filename\",\n                    \"type\": \"filename\",\n                    \"label\": \"File Name\",\n                    \"semantic\": \"file:name\"\n                },\n                {\n                    \"name\": \"data\",\n                    \"type\": \"buffer\",\n                    \"label\": \"File Data\",\n                    \"semantic\": \"file:data\"\n                }\n            ]\n        }\n    }\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": null,
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "parametersMakeAnApiCallUrl": {
+      "api": {
+        "response": {
+          "temp": {
+            "deploymentName": "{{if(substring(parameters.deploymentName, 0, 2) === '{{' && substring(parameters.deploymentName, length(parameters.deploymentName) - 2) === '}}', '{your_deployment_name}', parameters.deploymentName)}}"
+          },
+          "output": [
+            {
+              "help": "Enter a path relative to {{get(split(parameters.endpoint, '~'), 1)}}openai/deployments/{{temp.deploymentName}}.\ne.g. `/chat/completions`",
+              "name": "url",
+              "type": "text",
+              "label": "URL",
+              "required": true
+            }
+          ]
+        }
+      },
+      "rev": 9,
+      "name": "parametersMakeAnApiCallUrl",
+      "label": "Parameters: Make an API Call -> URL",
+      "appName": "azure-openai",
+      "apiJsonc": "{\n    \"response\": {\n        \"temp\": {\n            \"deploymentName\": \"{{if(substring(parameters.deploymentName, 0, 2) === '{{' && substring(parameters.deploymentName, length(parameters.deploymentName) - 2) === '}}', '{your_deployment_name}', parameters.deploymentName)}}\"\n        },\n        \"output\": [\n            {\n                \"name\": \"url\",\n                \"label\": \"URL\",\n                \"type\": \"text\",\n                \"required\": true,\n                \"help\": \"Enter a path relative to {{get(split(parameters.endpoint, '~'), 1)}}openai/deployments/{{temp.deploymentName}}.\\ne.g. `/chat/completions`\"\n            }\n        ]\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": null,
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "parametersMakeAnApiCallEndpoint": {
+      "api": {
+        "response": {
+          "temp": {
+            "oauth": [
+              {
+                "name": "endpoint",
+                "type": "select",
+                "label": "Endpoint",
+                "options": {
+                  "store": "{{azureOpenaiEndpointOptions(connection.endpoints)}}",
+                  "nested": "rpc://app%23azure-openai@1/parametersMakeAnApiCallDeploymentName"
+                },
+                "mappable": false,
+                "required": true
+              }
+            ],
+            "apiKey": [
+              {
+                "help": "Provide a unique name for the OpenAI deployment, enabling API calls to a base or custom model. For more information about model deployment, see the [Azure OpenAI model deployment guide](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model).",
+                "name": "deploymentName",
+                "type": "text",
+                "label": "OpenAI Deployment Name",
+                "required": true
+              },
+              {
+                "help": "Enter a path relative to {{connection.baseUrl}}openai/deployments/`{OpenAI Deployment Name}`.\ne.g. `/chat/completions`",
+                "name": "url",
+                "type": "text",
+                "label": "URL",
+                "required": true
+              }
+            ]
+          },
+          "output": "{{if(connection.isApiKey, temp.apiKey, temp.oauth)}}"
+        }
+      },
+      "rev": 3,
+      "name": "parametersMakeAnApiCallEndpoint",
+      "label": "Parameters: Make an API Call -> Endpoint",
+      "appName": "azure-openai",
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"temp\": {\n\t\t\t\"oauth\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"endpoint\",\n\t\t\t\t\t\"label\": \"Endpoint\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"mappable\": false,\n\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\"store\": \"{{azureOpenaiEndpointOptions(connection.endpoints)}}\",\n\t\t\t\t\t\t\"nested\": \"rpc://parametersMakeAnApiCallDeploymentName\"\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"apiKey\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"deploymentName\",\n\t\t\t\t\t\"label\": \"OpenAI Deployment Name\",\n\t\t\t\t\t\"help\": \"Provide a unique name for the OpenAI deployment, enabling API calls to a base or custom model. For more information about model deployment, see the [Azure OpenAI model deployment guide](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model).\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"required\": true\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"url\",\n\t\t\t\t\t\"label\": \"URL\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"help\": \"Enter a path relative to {{connection.baseUrl}}openai/deployments/`{OpenAI Deployment Name}`.\\ne.g. `/chat/completions`\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"output\": \"{{if(connection.isApiKey, temp.apiKey, temp.oauth)}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "azure-openai",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "parametersHiddenAccessRefreshToken": {
+      "api": {
+        "response": {
+          "output": [
+            {
+              "name": "clientId",
+              "type": "hidden",
+              "label": "Client ID",
+              "default": "{{connection.clientId || undefined}}"
+            },
+            {
+              "help": "The default value is encrypted for security purposes",
+              "name": "clientSecret",
+              "type": "hidden",
+              "label": "Client Secret",
+              "default": "{{encrypt(connection.clientSecret, common.salt) || undefined}}"
+            },
+            {
+              "name": "tenantId",
+              "type": "hidden",
+              "label": "Tenant ID",
+              "default": "{{connection.tenantId || undefined}}"
+            },
+            {
+              "help": "The default value is encrypted for security purposes",
+              "name": "refreshToken",
+              "type": "hidden",
+              "default": "{{encrypt(connection.refreshToken, common.salt)}}"
+            }
+          ]
+        }
+      },
+      "rev": 5,
+      "name": "parametersHiddenAccessRefreshToken",
+      "label": "Parameters: Hidden Access & Refresh Token",
+      "appName": "azure-openai",
+      "apiJsonc": "{\n    \"response\": {\n        \"output\": [\n            {\n                \"name\": \"clientId\",\n                \"type\": \"hidden\",\n                \"label\": \"Client ID\",\n                \"default\": \"{{connection.clientId || undefined}}\"\n            },\n            {\n                \"name\": \"clientSecret\",\n                \"type\": \"hidden\",\n                \"label\": \"Client Secret\",\n                \"help\": \"The default value is encrypted for security purposes\",\n                \"default\": \"{{encrypt(connection.clientSecret, common.salt) || undefined}}\"\n            },\n            {\n                \"name\": \"tenantId\",\n                \"label\": \"Tenant ID\",\n                \"type\": \"hidden\",\n                \"default\": \"{{connection.tenantId || undefined}}\"\n            },\n            {\n                \"name\": \"refreshToken\",\n                \"type\": \"hidden\",\n                \"help\": \"The default value is encrypted for security purposes\",\n                \"default\": \"{{encrypt(connection.refreshToken, common.salt)}}\"\n            }\n        ]\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "azure-openai",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "parametersMakeAnApiCallDeploymentName": {
+      "api": {
+        "response": {
+          "output": [
+            {
+              "help": "Provide a unique name for the OpenAI deployment, enabling API calls to a base or custom model. For more information about model deployment, see the [Azure OpenAI model deployment guide](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model).",
+              "name": "deploymentName",
+              "type": "select",
+              "label": "OpenAI Deployment Name",
+              "options": {
+                "store": "rpc://app%23azure-openai@1/listDeployments",
+                "nested": "rpc://app%23azure-openai@1/parametersMakeAnApiCallUrl"
+              },
+              "required": true
+            }
+          ]
+        }
+      },
+      "rev": 3,
+      "name": "parametersMakeAnApiCallDeploymentName",
+      "label": "Parameters: Make an API Call -> Deployment Name",
+      "appName": "azure-openai",
+      "apiJsonc": "{\n    \"response\": {\n        \"output\": [\n            {\n                \"name\": \"deploymentName\",\n                \"label\": \"OpenAI Deployment Name\",\n                \"help\": \"Provide a unique name for the OpenAI deployment, enabling API calls to a base or custom model. For more information about model deployment, see the [Azure OpenAI model deployment guide](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model).\",\n                \"type\": \"select\",\n                \"required\": true,\n                \"options\": {\n                    \"store\": \"rpc://listDeployments\",\n                    \"nested\": \"rpc://parametersMakeAnApiCallUrl\"\n                }\n            }\n        ]\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": null,
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {},
+  "label": "Azure OpenAI",
+  "theme": "#094ab1",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "createAChatCompletion",
+        "createATranslation",
+        "createATranscription",
+        "generateAnImage",
+        "makeAnApiCall",
+        "devMakeAnApiCallDontRelease"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda793000002134944415458c3edd5db8b4e511806f0df37e6646614c3881a6e24a23473a1414966328394434ab99172eb2fe08f70a5dc891ba170e5704b9324351a45e2c6a10ccd388c19e6f4b9d8efaedd9eef9b4f1137fba9557beff5aef53ceff3be6b6d0a142850e03fa3b4d064b95c4e1f176562cb98855269c1e57f2620437e02478238c54d5ccc8ac8c437a31d5f315e4b682d01cb701b3db9e947d887d152a994255f8793a8433d06f11aaff0bd9298ba1a0e75617385ef9bd09dcbbc13a7700f973085ad3880b3585589a0a280cca6fd68ab10d2167329b6e14c385a1feedcc7135cc7300ee7f6aee9403bfa32ef733152f461391a710897f122cad08a63e8402fd663e56f3b10e80eab530cc748b131621a629fb7e1cc1249ddcf630b26f02c129ae7e63c01198b06229314577125f3de8abd92e61ac16ebc91f4cc477cc168103fc7076cc8f3d557215f11d6a598c28ce428fe44537cef959c94975186c7b883e3e1c834dea325b2ff911750aa22a01f3762a1204e053464d64de06008dc192e6d97dc01ad581c73bb30146599c91ec56a3d3090219fc383b0b33127ba05fb23f33a1c0d813d18c3dd28c92d5cc8935773a0437296bbe2f398e42c77e21c56e7c43ec51e7c9334e51aecc0272cc5435ca3f28d586f3e1a2537d778081c8a3188499c965cb7e5c87a24d64c460cc9edb9169ff1ae1af9423dd024f9019134d27426ac3957ba594963fe959f538102050afc73fc02307f8d6f31b796d00000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000005054944415478daed987becd6531cc75f4ff7a2a252d2724b0ab5e64e0961ca5d5393ebb056e6b2d998fff8cbe61f97b4618d319aa8d694612349da30fe88242af724b1eeca5279f9e37c7e7edf7e3cb75f8fd638afedd9f37ccf73cef99ecffb7c3ee77cce814c2693c96432994c2693c96432994c26f37fa2b4378d55800ec068e0d8e8cf7fa8ba13f8067813d8512aedd56bf71f54d451ea46abb349bd2044abf71d6dd4ee6a2fb5639435c486367b637c703170500d4dba0397b4685bcdf012703a300d781b5808cc056e01ba364288767ba71fbd80f3eaa83f0ae80dfc5ccdf8e01ae04152f8cc04b6002701f703e700b381f6ea77c017c076807d1262a1fe68755b0deedfc476f5e26ab3167d0f5357a90fa87fcdb67ab0faacba23fe5fa9ae51e7a9a734323caa0d10f5913a8c6f626ab94146793b75b0fabcfa7ac1f88eeaa551f69a3a4e3d423d5cbd4c7d57fd629f88102fe8ad2e6985004bd53ec5011604eda53ea47e1dde7267949fac4e0f2327abddd40eea0185b6fdd5c5eacb6aa77d21c04531c87af92d66f2af598adf5dd467d42fd56bd4d9ea7561ccfcf0b6be6a491da1ce54df5227a89da38f71eaf7ea905a05a87b1728743c06e8dc0afd3a45db96fd8d8ef2bb8017810da4bca25d8c7346b49d024c05969016c1db81e780e1c00a6037d0a7d6c1b47617e8039c5be1ff3fe2bb9cc0e7027d81b585b231c027c0fc32e3bc0d180cf424ed061f02ef00f38089c0a3215a3b6073ad86b4360f389594f9956339f05985ff8f014e2b3cb70d41be057614ca8d4f17a03f705f88f752183c8db4153f00dc1cc27406ba416df9465d02b470d74e15aace21b967393a52080392dbfe021c4ab357b609a33b8561f7030b485ef33029ad3e1f782684f90198042c06ee05bad662536b3ca02f95dd7f33f0467c3655a8770ed0aff0bc00381138259edf02c6024f028700bfb768bf0b984e5a33ae2079e5e6a83f343e8d13a030fba702032b545d4672ffe5c0d20af50690d2dc265e053e061e03ce006601d79266b607701d7018295cce2265953b81f781af48873280552156ff860a50600cc985cbf106c9657f8ddfe5e8107d35e5ad5b42b041c013a41478177037c9137a93426b06f0107020cd8b2d349f420f8af16d6b88002db2aac348ae5b8eddc071a498bc0f383e8c28c7489ac3a0041c458aed49a4509b0ddc01ac073e27cdea56e026d2d9a02d7f3fd25f19c62fab45807ab7c13349ae5b49d0098541555b868f26eddfb3e27903308c143e93810b815b439095c00da445ae073004f834de552279c4f551770a6947690ce10525755a2b32bf6a3c1d7da35eaefe14dfc5c3cf6991f61ea0dea82e8c4cf004d319e14df51b75b5faa07a604353e118483ff5f32a29ee865608b0c294c71306ce50bf52c79b0e42a5487547abaf445a3c3e5267d4a1913e3fa58e54dbff1bc6a35e653a82966361d45959a700bfab5717ded34f7d4e5da77ea0ce55df537f54ef31dd0c15bde30575415379bdd4ba0694808b68de6afe89f9a4557a1d692f1e5263dfed49bbc16cd2aabe8614f76702234837496b490be440529eb091944d4e8cf289d491feb6c603fa87ab96637dc46953fd93d58feaf08255ea9196bf2368ab8e551799e27cb5fa9d3a473ddd7ff3fc1f9d0f57b7543060be7b9ecd312d508b6a1460ab7a7639230a7d7635dd148d5407d9800bd2aa9767d17977d2b173007b261f90f6fe99a40b4b4aa55271400348db524fca6f896d80af81c7814dff992bf34c2693c96432994c2693c96432994c26b35ff22786c71f4929a847410000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2024-01-10T13:49:34.739667+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda79300000ce64944415478daed9c7b90dd557dc03f379b7780047925060206e263d04e78095a1e7644815a5fb51af15d476d454b0d0ea1ead86aeb68b1d46aa7b45a30515146dae2033088bc866aab45d4468c3542d06030804048224976b3bb9ffef13d97fbcbe6ee66f73e763799ef67e6cedebbf7fcceebfb3ddff33de77ccf852449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449260bb589ae00805a7f3b1398dd62bdfa8181f2772740ad36299a37a999f01e2ac29f0abc01781d700830a585ac7602bb801dc0b5c0e780be5482498e8afa22f5313bc716f50f4ade13ddc4494d2b23ad6314e1d4805700077730eb834a9ee3d6bebab2a93dea6c759e3a4bad4d66259c3ad115009e0abca00bf99e091c09dcdfcdca17e1f600cf00ce064e051612beccd652fe77d4db800d80392d15ca8879a5bab383e6bf4eaffada6e4d0395117fb4fa77eafdeac03075e9577fa65ea21e965353a3036beaa7bb20fc3aabd4299deeec8af04f57ef54074b797deabdeacdeab5eaedea067557451156abcf982c4a30d153c042e0ac2ee67f3ab008f865a732ac08ed54e00ae099c4d2f33bc02ae00ee061a00f98414c7167037f0c9c049c07cc01be0acc570f04b600bf007e08fc9458c9ecbfcbd8ca08faa362aabbc52ef5f59d1c6d25afc3cbe856dda6fe8d7a48b3722a6d3d52fdcff2cc60c56ad419507fa37e453d479d36192c4457281d3245bda28bc2af7395e19977aadea8171581f5a91f1a4e5895f447a817ab0f953af5ab0fab77ab6bd407dc7d206c562fad2bd57e47e99445eaba715080f5eae20e2ac061c6bcaf7abd3ad7e147fd01eaf9eaf78ad077a837a96f537fa7e475a8fa4cf5d5ea97d5ad25ef01f5f3ea53f62b25a874ce32bb6bfeebec52df688bd3800d67f5a822a495c6aa65bbfad2a1f996cfd3d417a85f2b421f50bf5fea71d030cfa0ce2865fcbcd4bddfb00453f71b25b061fe578e83f0eb5c3dd64eac08e5507585fa53c3e4d7b95b9d5fcfb3d2aea5ea67d4474bbaf5c6f26fc1de94b052e659ea3de5f9cdeab9ad2af0a4a334e4984a03c783fbd46347db8115413c4bfd863112559f309c3e8d65ded44ada85ea87d58de5fb4dea65c692af5649873ad3983af6d825aca4799dfadb92d735eaf47d5e012a8d7bed90d1d46d76a96f7614a3a852c725ea7f97e707d43bd497ab1f28ff5b5511ec14f5caf2ff6dea17d5e75a713e6d6c13ffae6191beab2e375614cda684d9ead74b9e1b0d3f61a245d81105e8299d37de8c6a1a28753cd0187575e17fc186093fb7fcef73150598a6de58d22fb78cd621af25ea270cefbf4e7f51b2d714810f7de6edc672b14f7d45371460220e831601674c40b9cf038e192941a5835f09bcbcbcbf1e782fb0692ff90b0c02ff476c02d53914b810b801580e4c07ae04fea2a43d8dd8405a55def7549e5d0b6c03a6957eeb38e3b61358e9dce703478f57b9158e220e88ee5547da659b43c426cc0036027f0dfca685f266032f21847f1aa11c3700ff48ec16f601d7006f07de02bc863814bb1af834b08ed821dc499c6e4eef46a78cb705e801ce6562b6a07b807388d134124b80a5e5fd8dc0ffc298b6657b805380cf134129a797f66e21847b3b8d40955f021f045e56d2cf04de037c83b016a700b308ebf2c804f459e72873da626359d42acdb650c7c206f5e9c3cda5a58ee797b979407d837b3a67c3f900ab4b19b7193b7b1acedb178d25e4a0fab8e1ff9c60e590cac61ec079ea378dfd917ec3a11c343687ced8677d804ac5eb8733adb28e382c69952329874f36597e15e613a3f809e28066acfc1e7000f0052228e5cdc408ff2411b2f616e03ae0c3c03195727b098bb30cb800f859c9a746588fae5880f19c02a6d2bef9bf16f8b736db7b0e23cfa775276c9008321d2bb713427c077057ad561b00ee055600af2284bf00783fe160be938883acb305f82cf087e57b8813c50b8099ddb0025da798b8e3d45fb461beb7aa67aaa719bb63adf22b875953977abea998f85ef565234c01ab9a4c018336d91eae3c8bfa6cf5c15297fa12ef0e23306696bb2f038fb4b1bcfcad5d0870e9ba05a854f60cc2136f95b5c08fcbdf356de4f36408da301db98e08e59a4e386143d3d508a7ec59c4f97eb50f25ccfc1e4e63e5736f49f76be032e03e62757215b1147c7ae5b18dc05f020f10ab933fa5b3b193e336054c23cc7f4f1b79dc023c4eac8b6f69b3cde710cbbc66fc9c589f03fc3ea130551e051e240242be0e7c9410da689709b5f27a02f80762a9f8f1f27959f95c5598bb88e01108853ba18db637ed8cf1e069c45ab855b6b2bbd06f0136b791df7381e386f96e33f0ef840fb014f813a01a4ff0034250d70073814b8879fd2446e733585e75d6973cae289f9ff4918a124838873b08a7f044a063d34057156088f95fd846563f6177b3bf96b23e6f91053499062aa3ee6ae0dba57f2e243cf7ba600680ff2242bcde446cea1c051c56d23f07986193fdfdf2fd12626d3f942d23d4f75e1a0a7f1c1d643c2cc074220eae1df37f3361feeb6c2bff6b951a310dcc1ce6fb8780f71121ddf380bf073e44284e9d1dc057086f7d39b13c9d02fc15b1a9732ac572a835226cfc32c2c39f4b5898d1b2a3bc2875ee58b0e07828c0e2d219adb28562fe6bb55a7594de4accc7ad7232311a77a392ff3a1a5bc07389bdfbeb8875fddcca238f01971373f7c74a7d9711fec1a5c4d47709b1bbf71e1a4edc58847830b11d0cb135dcb16540d714a062fece644f476a2cac21bcffa1ac057ed446bef3197935f0b4f202f87ea9c709c067802f53d94f68b2adbb9230f31711f3f7478869e25bc09f01bf62140a50a9d7f13414e79e36dabc07ddb600d34b47b553ce1a42fb171971848b88ddc479b4e707d4801733fc34b000389008f9fedbd28e15c4b4702ee104fe0b70825a6fdf2011da7d15b174ab95baaf05de4d1cf85c4f2c05476b016612a793530967f84ee85cc878c70e652ada5aaf99c0b184c7dd72b6c0f9c4a86ac69c92a6d5de389958c2fdb8ccd3d572e7108a5b6fd823c0278811fdee52afb7128ab19298db67126bf5f381238875fcaaf2dd8692cf01957286ad77a53fcf2b654008bf9d3d903de8f4a95c0fbb7bcb2fa43df35f23ced30fed703deb1c01bc8870e0aa4e6a3f3197f711a6fcd84adbee012e26fc817711973e3e00bc9ab0788b0987f54a6269b786b00c334abe334a3e0325fd74cae651134e248ea30f2246ffe5e56fc7e8f414304098b7ded2616777a18c4e522394745aa5debda51deb693881f51dbf5e4288db819b88df33782bf03f8443b910584d28c305c488ed2504dc47589b1525dd2ec2a1eb6377a76e6ae9bb9712c7c9cf26146865c97bf2df182a4b9fe32bc7a29399078d48dea1f59fa17eb592e679cdd6f6362e7ebccd384a9eeb9ea15d0b8d58c2fb4a7e8faa1f71f7d0b17aace10f8dfb019bcbe75dc6b9c3be7149a4d2a077d9ded9fd78725155b89536bcd1c6dd85eb2d377bc7d00707abef28421d300e74fec308fbae4614a3fe6b937a6d523f6893cb2793161b61cfd74db454c7c0372d419943da314fbda1a4a90787ce779813b98a306719419cb719a77dbb8c13bf575939f1ab3c73b8faa352ce7675adfa4f0e892cde27280d7a8efaeb3604b2c588a21968238fb1f0b07a92cdcdfbc9a52e7525b85d7d8971ed6ba8a99f658cee6b8cd13ea8fe44bdc02697472bcfbddeb0343bd50b8d29a5e3d7dac74bf89446b463fe6f36cecdbfd6663e63e1e2110474967113a8ce56f556f5a345b8ef342e85acb67123e8fef2bfa375c4f880c5ea5de5993b2df704f6492aa3e006db6345c9eba9463c7f7f7bd98d8a6fa9734610d4f1ea976cdc0c1a890deaf3ddfb54b1c8c654d96bdc03d877af8095ca2fb511f1d20a4f9a631b77f33e6bf76f123da29eb21781cd367ed1ec72e3b2e703c69dfe878c9bcef5d1ff98fa7e43819b3997b3d4171b7e41ddc27dc97271749fa4d2b8e56d0ae2262b0e59c9f320f59376ff36f1fbdccb08b47115ec60e3dedf52c33a2c30a288ebbe4fbf71f7ff522394eb85c64fd72d3756148f977483c654b7706f654f6a2a23e446dbe3bd369f8b0f307e89637b1715e0d6524eabedaf1916e2bb36a6adc1f27ebba1c0559f66b3fa29475859ec3394069ce8ee77dfc6ca4346ccfc70f9cf344cebd636ca1889478da0d376fa00c31afcb9faed92e7ae22f881a208eb8d7b05673bc1b77e3b7d16702a1119d32a3f20e2e1f7a056aba1ee24e2e7b6117be4f33a5cffa71057d7bee7c8d7c79a524faf6e023e456ce52e21ee241e426c216f22227c3612dbca13bab5db6905e823f6ad5bd9ff97d85fdf315c82a204fdc03f134af071da53b86675e86b37938a40b710419d7775b08e93131b7bdeab8d0d8dbe31bc761abec351a33187361cb165c6cfa98ca5ac8ed4617fa163b6a7d26987138191d3195de8528d18757713bfaf372a9358caab1126767107fa61cc75489224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224e924ff0f7f8785feb4b9b6060000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda79300001dbe4944415478daeddd79bc5d657deff1cfc99c9304a2103211149010b984c1a08d5664a88a73815ea5087869857845da4a6f2dbdafa2a857af5aafb64a2b631145ad38606da98a0251a80217044a98045402214c81ccf339fbdb3f7eeb74afb3f63a670f67efbdf6dee7fb7ebdf2829cecb3f69a9e673dcfeff93dcf0233333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333eb297d45ef40279234f4bf138169c97fdb6510d8050ced4429f9435f9f2f973597efa894a4e04f008e04de0cec07cc232a8176d90e3c4f52e889cae069e006e036a0e48ac0acc924216982a4f7485a2da9a4ce5192f4a4a40f4a9a926aa198d95825851f496f480a5aa75a27e9c4a1fd351bab0945ef40079906fc11b0a0e81d19c55ec00a6056d13b62bdc11540d901c0ab8bde891a1c092c2e7a27ac378cfb0a20d5943e1a5858f4fed4609f645fc7453720d53deb933451d22c49d393bf8f8b73d04a938ade810ed10fbc1e985cf48ed46002f016e04a6053d13bd36ca9023d0d980f2c0596105db37e6011b0951819d90c3c26e957c083c0737894a42eae00c2fec0ef14bd1375580a1c0cdc51f48e344baae0cf078e07de0a2c275a3cfde40f598bc89bd802fc1a58095c2fe956a29270ee848d2cd5bc3c47d240d121fe3a0c4a3abf179ac0a96b304fd20724dd26697b83e7a524e90549df92f4e6a4ab50f4215aa74a6ebc7e49df2bba4437e07a497b76f30d9e9cff29924e90b452d2ae269e9f17245d26e910f54045692d90dc184b253d5e74696ec0b3929677eb8d9d9cfbbd245d28e9e91a8fb9a468fd0caab644ad92a455924e5604108b3eec8e336e63001a1efd9f5ff4fe34600e700c709ba4aeeaeb26e77e0ef019e03460ca081f1d24d2a21f041e01d600eb88fb762130978887ec0fec41e5a8561f7028f025604fe06a4903dd74ae5a6ddc56008999c0095d7c1ede085c026c2c7a476a952afc9f06ce20ffdcef00ee05fe05f83151f8b7000399cf4d016603871041c3b7032fa372f2d65ca2b2e903be296916309d185998917ce605e0d9e4bb3700bba1f78388bd7d74a3486ec4c3817fa33bc6fff3ac034e02febd1b6ed4e49c4f073e059c4b65412d01f700171385ff3940d58e4de5495c2f034e252a9603a8bcbf9f2126541d48541cfda97dd805ec242a81bb891196bb8155c404ad9eaf0cc60d9523cf7faaee8afee7f988ba20c8953ae72b246dce398e2d92fe5ed2cb1a3d1e952774bd52d27563bcb6bb24ad95f435496f9334a31bceb3d520b990b324fda0e8d2db042b25bda8d36fcce49c1f2ee9919c637856d25f0e15b2267c0f92deabc68713b3364afab6a4a3e56062f74b6e9057286af86ef7bca4633af9a65479b8ef8baa8cde6f514c731e73c14abe67b2a43729a2ffcdf6a4a4bf528c5ef4446ba05b835f0d4b5db4d711c1a16ef762e038e067eaecd180e5c0290cef970f0297029701838deebbca3180a5c48cce771381c63c3b80f5c06a22951822983834aa308391e7c82c003e0a1c057c1878b0c3cf7955e3ae0248ec4144ff7b6532d471c017881bbba3a40ae73b88b4deb49f019f03b63552885295f9be44c17f0f11e0cb6e6c07f000912afc4b22b0b796f2a8c20462aaf5414425f25a6266e8de39db9a0afc0151f1fe09707fb75702e34ad2747ba56a4f3ee9061ddb0d48cef74b253d98b3cf6f6fa429ad723f7fb6a43325ddaefc80df0e493f967486a4058a00612ddb9d21e977255da2588465242b252deec4f36e395217f8cf15d964bde413ea907ea9cad37767280aff87551990fb86a469f5ee6fb2ed6992dea288f46fcd39170392ee54ccf1d8a791f392f99e5b949f795892f475497b77c279b72a928bbaa7a41b8a2ead2d708ba417177523aa5cb9f64b7a8da40b1405f4b7aa2cfcdb259daa3a0aa6ca437caf503c999fcf390725455af7c7241d50cff6ab1cd3fe92beaafc56c66ec550ac47073a5d72315fa5de6afe0f7941d27145dc842a17fc372a9eeccf69f416d643925e52cbbeaa5c080f96f449498faaf2695c5234d52f917494aa34f51b3cbe7d245da5fc4a608da4d7aa435a60962375239dafde6bfe0ff9743b6fc2d4395d22e972452554cb249d6fabca54ddd4b6174a3a4fd23dcabf6e5b24fdab624661dd5d8a3a8f758e223128ef18bfa3c82d69cbb9b73aa9dcfcbfbee852da42bf509bfaa3c9f99c28e9f71585b39e65d42fd4081595ca057f96a4774bba55f9d384774aba51d2698a6060cb2bbee43b162b828e59eb1595905b019d28b930cb155967bd6abd6269f3769ccbe992de27e9a951f6678b2abb033b249dae910bff2449c72b5a095b72b63920e99792fe4cd25cd558e092cf4d95b447f2df468f1b49ef94b42967df2e4ef6bfa5e7dfeaa4e1cdff5ef77f952c98d9c273394991babb69847dd8aa68699da2880bac4efddb3649efcaee9fcad7e804459f3aaba1005f6a7f8f9674a522007c45f2f7ba0babcaf18e7fcad9c70754636cc3da48bd1dfdcffab9a2afdaaaf3d8a778828fd4927a48d2d94ae62728027217a5febd5a05f091ccf64a8a88ff158afc8d9a027ca97d3d58d2e75499f6bd56d217241d5aeb3633db7e872a27356d5692db601d24b960af96f44cd1a5b30dd62b9ad0ad388728a2dd0f8ff0dd2b155178327fd285ba5a057061669bb72b72fb6b5adf2fb59d798ae0e1831a39e85b4a8ee57c45a2503dad8a798a5c83ac0b6add4e27e89554d811a52ec4b1446a67af9b0dbc2173eccd3287c8813f28e7df6e02de0fdc091573e7c79227fba3e4cff6d1d26d53856e26f04ee01a621190258c7c9ff725c7f27f80ef106b09d43aedf759e0f69c9f1f40772c2f0f8c9fb9007b124b4df77c8597388e28accf356363a9c2702a519166fd82c88b7f089abe7046a9da0792fd9b48e4ef7f80581d6856ce767e05dc45e4faef47b9629a9cfcee5262cec297805f481a6d825289985f5062f87db51fb1e8c9ee669e8456192f15c0e1c42bb5c68b25c9f1feb889db7c09702695ebf7ad062e200a435b27c524057fe8297e263119286f75a7a7806f009703bf21ee87b380ff4e4cea19dae999c01f123345bf0c5c25e9d7645625eaebeb1bfaee67888946fda9efda9b9830d4157aba02483db98e21667b8d177b12eb05fe4452d525b546933a876f239e9069bb802f023f85f615fed43ecd2116153d0b7839952dbc8dc00f8825c66e050692c27b27701ff03d6269b2e3195e8817007f05fc3e703551113c9b738c6b88e5c2fae9523d5d01245e445ce0f1e658627efbd34dd8d64ce04d54de2f7702dfa48675fb9a2155f0671115d239c02ba97ce2ee007e4e34e57f046c8372e14d2a811dc0f5443ffec4645b4750eebf4f245614fe04d1a5b80cb84e527a01d6bc4041d52e4b27190f7de2c3923fe3cd41c40ddd0c07e46c6b90089cad6de3314d229671ff32d19c7f2df9cdedbb88027d2dc95a03d90a2af5b30dc055c0c9c085c42bc6d2857832d125b804f82a115f19aa24f625fafb694f912c22da0d7ab602483d2d8e27fa79e3cd1e4437a0e1a4a0d4ef1d49e5621e6b809f40cb9bfe433b711011d5bf86589063c628bf7318f071e0f78029a31d7faa2258936cff24e01f88fe7dda4c2240f80de06f8956c3722a23fecf10ab0b77855eef02bc88e8ff8f57af03e6114fa5464d00965119fcbb1f78ac0dc7b00058410c311e46e5436b3b51e0f6647830ef14a21bf42de032490f30ca9b83939f9724ad02fe02f83ed18a3881e195cdbce4e77f447413b215c06374c90800f4700b207138c536ff457e3fb15d1603af18e336a692ffe6a487899775b4dae9c472674730fc7e1d24d6eeff3362dcff9b54be2e7d2e11e4bb16f8105035d927a9087601371285fc2ce0668617ea3e22f097ed7e6c05fe23b59d8ed7931540ea02bf81680514e53162ecb928b392733096f9f1436fd0491ba03563fe796600d3527f2f1143791f27faed9703371005f52ce0162a0beb50b2cf77890543479d3d98ea166c222a965380ff4d5ccbd1827c4f915400dda2272b80c48b89805191fe95089415e9582a0b703d26114deab4ddc4abb4da6d1d118d3f9188ceaf4915d66dc0b7817701e713af134b97f0c9449ffd326268ef04605a8df181a781cf13f181cba96c69a4bf632f684916664bf47205b08cca71eb76da4c398db588c232e4405a9304d5ce36ee66a270bf1b380f58d5d7d757ca26e7a40aebdf1115c125546643ce2086f5be9e7c6e99aa4c064ab62de225a5e711318087733efa12e29d875df3aab99eab0052d961c71179f1457998188eba8f78d165516632b66e4089e86fa7f5d1be7be71ee08f89fef84f801da3753b5285f51ee0834466df0f33c7d0473ca9571015cb05c08135c607b61395c7ff242a84ace38916487f37b4027aae0248ec4df1d1ff9b8909231b4932e50a741c8d770376004f667e360d58046d69ea0e75a3b6e68de78f2415ccbb09f818f9ef4ce8235e2dfe112250782eb04fb5f840622531ef205b094c20d2924f6ed3f919935ead009612af8c2eca26220f7fe8eaafa4d86ec04b892e512337e40ef2871117d39e61e4c1467f315558b7337af06e22315af4ff88a7fb49244ff0bcf395a904fe22e7fccc22462716b5e1fc8c494f5500a98b7502c537ffef49fdfddeccdfdb6d26714e1a29b003c4987fb6001d4a63e7b88f64a65e814fc7e78811816c9af454e0f544a6e11544107952954ae04744caf140e6238713c3931ddd0ae8a90a20319768f2166925c36fae0dc4b8729177c2eba8b31b90bac9ff83e8caa42da1b154e3a9c4449b0b807d0b5a3c632d111f388d18e6db9cf9f73d89a9cfd71009481347a9044a44857167e69f2713c3877939141da3172b802381830bfcfe0dc42413327dd69534697e7e83f6075e050d3d91ee2786d5d26693bc5fb186eda53fd007bc8c78c9e6b5c0d91493aabd93880f9c9dfcf9319539fcf38929c6d572499e248616b319808712f3153a56cf5400a9e8ff1b893cf8a23c407ed4ff01e2a59445e92746031ae906ac235ee499f507d49669f90b225896ae08261233f9be40e4d7ff219174d4eed9745b8827fda944abe02e2af307468c3ca62af81f505949f6136f12eed86e40cf540089b94453b7483f230a4cd64692c933053a8698c156b3e4061731773e1becda9f889cf757e927df48f4872f229e96e90f4f275a125710b3ed8e6de70949b5d25e209284de073cdec0a6d600ff9ef3f3a3882e4547eab50ae048f2d7ab6b970d4453bf620599c44f89a1c1a2ec47e3dd805f02ff92f3f35380ffc108b30e53e3f2f703ff8b5885e7eb54c6146624ff56c8da0da96bb49ab88ef51a006e23861ed30ea083d7a2ec890aa0839afff7114dc8913c48b1a301d38929b27575035263ea1713f3e5d366027f4d3cc5ab8d9f0f1592f701ef2572f8ab4d9dedf819aba9cae3212a2748cda6ce56573bf5440590984ff1b9ff3703cf8ff2ef9b88e67091abc61c47b4041a712ff0392a6ff285c9cfdfca08117318d6dcde460cc39d06fc39d1ba1869bcff1d44aca1aeccbad4e8c281440a713b1e0c2f103302d3a6125dd38ed44b15c0328a8dfeaf6794053232fde122bb01fbd2403720150bf80a70259505f61062a2cc078059354eb2799618437f17f049e0092a874a0f4bbeef52e035aaf21aee54c15f40ac54fc3da2eb318dd65b4f7ec661c7eafa0a20b9d8138808f7ccb16d6d4ceea5b6a9a08fd4f8b956994eacef37a5de5f4c3dbd3f015c97f391f9c0a788605fd5d774a72a82df10e9ba2713cb73ad677845b007b12ec0b788e1c3c5d9fc81d4df6713230adf2532fb96d2be6ec474ba6c81d0aeaf00120be88ce87f2db5ff26227bacc86ec06b185bbff479e2699da79f183bbf965863efa05a26d9f4f5f59588649a738921b9eba81c975f48cccbff36312b6f4e6adbfd441ce26a624461390d547263b4171d1cf1cfd32b15c03222b9a4282f104925549ba996b899ca35e7da69115109343a3ebd17f1228d110f35f98ebf269ec4e702f36a9c6db78d48a47a0fd184bf83e109364379fb9f265a046710c9369701ff44c421d24b788998cfd08e0a773f2a5b003b29f65a8faaab2b8054f3fff58cbe4864abdd4b7d537e1fa1d8d18069c4396bf409b99898609426a29065937d96124df16b885c801935aec6b301f8472200f8512a57eb9d42e40c5c0cfc33d16a7811c39376b61215d079c4387d4ba48ee5e554de87eb19b9b554b8aeae00120b6873f2488e9ba82ff8b399483d2db21bf0bbd4395b2d75a32fa132aa7e37116cfb5be0d1ccb14d25ba68571085fa1860728df1812788a7fd49c0df53b90cf90ca24592be977713c38d2b887504be43eb83737b903f05fd57149b023eaaaead005237cf322a9f46edf43c75bc19273337a09d6bea678da51b308fcad570ef20827fe71385f5122a9bbe7b108943df240af5921a038525228dfa2f890a64a4214311adab0f132d876f104396ed58bde8089229d719775239d9a863747c9245151389e49f22a3ff8f104f9785926abdd144f40d1fa5b82491a1a9afd75099bd564ddee498a72917ccfb88bcfa6b88feff5ba85c5afb83c4db7dae04ae96b4162a2bd154e5b0985819e854e2ba673d43b20438c94b3b53eff06b9964fb53894540b2197f1ba8213654a46eaf00e653fc6caba5c444904614b96231440b601195d97da3994afeb4e2ff6a4d26056f3711ecbc8b781a9f433c2127a63ebf9858adf744a2f5709da4ec829bf3893c813f2666d7655bad5b89a0e13f10b9f8bb0a7847e1d1446596751fc54e00abaadb2b806544a6579166506c00722c161115e8af25d5fa94da457e22d3be44b76037949f7892b610c9433712e9bfef4d3e9b7e35f772a222bd9e480cba8508f29d44ccc73f8aca2ec76ee2859f5f22d6fcdb54d053763ed1359993f9f94ea20bb2aeee2db651475600a9dcfe198cdc7f9b48e5908fd5672a3176fe6fc0ce1a9bcb03e4f769f7230ac1a611ba42eb8900e12d4425f06686b78066108940af21322a67125d945999ed0c122d96af115d8c3544ab60a4ec4325db4ab71c2626dbdd9ed9d71db59eb854eec18788f9155937932c09dfa9cd7fe8d00a2021221124efec9588a9a845e7fef782e5c47bff1ea2b6a0f00011bc1c60f8fdb390784a6fabb29d95c41b798f25e2034753191f3823e7f7947cefd5c40a3cbf4e7e566d9f0789ecc0f4e74ac4bd95ddd7016a9029fc2b72f6611db1ce41c746ff8774640590aa312ba2bda95afe15c43aec3636fb124fdd51df9d372439ff8f10d1f5d9a97f9a472463ad4ea2f6a36d632bd1eaf83931d9e7fd44776ef208bfb291c80cbc8898383490dacfd208df31f4bff38925bcf74fff3351d84be97dadd6024afdfb5c6231d0f753d9021d24ba3ced7871ea9875eb30e024a279387dac1b322613e7b29ec932f753b968c66c628ec1c46a052993ecf355a2af7f2195afdeda49f91d7d2b8896c3c068852a3327e04c2249e8430ccfd0ab27ff6212e58a691291cff06562d5dfbceee77544e253db8291e34a72815f2ae92159b3fc46d262d51003509cffc9922ecfd9ce2a4907d6b29d9c6d4e907488a4bf93f488a4ff2fe94f24cd550d0b870e7d4652bfa4b74afaa1a42d39fb589274b1a48ad78627bf3f47d23da9cf6f4ff6e395922e92b47694f378a3a425b5ecaf35207591df25695bd1a5a687ec92b442f515b4774ada9ad9cea0a44fa9ca94dd2adb9e226981a4bd25f5d5b21d952ba5df91f435492fe41c634951d15d28697ede7693ed1c987c2e6d83a4e7926de4199474bda497d7720ead41a90b7d45d125a6077d4bd274d55ee0e64bba3d673b4f497aa3da501034bce5f079494f28bf903e27e94b92467d0f60b2bd574b5a57c779dbac68512c6cc731375b470601abd81747ff5be1286228afd6d7993f450c73a5937b2082811f2786e71e50edf905354b15b27d89f8c0e9c45a90d92fda44f4c9af249284768eb42f1a9e71388bea068925de3e4f64206e759fbf85546e7abe5b6efeb7c280a47354e3532cf9dc22493f1f617b4def0fab7c0fbc58d2d98a38c140ce77ef92f45349274b9a51c7f14c92746995f3b45bd2c3923e2aa9ea5a07d6242af70faf2abaa4f4b0efa8be6e0092deae6862e75929e92835a19024db982ee924457f3bef213020e96e45455675fd819ced1fa0fce0f276498f4bba56d2fb251dac2a9398acc95217e8e1020bc8a0e2e9d2ab564b5aaafa0acd14499f1ce5bc3c20e93d9266a9818a40e527f36b255dad08c865951405f4634a4621eaf91e952bb31539c7719ba4d31401befe468ec1c62875814e97b4a3c002b256d267939bad17ed563ce1ea7d72ee2de9cbca6f8e4b311cf75d4570708f6adb57f97a4f55b420bea8fce1b79222607749f2b9869eca2a77676ecd6c7f97a2abd1b385be9b82805388a9bf530bdc87bb8905316f20823f45be82bc152611e7f8ab542e6f9d2b99f9b78e5807a08f08c865a7ebce20927d8e2326f0dc00dc2e69359151987d53d04222d3f35822f1263d7968c856626dc54b89f9053b1a09c225057b227016c96bbc525653c75a0fdda89b2a80458cbe0e5dab0d12abf86c2466ad9d4bac50d36b95c032226df6be5a7f21a9049e2566c56d27d6f3cbae8dd7474cfe790b31016923b196e2e3445a6e5ff2673e3137614ff2972cdb4954229712d3b0370ded43bd524ff537119986e9f2206239b17aa64a5bb3a59a8367aad8e6ff1a4947a4f60749c748baa3c07d6a850149e7aaf1fefa2c45e6dca32dd8b72d923e2c699f46f66f84fbeaf5ca0ffc3d2ae9b0b17c4737e896b900538929974536ffef2256f0493f6d7e464c6dbda9c893d3640dafb2949c97cd44cbe834caef006c5629ba819852fc6ce6d5eb754915eadf2366ed655f283340ac5fd8d18b793443b754002f2159bfae2003447ff3bf5e8995baf9ee25de86d34b95c0321a7cc96aea65a0b713b3f0ce20d6f17b8ce1cb7b376209d17d98dae89339f9bde9c40a439791df85bb9198f0a35eedfb0fe9e8a34b5de4b389259f2637beb5317982587c64d5286bd62d21de8af336ba2bb692a744bcb3ef0bd078002c756e26132b37bd8e782dd921444c6726c3efc1a1c5465613536e0fa6f21e5d4f64defd23b1b4faee5af62f55f09713b3044f24ff7d81ab8856dd1d6339f66ed1d147975cb469c4eba24e297057fe9968d26ecbbb215237fa5ce033e447c2bbcd0f8973beb91985205319cc220282fb1195a5887b7113b1e8c74662fdbf4b93ff566c0e7812f87eb29f771301c5ec8a3e7d44a1df87a878de4e746fe6907fef3f48ac5df853e8fdc23f74823a5672d32c269adffb8f6d6b0d1b04fe94587b8e6a73d1899bed33448551548ba5199e220acc2fdb5d105295c5d1c4dcfa578df4516238f009e27d8b4f1115c876e2e93e9f68691c96fcff68eb47dc475ce795303e0a7f47d3e8d959edf4b8a4ff566b9f53e5c498cfab72ba6c371994749e0a4a8251f9fa2f552411d53a02544af6bd54e3e70714f3165e5dd4b116a9d38380d389265b914fd2db81dfd6fae1e4c9b18e7839c5df5063424d071a7ae3722d33e39a2ef5045e458cd17f8cfcd78757fc6ab2efd51ee122de6530d465bb35f3bd56a4a4365e22e9b7053e0577497a5f234f069557a7b950f92bd37483a7158b6c74c2bd304191ee7b91469ef75f8bc1e4b8ae52e47154ac0c349e7464b45ac3c769eb7a7f5d933d49a499d6fd6448b2e3b6019f255e1f76011124ec267388c8fded6ac1bcfe5a25df5b927427d1d7ff0a312a733c31a2309b08bae6eda08838ce0662e5e39b883502ee6594f501c68b8e3c7a95a3ff5f21de0a53946b8821a386f2cc53c732816866fe0ddd5709347534a019547e6fc46c62f8f508e000227d78115119ec24ba0ceb8974e3554405b09e7130be5fab8e6c01246611230045d94d2484d4fcb2883c494ba044bcc842c464a2fd0a3cae7abd9c18d9e898175c268557c07a49b792f4df8982df4f540e2562ddff52ea772ca3932b80a1f7cd17650d91ea3be69b2755097c9d78027d967872758301467e1b6fe132d766900eaaa8ba41278f026c24123c8a721b956bdf376ca81f4bf43fcf21924ebac11d44b4dc7a50275700bb8927e6da02befb69e21554636afe67a59e562b89f903f7d0bc89325d731eccaa4a0dfd9c2ee957c9f04dab0d26df75ba1a5cdbbe8e634331ddf4fbeabc454edb721eac781d1d195139da7b28700cb0578bbf7203314c741f2d8e14a70ad5dec4abb916d319d7a38f8853b4e53c98999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999995913fd272d499e1172c7018b0000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda793000033694944415478daeddd7b9c5d557df7f1cfcc24042db61a12d206f06e0868128297a78a8006eaad55292004d056ad9716f056ab6d1510add8dafaf4b1228ab5deaa948b8a977a2b4a28a03e5a95dcbc44f4b12a100542aa565a429899fef13be799382699bdf7d97baf7dcefabc5fafbc5e68cecc596772e6ecef5eebb77e0b24495276c600a6a7a7538f439224b568cc8bbf2449f9194f3d004992d43e038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294a179a907a0a1b40a18030e060e03ee977a400dfb36f0dd3dfcdd1dc04f80696063ea814a5251060015351f78257032b032f5603a6a23f075e039c0ced48391a4bd199b9e9e4e3d0675df0ae073c001a90732246e05d60257a71e8824ed8935009acb2a601d5efccb3880f8999d977a2092b427ce00686f1e087c1958947a2043ea76600db029f5402469366700b427e3c05bf0e23f88fd814bb1d64652071900b42747014f4e3d88117028f0dcd48390a4d90c00da9393f0fd519753520f409266f3035ebbb3007842ea418c904702f74f3d0849da950140bbf3386059ea418c907b018f493d0849da950140bbf3d4d40318414f27ba274a5227b80d50b3cd036e0296a41ec8889904ee09dc957a2092046e4fd22f7b0236fd69c204f062e04da907a2c61c002cdde57f2f064e20ce8900f83cf0cd5dfefe16e047a907ad7c3903a0d92e00ce4a3d8811f515e051a907a15a4c103d324e048e240ec5faf5de9fa2b611b36db7031f02b6031f26668ba4c61900b4ab0389ae750b530f64446d270e52ba39f54054c902e0a1c4614fcf2002c0448ddf7f9a3844eabdc0e5c07ae23d2335c200a05dad06ae4f3d88117726f0b6d48350294b880bfe99c0f2169ff766e01ae08dc066669612a45ab80b407d63c01fa71e44068ec1dd00c36229f07ae0466269accd8b3fc48cdc69c44cc025c45283541b6700d4370ff83931cda9e64c11332d1e10d45d4b80738053e9d672d80ee05f8157e28c806ae00c80fa8e04e6a71e4406c6b1295057cd272efa3712d3fd5dbaf84384f327123302ef240e9b922a3300a8ef1c7c3fb4e519a907a05fb2829866bf98ee07e171e00f8859a413f1f75615f9c611c49dc5c1a907919135c40547dd7006f069e2623a4cf5194b89dd021f04f6493d180d1f0380203ef8ecfddf2e03407a8b810b7b7f0e4c3d988ac68966431b8155a907a3e16211a0002e025e987a1099d94414034ea51e48a616019fa3d98be6467eb950ef509a2bb4dd46cc2e6d6ef03569841800341fd84a7c20aa3d7703f706ee483d900c2d023e033cbca6ef37095c09fc00f817e0fbc4857fe36e1ebb8c381302e0c9c00380df2776e1d43123bb0df85da2edb0b4570600bd90980150fbce06ce4f3d88cc2c043e013cba86ef75357019f031a2af7fd50fd379c011c4391c7fc42f9e2750c536e0742294487b6400d0bb89d6a66adf265cb76dd342e2a258f5cebfdfaaf76f88e2bb267a392c249686ce018ea2faacc06dc06f31330b31becbf79a073c1678c81e5ee3478816c4fd8bc3dd0dbc4e758001206ff6fe4febbf8862c0efa51e4806f605be44f5c0753b315b7301ed5c10c78900702eb1ae5fc536e0d9c02380c7f38b9d0427d8f38e8749662efe53c07b80af13cb0adf221a1269041800f2f644622d54e9bc9eb8db53b3fe0af8d30a5f3749f4e2bf90a89549610df01ae0e844cfbfab1b806b8933433e8f058743cd0090af31a2f1c929a90792b97f23d6a3dd0dd09c33880b78599b8097126bfda94d1001e65cbad3aefb36a206e242604beac1a83c0340bef621a6a0eb3cce54e5793640b3ee4784ac034a7eddeb80b71053ff5d727c6f6c5dea23b103d84014146fc6303b346c0494af67e3c5bf0bc681a7a61ec4889a0f7c8af217ff371353ee5dbbf8037c94eef5ec5800fc2f6259e03ada3f3551151900f27572ea01e8fff36c80663c1738acc4e3fb8d745e967ae07bb12ff04fa907b107fd83ae36001f00ee957a40da3b03409e0e24a69dd50dab8095a907316216032f2ef1f829e038bab1debf371701f74f3d88392c20fa107c97d87da08e3200e4e918dcfad735ce02d4678c286e2d73f7ff5aba5b8731063c88b8f35f9b7a30251c00ac238a0417a71e8c7e994580f919032ec52580aef16c80faac02be46b11a9769e00d4457c62eda1ff86de0bd0cd74985b36d24c28bbb053ac400901fabffbbc9dd00f5f94be0cf0a3ef62b44015bd73e08278862bf33293793b127d3444f832f033f047e32ebeff705f6030e011e4a339f0f77012f00fe91eefdbcb3342ff500d4ba67e3c5bf8bc6815331000c6a9ce2d3e4df019e42f72e467535feb919b815781751e07805335dfe76f79ac77a7f9613cb84bf0a9c043c907a960cf7e98de53f7b635162ce00e4e72aaab71655b33c1b60706b89b5f222d3e52f00de997ac0bbf80de062062b9cdb49b4eebd1c584ff4f41fd481443be153895a95416bc776007f482c6b282103405e96116b71fba61e88f66815ce020ce26bc4c97a73f9bf44affdc9d403264eff7b3ef06aa27741155b80b7139df96e69689c63c0c1c0b388ee8a839c5a38093c93082ad6bd24e22e80bc3c022ffe5de76e80ea9611ebd773b99db8e0a6bef8cf272e821b81f3a876f1df4c6cb93b9ce85cd8d4c51f62d9e087c4a1482b7a63ae7af19e00de0f9cd0e078350703403ec680d3520f42737a1afe5e56f5248af5c9ff2cf08dc4633d1ef82a5110b7a8c2d76f27b6d71d4b2c79b47d42df76a225f16aa23b6115f388a395dd2298884b00f9b0fa7f384c1317878fa71ec89098476c957b16f04ae6be984c12d3d83f4a30d631e2cef9af8922bb2ab37193c4c9866f23dde984b3ed4b140bbe976a9f2f9b89baa46da95f486ebcd3c8c72bf0e23f0cc6b02be05c56125be4de4d4ce7df4cf13bc96d44657cdb161227f9ad278ee1ae72f15f475c28cfa63b177f803b89d6bf6ba856bfb202b820f58bc8913300f9d88015e6c3e206e243f1aed403e988fe9df3b1448dc4a307f85ea7d36e2ffd09a227c1204573b712bb1bbadea6186239e37354fbac3911b707b6ca009087a5c4349bed7f8787bb01c272624ffcc9d4b3fd6c2511b0da703cf05262babf8aadc454ff5f13dbfb86c52262b6a2ec91c5db88f77d976637469a4b0079381d2ffec326e756cdfd65908b8999abb5d4f359f54ddab9f83f83a8ecff08d52efe534485fd0aa2e27e982efe3073aae2c6925fb7889829514b0c00a36f8cd8fea7e1f20af2ecd4b98898a25f4fec5a2952d55fd4471b1efb4aa20df12554abe3b8b3f7da571315f67534f149651b71bae286925ff7670cde015105190046df0aa24257c3651ef5f4801f1663c4a1375fa6be3bfed99ada23bf94d892b791b880952db69d26967b4e2566eb36d1bdf6c4556c23ea36be5fe26b2688251fb5c00030fa1e83ffcec3681cf8d3d48368c93ec0fb88ad8f0f6ce839ee265ae4d63deef3890b5cd5a9eb1f10331d83eca7efb2edc01f53ae4fc11a6c57de0a2f0ca3cfce72c3ab4857bb61b712f822b18fbfc9cfa369ea6b393b46dca96f045e45b50e7edf61a683dfa5358ead8b3e422c6994714aea41e7c05d00a36d15e5d7e0d42dc71215d5a36845efb555e98457d6fb88933007b59c38d1eed1143b7068b6edc095c08b81db5a78dd5d310ff83c71f472113b89864d4db636ce9e3300a32d873bc85137aa33386b19fce23f4d4ced17b97bfeaf01c7bb82995d098fa1fcc57f12781333a7eae574f187f877facb128f9f8fb54b8d33008cae9cd69047d928d6709c4b54ca0f72f1ff2eb176be2fd115b0492b89b052755742bf83df2b807f6f78ac7d0f01de4af411785befbfefdfd273efc9c788e580a2d6261eefc873096074ed03dc419e5bc946c934f1417879ea81d4642d71f1affab3d80cbc91b898dcd1fbff0f24eeccf71628de4eb542bd71e2025e653f7f8a0e7ef38916c92700f79cf5773f05fe19782ee97a0b1c4034fa29b253a2edc64dd919b53b0bcdc8751ff9a819238eb91d0583f47cbf9db8d35f4dec95bf6397bfbb99281a6ba2906e1c38b2e4d76c2566390ea2bd8bfffec099c08dc411c3f7dccd637eadf77737f61e9ba239d836a216a0880594ffd9ab0403c0e81ad5b5e31cfd11c3dfc9719082bf4f008f04dec99e2ff2d792be927e0ab888b86bfd0bdab9cb1e276627d611d3fc4b0a7ccd92de633713fdf7dbbc0e4cf57e36453daac5b165c700309a961215b41a0dc3feefb980d80656f6e2bf037835d153bfadb5f32a2689259ad5c432c3ed2d3d6fbf36611dd53a0f2eed8dbb5fa3d096f5c4ac4d116b7126b3310680d1340a778cfa45c33aa33346dcb91f5ff2eb2689a2bb37f4febbaba688fdfca7d15e07bffe1d7cbf366190cff1fe0cc2554437c322330883da0e5c53f0b1fbb5309e6c190046cf186eff1b45c35ad3710271812c63077118d2301c0d3b057c987642ca027e710d7fff9abfff19bdeffd2aa288b8499f29f8b809a217861a6000183d2b80a7a71e846a378c67032c04de42b9cf99fe9dff305cfcdb740af005e0fd54eb3c58d47ca2bdf1469add86f761a237c05cc668ae3d74f60c00a367d0294175d3b0f57518035e44ac3317354c77fe6d594e6c9bbc14787882e7bda4f7df75bb8be2e703343d1b912d2f14a36758d78a35b74701f7483d888256105be18a9a260e8df1e21fe61377fb1ba876273e45acb31f474ca1df5a711c6b7b63783fd174a92e7713b30045d811b0210680d1b212382af520d49807133de887c15994fb7cf908f08ed483ee807b014f016e22d6fbab741e5ccfcc897a5711c582070167133d0acaead71efc9028e62c7bdcf19edc51f071160236c400305a4e483d0035eee4d40328e010e0f74a3c7e0bd11fbfcbd5fe4d1b038e261a077d92e89857d62d44f05a43dcfdefda176127b1b6bf02388f6a3d131613416d5d6fac550e435287180046c738f0bba907a1c63d9d6effde8e113b168adeb94e11d3cc77a51e7842c710070dada3da3aff0ee00344af880b819fece5b1db899e0cfd8e8a775678bea37b63bd9838aba2aaa21d01d5902e7f90a89c07e3f6bf1c2ca1db6ba2f32877eceeeb88fdf3395a406cb95b47cc80949d5a9f268a030f079e45f1ce83d3c4cffcf4def356e95f30d1fbda754433a12ad7926f0efa03d4600c00a3e364ea5b9b53778dd1ed6d9ea750fc7df833e03db4d33ca74b16007fd27bfdafa7dae7f016e268e1d37aff5dd54789d98067117dfaabbc969380ff2602c56f34f54353fd0c00a3c3eaff7c1c43773b3d9669faf326a2b02c1763cc54d5ff0db1bdadec3afa3781e71177fdd7534f789a22a6f35711750265cf3018ebbd960f10bd0a4e29f8ba1e5cc3d8350003c0685849b55ee01a4e0712776d5d736f8a2f434d027f977ac02d5a0e7c995877afbaaffe32e071c0bb28be87be8cadc44e818710470a57f1006259e24aa226696fdd2b8b9e3f90eb1251e30c00a3c1bbfffc747137c06f51fcd0a20f01ff997ac02dd8753fff2319ac72fe3ada3968e807c01f1017e8af536dc7c071c4bff1c50cdeb9f04b2dbce62c190086df38f0b4d48350eb9e4df76a3e1e5fe2b1ffc868affdef4ff4ebbf91eafbf9677b0bd143bf89ce7cbb7335b12c7032d5fa078cf7bef656a2e661f6d905a3fcef3f140c00c3ef51c0c3520f42ad9b4f9ce5de15e3143fabe07b143f0d6ed88c11351aeb8813fbea3c5d6f9c9865d940dc59af68e1f5f40f3b5a41f418b8adc2f7b83751f3f06fc09b893a8317516ce6729a78bfa8010680e1771cfe3be6a86bbb01ee051c59f0b19fa77817b861b214781bd17dafc99a9c0544f5ff55c42c431b05a1db891e03c712750c556a101e08bc84d8faf816a2b1d05c267baf530df0c231fc5cffcf579776039c48f1e38a47694d779c287c3c0fd80cfc21d5f6f31739196fb6c5c42cc366e2e7dfc6e7f96662a7c7e1c489814d4fe357a93f50410680e166f57fde0e049e987a103d45d7b8a7811fa71e6c8dc689ed78e7522d8cf53bf3dd93d84657e5ce7a29d18c671dc52beb07b5053882c1fb10cce53d540b472ac00030dcba5809ae761d937a00254d021f4f3d889a8d53beba7f766ffe9d44339e8713dbe8cade598f13ef85ab88a9fa3a6b0ff6648a6a9d08cbb8be85d7912d03c0f09a4714d2e4ec46e2d4b49c3d877a8f69adeab1051fd7c636b6aebb1ab81fbb3f9def1b448bdd63807faff8fdcf207e37ce271af4346df659043faff1fbfe6b0be3cf960160781d86c7646e06de9e7a108975653740d11d001f26cf53ffa6801b9839a6f747733cfe3a06bbb39e4f14db6d24ba0fb6f159bfb7d308abf856ef67a686180086d7ef93f7bfdf34b197fcf3e45d2834469c1f9f5ad129f01c8f90dd4a2cd71d46dcfd17f53366eeac2fa2daecc972a26a7f3d707c4baff72b4408f86de0db037c9f09f27cbfb426e70bc8b03b2ef50012bb9be834f679a25b59ce4e0496257cfe31bad794a80b7e4aec7f5fc960331fb7007f445c54afadf0f563bd315c42f40f5849f317d629a269d1a389d6c555760b2ca7db275f0e3d03c0705a83d5ff9f203e64a618bda2b2b21650bc05af9ab793288e3b0a7825f5d53d6c227ef75f4eb5e638fb1255fbeba9be6ba1acff009e4f9c5c58f6b4c1f9446879590be3cc92016038b9f73f8a8dfa77151f4c3d980e7829e9a64ba7c97b19a66f0af82cb1767f2a51a352b749e06f897305cea3daacc238337d0b5e4df1fe0d554d13d5fcab802b4a7eed04117816353cc62c190086cf38f098d48348ec66e22ea66f139e18f644d2fe3ee71e00be4d9cd4f724e2c8dea6f5fb072c21a6f5ab1cacb414783df035dad94edaaf85281b020e043e47749b548d0c00c3e724dae901de65d7101f80bbca7d16601ece0ca53045b4e35d4554eeb71984a689e5856732d88cc34a62bbddc78920d0e44cd224b10c513604ac025edbf0d8b26300183ecbc8fb97601af8d86efeff8f93f75de818b1de9ccae70b3eee4846eb73670af87baa75f0abd327899d4183782ad14df07dc4ec405376506d26e065c0f31a1c577646e91731070b896ae09ced242aaa67fb3aee063880746703149df63e0c3f779a52475ffe71a2f7c066e29c812207f654517526e0e5345fb3900d7f1187cbc1349bcc87c17bd97de193bb0162adf4b4d48398c31870ffd483d09c16124b1b5711efa9a2673d94d19f0928f37b7b08713e806a6000182eaef1c6a1277b927b1d00c0ea44cffb458a2dc14c004f48344695b7822832dc40acc3d7bdfc3849b4342fb345f0a918226b6100181ef38057a41e4462b3abff67db047c39f520137b16ed1c0433db37283e057d7882f16930cb89ad7cffd4fbef3afd9078df167dfffc1ad1e6580332000c8f47e0dad7eeaaff67cb7d16603e69baa74db2fbda8cdd795482f18de3e7ddb789bbf8b380db2a7cfd3871aec006e0fdc47bad2e9f012e2bf1f867e26ea881e5fe0b314c5e44deff5e53c03b0a3ceeb3e4bd1b00d29c0d304d9c4057c42ada3fc6f8f9c45ef2613b3eb94eff4dcc925d081c4bdccd57d9bdb080b800dfc8e03b0f76f562e63e24a9ef1e781aeac072bea00c93fb0047a71e44627713ebcc73d90c7c3af560133b963467037ca8c463dbae6719071e4fec775f47ec98c8d966e0746239e6d28adf63095194bbb6a631dd56722c4f21ddae97916000180e470007a51e44627f4b8480b94cb3f73a811c2c007e33c1f36ea0f8f1ad4791ee00a1c7033701e793a65ea24bb6104d844eedfd771575f69f389fe2ed8d8761d74ba719008683d5ff7baffe9fededcc5d2b30ea9e4bfbbfdf77025f2df8d815c416b054e61385649b89bef8b97f165e4acc069c4e2c1394e92950e7ce80edc05f9478fc49f86f57993fb8ee9ba0de75b661b415f841c9c7175d8f1e558fa5b9262e7bf33e8a5d3cc68813e9eada5f3e057ca1c2d72dee8d633d11b49bd8ef3e2c76107501ab8973065284e869e204c0a2b509a3d659b255fee0baef44f2fe50826a77f4b9ef069820cdccd15544b7c622ea3cef7d0a780951e857b608748ce8877f39b18cb196bc3f1ba788599115949b92afcb0d140f73e34477495590f39b7c583c1d7bff175d57ded5df50ac6660943d27c1734e1247cc16f57fa8af206f23d164e8646216a88ae5c45df0f5c0838802dc5c7fffb60267133fcf3b5b7eee8f157cdc38f0b496c736320c00ddb690bcb72d41acd196a92eefbb9b768e65edb287926637c025c42975452c26a69beb324df4235841ec77bf85f23df2c788ad8a1b88a58154c58a5d7105d50b04abba8ce2330f29fa5e8c040340b7ad262a5d7356b4c5ec6c53c01b530f3eb105a469bb7b33705189c7bf90d8a75fa7edc47ef7838869ec2afbddf7c3dfbf546e2366748ab8072e93566200e8b6d3530fa0030659cbbf9ee2ebd1a32a5595f45b809f9478fcf9c45d77ddee06ce212adcdf8bcb42c3628ae26dbd970187a61ef030320074d704d16d2b679b88a62d556d01ae4bfd22124bb51be056e234b9a21613057c4d9d76b985a8895843fbd3d9aae64b251e5bc751c8d9310074d789d8fbff9a1abe87bb01d2f591f810f0ad128f5f045c40b36beed731b3df7d73a29f8b8a29f3ef631d40050680eecabdfa7f0af8871abecf757836c00b4953c87617d161aeccc1332710dbf19a5cd3edef773f96a8131864bffb38d1092ff51af418690a3e9b54e6ae7effd4831d4606806eb2fa1f7e4e3d55fcdfa4da2e82517218f51fe15ad446624f791927109de99a3eeded3662a7c020fbddc77b5ffb056279a16d63c467c525943b4d6f18dc861d3d1b6500e8a613b0faf802ea29d89a063e95fac524d63f082795b7117d19ca389ea8ff68e3c8d7fe7ef73554af39793851c3703970700b63067840eff9d601a7b4f49c6dba19f861ea418c320340373d22f5003aa04cefffb97c0eef247e8fb4bfefafa5f8b6aebe45c0d5949f41a8ea5a6259600d51c458d618516fb101783771de401316017f4754c9db0b5f95f9c6e99e5f250e72c9d9a6de9fbadc4cb962b4517404697603f4dd011c47f9c2bbfd81d71053dc8b5a1aebd544ff80b3a9d6517021b1e3e026e0c9358e6b1f62b9612bf062d2fe7b6a041800bae7449abb7318164d54eed739a3308c2688fdf0296d23424095b5f6b5c40cc2ab69e7f7632733bd092ea55a21e901c4f2d33ae077a85ed43b4e4cf17f9138c13097cf07f7f737cc00d03dc7a51e406253c4947ddd2ea2fd434dbae6c8d403205a0457ddb3bd14783d7167dd564dc336e2ccf9d5c4ce812a3df11f4ff4b6bf88f207d71c4fb423be84a833c8891dfe1a6600e89665c40c40cebe0efc5b03df7727d1233e67870287241ec3490cbe25f100e2aefa2aa202bee9cfb1696249ea74627bee26ca879871e005c45dfc07e7f819f44f27bc98b8f0af24cf2dc1fba51ec0a8330074cbc198783f4e33fbf6a7297ec2d8a85a003c3bf118cea2be8b59bf6aff729aeb2038db95c46cc01f53ad50f0d78890ff03626661f66e9ffe6984eb7b7fbf6f4bafab8b8e2ef1d8a2874f69170680ee1827fd1a6d1734d9b9ef1adc0df068d2fededfabe6ef374e5c5037036fa59dc2b829e0cd447dc01b28bf5d758cb8f05f4cec18584bacebbf8aa873588b9fcd506e3b65eebd3e2af14dd61d6374638d36a5baabff67bb19f85aea1799d851bd3f29aca499037f202aefcf04fe153897a8986fda8f89a2c443a9deb5721171c7ff5f44d1619571f73b1b9ec7e81c7e354eb9cfc31c9748066600e88e67e0b9e36df4edcfbd0e601c7858a2e77e7a0bcf7118333d078ea29d0bc37789f0712c51c35276096b8c6ae77e4cf75ee7e1447dc2eb189d838ef6a378c1e40db8cdb712034077bc92bc53ec24ed6cd57b0fee06388b34b526bf5ef071371153e31b28df3ca86f39b1e47305edb441be8ba84758059c4cb5fe01656c216a048e60e6a23fcde8bcb79f45f1507423310ba2920c00ddb090a86cced937883ba9a6b91b202e886defaf1ea7f8d2c3f944a1dd6ae2eef62ce250a7b295f763c436ba0dc00788dfb3a64d11efaf15bd71df52f3f7df49d41d0cd29f60189c5ce2b1aeff576400e886dd5503e7e623b4f361e66e80d076bdc93870df828ffdef59fffb42e071c093a87667bd809822ff163155dfc6c971db7be33e987a8eb5863853e160a2eee0ae165e432a0f021e59f0b153c4d64a556000e886546bb25d72458bcff5493c64e41cdaaf39f995028f9922eed877f7ff5f496cfd7b05f0b30acf7f00b153601dedf40fe81be479a68800712c115eea9e51e8a267124d808af819f59c1a9a2503407a4bb0f7ff75345bfd3fdb4f81efa47ed1892da2bddefa654c11cb417bf26de04dc4efcd07a8b6f6bb920801eb68ee08df85c06ff5c65b75d7c556622a7c90530a87cd126286a3a80ba9e7d4d02c1900d2b3f77fdcfdcf6bf9cfdba9de927614b47d36c011d4fb79732751287638f0d90a5f3f4ecc025c455c4496d438b6c7015f21662c1e50e1eb6f23ea075610f504a3bacebf3be750eef3b08d9d4323cb00905eee7bff01fe37b1eedbe69fcbc87bd705b4fbde7b38cd7cde6c019e089c4af4edafe20ca292bcea3efcbe55c03b8940f2c00a5fbf03782f31dd7f21f935ad5a4afc3b167523d15151151900d2b2f77f18a7fd1980dc7b2e40ec0468638b5c596583d9345111bf8aeacd7006e9c4b784a82db81a781ee5f7f4efba9fff39943f3279148c11370265766afc3df093d4031f660680b4ecfdaf94161053cd6d287a0ae00451ed5fc556a209d0fd888b7115fd5efcd73377385a0cbc84b8133d13b84f85e7dbdd7efe1c9d40b9ad7fb7e16e9e811900d2b1f7bfba6035ed7c0e7c98624d6ac6187c3dfe4744e1dc1aaa1dd83346cc266c20faf5afd8cd63d61277ed6fa65a0dcf4e666a1846793f7f118b80b750ee7df8b7e43953522b03403af7c0f57fa5f79bb47336409969fd2a6d7177e76ae020e06caaf70f388d28143c93b8583f9a38a2f712e0372a7ccfdb99e90f507517c32819073e47b9d31cb712b5161a505dbf68397ad0805f7f22fefc95de38f064a2fd6e932688bbde22eff96751adb27f4f2e053e03fc29f17b57f6c66731b1c63f8829e0abccf4ebdf8f66cebb5f30c7df95f9dcfa7f0d8c6fb6d710db328b9a025e8cc7ffd6c20b507583fe72ac4dfd02a49ee3890fe226ef462788d3f38a6c8bbb27cd5c7c4e21a6f35fdb7bcd6d59475cf8afa3f9a9fe1d73fc5d1b17f5a2ceedfd29e38b44d750d5c02580340ea6dafe60a90987000f6df83926817f29f8d8c534d3b77f9a6838752ad11a7813cdf682b885995302afa19d75fe61d9dafadade9f326e277e9e39d74bd4ca0090c6d3817ba71e84b48bdf4f3d805d1c48b38715dd4954faaf26d6f8eb5efeb88be8667730d1bfbf2d2f278a17bbaeca9dff34b10cd366c7d091670068df387052ea4148b39c42f3bd118ace00403bbf2353447dc02389fe017731d88c40fffbad224eecabd28fa08a254461e19b5a7abeaa1611cb2165effc212efcaf4bfd02468d01a07d8b81c7a61e8434cb62e0310d3fc72729bed7fd58e05e2dbdf61f1317a57b51bdb5ec16622fff69255ee3a09602af27fa109cd1d27356753c71f17f7c85afdd041c8753ffb53300b4ef19d8854edd334eb9462c55ece4978ffadd9315c4ef4a9bee2266428e25b6a615b9e07c8738bdee70a22f401be74b8c33d387e0d5a43f4b646f7507f381f713db265714fb76bf60127811d5db3c6b2f0c00ed7b4eea01487bf0049aef4c59e60efbd8443f8775bd9fc5d380efede131db8969f7c712cd82dad8cfbf2f31c3b09ea861287b9ae3171a1ad72a624d7fd720b09028d8bb910848fb56f8be3b88507a6d43e3ceded8f474ce07a2b56e19319d65fb5f75d5c38936b84d5902dc4cb159b01dc49d75ca16b90b895d03e700fb1377f8ff40f4ad6f6b4bdd18836f5fbc0bb82fb133a18af5c4bfc59e4c127d0da68057104b12659afbeceefb9d4c9c14aa861800da75167041ea41487bf15662cab529e3c41df631051fbf91585b4fbdfe3bc1cc1d6e9be7cf2f277a349c4cf519dbab81e7533db02c206e5c96cdf1b8fecf65d0fe323b88990e2ffe0d7309a03d56ff6b183c83661b844d011f2af1f895943b22b62993c405aead8bff7e543f9db06f3db18cb286c1662b0e65ee8b3fcc9cb439889d78f16f8d3300ed2933f529a5320dfc0ef0a9069f632171477960c1c76f23d699abf4f31f36f724ea845e4ef566615b89fe036fa49ec0723811269ab699a8f6af7280932a7006a03d67e0c55fdd37469c0dd0a4ed940b188b88a5b351fefd1927d6f73710cb30552efefdf5f715c0f9d4375b71580bafff52aa9fdea88a0c00ed796aea014805b5b11be0ad945bd73f8138cc6714ad21ea223e0c3ca4c2d7ff9cd815b08c284edc5ef3f89aec5bb28d58e23915b7fab5ce00d08e436827454b755846f367036c062e2ff935e7124160541c405cf8af228a22ab7c1e5f4a4cd19f4eacf3d7bda63b4e339f5d5344e059d57b0d4ac000d08ee371eb9f86cbcb68f6609969625bdb5d25be6601111a863d042c21a6e86fa25a673c88d0f054e2ceb9c9ed884d742e5d47cc7a9c4c1e751d9d6500685effbc756998b4d1b1720be5fbc24f10d3ddc31802c6893307361315fe553af8ed049e4d146a7ea28531d7f53e98626657429ba7236a2fdc05d0bc6388c46bd8d2309922eed2ae69f8792688df8fa34b7edd30358a59009c48d430aca0daccca6d443bddbfa0ddb5f2af117d18aafa0eb1e3e302e03abce8778a17a5e63d0c7fce1a3ee3b473c04cbfd7fbed25bfae3f13f02ababb3b608c58e3de40b40b5e49f98bff247011111c5e42bb17ffe594af0599067e06bc87a84b5849f43ff18ebf839c0168d63ce297bfe9822aa90937101fe06df4b93f8fe87857c51544a7bbbaabdf077130f0d70cd6c16f1d7104eeb5b473c8d06c6f25faf9cfe54ea261d1c5c0f7814fd36eb74455640068d60ae217a3c9622aa949a71377da6db884e87a57c54dc41df247497ba7391f7837f014a2e15115b7f67e0e57277e1ddf030e9ae37153449dc0302cc56816a7a69b75345efcff0af7f70eb3235b7cae17110572551c44b418be9e98ba6edbecd3efaa5cfcb70267f75e4bca8b3f4443a1b92efe10b5091f4b3c5655e40c40732688d6bf4b520f24a1edc414f24262dbd2e2d4035269b710d3d93b5b7abe45c0e788b5f3aa76107bccdf087c9d666704e6017f42d44b1c5cf17b4c1153fd17d08d658c4388c2bd7d0a3cb6e9c3a3d42067009ab388f2e7758f9af54408da4c342bf948ea01a9b425c0735b7cbe6d443ff8aa33011055f7a711efbf2b7bff7d408d639c20decf6f2502c65f52ede2bf83585e594d04802e5cfcc7889d06452efe10c57e1a524d9efa95bb73e86e75725b76edf4b695685a32ac7bb873f6b0969f6f1bb10571d099807166f69dff18f806b14cf045e09b4461dd6481efd1fff39cdecf620d71425ed5e5bd69e0abc0ef11bd10bae414624dbf882dc4cf5443ca2580e66c60b00faf6137499c6c36bbd3db04a3d1cd2d27fda59c9b5b7ede454425fc8a9abfef54efcfedc452c1de2ee48731530751c70d53bff9d1e5746f5bdc7d897dff45662ea7899915dbf80e310340330e250240d169b451741971c7bfbb37d8029c091836bf097c39c1f3f64f02acba3ba02b7e029c45cc40b4b1adb2ac09a292ff69051fbf8958bae85a885109d60034e34cf2bef8037c803def5dde41ec8ffe60ea41aab0979266474bffb4b8d7013f4dfd43a8e80d4461ddc574f3e2bf3f713c73d18b3f4481a517ff21e70c40fdc6812f018f4c3d90848a4e19ef4b6c7bfa730ca35d3709dc83f67603ecce11c0dfd1ecf1b475eb7ad0adb224b7852882ec629851097ee8d6ef28e0e1a90791d8a729b65e7c2771c4eb0bf0c3a4ebc689e636295d0f3c8ea8be1f86d9802be9f6c5bfcae98a53c4728cbfaf23c00050bfc7e3cff5ba128f9d02de451414cd5591ad74c6e8c67eeffed90187d3ed02b44962e9a2abf6a15a1dcee5c4fabf46804b00f55a40b4fe3d24f54012da062ca5da54f109c487d282d42f42bb752bb1b4734bea81ece214629afdb7e9defbe60a2204dc35e837aad94aa2b0b2ec098c5b899d4d76f61c11b9dfa9d6eda1e47df187d85655759df80a9c09e8b203883df55d721971d4ee4a6266e056ba539c76027143b08a6eb4041f039e4474e5ac72fcf28bf0e23f520c00f57a4eea0174c0b5037efd15c41ddd1da95f8876eb6974e36236db0d446dc052a251cf3ff6febfd49613b50be752fd70a03a3c98b8ebff14e53b944e02e7e3813f23c72580fad8fbbfdee3638f213eb0ea6e02a3c1dc0dfc0add9bd6de9d05444f8ec732d3d0e73022c014e9d2d96f183446cc6cdd4edc343d9f6a374f5b81b711c704b7b59b6205d1caf985c42e8e2a2ec799b9916400a8cf3144d7b29c6755ae22fab8d7a5a94e701acc0b81bf4f3d880afa2d7df727960de6faf0fb02d13218e2e2374d848173886e7e55dd42f4dbbf84e6faff3f8838a4e814e03e037c9ff713339b5efc479001a03e17109dbe7235454cbd5e53f3f7ade37438d5abeea0376cf6259afa0cdac9f266e2f7e563c40cc334d5eb1726880bfd3380e701cb80fd061cdfc7893b7f97e3469401a01e0b88ad31cb520f24a11dc407cedd0d7c6f6702ba25d5d9005d3241ec583991c10ffdea1f4af405e274c17731333bf11d7ef9027c2033476bf797364e247e4fea3a80ac5f8be39dff083300d4e308e2108d9c7d8038ddaca937d422a2b1caead42f54009c4e5c00733601bc9c380eb8a9a5bfef013f9bf5ffdd97660b0adf4fd439d8ec67c41900ea91fbf43f44085adff0732c262abd4f4efd62c52781a7d25ce01b1663c08b89c2be613fffe34ee2b0a267e39d7f160c00839b07dc44ded5ff6d4e092f02ce230e5c523a7b3aee3957cb89ce84c35aabb29368f1eb56bf8ce45cb15e97df251aa4e4ec9f686f3d781bd190e475a95f74e626883b45852d4411ec3b530fa482ab8183f0e29f1d03c0e08ea69b8d51da324d1cfed3f673bea6f747e9b814f38bb613075bad213a1276dd7f103b068665bcaa994b0083d98fa8fe7f40ea8124740b71f7d044f57f11af25baaca97ddb899d195b530fa483e603af04ce20ba1376c9cf807710c57e9b530f46e93803309865e47df187281a4a75f1076702525a88edaff76427d13e77055120dc850394ee00de4bd429bc122ffed93300543706bc22f5203ae09f530f80a807f873a255abdab592bc97c0e6b21db8103818389b3447e96e2266c9ee4304b6efa7fea1a81b5c02a86e1eb16da6aec61bc3a8cedeff755841340c2a7bd889aa9b22f6a5e7dc14a8ac9544c7bea7010fa3fe1bb129a2a1d067810f025f4efd82d54d0680eaecfd1f7bf25f947a10b3ac225a071b02daf387c49ab2ca192702c063809388330a0e253a8b967133701b3103f621e08b4400e8cab1c8ea28034075ef202a7e73d554efff3a3813d0aedccf06a8d332a2bf0244e3ab13f8e5664b3f252ef4fd663d3fa4b9438534c20c00d5ad070e4f3d88846e217a9277b563983301ede9da5290a402729ebed6603e48772ffe001b816371fdb30dcb88a96b4943c400a0aade937a00056c02fe80384448cdb91beffea5a16300a82ee7b5931b806fa41e4441df004ec536a74dfa56ef8fa4216200a82ee70bca950cd71ddf76a26d6dceff664dea6221a8a4391800aa7b27dd5e036fca1451813c6c2681d33004d46d58df0f52f60c00d5dd067c34f52012b8aef76718edc09980ba0df3fb41ca9adb0007b394a836cf65abd936a2b23e453bd33a2d2066704ec7103c8851793f4859f2c36f305b890628db520fa405db7aaf75143eec771067d99fc670d53274c928bd1fa42c190006d7df6f7e6dea8134e8dade6bdc987a20359a022e03d6e2a968658de2fb41ca8e4b00f599204eda5a0bac268e4a1d663b89b5ddcb807731da058f8b8153803381e5a907d361ebc8e3fd2065c100204952865c0290242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232640090242943060049923264009024294306004992326400902429430600499232f43f9ecbcc63bc83d7640000000049454e44ae426082",
+  "install": {
+    "common": {
+      "salt": "{{parameters.salt}}",
+      "timeout": "{{parameters.timeout}}"
+    }
+  },
+  "ipmRepo": null,
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "makeAnApiCall": {
+      "id": 123309,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}",
+          "api-version": "{{ifempty(get(map(parameters.qs, 'value', 'key', 'api-version'), 1), '2023-05-15')}}"
+        },
+        "url": "{{if(connection.isApiKey, '', first(split(parameters.endpoint, '~')) + '/openai')}}/deployments/{{parameters.deploymentName}}/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 14,
+      "crud": null,
+      "name": "makeAnApiCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        "rpc://app%23azure-openai@1/parametersMakeAnApiCallEndpoint",
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "POST",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": {
+            "spec": [
+              {
+                "name": "key",
+                "type": "text",
+                "label": "Key"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Value"
+              }
+            ],
+            "type": "collection",
+            "label": "Header"
+          },
+          "type": "array",
+          "label": "Headers",
+          "labels": {
+            "add": "Add header"
+          },
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": {
+            "spec": [
+              {
+                "name": "key",
+                "type": "text",
+                "label": "Key"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Value"
+              }
+            ],
+            "type": "collection",
+            "label": "Query String"
+          },
+          "type": "array",
+          "label": "Query String",
+          "labels": {
+            "add": "Add query string"
+          },
+          "default": [
+            {
+              "key": "api-version",
+              "value": "2023-05-15"
+            }
+          ]
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "azure-openai",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"api-version\": \"{{ifempty(get(map(parameters.qs, 'value', 'key', 'api-version'), 1), '2023-05-15')}}\",\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"url\": \"{{if(connection.isApiKey, '', first(split(parameters.endpoint, '~')) + '/openai')}}/deployments/{{parameters.deploymentName}}/{{parameters.url}}\",\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"method\": \"{{parameters.method}}\",\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"body\": \"{{body}}\",\n            \"headers\": \"{{headers}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "azure-openai2",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    \"rpc://parametersMakeAnApiCallEndpoint\",\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"default\": \"POST\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ],\n        \"required\": true\n    },\n    {\n        \"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"name\": \"headers\",\n        \"spec\": {\n            \"label\": \"Header\",\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"key\",\n                    \"type\": \"text\",\n                    \"label\": \"Key\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"type\": \"text\",\n                    \"label\": \"Value\"\n                }\n            ]\n        },\n        \"labels\": {\n            \"add\": \"Add header\"\n        },\n        \"type\": \"array\",\n        \"label\": \"Headers\",\n        \"default\": [\n            {\n                \"key\": \"Content-Type\",\n                \"value\": \"application/json\"\n            }\n        ]\n    },\n    {\n        \"name\": \"qs\",\n        \"spec\": {\n            \"label\": \"Query String\",\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"key\",\n                    \"type\": \"text\",\n                    \"label\": \"Key\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"type\": \"text\",\n                    \"label\": \"Value\"\n                }\n            ]\n        },\n        \"type\": \"array\",\n        \"labels\": {\n            \"add\": \"Add query string\"\n        },\n        \"label\": \"Query String\",\n        \"default\": [\n            {\n                \"key\": \"api-version\",\n                \"value\": \"2023-05-15\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"type\": \"any\",\n        \"label\": \"Body\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": "azure-openai3",
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "generateAnImage": {
+      "id": 123308,
+      "api": {
+        "qs": {
+          "api-version": "2023-12-01-preview"
+        },
+        "url": "{{if(connection.isApiKey, '', connection.endpoints.`OpenAI Dall-E API` + '/openai')}}/deployments/{{parameters.deploymentName}}/images/generations",
+        "body": {
+          "n": 1,
+          "{{...}}": "{{omit(parameters, 'n', 'response_format')}}",
+          "response_format": "{{if(parameters.response_format === 'imageFile', 'b64_json', parameters.response_format)}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{parseGenerateImgResponse(parseTimestamps(body), parameters.response_format)}}"
+        }
+      },
+      "rev": 15,
+      "crud": "create",
+      "name": "generateAnImage",
+      "epoch": null,
+      "flags": {},
+      "label": "Generate an Image (DALL-E 3)",
+      "scope": [],
+      "expect": [
+        "rpc://app%23azure-openai@1/listDeployments?modelType=dalle",
+        {
+          "help": "A text description of the desired image(s).",
+          "name": "prompt",
+          "type": "text",
+          "label": "Prompt",
+          "required": true,
+          "validate": {
+            "max": 4000,
+            "min": 0
+          }
+        },
+        {
+          "help": "The size of the generated images.",
+          "name": "size",
+          "type": "select",
+          "label": "Size",
+          "options": [
+            {
+              "value": "1024x1024",
+              "default": true
+            },
+            {
+              "value": "1792x1024"
+            },
+            {
+              "value": "1024x1792"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "help": "The quality of generated image. `HD` creates images with finer details and greater consistency across the image.",
+          "name": "quality",
+          "type": "select",
+          "label": "Quality",
+          "options": [
+            {
+              "label": "Standard",
+              "value": "standard",
+              "default": true
+            },
+            {
+              "label": "HD",
+              "value": "hd"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "name": "style",
+          "type": "select",
+          "label": "Style",
+          "options": [
+            {
+              "label": "Vivid",
+              "value": "vivid",
+              "default": true
+            },
+            {
+              "label": "Natural",
+              "value": "natural"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "help": "The format in which the generated images are returned.",
+          "name": "response_format",
+          "type": "select",
+          "label": "Response Format",
+          "default": "url",
+          "options": [
+            {
+              "label": "URL",
+              "value": "url"
+            },
+            {
+              "label": "Image File",
+              "value": "imageFile"
+            }
+          ],
+          "advanced": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "azure-openai",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"{{if(connection.isApiKey, '', connection.endpoints.`OpenAI Dall-E API` + '/openai')}}/deployments/{{parameters.deploymentName}}/images/generations\",\n    \"method\": \"POST\",\n    \"qs\": {\n        \"api-version\": \"2023-12-01-preview\"\n    },\n    \"body\": {\n        \"{{...}}\": \"{{omit(parameters, 'n', 'response_format')}}\",\n        \"n\": 1,\n        \"response_format\": \"{{if(parameters.response_format === 'imageFile', 'b64_json', parameters.response_format)}}\"\n    },\n    \"response\": {\n        \"output\": \"{{parseGenerateImgResponse(parseTimestamps(body), parameters.response_format)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": "rpc://app%23azure-openai@1/interfaceGenerateAnImage",
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "azure-openai2",
+      "description": "Generates an image based on the prompt.",
+      "expectJsonc": "[\n    \"rpc://listDeployments?modelType=dalle\",\n    {\n        \"name\": \"prompt\",\n        \"label\": \"Prompt\",\n        \"required\": true,\n        \"type\": \"text\",\n        \"validate\": {\n            \"max\": 4000,\n            \"min\": 0\n        },\n        \"help\": \"A text description of the desired image(s).\"\n    },\n    {\n        \"name\": \"size\",\n        \"label\": \"Size\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"value\": \"1024x1024\",\n                \"default\": true\n            },\n            {\n                \"value\": \"1792x1024\"\n            },\n            {\n                \"value\": \"1024x1792\"\n            }\n        ],\n        \"help\": \"The size of the generated images.\",\n        \"advanced\": true\n    },\n    {\n        \"name\": \"quality\",\n        \"label\": \"Quality\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"label\": \"Standard\",\n                \"value\": \"standard\",\n                \"default\": true\n            },\n            {\n                \"label\": \"HD\",\n                \"value\": \"hd\"\n            }\n        ],\n        \"help\": \"The quality of generated image. `HD` creates images with finer details and greater consistency across the image.\",\n        \"advanced\": true\n    },\n    {\n        \"name\": \"style\",\n        \"label\": \"Style\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"label\": \"Vivid\",\n                \"value\": \"vivid\",\n                \"default\": true\n            },\n            {\n                \"label\": \"Natural\",\n                \"value\": \"natural\"\n            }\n        ],\n        \"advanced\": true\n    },\n    {\n        \"name\": \"response_format\",\n        \"label\": \"Response Format\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"label\": \"URL\",\n                \"value\": \"url\"\n            },\n            {\n                \"label\": \"Image File\",\n                \"value\": \"imageFile\"\n            }\n        ],\n        \"default\": \"url\",\n        \"help\": \"The format in which the generated images are returned.\",\n        \"advanced\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": "azure-openai3",
+      "interfaceJsonc": "\"rpc://interfaceGenerateAnImage\"\n",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createATranslation": {
+      "id": 123307,
+      "api": {
+        "qs": {
+          "api-version": "2023-12-01-preview"
+        },
+        "url": "{{if(connection.isApiKey, '', connection.endpoints.`OpenAI Whisper API` + '/openai')}}/deployments/{{parameters.deploymentName}}/audio/translations",
+        "body": {
+          "file": {
+            "value": "{{parameters.fileData}}",
+            "options": {
+              "filename": "{{parameters.fileName}}"
+            }
+          },
+          "prompt": "{{parameters.prompt}}",
+          "temperature": "{{parameters.temperature}}",
+          "response_format": "json"
+        },
+        "type": "multipart/form-data",
+        "method": "POST",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 12,
+      "crud": "create",
+      "name": "createATranslation",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Translation (Whisper)",
+      "scope": [],
+      "expect": [
+        "rpc://app%23azure-openai@1/listDeployments?modelType=whisper",
+        {
+          "help": "File name with its extension. Supported formats: `.flac`, `.mp3`, `.mp4`, `.mpeg`, `.mpga`, `.m4a`, `.ogg`, `.wav`, or `.webm`.",
+          "name": "fileName",
+          "type": "filename",
+          "label": "File Name",
+          "required": true,
+          "semantic": "file:name"
+        },
+        {
+          "name": "fileData",
+          "type": "buffer",
+          "label": "File Data",
+          "required": true,
+          "semantic": "file:data"
+        },
+        {
+          "help": "An optional text to guide the model's style or continue a previous audio segment. The prompt should be in English.",
+          "name": "prompt",
+          "type": "text",
+          "label": "Prompt"
+        },
+        {
+          "help": "Higher temperatures generate more diverse and creative responses. For example, `0.8`. Lower temperatures generate more focused and well-defined responses. For example, `0.2`.\nThe default value is `1`.",
+          "name": "temperature",
+          "type": "number",
+          "label": "Temperature",
+          "default": 1,
+          "advanced": true,
+          "validate": {
+            "max": 1,
+            "min": 0
+          }
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "azure-openai",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"{{if(connection.isApiKey, '', connection.endpoints.`OpenAI Whisper API` + '/openai')}}/deployments/{{parameters.deploymentName}}/audio/translations\",\n    \"method\": \"POST\",\n    \"qs\": {\n        \"api-version\": \"2023-12-01-preview\"\n    },\n    \"type\": \"multipart/form-data\",\n    \"body\": {\n        \"file\": {\n            \"value\": \"{{parameters.fileData}}\",\n            \"options\": {\n                \"filename\": \"{{parameters.fileName}}\"\n            }\n        },\n        \"prompt\": \"{{parameters.prompt}}\",\n        \"response_format\": \"json\",\n        \"temperature\": \"{{parameters.temperature}}\"\n    },\n    \"response\": {\n        \"output\": \"{{body}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "text",
+          "type": "text",
+          "label": "Text"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "azure-openai2",
+      "description": "Creates a translation of an audio to English.",
+      "expectJsonc": "[\n    \"rpc://listDeployments?modelType=whisper\",\n    {\n        \"name\": \"fileName\",\n        \"type\": \"filename\",\n        \"label\": \"File Name\",\n        \"help\": \"File name with its extension. Supported formats: `.flac`, `.mp3`, `.mp4`, `.mpeg`, `.mpga`, `.m4a`, `.ogg`, `.wav`, or `.webm`.\",\n        \"semantic\": \"file:name\",\n        \"required\": true\n    },\n    {\n        \"name\": \"fileData\",\n        \"type\": \"buffer\",\n        \"label\": \"File Data\",\n        \"semantic\": \"file:data\",\n        \"required\": true\n    },\n    {\n        \"name\": \"prompt\",\n        \"type\": \"text\",\n        \"help\": \"An optional text to guide the model's style or continue a previous audio segment. The prompt should be in English.\",\n        \"label\": \"Prompt\"\n    },\n    {\n        \"name\": \"temperature\",\n        \"type\": \"number\",\n        \"advanced\": true,\n        \"validate\": {\n            \"max\": 1,\n            \"min\": 0\n        },\n        \"default\": 1,\n        \"help\": \"Higher temperatures generate more diverse and creative responses. For example, `0.8`. Lower temperatures generate more focused and well-defined responses. For example, `0.2`.\\nThe default value is `1`.\",\n        \"label\": \"Temperature\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": "azure-openai3",
+      "interfaceJsonc": "[\n    {\n        \"name\": \"text\",\n        \"label\": \"Text\",\n        \"type\": \"text\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createATranscription": {
+      "id": 123306,
+      "api": {
+        "qs": {
+          "api-version": "2023-12-01-preview"
+        },
+        "url": "{{if(connection.isApiKey, '', connection.endpoints.`OpenAI Whisper API` + '/openai')}}/deployments/{{parameters.deploymentName}}/audio/transcriptions",
+        "body": {
+          "file": {
+            "value": "{{parameters.fileData}}",
+            "options": {
+              "filename": "{{parameters.fileName}}"
+            }
+          },
+          "prompt": "{{parameters.prompt}}",
+          "language": "{{parameters.language}}",
+          "temperature": "{{parameters.temperature}}",
+          "response_format": "json"
+        },
+        "type": "multipart/form-data",
+        "method": "POST",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 13,
+      "crud": "create",
+      "name": "createATranscription",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Transcription (Whisper)",
+      "scope": [],
+      "expect": [
+        "rpc://app%23azure-openai@1/listDeployments?modelType=whisper",
+        {
+          "help": "File name with its extension. Supported formats: `.flac`, `.mp3`, `.mp4`, `.mpeg`, `.mpga`, `.m4a`, `.ogg`, `.wav`, or `.webm`.",
+          "name": "fileName",
+          "type": "filename",
+          "label": "File Name",
+          "required": true,
+          "semantic": "file:name"
+        },
+        {
+          "name": "fileData",
+          "type": "buffer",
+          "label": "File Data",
+          "required": true,
+          "semantic": "file:data"
+        },
+        {
+          "help": "An optional text to guide the model's style or continue a previous audio segment. The prompt should match the audio language.",
+          "name": "prompt",
+          "type": "text",
+          "label": "Prompt"
+        },
+        {
+          "help": "Higher temperatures generate more diverse and creative responses. For example, `0.8`. Lower temperatures generate more focused and well-defined responses. For example, `0.2`.\nThe default value is `1`.",
+          "name": "temperature",
+          "type": "number",
+          "label": "Temperature",
+          "default": 1,
+          "advanced": true,
+          "validate": {
+            "max": 1,
+            "min": 0
+          }
+        },
+        {
+          "help": "The language code of the input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format. For more information on supported languages, see the [OpenAI Supported languages](https://platform.openai.com/docs/guides/speech-to-text/supported-languages).",
+          "name": "language",
+          "type": "text",
+          "label": "Language",
+          "advanced": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "azure-openai",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"{{if(connection.isApiKey, '', connection.endpoints.`OpenAI Whisper API` + '/openai')}}/deployments/{{parameters.deploymentName}}/audio/transcriptions\",\n    \"method\": \"POST\",\n    \"qs\": {\n        \"api-version\": \"2023-12-01-preview\"\n    },\n    \"type\": \"multipart/form-data\",\n    \"body\": {\n        \"file\": {\n            \"value\": \"{{parameters.fileData}}\",\n            \"options\": {\n                \"filename\": \"{{parameters.fileName}}\"\n            }\n        },\n        \"prompt\": \"{{parameters.prompt}}\",\n        \"language\": \"{{parameters.language}}\",\n        \"response_format\": \"json\",\n        \"temperature\": \"{{parameters.temperature}}\"\n    },\n    \"response\": {\n        \"output\": \"{{body}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "text",
+          "type": "text",
+          "label": "Text"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "azure-openai2",
+      "description": "Creates a text transcription of an audio.",
+      "expectJsonc": "[\n    \"rpc://listDeployments?modelType=whisper\",\n    {\n        \"name\": \"fileName\",\n        \"type\": \"filename\",\n        \"label\": \"File Name\",\n        \"semantic\": \"file:name\",\n        \"help\": \"File name with its extension. Supported formats: `.flac`, `.mp3`, `.mp4`, `.mpeg`, `.mpga`, `.m4a`, `.ogg`, `.wav`, or `.webm`.\",\n        \"required\": true\n    },\n    {\n        \"name\": \"fileData\",\n        \"type\": \"buffer\",\n        \"label\": \"File Data\",\n        \"semantic\": \"file:data\",\n        \"required\": true\n    },\n    {\n        \"name\": \"prompt\",\n        \"type\": \"text\",\n        \"help\": \"An optional text to guide the model's style or continue a previous audio segment. The prompt should match the audio language.\",\n        \"label\": \"Prompt\"\n    },\n    {\n        \"name\": \"temperature\",\n        \"type\": \"number\",\n        \"advanced\": true,\n        \"validate\": {\n            \"max\": 1,\n            \"min\": 0\n        },\n        \"default\": 1,\n        \"help\": \"Higher temperatures generate more diverse and creative responses. For example, `0.8`. Lower temperatures generate more focused and well-defined responses. For example, `0.2`.\\nThe default value is `1`.\",\n        \"label\": \"Temperature\"\n    },\n    {\n        \"name\": \"language\",\n        \"type\": \"text\",\n        \"advanced\": true,\n        \"help\": \"The language code of the input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format. For more information on supported languages, see the [OpenAI Supported languages](https://platform.openai.com/docs/guides/speech-to-text/supported-languages).\",\n        \"label\": \"Language\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": "azure-openai3",
+      "interfaceJsonc": "[\n    {\n        \"name\": \"text\",\n        \"label\": \"Text\",\n        \"type\": \"text\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createAChatCompletion": {
+      "id": 123305,
+      "api": {
+        "url": "/deployments/{{parameters.deploymentName}}/chat/completions",
+        "body": {
+          "n": "{{parameters.n}}",
+          "stop": "{{parameters.stop}}",
+          "model": "{{parameters.model}}",
+          "top_p": "{{parameters.top_p}}",
+          "messages": "{{parameters.messages}}",
+          "logit_bias": "{{if(createJSON(temp.logit_bias) === '{}', undefined, temp.logit_bias)}}",
+          "max_tokens": "{{parameters.max_tokens}}",
+          "temperature": "{{parameters.temperature}}",
+          "presence_penalty": "{{parameters.presence_penalty}}",
+          "frequency_penalty": "{{parameters.frequency_penalty}}"
+        },
+        "temp": {
+          "logit_bias": "{{toCollection(parameters.logit_bias, 'token', 'probability')}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{assembleContentMessages(parseTimestamps(body))}}"
+        }
+      },
+      "rev": 19,
+      "crud": "create",
+      "name": "createAChatCompletion",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Chat Completion (Prompt)",
+      "scope": [],
+      "expect": [
+        "rpc://app%23azure-openai@1/listDeployments?modelType=chat",
+        {
+          "help": "For more information about chat completion please follow [OpenAI documentation](https://platform.openai.com/docs/guides/chat).",
+          "name": "messages",
+          "spec": {
+            "spec": [
+              {
+                "name": "role",
+                "type": "select",
+                "label": "Role",
+                "options": [
+                  {
+                    "label": "System",
+                    "value": "system",
+                    "nested": [
+                      {
+                        "help": "The contents of the message. This parameter is required except for `Assistant` role with function calls.",
+                        "name": "content",
+                        "type": "text",
+                        "label": "Message Content",
+                        "required": true
+                      }
+                    ]
+                  },
+                  {
+                    "label": "User",
+                    "value": "user",
+                    "nested": [
+                      {
+                        "name": "content",
+                        "spec": {
+                          "spec": [
+                            {
+                              "help": "`Image` is supported by only GPT-4 Turbo with Vision model.",
+                              "name": "type",
+                              "type": "select",
+                              "label": "Type",
+                              "options": [
+                                {
+                                  "label": "Text",
+                                  "value": "text",
+                                  "nested": [
+                                    {
+                                      "name": "text",
+                                      "type": "text",
+                                      "label": "Text",
+                                      "required": true
+                                    }
+                                  ],
+                                  "default": true
+                                },
+                                {
+                                  "label": "Image",
+                                  "value": "image_url",
+                                  "nested": [
+                                    {
+                                      "name": "image_url",
+                                      "spec": [
+                                        {
+                                          "name": "url",
+                                          "type": "text",
+                                          "label": "URL",
+                                          "required": true
+                                        },
+                                        {
+                                          "name": "detail",
+                                          "type": "select",
+                                          "label": "Detail",
+                                          "options": [
+                                            {
+                                              "label": "High",
+                                              "value": "high"
+                                            },
+                                            {
+                                              "label": "Low",
+                                              "value": "low"
+                                            },
+                                            {
+                                              "label": "Auto",
+                                              "value": "auto"
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "type": "collection",
+                                      "label": "Image URL"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "mappable": false,
+                              "required": true
+                            }
+                          ],
+                          "type": "collection",
+                          "label": "Content"
+                        },
+                        "type": "array",
+                        "label": "Content",
+                        "labels": {
+                          "add": "Add content"
+                        },
+                        "required": true
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Assistant",
+                    "value": "assistant",
+                    "nested": [
+                      {
+                        "help": "The contents of the message. This parameter is required except for `Assistant` role with function calls.",
+                        "name": "content",
+                        "type": "text",
+                        "label": "Message Content",
+                        "required": true
+                      }
+                    ]
+                  }
+                ],
+                "mappable": false,
+                "required": true
+              }
+            ],
+            "type": "collection",
+            "label": "Message"
+          },
+          "type": "array",
+          "label": "Messages",
+          "labels": {
+            "add": "Add message"
+          },
+          "mappable": {
+            "help": "◉ The messages(s) to generate chat completions for (in an **Array** ) - e.g. `[{\"role\": \"system\", \"content\": \"You are a hellpful assistant.\"}]`\n◉ For more information about chat completion please follow [OpenAI documentation](https://platform.openai.com/docs/guides/chat)."
+          },
+          "required": true
+        },
+        {
+          "help": "The maximum number of tokens to generate in the completion.",
+          "name": "max_tokens",
+          "type": "number",
+          "label": "Max Tokens",
+          "advanced": true,
+          "validate": {
+            "min": 0
+          }
+        },
+        {
+          "help": "Higher temperatures generate more diverse and creative responses. For example, `0.8`. Lower temperatures generate more focused and well-defined responses. For example, `0.2`.\nThe default value is `1`.",
+          "name": "temperature",
+          "type": "number",
+          "label": "Temperature",
+          "default": 1,
+          "advanced": true,
+          "validate": {
+            "max": 2,
+            "min": 0
+          }
+        },
+        {
+          "help": "Nucleus sampling considers the results of the tokens with probability mass. Use as an alternative to sampling with temperature.\nThe default value is `1`.",
+          "name": "top_p",
+          "type": "number",
+          "label": "Top P",
+          "advanced": true,
+          "validate": {
+            "max": 1,
+            "min": 0
+          }
+        },
+        {
+          "help": "The number of responses to generate. Defaults to `1`.",
+          "name": "n",
+          "type": "number",
+          "label": "Number of Completions",
+          "advanced": true
+        },
+        {
+          "help": "Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.",
+          "name": "frequency_penalty",
+          "type": "number",
+          "label": "Frequency Penalty",
+          "default": 0,
+          "advanced": true,
+          "validate": {
+            "max": 2,
+            "min": -2
+          }
+        },
+        {
+          "help": "Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.",
+          "name": "presence_penalty",
+          "type": "number",
+          "label": "Presence Penalty",
+          "default": 0,
+          "advanced": true,
+          "validate": {
+            "max": 2,
+            "min": -2
+          }
+        },
+        {
+          "help": "Configuration of the occurrence of specific tokens in the generated response. It is not available with the deployment that contains `GPT-4 Vision` models.",
+          "name": "logit_bias",
+          "spec": {
+            "spec": [
+              {
+                "name": "token",
+                "type": "text",
+                "label": "Token",
+                "required": true
+              },
+              {
+                "help": "Accepts an array of tokens (specified by their token ID in the GPT tokenizer) and probability values. You can use this [tokenizer tool](https://platform.openai.com/tokenizer?view=bpe) (which works for all GPT-2 and GPT-3 and GPT-4) to convert text to token IDs.\nThe exact effect will vary per model, but values between `-1` and `1` should decrease or increase likelihood of selection; values like `-100` or `100` should result in a ban or exclusive selection of the relevant token.",
+                "name": "probability",
+                "type": "number",
+                "label": "Probability",
+                "required": true,
+                "validate": {
+                  "max": 100,
+                  "min": -100
+                }
+              }
+            ],
+            "type": "collection",
+            "label": "Token Probability"
+          },
+          "type": "array",
+          "label": "Token Probability",
+          "labels": {
+            "add": "Add token probability"
+          },
+          "advanced": true
+        },
+        {
+          "help": "Up to 4 sequences where the API will stop generating further tokens.",
+          "name": "stop",
+          "spec": {
+            "spec": [
+              {
+                "type": "text"
+              }
+            ],
+            "type": "text",
+            "label": "Sequence"
+          },
+          "type": "array",
+          "label": "Stop Sequences",
+          "labels": {
+            "add": "Add sequence"
+          },
+          "advanced": true,
+          "validate": {
+            "maxItems": 4
+          }
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "azure-openai",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/deployments/{{parameters.deploymentName}}/chat/completions\",\n    \"temp\": {\n        \"logit_bias\": \"{{toCollection(parameters.logit_bias, 'token', 'probability')}}\"\n    },\n    \"body\": {\n        \"n\": \"{{parameters.n}}\",\n        \"stop\": \"{{parameters.stop}}\",\n        \"model\": \"{{parameters.model}}\",\n        \"top_p\": \"{{parameters.top_p}}\",\n        \"messages\": \"{{parameters.messages}}\",\n        \"logit_bias\": \"{{if(createJSON(temp.logit_bias) === '{}', undefined, temp.logit_bias)}}\",\n        \"max_tokens\": \"{{parameters.max_tokens}}\",\n        \"temperature\": \"{{parameters.temperature}}\",\n        \"presence_penalty\": \"{{parameters.presence_penalty}}\",\n        \"frequency_penalty\": \"{{parameters.frequency_penalty}}\"\n    },\n    \"method\": \"POST\",\n    \"response\": {\n        \"output\": \"{{assembleContentMessages(parseTimestamps(body))}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "result",
+          "type": "text",
+          "label": "Text Response"
+        },
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Completion ID"
+        },
+        {
+          "name": "object",
+          "type": "text",
+          "label": "Object"
+        },
+        {
+          "name": "created",
+          "type": "date",
+          "label": "Created"
+        },
+        {
+          "name": "model",
+          "type": "text",
+          "label": "Model"
+        },
+        {
+          "name": "system_fingerprint",
+          "type": "text",
+          "label": "System Fingerprint"
+        },
+        {
+          "name": "choices",
+          "spec": {
+            "spec": [
+              {
+                "name": "finish_reason",
+                "type": "text",
+                "label": "Finish Reason"
+              },
+              {
+                "name": "finish_details",
+                "spec": [
+                  {
+                    "name": "type",
+                    "type": "text",
+                    "label": "Type"
+                  },
+                  {
+                    "name": "stop",
+                    "type": "text",
+                    "label": "Stop"
+                  }
+                ],
+                "type": "collection",
+                "label": "Finish Details"
+              },
+              {
+                "name": "index",
+                "type": "number",
+                "label": "Index"
+              },
+              {
+                "name": "message",
+                "spec": [
+                  {
+                    "name": "role",
+                    "type": "text",
+                    "label": "Role"
+                  },
+                  {
+                    "name": "content",
+                    "type": "text",
+                    "label": "Content"
+                  }
+                ],
+                "type": "collection",
+                "label": "Message"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Choices"
+        },
+        {
+          "name": "usage",
+          "spec": [
+            {
+              "name": "prompt_tokens",
+              "type": "number",
+              "label": "Prompt Tokens"
+            },
+            {
+              "name": "completion_tokens",
+              "type": "number",
+              "label": "Completion Tokens"
+            },
+            {
+              "name": "total_tokens",
+              "type": "number",
+              "label": "Total Tokens"
+            }
+          ],
+          "type": "collection",
+          "label": "Usage"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "azure-openai2",
+      "description": "Creates a response for the provided chat message(s).",
+      "expectJsonc": "[\n    \"rpc://listDeployments?modelType=chat\",\n    {\n        \"help\": \"For more information about chat completion please follow [OpenAI documentation](https://platform.openai.com/docs/guides/chat).\",\n        \"name\": \"messages\",\n        \"spec\": {\n            \"label\": \"Message\",\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"role\",\n                    \"type\": \"select\",\n                    \"label\": \"Role\",\n                    \"mappable\": false,\n                    \"options\": [\n                        {\n                            \"label\": \"System\",\n                            \"value\": \"system\",\n                            \"nested\": [\n                                {\n                                    \"help\": \"The contents of the message. This parameter is required except for `Assistant` role with function calls.\",\n                                    \"name\": \"content\",\n                                    \"type\": \"text\",\n                                    \"label\": \"Message Content\",\n                                    \"required\": true\n                                }\n                            ]\n                        },\n                        {\n                            \"label\": \"User\",\n                            \"value\": \"user\",\n                            \"nested\": [\n                                {\n                                    \"name\": \"content\",\n                                    \"label\": \"Content\",\n                                    \"type\": \"array\",\n                                    \"required\": true,\n                                    \"labels\": {\n                                        \"add\": \"Add content\"\n                                    },\n                                    \"spec\": {\n                                        \"label\": \"Content\",\n                                        \"type\": \"collection\",\n                                        \"spec\": [\n                                            {\n                                                \"name\": \"type\",\n                                                \"label\": \"Type\",\n                                                \"type\": \"select\",\n                                                \"mappable\": false,\n                                                \"required\": true,\n                                                \"help\": \"`Image` is supported by only GPT-4 Turbo with Vision model.\",\n                                                \"options\": [\n                                                    {\n                                                        \"label\": \"Text\",\n                                                        \"value\": \"text\",\n                                                        \"default\": true,\n                                                        \"nested\": [\n                                                            {\n                                                                \"name\": \"text\",\n                                                                \"label\": \"Text\",\n                                                                \"type\": \"text\",\n                                                                \"required\": true\n                                                            }\n                                                        ]\n                                                    },\n                                                    {\n                                                        \"label\": \"Image\",\n                                                        \"value\": \"image_url\",\n                                                        \"nested\": [\n                                                            {\n                                                                \"name\": \"image_url\",\n                                                                \"label\": \"Image URL\",\n                                                                \"type\": \"collection\",\n                                                                \"spec\": [\n                                                                    {\n                                                                        \"name\": \"url\",\n                                                                        \"label\": \"URL\",\n                                                                        \"type\": \"text\",\n                                                                        \"required\": true\n                                                                    },\n                                                                    {\n                                                                        \"name\": \"detail\",\n                                                                        \"label\": \"Detail\",\n                                                                        \"type\": \"select\",\n                                                                        \"options\": [\n                                                                            {\n                                                                                \"label\": \"High\",\n                                                                                \"value\": \"high\"\n                                                                            },\n                                                                            {\n                                                                                \"label\": \"Low\",\n                                                                                \"value\": \"low\"\n                                                                            },\n                                                                            {\n                                                                                \"label\": \"Auto\",\n                                                                                \"value\": \"auto\"\n                                                                            }\n                                                                        ]\n                                                                    }\n                                                                ]\n                                                            }\n                                                        ]\n                                                    }\n                                                ]\n                                            }\n                                        ]\n                                    }\n                                }\n                            ]\n                        },\n                        {\n                            \"label\": \"Assistant\",\n                            \"value\": \"assistant\",\n                            \"nested\": [\n                                {\n                                    \"help\": \"The contents of the message. This parameter is required except for `Assistant` role with function calls.\",\n                                    \"name\": \"content\",\n                                    \"type\": \"text\",\n                                    \"label\": \"Message Content\",\n                                    \"required\": true\n                                }\n                            ]\n                        }\n                    ],\n                    \"required\": true\n                }\n            ]\n        },\n        \"type\": \"array\",\n        \"label\": \"Messages\",\n        \"labels\": {\n            \"add\": \"Add message\"\n        },\n        \"mappable\": {\n            \"help\": \"◉ The messages(s) to generate chat completions for (in an **Array** ) - e.g. `[{\\\"role\\\": \\\"system\\\", \\\"content\\\": \\\"You are a hellpful assistant.\\\"}]`\\n◉ For more information about chat completion please follow [OpenAI documentation](https://platform.openai.com/docs/guides/chat).\"\n        },\n        \"required\": true\n    },\n    {\n        \"help\": \"The maximum number of tokens to generate in the completion.\",\n        \"name\": \"max_tokens\",\n        \"type\": \"number\",\n        \"label\": \"Max Tokens\",\n        \"advanced\": true,\n        \"validate\": {\n            \"min\": 0\n        }\n    },\n    {\n        \"help\": \"Higher temperatures generate more diverse and creative responses. For example, `0.8`. Lower temperatures generate more focused and well-defined responses. For example, `0.2`.\\nThe default value is `1`.\",\n        \"name\": \"temperature\",\n        \"type\": \"number\",\n        \"label\": \"Temperature\",\n        \"default\": 1,\n        \"advanced\": true,\n        \"validate\": {\n            \"max\": 2,\n            \"min\": 0\n        }\n    },\n    {\n        \"help\": \"Nucleus sampling considers the results of the tokens with probability mass. Use as an alternative to sampling with temperature.\\nThe default value is `1`.\",\n        \"name\": \"top_p\",\n        \"type\": \"number\",\n        \"label\": \"Top P\",\n        \"advanced\": true,\n        \"validate\": {\n            \"max\": 1,\n            \"min\": 0\n        }\n    },\n    {\n        \"help\": \"The number of responses to generate. Defaults to `1`.\",\n        \"name\": \"n\",\n        \"type\": \"number\",\n        \"label\": \"Number of Completions\",\n        \"advanced\": true\n    },\n    {\n        \"help\": \"Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.\",\n        \"name\": \"frequency_penalty\",\n        \"type\": \"number\",\n        \"label\": \"Frequency Penalty\",\n        \"default\": 0,\n        \"advanced\": true,\n        \"validate\": {\n            \"max\": 2,\n            \"min\": -2\n        }\n    },\n    {\n        \"help\": \"Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.\",\n        \"name\": \"presence_penalty\",\n        \"type\": \"number\",\n        \"label\": \"Presence Penalty\",\n        \"default\": 0,\n        \"advanced\": true,\n        \"validate\": {\n            \"max\": 2,\n            \"min\": -2\n        }\n    },\n    {\n        \"help\": \"Configuration of the occurrence of specific tokens in the generated response. It is not available with the deployment that contains `GPT-4 Vision` models.\",\n        \"name\": \"logit_bias\",\n        \"labels\": {\n            \"add\": \"Add token probability\"\n        },\n        \"spec\": {\n            \"label\": \"Token Probability\",\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"token\",\n                    \"type\": \"text\",\n                    \"label\": \"Token\",\n                    \"required\": true\n                },\n                {\n                    \"help\": \"Accepts an array of tokens (specified by their token ID in the GPT tokenizer) and probability values. You can use this [tokenizer tool](https://platform.openai.com/tokenizer?view=bpe) (which works for all GPT-2 and GPT-3 and GPT-4) to convert text to token IDs.\\nThe exact effect will vary per model, but values between `-1` and `1` should decrease or increase likelihood of selection; values like `-100` or `100` should result in a ban or exclusive selection of the relevant token.\",\n                    \"name\": \"probability\",\n                    \"type\": \"number\",\n                    \"label\": \"Probability\",\n                    \"required\": true,\n                    \"validate\": {\n                        \"max\": 100,\n                        \"min\": -100\n                    }\n                }\n            ]\n        },\n        \"type\": \"array\",\n        \"label\": \"Token Probability\",\n        \"advanced\": true\n    },\n    {\n        \"help\": \"Up to 4 sequences where the API will stop generating further tokens.\",\n        \"name\": \"stop\",\n        \"labels\": {\n            \"add\": \"Add sequence\"\n        },\n        \"spec\": {\n            \"label\": \"Sequence\",\n            \"type\": \"text\",\n            \"spec\": [\n                {\n                    \"type\": \"text\"\n                }\n            ]\n        },\n        \"type\": \"array\",\n        \"label\": \"Stop Sequences\",\n        \"advanced\": true,\n        \"validate\": {\n            \"maxItems\": 4\n        }\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": "azure-openai3",
+      "interfaceJsonc": "[\n    {\n        \"name\": \"result\",\n        \"label\": \"Text Response\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"Completion ID\"\n    },\n    {\n        \"name\": \"object\",\n        \"type\": \"text\",\n        \"label\": \"Object\"\n    },\n    {\n        \"name\": \"created\",\n        \"type\": \"date\",\n        \"label\": \"Created\"\n    },\n    {\n        \"name\": \"model\",\n        \"type\": \"text\",\n        \"label\": \"Model\"\n    },\n    {\n        \"name\": \"system_fingerprint\",\n        \"label\": \"System Fingerprint\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"choices\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"finish_reason\",\n                    \"type\": \"text\",\n                    \"label\": \"Finish Reason\"\n                },\n                {\n                    \"name\": \"finish_details\",\n                    \"type\": \"collection\",\n                    \"spec\": [\n                        {\n                            \"name\": \"type\",\n                            \"type\": \"text\",\n                            \"label\": \"Type\"\n                        },\n                        {\n                            \"name\": \"stop\",\n                            \"type\": \"text\",\n                            \"label\": \"Stop\"\n                        }\n                    ],\n                    \"label\": \"Finish Details\"\n                },\n                {\n                    \"name\": \"index\",\n                    \"type\": \"number\",\n                    \"label\": \"Index\"\n                },\n                {\n                    \"name\": \"message\",\n                    \"type\": \"collection\",\n                    \"spec\": [\n                        {\n                            \"name\": \"role\",\n                            \"type\": \"text\",\n                            \"label\": \"Role\"\n                        },\n                        {\n                            \"name\": \"content\",\n                            \"type\": \"text\",\n                            \"label\": \"Content\"\n                        }\n                    ],\n                    \"label\": \"Message\"\n                }\n            ]\n        },\n        \"label\": \"Choices\"\n    },\n    {\n        \"name\": \"usage\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"prompt_tokens\",\n                \"type\": \"number\",\n                \"label\": \"Prompt Tokens\"\n            },\n            {\n                \"name\": \"completion_tokens\",\n                \"type\": \"number\",\n                \"label\": \"Completion Tokens\"\n            },\n            {\n                \"name\": \"total_tokens\",\n                \"type\": \"number\",\n                \"label\": \"Total Tokens\"\n            }\n        ],\n        \"label\": \"Usage\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "devMakeAnApiCallDontRelease": {
+      "id": 170216,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "devMakeAnApiCallDontRelease",
+      "epoch": null,
+      "flags": {},
+      "label": "DELETE Make an API Call DON'T RELEASE",
+      "scope": [],
+      "expect": [
+        {
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": {
+            "spec": [
+              {
+                "name": "key",
+                "type": "text",
+                "label": "Key"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Value"
+              }
+            ],
+            "type": "collection",
+            "label": "Header"
+          },
+          "type": "array",
+          "label": "Headers",
+          "labels": {
+            "add": "Add header"
+          },
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": {
+            "spec": [
+              {
+                "name": "key",
+                "type": "text",
+                "label": "Key"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Value"
+              }
+            ],
+            "type": "collection",
+            "label": "Parameter"
+          },
+          "type": "array",
+          "label": "Query String",
+          "labels": {
+            "add": "Add parameter"
+          }
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": false,
+      "typeId": 12,
+      "appName": "azure-openai",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"url\": \"{{parameters.url}}\",  // Defines the fixed base URL and maps the relative path URL from the user.\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"method\": \"{{parameters.method}}\",\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"body\": \"{{body}}\",\n            \"headers\": \"{{headers}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "azure-openai3",
+      "description": "api call",
+      "expectJsonc": "[\n    {\n        \"name\": \"url\", // Makes value accesible via \"{{parameters.url}}\"\".\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\", // Allows the user to select the method by themselves.\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ],\n        \"required\": true\n    },\n    {\n        \"name\": \"headers\", // Allows the user to add headers by themselves.\n        \"label\": \"Headers\",\n        \"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"label\": \"Header\",\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"key\",\n                    \"label\": \"Key\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"label\": \"Value\",\n                    \"type\": \"text\"\n                }\n            ]\n        },\n        \"labels\": {\n            \"add\": \"Add header\"\n        },\n        \"default\": [\n            {\n                \"key\": \"Content-Type\",\n                \"value\": \"application/json\"\n            }\n        ]\n    },\n    {\n        \"name\": \"qs\", // Allows the user to set Query String by themselves.\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"label\": \"Parameter\",\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"key\",\n                    \"label\": \"Key\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"value\",\n                    \"label\": \"Value\",\n                    \"type\": \"text\"\n                }\n            ]\n        },\n        \"labels\": {\n            \"add\": \"Add parameter\"\n        }\n    },\n    {\n        \"name\": \"body\", // Allows the user to set Body by themselves.\n        \"type\": \"any\",\n        \"label\": \"Body\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": "azure-openai2",
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "azure-openai": {
+      "api": {
+        "info": {
+          "qs": {
+            "api-version": "2023-07-01"
+          },
+          "log": {
+            "sanitize": [
+              "request.headers.authorization"
+            ]
+          },
+          "url": "https://management.azure.com/subscriptions",
+          "headers": {
+            "authorization": "Bearer {{connection.accessToken}}"
+          },
+          "response": {
+            "error": {
+              "message": "[{{statusCode}}] {{body.error.message}}"
+            }
+          }
+        },
+        "token": {
+          "log": {
+            "sanitize": [
+              "request.body.code",
+              "request.body.client_secret",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://login.microsoftonline.com/{{parameters.tenantId || 'common'}}/oauth2/v2.0/token",
+          "body": {
+            "code": "{{temp.code}}",
+            "scope": "{{join(oauth.scope, ' ')}}",
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "grant_type": "authorization_code",
+            "redirect_uri": "{{oauth.localRedirectUri}}",
+            "client_secret": "{{ifempty(parameters.clientSecret, common.clientSecret)}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}"
+            }
+          }
+        },
+        "refresh": {
+          "log": {
+            "sanitize": [
+              "request.body.client_secret",
+              "request.body.refresh_token",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://login.microsoftonline.com/{{parameters.tenantId || 'common'}}/oauth2/v2.0/token",
+          "body": {
+            "scope": "{{join(oauth.scope, ' ')}}",
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "grant_type": "refresh_token",
+            "client_secret": "{{ifempty(parameters.clientSecret, common.clientSecret)}}",
+            "refresh_token": "{{data.refreshToken}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}"
+            }
+          },
+          "condition": "{{data.expires < addMinutes(now, 1)}}"
+        },
+        "authorize": {
+          "qs": {
+            "scope": "{{join(oauth.scope, ' ')}}",
+            "prompt": "consent",
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "redirect_uri": "{{oauth.localRedirectUri}}",
+            "response_mode": "query",
+            "response_type": "code"
+          },
+          "url": "https://login.microsoftonline.com/{{parameters.tenantId || 'common'}}/oauth2/v2.0/authorize",
+          "response": {
+            "temp": {
+              "code": "{{query.code}}"
+            }
+          }
+        }
+      },
+      "rev": 14,
+      "name": "azure-openai",
+      "type": "oauth",
+      "label": "Azure Management",
+      "scope": [
+        "https://management.azure.com/user_impersonation",
+        "openid",
+        "profile",
+        "offline_access"
+      ],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "azure-openai",
+      "install": {
+        "common": {
+          "clientId": "{{parameters.clientId}}",
+          "clientSecret": "{{parameters.clientSecret}}"
+        }
+      },
+      "apiJsonc": "{\n    \"authorize\": {\n        \"url\": \"https://login.microsoftonline.com/{{parameters.tenantId || 'common'}}/oauth2/v2.0/authorize\",\n        \"qs\": {\n            \"scope\": \"{{join(oauth.scope, ' ')}}\",\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"redirect_uri\": \"{{oauth.localRedirectUri}}\",\n            \"response_type\": \"code\",\n            \"response_mode\": \"query\",\n            \"prompt\": \"consent\"\n        },\n        \"response\": {\n            \"temp\": {\n                \"code\": \"{{query.code}}\"\n            }\n        }\n    },\n    \"token\": {\n        \"url\": \"https://login.microsoftonline.com/{{parameters.tenantId || 'common'}}/oauth2/v2.0/token\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"scope\": \"{{join(oauth.scope, ' ')}}\",\n            \"code\": \"{{temp.code}}\",\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"grant_type\": \"authorization_code\",\n            \"redirect_uri\": \"{{oauth.localRedirectUri}}\",\n            \"client_secret\": \"{{ifempty(parameters.clientSecret, common.clientSecret)}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\",\n                \"refreshToken\": \"{{body.refresh_token}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.code\",\n                \"request.body.client_secret\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },\n    \"refresh\": {\n        \"condition\": \"{{data.expires < addMinutes(now, 1)}}\",\n        \"url\": \"https://login.microsoftonline.com/{{parameters.tenantId || 'common'}}/oauth2/v2.0/token\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"scope\": \"{{join(oauth.scope, ' ')}}\",\n            \"grant_type\": \"refresh_token\",\n            \"client_secret\": \"{{ifempty(parameters.clientSecret, common.clientSecret)}}\",\n            \"refresh_token\": \"{{data.refreshToken}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\",\n                \"refreshToken\": \"{{body.refresh_token}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.client_secret\",\n                \"request.body.refresh_token\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },\n    \"info\": {\n        \"url\": \"https://management.azure.com/subscriptions\",\n        \"qs\": {\n            \"api-version\": \"2023-07-01\"\n        },\n        \"headers\": {\n            \"authorization\": \"Bearer {{connection.accessToken}}\"\n        },\n        \"response\": {\n            \"error\": {\n                \"message\": \"[{{statusCode}}] {{body.error.message}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.headers.authorization\"\n            ]\n        }\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "advanced": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "password",
+          "label": "Client Secret",
+          "advanced": true
+        },
+        {
+          "name": "tenantId",
+          "type": "text",
+          "label": "Tenant ID",
+          "advanced": true
+        }
+      ],
+      "scopeJsonc": "[\n    \"https://management.azure.com/user_impersonation\",\n    \"openid\",\n    \"profile\",\n    \"offline_access\"\n]",
+      "installSpec": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "required": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "required": true
+        }
+      ],
+      "scopesJsonc": null,
+      "installJsonc": "{\n    \"common\": {\n        \"clientId\": \"{{parameters.clientId}}\",\n        \"clientSecret\": \"{{parameters.clientSecret}}\"\n    }\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"advanced\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"password\",\n        \"label\": \"Client Secret\",\n        \"advanced\": true\n    },\n    {\n        \"name\": \"tenantId\",\n        \"label\": \"Tenant ID\",\n        \"type\": \"text\",\n        \"advanced\": true\n    }\n]",
+      "installSpecJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"required\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"text\",\n        \"label\": \"Client Secret\",\n        \"required\": true\n    }\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    },
+    "azure-openai2": {
+      "api": {
+        "info": {
+          "qs": {
+            "api-version": "2023-05-01"
+          },
+          "log": {
+            "sanitize": [
+              "request.headers.authorization"
+            ]
+          },
+          "url": "https://management.azure.com/subscriptions/{{parameters.subscriptionId}}/resourceGroups/{{parameters.resourceGroup}}/providers/Microsoft.CognitiveServices/accounts/{{parameters.azureOpenAiResource}}",
+          "headers": {
+            "authorization": "Bearer {{connection.accessToken}}"
+          },
+          "response": {
+            "data": {
+              "endpoints": "{{endpointsObject(body.properties)}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] {{body.error.message}}"
+            },
+            "metadata": {
+              "type": "text",
+              "value": "{{body.name}}"
+            }
+          }
+        },
+        "token": {
+          "log": {
+            "sanitize": [
+              "request.body.client_secret",
+              "request.body.refresh_token",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://login.microsoftonline.com/{{parameters.tenantId || 'common'}}/oauth2/v2.0/token",
+          "body": {
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "grant_type": "refresh_token",
+            "client_secret": "{{ifempty(temp.userClientSecret, common.clientSecret)}}",
+            "refresh_token": "{{if(data.created, data.refreshToken, decrypt(parameters.refreshToken, common.salt))}}"
+          },
+          "temp": {
+            "userClientSecret": "{{if(parameters.clientSecret && parameters.clientSecret !== '', if(data.created, data.clientSecret, decrypt(parameters.clientSecret, common.salt)), undefined)}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "created": true,
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "clientSecret": "{{temp.userClientSecret}}",
+              "refreshToken": "{{body.refresh_token}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] {{body.error.message || createJSON(body.error)}}"
+            }
+          },
+          "condition": "{{if(data.accessToken, data.expires < addMinutes(now, 1), true)}}"
+        }
+      },
+      "rev": 22,
+      "name": "azure-openai2",
+      "type": "oauth",
+      "label": "Azure OpenAI OAuth + API Key",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "azure-openai",
+      "install": {
+        "common": {
+          "salt": "{{parameters.salt}}",
+          "clientId": "{{parameters.clientId}}",
+          "clientSecret": "{{parameters.clientSecret}}"
+        }
+      },
+      "apiJsonc": "{\n    \"token\": {\n        \"condition\": \"{{if(data.accessToken, data.expires < addMinutes(now, 1), true)}}\",\n        \"url\": \"https://login.microsoftonline.com/{{parameters.tenantId || 'common'}}/oauth2/v2.0/token\",\n        \"method\": \"POST\",\n        \"temp\": {\n            \"userClientSecret\": \"{{if(parameters.clientSecret && parameters.clientSecret !== '', if(data.created, data.clientSecret, decrypt(parameters.clientSecret, common.salt)), undefined)}}\"\n        },\n        \"body\": {\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"grant_type\": \"refresh_token\",\n            \"client_secret\": \"{{ifempty(temp.userClientSecret, common.clientSecret)}}\",\n            \"refresh_token\": \"{{if(data.created, data.refreshToken, decrypt(parameters.refreshToken, common.salt))}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\",\n                \"refreshToken\": \"{{body.refresh_token}}\",\n                \"clientSecret\": \"{{temp.userClientSecret}}\",\n                \"created\": true\n            },\n            \"error\": {\n                \"message\": \"[{{statusCode}}] {{body.error.message || createJSON(body.error)}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.client_secret\",\n                \"request.body.refresh_token\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },\n    \"info\": {\n        \"url\": \"https://management.azure.com/subscriptions/{{parameters.subscriptionId}}/resourceGroups/{{parameters.resourceGroup}}/providers/Microsoft.CognitiveServices/accounts/{{parameters.azureOpenAiResource}}\",\n        \"qs\": {\n            \"api-version\": \"2023-05-01\"\n        },\n        \"headers\": {\n            \"authorization\": \"Bearer {{connection.accessToken}}\"\n        },\n        \"response\": {\n            \"error\": {\n                \"message\": \"[{{statusCode}}] {{body.error.message}}\"\n            },\n            \"metadata\": {\n                \"type\": \"text\",\n                \"value\": \"{{body.name}}\"\n            },\n            \"data\": {\n                \"endpoints\": \"{{endpointsObject(body.properties)}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.headers.authorization\"\n            ]\n        }\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "__IMTCONN__",
+          "type": "account:app#azure-openai",
+          "label": "Azure Connection",
+          "options": {
+            "nested": {
+              "store": [
+                {
+                  "help": "Enter the unique identifier for Azure subscription. This ID is associated with the Azure account that has been granted access to Azure OpenAI services.",
+                  "name": "subscriptionId",
+                  "type": "select",
+                  "label": "Subscription ID",
+                  "options": {
+                    "store": "rpc://app%23azure-openai@1/listSubscriptions",
+                    "nested": [
+                      {
+                        "help": "Name of the Azure resource group where Azure OpenAI resources will be organized. ",
+                        "name": "resourceGroup",
+                        "type": "select",
+                        "label": "Resource Group Name",
+                        "options": {
+                          "store": "rpc://app%23azure-openai@1/listResourceGroups",
+                          "nested": [
+                            {
+                              "help": "For information on how to create a resource, see the [Azure OpenAI resource creation guide](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#create-a-resource).",
+                              "name": "azureOpenAiResource",
+                              "type": "select",
+                              "label": "Your Azure OpenAI Resource Name",
+                              "options": {
+                                "store": "rpc://app%23azure-openai@1/listResources"
+                              },
+                              "required": true
+                            },
+                            {
+                              "help": "You can find API key on your resource page under Keys and Endpoint tab.",
+                              "name": "azureOpenAiKey",
+                              "type": "password",
+                              "label": "Your Azure OpenAI API Key",
+                              "required": true
+                            },
+                            "rpc://app%23azure-openai@1/parametersHiddenAccessRefreshToken"
+                          ]
+                        },
+                        "required": true
+                      }
+                    ]
+                  },
+                  "required": true
+                }
+              ]
+            }
+          },
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "installSpec": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "required": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "required": true
+        },
+        {
+          "help": "**Token Salt** in Account Parameters must be equal with **Token Salt** in App Parameters.",
+          "name": "salt",
+          "type": "text",
+          "label": "Token Salt",
+          "required": true
+        }
+      ],
+      "scopesJsonc": null,
+      "installJsonc": "{\n    \"common\": {\n        \"clientId\": \"{{parameters.clientId}}\",\n        \"clientSecret\": \"{{parameters.clientSecret}}\",\n        \"salt\": \"{{parameters.salt}}\"\n    }\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"__IMTCONN__\",\n        \"label\": \"Azure Connection\",\n        \"required\": true,\n        \"type\": \"account:app#azure-openai\",\n        \"options\": {\n            \"nested\": {\n                \"store\": [\n                    {\n                        \"name\": \"subscriptionId\",\n                        \"label\": \"Subscription ID\",\n                        \"help\": \"Enter the unique identifier for Azure subscription. This ID is associated with the Azure account that has been granted access to Azure OpenAI services.\",\n                        \"type\": \"select\",\n                        \"options\": {\n                            \"store\": \"rpc://listSubscriptions\",\n                            \"nested\": [\n                                {\n                                    \"name\": \"resourceGroup\",\n                                    \"label\": \"Resource Group Name\",\n                                    \"type\": \"select\",\n                                    \"help\": \"Name of the Azure resource group where Azure OpenAI resources will be organized. \",\n                                    \"options\": {\n                                        \"store\": \"rpc://listResourceGroups\",\n                                        \"nested\": [\n                                            {\n                                                \"name\": \"azureOpenAiResource\",\n                                                \"label\": \"Your Azure OpenAI Resource Name\",\n                                                \"type\": \"select\",\n                                                \"help\": \"For information on how to create a resource, see the [Azure OpenAI resource creation guide](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#create-a-resource).\",\n                                                \"options\": {\n                                                    \"store\": \"rpc://listResources\"\n                                                },\n                                                \"required\": true\n                                            },\n                                            {\n                                                \"name\": \"azureOpenAiKey\",\n                                                \"help\": \"You can find API key on your resource page under Keys and Endpoint tab.\",\n                                                \"label\": \"Your Azure OpenAI API Key\",\n                                                \"type\": \"password\",\n                                                \"required\": true\n                                            },\n                                            \"rpc://parametersHiddenAccessRefreshToken\"\n                                        ]\n                                    },\n                                    \"required\": true\n                                }\n                            ]\n                        },\n                        \"required\": true\n                    }\n                ]\n            }\n        }\n    }\n]",
+      "installSpecJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"required\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"text\",\n        \"label\": \"Client Secret\",\n        \"required\": true\n    },\n    {\n        \"name\": \"salt\",\n        \"label\": \"Token Salt\",\n        \"type\": \"text\",\n        \"required\": true,\n        \"help\": \"**Token Salt** in Account Parameters must be equal with **Token Salt** in App Parameters.\"\n    }\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    },
+    "azure-openai3": {
+      "api": {},
+      "rev": 8,
+      "name": "azure-openai3",
+      "type": "basic",
+      "label": "Azure OpenAI API Key (advanced)",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "azure-openai",
+      "install": {},
+      "apiJsonc": "{}\r\n//? since we need to know the deployment name for any requests, it's not possible to validate the connection. Adding the deployment name as a connection param is too restrictive and not consistent with the other connection",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "help": "You can find the endpoint on your resource page under Keys and Endpoint tab. See [our Azure OpenAI documentation](https://www.make.com/en/help/app/azure-openai) for details.",
+          "name": "baseUrl",
+          "type": "text",
+          "label": "Endpoint",
+          "required": true,
+          "validate": {
+            "pattern": "^https://.*.openai.azure.com/$"
+          }
+        },
+        {
+          "help": "You can find the API key on your resource page under Keys and Endpoint tab. See [our Azure OpenAI documentation](https://www.make.com/en/help/app/azure-openai) for details.",
+          "name": "azureOpenAiKey",
+          "type": "password",
+          "label": "Your Azure OpenAI API Key",
+          "editable": true,
+          "required": true
+        },
+        {
+          "name": "isApiKey",
+          "type": "hidden",
+          "default": true
+        }
+      ],
+      "scopeJsonc": null,
+      "installSpec": [],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"baseUrl\",\n\t\t\"label\": \"Endpoint\",\n\t\t\"type\": \"text\",\n\t\t\"help\": \"You can find the endpoint on your resource page under Keys and Endpoint tab. See [our Azure OpenAI documentation](https://www.make.com/en/help/app/azure-openai) for details.\",\n\t\t\"required\": true,\n\t\t\"validate\": {\n\t\t\t\"pattern\": \"^https:\\/\\/.*.openai.azure.com\\/$\"\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"azureOpenAiKey\",\n\t\t\"help\": \"You can find the API key on your resource page under Keys and Endpoint tab. See [our Azure OpenAI documentation](https://www.make.com/en/help/app/azure-openai) for details.\",\n\t\t\"label\": \"Your Azure OpenAI API Key\",\n\t\t\"type\": \"password\",\n\t\t\"required\": true,\n\t\t\"editable\": true\n\t},\n\t{\n\t\t\"name\": \"isApiKey\",\n\t\t\"type\": \"hidden\",\n\t\t\"default\": true\n\t}\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"{{if(connection.isApiKey, connection.baseUrl, connection.endpoints.`Base Endpoint`)}}/openai\",\n    \"headers\": {\n        \"api-key\": \"{{connection.azureOpenAiKey}}\"\n    },\n    \"qs\": {\n        \"api-version\": \"2023-05-15\"\n    },\n    \"timeout\": \"{{common.timeout || 40000}}\",\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error.message}}\",\n            \"401\": {\n                \"message\": \"[{{statusCode}}] {{body.message}}\"\n            },\n            \"429\": {\n                \"message\": \"[{{statusCode}}] {{body.error.message || body.message}}\",\n                \"type\": \"RateLimitError\"\n            }\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.api-key\",\n            \"request.headers.Authorization\"\n        ]\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "decrypt": {
+      "rev": 6,
+      "code": "function decrypt(encrypted, salt) {\n\n    if (!encrypted) return;\n\n    const textToChars = (text) => text.split(\"\").map((c) => c.charCodeAt(0));\n    const applySaltToChar = (code) => textToChars(salt).reduce((a, b) => a ^ b, code);\n\n    const decrypted = encrypted\n        .match(/.{1,2}/g)\n        .map((hex) => parseInt(hex, 16))\n        .map(applySaltToChar)\n        .map((charCode) => String.fromCharCode(charCode))\n        .join(\"\");\n\n    return decrypted;\n}\n",
+      "name": "decrypt",
+      "test": "it ('generate a decryption', function () {\n\n\n    const input = decrypt ('3c3126311d27003c3106353a303b3900312c20', 'de1fcbb7-a64e-434e-8b19-9b27133d248a');\n    const result = 'hereIsTheRandomText'\n\n    assert.equal(input, result)\n})",
+      "appName": "azure-openai",
+      "arguments": "(encrypted, salt)",
+      "appVersion": 1
+    },
+    "encrypt": {
+      "rev": 10,
+      "code": "function encrypt(text, salt) {\n\n    if(!text) return;\n\n    const textToChars = (text) => text.split(\"\").map((c) => c.charCodeAt(0));\n    const byteHex = (n) => (\"0\" + Number(n).toString(16)).substr(-2);\n    const applySaltToChar = (code) => textToChars(salt).reduce((a, b) => a ^ b, code);\n\n    const encrypted = text\n        .split(\"\")\n        .map(textToChars)\n        .map(applySaltToChar)\n        .map(byteHex)\n        .join(\"\");\n\n    return encrypted;\n}",
+      "name": "encrypt",
+      "test": "it ('generate a encryption', function () {\n\n\n    const input = encrypt ('hereIsTheRandomText', 'de1fcbb7-a64e-434e-8b19-9b27133d248a');\n    const result = '3c3126311d27003c3106353a303b3900312c20'\n\n    assert.equal(input, result)\n})",
+      "appName": "azure-openai",
+      "arguments": "(text, salt)",
+      "appVersion": 1
+    },
+    "endpointsObject": {
+      "rev": 8,
+      "code": "function endpointsObject(properties) {\n\n    if(!properties) return;\n\n    const obj = Object.assign({'Base Endpoint': properties.endpoint}, properties.endpoints || {});\n\n    return obj;\n\n}",
+      "name": "endpointsObject",
+      "test": "it('Generate endpoints object.', () => {\r\n    const properties = {\r\n        \"endpoint\": \"https://minsu-azure-open-ai.openai.azure.com/\",\r\n        \"endpoints\": {\r\n            \"OpenAI Language Model Instance API\": \"https://minsu-azure-open-ai.openai.azure.com/\",\r\n            \"OpenAI Dall-E API\": \"https://minsu-azure-open-ai.openai.azure.com/\",\r\n            \"OpenAI Whisper API\": \"https://minsu-azure-open-ai.openai.azure.com/\",\r\n            \"OpenAI Model Scaleset API\": \"https://minsu-azure-open-ai.openai.azure.com/\"\r\n        }\r\n    };\r\n\r\n    const result = {\r\n        'Base Endpoint': 'https://minsu-azure-open-ai.openai.azure.com/',\r\n        'OpenAI Dall-E API': 'https://minsu-azure-open-ai.openai.azure.com/',\r\n        'OpenAI Language Model Instance API': 'https://minsu-azure-open-ai.openai.azure.com/',\r\n        'OpenAI Model Scaleset API': 'https://minsu-azure-open-ai.openai.azure.com/',\r\n        'OpenAI Whisper API': 'https://minsu-azure-open-ai.openai.azure.com/'\r\n    };\r\n\r\n    assert.deepStrictEqual(endpointsObject(properties), result);\r\n});",
+      "appName": "azure-openai",
+      "arguments": "(properties)",
+      "appVersion": 1
+    },
+    "parseTimestamps": {
+      "rev": 11,
+      "code": "function parseTimestamps(itemObj) {\n\tif (!itemObj) throw TypeError('\"itemObj\" should be empty.');\n\tif (typeof itemObj !== 'object') throw TypeError('\"itemObj\" should be an object.');\n\n    const outputObj = Object.assign({}, itemObj);\n    outputObj.created = outputObj.created ? iml.parseDate(Number(outputObj.created), 'X') : null;\n    \n    return outputObj;\n}",
+      "name": "parseTimestamps",
+      "test": "it('should throw appropriate error on invalid input', () => {\n    assert.throws(\n        () => {\n            parseTimestamps(null);\n        },\n        TypeError,\n        'throws an error when input is empty.'\n    );\n    assert.throws(\n        () => {\n            parseTimestamps('not an object');\n        },\n        TypeError,\n        'throws an error when input is not an object.'\n    );\n});\n\nit('should parse the timestamp in milliseconds to the ISO date', () => {\n    const timestamp = Date.now() / 1000;\n\n    const input = {\n        created: timestamp,\n        exec_id: 'blah-blah-blah',\n    };\n\n    const output = {\n        created: iml.parseDate(timestamp, 'X'),\n        exec_id: 'blah-blah-blah',\n    };\n\n    assert.deepEqual(parseTimestamps(input), output);\n});\n\nit('should return unchanged object with \"created\" set to null if \"created\" is an \"empty\" value', () => {\n    const input = {\n        exec_id: 'blah-blah-blah',\n    };\n\n    const output = {\n        created: null,\n        exec_id: 'blah-blah-blah',\n    };\n\n    assert.deepEqual(parseTimestamps(input), output);\n});\n",
+      "appName": "azure-openai",
+      "arguments": "(itemObj)",
+      "appVersion": 1
+    },
+    "deploymentFiltering": {
+      "rev": 4,
+      "code": "function deploymentFiltering(deployments, modelType) {\n\tif (!Array.isArray(deployments))\n\t\treturn []\n\n\treturn deployments.filter((d) => {\n\t\tif (d.properties.model.format !== 'OpenAI') return false;\n\t\tswitch (modelType) {\n\t\t\tcase 'chat':\n\t\t\t\treturn d.properties.capabilities.chatCompletion;\n\t\t\tcase 'whisper':\n\t\t\t\treturn d.properties.capabilities.audio;\n\t\t\tcase 'dalle':\n\t\t\t\treturn d.properties.capabilities.imageGenerations;\n\t\t}\n\t\treturn true;\n\t}).map((d) => {\n\t\treturn {\n\t\t\tlabel: `${d.name} (${d.properties.model.name})`,\n\t\t\tvalue: d.name\n\t\t}\n\t});\n}",
+      "name": "deploymentFiltering",
+      "test": "it('Filters deployments based on model type and outputs them in \"options\" format (label+value)', () => {\r\n\tconst body = {\r\n\t\tvalue: [\r\n\t\t\t{\r\n\t\t\t\tid: '/subscriptions/733329d6-8119-4cb1-b5a2-7d5113700840/resourceGroups/openai/providers/Microsoft.CognitiveServices/accounts/dmopenaitestapikey/deployments/gpt-4o',\r\n\t\t\t\ttype: 'Microsoft.CognitiveServices/accounts/deployments',\r\n\t\t\t\tname: 'gpt-4o',\r\n\t\t\t\tsku: {\r\n\t\t\t\t\tname: 'GlobalStandard',\r\n\t\t\t\t\tcapacity: 30\r\n\t\t\t\t},\r\n\t\t\t\tproperties: {\r\n\t\t\t\t\tmodel: {\r\n\t\t\t\t\t\tformat: 'OpenAI',\r\n\t\t\t\t\t\tname: 'gpt-4o',\r\n\t\t\t\t\t\tversion: '2024-11-20'\r\n\t\t\t\t\t},\r\n\t\t\t\t\tversionUpgradeOption: 'OnceNewDefaultVersionAvailable',\r\n\t\t\t\t\tcapabilities: {\r\n\t\t\t\t\t\tchatCompletion: 'true',\r\n\t\t\t\t\t\tassistants: 'true',\r\n\t\t\t\t\t\tjsonSchemaResponse: 'true',\r\n\t\t\t\t\t\tresponses: 'true'\r\n\t\t\t\t\t},\r\n\t\t\t\t\traiPolicyName: 'Microsoft.DefaultV2',\r\n\t\t\t\t\tprovisioningState: 'Succeeded',\r\n\t\t\t\t\trateLimits: [\r\n\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\tkey: 'request',\r\n\t\t\t\t\t\t\trenewalPeriod: 10,\r\n\t\t\t\t\t\t\tcount: 30\r\n\t\t\t\t\t\t},\r\n\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\tkey: 'token',\r\n\t\t\t\t\t\t\trenewalPeriod: 60,\r\n\t\t\t\t\t\t\tcount: 30000\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t]\r\n\t\t\t\t},\r\n\t\t\t\tsystemData: {\r\n\t\t\t\t\tcreatedBy: 'integromat@integromatservice.onmicrosoft.com',\r\n\t\t\t\t\tcreatedByType: 'User',\r\n\t\t\t\t\tcreatedAt: '2025-03-19T15:50:24.1425675Z',\r\n\t\t\t\t\tlastModifiedBy: 'integromat@integromatservice.onmicrosoft.com',\r\n\t\t\t\t\tlastModifiedByType: 'User',\r\n\t\t\t\t\tlastModifiedAt: '2025-03-19T15:50:24.1425675Z'\r\n\t\t\t\t},\r\n\t\t\t\tetag: '\"ce3af948-7420-41aa-91be-6d6970899e2e\"'\r\n\t\t\t}\r\n\t\t]\r\n\t};\r\n\r\n\tconst chat = [{ label: 'gpt-4o (gpt-4o)', value: 'gpt-4o' }];\r\n\r\n\tassert.deepStrictEqual(deploymentFiltering(body.value, 'chat'), chat);\r\n\tassert.deepStrictEqual(deploymentFiltering(body.value, 'whisper'), []);\r\n\tassert.deepStrictEqual(deploymentFiltering(body.value, 'dalle'), []);\r\n});",
+      "appName": "azure-openai",
+      "arguments": "(deployments, modelType)",
+      "appVersion": 1
+    },
+    "assembleContentMessages": {
+      "rev": 10,
+      "code": "function assembleContentMessages(body) {\n\n    const output = {};\n\n    const mergedMessages = [];\n\n    (body?.choices || []).forEach(choice => {\n        if (choice?.message?.role === 'assistant' && choice.message.content) {\n            mergedMessages.push(choice.message.content);\n        }\n    });\n\n    if (mergedMessages.length > 0) {\n        output['result'] = mergedMessages.join('\\n\\n');\n    }\n\n    return Object.assign(output, body);\n}",
+      "name": "assembleContentMessages",
+      "test": "it('If empty message, return no result', () => {\n    const body = {\n        \"choices\": [\n            {\n                \"finish_reason\": \"stop\",\n                \"index\": 0,\n                \"message\": {\n                    \"role\": \"assistant\",\n                    \"content\": \"\"\n                }\n            }\n        ]\n    }\n\n    const result = {\n        \"choices\": [\n            {\n                \"finish_reason\": \"stop\",\n                \"index\": 0,\n                \"message\": {\n                    \"role\": \"assistant\",\n                    \"content\": \"\"\n                }\n            }\n        ]\n    }\n\n    assert.deepStrictEqual(assembleContentMessages(body), result);\n});\n\nit('If one message, return result', () => {\n    const body = {\n        \"choices\": [\n            {\n                \"finish_reason\": \"stop\",\n                \"index\": 0,\n                \"message\": {\n                    \"role\": \"assistant\",\n                    \"content\": \"Prague is the capital city of the Czech Republic, located in Central Europe.\"\n                }\n            }\n        ]\n    }\n\n    const result = {\n        \"result\": \"Prague is the capital city of the Czech Republic, located in Central Europe.\",\n        \"choices\": [\n            {\n                \"finish_reason\": \"stop\",\n                \"index\": 0,\n                \"message\": {\n                    \"role\": \"assistant\",\n                    \"content\": \"Prague is the capital city of the Czech Republic, located in Central Europe.\"\n                }\n            }\n        ]\n    }\n\n    assert.deepStrictEqual(assembleContentMessages(body), result);\n});\n\nit('If two messages, return assembled result', () => {\n    const body = {\n        \"choices\": [\n            {\n                \"finish_reason\": \"stop\",\n                \"index\": 0,\n                \"message\": {\n                    \"role\": \"assistant\",\n                    \"content\": \"Prague is the capital city of the Czech Republic, located in Central Europe.\"\n                }\n            },\n            {\n                \"finish_reason\": \"stop\",\n                \"index\": 0,\n                \"message\": {\n                    \"role\": \"assistant\",\n                    \"content\": \"Seoul is the capital and largest city of South Korea. It is located in the northwest part of the country, on the Han River.\"\n                }\n            }\n        ]\n    }\n\n    const result = {\n        \"result\": \"Prague is the capital city of the Czech Republic, located in Central Europe.\\n\\nSeoul is the capital and largest city of South Korea. It is located in the northwest part of the country, on the Han River.\",\n        \"choices\": [\n            {\n                \"finish_reason\": \"stop\",\n                \"index\": 0,\n                \"message\": {\n                    \"role\": \"assistant\",\n                    \"content\": \"Prague is the capital city of the Czech Republic, located in Central Europe.\"\n                }\n            },\n            {\n                \"finish_reason\": \"stop\",\n                \"index\": 0,\n                \"message\": {\n                    \"role\": \"assistant\",\n                    \"content\": \"Seoul is the capital and largest city of South Korea. It is located in the northwest part of the country, on the Han River.\"\n                }\n            }\n        ]\n    }\n\n    assert.deepStrictEqual(assembleContentMessages(body), result);\n});",
+      "appName": "azure-openai",
+      "arguments": "(body)",
+      "appVersion": 1
+    },
+    "parseGenerateImgResponse": {
+      "rev": 15,
+      "code": "function parseGenerateImgResponse(res, response_format) {\n    if (typeof res !== 'object')\n        throw TypeError('\"res\" argument is expected to be an object.');\n    if (Array.isArray(res))\n        throw TypeError('\"res\" argument is expected to be an object.');\n    if (!res.hasOwnProperty('data'))\n        throw TypeError('\"data\" property is missing in the response.');\n    if (!Array.isArray(res.data))\n        throw TypeError('\"data\" is expected to be an array.');\n\n    const data = res.data.find((item, idx) => {\n        if (typeof item !== 'object')\n            throw TypeError(`data[${idx}] is not an object.`);\n        if (response_format === 'imageFile' && !item.hasOwnProperty('b64_json'))\n            throw TypeError(`data[${idx}] is missing \"b64_json\" property.`);\n\n        if (response_format === 'url' && !item.hasOwnProperty('url'))\n            throw TypeError(`data[${idx}] is missing \"url\" property.`);\n\n        return true;\n    });\n\n    const { b64_json, revised_prompt, url } = data\n\n    return {\n        created: res.created,\n        revised_prompt,\n        url,\n        filename: b64_json ? 'output.png' : undefined,\n        data: b64_json ? iml.toBinary(b64_json, 'base64') : undefined\n    };\n}\n",
+      "name": "parseGenerateImgResponse",
+      "test": "it('throw appropriate errors if invalid argument is passed.', () => {\n    const invalidArgs1 = ['res arg is a string', 'imageFile'];\n    const invalidArgs2 = [['res arg is an array'], 'imageFile'];\n    const invalidArgs3 = [\n        { created: Date.now(), no_data: 'property' },\n        'imageFile',\n    ];\n    const invalidArgs4 = [{ data: { data_is: 'not_array' } }, 'imageFile'];\n    const invalidArgs5 = [\n        {\n            data: [\n                { b64_json: Buffer.from('IML test').toString('base64') },\n                '2nd item is not an object',\n            ],\n        },\n        'imageFile',\n    ];\n    const invalidArgs6 = [\n        {\n            data: [\n                { b64_json: Buffer.from('IML test').toString('base64') },\n                { noB64_json: 'value' },\n            ],\n        },\n        'imageFile',\n    ];\n\n    assert.throws(() => {\n        parseGenerateImgResponse(\n            ...invalidArgs1,\n            TypeError,\n            'should throw TypeError if \"res\" arg is a string'\n        );\n        parseGenerateImgResponse(\n            ...invalidArgs2,\n            TypeError,\n            'should throw TypeError if \"res\" arg is an array'\n        );\n        parseGenerateImgResponse(\n            ...invalidArgs3,\n            TypeError,\n            'should throw TypeError if \"res\" arg has no \"data\" property'\n        );\n        parseGenerateImgResponse(\n            ...invalidArgs4,\n            TypeError,\n            'should throw TypeError if \"res\" has \"data\" property that is not an array'\n        );\n        parseGenerateImgResponse(\n            ...invalidArgs5,\n            TypeError,\n            'should throw TypeError if \"res\" arg has \"data\" property that has 2nd item that is not an object.'\n        );\n        parseGenerateImgResponse(\n            ...invalidArgs6,\n            TypeError,\n            'should throw TypeError if \"res\" arg has \"data\" property that has 2nd item has no \"b64_json\" property.'\n        );\n    });\n});\n\nit('should return unchanged \"res\" argument if \"responseFormat\" is not equal to \"imageFile\"', () => {\n    const args = [\n        {\n            created: Date.now(),\n            data: [{ url: 'https://dwnld.my.image', revised_prompt: 'nothing to describe' }],\n        },\n        'url',\n    ];\n\n    const result = {\n        created: Date.now(),\n        url: 'https://dwnld.my.image',\n        data: undefined,\n        filename: undefined,\n        revised_prompt: 'nothing to describe'\n    }\n\n    assert.deepEqual(parseGenerateImgResponse(...args), result);\n});\n\nit('when all args are valid, should convert all items in \"data\" to the objects containing \"fileName\" and \"fileData\" props', () => {\n    const dataItem1 = Buffer.from('1st data item').toString('base64');\n\n    const created = Date.now();\n    const args = [\n        {\n            created,\n            data: [{ b64_json: dataItem1, revised_prompt: 'prompt1' }],\n        },\n        'imageFile',\n    ];\n\n    const parsedDataItem1 = Buffer.from(dataItem1, 'base64');\n\n    const result = {\n        created,\n        filename: 'output.png', \n        data: parsedDataItem1, \n        revised_prompt: 'prompt1',\n        url: undefined\n    };\n\n    assert.deepEqual(parseGenerateImgResponse(...args), result);\n});\n",
+      "appName": "azure-openai",
+      "arguments": "(res, response_format)",
+      "appVersion": 1
+    },
+    "azureOpenaiEndpointOptions": {
+      "rev": 11,
+      "code": "function azureOpenaiEndpointOptions(endpoints) {\n\n    const arr = [];\n    let i = 1;\n    if(endpoints) {\n        for(const k in endpoints) {\n            arr.push({\n                label: k,\n                value: endpoints[k] + `~${i}`,\n                default: k === 'Base Endpoint' ? true : undefined\n            });\n            i++;\n        }\n    }\n\n    return arr;\n    \n}",
+      "name": "azureOpenaiEndpointOptions",
+      "test": "it('If no Azure OpenAI Endpoint exists, options are empty', () => {\r\n    const endpoints = {};\r\n\r\n    const result = [];\r\n\r\n    assert.deepStrictEqual(azureOpenaiEndpointOptions(endpoints), result);\r\n});\r\n\r\nit('Generate OpenAI Endpoint options', () => {\r\n    const endpoints = {\r\n        \"Base Endpoint\": \"https://minsu-azure-open-ai.openai.azure.com/\",\r\n        \"OpenAI Language Model Instance API\": \"https://minsu-azure-open-ai.openai.azure.com/\",\r\n        \"OpenAI Dall-E API\": \"https://minsu-azure-open-ai.openai.azure.com/\",\r\n        \"OpenAI Whisper API\": \"https://minsu-azure-open-ai.openai.azure.com/\",\r\n        \"OpenAI Model Scaleset API\": \"https://minsu-azure-open-ai.openai.azure.com/\"\r\n    };\r\n\r\n    const result = [\r\n        {\r\n            default: true,\r\n            label: 'Base Endpoint',\r\n            value: 'https://minsu-azure-open-ai.openai.azure.com/~1'\r\n        },\r\n        {\r\n            default: undefined,\r\n            label: 'OpenAI Language Model Instance API',\r\n            value: 'https://minsu-azure-open-ai.openai.azure.com/~2'\r\n        },\r\n        {\r\n            default: undefined,\r\n            label: 'OpenAI Dall-E API',\r\n            value: 'https://minsu-azure-open-ai.openai.azure.com/~3'\r\n        },\r\n        {\r\n            default: undefined,\r\n            label: 'OpenAI Whisper API',\r\n            value: 'https://minsu-azure-open-ai.openai.azure.com/~4'\r\n        },\r\n        {\r\n            default: undefined,\r\n            label: 'OpenAI Model Scaleset API',\r\n            value: 'https://minsu-azure-open-ai.openai.azure.com/~5'\r\n        }\r\n    ];\r\n\r\n    assert.deepStrictEqual(azureOpenaiEndpointOptions(endpoints), result);\r\n});",
+      "appName": "azure-openai",
+      "arguments": "(endpoints)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2024-01-17T19:55:38.435553+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Azure OpenAI is a cloud-based platform that enables developers and data scientists to build and deploy AI models quickly and easily. With Azure OpenAI, users can access a wide range of AI tools and technologies to create intelligent applications, including natural language processing, computer vision, and deep learning.  Azure OpenAI is designed to accelerate the development of AI applications, allowing users to focus on creating innovative solutions that deliver value to their organizations and customers.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [
+    {
+      "help": "**Token Salt** in App Parameters must be equal with **Token Salt** in Account Parameters.",
+      "name": "salt",
+      "type": "text",
+      "label": "Token Salt",
+      "required": true
+    },
+    {
+      "name": "timeout",
+      "type": "uinteger",
+      "label": "Module Timeout",
+      "default": 40000
+    }
+  ],
+  "inviteToken": "6a6cfd6a3d15893b217aaaa8318f17b5",
+  "versionFull": "1.0.19",
+  "compiledName": "azure-openai",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n    \"common\": {\n        \"timeout\": \"{{parameters.timeout}}\",\n        \"salt\": \"{{parameters.salt}}\"\n    }\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n    {\n        \"name\": \"salt\",\n        \"label\": \"Token Salt\",\n        \"type\": \"text\",\n        \"required\": true,\n        \"help\": \"**Token Salt** in App Parameters must be equal with **Token Salt** in Account Parameters.\"\n    },\n    {\n        \"name\": \"timeout\",\n        \"label\": \"Module Timeout\",\n        \"type\": \"uinteger\",\n        \"default\": 40000\n    }\n]"
+}

@@ -1,0 +1,1836 @@
+{
+  "rev": 18,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.tokenid"
+      ]
+    },
+    "baseUrl": "https://api.powerlink.co.il/api",
+    "headers": {
+      "tokenid": "{{connection.tokenid}}"
+    },
+    "response": {
+      "error": {
+        "429": {
+          "type": "RateLimitError",
+          "message": "[429] You have surpassed one of the established rate limits in the API. Please refer to the Fireberry API documentation on rate limits for further information."
+        },
+        "message": "[{{statusCode}}] {{body.Message}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": "#How to get your token#\nTo get your tokenid please login to your powerlink account and click on the gear icon on the top left corner then select ממשקי אינטרנט and copy your token",
+  "name": "powerlink",
+  "_rpcs": {
+    "getOwners": {
+      "api": {
+        "url": "/query",
+        "body": {
+          "query": "",
+          "fields": "",
+          "page_size": 500,
+          "objecttype": 9,
+          "page_number": 1
+        },
+        "method": "POST",
+        "response": {
+          "limit": 500,
+          "output": {
+            "label": "{{item.fullname}}",
+            "value": "{{item.crmuserid}}"
+          },
+          "iterate": "{{body.data.Data}}"
+        },
+        "pagination": {
+          "body": {
+            "query": "",
+            "fields": "",
+            "page_size": 500,
+            "objecttype": 9,
+            "page_number": "{{pagination.page}}"
+          },
+          "condition": "{{!body.data.IsLastPage}}"
+        }
+      },
+      "rev": 3,
+      "name": "getOwners",
+      "label": "Get Owner Name and ID",
+      "appName": "powerlink",
+      "apiJsonc": "{\n  \"url\": \"/query\",\n  \"body\": {\n    \"query\": \"\",\n    \"fields\": \"\",\n    \"page_size\": 500,\n    \"objecttype\": 9,\n    \"page_number\": 1\n  },\n  \"method\": \"POST\",\n  \"response\": {\n    \"limit\": 500,\n    \"iterate\": \"{{body.data.Data}}\",\n    \"output\": {\n      \"label\": \"{{item.fullname}}\",\n      \"value\": \"{{item.crmuserid}}\"\n    }\n  },\n  \"pagination\": {\n    \"body\": {\n      \"query\": \"\",\n      \"fields\": \"\",\n      \"page_size\": 500,\n      \"objecttype\": 9,\n      \"page_number\": \"{{pagination.page}}\"\n    },\n    \"condition\": \"{{!body.data.IsLastPage}}\"\n  }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "powerlink",
+      "altAccountName": null,
+      "parametersJsonc": "[]"
+    },
+    "getfieldnames": {
+      "api": {
+        "url": "https://api.powerlink.co.il/metadata/records/{{parameters.objecttype}}/fields",
+        "method": "GET",
+        "response": {
+          "limit": 500,
+          "output": {
+            "label": "{{item.label}}",
+            "value": "{{item.fieldName}}"
+          },
+          "iterate": "{{body.data}}"
+        }
+      },
+      "rev": 3,
+      "name": "getfieldnames",
+      "label": "Get Field Names",
+      "appName": "powerlink",
+      "apiJsonc": "{\n  \"url\": \"https://api.powerlink.co.il/metadata/records/{{parameters.objecttype}}/fields\",\n  \"method\": \"GET\",\n  \"response\": {\n    \"limit\": 500,\n    \"output\": {\n      \"label\": \"{{item.label}}\",\n      \"value\": \"{{item.fieldName}}\"\n    },\n    \"iterate\": \"{{body.data}}\"\n  }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "powerlink",
+      "altAccountName": null,
+      "parametersJsonc": "[]"
+    },
+    "getObjectsByType": {
+      "api": {
+        "url": "/query",
+        "body": {
+          "page_size": 500,
+          "objecttype": "{{parameters.objecttype}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.users}}"
+        },
+        "pagination": {
+          "body": {
+            "fields": "*",
+            "page_size": 500,
+            "objecttype": "{{parameters.objecttype}}",
+            "page_number": "{{pagination.page}}"
+          },
+          "condition": "{{!body.data.IsLastPage}}"
+        }
+      },
+      "rev": 2,
+      "name": "getObjectsByType",
+      "label": "Get Objects by Type",
+      "appName": "powerlink",
+      "apiJsonc": "{\n  \"url\": \"/query\",\n  \"method\": \"POST\",\n  \"body\": {\n    \"objecttype\": \"{{parameters.objecttype}}\",\n    \"page_size\": 500\n  },\n  \"response\": {\n    \"output\": {\n      \"label\": \"{{item.name}}\",\n      \"value\": \"{{item.id}}\"\n    },\n    \"iterate\": \"{{body.users}}\"\n  },\n  \"pagination\": {\n    \"body\": {\n      \"objecttype\": \"{{parameters.objecttype}}\",\n      \"page_size\": 500,\n      \"page_number\": \"{{pagination.page}}\",\n      \"fields\": \"*\"\n    },\n    \"condition\": \"{{!body.data.IsLastPage}}\"\n  }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "powerlink",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "getobjectnameandid": {
+      "api": {
+        "url": "https://api.powerlink.co.il/metadata/records",
+        "method": "GET",
+        "response": {
+          "limit": 500,
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.objectType}}"
+          },
+          "iterate": "{{body.data}}"
+        }
+      },
+      "rev": 3,
+      "name": "getobjectnameandid",
+      "label": "Get Object Name and ID",
+      "appName": "powerlink",
+      "apiJsonc": "{\n  \"url\": \"https://api.powerlink.co.il/metadata/records\",\n  \"method\": \"GET\",\n  \"response\": {\n    \"limit\": 500,\n    \"output\": {\n      \"label\": \"{{item.name}}\",\n      \"value\": \"{{item.objectType}}\"\n    },\n    \"iterate\": \"{{body.data}}\"\n  }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "powerlink",
+      "altAccountName": null,
+      "parametersJsonc": "[]"
+    },
+    "getFieldNamesComments": {
+      "api": {
+        "url": "https://api.powerlink.co.il/metadata/records/7/fields",
+        "method": "GET",
+        "response": {
+          "limit": 500,
+          "output": {
+            "label": "{{item.label}} - {{item.fieldName}}",
+            "value": "{{item.fieldName}}"
+          },
+          "iterate": "{{body.data}}"
+        }
+      },
+      "rev": 2,
+      "name": "getFieldNamesComments",
+      "label": "Get Field Names for Comments",
+      "appName": "powerlink",
+      "apiJsonc": "{\n  \"url\": \"https://api.powerlink.co.il/metadata/records/7/fields\",\n  \"method\": \"GET\",\n  \"response\": {\n    \"output\": {\n      \"label\": \"{{item.label}} - {{item.fieldName}}\",\n      \"value\": \"{{item.fieldName}}\"\n    },\n\t\"limit\": 500,\n    \"iterate\": \"{{body.data}}\"\n  }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "powerlink",
+      "altAccountName": null,
+      "parametersJsonc": "[]"
+    },
+    "createDynamicInterface": {
+      "api": {
+        "url": "/query",
+        "body": {
+          "query": "",
+          "fields": "*",
+          "page_size": 500,
+          "objecttype": "{{parameters.objecttype}}",
+          "page_number": "1"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{createDynamicInterface(item)}}",
+          "iterate": "{{body.data.Columns}}"
+        }
+      },
+      "rev": 2,
+      "name": "createDynamicInterface",
+      "label": "Create Dynamic Interface",
+      "appName": "powerlink",
+      "apiJsonc": "{\n  \"url\": \"/query\",\n  \"body\": {\n    \"query\": \"\",\n    \"fields\": \"*\",\n    \"page_size\": 500,\n    \"objecttype\": \"{{parameters.objecttype}}\",\n    \"page_number\": \"1\"\n  },\n  \"method\": \"POST\",\n  \"response\": {\n    \"output\": \"{{createDynamicInterface(item)}}\",\n    \"iterate\": \"{{body.data.Columns}}\"\n  }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "powerlink",
+      "altAccountName": null,
+      "parametersJsonc": "[]"
+    }
+  },
+  "flags": {},
+  "label": "Fireberry",
+  "theme": "#000000",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "addComment",
+        "createCall",
+        "createObjectTest",
+        "createobject",
+        "deleteObject",
+        "makeApiCall",
+        "plquery",
+        "queryObjectGetAll",
+        "queryObjectUnparsed",
+        "updateObject",
+        "uploadFile"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda7930000016c4944415458c3ed96bb4a03511445574234f10162e3b3b0d25f102c2c44f01ffc02fd020bb1b1117b5b45f0d9d8f90336da88859fa12028c1f84a9645267819889387138b64b577e6ec7deedcbbcf408f6e27d36e0135ac254026d378d9ec1f880f006bc011b00ae40253e9a1a216d46db5649547753e750331f1377f28a92ba91aa8d3b96a453d5647523390207ea68e45cf7474dbbb5bfcb493e2e13757bd50a7d4acdaa7e65a315237b2a242fdc026b001e483e532700b3cf0136665e01238043e9b49c3dfba5f565f6c9c2775a1995d488ae2a158e74914a2771a2697b07e05ec03cb81d90ad5fc9f8a3550014e809bd6f63c46ed40a9fdea843aad4eaab3d1e90f29ab07ea68da3702754bfd08c4bfd4fd54c50303c3ea75acfb7b75a655e166ff075ea95ebf9039601d18ecc414244abef328096bbcabbbeabf9bd851f3ff69e2595d4cd5408289a2ba94ba81988971754fbd8b865653e7a0ad891108f50183401128b73d887a7415df3e49aa414ae4ac880000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda7930000026b4944415478daed9a3b6814511486bfc94663d41850ac44f051d8a828424a5b45ec6cb4b014d3aaad08822228d868619bd2c62e4dd206311a7c80588862a15508362a3ed6cd6731b330a8bb4e76bdb3c3cefdea3333e7ffe79c7b67ce0c4422914824128944ea4932e80400548051603f7018f80a2c016f0193a412698613af8eab57d4657555fda9be51cfa84966d0f091137f4dfde69f7c50a786d2809cf8eb1dc4b7b99ac506c9636450e28171e032700918eb12be35642ea51bb046f102afcbce31a8f88265df6641dd39146b400fe21fab0743f67f95c52f46f1517cfdc4c79eafb3f80375151fcbbeaee26b7fe72bd3f37d8d5a5cdb8b0d400b78003c031a5de2be000bc053a055c989507607c7ec3ccce89765f582daa842a5fc4d3cea29f57300f16d56d4a321dba5df79c071605340afb701c7029ebf2f03126063c8e4323657d500815781c5b7801781afd1a3fab42f77a90f03ae01b3eaf6908b60cffb4b2ea97dc045600ad8d0ed106002d851f0ba73c034f00e20d456d8f75933231ac024b0ae43d82ae982760b3859e0b4f3c0f9d0e24b216b9549f59ee9179f7f31a7ee0eb9f5952d7ea2cee251a7d566adc4e70c1851ef17103f9fed28a58b0ffd652801d617887b0fac40f90b5e68035ac0cb027167811bc0c450947f9baca4f7a88f0ab44153bdab6e191a13720be121f5494113ee441362254413da26dc369d3a0d3afd20262c1530e1937a6210cf07659950a4126e8634a0f45f64720f3acf8173a4ff037663b4ec1c4ba160257c574f0f550b743161f137f12d7526f44e30f049434edc5ed29638023449872233c047a8f044e83f1bd17e7912f811527824128944229148edf905700d86c3676ab5690000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-05-16T13:03:08.987846+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda793000005604944415478daeddd4b681d551cc7f16f5e4db5a52e5a922ab448bb500415c485e022e8c2ad8aa8880b1117157c22361685eacaaa2d082e044504175a15a4eaa23bc52a2ad2455d88f8285a49a2a80b6b6243424d7e2ee65c324d4a7ad33bc73967e6f7810b5da4c9ccfcfee731671e17ccccccccccccccccccccccccccccccccccccccac09faeade805449eafc7300580fcc03ff02f4f535e7b035674f2a1282ef072e03c680eb81edc049e038f069f8fc05cd2a86d69384a40b253d26e967490b5a694ed26149d7869faf7bb3ad0a21cc8d920e8490cfe55b49632e820608216e90f482a4f92ec2ef382a69870b2063a5f09f5f63f81dfbdc0b64aad4edafb5e5971d9334ea02c84ca9e5efef217c493a29e9ba5c0b60b0ee0da843086b23b017780858d7c3af1b0486ebdea75e36be5542f81b8067e83d7c804560a1eefdb22ef430db5fcd4f9276e63a04b4464513beb3794bd2a00b2061154ef896fb53d24df26960ba22b6fc19498f4a1a70f8898ad8f2ff91f484a4750e3f518a33e1ebb47c879fb2c8e1ef76f8098bd8edcf481a77f80953bc099fc7fcd4e9ccebf96ef96d228ff9ed1539fcc71d7ec214f73c7f5cd290c34f94e2aef079c297b252cbf784af6d2276fbd3f2842f6d8a3fe1f3989f2a2d8df9fbd5dd7dfbeef69b2262cbefccf61d7eaa147785cfb3fd9429ee851d4ff85216b1db77f8a9d399133eaff0b549c496ef4bbaa953bc09dfaca4271d7ec21477c2b757d2b0c35f298947c3b4f4b8d6d3c0c3f4feb856d99bc01bc0e6f0b7caef743957452cffd999f069ccab616adf8b65e13f42b5e103fc0e4c53bcf747619fbbed0acac76711f815f8187817f80e9a5308b58838e18b6951d20f92eef59ca20721fc6149cf65147ed9b4a4fb95f96361b5f45fa5037637f00ac51090a309e036e028e4391cf4d7f8b73703bbc8377c806dc07dd47b1c7b52e7865f0d5c53f701a8c00d148590a53a0be012e082ba0f4005b6867dc9529d05b09e044e432b30000cd5bd11e7abce023845716e9dbbd3142f92ce529d0530495104b93b113e59aab300be06beacfb0054e008c56a6396ea2c8019e065c26bd733f53df01ae4b90600351540e9601d06f691e75030058c03dfd4bd21d90acba8eb24ed92743cacb3e76052d2cdb92f034302a761e100f6517c43c79d148b43232c5d155ced082fbfb2d757facc517cd347d5e7e893146f187d1ff2edfa3b92d9fa524b1aa4581e1e58cb7f2fed4b1fc5e9e50ee075e0aa0a37730a78908684df389d2e59d2a52abed6a5ca216552d2ad4de8f61ba914fe36491f4618f36f71f8892a85bf3d84ef96df16cb5afe0715873fe1969fb810cea8a44311ba7db7fc948570fa55dc565675b7ef969fba10d015924eb8e5b75008e91e9dfd1b3ecfc754dbc2cff65eb6922d15edc704f0007008dab3c8d3840258cb8ae16a7e043e87f6840fcd2880b98a7ecf18f02230e221202fbf504d110c0077118a00684d11642bb4d42d923eabf02c6041c53781b5aa27c8929656016f97f4778422187511242e043424698fa4531516c1a2a4b75d0419d0d283a64f4528020f07398858040b920eba27c840e422f0709083ffa108b6ba081217b1081625bde39e2003918bc0c3410e220f070715ce0e2c61917b8297e4f70fa62f62114cab214f08355ec42278cfbd40262215c184a4cb732d80265c0eee5ab8d1631e38003c0bcc56f06b2fa2b82b294bad2a00885204fd647c1cb3ddf05e545c04b38417485b662a9a131c91b429d73940ebf558040b2abe7fc8a78139eba1083e9274b1c36f805211ec5177b7977d21e94ab7fe06d1d2ed657748fa4a2b5f63bf28e90f49af4adad984f0dbf30444974a818e003752bc626613c51b417f033e018e01a7dbf4008999999999999999999999999999999999999999a5ed3fc53d198cbcc23e800000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda79300000d004944415478daeddd6bac65e55dc7f1ef3973a55c5a66a88d356db14d79c1458b1514bc45a9341aa9690c6d6ca256a18d96522cb18a1a05b9d5448d7229a589f1166334be68136b6c5f3465e6945ea8a68402b1507b4dd43257b0748661e6fc7cb1d6e1acb333c39c61afd9cf5afbf97e92094c2067feb3f7fefdd7f33cfb59cf02499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224a9020ba50bd0b82559f9d74d349fa743000b0b7eb4c6c0774927a413f8cdc036e062e035c079344de031603ff004f020f04de020d81486c87744ebd209fef7003f055c069c0f9c039c0a2c76fef7659ad07f0578045802fe05f806d808a451494292ad497e3ec927921cc8897926c9a7925cd9fe9cd27f2549ebd186ff8c243726d97382c19fb437c9ad49b6b73fb7f45f4fd2b1b421fdae24f7be80abfeb11c48f297495e61139006aa0de7f636fc877a0aff8a4349fe3ac94b6d00d2c0b4e1df96e403edfcfd6438d84e07b6d804a481e884ffae36a427d3ae340b8b4e05a4d2da20bea40dffc9baf24fda99e4e53600a9a0892bffacc29f24df49f28b8e02ca589cfe4768ecdae09d09dc04bc936697dfac9c02bc61c67fa65a3680cab5e1df0edccaecc3bfe212e07b4bbf1635b20154ac0dff5934e1bf1ad852a894570117947e3d6a6403a85467d8ff47c0af517608be0938a3f46b52a38da50bd0ecb5e1df06dc085c45f9f9f7e2006aa8920da0329d61ffcd3457fe52c3feae05fc2c16e18b5e914ef86f03dece70aeba018e942ea24636804a7486fd3703bf4a33ef1e8ac3c0b74b17512317012bd009ff2d3473fe21851fe000f0bfa58ba8910d60ce75c27f13c358f03b9a47698e0fd38c3905986313c3fe7730ccf003ec0476972ea2468e00e6546787df2d0c3bfc4f02f701f1acc0d97304308726c23fd461ff8a8f039f2b5d843417329bc33cfaf278928bbd1350ea4127fc77e4e41fe631ad6f25f9e5240b865f9a521bfeb3927c30c3bff2ef49724d924d865f9a5227fcf78e24fcd7c5b300a5e96575d87ff708c2bfb70dff66c32f4d29ab47778f61c16f6f92ebe3955f9a5ec6b5daff4492f7187ea907230bffee340b7e0efba569655c5ff5adacf61b7e695a595dedbf6724e1bfcef04b3dc8da67f58d61d8ef9c5fea431bfe3393dc3982f0fb3dbfd497ac5ef9efcef087fdfb92fca6e1977ad086ffa519c7b07f8fe1977a92b573fe43a5d37d1ccef9a5be645c3bfc762779775ced97a697712df8ed4e72ade1977a90b537f60c7dc1cf1d7e525f32aebbfa9e48f22ec32ff520ab73fe7b4610febd71d82ff56384e1f7ab3ea90f595df0bb6b24e17fafe1977a90d51b7bc6b0e0e7f65ea92ff10c3fa94e599df37f30c3dfe1b772869fe197a695b537f60cfdcabfb2c9c7f04bd3caea82df1856fb77c5edbd523f32aebdfdbbe2261fa91f19d7577d6eef95fa92711de6e10e3fa92f19d7b3fa76c7d57ea91f19d782df9e34877978e597a695d5bbfaeecc3886fdd7c52bbf34bdac0efbc7b0daefde7ea92f9df07f6804e1777bafd497ac0efbefc9f0b7f7ee8a3bfca47e4c847f0c577e77f8497dc8da05bfa187df4d3e525f32ae1d7eeeed97fa9271ededf7ca2ff525e33ac3cfc775497dc9ea9c7f0c57fe7d865fea4927fc7764f83bfcbcf24b7dc9b86eecd997e47ac32ff5206b77f80d7d93cfb793fc5e92ad865f9a52c635e77f3ac9cd494e35fcd29432aeaffaf627b929c9e9865f9a52c6f5a0ceaf26f99538ecd70bb0b1740143d386683b70337035b0b9744dc7f15fc012703af0e2240b2b7f95f69fdddf4ffeb7691debcf3a021c04be031c59585838d19fab19f19de968c3bf8d26fcef60f8e10738007c0d580636b0fa9e2eb7ff5ca4bfc04f3a5a03087008f81fe07e9ae6f410b017c066302cbe1bad89f05f0d6c295dd31c38023c057c01f83be0c3edef6d0403e1bbc09a61ff2dc0558ce3ca3f364f03ff06fc09f0efc0b24da0bceadf81910efbc7ec4bc01f03ff081cb4099455f5abef95bf98bdc01f00f7e248a0a8c5d20594d286ff14e0060cffac6d03de075c06cfbd172aa0ca06d0f9c0bd05782786bf84b3811b8157972ea466553680d66b81eb81334a1752b11f06de0e2c3a0a28a3ba06d07ed016803703e796aea7721b80b701e7972ea456d53580d6d9c095b8137208ce062e07d7024aa8aa01743e6097e255672836003f09bcb8742135aaaa01749c076c2d5d849e73217041e9226a546303d808bcac74115ae34ce015a58ba8518d0d60130e37876603cd9e0ccd588d0d6003dee833340b348d593356630308cd5d6a1a8e05eafc2c1657e38b7e98e6ce340dc732cd19029ab11a1bc0b3c093a58bd01acf00bb4b1751a31a1bc0327ed886e66bc0a3a58ba8518d0d009a03291c050cc717806f942ea246553580ce7de73b81cf94ae474033f7bf8f661aa019abaa0174ec07fe99e6e45a95f538cdc1a19e135840750da0f321fb571c05947610f810f0e5d285d4aaba06d0f12de036e09ba50ba954808f007f0fc4ab7f19553680ce87ed93c0ed345302cdd60ee00f817da50ba959950d009e6b02cbc05fd11c0aeab702b3b304bc8766feefdcbfa0ea5ff9f68c80cd344753fd3ef0cad235cdb91dc035c02360f84bf3d5e7b926b001f871e0b7809f004e2d5dd71cda09bc0bc33f18be03adce6941db813702bf447372d069543c55ead10ee0ddc0c360f887c27761c24423f821e0353427079f43737045b719ac3c0cb3fbe4dde7fdf1edaf45d63e5873f230bc85899fb791d5877c3e43f3608dd3809f631c479adf47137eaffc03e33b711c9d86b0852688d3be66eb6d165ddd86b0722bf30dedafa11f6cba04fc06865f9a4e92955f5724f97a866f67920b56ea96f402b521da90e417923c563ad9ebb0c3f04b3dc8ea95ff4d49be523ad9ebb064f8a51e74c2ffc6248f964ef63adc97e47cc32f4da913fecb923c5c3ad9ebb064f8a51e74c27f7992474a277b9de1ff3ec32f4d6922fc6318f6ef34fc520fb276d83f862bff8e38ec97a6d709ff1b927cb174b2d7e19349ce33fcd29426c23f8661ff92e1977ad009ff0f2479b074b2d7c139bfd49736482f4bf2d1d2c95e07e7fc73c4db5c0beb84e84ae0a74bd7731c4b348779784bef9cb0010cc377036f61d8b7f6eec4fbf9e7ced06f259d6b9dabffe5c0eb4bd7f33cbcf2cf294700e56da23982ec45a50b3906c33fc76c00e56d055e5eba8863b89f26fc5f04c33f8f6c00e56da6396a6c683e4d33e737fc73cc0650de06e094d245742c031f037e1d78100cff3cb3010cc390de8783c0dfe295bf0a43fae0d56cb974011d5b81b701e7026ef699733680f28ed01cf53d148b34c78ddf03bc0e6c02f3cc0650de6186f75cc2059aaf26ef02be1f6c02f3ca0650de33c0aed2451cc38f00770317824d601ed900ca3b083c403312189a05e047699ac0ebc026306f6c00057556d83f4afbe49c81ba04b813470273c706300c5f06fe81618e02a01909fc184e07e68e0da0b0761410e09f80ff285dcf715c8a4d60aed80086e3ebc0fb81274a17721c97021f002e029b80d48bf6849d8d49ae4db2bff4b13febf0f92417793290d493364c5b92bc2fc993a513be0e9f49f2833601a9276d98b626b921c953a513bece2670a14d40eac9089bc04e9b80d4a389263086e9c0fd698e35b709487de8348131ad09d804a4be749ac0ef641cd3011706a53e8db0097c2ec9eb6d02524f32be85c1cfc69180d49fac1d098c614de0812417db04a49e647cd381cfdb04a41e657c5f117e3a4e07a4fe647c2381076c02528f32be3581cfc66f07a4fe647c2301f709487dea3481dfce784602ee1894fa92f14d073e96e4953600a92719d748e070923f6beb2dfdd249f321e3da31b83bc99be254a018cf049c33ed21a30781bf006e07feaf744dcf633b700d7056e9426a65039843134de03686dd042ea53972dc514001368039d5690277d09c36fc54e99a8ee134e06780cda50ba9910d608e759ac09f33ec91c025c0ab4a1751231bc09ceb34813b19ee9ac0d9c0b9a58ba8910da002235818dc0cbca4741135b2015462a209dc0a3c59baa68e456053e9226a6403a8c880a7030bc0c6d245d4c8065099892630e48541cd800da042135f110e61247078003554c90650a9a32c0c96dc27b08fe6e9c89a311b40c58eb263b05413780878b8f4eb51231b40e526d604decfec87e2013e05ec2ffd5ad4c806a0a37d4538cb26b00758ead421a98494396df86f929cea8d40d20064b6670c3e9ee422cf039006a4d3047ef7243681bd49ae4ab260f8a581c9c93d63f0a9348f3cdf6cf8a5816a9bc09624d726f9ef9ec2bf2bc97be35980d2f0b54d6063922bd23ce7efc80b0cfe72928792bc35c926c32f8d44db0448724e92db93fc679267d719fc67937c29c99f26393f2ef80d8a5fbc6adddae06e005e0b5c01fc2cf06ae0453477f32d00cbc011e000f055e0e3c04780c780c37ed73f2cbe1b3a616d235804ce00cea439ddf7749ae67008789a6667df5e9aedc5470cbe24499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224492aedff013bb75eab082ea1bf0000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda79300001ce94944415478daeddd7fa8a757811ef0279dec3032e5d24b2f17a604a4e222a4d806178b54b059a6649bd64d1b89c4d51582c1604ce29ac68da68a41abe8da7515b31d6733185713438241d96c445636d47509482d2125b0102a422074e87097592e0e3b4c994cff38f76b269399b9bfce7dcffbbee7f381306b929d792668cef39e9f0900d09d2b92e4dcb973ad73000003bac2e00f00fdf907ad030000c3530000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001dbab2750080f3dc906439c9fe2467927cab752098ab2bce9d3bd73a03d0af4f24f96749fe6992d72759497260e3af9d4d722ac9fac61f27931c4ff24292ff91e4c9d6e161ca140060488793bc35c96f247973923726d9b7839fe71749fe26c9ff4af25c92e7538a01b0450a00b0d7ae49726392eb93fc8b94e9fdda5e4cf283240f27f969ebdf304c810200ec95fd493e90e4a349de34d0af7922c95792fc49ca920170090a00b0170e27b937c9758d7efd9f25b93fc90f5bff8380b1520080daee49f29924071be73895e40b49be9ce474eb7f2830360a0050d3d792dcd53ac4058e25f96c92975a0781315100801a5693fc69ca46bf317a22c9e7534e0c00510080ddbb2ac96349dede3ac8269e4ef2b9243f6e1d04c640010076632565f03fdc3ac816fd24c9c752360942d7bc0500ecd46a926f673a837f92bc23c9a7536e1d84ae2900c04eac24f946c6bbe67f39ef4c29017b7121114c8602006cd74a92075306d2a95a5c5004ddb20700d88ea594ddfe37b60e52c1c924ef4ed91c08dd3103006cd572e633f82f7e3ff765678f11c1e42900c0562ca56cf89bcbe0bf7038c9efb70e012d58020036b33fc97793dcd03ac81e3999e45f26f979eb2030243300c0e52c65de837f5296026e6a1d0286a6000097b292e43b99f7e0bf30e5130db0230a0070314b99fe51bfedb83ac9db5a8780212900c085965306ffb96df8dbecf77c6deb103024050038dfe286bf9b5b0769e0375b0780212900c0c26a926fa6af2ffff3bd353603d211050048ca97ff9fa69f35ff8b594ef2e6d62160280a00b078d56f8a0ffbd4f686d60160280a00f46df1e56ff02f965a0780a12800d0af83296bfe06ff571c681d0086a200409f0ea6ecf6ef79cdff621400baa100407f16d3fe3d1ef5dbccfed601602857b60e000c6a35c9b1f471bdef4e280074c30c00f4e350cab4bfc1ffd2fc3b916e9801803eac267938c9e1d64146eee5d60160280a00ccdf6a92c7e3aefbadf865eb003014d35d306f4b295ffed7b60e3211ebad03c050140098afe524df49725deb2013f2b7ad03c050140098a79594eb7d9df3df9e975a0780a12800303f4b2937fc19fcb7e76c92175b8780a15c71eedcb9d619807a0ea65cf2e359dbed7b36c96fb40e0143310300f3b192e4d118fc77ea99d60160488e01c23c2cc7b4ff6e9c4df2df5b878021590280e95b1cf573c3dfcefd3cc9afb70e0143b20400d3b638ea67f0df9dbf6c1d0086a600c074adc651bf5a7ed03a000ccd1e0098a6d594ddfed7b70e32034fc706403a640600a667f1a4afc17ff78e27b93fc9c9d64160680a004ccb62f0b7e65fc7b1f8faa7534e01c0742ca74cfb1bfceb7826c96f2539d53a08b4600600a6e140920763f0afe517493e12833f1d530060fc96e386bf9a7e91e4f694ab7fa15b4e01c0b82d5ef5b3e1af8e13493e9ee447ad83406b0a008cd76aca0d7fd7b50e32136b49ee49f244eb2030069600609c0cfe759d4cf2b1248fb40e0263e114008ccfa194ddfe06ff3ad653d6fc1f6d1d04c6c40c008ccb72ca6e7f837f1d067fb8040500c66339c937e26eff5ad693dc11833f5c944d80300e2ef9a96b3dc9ddb1e60f97a400407b8b277d1df5abe364ca51bf875a078131b30910da3a90e4cf62cdbf961349ee8bc11f36650f00b4b394e47b31f8d7f262cab4bfc11fb6c00c00b4e186bfba4ea4dcedff78eb203015660060788bddfe06ff3ad662f0876db3091086b594e4ebb1dbbf969329e7fc5def0bdba400c0705652067faffad57132c92d499e6c1d04a648018061ac2639165ffeb5aca74cfb1bfc6187ec0180bdb71a97fcd4b458f377c90fec821900d85b5ef5abeb44ca93be067fd8253300b0775662f0afc9e00f15b90700f6c6c1248fc5c33eb59c4cb9e4e75bad83c05c980180fa96e255bf9a0cfeb007cc00405d2b491e4c7263eb2033712ac98762da1faab30910ea71d4afae5349ee88c11ff6842500a8633565dadfe05fc77acae06fda1ff6881900d8bd4329bbfd0fb70e32136b296bfebefc610f2900b03b2b491e4d726deb2033b196e46331f8c39eb304003bb79ce43b31f8d7723c76fbc360cc00c0ce2c25f9765cf253cbf1942fff475b07815e380608dbb79232f85fdf3ac84cac25b933c9e3ad83404f1400d81e37fcd57532c9ed31f8c3e0ec0180ad3b98f2aa9fc1bf8eb518fca1197b00606b56e29c7f4d6b496e4bf2fdd641a05766006073cb49be19837f2d2752d6fc0dfed090020097b714d3fe351d4ff29198f687e61400b8b4c5397f5ffe75bc18833f8c86530070718efad5e5a81f8c8c190078add518fc6b5a4fb9e4c7e00f23a200c0ab2d5ef533f8d7b19e32edef7a5f1819c700e115ab498ec586bf5ad653cef9bbde1746c81e0028965376fbdbf057c7a92477c4973f8c9625002837fc3d18837f2d2763f087d15300e8dd72928793dcd43ac84cacc59a3f4c823d00f46c3565dadf86bf3a4e24b937c923ad83009b5300e8d54aca97ff75ad83ccc45a92fbe2cb1f264301a047875206ffc3ad83ccc45aca397f833f4c885300f46635befc6b5a4fd9f067da1f26c626407ab278d2d7e05f87c11f264c01a0174b2947fd5cf253c7c9944b7e0cfe30510a003d586cf8bbb17590993891e4b6b8e10f26cd2640e66ef1a4af69ff3a4ea49cf37fa275106077cc0030670762f0afe9a52477c7ab7e300b0a0073b594e47b71c94f2d2fa61cf533ed0f33a10030472b491e8bc1bf96e3493e1e5ffe302bee01606e965236fc79d8a78eb52477c6e00fb363068039594e39e76ff0af632de5a89fc11f66c80c0073b192e4ebf1aa5f2deb496e49f2fdd64180bde1182073b09ae4587cf9d7b2b8e1cfe00f33a60030752bf1a46f4d27538efab9e10f66ce1e00a6ec50926fc7e05fcbf1944b7ebcea071db00780a95a894b7e6a3a91e49ef8f2876e9801608a0e26f9660cfeb5ac25b937067fe88a02c0d41c4c59f3f7aa5f1d27536ef833ed0f9d51009892c5ab7e8efad5b11e6bfed02da700988a95b8e4a7a6532983bf697fe8941900a6e050ca9abfc1bf8ec5397f5ffed031a70018bbd594697f1bfeea38195ffe40cc00306eab29cfcf1afceb381197fc001bcc0030564b49be1b837f2dcef903af620680315a8e4b7e6a7a29befc810b9801606c56e27adf9ad692dc194ffa021750001893a5248fc5e05fcbc924b7c7e00f5c842500c6e260ca397f837f1d6b31f80397e12220c6c0253f75ad25b92dc9f75b0701c64b01a0b5a5944b7edced5fc762cddfe00f5c9625005a5a8a877d6a3a1e1bfe802d3203402bcb29bbfd0dfe752c8efa3dd13a08300d6600686135e59cbfc1bf8e13493e1e833fb00d8e013234e7fcebf2a42fb023660018d26aca863f837f1d8b877d0cfec0b699016028ab498ec551bf5a4ea51cf57bb47510609a140086b09cb2dbdfe05fc7a9241f8abbfd815db004c05e3b90e4c118fc6b594f72470cfec02e2900eca5e59429ea9b5a079989b558f3072a710f007bc56effba4e26f9cf31f803952800ec85d5240f27b9ae759099584f19fc8fb50e02cc8702406dab29d3fe875b0799893349ee4f72b47510605eec01a0a643295ffe06ff7aee4ff2d5d62180f95100a865f1a4af69ff7a3e9be48f5a8700e64901a086e594a37e36fcd5f3c5249f4f590200a84e0160b756522ef9b9b1759019f96292cfc5e00fec219b00d90d47fdea3a9bb2e6ffc58dff1b60cfb80a989d3a90e47b31f8d7f25cca94bf277d81415802602796937c3706ff5a9e4a726b0cfec0801400b66b31edffced64166e254921f2779b67510a02f0a00dbb138ea67f0afe760926b5a8700fa630f005bb518fcbdea57dfd9242fa6cc06ec4ff26b49f66dfcb57d17f97bcf9ef7d7f65df0d7ceb7ef127f7e0c2ef6fbbad45f3f9be4ffa5bc87f06292e753664c9e6afd9b80295300d88a959473fe8efa31166b2925e099243f4df29324a75b8782295100d8cc72ca97bfc19f317b36e50d8a47931c6f1d06a64001e0729652eef637edcf54bc98728f82c79360130a0097b21cbbfd99ae1f25f95292a75b0781b15200b898e5248fc5c33e4cdbc9240f24f97292f5d661606c14002ee4863fe6e6c9245f48d92c086c700f00e773c31f737443ca29969b5b0781313103c0c26acaab7e067fe6ea44ca72c0975a0781313003405206ff6fc4e0cfbcad26b92bfe7b0e491400ca9affd1d8ed4f1fae4a724f9237b60e02ad29007c212ef9a12f87937c26e51d06e89602d0b79b937cb4750868e0bd29cb01d02d05a05f5727f964eb10d0d03d29b301d02505a05f9f4ef2e6d621a0a1959801a3630a409f0e27b9a97508188177c6fd00744a01e8d32d79ed7becd0ab7b531ebe82ae2800fdb936c9bf6d1d0246e42df1e2251d5200faf3de94b54fe015ef6e1d0086a600f4e5dad8f50c17f3b6949331d00d05a02fd7277943eb103042ab49ded13a040c4901e8cbdb5a078011bbb67500189202d08fa538f70f97f3b67828888e2800fdb82ac972eb103062af8f7d00744401e8c7a1d6016002ec91a11b0a403f1cfd83cdfde3d60160280a403ffc8b0d36f7bad60160280a403facffc3e67ead7500188a02d00f5f36b039ff3ba11b0a403f3cfe039b3303403714807e9c6d1d0026607feb00301405a01fbf6c1d00264051a61b0a403fd65b07800938d33a000c4501e8c7dfb60e0013a028d30d05a01f275b07800978a97500188a02d08fb5d60160027ede3a000c4501e8872500b8bc1793fcefd62160280a403fd66219002ee7f9244fb60e01435100fa712ac95fb70e0123f6b3d60160480a405fbe9be474eb103042a7a200d0992bce9d3bd73a03c3fa8b24d7b50e0123f37c927fde3a040cc90c407ffeac75001821cb63744701e8cf1349fea675081899efb50e00435300fa7322c9e3ad43c0883c99e4e9d62160680a409f8e26f945eb1030022f25f952eb10d08202d0a71349fea4750818816f2579a6750868c12980be7d27c97b5b8780469e49f25b294700a13b0a40df0e25f9cb2457b70e02033b9ee49d499e6d1d045ab104d0b7e349ee882b82e9cbe924b7c5e04fe714007e9cf22fc333ad83c0406e4df254eb10d09a024052ee06b8ad750818c06d491e6d1d02c6c01e00ce777392c75a87803d724bcaae7f20660078b5c793fc7692f5d641a0b2f7c5e00fafa20070a1a7524ac073ad834025ef89697f780d05808bf9494a09f0c5c4d4bd2faebe868bb20780cdfc6e920f267947eb20b04def4ff248eb1030560a005bb192e4a624bf134580f13b9bb2dbffa1d64160cc1400b66325c98d29a7050eb70e0317712665f0b77c059b5000d8899524d76dfc717592e52407cffb635feb8023753ac92f93bc2ee59f13f5bd2f36fcc1962800d4767392d59452f0ba4bfc3de76f3e7d79e3c7b31b3fd62c0f67cffb79f79ff7ebee3befcf5ff8eb5fcabe5c7ad3ecbe8d9f7ff1f72c7efe9793fc7dcab1caf58d3ff740923f4ff2f68d7f46d4f3ee944bad802db8b2750066c78eebcdbd1c837f6def8fc11fb6c5314018d64793bca5758899b92576fbc3b62900309c6b92fc872457b50e3223b7c6863fd811050086f1fa249f48726deb2033726b1cf5831d530060ef5d9de46b291b24d93de7fca1029b00616fbd25c997e3cbbf96b331ed0f55980180bd63f0afeff618fca10af700c0deb82ac98349ae6f1d64466e4b72ac7508980b4b0050df5549fe2006ff9a6e892f7fa84a0180ba1683ff7b5b079991f7c40553509d3d0050cf4a92cfc5e05fd32d31f8c39e300300752c27f94a92df6d1d6446bcea077bc80c00ecde4aca397f837f1d675376fbdbf0077bc82900d89d432983ff4dad83cc88ddfe30003300b0738752a6fd0dfef5f8f28781d803003bb318fc5def5b8fbbfd61400a006cdf6a923f8cc1bfa65b62c31f0cca1e00d89ee5d8f057dbfb933cd23a04f4c60c006cdd72ca97bfc1bf9ef72579b47508e89102005bb39ab2e6ef929f7ade9de489d621a0570a006c6e3565dadf9a7f3def8fc11f9a720c102e6f2906ffda6e8b357f684e0180cbb3dbbf2ee7fc61242c01c0a57d22c9075b879811e7fc61441c03848bbb2ec95fb40e3123b7c4397f18153300f05aaf4f59f7a70e47fd6084ec0180d7ba2bc99b5a879889f7c7e00fa3a400c0ab5d1367fd6bb93576fbc3682900f06aff3ee5a11f76e7f6d8f007a3a600c02bde98e45dad434cdc99942fffa3ad830097671320bce25d49ded23ac4c4dd16bbfd6112cc00407128c94dad434c9cc11f26c40c00146f4af2d6d62126cc253f30310a0014bfde3ac084dd125ffe30399600a07843eb0013756b0cfe30490a00148efe6d9fa37e30610a0014abad034cccdd71d40f264d018062b9758089389be46349beda3a08b03b0a0014075b079880b5247726f972eb20c0ee390500c5fed60146ee8524f725f97eeb20401d660080ad7838067f981505008a7dad038c9c1912981905008ab3ad038cdc0d496e6c1d02a8470180e24ceb0023774d922f24f940eb20401d0a0014a75b0798803725f9c3241f6e1d04d83d05008af5d601266239c99792dcd33a08b03b0a00146bad034cc8c1249f8b120093a6004071bc7580893990e433493eda3a08b0330a00140ac0f61d8c120093a50040f162eb0013b594723ae013ad8300dba30040f142ec03d8a90349ee4ff2c9d64180ad5300a0782ec90f5a8798b003493e151b036132140078c5e3711c70370e24f974ec0980495000e0153f4cf244eb1013b7947244d09e00183905005eede1781760b716a7039400183105005eedc7491e6a1d6206f6a76c0cbcb77510e0e2ae3877ee5ceb0c3036d724f99ff144700da7536603bed83a08f06a6600e0b59e8b01ab96c5e900cb0130326600e0e2f627f9ab246f6b1d64264ea56c0e54ac60241400b8b46b524ac052eb20337126c91f25b9af7510c012005cce7349de97f2f5caeeed4ff2fb295707ef6f1d067aa700c0e53d95e443299bd9d8bd7d29fb015c1b0c8d2900b0b94792dc9d32854d1df7c6c64068ca1e00d8ba0f25f9e3381e58cbd9944d819f6a1d047a640600b6ee68923b5b879891c572c0a75b07811e2900b03d47937ca4758819d997b21ce0154118980200dbf74092db5b8798918329b3004a000c4801809d399ae48ed621666429a504783b0006621320ecce5d49bed63ac48c9c4e7944e84bad83c0dc990180dd79206526c011c13a0e24f92f714f00ec39050076ef4892df8bcb826ad99fb21ca004c01ebab275009889a31b3fba27a08e45094892cfb70e0373640600ea7144b0ae4509706320ec019b00a1be0f25f97aeb10337226c97f8d1b03a12a0500f6c607933cd83ac48cb836182ab304007be358dc1350d3be94a7846d0c844acc00c0defa7092ffd63ac48c9c49d914f8d9d64160ea1400d87b1f4eb92cc8e9803acea69480fb5b078129b304007bef4892bb53062e766f5fcae980cfb40e025366060086f3e1245f4939dec6ee9d4d391d705feb2030450a000ccb11c1bace26f96a928fb50e025363090086e515c1baf625f968923f681d04a6460180e11d891b036b5a94003706c236580280762c07d4752ac997e374006c8902006d7d20c9375a8798113706c216590280b61e8a3d0135ed4bb92dd01141d8840200ed2df604b827a09e4fc6b5c170590a008cc3032925e04ceb2033b12f6516e0d3ad83c0585dd93a00f02b47367ef476401d8be580c4db01f01a6600605c8ec49e809af6a7dc14684f005cc0290018a70f2679b0758819399d7263a06b836183190018a763496e6d1d62460e24f94fb131107ec50c008c9bcb82ea3a9d52ac1e6d1d045a330300e3b6783bc011c13a0ea49c0c787beb20d09a0200e37724c99d7144b09637a52c05acb40e022d2900300d4793dc1d3301b55c9fe4aed621a0257b00605aee4af2b5d62166e26492f724f951eb20d0820200d3f3e1b82ca896a793fc9bd621a0054b00303d2e0baae770ca8b8cd01d3300305d6602ea783ec9bf4e5912806e980180e93a92e4b6d62166e0cd496e681d0286a600c0b41d4b727beb1033f0aed60160680a004cdfe288203bf7af92bcb5750818920200f3f0d59412e0b2a09d5949f28ed62160480a00ccc75793fc5e94809d5200e88a0200f37234e5da60b6efad49ded93a040c450180f93996e423ad434cd0a1947702a00b0a00ccd303713a6027ded03a000c450180f93a1a2560bb565b0780a12800306f476339603b0eb40e0043510060fe16cb019e12dedcbed60160280a00f461713ae074eb2023b7bf750018ca95ad03008339baf1e31fc797eea55802a01b0a00f4e568cacc9f57042f4e31a21b9600a03f47e27400744f01803e1d8da7842fc635ca744301807e1d4b7247eb1023f377ad03c0501400e8db912801e7fb3fad03c0501400605102dc1390fcbc7500188a020024a504dc9dbe4bc04b495e681d0286a200000b0fa45c1bdceb46b867933cd53a040cc53d00c0f98e2479397d5e16f44ceb0030240500b8508f97059d4cf293d62160489600808b3992be5e117c21c94f5b8780212900c0a52c5e11ec81af7fbaa30000977334c9adad43ecb1d3499e6c1d0286a600009b7928f35e0e78223600d2210500d88ab91e117c21c9d75a878016140060ab1e48b92c684e25e0e1243f6b1d025ab8e2dcb973ad3300d37257e6f1d5fce324ef4a390208dd3103006cd7623960ca5e4af2a918fce9980200ecc4944bc0a98dec36fed1350500d8a90732cda7843f92e4fbad43406b0a00b01b4732adcb82ee4839d608ddb30910a8e1bd49be99647feb2097716b0cfef02b6600801a1e4df21f93fcbc75908b584bd9ed6ff087f32800402d3f4c7273c675affef349de1d6bfef01a0a0050d3b349fe5d922fa6fd85410f25f9ed94f3fec005ec0100f6ca4d299706bd63e05ff7b994c1ff81d6ff0060cc1400602fed4ff23b299b040f27d9b747bfce99942ffd2736fe70c10f6c420100867263caacc06f263954e9e73c9e72a1cf5349bed5fa370853a20000437b7b921b367ebc3ac9f236ffff4fa56ceefb6992a753067f609b1400a0a5fd495637fef82749fe51927f98b241f9e5247f9f643d65d05f4bf27749feefc67f0676410100800e390608001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8900200001d520000a0430a000074480100800e290000d0210500003aa400004087140000e8d0ff07ba8d76b5843b02120000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "plquery": {
+      "id": 31828,
+      "api": {
+        "url": "/query",
+        "body": {
+          "query": "{{formatQuery(parameters.query)}}",
+          "fields": "{{ifempty(join(parameters.fields, ','), '*')}}",
+          "sort_by": "{{parameters.sort_by}}",
+          "page_size": 500,
+          "sort_type": "{{parameters.sort_type}}",
+          "objecttype": "{{parameters.objecttype}}"
+        },
+        "method": "POST",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{transformDate(item)}}",
+          "iterate": "{{body.data.Data}}"
+        },
+        "pagination": {
+          "body": {
+            "query": "{{formatQuery(parameters.query)}}",
+            "fields": "{{ifempty(join(parameters.fields, ','), '*')}}",
+            "sort_by": "{{parameters.sort_by}}",
+            "page_size": 500,
+            "sort_type": "{{parameters.sort_type}}",
+            "objecttype": "{{parameters.objecttype}}",
+            "page_number": "{{pagination.page}}"
+          },
+          "condition": "{{!body.data.IsLastPage}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "plquery",
+      "epoch": null,
+      "flags": {},
+      "label": "Query Objects",
+      "scope": [],
+      "expect": [
+        {
+          "name": "objecttype",
+          "type": "select",
+          "label": "Name of Object",
+          "options": {
+            "store": "rpc://app%23powerlink@1/getobjectnameandid",
+            "nested": [
+              {
+                "help": "To select all fields do not select anything.",
+                "name": "fields",
+                "type": "select",
+                "label": "Fields",
+                "options": "rpc://app%23powerlink@1/getfieldnames",
+                "multiple": true
+              },
+              {
+                "name": "query",
+                "type": "filter",
+                "label": "Search criteria",
+                "options": {
+                  "store": "rpc://app%23powerlink@1/getfieldnames",
+                  "operators": [
+                    {
+                      "label": "Text",
+                      "options": [
+                        {
+                          "label": "=",
+                          "value": "="
+                        },
+                        {
+                          "label": "!=",
+                          "value": "!="
+                        },
+                        {
+                          "label": ">",
+                          "value": ">"
+                        },
+                        {
+                          "label": "<",
+                          "value": "<"
+                        },
+                        {
+                          "label": "<=",
+                          "value": "<="
+                        },
+                        {
+                          "label": ">=",
+                          "value": ">="
+                        },
+                        {
+                          "label": "Is Null",
+                          "value": "is-null"
+                        },
+                        {
+                          "label": "Is Not Null",
+                          "value": "is-not-null"
+                        },
+                        {
+                          "label": "Start With",
+                          "value": "start-with"
+                        },
+                        {
+                          "label": "End With",
+                          "value": "end-with"
+                        },
+                        {
+                          "label": "Not Start With",
+                          "value": "not-start-with"
+                        },
+                        {
+                          "label": "Not End With",
+                          "value": "not-end-with"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "sort_by",
+                "type": "select",
+                "label": "Sort by",
+                "options": "rpc://app%23powerlink@1/getfieldnames"
+              },
+              {
+                "name": "sort_type",
+                "type": "select",
+                "label": "Sort Type",
+                "options": [
+                  {
+                    "label": "Ascending",
+                    "value": "asc"
+                  },
+                  {
+                    "label": "Descending",
+                    "value": "desc"
+                  }
+                ]
+              }
+            ]
+          },
+          "required": true
+        },
+        {
+          "help": "The maximum number of results to return.",
+          "name": "limit",
+          "type": "integer",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "powerlink",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/query\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"objecttype\": \"{{parameters.objecttype}}\",\n        \"page_size\": 500,\n        \"fields\": \"{{ifempty(join(parameters.fields, ','), '*')}}\",\n        \"query\": \"{{formatQuery(parameters.query)}}\",\n        \"sort_by\": \"{{parameters.sort_by}}\",\n        \"sort_type\": \"{{parameters.sort_type}}\"\n    },\n    \"response\": {\n\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\"iterate\": \"{{body.data.Data}}\",\n        \"output\": \"{{transformDate(item)}}\"\n    },\n\t\"pagination\": {\n\t\t\"body\": {\n\t\t\t\"objecttype\": \"{{parameters.objecttype}}\",\n\t\t\t\"page_size\": 500,\n\t\t\t\"page_number\": \"{{pagination.page}}\",\n\t\t\t\"fields\": \"{{ifempty(join(parameters.fields, ','), '*')}}\",\n\t\t\t\"query\": \"{{formatQuery(parameters.query)}}\",\n\t\t\t\"sort_by\": \"{{parameters.sort_by}}\",\n\t\t\t\"sort_type\": \"{{parameters.sort_type}}\"\n\t\t},\n\t\t\"condition\": \"{{!body.data.IsLastPage}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23powerlink@1/createDynamicInterface"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "powerlink",
+      "description": "Performs a query for Powerlink objects.",
+      "expectJsonc": "[\n    {\n        \"name\": \"objecttype\",\n        \"type\": \"select\",\n        \"label\": \"Name of Object\",\n        \"options\": {\n            \"store\": \"rpc://getobjectnameandid\",\n            \"nested\": [\n                {\n                    \"name\": \"fields\",\n                    \"type\": \"select\",\n\t\t\t\t\t\"label\": \"Fields\",\n                    \"options\": \"rpc://getfieldnames\",\n                    \"multiple\": true,\n                    \"help\": \"To select all fields do not select anything.\"\n                },\n                {\n                    \"name\": \"query\",\n                    \"label\": \"Search criteria\",\n                    \"type\": \"filter\",\n                    \"options\": {\n                        \"store\": \"rpc://getfieldnames\",\n                        \"operators\": [\n                            {\n                                \"label\": \"Text\",\n                                \"options\": [\n                                    {\n                                        \"label\": \"=\",\n                                        \"value\": \"=\"\n                                    },\n                                    {\n                                        \"label\": \"!=\",\n                                        \"value\": \"!=\"\n                                    },\n                                    {\n                                        \"label\": \">\",\n                                        \"value\": \">\"\n                                    },\n                                    {\n                                        \"label\": \"<\",\n                                        \"value\": \"<\"\n                                    },\n                                    {\n                                        \"label\": \"<=\",\n                                        \"value\": \"<=\"\n                                    },\n                                    {\n                                        \"label\": \">=\",\n                                        \"value\": \">=\"\n                                    },\n                                    {\n                                        \"label\": \"Is Null\",\n                                        \"value\": \"is-null\"\n                                    },\n                                    {\n                                        \"label\": \"Is Not Null\",\n                                        \"value\": \"is-not-null\"\n                                    },\n                                    {\n                                        \"label\": \"Start With\",\n                                        \"value\": \"start-with\"\n                                    },\n                                    {\n                                        \"label\": \"End With\",\n                                        \"value\": \"end-with\"\n                                    },\n                                    {\n                                        \"label\": \"Not Start With\",\n                                        \"value\": \"not-start-with\"\n                                    },\n                                    {\n                                        \"label\": \"Not End With\",\n                                        \"value\": \"not-end-with\"\n                                    }\n                                ]\n                            }\n                        ]\n                    }\n                },\n                {\n                    \"name\": \"sort_by\",\n                    \"type\": \"select\",\n                    \"label\": \"Sort by\",\n                    \"options\": \"rpc://getfieldnames\"\n                },\n                {\n                    \"name\": \"sort_type\",\n                    \"type\": \"select\",\n                    \"label\": \"Sort Type\",\n                    \"options\": [\n                        {\n                            \"label\": \"Ascending\",\n                            \"value\": \"asc\"\n                        },\n                        {\n                            \"label\": \"Descending\",\n                            \"value\": \"desc\"\n                        }\n                    ]\n                }\n            ]\n        },\n        \"required\": true\n    },\n\t{\n        \"name\": \"limit\",\n        \"help\": \"The maximum number of results to return.\",\n        \"type\": \"integer\",\n        \"label\": \"Limit\",\n        \"default\": 10\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\"rpc://createDynamicInterface\"]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "addComment": {
+      "id": 31822,
+      "api": {
+        "url": "/record/7",
+        "body": "{{buildCommentRequest(parameters)}}",
+        "method": "POST",
+        "response": {
+          "output": "{{transformDate(body.data.Record)}}"
+        }
+      },
+      "rev": 3,
+      "crud": "create",
+      "name": "addComment",
+      "epoch": null,
+      "flags": {},
+      "label": "Add a Comment",
+      "scope": [],
+      "expect": [
+        {
+          "name": "objecttype",
+          "type": "select",
+          "label": "Name of Object",
+          "options": {
+            "store": "rpc://app%23powerlink@1/getobjectnameandid",
+            "nested": [
+              {
+                "help": "Select object ID from earlier module or source (for accounts the parameter name is accountid).",
+                "name": "objectid",
+                "type": "text",
+                "label": "Object ID",
+                "required": true
+              }
+            ]
+          },
+          "required": true
+        },
+        {
+          "name": "fields",
+          "spec": [
+            {
+              "name": "name",
+              "type": "select",
+              "label": "Field Name",
+              "options": "rpc://app%23powerlink@1/getFieldNamesComments"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Fields",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "powerlink",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/record/7\",\n    \"method\": \"POST\",\n    \"body\": \"{{buildCommentRequest(parameters)}}\",\n    \"response\": {\n        \"output\": \"{{transformDate(body.data.Record)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "noteid",
+          "type": "text",
+          "label": "Noteid"
+        },
+        {
+          "name": "objectid",
+          "type": "text",
+          "label": "Object ID"
+        },
+        {
+          "name": "subject",
+          "type": "text",
+          "label": "Subject"
+        },
+        {
+          "name": "notetext",
+          "type": "text",
+          "label": "Notetext"
+        },
+        {
+          "name": "objecttitle",
+          "type": "text",
+          "label": "Object Title"
+        },
+        {
+          "name": "objecttypecode",
+          "type": "number",
+          "label": "Object Type Code"
+        },
+        {
+          "name": "fileurl",
+          "type": "url",
+          "label": "File URL"
+        },
+        {
+          "name": "filetype",
+          "type": "text",
+          "label": "File Type"
+        },
+        {
+          "name": "filesize",
+          "type": "text",
+          "label": "Filesize"
+        },
+        {
+          "name": "objectname",
+          "type": "text",
+          "label": "Object Name"
+        },
+        {
+          "name": "filename",
+          "type": "text",
+          "label": "File Name"
+        },
+        {
+          "name": "parentnoteid",
+          "type": "text",
+          "label": "Parent Note ID"
+        },
+        {
+          "name": "linkurl",
+          "type": "url",
+          "label": "Link URL"
+        },
+        {
+          "name": "issystem",
+          "type": "number",
+          "label": "Is System"
+        },
+        {
+          "name": "notetype",
+          "type": "text",
+          "label": "Note Type"
+        },
+        {
+          "name": "recordid",
+          "type": "text",
+          "label": "Record ID"
+        },
+        {
+          "name": "recordtype",
+          "type": "number",
+          "label": "Record Type"
+        },
+        "rpc://app%23powerlink@1/createDynamicInterface"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "powerlink",
+      "description": "Adds a comment to a Powerlink object.",
+      "expectJsonc": "[\n\t{\n        \"name\": \"objecttype\",\n        \"type\": \"select\",\n        \"label\": \"Name of Object\",\n        \"options\": {\n            \"store\": \"rpc://getobjectnameandid\",\n            \"nested\": [\n                {\n                    \"name\": \"objectid\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"required\": true,\n                    \"label\": \"Object ID\",\n                    \"help\": \"Select object ID from earlier module or source (for accounts the parameter name is accountid).\"\n                }\n            ]\n        },\n        \"required\": true\n    },\n    {\n        \"name\": \"fields\",\n\t\t\"required\": true,\n        \"spec\": [\n            {\n                \"name\": \"name\",\n                \"type\": \"select\",\n                \"label\": \"Field Name\",\n                \"options\": \"rpc://getFieldNamesComments\"\n            },\n            {\n                \"name\": \"value\",\n                \"type\": \"text\",\n                \"label\": \"Value\"\n            }\n        ],\n        \"type\": \"array\",\n        \"label\": \"Fields\"\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"noteid\",\n        \"label\": \"Noteid\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"objectid\",\n        \"label\": \"Object ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"subject\",\n        \"label\": \"Subject\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"notetext\",\n        \"label\": \"Notetext\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"objecttitle\",\n        \"label\": \"Object Title\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"objecttypecode\",\n        \"label\": \"Object Type Code\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"fileurl\",\n        \"label\": \"File URL\",\n        \"type\": \"url\"\n    },\n    {\n        \"name\": \"filetype\",\n        \"label\": \"File Type\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"filesize\",\n        \"label\": \"Filesize\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"objectname\",\n        \"label\": \"Object Name\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"filename\",\n        \"label\": \"File Name\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"parentnoteid\",\n        \"label\": \"Parent Note ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"linkurl\",\n        \"label\": \"Link URL\",\n        \"type\": \"url\"\n    },\n    {\n        \"name\": \"issystem\",\n        \"label\": \"Is System\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"notetype\",\n        \"label\": \"Note Type\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"recordid\",\n        \"label\": \"Record ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"recordtype\",\n        \"label\": \"Record Type\",\n        \"type\": \"number\"\n    },\n\t\"rpc://createDynamicInterface\"\n]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createCall": {
+      "id": 31823,
+      "api": [
+        {
+          "url": "https://api.powerlink.co.il/web/cdr_log.ashx?orgid={{parameters.orgid}}",
+          "body": {
+            "did": "{{parameters.did}}",
+            "time": "{{parameters.time}}",
+            "type": "{{parameters.type}}",
+            "caller": "{{parameters.caller}}",
+            "record": "{{parameters.record}}",
+            "status": "{{parameters.status}}",
+            "target": "{{parameters.target}}",
+            "queueid": "{{parameters.queueid}}",
+            "duration": "{{parameters.duration}}",
+            "queuename": "{{parameters.queuename}}",
+            "ivruniqueid": "{{uuid}}",
+            "callerextension": "{{parameters.callerextension}}",
+            "targetextension": "{{parameters.targetextension}}"
+          },
+          "method": "POST",
+          "response": {
+            "output": null
+          }
+        },
+        {
+          "url": "https://api.powerlink.co.il/api/query",
+          "body": {
+            "query": "(callerid = {{parameters.caller}})",
+            "fields": "*",
+            "page_size": 500,
+            "objecttype": 100,
+            "page_number": 1
+          },
+          "method": "POST",
+          "response": {
+            "temp": {
+              "calllogid": "{{body.data.Data[1].calllogid}}"
+            }
+          }
+        },
+        {
+          "url": "https://api.powerlink.co.il/api/record/100/{{temp.calllogid}}",
+          "body": {
+            "ownerid": "{{parameters.owner}}"
+          },
+          "method": "PUT",
+          "response": {
+            "output": {
+              "objectId": "{{body.data}}"
+            }
+          }
+        }
+      ],
+      "rev": 2,
+      "crud": "create",
+      "name": "createCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Call Record",
+      "scope": [],
+      "expect": [
+        {
+          "name": "orgid",
+          "type": "text",
+          "label": "Organization ID",
+          "required": true
+        },
+        {
+          "name": "caller",
+          "type": "text",
+          "label": "Caller Number",
+          "required": true
+        },
+        {
+          "name": "owner",
+          "type": "select",
+          "label": "Owner ID",
+          "options": {
+            "store": "rpc://app%23powerlink@1/getOwners"
+          }
+        },
+        {
+          "help": "For outbound calls.",
+          "name": "target",
+          "type": "text",
+          "label": "Target Number"
+        },
+        {
+          "name": "time",
+          "type": "timestamp",
+          "label": "Unix Timestamp"
+        },
+        {
+          "name": "duration",
+          "type": "uinteger",
+          "label": "Call Duration"
+        },
+        {
+          "name": "ivruniqueid",
+          "type": "text",
+          "label": "ID of Specific Call"
+        },
+        {
+          "name": "type",
+          "type": "select",
+          "label": "Type",
+          "options": [
+            {
+              "label": "Inbound",
+              "value": "Incoming Call"
+            },
+            {
+              "label": "Outbound",
+              "value": "Extension Outgoing"
+            }
+          ]
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "label": "Status",
+          "options": [
+            {
+              "label": "Answered",
+              "value": "ANSWER"
+            },
+            {
+              "label": "Busy",
+              "value": "BUSY"
+            },
+            {
+              "label": "No Answer",
+              "value": "NOANSWER"
+            }
+          ]
+        },
+        {
+          "name": "targetextension",
+          "type": "text",
+          "label": "Extension SIP Code"
+        },
+        {
+          "help": "Relevant for Outbound Calls only.",
+          "name": "did",
+          "type": "text",
+          "label": "Number that was dialed"
+        },
+        {
+          "name": "queueid",
+          "type": "text",
+          "label": "Queue ID"
+        },
+        {
+          "name": "queuename",
+          "type": "text",
+          "label": "Queue Name"
+        },
+        {
+          "name": "record",
+          "type": "text",
+          "label": "Recording Link"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "powerlink",
+      "samples": null,
+      "apiJsonc": "[\n    {\n        \"url\": \"https://api.powerlink.co.il/web/cdr_log.ashx?orgid={{parameters.orgid}}\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"caller\": \"{{parameters.caller}}\",\n            \"target\": \"{{parameters.target}}\",\n            \"time\": \"{{parameters.time}}\",\n            \"duration\": \"{{parameters.duration}}\",\n            \"ivruniqueid\": \"{{uuid}}\",\n            \"type\": \"{{parameters.type}}\",\n            \"status\": \"{{parameters.status}}\",\n            \"targetextension\": \"{{parameters.targetextension}}\",\n            \"callerextension\": \"{{parameters.callerextension}}\",\n            \"did\": \"{{parameters.did}}\",\n            \"queueid\": \"{{parameters.queueid}}\",\n            \"queuename\": \"{{parameters.queuename}}\",\n            \"record\": \"{{parameters.record}}\"\n        },\n        \"response\": {\n\t\t\t\"output\": null\n\t\t}\n    },\n    {\n        \"url\": \"https://api.powerlink.co.il/api/query\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"objecttype\": 100,\n            \"page_size\": 500,\n            \"page_number\": 1,\n            \"fields\": \"*\",\n            \"query\": \"(callerid = {{parameters.caller}})\"\n        },\n        \"response\": {\n            \"temp\": {\n                \"calllogid\": \"{{body.data.Data[1].calllogid}}\"\n            }\n        }\n    },\n    {\n        \"url\": \"https://api.powerlink.co.il/api/record/100/{{temp.calllogid}}\",\n        \"method\": \"PUT\",\n        \"body\": {\n            \"ownerid\": \"{{parameters.owner}}\"\n        },\n        \"response\": {\n            \"output\": {\n\t\t\t\t\"objectId\": \"{{body.data}}\"\n\t\t\t}\n        }\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "objectId",
+          "type": "text",
+          "label": "Object ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "powerlink",
+      "description": "Creates a new call record.",
+      "expectJsonc": "[\n    {\n        \"name\": \"orgid\",\n        \"type\": \"text\",\n        \"label\": \"Organization ID\",\n        \"required\": true\n    },\n    {\n        \"name\": \"caller\",\n        \"type\": \"text\",\n        \"label\": \"Caller Number\",\n        \"required\": true\n    },\n    {\n        \"name\": \"owner\",\n        \"type\": \"select\",\n        \"label\": \"Owner ID\",\n        \"options\": {\n            \"store\": \"rpc://getOwners\"\n        }\n    },\n    {\n        \"name\": \"target\",\n        \"type\": \"text\",\n        \"label\": \"Target Number\",\n        \"help\": \"For outbound calls.\"\n    },\n    {\n        \"name\": \"time\",\n        \"type\": \"timestamp\",\n        \"label\": \"Unix Timestamp\"\n    },\n    {\n        \"name\": \"duration\",\n        \"type\": \"uinteger\",\n        \"label\": \"Call Duration\"\n    },\n    {\n        \"name\": \"ivruniqueid\",\n        \"type\": \"text\",\n        \"label\": \"ID of Specific Call\"\n    },\n    {\n        \"name\": \"type\",\n        \"type\": \"select\",\n        \"label\": \"Type\",\n        \"options\": [\n            {\n                \"label\": \"Inbound\",\n                \"value\": \"Incoming Call\"\n            },\n            {\n                \"label\": \"Outbound\",\n                \"value\": \"Extension Outgoing\"\n            }\n        ]\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"select\",\n        \"label\": \"Status\",\n        \"options\": [\n            {\n                \"label\": \"Answered\",\n                \"value\": \"ANSWER\"\n            },\n            {\n                \"label\": \"Busy\",\n                \"value\": \"BUSY\"\n            },\n            {\n                \"label\": \"No Answer\",\n                \"value\": \"NOANSWER\"\n            }\n        ]\n    },\n    {\n        \"name\": \"targetextension\",\n        \"type\": \"text\",\n        \"label\": \"Extension SIP Code\"\n    },\n    {\n        \"name\": \"did\",\n        \"type\": \"text\",\n        \"label\": \"Number that was dialed\",\n        \"help\": \"Relevant for Outbound Calls only.\"\n    },\n    {\n        \"name\": \"queueid\",\n        \"type\": \"text\",\n        \"label\": \"Queue ID\"\n    },\n    {\n        \"name\": \"queuename\",\n        \"type\": \"text\",\n        \"label\": \"Queue Name\"\n    },\n    {\n        \"name\": \"record\",\n        \"type\": \"text\",\n        \"label\": \"Recording Link\"\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"objectId\",\n        \"type\": \"text\",\n        \"label\": \"Object ID\"\n    }\n]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "uploadFile": {
+      "id": 31832,
+      "api": {
+        "url": "/v2/record/{{parameters.objecttype}}/{{parameters.objectid}}/files",
+        "body": {
+          "file": {
+            "value": "{{parameters.file_data}}",
+            "options": {
+              "filename": "{{parameters.file_name}}"
+            }
+          }
+        },
+        "type": "multipart/form-data",
+        "method": "POST",
+        "response": {
+          "output": null
+        }
+      },
+      "rev": 2,
+      "crud": "create",
+      "name": "uploadFile",
+      "epoch": null,
+      "flags": {},
+      "label": "Upload a File",
+      "scope": [],
+      "expect": [
+        {
+          "name": "objecttype",
+          "type": "select",
+          "label": "Name of Object",
+          "options": {
+            "store": "rpc://app%23powerlink@1/getobjectnameandid",
+            "nested": [
+              {
+                "name": "objectid",
+                "type": "text",
+                "label": "Object ID",
+                "required": true
+              },
+              {
+                "name": "file_name",
+                "type": "text",
+                "label": "Name",
+                "required": true,
+                "semantic": "file:name"
+              },
+              {
+                "name": "file_data",
+                "type": "buffer",
+                "label": "Data",
+                "required": true,
+                "semantic": "file:data"
+              }
+            ]
+          },
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "powerlink",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/v2/record/{{parameters.objecttype}}/{{parameters.objectid}}/files\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"file\": {\n            \"value\": \"{{parameters.file_data}}\",\n            \"options\": {\n                \"filename\": \"{{parameters.file_name}}\"\n            }\n        }\n    },\n    \"type\": \"multipart/form-data\",\n    \"response\": {\n        \"output\": null\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "powerlink",
+      "description": "Uploads a file to a Powerlink object.",
+      "expectJsonc": "[\n    {\n        \"name\": \"objecttype\",\n        \"type\": \"select\",\n        \"label\": \"Name of Object\",\n        \"options\": {\n            \"store\": \"rpc://getobjectnameandid\",\n            \"nested\": [\n                {\n                    \"name\": \"objectid\",\n                    \"type\": \"text\",\n                    \"label\": \"Object ID\",\n                    \"required\": true\n                },\n                {\n                    \"name\": \"file_name\",\n                    \"type\": \"text\",\n                    \"label\": \"Name\",\n                    \"required\": true,\n                    \"semantic\": \"file:name\"\n                },\n                {\n                    \"name\": \"file_data\",\n                    \"type\": \"buffer\",\n                    \"label\": \"Data\",\n                    \"required\": true,\n                    \"semantic\": \"file:data\"\n                }\n            ]\n        },\n        \"required\": true\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "makeApiCall": {
+      "id": 31827,
+      "api": {
+        "url": "https://api.powerlink.co.il/api{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "makeApiCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://api.powerlink.co.il/api`. For example `/query`.",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "POST",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "powerlink",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"https://api.powerlink.co.il/api{{parameters.url}}\",\n    \"method\": \"{{parameters.method}}\",\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"response\": {\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "powerlink",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"help\": \"Enter a path relative to `https://api.powerlink.co.il/api`. For example `/query`.\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"required\": true,\n        \"default\": \"POST\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ]\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n        \"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n        \"default\": [\n            {\n                \"key\": \"Content-Type\",\n                \"value\": \"application/json\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n        \"type\": \"collection\"\n    },\n    {\n        \"name\": \"statusCode\",\n        \"label\": \"Status code\",\n        \"type\": \"number\"\n    }\n]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createobject": {
+      "id": 31825,
+      "api": {
+        "url": "/record/{{parameters.objecttype}}",
+        "body": "{{arrayToJson(parameters.fields)}}",
+        "method": "POST",
+        "response": {
+          "output": "{{transformDate(body.data.Record)}}"
+        }
+      },
+      "rev": 3,
+      "crud": "create",
+      "name": "createobject",
+      "epoch": null,
+      "flags": {},
+      "label": "Create an Object",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Select the object type",
+          "name": "objecttype",
+          "type": "select",
+          "label": "Name of Object",
+          "options": {
+            "store": "rpc://app%23powerlink@1/getobjectnameandid",
+            "nested": [
+              {
+                "name": "fields",
+                "spec": [
+                  {
+                    "name": "name",
+                    "type": "select",
+                    "label": "Field Name",
+                    "options": "rpc://app%23powerlink@1/getfieldnames"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  }
+                ],
+                "type": "array",
+                "label": "Fields"
+              }
+            ]
+          },
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "powerlink",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/record/{{parameters.objecttype}}\",\n    \"method\": \"POST\",\n    \"body\": \"{{arrayToJson(parameters.fields)}}\",\n    \"response\": {\n        \"output\": \"{{transformDate(body.data.Record)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23powerlink@1/createDynamicInterface"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "powerlink",
+      "description": "Creates a new Powerlink object.",
+      "expectJsonc": "[\n    {\n        \"name\": \"objecttype\",\n        \"type\": \"select\",\n        \"label\": \"Name of Object\",\n        \"options\": {\n            \"store\": \"rpc://getobjectnameandid\",\n            \"nested\": [\n                {\n                    \"name\": \"fields\",\n                    \"spec\": [\n                        {\n                            \"name\": \"name\",\n                            \"type\": \"select\",\n                            \"label\": \"Field Name\",\n                            \"options\": \"rpc://getfieldnames\"\n                        },\n                        {\n                            \"name\": \"value\",\n                            \"type\": \"text\",\n                            \"label\": \"Value\"\n                        }\n                    ],\n                    \"type\": \"array\",\n                    \"label\": \"Fields\"\n                }\n            ]\n        },\n        \"required\": true,\n        \"help\": \"Select the object type\"\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\"rpc://createDynamicInterface\"]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deleteObject": {
+      "id": 31826,
+      "api": {
+        "url": "/record/{{parameters.objecttype}}/{{parameters.objectid}}",
+        "body": "",
+        "method": "DELETE",
+        "response": {
+          "output": null
+        }
+      },
+      "rev": 2,
+      "crud": "create",
+      "name": "deleteObject",
+      "epoch": null,
+      "flags": {},
+      "label": "Delete an Object",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Select the object type",
+          "mode": "edit",
+          "name": "objecttype",
+          "type": "select",
+          "label": "Name of Object",
+          "options": {
+            "store": "rpc://app%23powerlink@1/getobjectnameandid",
+            "nested": [
+              {
+                "help": "Select object id (i.e for account select 'accountid')",
+                "name": "objectid",
+                "type": "text",
+                "label": "Object ID",
+                "required": true
+              }
+            ]
+          },
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "powerlink",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/record/{{parameters.objecttype}}/{{parameters.objectid}}\",\n    \"method\": \"DELETE\",\n    \"body\": \"\",\n    \"response\": {\n        \"output\": null\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "powerlink",
+      "description": "Deletes a Powerlink object.",
+      "expectJsonc": "[\n    {\n        \"name\": \"objecttype\",\n        \"type\": \"select\",\n        \"label\": \"Name of Object\",\n        \"options\": {\n            \"store\": \"rpc://getobjectnameandid\",\n            \"nested\": [\n                {\n                    \"name\": \"objectid\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"required\": true,\n                    \"label\": \"Object ID\",\n                    \"help\": \"Select object id (i.e for account select 'accountid')\"\n                }\n            ]\n        },\n        \"required\": true,\n\t\t\"mode\": \"edit\",\n        \"help\": \"Select the object type\"\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "updateObject": {
+      "id": 31831,
+      "api": {
+        "url": "/record/{{parameters.objecttype}}/{{parameters.objectid}}",
+        "body": "{{arrayToJson(parameters.fields)}}",
+        "method": "PUT",
+        "response": {
+          "output": {
+            "objectId": "{{body.data}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": "update",
+      "name": "updateObject",
+      "epoch": null,
+      "flags": {},
+      "label": "Update an Object",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "objecttype",
+          "type": "select",
+          "label": "Name of Object",
+          "options": {
+            "store": "rpc://app%23powerlink@1/getobjectnameandid",
+            "nested": [
+              {
+                "help": "Select object ID from earlier module or source (for accounts the parameter name is accountid).",
+                "name": "objectid",
+                "type": "text",
+                "label": "Object ID",
+                "required": true
+              },
+              {
+                "name": "fields",
+                "spec": [
+                  {
+                    "mode": "edit",
+                    "name": "name",
+                    "type": "select",
+                    "label": "Field Name",
+                    "options": "rpc://app%23powerlink@1/getfieldnames"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  }
+                ],
+                "type": "array",
+                "label": "Fields"
+              }
+            ]
+          },
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "powerlink",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/record/{{parameters.objecttype}}/{{parameters.objectid}}\",\n    \"method\": \"PUT\",\n    \"body\": \"{{arrayToJson(parameters.fields)}}\",\n    \"response\": {\n        \"output\": {\n            \"objectId\": \"{{body.data}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "objectId",
+          "type": "text",
+          "label": "Object ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "powerlink",
+      "description": "Updates a Powerlink object.",
+      "expectJsonc": "[\n    {\n        \"name\": \"objecttype\",\n        \"type\": \"select\",\n\t\t\"mode\": \"edit\",\n        \"label\": \"Name of Object\",\n        \"options\": {\n            \"store\": \"rpc://getobjectnameandid\",\n            \"nested\": [\n                {\n                    \"name\": \"objectid\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"required\": true,\n                    \"label\": \"Object ID\",\n                    \"help\": \"Select object ID from earlier module or source (for accounts the parameter name is accountid).\"\n                },\n                {\n                    \"name\": \"fields\",\n                    \"spec\": [\n                        {\n                            \"name\": \"name\",\n                            \"type\": \"select\",\n\t\t\t\t\t\t\t\"mode\": \"edit\",\n                            \"label\": \"Field Name\",\n                            \"options\": \"rpc://getfieldnames\"\n                        },\n                        {\n                            \"name\": \"value\",\n                            \"type\": \"text\",\n                            \"label\": \"Value\"\n                        }\n                    ],\n                    \"type\": \"array\",\n                    \"label\": \"Fields\"\n                }\n            ]\n        },\n        \"required\": true\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"objectId\",\n        \"type\": \"text\",\n        \"label\": \"Object ID\"\n    }\n]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createObjectTest": {
+      "id": 31824,
+      "api": {
+        "url": "/record/{{parameters.objecttype}}",
+        "body": "{{arrayToJson(parameters.fields)}}",
+        "method": "POST",
+        "response": {
+          "output": "{{body.data.Record}}"
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "createObjectTest",
+      "epoch": null,
+      "flags": {},
+      "label": "Create Object with Mapped Fields",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Select the object type",
+          "name": "objecttype",
+          "type": "select",
+          "label": "Name of Object",
+          "options": {
+            "store": "rpc://app%23powerlink@1/getobjectnameandid",
+            "nested": [
+              {
+                "name": "fields",
+                "spec": [
+                  {
+                    "name": "name",
+                    "type": "select",
+                    "label": "Field Name",
+                    "options": {
+                      "store": "rpc://app%23powerlink@1/getfieldnames",
+                      "nested": [
+                        {
+                          "mode": "edit",
+                          "name": "value",
+                          "type": "select",
+                          "label": "Value",
+                          "options": "rpc://app%23powerlink@1/testRpc"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "type": "array",
+                "label": "Fields"
+              }
+            ]
+          },
+          "required": true
+        }
+      ],
+      "public": false,
+      "typeId": 4,
+      "appName": "powerlink",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/record/{{parameters.objecttype}}\",\n    \"method\": \"POST\",\n    \"body\": \"{{arrayToJson(parameters.fields)}}\",\n    \"response\": {\n        \"output\": \"{{body.data.Record}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": "rpc://app%23powerlink@1/createDynamicInterface",
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "powerlink",
+      "description": "Create object with mapped fields",
+      "expectJsonc": "[\n    {\n        \"name\": \"objecttype\",\n        \"type\": \"select\",\n        \"label\": \"Name of Object\",\n        \"options\": {\n            \"store\": \"rpc://getobjectnameandid\",\n            \"nested\": [\n                {\n                    \"name\": \"fields\",\n                    \"spec\": [\n                        {\n                            \"name\": \"name\",\n                            \"type\": \"select\",\n                            \"label\": \"Field Name\",\n                            \"options\": {\n                                \"store\": \"rpc://getfieldnames\",\n                                \"nested\": [\n                                    {\n                                        \"name\": \"value\",\n                                        \"label\": \"Value\",\n                                        \"type\": \"select\",\n                                        \"options\": \"rpc://testRpc\",\n                                        \"mode\": \"edit\"\n                                    }\n                                ]\n                            }\n                        }\n                    ],\n                    \"type\": \"array\",\n                    \"label\": \"Fields\"\n                }\n            ]\n        },\n        \"required\": true,\n        \"help\": \"Select the object type\"\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "\"rpc://createDynamicInterface\"",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "queryObjectGetAll": {
+      "id": 31829,
+      "api": {
+        "url": "/query",
+        "body": {
+          "query": "{{formatQuery(parameters.query)}}",
+          "fields": "{{ifempty(join(parameters.fields, ','), '*')}}",
+          "sort_by": "{{parameters.sort_by}}",
+          "page_size": 500,
+          "sort_type": "{{parameters.sort_type}}",
+          "objecttype": "{{parameters.objecttype}}"
+        },
+        "method": "POST",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{item}}",
+          "iterate": "{{body.data.Data}}"
+        },
+        "pagination": {
+          "body": {
+            "page_number": "{{pagination.page}}"
+          },
+          "condition": "{{!body.data.IsLastPage}}"
+        }
+      },
+      "rev": 2,
+      "crud": "read",
+      "name": "queryObjectGetAll",
+      "epoch": null,
+      "flags": {},
+      "label": "Query Object - All items",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Select the object type",
+          "name": "objecttype",
+          "type": "select",
+          "label": "Name of Object",
+          "options": {
+            "store": "rpc://app%23powerlink@1/getobjectnameandid",
+            "nested": [
+              {
+                "help": "To select all fields do not select anything",
+                "name": "fields",
+                "type": "select",
+                "options": "rpc://app%23powerlink@1/getfieldnames",
+                "multiple": true
+              },
+              {
+                "name": "query",
+                "type": "filter",
+                "label": "Search criteria",
+                "options": {
+                  "store": "rpc://app%23powerlink@1/getfieldnames",
+                  "operators": [
+                    {
+                      "label": "Text",
+                      "options": [
+                        {
+                          "label": "=",
+                          "value": "="
+                        },
+                        {
+                          "label": "!=",
+                          "value": "!="
+                        },
+                        {
+                          "label": ">",
+                          "value": ">"
+                        },
+                        {
+                          "label": "<",
+                          "value": "<"
+                        },
+                        {
+                          "label": "<=",
+                          "value": "<="
+                        },
+                        {
+                          "label": ">=",
+                          "value": ">="
+                        },
+                        {
+                          "label": "is-null",
+                          "value": "is-null"
+                        },
+                        {
+                          "label": "is-not-null",
+                          "value": "is-not-null"
+                        },
+                        {
+                          "label": "start-with",
+                          "value": "start-with"
+                        },
+                        {
+                          "label": "end-with",
+                          "value": "end-with"
+                        },
+                        {
+                          "label": "not-start-with",
+                          "value": "not-start-with"
+                        },
+                        {
+                          "label": "not-end-with",
+                          "value": "not-end-with"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "sort_by",
+                "type": "select",
+                "label": "Sort By",
+                "options": "rpc://app%23powerlink@1/getfieldnames"
+              },
+              {
+                "name": "sort_type",
+                "type": "select",
+                "label": "Sort Type",
+                "options": [
+                  {
+                    "label": "acsending",
+                    "value": "asc"
+                  },
+                  {
+                    "label": "descending",
+                    "value": "desc"
+                  }
+                ]
+              }
+            ]
+          },
+          "required": true
+        },
+        {
+          "help": "Select page number (default is 1)",
+          "name": "page_number",
+          "type": "hidden",
+          "label": "Page Number",
+          "hidden": true,
+          "default": "1"
+        }
+      ],
+      "public": false,
+      "typeId": 9,
+      "appName": "powerlink",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/query\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"objecttype\": \"{{parameters.objecttype}}\",\n        \"page_size\": 500,\n        \"fields\": \"{{ifempty(join(parameters.fields, ','), '*')}}\",\n        \"query\": \"{{formatQuery(parameters.query)}}\",\n        \"sort_by\": \"{{parameters.sort_by}}\",\n        \"sort_type\": \"{{parameters.sort_type}}\"\n    },\n    \"response\": {\n        \"limit\": \"{{parameters.limit}}\",\n\t\t\"iterate\": \"{{body.data.Data}}\",\n        \"output\": \"{{item}}\"\n    },\n    \"pagination\": {\n        \"body\": {\n            \"page_number\": \"{{pagination.page}}\"\n        },\n        \"condition\": \"{{!body.data.IsLastPage}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uinteger",
+          "label": "User ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "powerlink",
+      "description": "Perform a Query for Powerlink objects and return all matches.",
+      "expectJsonc": "[\n    {\n        \"name\": \"objecttype\",\n        \"type\": \"select\",\n        \"label\": \"Name of Object\",\n        \"options\": {\n            \"store\": \"rpc://getobjectnameandid\",\n            \"nested\": [\n                {\n                    \"name\": \"fields\",\n                    \"type\": \"select\",\n                    \"options\": \"rpc://getfieldnames\",\n                    \"multiple\": true,\n                    \"help\": \"To select all fields do not select anything\"\n                },\n                {\n                    \"name\": \"query\",\n                    \"label\": \"Search criteria\",\n                    \"type\": \"filter\",\n                    \"options\": {\n                        \"store\": \"rpc://getfieldnames\",\n                        \"operators\": [\n                            {\n                                \"label\": \"Text\",\n                                \"options\": [\n                                    {\n                                        \"label\": \"=\",\n                                        \"value\": \"=\"\n                                    },\n                                    {\n                                        \"label\": \"!=\",\n                                        \"value\": \"!=\"\n                                    },\n                                    {\n                                        \"label\": \">\",\n                                        \"value\": \">\"\n                                    },\n                                    {\n                                        \"label\": \"<\",\n                                        \"value\": \"<\"\n                                    },\n                                    {\n                                        \"label\": \"<=\",\n                                        \"value\": \"<=\"\n                                    },\n                                    {\n                                        \"label\": \">=\",\n                                        \"value\": \">=\"\n                                    },\n                                    {\n                                        \"label\": \"is-null\",\n                                        \"value\": \"is-null\"\n                                    },\n                                    {\n                                        \"label\": \"is-not-null\",\n                                        \"value\": \"is-not-null\"\n                                    },\n                                    {\n                                        \"label\": \"start-with\",\n                                        \"value\": \"start-with\"\n                                    },\n                                    {\n                                        \"label\": \"end-with\",\n                                        \"value\": \"end-with\"\n                                    },\n                                    {\n                                        \"label\": \"not-start-with\",\n                                        \"value\": \"not-start-with\"\n                                    },\n                                    {\n                                        \"label\": \"not-end-with\",\n                                        \"value\": \"not-end-with\"\n                                    }\n                                ]\n                            }\n                        ]\n                    }\n                },\n                {\n                    \"name\": \"sort_by\",\n                    \"type\": \"select\",\n                    \"label\": \"Sort By\",\n                    \"options\": \"rpc://getfieldnames\"\n                },\n                {\n                    \"name\": \"sort_type\",\n                    \"type\": \"select\",\n                    \"label\": \"Sort Type\",\n                    \"options\": [\n                        {\n                            \"label\": \"acsending\",\n                            \"value\": \"asc\"\n                        },\n                        {\n                            \"label\": \"descending\",\n                            \"value\": \"desc\"\n                        }\n                    ]\n                }\n            ]\n        },\n        \"required\": true,\n        \"help\": \"Select the object type\"\n    },\n    {\n        \"name\": \"page_number\",\n        \"type\": \"hidden\",\n        \"label\": \"Page Number\",\n        \"help\": \"Select page number (default is 1)\",\n        \"default\": \"1\",\n        \"hidden\": true\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uinteger\",\n        \"label\": \"User ID\"\n    }\n]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "queryObjectUnparsed": {
+      "id": 31830,
+      "api": {
+        "url": "/query",
+        "body": {
+          "query": "{{formatQuery(parameters.query)}}",
+          "fields": "{{ifempty(join(parameters.fields, ','), '*')}}",
+          "sort_by": "{{parameters.sort_by}}",
+          "page_size": 500,
+          "sort_type": "{{parameters.sort_type}}",
+          "objecttype": "{{parameters.objecttype}}"
+        },
+        "method": "POST",
+        "response": {
+          "error": {
+            "message": "[{{statusCode}}] {{body.Message}}"
+          },
+          "output": {
+            "output": "{{jsonStringify(body)}}"
+          }
+        },
+        "pagination": {
+          "body": {
+            "query": "{{formatQuery(parameters.query)}}",
+            "fields": "{{ifempty(join(parameters.fields, ','), '*')}}",
+            "sort_by": "{{parameters.sort_by}}",
+            "page_size": 500,
+            "sort_type": "{{parameters.sort_type}}",
+            "objecttype": "{{parameters.objecttype}}",
+            "page_number": "{{pagination.page}}"
+          },
+          "condition": "{{!body.data.IsLastPage}}"
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "queryObjectUnparsed",
+      "epoch": null,
+      "flags": {},
+      "label": "Query Object Unparsed",
+      "scope": [],
+      "expect": [
+        {
+          "name": "objecttype",
+          "type": "select",
+          "label": "Name of Object",
+          "options": {
+            "store": "rpc://app%23powerlink@1/getobjectnameandid",
+            "nested": [
+              {
+                "help": "To select all fields do not select anything.",
+                "name": "Fields",
+                "type": "select",
+                "options": "rpc://app%23powerlink@1/getfieldnames",
+                "multiple": true
+              },
+              {
+                "name": "query",
+                "type": "filter",
+                "label": "Search criteria",
+                "options": {
+                  "store": "rpc://app%23powerlink@1/getfieldnames",
+                  "operators": [
+                    {
+                      "label": "Text",
+                      "options": [
+                        {
+                          "label": "=",
+                          "value": "="
+                        },
+                        {
+                          "label": "!=",
+                          "value": "!="
+                        },
+                        {
+                          "label": ">",
+                          "value": ">"
+                        },
+                        {
+                          "label": "<",
+                          "value": "<"
+                        },
+                        {
+                          "label": "<=",
+                          "value": "<="
+                        },
+                        {
+                          "label": ">=",
+                          "value": ">="
+                        },
+                        {
+                          "label": "is-null",
+                          "value": "is-null"
+                        },
+                        {
+                          "label": "is-not-null",
+                          "value": "is-not-null"
+                        },
+                        {
+                          "label": "start-with",
+                          "value": "start-with"
+                        },
+                        {
+                          "label": "end-with",
+                          "value": "end-with"
+                        },
+                        {
+                          "label": "not-start-with",
+                          "value": "not-start-with"
+                        },
+                        {
+                          "label": "not-end-with",
+                          "value": "not-end-with"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "sort_by",
+                "type": "select",
+                "label": "Sort By",
+                "options": "rpc://app%23powerlink@1/getfieldnames"
+              },
+              {
+                "name": "sort_type",
+                "type": "select",
+                "label": "Sort Type",
+                "options": [
+                  {
+                    "label": "Ascending",
+                    "value": "asc"
+                  },
+                  {
+                    "label": "Descending",
+                    "value": "desc"
+                  }
+                ]
+              }
+            ]
+          },
+          "required": true
+        }
+      ],
+      "public": false,
+      "typeId": 4,
+      "appName": "powerlink",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/query\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"objecttype\": \"{{parameters.objecttype}}\",\n        \"page_size\": 500,\n        \"fields\": \"{{ifempty(join(parameters.fields, ','), '*')}}\",\n        \"query\": \"{{formatQuery(parameters.query)}}\",\n        \"sort_by\": \"{{parameters.sort_by}}\",\n        \"sort_type\": \"{{parameters.sort_type}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"output\": \"{{jsonStringify(body)}}\"\n        },\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.Message}}\"\n        }\n    },\n\t\"pagination\": {\n\t\t\"body\": {\n\t\t\t\"objecttype\": \"{{parameters.objecttype}}\",\n\t\t\t\"page_size\": 500,\n\t\t\t\"page_number\": \"{{pagination.page}}\",\n\t\t\t\"fields\": \"{{ifempty(join(parameters.fields, ','), '*')}}\",\n\t\t\t\"query\": \"{{formatQuery(parameters.query)}}\",\n\t\t\t\"sort_by\": \"{{parameters.sort_by}}\",\n\t\t\t\"sort_type\": \"{{parameters.sort_type}}\"\n\t\t},\n\t\t\"condition\": \"{{!body.data.IsLastPage}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "powerlink",
+      "description": "Perform a query for powerlink objects - unparsed",
+      "expectJsonc": "[\n    {\n        \"name\": \"objecttype\",\n        \"type\": \"select\",\n        \"label\": \"Name of Object\",\n        \"options\": {\n            \"store\": \"rpc://getobjectnameandid\",\n            \"nested\": [\n                {\n                    \"name\": \"fields\",\n\t\t\t\t\t\"name\": \"Fields\",\n                    \"type\": \"select\",\n                    \"options\": \"rpc://getfieldnames\",\n                    \"multiple\": true,\n                    \"help\": \"To select all fields do not select anything.\"\n                },\n                {\n                    \"name\": \"query\",\n                    \"label\": \"Search criteria\",\n                    \"type\": \"filter\",\n                    \"options\": {\n                        \"store\": \"rpc://getfieldnames\",\n                        \"operators\": [\n                            {\n                                \"label\": \"Text\",\n                                \"options\": [\n                                    {\n                                        \"label\": \"=\",\n                                        \"value\": \"=\"\n                                    },\n                                    {\n                                        \"label\": \"!=\",\n                                        \"value\": \"!=\"\n                                    },\n                                    {\n                                        \"label\": \">\",\n                                        \"value\": \">\"\n                                    },\n                                    {\n                                        \"label\": \"<\",\n                                        \"value\": \"<\"\n                                    },\n                                    {\n                                        \"label\": \"<=\",\n                                        \"value\": \"<=\"\n                                    },\n                                    {\n                                        \"label\": \">=\",\n                                        \"value\": \">=\"\n                                    },\n                                    {\n                                        \"label\": \"is-null\",\n                                        \"value\": \"is-null\"\n                                    },\n                                    {\n                                        \"label\": \"is-not-null\",\n                                        \"value\": \"is-not-null\"\n                                    },\n                                    {\n                                        \"label\": \"start-with\",\n                                        \"value\": \"start-with\"\n                                    },\n                                    {\n                                        \"label\": \"end-with\",\n                                        \"value\": \"end-with\"\n                                    },\n                                    {\n                                        \"label\": \"not-start-with\",\n                                        \"value\": \"not-start-with\"\n                                    },\n                                    {\n                                        \"label\": \"not-end-with\",\n                                        \"value\": \"not-end-with\"\n                                    }\n                                ]\n                            }\n                        ]\n                    }\n                },\n                {\n                    \"name\": \"sort_by\",\n                    \"type\": \"select\",\n                    \"label\": \"Sort By\",\n                    \"options\": \"rpc://getfieldnames\"\n                },\n                {\n                    \"name\": \"sort_type\",\n                    \"type\": \"select\",\n                    \"label\": \"Sort Type\",\n                    \"options\": [\n                        {\n                            \"label\": \"Ascending\",\n                            \"value\": \"asc\"\n                        },\n                        {\n                            \"label\": \"Descending\",\n                            \"value\": \"desc\"\n                        }\n                    ]\n                }\n            ]\n        },\n        \"required\": true\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "powerlink": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.tokenid"
+          ]
+        },
+        "url": "https://api.powerlink.co.il/metadata/records/1/fields",
+        "method": "GET",
+        "headers": {
+          "tokenid": "{{parameters.tokenid}}"
+        },
+        "response": {
+          "error": {
+            "message": "Authentication Failed"
+          },
+          "valid": {
+            "condition": "{{if(statusCode !== 401, true)}}"
+          }
+        }
+      },
+      "rev": 7,
+      "name": "powerlink",
+      "type": "basic",
+      "label": "Fireberry",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "powerlink",
+      "install": {},
+      "apiJsonc": "{\n    \"url\": \"https://api.powerlink.co.il/metadata/records/1/fields\",\n    \"method\": \"GET\",\n    \"headers\": {\n        \"tokenid\": \"{{parameters.tokenid}}\"\n    },\n    \"response\": {\n        \"valid\": {\n            \"condition\": \"{{if(statusCode !== 401, true)}}\"\n        },\n        \"error\": {\n            \"message\": \"Authentication Failed\"\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.tokenid\"\n        ]\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "tokenid",
+          "type": "password",
+          "label": "Token",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[]",
+      "installSpec": [],
+      "scopesJsonc": "{}",
+      "installJsonc": "{\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"tokenid\",\n        \"type\": \"password\",\n        \"label\": \"Token\",\n        \"editable\":true,\n        \"required\": true\n    }\n]",
+      "installSpecJsonc": "[\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://api.powerlink.co.il/api\",\n    \"headers\": {\n        \"tokenid\": \"{{connection.tokenid}}\"\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.Message}}\",\n            \"429\": {\n                \"type\": \"RateLimitError\",\n                \"message\": \"[429] You have surpassed one of the established rate limits in the API. Please refer to the Fireberry API documentation on rate limits for further information.\"\n            }\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.tokenid\"\n        ]\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "sortOwner": {
+      "rev": 2,
+      "code": "function sortOwner(data) {\n\tbody = [];\n\tfor (i=0;i<data.data.Data.length;i++){\n\t\tif (data.data.Data[i].ownerid !== null){\n\t\t\tbody.push({\"label\": data.data.Data[i].ownername, \"value\": data.data.Data[i].ownerid})\n\t\t}\n\t}\n\treturn body;\n}",
+      "name": "sortOwner",
+      "test": null,
+      "appName": "powerlink",
+      "arguments": "(data)",
+      "appVersion": 1
+    },
+    "arrayToJson": {
+      "rev": 3,
+      "code": "function arrayToJson(item) {\n\tif (item === undefined) {return {};}\n    const payload = {};\n    const parsed = item;\n    for (i=0;i<parsed.length;i++){\n        var name = parsed[i].name;\n        var value = parsed[i].value;\n        payload[name] = value;\n    }\n    return payload;\n}",
+      "name": "arrayToJson",
+      "test": null,
+      "appName": "powerlink",
+      "arguments": "(item)",
+      "appVersion": 1
+    },
+    "formatQuery": {
+      "rev": 2,
+      "code": "function formatQuery(item) {\n\tdebug(item);\n\tif (!item){ return undefined;}\n    var query = '';\n \n    for (var i=0, group_length=item.length; i<group_length; i++){\n        var group = item[i];\n        if (group.length > 1)\n            query += '(';\n         \n        for(var j=0, length=group.length; j<length; j++){\n            var condition = group[j];\n \n            query += '(' + condition.a + ' ' + condition.o + ' ' + condition.b + ')';\n \n            if (j < length - 1)\n                query += ' AND ';\n        }\n \n        if (group.length > 1)\n            query += ')';\n \n        if (i < group_length - 1)\n            query += ' OR ';\n    }\n \n    return query;\n}",
+      "name": "formatQuery",
+      "test": null,
+      "appName": "powerlink",
+      "arguments": "(item)",
+      "appVersion": 1
+    },
+    "jsonStringify": {
+      "rev": 2,
+      "code": "function jsonStringify(data) {\n\treturn JSON.stringify(data);\n}",
+      "name": "jsonStringify",
+      "test": null,
+      "appName": "powerlink",
+      "arguments": "(data)",
+      "appVersion": 1
+    },
+    "transformDate": {
+      "rev": 2,
+      "code": "function transformDate(obj) {\n\tfor (let [key, value] of Object.entries(obj)) {\n\t\tif (/^(19|20)\\d\\d-(0[1-9]|1[012])-([012]\\d|3[01])T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)$/.test(value)) {\n\t\t\tobj[key] = iml.parseDate(obj[key]);\n\t\t} else continue;\n\t}\n\treturn obj;\n}",
+      "name": "transformDate",
+      "test": null,
+      "appName": "powerlink",
+      "arguments": "(obj)",
+      "appVersion": 1
+    },
+    "dynamicInterface": {
+      "rev": 2,
+      "code": "function dynamicInterface(data) {\n\tvar arr = [];\n\tvar type = \"\";\n\tfor (var key in data){\n\t\tif (data[key] === null){\n\t\t\tdata[key] = \"\";\n\t\t}\n\n\t\tif (typeof(data[key]) == \"number\"){\n\t\t\ttype = \"integer\";\n\t\t}else{\n\t\t\ttype = \"text\";\n\t\t}\n\t\t\n\t\tarr.push({\"name\": key, \"type\": type, \"label\": key});\n\t}\n\t\n\treturn {\n\t\tname: \"Data\",\n\t\tlabel: \"Data\",\n\t\ttype: \"array\",\n\t\tspec: arr\n\t};\n}",
+      "name": "dynamicInterface",
+      "test": null,
+      "appName": "powerlink",
+      "arguments": "(data)",
+      "appVersion": 1
+    },
+    "allFieldsSelection": {
+      "rev": 2,
+      "code": "function allFieldsSelection(item) {\n\tconst data = item;\n\tdata.unshift({\"label\": \"Select All\", \"value\": \"*\"});\n\treturn data;\n}",
+      "name": "allFieldsSelection",
+      "test": null,
+      "appName": "powerlink",
+      "arguments": "(item)",
+      "appVersion": 1
+    },
+    "arrayToJsonComment": {
+      "rev": 2,
+      "code": "function arrayToJsonComment(item) {\n    const payload = {};\n    const parsed = item;\n    for (i=0;i<parsed.length;i++){\n        var name = parsed[i].name;\n        var value = parsed[i].value;\n        payload[name] = value;\n    }\n\tpayload.objecttype = 7;\n    return payload;\n}",
+      "name": "arrayToJsonComment",
+      "test": null,
+      "appName": "powerlink",
+      "arguments": "(item)",
+      "appVersion": 1
+    },
+    "buildCommentRequest": {
+      "rev": 2,
+      "code": "function buildCommentRequest(params) {\n\tlet output = {};\n\toutput.objectid = params.objectid;\n\toutput.objecttypecode = params.objecttype;\n\tfor (i=0;i<params.fields.length;i++){\n        var name = params.fields[i].name;\n        var value = params.fields[i].value;\n        output[name] = value;\n    }\n\t\n\treturn output;\n}",
+      "name": "buildCommentRequest",
+      "test": null,
+      "appName": "powerlink",
+      "arguments": "(params)",
+      "appVersion": 1
+    },
+    "multipleSelectFields": {
+      "rev": 2,
+      "code": "function multipleSelectFields() {\n\t\n\treturn        {\n                    \"name\": \"fields\",\n                    \"spec\": [\n                        {\n                            \"name\": \"name\",\n                            \"type\": \"select\",\n                            \"label\": \"fieldname\",\n                            \"options\": \"rpc://getfieldnames\"\n                        },\n                        {\n                            \"name\": \"value\",\n                            \"type\": \"text\",\n                            \"label\": \"value\"\n                        }\n                    ],\n                    \"type\": \"array\",\n                    \"label\": \"Fields\"\n                }\n}",
+      "name": "multipleSelectFields",
+      "test": null,
+      "appName": "powerlink",
+      "arguments": "()",
+      "appVersion": 1
+    },
+    "createDynamicInterface": {
+      "rev": 3,
+      "code": "function createDynamicInterface(data) {\n\t/*var arr = [];\n\tvar type = \"\";\n\tfor (var key in data){\n\t\tif (data[key] === null){\n\t\t\tdata[key] = \"\";\n\t\t}\n\n\t\tif (typeof(data[key]) == \"number\"){\n\t\t\ttype = \"integer\";\n\t\t}else{\n\t\t\ttype = \"text\";\n\t\t}\n\t\t\n\t\tarr.push({\"name\": key, \"type\": type, \"label\": key});\n\t}*/\n\t\n\tlet outptuObj = {\n\t\ttype: \"text\",\n\t\tname: data.fieldname,\n\t\tlabel: data.name\n\t};\n\tif (data.fieldname === \"createdon\" || data.fieldname === \"modifiedon\") {outptuObj.type = \"date\";}\n\treturn outptuObj;\n}",
+      "name": "createDynamicInterface",
+      "test": null,
+      "appName": "powerlink",
+      "arguments": "(data)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-05-26T11:42:04.940207+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Sales and service center management software, all tools for increasing sales and keeping in touch with customers in one place.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "8d650599fcf4d48acb8ee690b90acf48",
+  "versionFull": "1.0.6",
+  "compiledName": "powerlink",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

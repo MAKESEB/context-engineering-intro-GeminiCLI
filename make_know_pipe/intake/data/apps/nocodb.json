@@ -1,0 +1,1835 @@
+{
+  "rev": 27,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.xc-token"
+      ]
+    },
+    "baseUrl": "{{connection.instanceUrl}}",
+    "headers": {
+      "xc-token": "{{connection.authToken}}"
+    },
+    "response": {
+      "error": {
+        "401": {
+          "message": "[{{statusCode}}] Unauthorised"
+        },
+        "403": {
+          "message": "[{{statusCode}}] Forbidden"
+        },
+        "404": {
+          "message": "[{{statusCode}}] not found"
+        },
+        "type": "RuntimeError",
+        "message": "{{ifempty(body.msg, 'Some error occurred')}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": "# NocoDB\n\nThe NocoDB modules allow you to search, retrieve, create, update and delete records in your NocoDB instance.\nYou can also use the module to make arbitrary API calls to your NocoDB instance.\n\n<a name=\"connect-nocodb-to-make\"></a>\n## Connect NocoDB to Make\n\n1. Login into your NocoDB instance.\n2. Open/Create a project.\n3. Open Team & Settings from project dropdown menu on the left.\n4. Go to API tokens Management tab.\n5. Add new Token or copy an existing token.\n6. Log in to your Make account, open the NocoDB module scenario, and click the Add button next to the Connection field.\n7. Add connection parameters, Name, Your NocoDB instance's base URL and API Token (xc-token) that you generated earlier.\n8. Click Save\n\n## Records\n\nUsing the following modules, you can create, update, search, get, upsert, and delete records, and make authorized calls to NocoDB APIs.\n\n***\n<details>\n\n<summary><h3>+ Search Records</h3></summary>\n\nReturns records based on the filter settings.\n\n<table>\n<tr>\n<td>Connection</td><td>[Connection](#connect-nocodb-to-make) to your NocoDB instance.</td>\n</tr>\n<tr>\n<td>Base</td><td>Select the base/project that contains the table in which you want to create a record.</td>\n</tr>\n<tr>\n<td>Table</td><td>Select the table in which you want to create a record.</td>\n</tr>\n<tr>\n<td>Fields</td><td>Add the fields (comma separated) you want to receive in the output. If no field is provided, all fields will be returned.</td>\n</tr>\n<tr>\n<td>Where</td><td>Enter the where condition to filter records. e.g. (products_slug,eq,{polestar-2-646-snow}). For full documentation see [here](https://docs.nocodb.com/developer-resources/rest-apis#query-params).</td>\n</tr>\n<tr>\n<td>Limit</td><td>Set the maximum number of records Make will return during one execution cycle. The default value is 10.</td>\n</tr>\n<tr>\n<td>Sort</td><td>Specify sorting, if needed. The higher item in the list has precedence. Add Comma separated field names without spaces, e.g. -available_from,product_stock_total. A - in front of the field name is used to invert the sort order.</td>\n</tr>\n</table>\n</details>\n\n***\n<details>\n\n<summary><h3>+ Get a Record</h3></summary>\n\nRetrieves the specified record details.\n\n<table>\n<tr>\n<td>Connection</td><td>[Connection](#connect-nocodb-to-make) to your NocoDB instance.</td>\n</tr>\n<tr>\n<td>Base</td><td>Select the base/project that contains the table in which you want to create a record.</td>\n</tr>\n<tr>\n<td>Table</td><td>Select the table in which you want to create a record.</td>\n</tr>\n<tr>\n<td>ID</td><td>Enter (map) the Record ID you want to update. You can retrieve the ID, for example, using the Search Records.</td>\n</tr>\n</table>\n</details>\n\n***\n<details>\n\n<summary><h3>+ Create a Record</h3></summary>\n\nCreates a new record in a selected table.\n\n<table>\n<tr>\n<td>Connection</td><td>[Connection](#connect-nocodb-to-make) to your NocoDB instance.</td>\n</tr>\n<tr>\n<td>Base</td><td>Select the base/project that contains the table in which you want to create a record.</td>\n</tr>\n<tr>\n<td>Table</td><td>Select the table in which you want to create a record.</td>\n</tr>\n<tr>\n<td>Record</td><td>Enter values to the desired fields. See also NocoDB's guide to [column types](https://docs.nocodb.com/setup-and-usages/column-types).</td>\n</tr>\n</table>\n</details>\n\n***\n<details>\n\n<summary><h3>+ Update a Record</h3></summary>\n\nUpdates an existing record.\n\n<table>\n<tr>\n<td>Connection</td><td>[Connection](#connect-nocodb-to-make) to your NocoDB instance.</td>\n</tr>\n<tr>\n<td>Base</td><td>Select the base/project containing the table whose records you want to update.</td>\n</tr>\n<tr>\n<td>Table</td><td>Select the table whose record you want to update.</td>\n</tr>\n<tr>\n<td>ID</td><td>Enter (map) the Record ID you want to update. You can retrieve the ID, for example, using the Search Records or Get a Record module.</td>\n</tr>\n<tr>\n<td>Record</td><td>Enter values to the desired fields. Use `erase` to remove a value. Empty field equals to no change in the value</td>\n</tr>\n</table>\n</details>\n\n***\n<details>\n\n<summary><h3>+ Upsert a Record</h3></summary>\n\nCreates a record when you don't specify a record ID. Updates a record if the record ID is specified.\n\n<table>\n<tr>\n<td>Connection</td><td>[Connection](#connect-nocodb-to-make) to your NocoDB instance.</td>\n</tr>\n<tr>\n<td>Base</td><td>Select the base/project containing the table whose records you want to update.</td>\n</tr>\n<tr>\n<td>Table</td><td>Select the table where you want to create or update a record.</td>\n</tr>\n<tr>\n<td>ID</td><td>Enter (map) the Record ID you want to update. You can retrieve the ID, for example, using the Search Records or Get a Record module.If you enter an ID that does not exist, an error occurs, and no action is performed.</td>\n</tr>\n<tr>\n<td>Record</td><td>Enter values in the fields you want to update or create. See also NocoDB's guide to [column types](https://docs.nocodb.com/setup-and-usages/column-types).</td>\n</tr>\n</table>\n</details>\n\n***\n<details>\n\n<summary><h3>+ Delete a Record</h3></summary>\n\nDeletes a specified record.\n\n<table>\n<tr>\n<td>Connection</td><td>[Connection](#connect-nocodb-to-make) to your NocoDB instance.</td>\n</tr>\n<tr>\n<td>Base</td><td>Select the base/project containing the table whose records you want to update.</td>\n</tr>\n<tr>\n<td>Table</td><td>Select the table where you want to delete a record.</td>\n</tr>\n<tr>\n<td>ID</td><td>Enter (map) the Record ID you want to delete. You can retrieve the ID, for example, using the Search Records or Get a Record module.</td>\n</tr>\n</table>\n</details>\n\n## Other\n\n***\n<details>\n\n<summary><h3>+ Make an API Call</h3></summary>\n\nAllows you to perform a custom API call.\n\n<table>\n<tr>\n<td>Connection</td><td>[Connection](#connect-nocodb-to-make) to your NocoDB instance.</td>\n</tr>\n<tr>\n<td>URL</td><td>Enter a path relative to the connections Base URL. For example, `/api/v1/db/meta/projects/{project_id}/tables`.</td>\n</tr>\n<tr>\n<td>Note</td><td>For the list of available endpoints, refer to the NocoDB's REST API [Documentation](https://docs.nocodb.com/developer-resources/rest-apis). Additionally you can check swagger documentation of the project.</td>\n</tr>\n<tr>\n<td>Method</td><td>Select the HTTP method you want to use. eg. GET,POST,PUT,PATCH,DELETE</td>\n</tr>\n<tr>\n<td>Headers</td><td>Enter the desired request headers. You don't have to add authorization headers; we already did that for you.</td>\n</tr>\n<tr>\n<td>Query String</td><td>Enter the request query string.</td>\n</tr>\n<tr>\n<td>Body</td><td>Enter the body content for your API call.</td>\n</tr>\n</table>\n</details>\n",
+  "name": "nocodb",
+  "_rpcs": {
+    "getTables": {
+      "api": {
+        "url": "/api/v1/db/meta/projects/{{parameters.selectedProject}}/tables",
+        "method": "GET",
+        "response": {
+          "temp": {
+            "tableList": "{{body.list}}"
+          },
+          "output": {
+            "label": "{{item.title}}",
+            "value": "{{item.title}}||{{item.table_name}}||{{item.id}}"
+          },
+          "iterate": "{{body.list}}"
+        }
+      },
+      "rev": 6,
+      "name": "getTables",
+      "label": "getTables",
+      "appName": "nocodb",
+      "apiJsonc": "{\n  \"url\": \"/api/v1/db/meta/projects/{{parameters.selectedProject}}/tables\",\n  \"method\": \"GET\",\n  \"response\": {\n    \"temp\": {\n      \"tableList\": \"{{body.list}}\"\n    },\n    \"output\": {\n      \"label\": \"{{item.title}}\",\n      \"value\": \"{{item.title}}||{{item.table_name}}||{{item.id}}\"\n    },\n    \"iterate\": \"{{body.list}}\"\n  }\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "selectedProject",
+          "type": "text",
+          "label": "Selected Project"
+        }
+      ],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"selectedProject\",\n        \"label\": \"Selected Project\",\n        \"type\": \"text\"\n    }\n]"
+    },
+    "getProjects": {
+      "api": [
+        {
+          "url": "/api/v1/db/meta/projects/",
+          "method": "GET",
+          "response": {
+            "output": {
+              "label": "{{item.title}}",
+              "value": "{{item.id}}"
+            },
+            "iterate": "{{body.list}}"
+          },
+          "condition": "{{!connection.isCloud}}"
+        },
+        {
+          "url": "/api/v1/workspaces/{{parameters.selectedWorkspace}}/bases/",
+          "method": "GET",
+          "response": {
+            "output": {
+              "label": "{{item.title}}",
+              "value": "{{item.id}}"
+            },
+            "iterate": "{{body.list}}"
+          },
+          "condition": "{{connection.isCloud}}"
+        }
+      ],
+      "rev": 6,
+      "name": "getProjects",
+      "label": "getProjects",
+      "appName": "nocodb",
+      "apiJsonc": "[\n  {\n    \"condition\": \"{{!connection.isCloud}}\",\n    \"url\": \"/api/v1/db/meta/projects/\",\n    \"method\": \"GET\",\n    \"response\": {\n      \"output\": {\n        \"label\": \"{{item.title}}\",\n        \"value\": \"{{item.id}}\"\n      },\n      \"iterate\": \"{{body.list}}\"\n    }\n  },\n  {\n    \"condition\": \"{{connection.isCloud}}\",\n    \"url\": \"/api/v1/workspaces/{{parameters.selectedWorkspace}}/bases/\",\n    \"method\": \"GET\",\n    \"response\": {\n      \"output\": {\n        \"label\": \"{{item.title}}\",\n        \"value\": \"{{item.id}}\"\n      },\n      \"iterate\": \"{{body.list}}\"\n    }\n  }\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "getTableMeta": {
+      "api": {
+        "url": "/api/v1/db/meta/tables/{{getTableId(parameters.selectedTable)}}",
+        "method": "GET",
+        "response": {
+          "output": "{{parseTableColumns(body.columns)}}"
+        }
+      },
+      "rev": 6,
+      "name": "getTableMeta",
+      "label": "getTableMeta",
+      "appName": "nocodb",
+      "apiJsonc": "{\n  \"url\": \"/api/v1/db/meta/tables/{{getTableId(parameters.selectedTable)}}\",\n  \"method\": \"GET\",\n  \"response\": {\n    \"output\": \"{{parseTableColumns(body.columns)}}\"\n  }\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "selectedProject",
+          "type": "text",
+          "label": "Selected Project"
+        },
+        {
+          "name": "selectedTable",
+          "type": "text",
+          "label": "Selected Table"
+        }
+      ],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": "[\n  {\n      \"name\": \"selectedProject\",\n      \"label\": \"Selected Project\",\n      \"type\": \"text\"\n  },\n{\n      \"name\": \"selectedTable\",\n      \"label\": \"Selected Table\",\n      \"type\": \"text\"\n  }\n]"
+    },
+    "getWorkspaces": {
+      "api": {
+        "qs": {},
+        "url": "/api/v1/workspaces/",
+        "body": {},
+        "method": "GET",
+        "headers": {},
+        "response": {
+          "output": {
+            "label": "{{item.title}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.list}}"
+        },
+        "condition": "{{connection.isCloud == true}}"
+      },
+      "rev": 2,
+      "name": "getWorkspaces",
+      "label": "getWorkspaces",
+      "appName": "nocodb",
+      "apiJsonc": "\n{\n\t\"condition\": \"{{connection.isCloud == true}}\",\n\t\"url\": \"/api/v1/workspaces/\",\n\t\"method\": \"GET\",\n\t\"qs\": { },\n\t\"body\": { },\n\t\"headers\": { },\n\t\"response\": {\n\t\t\"iterate\": \"{{body.list}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.title}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "upsertRecords": {
+      "api": [
+        {
+          "response": {
+            "output": [
+              {
+                "name": "selectedProject",
+                "type": "select",
+                "label": "Base",
+                "options": {
+                  "store": "rpc://app%23nocodb@1/getProjects",
+                  "nested": [
+                    {
+                      "name": "selectedTable",
+                      "type": "select",
+                      "label": "Table",
+                      "options": {
+                        "store": "rpc://app%23nocodb@1/getTables",
+                        "nested": [
+                          "rpc://app%23nocodb@1/getTablePrimaryKeyField",
+                          "rpc://app%23nocodb@1/getTableCreatableFields"
+                        ]
+                      },
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{!connection.isCloud}}"
+        },
+        {
+          "response": {
+            "output": [
+              {
+                "name": "selectedWorkspace",
+                "type": "select",
+                "label": "Workspace",
+                "options": {
+                  "store": "rpc://app%23nocodb@1/getWorkspaces",
+                  "nested": [
+                    {
+                      "name": "selectedProject",
+                      "type": "select",
+                      "label": "Base",
+                      "options": {
+                        "store": "rpc://app%23nocodb@1/getProjects",
+                        "nested": [
+                          {
+                            "name": "selectedTable",
+                            "type": "select",
+                            "label": "Table",
+                            "options": {
+                              "store": "rpc://app%23nocodb@1/getTables",
+                              "nested": [
+                                "rpc://app%23nocodb@1/getTablePrimaryKeyField",
+                                "rpc://app%23nocodb@1/getTableCreatableFields"
+                              ]
+                            },
+                            "required": true
+                          }
+                        ]
+                      },
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{connection.isCloud}}"
+        }
+      ],
+      "rev": 2,
+      "name": "upsertRecords",
+      "label": "upsertRecords",
+      "appName": "nocodb",
+      "apiJsonc": "[\n\t//for legacy users\n\t{\n\t\t\"condition\": \"{{!connection.isCloud}}\",\n\t\t\"response\": {\n\t\t\t\"output\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"selectedProject\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"label\": \"Base\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": {\n\t\t\t\t\t\"store\": \"rpc://getProjects\",\n\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"selectedTable\",\n\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\"label\": \"Table\",\n\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\"store\": \"rpc://getTables\",\n\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\"rpc://getTablePrimaryKeyField\",\n\t\t\t\t\t\t\t\t\t\t\"rpc://getTableCreatableFields\"\n\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t},\n\t//for new users\n\t{\n\t\t\"condition\": \"{{connection.isCloud}}\",\n\t\t\"response\": {\n\t\t\t\"output\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"selectedWorkspace\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"label\": \"Workspace\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\"store\": \"rpc://getWorkspaces\",\n\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"name\": \"selectedProject\",\n\t\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\t\"label\": \"Base\",\n\t\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\t\"store\": \"rpc://getProjects\",\n\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"selectedTable\",\n\t\t\t\t\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Table\",\n\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\t\t\t\t\"store\": \"rpc://getTables\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"rpc://getTablePrimaryKeyField\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"rpc://getTableCreatableFields\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t]\n\t\t\t\t    }\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t}\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "getRecordParameters": {
+      "api": [
+        {
+          "response": {
+            "output": [
+              {
+                "name": "selectedProject",
+                "type": "select",
+                "label": "Base",
+                "options": {
+                  "store": "rpc://app%23nocodb@1/getProjects",
+                  "nested": [
+                    {
+                      "name": "selectedTable",
+                      "type": "select",
+                      "label": "Table",
+                      "options": {
+                        "store": "rpc://app%23nocodb@1/getTables",
+                        "nested": [
+                          "rpc://app%23nocodb@1/getTablePrimaryKeyField"
+                        ]
+                      },
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{!connection.isCloud}}"
+        },
+        {
+          "response": {
+            "output": [
+              {
+                "name": "selectedWorkspace",
+                "type": "select",
+                "label": "Workspace",
+                "options": {
+                  "store": "rpc://app%23nocodb@1/getWorkspaces",
+                  "nested": [
+                    {
+                      "name": "selectedProject",
+                      "type": "select",
+                      "label": "Base",
+                      "options": {
+                        "store": "rpc://app%23nocodb@1/getProjects",
+                        "nested": [
+                          {
+                            "name": "selectedTable",
+                            "type": "select",
+                            "label": "Table",
+                            "options": {
+                              "store": "rpc://app%23nocodb@1/getTables",
+                              "nested": [
+                                "rpc://app%23nocodb@1/getTablePrimaryKeyField"
+                              ]
+                            },
+                            "required": true
+                          }
+                        ]
+                      },
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{connection.isCloud}}"
+        }
+      ],
+      "rev": 2,
+      "name": "getRecordParameters",
+      "label": "getRecordParameters",
+      "appName": "nocodb",
+      "apiJsonc": "[\n\t//for legacy users\n\t{\n\t\t\"condition\": \"{{!connection.isCloud}}\",\n\t\t\"response\": {\n\t\t\t\"output\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"selectedProject\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"label\": \"Base\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\"store\": \"rpc://getProjects\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"selectedTable\",\n\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\"label\": \"Table\",\n\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\"store\": \"rpc://getTables\",\n\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\"rpc://getTablePrimaryKeyField\"\n\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t},\n\t//for new users\n\t{\n\t\t\"condition\": \"{{connection.isCloud}}\",\n\t\t\"response\": {\n\t\t\t\"output\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"selectedWorkspace\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"label\": \"Workspace\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\"store\": \"rpc://getWorkspaces\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"selectedProject\",\n\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\"label\": \"Base\",\n\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\"store\": \"rpc://getProjects\",\n\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\"name\": \"selectedTable\",\n\t\t\t\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Table\",\n\t\t\t\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\t\t\t\"store\": \"rpc://getTables\",\n\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\"rpc://getTablePrimaryKeyField\"\n\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t}\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "createRecordParameters": {
+      "api": [
+        {
+          "response": {
+            "output": [
+              {
+                "name": "selectedProject",
+                "type": "select",
+                "label": "Base",
+                "options": {
+                  "store": "rpc://app%23nocodb@1/getProjects",
+                  "nested": [
+                    {
+                      "name": "selectedTable",
+                      "type": "select",
+                      "label": "Table",
+                      "options": {
+                        "store": "rpc://app%23nocodb@1/getTables",
+                        "nested": [
+                          "rpc://app%23nocodb@1/getTableCreatableFields"
+                        ]
+                      },
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{!connection.isCloud}}"
+        },
+        {
+          "response": {
+            "output": [
+              {
+                "name": "selectedWorkspace",
+                "type": "select",
+                "label": "Workspace",
+                "options": {
+                  "store": "rpc://app%23nocodb@1/getWorkspaces",
+                  "nested": [
+                    {
+                      "name": "selectedProject",
+                      "type": "select",
+                      "label": "Base",
+                      "options": {
+                        "store": "rpc://app%23nocodb@1/getProjects",
+                        "nested": [
+                          {
+                            "name": "selectedTable",
+                            "type": "select",
+                            "label": "Table",
+                            "options": {
+                              "store": "rpc://app%23nocodb@1/getTables",
+                              "nested": [
+                                "rpc://app%23nocodb@1/getTableCreatableFields"
+                              ]
+                            },
+                            "required": true
+                          }
+                        ]
+                      },
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{connection.isCloud}}"
+        }
+      ],
+      "rev": 2,
+      "name": "createRecordParameters",
+      "label": "createRecordParameters",
+      "appName": "nocodb",
+      "apiJsonc": "[\n\t//for legacy users\n\t{\n\t\t\"condition\": \"{{!connection.isCloud}}\",\n\t\t\"response\": {\n\t\t\t\"output\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"selectedProject\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"label\": \"Base\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\"store\": \"rpc://getProjects\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"selectedTable\",\n\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\"label\": \"Table\",\n\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\"store\": \"rpc://getTables\",\n\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\"rpc://getTableCreatableFields\"\n\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t},\n\t//for new users\n\t{\n\t\t\"condition\": \"{{connection.isCloud}}\",\n\t\t\"response\": {\n\t\t\t\"output\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"selectedWorkspace\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"label\": \"Workspace\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\"store\": \"rpc://getWorkspaces\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"selectedProject\",\n\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\"label\": \"Base\",\n\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\"store\": \"rpc://getProjects\",\n\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\"name\": \"selectedTable\",\n\t\t\t\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Table\",\n\t\t\t\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\t\t\t\"store\": \"rpc://getTables\",\n\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\"rpc://getTableCreatableFields\"\n\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t}\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "deleteRecordParameters": {
+      "api": [
+        {
+          "response": {
+            "output": [
+              {
+                "name": "selectedProject",
+                "type": "select",
+                "label": "Base",
+                "options": {
+                  "store": "rpc://app%23nocodb@1/getProjects",
+                  "nested": [
+                    {
+                      "name": "selectedTable",
+                      "type": "select",
+                      "label": "Table",
+                      "options": {
+                        "store": "rpc://app%23nocodb@1/getTables",
+                        "nested": [
+                          "rpc://app%23nocodb@1/getTablePrimaryKeyField"
+                        ]
+                      },
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{!connection.isCloud}}"
+        },
+        {
+          "response": {
+            "output": [
+              {
+                "name": "selectedWorkspace",
+                "type": "select",
+                "label": "Workspace",
+                "options": {
+                  "store": "rpc://app%23nocodb@1/getWorkspaces",
+                  "nested": [
+                    {
+                      "name": "selectedProject",
+                      "type": "select",
+                      "label": "Base",
+                      "options": {
+                        "store": "rpc://app%23nocodb@1/getProjects",
+                        "nested": [
+                          {
+                            "name": "selectedTable",
+                            "type": "select",
+                            "label": "Table",
+                            "options": {
+                              "store": "rpc://app%23nocodb@1/getTables",
+                              "nested": [
+                                "rpc://app%23nocodb@1/getTablePrimaryKeyField"
+                              ]
+                            },
+                            "required": true
+                          }
+                        ]
+                      },
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{connection.isCloud}}"
+        }
+      ],
+      "rev": 2,
+      "name": "deleteRecordParameters",
+      "label": "deleteRecordParameters",
+      "appName": "nocodb",
+      "apiJsonc": "[\n\t{\n\t\t\"condition\": \"{{!connection.isCloud}}\",\n\t\t\"response\": {\n\t\t\t\"output\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"selectedProject\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"label\": \"Base\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\"store\": \"rpc://getProjects\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"selectedTable\",\n\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\"label\": \"Table\",\n\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\"store\": \"rpc://getTables\",\n\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\"rpc://getTablePrimaryKeyField\"\n\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t},\n\t{\n\t\t\"condition\": \"{{connection.isCloud}}\",\n\t\t\"response\": {\n\t\t\t\"output\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"selectedWorkspace\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"label\": \"Workspace\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\"store\": \"rpc://getWorkspaces\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"selectedProject\",\n\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\"label\": \"Base\",\n\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\"store\": \"rpc://getProjects\",\n\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\"name\": \"selectedTable\",\n\t\t\t\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Table\",\n\t\t\t\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\t\t\t\"store\": \"rpc://getTables\",\n\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\"rpc://getTablePrimaryKeyField\"\n\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t}\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "getTableEditableFields": {
+      "api": {
+        "url": "/api/v1/db/meta/tables/{{getTableId(parameters.selectedTable)}}",
+        "method": "GET",
+        "response": {
+          "output": {
+            "name": "record",
+            "spec": "{{filterUneditableFields(parseTableColumns(body.columns))}}",
+            "type": "collection",
+            "label": "Record",
+            "required": true
+          }
+        }
+      },
+      "rev": 6,
+      "name": "getTableEditableFields",
+      "label": "getTableEditableFields",
+      "appName": "nocodb",
+      "apiJsonc": "{\n  \"url\": \"/api/v1/db/meta/tables/{{getTableId(parameters.selectedTable)}}\",\n  \"method\": \"GET\",\n  \"response\": {\n    \"output\": {\n      \"name\": \"record\",\n      \"spec\": \"{{filterUneditableFields(parseTableColumns(body.columns))}}\",\n      \"type\": \"collection\",\n      \"label\": \"Record\",\n      \"required\": true\n    }\n  }\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "selectedProject",
+          "type": "text",
+          "label": "Selected Project"
+        },
+        {
+          "name": "selectedTable",
+          "type": "text",
+          "label": "Selected Table"
+        }
+      ],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": "[\n  {\n      \"name\": \"selectedProject\",\n      \"label\": \"Selected Project\",\n      \"type\": \"text\"\n  },\n{\n      \"name\": \"selectedTable\",\n      \"label\": \"Selected Table\",\n      \"type\": \"text\"\n  }\n]"
+    },
+    "getTableCreatableFields": {
+      "api": {
+        "url": "/api/v1/db/meta/tables/{{getTableId(parameters.selectedTable)}}",
+        "method": "GET",
+        "response": {
+          "output": {
+            "name": "record",
+            "spec": "{{filterUncreatableFields(parseTableColumns(body.columns))}}",
+            "type": "collection",
+            "label": "Record",
+            "required": true
+          }
+        }
+      },
+      "rev": 6,
+      "name": "getTableCreatableFields",
+      "label": "getTableCreatableFields",
+      "appName": "nocodb",
+      "apiJsonc": "{\n  \"url\": \"/api/v1/db/meta/tables/{{getTableId(parameters.selectedTable)}}\",\n  \"method\": \"GET\",\n  \"response\": {\n    \"output\": {\n      \"name\": \"record\",\n      \"spec\": \"{{filterUncreatableFields(parseTableColumns(body.columns))}}\",\n      \"type\": \"collection\",\n      \"label\": \"Record\",\n      \"required\": true\n    }\n  }\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "selectedProject",
+          "type": "text",
+          "label": "Selected Project"
+        },
+        {
+          "name": "selectedTable",
+          "type": "text",
+          "label": "Selected Table"
+        }
+      ],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": "[\n  {\n      \"name\": \"selectedProject\",\n      \"label\": \"Selected Project\",\n      \"type\": \"text\"\n  },\n{\n      \"name\": \"selectedTable\",\n      \"label\": \"Selected Table\",\n      \"type\": \"text\"\n  }\n]"
+    },
+    "getTablePrimaryKeyField": {
+      "api": {
+        "url": "/api/v1/db/meta/tables/{{getTableId(parameters.selectedTable)}}",
+        "method": "GET",
+        "response": {
+          "output": "{{getTablePrimaryKeyFromColumns(body.columns)}}"
+        }
+      },
+      "rev": 6,
+      "name": "getTablePrimaryKeyField",
+      "label": "getTablePrimaryKeyField",
+      "appName": "nocodb",
+      "apiJsonc": "{\n  \"url\": \"/api/v1/db/meta/tables/{{getTableId(parameters.selectedTable)}}\",\n  \"method\": \"GET\",\n  \"response\": {\n    \"output\": \"{{getTablePrimaryKeyFromColumns(body.columns)}}\"\n  }\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "selectedProject",
+          "type": "text",
+          "label": "Selected Project"
+        },
+        {
+          "name": "selectedTable",
+          "type": "text",
+          "label": "Selected Table"
+        }
+      ],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": "[\n  {\n      \"name\": \"selectedProject\",\n      \"label\": \"Selected Project\",\n      \"type\": \"text\"\n  },\n{\n      \"name\": \"selectedTable\",\n      \"label\": \"Selected Table\",\n      \"type\": \"text\"\n  }\n]"
+    },
+    "searchRecordsParameters": {
+      "api": [
+        {
+          "response": {
+            "output": [
+              {
+                "name": "selectedProject",
+                "type": "select",
+                "label": "Base",
+                "options": {
+                  "store": "rpc://app%23nocodb@1/getProjects",
+                  "nested": [
+                    {
+                      "name": "selectedTable",
+                      "type": "select",
+                      "label": "Table",
+                      "options": {
+                        "store": "rpc://app%23nocodb@1/getTables",
+                        "nested": [
+                          {
+                            "help": "Comma separated fields names without spaces, e.g. products_slug,status. Use this field to specify which columns should be included in the search response. This is very useful to speed up the response time of NocoDB and the loading time of a response in Make.",
+                            "name": "fields",
+                            "type": "text",
+                            "label": "Fields",
+                            "required": false
+                          },
+                          {
+                            "help": "Where condition, e.g. (products_slug,eq,{polestar-2-646-snow}). For full documentation see https://docs.nocodb.com/developer-resources/rest-apis#query-params.",
+                            "name": "where",
+                            "type": "text",
+                            "label": "Where",
+                            "required": false
+                          },
+                          {
+                            "help": "The maximum number of records to be worked with during one execution cycle.",
+                            "name": "limit",
+                            "type": "uinteger",
+                            "label": "Limit",
+                            "default": 10,
+                            "required": false
+                          },
+                          {
+                            "help": "Comma separated field names without spaces, e.g. -available_from,product_stock_total. A `-` in front of the field name is used to invert the sort order.",
+                            "name": "sort",
+                            "type": "text",
+                            "label": "Sort",
+                            "required": false
+                          }
+                        ]
+                      },
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{!connection.isCloud}}"
+        },
+        {
+          "response": {
+            "output": [
+              {
+                "name": "selectedWorkspace",
+                "type": "select",
+                "label": "Workspace",
+                "options": {
+                  "store": "rpc://app%23nocodb@1/getWorkspaces",
+                  "nested": [
+                    {
+                      "name": "selectedProject",
+                      "type": "select",
+                      "label": "Base",
+                      "options": {
+                        "store": "rpc://app%23nocodb@1/getProjects",
+                        "nested": [
+                          {
+                            "name": "selectedTable",
+                            "type": "select",
+                            "label": "Table",
+                            "options": {
+                              "store": "rpc://app%23nocodb@1/getTables",
+                              "nested": [
+                                {
+                                  "help": "Comma separated fields names without spaces, e.g. products_slug,status. Use this field to specify which columns should be included in the search response. This is very useful to speed up the response time of NocoDB and the loading time of a response in Make.",
+                                  "name": "fields",
+                                  "type": "text",
+                                  "label": "Fields",
+                                  "required": false
+                                },
+                                {
+                                  "help": "Where condition, e.g. (products_slug,eq,{polestar-2-646-snow}). For full documentation see https://docs.nocodb.com/developer-resources/rest-apis#query-params.",
+                                  "name": "where",
+                                  "type": "text",
+                                  "label": "Where",
+                                  "required": false
+                                },
+                                {
+                                  "help": "The maximum number of records to be worked with during one execution cycle.",
+                                  "name": "limit",
+                                  "type": "uinteger",
+                                  "label": "Limit",
+                                  "default": 10,
+                                  "required": false
+                                },
+                                {
+                                  "help": "Comma separated field names without spaces, e.g. -available_from,product_stock_total. A `-` in front of the field name is used to invert the sort order.",
+                                  "name": "sort",
+                                  "type": "text",
+                                  "label": "Sort",
+                                  "required": false
+                                }
+                              ]
+                            },
+                            "required": true
+                          }
+                        ]
+                      },
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{connection.isCloud}}"
+        }
+      ],
+      "rev": 2,
+      "name": "searchRecordsParameters",
+      "label": "searchRecordsParameters",
+      "appName": "nocodb",
+      "apiJsonc": "[\n    //for legacy users\n    {\n        \"condition\": \"{{!connection.isCloud}}\",\n        \"response\": {\n            \"output\": [\n                {\n                    \"name\": \"selectedProject\",\n                    \"required\": true,\n                    \"label\": \"Base\",\n                    \"type\": \"select\",\n                    \"options\": {\n                        \"store\": \"rpc://getProjects\",\n                        \"nested\": [\n                            {\n                                \"name\": \"selectedTable\",\n                                \"required\": true,\n                                \"label\": \"Table\",\n                                \"type\": \"select\",\n                                \"options\": {\n                                    \"store\": \"rpc://getTables\",\n                                    \"nested\": [\n                                        {\n                                            \"name\": \"fields\",\n                                            \"required\": false,\n                                            \"label\": \"Fields\",\n                                            \"help\": \"Comma separated fields names without spaces, e.g. products_slug,status. Use this field to specify which columns should be included in the search response. This is very useful to speed up the response time of NocoDB and the loading time of a response in Make.\",\n                                            \"type\": \"text\"\n                                        },\n                                        {\n                                            \"name\": \"where\",\n                                            \"required\": false,\n                                            \"label\": \"Where\",\n                                            \"help\": \"Where condition, e.g. (products_slug,eq,{polestar-2-646-snow}). For full documentation see https://docs.nocodb.com/developer-resources/rest-apis#query-params.\",\n                                            \"type\": \"text\"\n                                        },\n                                        {\n                                            \"name\": \"limit\",\n                                            \"required\": false,\n                                            \"label\": \"Limit\",\n                                            \"default\": 10,\n                                            \"help\": \"The maximum number of records to be worked with during one execution cycle.\",\n                                            \"type\": \"uinteger\"\n                                        },\n                                        {\n                                            \"name\": \"sort\",\n                                            \"required\": false,\n                                            \"label\": \"Sort\",\n                                            \"help\": \"Comma separated field names without spaces, e.g. -available_from,product_stock_total. A `-` in front of the field name is used to invert the sort order.\",\n                                            \"type\": \"text\"\n                                        }\n                                    ]\n                                }\n                            }\n                        ]\n                    }\n                }\n            ]\n        }\n    },\n    //for new users\n    {\n        \"condition\": \"{{connection.isCloud}}\",\n        \"response\": {\n            \"output\": [\n                {\n                    \"name\": \"selectedWorkspace\",\n                    \"required\": true,\n                    \"label\": \"Workspace\",\n                    \"type\": \"select\",\n                    \"options\": {\n                        \"store\": \"rpc://getWorkspaces\",\n                        \"nested\": [\n                            {\n                                \"name\": \"selectedProject\",\n                                \"required\": true,\n                                \"label\": \"Base\",\n                                \"type\": \"select\",\n                                \"options\": {\n                                    \"store\": \"rpc://getProjects\",\n                                    \"nested\": [\n                                        {\n                                            \"name\": \"selectedTable\",\n                                            \"required\": true,\n                                            \"label\": \"Table\",\n                                            \"type\": \"select\",\n                                            \"options\": {\n                                                \"store\": \"rpc://getTables\",\n                                                \"nested\": [\n                                                    {\n                                                        \"name\": \"fields\",\n                                                        \"required\": false,\n                                                        \"label\": \"Fields\",\n                                                        \"help\": \"Comma separated fields names without spaces, e.g. products_slug,status. Use this field to specify which columns should be included in the search response. This is very useful to speed up the response time of NocoDB and the loading time of a response in Make.\",\n                                                        \"type\": \"text\"\n                                                    },\n                                                    {\n                                                        \"name\": \"where\",\n                                                        \"required\": false,\n                                                        \"label\": \"Where\",\n                                                        \"help\": \"Where condition, e.g. (products_slug,eq,{polestar-2-646-snow}). For full documentation see https://docs.nocodb.com/developer-resources/rest-apis#query-params.\",\n                                                        \"type\": \"text\"\n                                                    },\n                                                    {\n                                                        \"name\": \"limit\",\n                                                        \"required\": false,\n                                                        \"label\": \"Limit\",\n                                                        \"default\": 10,\n                                                        \"help\": \"The maximum number of records to be worked with during one execution cycle.\",\n                                                        \"type\": \"uinteger\"\n                                                    },\n                                                    {\n                                                        \"name\": \"sort\",\n                                                        \"required\": false,\n                                                        \"label\": \"Sort\",\n                                                        \"help\": \"Comma separated field names without spaces, e.g. -available_from,product_stock_total. A `-` in front of the field name is used to invert the sort order.\",\n                                                        \"type\": \"text\"\n                                                    }\n                                                ]\n                                            }\n                                        }\n                                    ]\n                                }\n                            }\n                        ]\n                    }\n                }\n            ]\n        }\n    }\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "updateRecordsParameters": {
+      "api": [
+        {
+          "response": {
+            "output": [
+              {
+                "name": "selectedProject",
+                "type": "select",
+                "label": "Base",
+                "options": {
+                  "store": "rpc://app%23nocodb@1/getProjects",
+                  "nested": [
+                    {
+                      "name": "selectedTable",
+                      "type": "select",
+                      "label": "Table",
+                      "options": {
+                        "store": "rpc://app%23nocodb@1/getTables",
+                        "nested": [
+                          "rpc://app%23nocodb@1/getTablePrimaryKeyField",
+                          "rpc://app%23nocodb@1/getTableEditableFields"
+                        ]
+                      },
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{!connection.isCloud}}"
+        },
+        {
+          "response": {
+            "output": [
+              {
+                "name": "selectedWorkspace",
+                "type": "select",
+                "label": "Workspace",
+                "options": {
+                  "store": "rpc://app%23nocodb@1/getWorkspaces",
+                  "nested": [
+                    {
+                      "name": "selectedProject",
+                      "type": "select",
+                      "label": "Base",
+                      "options": {
+                        "store": "rpc://app%23nocodb@1/getProjects",
+                        "nested": [
+                          {
+                            "name": "selectedTable",
+                            "type": "select",
+                            "label": "Table",
+                            "options": {
+                              "store": "rpc://app%23nocodb@1/getTables",
+                              "nested": [
+                                "rpc://app%23nocodb@1/getTablePrimaryKeyField",
+                                "rpc://app%23nocodb@1/getTableEditableFields"
+                              ]
+                            },
+                            "required": true
+                          }
+                        ]
+                      },
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "condition": "{{connection.isCloud}}"
+        }
+      ],
+      "rev": 2,
+      "name": "updateRecordsParameters",
+      "label": "updateRecordsParameters",
+      "appName": "nocodb",
+      "apiJsonc": "[\n\t{\n\t\t\"condition\": \"{{!connection.isCloud}}\",\n\t\t\"response\": {\n\t\t\t\"output\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"selectedProject\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"label\": \"Base\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": {\n\t\t\t\t\t\"store\": \"rpc://getProjects\",\n\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"selectedTable\",\n\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\"label\": \"Table\",\n\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\"store\": \"rpc://getTables\",\n\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\"rpc://getTablePrimaryKeyField\",\n\t\t\t\t\t\t\t\t\t\"rpc://getTableEditableFields\"\n\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t},\n\t{\n\t\t\"condition\": \"{{connection.isCloud}}\",\n\t\t\"response\": {\n\t\t\t\"output\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"selectedWorkspace\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"label\": \"Workspace\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": {\n\t\t\t\t\t\"store\": \"rpc://getWorkspaces\",\n\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"selectedProject\",\n\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\"label\": \"Base\",\n\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\"store\": \"rpc://getProjects\",\n\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\"name\": \"selectedTable\",\n\t\t\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\t\t\"label\": \"Table\",\n\t\t\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\t\t\"store\": \"rpc://getTables\",\n\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\"rpc://getTablePrimaryKeyField\",\n\t\t\t\t\t\t\t\t\t\t\t\t\"rpc://getTableEditableFields\"\n\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t}\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "nocodb",
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {},
+  "label": "NocoDB",
+  "theme": "#3d43d5",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "create",
+        "deleteRecord",
+        "updateRecord",
+        "getRecord",
+        "upsertRecord",
+        "searchRecords",
+        "makeApiCall",
+        "makeApiRequest"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000002174944415458c3ed96bb6b15411487bfcdde4434b9420884f8086825d828d858dbfb07d82986804d52db68235824a4d0460b4154ac041b5f6dba204463210aa285368a294413621ef77e163bd1cd66f73edccb6d925fb3ec9c3967be9d3d67cec0ae76baa2bc4115a017180296815f005114350c16fc00fa83bf618d3ab004d49bc54045ada857d50fea73f544186fd5f786baa0ceabafd4a7eac166fee92023ea7bffe9b57aba1944b0f78605d3faac1ecdf3ed29885501fa52ef2781bbc099cc5697564f1b738f017780b39d84680700e008701b3807449d802802f809bc2db01d006e0263405c16a211c004f08ca494b21a02a68149a0af933901fccd66d443ea23b56ebe96d52beade944f5b55d00ac4b07a4fdd2880f8ad4ea9d58e008420911aa72006d55bea7a01c47ab00f8683a834c0883aaef6a720aaea8cba5a0051531fa8a3ea93b200a3e1249cce40ec53afa92b0510f5b0f87c5980c3eaa7f0df67d48114c41ef5b2bad400a2d62900d53593e6b2dfad993ea9feb035950230ecc47593e4dc9c13ab63ea621980568fe21838456850a1a7d7487ac304f0adc538ff0db04d0142e0217009f8d255801404c063601cf8d855800cc40be022f0aeab00198859e03cb0d055800cc4cb00319732af026b797e9582783592a48a48122d06be92df9ab74084527b035c00a680e3c07d0a2a65db1d39048881e1f0dc9cb7022c66be3657a97aaf0203c07760a3e9957c573b527f00120e6681841ecd1c0000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000003ee4944415478daedda49881d5514c6f15f775a430633914409b810dd08ae04c585a01b09b814232e9ce2880a46340ee0102446451c42621489230eb850104141050537822e44171a51094483626ca2b646639b3e2eea16295fba5f77ddf4ebaeeeae0f6af56edd73eaffee74be2a5ab56ad5aa55ab56ade6a8faeade1011e57d4bb1087fe037e8ebabdd5d9d98fd98375e53fc5b2797818c4456e266acc572ecc3d3782522867b050117e3321c1ae3f7fe94cb1df871d2a34744796d898891f8bf8622e2ce88989f20f522f6a6185f3f44c4c97572e8af99cb329ce7c8a9b318f7a66b512f20f44a75012c4c1046d3026cc403583a5320d40540f785f358dc80c7b1b29c364d560e80f13480cbf124d6a0d1107a01a0ecf742ecc4494d86d02b001453e57c3c8f539b0aa197004a9d8317717a1321d405907bca39234138bb6910ea0218c6df99b14e534c87b54d825017c03e6cc14f99f14e512c8c17a0af0910260c209df103afe17aecc98c79229ec2a5e89f6e08b54640a5d07913d7e0dbccb8abb1550172603a21d4de052a10dec355f83233f6723c845bd19322aa27003a207c842bf05966fcc5d8847b4c5311957d0ea840f83441f838b3ab05b8cd341551477510aa40f802ebf14166576511f598292ea28efa245881f035aec6db995d0d2846d20e5358444d1840fa57fa22625e67621508bb711d5e576c9939f9ac33854554dd11b05ab1fd1dd705c25edc88978ceddf755359443d2715514d0230809b701f168f062181f859619cee945cda0c9d8b17a422aa290002c760031ec492d1866882b01fb7631bfec9ccef4c45117596bc2935794a6bc09a88f82639b0c311b12322c6dcbad23d0b236273441c9880ab3b96be8a88f77be10a1f0d8012c2ce8858310e84f9c9361fca043052b9a6d516efd400aec4a35831dafe9da6c3c1d4e62ee92d524df555ae49d5643842fd8a37365bb10a63411856ecf11b3138d90f329d00ca7e2ec1761cdf05c2213cabd849723d854602a0189e172508277481107855510a7f3f9b009410d629d685d11b1ce9297c379b00945ad6edc70a847715b0723d85c60218571d9ec27af99ec2cc04d001e1930421d7539899003a207cae980e1fce29001d1076297cc677e614800e08bb712dde3005055063007440d8abb0c85e96e729cc4c0025848aa7b001cfc8f714661e802a08873d85edf23d859909a002e177dc8d87f1d79c0250817000f76333feecd23cd45c381b0fa002e1201ed1dd5318548c98d905a00261184f28de24757a0a23780bbfd4e9b7d6a7b28a2d698f02dcc8186de6d54da20e8488283d85fdb845f11265303dfcb60aac89f539d18671f883e555095c74e973481a8abdf876b8e2332cc39214ef57440fbf556ed5aa55ab56ad5ab59a5dfa0fa7f980d4928ff4320000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-06-28T13:37:41.864178+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000007344944415478daeddd6bac65f718c7f1cf3e678ab6d29966a88aa84455902008af48a84b64bcf0c225116982b6e3521da1aa5af79016e5c5685d6a46e39a90264ad0485582b8bc31625c4210ca8bd6a5359329da3197e5c5b3f764cd763a73ce5e6bedff5a7b3fdfe424f3e2ec35ffff5adfb32ecff3dbff45922449922449922449922449922449922449922449922449922449b2208ce6f51f555535f9e70a4ec76958c5bf7100d56834b7e124633adfe3b503bf15dbf05c9c8733b109fbf0237c1e7b0d5884f15c37e3d5d882aac1e646b8079fc35d83dc2755554d7e9e5455d5ad5555fdb7ba7f6eafaaea82aaaa566bd20c8af15ccf19cfa50deeacaaea715dee8f9539ec97adf8089e8f534ef07b8fc2c7f05a6c1aaa0443a333016a07701b9ebdce8f6dc135b81c0f4a09baa7eb33c0485cf34fd9c067cec0bb70154e4f09baa56b011e8cc7ccf0b9537185381b6c4e09baa36b014e1577c5b3f000bc1e1fc559931bcaa45de67109586df0f94de291ea3a3c1c2941cbcce329a08d31be0cbb712e29419b0c4100e24cb20d9fc6134809da6228024c381f9fc5534909da606802c0d371239e454ad094210a004fc6674475312568c05005201a4abbf11252825919b200700eaec705186c13a924431700cec64ed9449a89451080c8165c83cb641369432c8a004413e93db8523691d6cd220940f41ede8eab6513695d2c9a004413e90d2284f2d06c229d987934834ab009af914da493d2b50007f1cf82737b3976e1d1a4046bd1b500fb44b2e79785e637c28b84048f272598a633016a31e61f889efe9e82f33c5fc4abb3893445a767809a047bc435f98705e79a4da435e8fc29a026c12f8404b7159c6f3691a698cb63604d82df633bbea1d9b7669a904da41a73ab03d424f893a8dbdf84a385e69d4da431732d04d524b813978aef031e2e34f76c222950091c8d461311fe8e37e3061c2a34ffa56f22152b058f25d82fea043b715fa1a12c7513a9682f602cc101bc1b1fc2bd8586b2b44da4e2cda0b104f7e283789f10a2044bd9442a2e00c724b84f7c0dec2a716928c1d235917a2100c724388c4fe1ade226b1d43e599a26526f04e098044744c97687785c2c32144bd244ea95001c93a0c257c435f9f682c359f82652ef04e0b882d1d77031fe5070380bdd44eaa5001c27c16db808bf2a389c856d2275ba46505555a3aaaa662eb3d624f83e5ea56ca660219b485d9f011e82d7e1cc1624d8830bc59a82a59834915e69419a485d0bb02adabf57e38c1624d82bd245df9dd3fe598bb3459d60bb056822752d40258a2bdb45a56f4b0b124c3205df542e53306922bdc5c09b48f3ba095c1107ed5a6c6d41823f8eb7779372126cc67b4513e9b4a14a30cfa780555166dda9c1aa5f5399821df882729982e396b32b348646ccfb317005af104bc23e8cd9eea66b9982bfe14d62eda052123c5014ac3e2c96c52d95729a8912758049adbd91041c9729b872bcbd8305e643dce75c246e0e1fa1dc6569a681976024967e5b117fc1775455659625d147a391aaaa0ee09d6279f5b78953f3bc99887dae015d0e4a560247a2a8f209b15278d333c12453f07e21420956f10cf19430084a97824778b16801376abdd63205d78a4bc2fec2731b04a50598f042110e6db412e854a6e072fca3f4c4fa4e5f0480e7694f8223a27973a972998241d0270188770becc263692cc124537009fe5c7a627da56f02c073c45fef13692c01dc2c1ed14a660a7a4b1f0580678ad6eb5368458249a6e0d7a527d637fa2a00f138b54b7b124c32053f2b3db13ed16701e06942824699bc9a043f15fd881f979e585fe8bb008404378a33421b12ec156782929982de300401884cdec7f1c8261b592353f02d03aadb77c1500420cac58d4bac3dcb1414674802b4464d823b44a6e08bcab5938bb29402f07f99821dca660a8ab1b4024c98ca145ca75ca6a0084b2f00c7ad53f00ed1522eb54ec1dc4901c6f42853305752801acb98294801a698ca145c81bb4a8fa94b528035a8650a7659f04c410a703fd432055fc61bf197d263ea8214e004d40a465fb5a0998214e024d424f88e58ac62a1320529c03aa849f03d0b96294801d6c954a6e042fca4f498da2005d80035097e6e41320529c006a949f03bd14ebec580dbc929c00c4c650a2e36e04c410a30236b640abe248a4783220568c01a99821b0c2c539002b4c058827da28174bd01650a52809698ca14947cf7c18648015a642cc17fc49a411fc0bf4a8fe964a4002dd372a6e0888eef2952800e184b70089fd42c53b05fc7c9a414a0236a9982dd2253f0d71936f35b1dbf7d3d05e890b1044745a6e0121bcb141c126f58edf4957a2940c74c650a36f2ee835bf0f5a96db44e0a30076a07f05621c1de13fcfa41b1a8c565e6104aed7a9dc0c3a25ebea2d90a9a23dcaddccb251b335ecf90c814bc54b4945f80b3c6fbe96efc469cf6bf6dfcfabc2efffa891ddb09e3c9ae882f74b621da51516d3bdcf54ee99af1be19897db359dc2cde230efa11ba3ff0499224499224499224499224499224499224499224499224499224c9c2f13fadb59407721c849b0000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000cbc4944415478daeddd5bac5c551d80f16f4ea12dd45284945b09f0203e2802890579f01235de1230114385043546a05c44a1454401215114048a8a72b3fa0006130c04efd710a3a8c845512e415e042aa2501e402c14da6e1fd69ed37da6a7a7e7327bd65a7b7dbf97f2c2e93a9d99ef9c99d9ffff80244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992549c5eec038c42555500f38085c07c6027600ca880978117804dbd5e11ff1cd2b84edee3eb07fc18b007700870187030b03fb027b01858006c029e051e01fe04dc013c0154c6200d8d782fadff4cc916603df04aaef7973c4fbd1df59d05c283fd78e068e0b58407fc8eee3c2f038f02370237034f02e47ac376457d9bee03fc10d88ff05b5b0a7a841f1e1f01feeafd24b2aaaaa8aa6a415555275455f5b7aaaa3655b3f3725555bfa9aaeaa8fa6bc6fed68a56df06cbaaaa5a37cbdbb34dcf5455b53ce7fbc858ec030c437d032c04ce01ae05dec0ec7f5ddc19781bb096f01b442fe71b589a4af601683c385700e7024b86f4a55f4f88c97118017554f601a81d0cac02761bf2d7dd1f58037c08183302ea9aac03d078401e4ff8b5bf0dcb80af022b818546405d9275006a4b81f7b7fcbdec0d5c46788d615723a0aee842000e253c0568db62e03ce0d3c02223a02ec836008d07e0a10cffb9fff62c2204e042600f23a0dc651b80c6f95fc3682f685a049c0d5c05ec6b0494b3dc03b0907095d8a8cd074e24bc43b09f1150ae720fc07cc2b5fd318c11ae3df81a7090570d2a47b907601eb04bc4bf7f0c3816f80e703860049495dc0300f1079ac680b703d703cbc108281f5d08402a8e04ae018e0223a03c1880e13a028788941103307c0e11291b06a01d0e11290b06a03d0e11297906a05d0e11296906a07d0e112959066034fa43441700bb1b01a5c2008cce22c2d6a22b817d8c80526000466b3ef051c224a143448ace008cde3c1c2252220c401cfd21a21ba877191a01c56000e21903de057c0b878814890188ef4d3844a4480c401a8e20fc26f05e30021a1d03908e43083b0556e0109146c400a4e5001c22d2081980f4f487884e02161801b5c900a4696fe02b842b071d22526b0c40ba9600e7e310915a6400d2e610915a6500d2e710915a6300f2e010915a6100f2e1109186ce00e4c521220d9501c88f43441a1a03902f8788346706206f0e11694e720fc0ff803f035b621f24228788346bb907e025e062e046e095d88789c82122cd4ab601e8f57af47a3d807f133e78e36a6043ec7345e41091662cdb00f4d5117816b808b89cf0b4a0540e116946b20f008c47e005c29dfff2fabf4be51091a6ad130180f1086c2044e08bc073b1cf149143449a96ce0400c623f022e1b9f06780a7639f29228788b4439d0a008c476023b016381b7832f6992272884853ea5c00603c029b81ef01ab293b020e1169bb3a1900188f4005dc029c09fc23f6992272884893ea6c006042046e074e011e887da6881c22d2363a1d009810815f1322706fec3345e61091c6753e00301e0180bb80d380bb639f29328788041412009810817b8195c0ef629f29328788544e00604204ee074e067e44787a502a87880a575400604204fe0e9c417897a0e4716287880a565c0060c224e13ac2d572b710ae1b28954344852a32007d7504fe45b862f026cade29e01051818a0e0030b853e01b8459825239445498e2030013760a7c1eb882b2770a3844541003506bec14b814178b3844540803d0d0d8297039700965ef147088a80006604023026b70a78043441d670026e14e81091c22ea3003b01dee14d88643441d6400a630b053e05394bd53001c22ea1c03b0038d08dc863b05c021a24e3100d3e04e816d3844d41106609a26d929704fec3345e610510718801918d829701a7067ec3345e61051e60cc00c3522701fe1a75fe93b051c22ca98019805770a6cc321a24c198059dace4e81d223e01051660cc01c35760aac02be0b6c8a7da6881c22ca8c0118823a024f1122f04dcade29e01051460cc09034760a5c803b051c22ca44b601a87fb2f4aaaada39953b973b052670882803d906a0b63bf00960ff54ee5c033b05be043c1ffb4c91f587888e0423909adc03300f389e70596a322f3a35227025701e65ef1480ad4344ef06239092dc0350013de038c2832db5086c243c0f2e7da700c0a1f5bf85434409c93d004d2b483302ee14d8ea40c26f6b2b708828095d0ac018031148e10e36c94e81c7629f29b26584eb043e06cc4fe1362a599702d0ff7e560057137edaa416815b091f4c5afa4e817d096f95aec621a2a8ba1680fef7f401e0eba41701805fe24e0108efe0f487888c40245d0c008417068f01ae055e07c945c09d02417f88e87c60490ab75169ba1a000811781f701d618d556a1170a740b088f054e00a1c221ab92e07a0ef2d840b510e87e422701fe135819f51f64e81058417051d221ab11202002102d793d025a98d083c4c8840e9e3c4fd21a235c001a9bc8bd375a50400c2a5a8d7905804dc293041ff5d9c1ba89fb6a95d250500c225a9494500dc2930f8cf01bc87f0a94ccb631fa6eb4a0b00a41d81a7082f885d47d93b0560eb1091116851890180ad1148ea63aeea08ac073e8b3b0520dc4e6b09bf11f4e6f8b53489520300e1ce753df066482e02ee14d8ea30c2eaf1a5b10fd245250700c284da35c05b21b908b85360ab3d09fb063564a50700c2caaab5c0d1906404ae043e073c13fb4cea1e03101c4c18203a06928bc046c28b8267e138b186cc006c751021021f24a18515ee14509b0cc0440712d65927b5b566929d028fc73e93bac1006c6b19e17977aa11b8953044f460ec33297f066072294700c2f0d0c9b85340736400b62ff508b85340736600a6b68c309d7622302fc108b85340736200766c3fc265b91f26a14db6ee14d0301880e9d90bb80c3809589060041e064e25bc4058f238b166c8004cdf5e846bd2cf24b108d4217882f01661e93b053403066066960017029f0476492502e04e01cd8e0198b9dd0811486e9df5243b055e8a7d26a5cd00ccce62e05cd28dc07ac200d11a1c27d6140cc0ecf577daa71a81ff0297e04e014dc100cc4dea1170a780a66400e6ae198157251a01770a685206603816115e13b810589c6004fa3b055613de29900003304cbb12de1e4c35029b096f0faec29d02aa1980e15a48b850e8cbc0ab138c407fa7c02ac285432a9c0118be85c00924f8c936031158093c14fb4c8acb00b4630cd829f62126d3981ff8392102ee1428980128502302bfc79d02453300851ad829703af0c7d867d2e81980820d44e064dc29501c0350b846041ec29d02c5310072a740c10c80c635760aac267c10893b053ace0068824604cec29d029d6700b40d770a94c3006852ee14288301d0760dec14b8941004758801d0941a11b802770a748e01d00ed5117809b816770a748a01d0b4b853a09b0c80a6cd9d02dd630034230311389df0b164ca9401d08c35e6077e029c823b05b26500342bee14e80603a05973a740fe0c80e6642002a700bfc09d02d930009ab346041e24ec1974a740260c8086a2b153e071dc29900d03a0a172a7405e0c8086ae1181b3811b70a740b20c805a5147e019e03cdc29902c03a0d6b853207d0640ad72a740da0c805a37b053e022c2ba3125c00068241a3b05ae264c12ba53200106402353476013ee14488601d048b953202d064023371081338047629fa95406405134e6077e4cf86052770a446000144d230277e24e81280c80a272a7405c0640d10d446025f02b9c241c0903a0243422f00061b1c86d1881d6190025a3b153e031dc2930120640c971a7c0e81800256960a7c0b771a7402b0c8092d5d829702eee1468850150d2ea083c8f3b055a6100943c770ab4c700280bee14688701503606760a9c033c15f94815e123d3b365009495c64e819b08ef10c4dc29f00a993f1d3100ca4e1d812dc4df29f01cf042ec7f8fb93000ca52223b05d6115e97c8960150b626d929f097111fe121c25b94d93200cadac04e81958c6ea7c006e00fb1bfffb93200ca5e2302f730ba9d028f02770dfcfdd93100ea8411ef14d84c78ede19fb1bfefb93200ea8c49760adc4e3b11b897b0da3ceb9ffe6000d4318d07e463c0990c7fa7c093c01708ef0064cf00a8731a8b4586bd53601de1ba839ff6ff9edc19007556230267015731fbabf63602bf053e0e7c1fa8baf0e007d829f601a436f57a3daaaa5a0f5c0cdc0f9c0a2c0776d9c1ffba857095df03c08dc00f80fff4bf6657e41e804dc0c384df6452d91dd7235c1cf25cec8328a823b001b819b8037807f04ee08dc052c2fd673361d7c0d3c0e3848b7cee2644e3d9fed7e99a6cbfa3aaaafae7df8df442561122b0a98b779a9cd5f71b809d81dd81c5c07cc2aff92fd67f6ea8ffece4835e9224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224492adcff018d0d06398d280be00000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000015914944415478daeddddf911bd979c6e1572edd1b19b81d81b111988ec0ab080446e061047b1481c8080446a0c940740482326867d019d0174d6a8825979c69fc39a7fb3c4f156a762f76f9ed5601f84d037dbe0400e8ceef92e4e3c78fb5e70000eee877defc01a03fff527b0000e0fe0400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040870400007448000040877e5f7b00ae6e48b2fff4f3df92ec3efd75bef8f9d9f4e9714af28f241f928cb5ff0300b8bddf7dfcf8b1f60c5ce65592fffcf4739ff90dff126392c724ef220600364b00acd3ab24ff9de490cbdff0bfe731c99f325f21007ecc0beacbfc57e62b8f54e03b00ebf22ac9df3e3d1e72db37ff24f939c9df93fc255f7f7c00c08a098075d825f96be637fe5715fefc43e61078a8fd3f0280eb1000ed7b95f9cdf7e7ca73ec92fcf9d303809513006dfb9fccbff50fb507f9c243e68f0476b50701603901d0ae5f92bcad3dc46f38640e935ded4100584600b4e9e724a5f6103fb0cffcd1c4507b10005e4e00b467c87a3e671fd2de4714003c830068cf2f59d71bea101100b03a02a02daf327fbebe36434400c0aa0880b6fc527b800b0c99bf13b0af3d08003f2600daf12a750ef9b9a65de62b017fac3d0800df2700dab19537cd5d92639c1a08d03401d08e9f6b0f70657fceba3fd200d83401d08657d9e6a13a252200a04902a00d3fd71ee0864a4400407304401bfea3f6003756b29ec38d00ba2000dab0af3dc01d3cc4122180660880faf6e9e74df1104b84009a2000eadbd51ee0cef6b14408a03a0150dfbef600150c717430405502a0be5ded012a19220200aa1100f50db507a8fcdf2e02002a1000f5fd6bed012a1b628910c0dd0980fa76b50768c02e960801dc9500a015bb58220470370280d65822047007028016958800809b1200b4aa440400dc8c00a06525960801dc8400a0750fb14408e0ea04006b7088254200572500588b7d2c1102b81a01c09a0c717430c0550800d666880800b89800608d868800808b0800d66a882542008b0900d66c174b8400161100acdd2e960801bc9800602b2c1102780101c096948800806711006c4d890800f82101c01695582204f05d0280ad7ac8bc4408806f10006cd921f35901bbda8300b44600b075fb383510e02b02801eec230200ce08007a31440400fc9300a027434400401201407f865822042000e8d22ef395809f6b0f02508b00a057bb247f8d4d8240a70400bd3bc6d1c140870400d81f00744800c0ac4404001d1100f0a4c41221a0130200ce3dc41221a0030200be76882542c0c60900f8b67d9c1a086c980080dfb68f0800364a00c0f70d1101c0060900f8b1212200d8180100cf33c41221604304003cdf2e9608011b2100e06576b14408d8000100cb1ce3e86060c504002c572202809512007099121100ac900080cb95582204ac8c0080eb78882542c08a0800b89e432c1102564200c075ede3d440600504005cdf3e2200689c0080db18220280860900b89d21220068940080db1a628910d0200100b7b78b254240630400dcc72e9608010d1100705fc7383a1868800080fb2b110140650200ea28110140450200ea29b14408a84400405d0fb14408a84000407d87582204dc9900a86faa3d004dd8c7a981c01d0980fade24196b0f4113f61101c09d0880fac624ff95e4547b109a30440400772000da304604f0648808006e4c00b463ca1c018fb507a109432c11026e4800b4654af28724ef6b0f421376b14408b81101d0a643923fd51e8226ec628910700302a05d25228027c7383a18b82201d0b61211c0931211005c8900685f8908e049890800ae4000ac43c97c601024960801572000d6e36d92d7b587a0190fb14408b88000589763e6db04a7da83d084432c1102161200ebf398f9c0a0a9f62034611fa706020b0880753a658e80b1f62034611f1100bc900058af5344004f868800e00504c0ba8d11013c19220280671200eb374604f064882542c03308806d18639d304f76b14408f80101b01d6344004f76b14408f80e01b02d53e60878ac3d08cd38c6d1c1c0370880ed99321f16f4bef62034a3440400bf2200b6eb90e45ded216846890800be2000b6ed213609f2a4c41221e01301b07d252280270fb144088800e8458908e0c921960841f704403f4a9237b587a019fb383510ba2600faf236c9ebda43d08c7d4400744b00f4e798f936c1a9f62034618808802e09803e3d663e3068aa3d084d182202a03b02a05fa75822c49321960841570440df4e11013cd9c51221e88600608c08e0c92e9608411704008908e06bc7383a18364d00f0d918eb843957220260b304005f1a23023857220260930400bf36658e80c7da83d08c124b8460730400df32653e2ce87ded4168c6432c11824d11007ccf21c9bbda43d08c432c1182cd1000fcc8436c12e4c93e4e0d844d10003c478908e0c93e2200564f00f05c25228027434400ac9a00e0254a44004f868800582d01c04b9524af6b0f413386582204ab240058e298f936c1a9f6203461174b84607504004b3d663e3068aa3d084dd8c51221581501c0254eb1448873c7383a1856410070a9534400e74a4400344f00700d634400e74a4400344d00702d634400e74a2c1182660900ae698c08e0dc432c1182260900ae6d4cf253e6ef0640628910344900700b53e62b018fb507a119fb3835109a2200b89529f36141ef6b0f4233f61101d00c01c0ad1d92bcab3d04cd182202a00902807b788825423c192202a03a01c0bd9488009e0cb14408aa1200dc538908e0c92e9608413502807b2b11013cd9c51221a84200504349f2baf61034e5184707c35d09006a3966be4d70aa3d08cd281101703702809a1e331f1834d51e8466948800b80b01406da7d81fc0b9124b84e0e604002d38450470ee219608c14d09005a31460470ee104b84e06604002d19230238b78f5303e1260400ad19230238b78f0880ab1300b4684cf253e6ef0640627f005c9d00a05553e62b011f6a0f4233868800b81a0140cba6cc11f0bef62034638825427015028035382479577b089ab18b2542703101c05a3cc412219eec6289105c4400b02625228073c7383a18161100ac4d8908e05c890880171300f5fd39bed5fc52252280732522005e4400d4b78f5b9b9628495ed71e82a6948800783601d0862122608963e608986a0f42334a2c1182671100ed1822029638663e2b60aa3d08cd38647e2eed6a0f022d13006d1922029638c5fe00cebd8ae7127c970068cf102f5c4b9c220238b78fe712fc2601d0a6215eb8961823023837c47309be4900b46b8817ae25c68800ce0df15c82af0880b60df1c2b5c41811c0b921f373695f7b1068850068df1011b0c498e4a7ccdf0d80e4e9b9f4aaf620d00201b00e43fcf6b2c494f94ac087da83d08c5de6e7922542744f00acc71011b0c4943902ded71e84a61ce3d4403a2700d6651711b0d421c9bbda43d094121140c704c0faec2202967a8825429c2b1101744a00acd32e2260a91211c0b91211408704c07aed92fc3dbeccb4448908e05c892542744600acdf312260891211c0b9432c11a22302601b8e11014b94cceb84e1b35771ee069d1000db718c0858e21811c0b97d44001d1000db72ccfc4d775ee698f9d4c0a9f6203463880860e304c0f6fc39bed1bcc429f607706e880860c304c036958880254e11019c1be2965b364a006c57890858628c08e0dc104b84d82001b06d2522608931228073bb5822c4c60880ed2b11014b8c11017ced18cf27364200f4a1c48bd61263e6bb034eb507a129259e4f6c8000e8478917ad25a6cc57024eb507a129259e4fac9c00e84b8917ad25a6cc5702ded71e84a694783eb16202a03f255eb4963a2479577b089a526289102b2500fa54321f18c4cb3dc41221ce1d6289102b2400faf510bfb92c55220238f72a7304c06a0880be1d2202962a11019cdbd71e005e420070880858aa4404002b25004844c0254aac1306564800f0d921bec8b4d4312200581901c0975e45042c75cc7c56c0547b1080e71000fcda3e2260a953ec0f00564200f02dfb8880a54e1101c00a08007ecb3e2260a9312200689c00e07bf649fe9e64a83dc80a8d110140c304003f3264be1230d41e6485c68800a0510280e7182202961a33df1d70aa3d08c0970400cf3544042c3565be1270aa3d08c067028097182202969a325f09785f7b10804400f0724344c0250e49ded51e024000b0c41011708987582204542600586a8808b8448908002a12005c628808b8448908002a11005c6a8808b8448908002a10005cc390f9c4c07ded4156aac43a61e0ce0400d7b2cb7c25605f7b90953a460400772400b8a65d44c0258e99cf0a986a0f026c9f00e0da7611019738653e3570aa3d08b06d02805bd8658e809f6b0fb252a7cc5702c6da8300db2500b8955d92bf26f963ed41566a8c4d82c00d09006eed1811b0d4181100dc8800e01e8e11014b8d1101c00d0800eee51811b0d498f93b01a7da8300db2100b8a763925f6a0fb15253e62b01a7da8300db2000b8b71211b0d494f94ac0fbda8300eb2700a8a144045ce21011005c4800504b8908b8c421960801171000d45422022e51220280850400b59588804b948800600101400b4a44c0254a4400f0420280569488804b9458270cbc8000a0252522e012c78800e0990400ad2911019738663e2b60aa3d08d03601408b4a92bfd41e62c54e994f0d9c6a0f02b44b00d0aa4344c0254e99af048cb50701da240068d92122e012636c12047e8300a0758788804b8c1101c0370800d6e090390276b50759a9312200f81501c05a1c92fc2d2260a931d609035f1000acc93ec9cfb58758b1312200f84400405fa6cc770758270c9d1300d0a7434400744d0040bf0eb14408ba2500a06f252200ba240080121100dd1100402202a03b0200f8ac2479537b08e03e0400f0a5b7495ed71e02b83d0100fcda31f3590153ed4180db1100c0b79c329f1a38d51e04b80d0100fc9653e62b0163ed4180eb1300c0f78cb14910364900003f324604c0e60800e039c68800d81401003cd718eb8461330400f0126344006c8200005e6aca7c778075c2b062020058ea101100ab2500804b1c628910ac9200002e55220260750400700d25220056450000d752220260350400704d25c99bda43003f2600806b7b9be475ed2180ef1300c02d1c339f1530d51e04f8360100dcca29f3a98153ed4180af0900e0964e99af048cb50701ce0900e0d6c6d82408cd1100c03d8c1101d0140100dccb181100cd1000c03d8db14e189a2000807b1b2302a03a0100d430658e00eb84a1120100d432655e272c02a0020100d476882542707702006841890880bb1200402b4a4400dc8d00005a522202e02e0400d09a92e44ded2160eb0400d0a2b7495ed71e02b64c0000ad3ac63a61b8190100b4ec434400dc8400005a774af2532c1182ab1200c01a8cb14910ae4a00006b314604c0d50800604dc68800b80a0100accd18eb84e162020058a33122002e220080b59a32478075c2b0800000d66ccabc4e5804c00b0900600b0eb144085e4400005b512202e0d90400b0252522009e4500005b532202e0870400b04525c99bda4340cb0400b0556f93bcae3d04b44a00005b764cf28758270c5f1100c0d63d663e3068aa3d08b44400003d3825f9299608c13f0900a017636c12847f1200404fc6880048220080fe8c11012000802e8db14e98ce0900a0576344001d130040cfa6cc11f0587b10b8370100f46eca7c58d0fbda83c03d090080d9219608d1110100f0a44404d009010070ae4404d0010100f0b51211c0c60900806f2b49ded41e026e450000fcb6b7495ed71e026e4100007cdf31f36d8253ed41e09a0400c08f3d663e3068aa3d085c8b0000789e53929f6289101b2100009e6f8c4d826c84000078993122800d1000002f374604b0720200609931d609b362020060b93122809512000097993247c063ed41e0250400c0e5a6cc8705bdaf3d083c970000b89e432c1162250400c075958800564000005c5f8908a0710200e0364a44000d130000b75392bca93d047c8b0000b8adb7495ed71e027e4d0000dcde31f36d8253ed41e0330100701f8f990f0c9a6a0f02890000b8a7532c11fad2547b809e090080fb3a45047c36d51ea0670200e0fec68880440054250000ea18d377044c1100550900807ac6f4bb4e78ac3d40ef0400405d63fa8c80ffab3d40ef0400407d53e60878ac3dc81d9d6a0fd03b0100d08629f36141ef6b0f72271f6a0fd03b0100d096439277b587b88353ed017a270000daf3906d6f12fc10770054270000da54b2dd08e8e5638ea609008076956c33023ed41e000100d0ba92e44ded21aee818670034410000b4ef6d92d7b587b81297ff1b210000d6e198f936c1a9f62017788ccbffcd100000ebf198f9c0a0a9f6200b6de9a38cd5130000eb72ca3a9708fd6985336f9a0000589f53d61501a7cc5f66a4210200609dc6ac2302c6ccdf5da031020060bdc6b41d01adcfd7350100b06e63da5c27fc79aeb1f6207c9b000058bf31f39bed87da837cf221c94ff1e6df340100b00d53e608a87974f094f956bf35dfaad80d0100b02d25f3a981e31dffcc297378fc7be6530b59010100b03dc7cc6fc6b7bef77ecad31b7f89dffa57e5f7b50700e0664ae6187895e49724c315fe9da724ff1bc7faae9e00a8ef1fb5075899b1f600b03263e6083826d97f7afcf1d3cfdd6ffc33d3a7c7f8e9f18f4f3f3fc46ff99bf1bb8f1f3fd69e01807a865ffdfd587b20ee43000040877c0910003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a0430200003a240000a043ff0f9ce7160d1ac9de460000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "create": {
+      "id": 47110,
+      "api": [
+        {
+          "qs": {},
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableName(parameters.selectedTable)}}/",
+          "body": "{{formatRecordForSave(parameters.record)}}",
+          "method": "POST",
+          "response": {
+            "output": "{{parseRecord(body)}}"
+          },
+          "condition": "{{!connection.isCloud}}"
+        },
+        {
+          "qs": {},
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableId(parameters.selectedTable)}}/",
+          "body": "{{formatRecordForSave(parameters.record)}}",
+          "method": "POST",
+          "response": {
+            "output": "{{parseRecord(body)}}"
+          },
+          "condition": "{{connection.isCloud}}"
+        }
+      ],
+      "rev": 12,
+      "crud": "create",
+      "name": "create",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Record",
+      "scope": [],
+      "expect": [
+        "rpc://app%23nocodb@1/createRecordParameters"
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "nocodb",
+      "samples": null,
+      "apiJsonc": "[\n\t//Only for Legacy users\n\t{\n\t\t\"condition\": \"{{!connection.isCloud}}\",\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableName(parameters.selectedTable)}}/\",\n\t\t\"method\": \"POST\",\n\t\t\"qs\": {},\n\t\t\"body\": \"{{formatRecordForSave(parameters.record)}}\",\n\t\t\"response\": {\n\t\t\t\"output\": \"{{parseRecord(body)}}\"\n\t\t}\n\t},\n\t//latest version below (different getTable function)\n\t{\n\t\t\"condition\": \"{{connection.isCloud}}\",\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableId(parameters.selectedTable)}}/\",\n\t\t\"method\": \"POST\",\n\t\t\"qs\": {},\n\t\t\"body\": \"{{formatRecordForSave(parameters.record)}}\",\n\t\t\"response\": {\n\t\t\t\"output\": \"{{parseRecord(body)}}\"\n\t\t}\n\t}\n\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23nocodb@1/getTableMeta"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "nocodb",
+      "description": "Creates a record in the given table.",
+      "expectJsonc": "[\n    \"rpc://createRecordParameters\"\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\"rpc://getTableMeta\"]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getRecord": {
+      "id": 48374,
+      "api": [
+        {
+          "qs": {},
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableName(parameters.selectedTable)}}/{{parameters.id}}",
+          "body": {},
+          "method": "GET",
+          "response": {
+            "output": "{{parseRecord(body)}}"
+          },
+          "condition": "{{!connection.isCloud}}"
+        },
+        {
+          "qs": {},
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableId(parameters.selectedTable)}}/{{parameters.id}}",
+          "body": {},
+          "method": "GET",
+          "response": {
+            "output": "{{parseRecord(body)}}"
+          },
+          "condition": "{{connection.isCloud}}"
+        }
+      ],
+      "rev": 17,
+      "crud": "read",
+      "name": "getRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Record",
+      "scope": [],
+      "expect": [
+        "rpc://app%23nocodb@1/getRecordParameters"
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "nocodb",
+      "samples": null,
+      "apiJsonc": "[\n\t//Only for Legacy users\n\t{\n\t\t\"condition\": \"{{!connection.isCloud}}\",\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableName(parameters.selectedTable)}}/{{parameters.id}}\",\n\t\t\"method\": \"GET\",\n\t\t\"qs\": {},\n\t\t\"body\": {},\n\t\t\"response\": {\n\t\t\t\"output\": \"{{parseRecord(body)}}\"\n\t\t}\n\t},\n\t//latest version below (different getTable function)\n\t{\n\t\t\"condition\": \"{{connection.isCloud}}\",\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableId(parameters.selectedTable)}}/{{parameters.id}}\",\n\t\t\"method\": \"GET\",\n\t\t\"qs\": {},\n\t\t\"body\": {},\n\t\t\"response\": {\n\t\t\t\"output\": \"{{parseRecord(body)}}\"\n\t\t}\n\t}\n\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23nocodb@1/getTableMeta"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "nocodb",
+      "description": "Gets a record by the record ID.",
+      "expectJsonc": "[\n \"rpc://getRecordParameters\"\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\"rpc://getTableMeta\"]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "makeApiCall": {
+      "id": 63849,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "{{connection.instanceUrl}}/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 10,
+      "crud": null,
+      "name": "makeApiCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to NocoDB Base URL, e.g. /api/v1/version.",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "nocodb",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"url\": \"{{connection.instanceUrl}}/{{parameters.url}}\",\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"method\": \"{{parameters.method}}\",\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"body\": \"{{body}}\",\n            \"headers\": \"{{headers}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "nocodb",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"help\": \"Enter a path relative to NocoDB Base URL, e.g. /api/v1/version.\",\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ],\n        \"required\": true\n    },\n    {\n        \"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"name\": \"headers\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"type\": \"text\",\n                \"label\": \"Key\"\n            },\n            {\n                \"name\": \"value\",\n                \"type\": \"text\",\n                \"label\": \"Value\"\n            }\n        ],\n        \"type\": \"array\",\n        \"label\": \"Headers\",\n        \"default\": [\n            {\n                \"key\": \"Content-Type\",\n                \"value\": \"application/json\"\n            }\n        ]\n    },\n    {\n        \"name\": \"qs\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"type\": \"text\",\n                \"label\": \"Key\"\n            },\n            {\n                \"name\": \"value\",\n                \"type\": \"text\",\n                \"label\": \"Value\"\n            }\n        ],\n        \"type\": \"array\",\n        \"label\": \"Query String\"\n    },\n    {\n        \"name\": \"body\",\n        \"type\": \"any\",\n        \"label\": \"Body\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deleteRecord": {
+      "id": 48370,
+      "api": [
+        {
+          "qs": {},
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableName(parameters.selectedTable)}}/{{parameters.id}}",
+          "body": {},
+          "method": "DELETE",
+          "response": {
+            "valid": "{{if(body=1,true,false)}}",
+            "output": {
+              "id": "{{parameters.id}}",
+              "recordsDeleted": "{{body}}"
+            }
+          },
+          "condition": "{{!connection.isCloud}}"
+        },
+        {
+          "qs": {},
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableId(parameters.selectedTable)}}/{{parameters.id}}",
+          "body": {},
+          "method": "DELETE",
+          "response": {
+            "valid": "{{if(body=1,true,false)}}",
+            "output": {
+              "id": "{{parameters.id}}",
+              "recordsDeleted": "{{body}}"
+            }
+          },
+          "condition": "{{connection.isCloud}}"
+        }
+      ],
+      "rev": 13,
+      "crud": "delete",
+      "name": "deleteRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Delete a Record",
+      "scope": [],
+      "expect": [
+        "rpc://app%23nocodb@1/deleteRecordParameters"
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "nocodb",
+      "samples": null,
+      "apiJsonc": "[\n\t//Only for Legacy users\n\t{\n\t\t\"condition\": \"{{!connection.isCloud}}\",\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableName(parameters.selectedTable)}}/{{parameters.id}}\",\n\t\t\"method\": \"DELETE\",\n\t\t\"qs\": {},\n\t\t\"body\": {},\n\t\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"recordsDeleted\": \"{{body}}\",\n\t\t\t\"id\": \"{{parameters.id}}\"\n\t\t},\n\t\t\"valid\": \"{{if(body=1,true,false)}}\"\n\t}\n\t},\n\t//latest version below (different getTable function)\n\t{\n\t\t\"condition\": \"{{connection.isCloud}}\",\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableId(parameters.selectedTable)}}/{{parameters.id}}\",\n\t\t\"method\": \"DELETE\",\n\t\t\"qs\": {},\n\t\t\"body\": {},\n\t\t\"response\": {\n\t\t\t\"output\": {\n\t\t\t\t\"recordsDeleted\": \"{{body}}\",\n\t\t\t\t\"id\": \"{{parameters.id}}\"\n\t\t\t},\n\t\t\t\"valid\": \"{{if(body=1,true,false)}}\"\n\t\t}\n\t}\n\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "help": "Record ID",
+          "name": "id",
+          "type": "uinteger",
+          "label": "Id"
+        },
+        {
+          "name": "recordsDeleted",
+          "type": "uinteger",
+          "label": "Records Deleted"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "nocodb",
+      "description": "Deletes a record with the given record ID.",
+      "expectJsonc": "[\"rpc://deleteRecordParameters\"]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"label\": \"Id\",\n\t\t\"help\": \"Record ID\",\n\t\t\"type\": \"uinteger\"\n\t},\n\t{\n\t\t\"name\": \"recordsDeleted\",\n\t\t\"label\": \"Records Deleted\",\n\t\t\"type\": \"uinteger\"\n\t}\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "updateRecord": {
+      "id": 48372,
+      "api": [
+        {
+          "qs": {},
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableName(parameters.selectedTable)}}/{{parameters.id}}",
+          "body": "{{formatRecordForSave(parameters.record)}}",
+          "method": "PATCH",
+          "response": {
+            "output": "{{parseRecord(body)}}"
+          },
+          "condition": "{{!connection.isCloud}}"
+        },
+        {
+          "qs": {},
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableId(parameters.selectedTable)}}/{{parameters.id}}",
+          "body": "{{formatRecordForSave(parameters.record)}}",
+          "method": "PATCH",
+          "response": {
+            "output": "{{parseRecord(body)}}"
+          },
+          "condition": "{{connection.isCloud}}"
+        }
+      ],
+      "rev": 13,
+      "crud": "update",
+      "name": "updateRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Update a Record",
+      "scope": [],
+      "expect": [
+        "rpc://app%23nocodb@1/updateRecordsParameters"
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "nocodb",
+      "samples": null,
+      "apiJsonc": "[\n\t//Only for Legacy users\n\t{\n\t\t\"condition\": \"{{!connection.isCloud}}\",\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableName(parameters.selectedTable)}}/{{parameters.id}}\",\n\t\t\"method\": \"PATCH\",\n\t\t\"qs\": {},\n\t\t\"body\": \"{{formatRecordForSave(parameters.record)}}\",\n\t\t\"response\": {\n\t\t\t\"output\": \"{{parseRecord(body)}}\"\n\t\t}\n\t},\n\t//latest version below (different getTable function)\n\t{\n\t\t\"condition\": \"{{connection.isCloud}}\",\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableId(parameters.selectedTable)}}/{{parameters.id}}\",\n\t\t\"method\": \"PATCH\",\n\t\t\"qs\": {},\n\t\t\"body\": \"{{formatRecordForSave(parameters.record)}}\",\n\t\t\"response\": {\n\t\t\t\"output\": \"{{parseRecord(body)}}\"\n\t\t}\n\t}\n\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23nocodb@1/getTableMeta"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "nocodb",
+      "description": "Updates a record by record ID.",
+      "expectJsonc": "[\"rpc://updateRecordsParameters\"]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\"rpc://getTableMeta\"]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "upsertRecord": {
+      "id": 48375,
+      "api": [
+        {
+          "qs": {
+            "where": "({{parameters.primaryKeyColumnName}},eq,{{parameters.id}})"
+          },
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{if(connection.isCloud;getTableId(parameters.selectedTable);getTableName(parameters.selectedTable))}}/find-one",
+          "body": {},
+          "method": "GET",
+          "response": {
+            "temp": {
+              "exists": "{{checkRecordExists(body)}}"
+            },
+            "output": {
+              "exists": "{{checkRecordExists(body)}}"
+            }
+          },
+          "condition": "{{if(parameters.id, true, false)}}"
+        },
+        {
+          "qs": {},
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{if(connection.isCloud;getTableId(parameters.selectedTable);getTableName(parameters.selectedTable))}}/{{parameters.id}}/",
+          "body": "{{formatRecordForSave(parameters.record)}}",
+          "method": "PATCH",
+          "response": {
+            "output": "{{parseRecord(body)}}"
+          },
+          "condition": "{{if(parameters.id && temp.exists, true, false)}}"
+        },
+        {
+          "qs": {},
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{if(connection.isCloud;getTableId(parameters.selectedTable);getTableName(parameters.selectedTable))}}",
+          "body": "{{formatRecordForSave(parameters.record)}}",
+          "method": "POST",
+          "response": {
+            "output": "{{parseRecord(body)}}"
+          },
+          "condition": "{{if(!parameters.id || !temp.exists, true, false)}}"
+        }
+      ],
+      "rev": 17,
+      "crud": "update",
+      "name": "upsertRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Upsert a Record",
+      "scope": [],
+      "expect": [
+        "rpc://app%23nocodb@1/upsertRecords"
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "nocodb",
+      "samples": null,
+      "apiJsonc": "\t\t\t\t\t\t\n[\n\t{\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{if(connection.isCloud;getTableId(parameters.selectedTable);getTableName(parameters.selectedTable))}}/find-one\",\n\t\t\"method\": \"GET\",\n\t\t\"qs\": {\"where\":\"({{parameters.primaryKeyColumnName}},eq,{{parameters.id}})\"},\n\t\t\"body\": {},\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"exists\": \"{{checkRecordExists(body)}}\"\n\t\t\t},\n\t\t\t\"output\": {\n\t\t\t\t\"exists\": \"{{checkRecordExists(body)}}\"\n\t\t\t}\n\t\t},\n\t\t\"condition\": \"{{if(parameters.id, true, false)}}\"\n\t},\n\t{\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{if(connection.isCloud;getTableId(parameters.selectedTable);getTableName(parameters.selectedTable))}}/{{parameters.id}}/\",\n\t\t\"method\": \"PATCH\",\n\t\t\"qs\": {},\n\t\t\"body\": \"{{formatRecordForSave(parameters.record)}}\",\n\t\t\"condition\": \"{{if(parameters.id && temp.exists, true, false)}}\",\n\t\t\"response\": {\n\t\t\t\"output\": \"{{parseRecord(body)}}\"\n\t\t}\n\t},\n\t{\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{if(connection.isCloud;getTableId(parameters.selectedTable);getTableName(parameters.selectedTable))}}\",\n\t\t\"method\": \"POST\",\n\t\t\"qs\": {},\n\t\t\"body\": \"{{formatRecordForSave(parameters.record)}}\",\n\t\t\"condition\": \"{{if(!parameters.id || !temp.exists, true, false)}}\",\n\t\t\"response\": {\n\t\t\t\"output\": \"{{parseRecord(body)}}\"\n\t\t}\n\t}\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23nocodb@1/getTableMeta"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "nocodb",
+      "description": "Tries to update a record with the given record ID, if the record does not exist, it creates one.",
+      "expectJsonc": "[\n\"rpc://upsertRecords\"\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\"rpc://getTableMeta\"]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "searchRecords": {
+      "id": 48376,
+      "api": [
+        {
+          "qs": {
+            "sort": "{{trim(parameters.sort)}}",
+            "limit": "{{trim(parameters.limit)}}",
+            "where": "{{trim(parameters.where)}}",
+            "fields": "{{trim(parameters.fields)}}"
+          },
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableName(parameters.selectedTable)}}",
+          "body": {},
+          "method": "GET",
+          "response": {
+            "limit": "{{parameters.limit}}",
+            "output": "{{parseRecord(item)}}",
+            "iterate": "{{body.list}}"
+          },
+          "condition": "{{!connection.isCloud}}",
+          "pagination": {
+            "qs": {
+              "offset": "{{body.pageInfo.page * body.pageInfo.pageSize}}"
+            },
+            "condition": "{{body.pageInfo.isLastPage != true}}"
+          }
+        },
+        {
+          "qs": {
+            "sort": "{{trim(parameters.sort)}}",
+            "limit": "{{trim(parameters.limit)}}",
+            "where": "{{trim(parameters.where)}}",
+            "fields": "{{trim(parameters.fields)}}"
+          },
+          "url": "/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableId(parameters.selectedTable)}}",
+          "body": {},
+          "method": "GET",
+          "response": {
+            "limit": "{{parameters.limit}}",
+            "output": "{{parseRecord(item)}}",
+            "iterate": "{{body.list}}"
+          },
+          "condition": "{{connection.isCloud}}",
+          "pagination": {
+            "qs": {
+              "offset": "{{body.pageInfo.page * body.pageInfo.pageSize}}"
+            },
+            "condition": "{{body.pageInfo.isLastPage != true}}"
+          }
+        }
+      ],
+      "rev": 21,
+      "crud": "read",
+      "name": "searchRecords",
+      "epoch": null,
+      "flags": {},
+      "label": "Search Records",
+      "scope": [],
+      "expect": [
+        "rpc://app%23nocodb@1/searchRecordsParameters"
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "nocodb",
+      "samples": null,
+      "apiJsonc": "[\n\t//Only for Legacy users\n\t{\n\t\t\"condition\": \"{{!connection.isCloud}}\",\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableName(parameters.selectedTable)}}\",\n\t\t\"method\": \"GET\",\n\t\t\"qs\": {\n\t\t\t\"fields\": \"{{trim(parameters.fields)}}\",\n\t\t\t\"where\": \"{{trim(parameters.where)}}\",\n\t\t\t\"limit\": \"{{trim(parameters.limit)}}\",\n\t\t\t\"sort\": \"{{trim(parameters.sort)}}\"\n\t\t},\n\t\t\"body\": { },\n\t\t\"response\": {\n\t\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\t\"output\": \"{{parseRecord(item)}}\",\n\t\t\t\"iterate\": \"{{body.list}}\"\n\t\t},\n\t\t\"pagination\": {\n\t\t\t\"qs\": {\n\t\t\t\t\"offset\": \"{{body.pageInfo.page * body.pageInfo.pageSize}}\"\n\t\t\t},\n\t\t\t\"condition\": \"{{body.pageInfo.isLastPage != true}}\"\n\t\t}\n\t},\n\t//latest version below (different getTable function)\n\t{\n\t\t\"condition\": \"{{connection.isCloud}}\",\n\t\t\"url\": \"/api/v1/db/data/noco/{{parameters.selectedProject}}/{{getTableId(parameters.selectedTable)}}\",\n\t\t\"method\": \"GET\",\n\t\t\"qs\": {\n\t\t\t\"fields\": \"{{trim(parameters.fields)}}\",\n\t\t\t\"where\": \"{{trim(parameters.where)}}\",\n\t\t\t\"limit\": \"{{trim(parameters.limit)}}\",\n\t\t\t\"sort\": \"{{trim(parameters.sort)}}\"\n\t\t},\n\t\t\"body\": { },\n\t\t\"response\": {\n\t\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\t\"output\": \"{{parseRecord(item)}}\",\n\t\t\t\"iterate\": \"{{body.list}}\"\n\t\t},\n\t\t\"pagination\": {\n\t\t\t\"qs\": {\n\t\t\t\t\"offset\": \"{{body.pageInfo.page * body.pageInfo.pageSize}}\"\n\t\t\t},\n\t\t\t\"condition\": \"{{body.pageInfo.isLastPage != true}}\"\n\t\t}\n\t}\n\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23nocodb@1/getTableMeta"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "nocodb",
+      "description": "Returns a list of records matching the where condition.",
+      "expectJsonc": "[\n    \"rpc://searchRecordsParameters\"\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\"rpc://getTableMeta\"]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "makeApiRequest": {
+      "id": 63850,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://www.example.com/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 6,
+      "crud": null,
+      "name": "makeApiRequest",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Request - DELETE",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://www.example.com/`.",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": false,
+      "typeId": 12,
+      "appName": "nocodb",
+      "samples": null,
+      "apiJsonc": null,
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "nocodb",
+      "description": "Performs an arbitrary authorized API request.",
+      "expectJsonc": null,
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "nocodb": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.xc-token"
+          ]
+        },
+        "url": "{{parameters.instanceUrl}}/api/v1/db/auth/user/me",
+        "headers": {
+          "xc-token": "{{parameters.authToken}}"
+        },
+        "response": {
+          "error": {
+            "message": "{{ifempty(body.msg, 'Invalid auth token!')}}"
+          },
+          "valid": "{{if(body.isAuthorized, true, false)}}",
+          "metadata": {
+            "type": "email",
+            "value": "{{body.email}}"
+          }
+        }
+      },
+      "rev": 17,
+      "name": "nocodb",
+      "type": "basic",
+      "label": "NocoDB",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "nocodb",
+      "install": {},
+      "apiJsonc": "{\n\t\"url\": \"{{parameters.instanceUrl}}/api/v1/db/auth/user/me\",\n\t\"headers\": {\n\t\t\"xc-token\": \"{{parameters.authToken}}\"\n\t},\n\t\"response\": {\n        \"metadata\": {\n            \"value\": \"{{body.email}}\",\n            \"type\": \"email\"\n        },\n\t\t\"valid\": \"{{if(body.isAuthorized, true, false)}}\",\n\t\t\"error\": {\n\t\t\t\"message\": \"{{ifempty(body.msg, 'Invalid auth token!')}}\"\n\t\t}\n    },\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.xc-token\"]\n\t}\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "isCloud",
+          "type": "boolean",
+          "label": "NocoDB Cloud",
+          "default": true,
+          "editable": true,
+          "required": true
+        },
+        {
+          "name": "instanceUrl",
+          "type": "url",
+          "label": "NocoDB Base URL",
+          "default": "https://app.nocodb.com",
+          "required": true
+        },
+        {
+          "name": "authToken",
+          "type": "password",
+          "label": "API Token (xc-token)",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "installSpec": [],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"isCloud\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"NocoDB Cloud\",\n\t\t\"default\": true,\n\t\t\"required\": true,\n\t\t\"editable\": true\n\t},\n\t{\n\t\t\"name\": \"instanceUrl\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"NocoDB Base URL\",\n\t\t\"default\": \"https://app.nocodb.com\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"authToken\",\n\t\t\"type\": \"password\",\n\t\t\"label\": \"API Token (xc-token)\",\n\t\t\"required\": true,\n\t\t\"editable\": true\n\t}\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n\t\"baseUrl\": \"{{connection.instanceUrl}}\",\n\t\"headers\": {\n\t\t\"xc-token\": \"{{connection.authToken}}\"\n\t},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"message\": \"{{ifempty(body.msg, 'Some error occurred')}}\",\n\t\t\t\"type\": \"RuntimeError\",\n\t\t\t\"404\": {\n                \"message\": \"[{{statusCode}}] not found\"\n            },\n\t\t\t\"401\": {\n                \"message\": \"[{{statusCode}}] Unauthorised\"\n            },\n\t\t\t\"403\": {\n                \"message\": \"[{{statusCode}}] Forbidden\"\n            }\n\t\t}\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.xc-token\"]\n\t}\n}",
+  "countries": null,
+  "_functions": {
+    "getTableId": {
+      "rev": 2,
+      "code": "function getTableId(selectedTable) { \n\tconst [_tableName, _tableInternalName, tableId] = selectedTable.split('||'); \t\n\treturn tableId;\n}",
+      "name": "getTableId",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(selectedTable)",
+      "appVersion": 1
+    },
+    "parseRecord": {
+      "rev": 3,
+      "code": "function parseRecord(data) {\n\tconst keys = Object.keys(data);\n\tconst parsedData = keys.reduce((acc, key) => {\n\t\tconst val = data[key];\n\t\tlet parsedVal = val;\n\t\ttry {\n\t\t\tparsedVal = JSON.parse(val);\n\t\t} catch (err) {\n\t\t\tparsedVal = val;\n\t\t}\n\t\tacc[key] = parsedVal;\n\t\treturn acc;\n\t}, {});\n\treturn parsedData;\n}",
+      "name": "parseRecord",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(data)",
+      "appVersion": 1
+    },
+    "getInputSpec": {
+      "rev": 3,
+      "code": "function getInputSpec(col) {\n\tconst { uidt } = col;\n\tlet spec;\n\tswitch(uidt) {\n\t\tcase \"Attachment\":\n\t\t\tspec = {\n\t\t\t\tname: \"attachment\",\n\t\t\t\ttype: \"collection\",\n\t\t\t\tlabel: \"Attachment\",\n\t\t\t\tspec: [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"url\",\n\t\t\t\t\t\t\"label\": \"URL\",\n\t\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"title\",\n\t\t\t\t\t\t\"label\": \"Title\",\n\t\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"mimetype\",\n\t\t\t\t\t\t\"label\": \"mimetype\",\n\t\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"size\",\n\t\t\t\t\t\t\"label\": \"size\",\n\t\t\t\t\t\t\"type\": \"uinteger\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t};\n\t\t\tbreak;\n\t\tdefault:\n\t\t\tspec = { \"type\": \"text\" };\n\t}\n\treturn spec;\n}",
+      "name": "getInputSpec",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(col)",
+      "appVersion": 1
+    },
+    "getInputType": {
+      "rev": 3,
+      "code": "function getInputType(field) {\n\tconst { dt, uidt, type } = field;\n\tlet integromatType = \"text\";\n\tswitch(true) {\n\t\tcase [dt, uidt].includes(\"integer\"):\n\t\t\tintegromatType = \"integer\";\n\t\t\tbreak;\n\t\tcase uidt === \"Date\":\n\t\tcase uidt === \"DateTime\":\n\t\tcase type === \"timestamp\":\n\t\t\tintegromatType = \"date\";\n\t\t\tbreak;\n\t\tcase uidt === \"Attachment\":\n\t\tcase dt === \"ARRAY\":\n\t\t\tintegromatType = \"array\";\n\t\t\tbreak;\n\t\tcase dt === \"boolean\":\n\t\tcase dt === \"bool\":\n\t\tcase uidt === \"Checkbox\":\n\t\t\tintegromatType = \"boolean\";\n\t\t\tbreak;\n\t\tdefault:\n\t\t\tintegromatType = \"text\";\n\t}\n\t\n\treturn integromatType;\n}",
+      "name": "getInputType",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(field)",
+      "appVersion": 1
+    },
+    "getTableName": {
+      "rev": 3,
+      "code": "function getTableName(selectedTable) {\n\tconst [tableName, tableInternalName] = selectedTable.split('||');\n\treturn tableName;\n}",
+      "name": "getTableName",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(selectedTable)",
+      "appVersion": 1
+    },
+    "isFieldEditable": {
+      "rev": 3,
+      "code": "function isFieldEditable(field) {\n\t// Autoincrement is not editable\n\treturn !field.pk && !field.ai && field.uidt !== \"LinkToAnotherRecord\" ;\n}",
+      "name": "isFieldEditable",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(field)",
+      "appVersion": 1
+    },
+    "isFieldCreatable": {
+      "rev": 3,
+      "code": "function isFieldCreatable(field) {\n\treturn !field.ai && field.uidt !== \"LinkToAnotherRecord\" ;\n}",
+      "name": "isFieldCreatable",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(field)",
+      "appVersion": 1
+    },
+    "checkRecordExists": {
+      "rev": 3,
+      "code": "function checkRecordExists(record) {\n\treturn !(iml.verifyNonEmptyObject(record));\n}",
+      "name": "checkRecordExists",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(record)",
+      "appVersion": 1
+    },
+    "parseTableColumns": {
+      "rev": 3,
+      "code": "function parseTableColumns(columns) {\n\treturn columns.map((col) => {\n\t\tlet type = iml.getInputType(col);\n\t\tconst field = {\n\t\t\tname: col.title||col.column_name,\n\t\t\tlabel: col.title||col.column_name,\n\t\t\ttype,\n\t\t\teditable: iml.isFieldEditable(col),\n\t\t\tcreatable: iml.isFieldCreatable(col)\n\t\t};\n\t\tif (type === \"array\") {\n\t\t\tfield.spec = iml.getInputSpec(col);\n\t\t}\n\t\treturn field;\n\t});\n}",
+      "name": "parseTableColumns",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(columns)",
+      "appVersion": 1
+    },
+    "formatRecordForSave": {
+      "rev": 3,
+      "code": "function formatRecordForSave(record) {\n\t const keys = Object.keys(record);\n\t const newRecord = keys.reduce((acc, key) => {\n\t\tconst val = record[key];\n\t\tif (Array.isArray(val)) {\n\t\t\tacc[key] = JSON.stringify(val);\n\t\t} else {\n\t\t\tacc[key] = val;\n\t\t}\n\t\treturn acc;\n\t }, {});\n\t return newRecord;\n}",
+      "name": "formatRecordForSave",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(record)",
+      "appVersion": 1
+    },
+    "verifyNonEmptyObject": {
+      "rev": 3,
+      "code": "function verifyNonEmptyObject(obj) {\n\treturn obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype\n}",
+      "name": "verifyNonEmptyObject",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(obj)",
+      "appVersion": 1
+    },
+    "filterUneditableFields": {
+      "rev": 3,
+      "code": "function filterUneditableFields(fieldList) {\n\treturn fieldList.filter(field => field.editable);\n}",
+      "name": "filterUneditableFields",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(fieldList)",
+      "appVersion": 1
+    },
+    "filterUncreatableFields": {
+      "rev": 3,
+      "code": "function filterUncreatableFields(fieldList) {\n\treturn fieldList.filter(field => field.creatable);\n}",
+      "name": "filterUncreatableFields",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(fieldList)",
+      "appVersion": 1
+    },
+    "upsertRecordsParameters": {
+      "rev": 1,
+      "code": "function upsertRecordsParameters() {\n\n}",
+      "name": "upsertRecordsParameters",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "()",
+      "appVersion": 1
+    },
+    "getTablePrimaryKeyFromColumns": {
+      "rev": 4,
+      "code": "function getTablePrimaryKeyFromColumns(columns) {\n    const primaryKeyColumn = columns.find(col => col.pk);\n\treturn [{\n\t\t\"name\": \"id\",\n\t\t\"required\": true,\n\t\t\"label\": primaryKeyColumn.title || primaryKeyColumn.column_name,\n\t\t\"help\": `Record ID (${primaryKeyColumn.title || primaryKeyColumn.column_name})`,\n\t\t\"type\": \"text\"\n\t},\n\t{\n\t\t\"name\": \"primaryKeyColumnName\",\n\t\t\"default\": primaryKeyColumn.title || primaryKeyColumn.column_name,\n\t\t\"type\": \"hidden\",\n\t\t\"value\": primaryKeyColumn.title || primaryKeyColumn.column_name\n\t}]\n}",
+      "name": "getTablePrimaryKeyFromColumns",
+      "test": null,
+      "appName": "nocodb",
+      "arguments": "(columns)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-10-05T17:12:37.073816+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "A NocoDB connector to do CRUD operations",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "abdc31b00f68ddf438eff259fda171a7",
+  "versionFull": "1.0.5",
+  "compiledName": "nocodb",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": null,
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": null
+}

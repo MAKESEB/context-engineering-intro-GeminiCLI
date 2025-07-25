@@ -1,0 +1,939 @@
+{
+  "rev": 4,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "https://www.googleapis.com/calendar/v3",
+    "headers": {
+      "Authorization": "Bearer {{connection.accessToken}}"
+    },
+    "response": {
+      "error": {
+        "message": "[{{statusCode}}] {{body.error.message}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "google-meet",
+  "_rpcs": {
+    "listColors": {
+      "api": {
+        "url": "/colors",
+        "method": "GET",
+        "response": {
+          "limit": 500,
+          "output": {
+            "label": "{{item.background + ' (' + item.foreground + ')'}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{colorRpcResponse(body, parameters.calendar)}}"
+        }
+      },
+      "rev": 2,
+      "name": "listColors",
+      "label": "List Colors",
+      "appName": "google-meet",
+      "apiJsonc": "{\n    \"url\": \"/colors\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"iterate\": \"{{colorRpcResponse(body, parameters.calendar)}}\",\n        \"output\": {\n            \"label\": \"{{item.background + ' (' + item.foreground + ')'}}\",\n            \"value\": \"{{item.id}}\"\n        },\n        \"limit\": 500\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "google-meet",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "listCalendars": {
+      "api": {
+        "qs": {
+          "maxResults": 250
+        },
+        "url": "/users/me/calendarList",
+        "method": "GET",
+        "response": {
+          "limit": 1000,
+          "output": {
+            "label": "{{item.summary + if(item.primary, ' (Primary Calendar)', '')}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.items)}}"
+        },
+        "pagination": {
+          "qs": {
+            "pageToken": "{{body.nextPageToken}}"
+          },
+          "condition": "{{ifempty(body.nextPageToken, false)}}"
+        }
+      },
+      "rev": 2,
+      "name": "listCalendars",
+      "label": "List Calendars",
+      "appName": "google-meet",
+      "apiJsonc": "{\n    \"url\": \"/users/me/calendarList\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"maxResults\": 250\n    },\n    \"response\": {\n        \"iterate\": \"{{body.items)}}\",\n        \"output\": {\n            \"label\": \"{{item.summary + if(item.primary, ' (Primary Calendar)', '')}}\",\n            \"value\": \"{{item.id}}\"\n        },\n        \"limit\": 1000\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"pageToken\": \"{{body.nextPageToken}}\"\n        },\n        \"condition\": \"{{ifempty(body.nextPageToken, false)}}\"\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "google-meet",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    }
+  },
+  "flags": {},
+  "label": "Google Meet",
+  "theme": "#2684fc",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "createAMeet"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda793000001a74944415458c3edd6316b15411486e167e3862082a904512410b0100431114544042b1b0b4bc1c6422c6cadb5127b3b41c1c2c6ceca9f1141d1d23a65d4042d927c16d90dcb75efba776388c87d6160677676ce77ce99993d4c9972c0145d2f93d48fc7303fc1ba5b58c50f288af166ca1ec697f00c8bd8eee9d436dee121be4f1c9624755b4ab29261ac25b9d458ab48325bf76b663a3c5fc64b9c9fd8831d6631d778be8b5738d5c7f3e524ef077a5eb391e46a9223499e2459afda956604caa6f18a0b788173033dafd9c602eee176656bc3c8c61fdd848b78de62fc233e683f35c1695c1c199fc3539cd092ea71021670a665de5b3cea1070bf45408993fe70d4cb96c5daa8c7d33cd38db4b57dd769b866a6cfa4fde46f09c8d00fff9b08f4caf73f1981b2e7bcdac3a2798b55642f11e82be0969d4baaeb221a650beb38da25b0af80b3559b849f788c9bb83e4ec47eee81022bb883d7d8ec1381c1b9ec10b18a07f8826b55ff77aadff0e524dff6f81b1e57909449e6abc2646c043ee10d6e54e91972c3354bb2cfecd6849bf8da367937021587711c879a019a303dbd8bd229530e9c5f90b96dc1856ff14c0000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000002b14944415478daedda4dc854551cc7f1cff5ed797c4144094b24d742e04ef7e65a21226a518b16ed0aad10a174a1881b1124715fe0da8d9b56e542a2554110441b91882c107ce3b114ff2dee1db8a8337367ee79eedc71ce1786b970e79c7b7ebf39e77fffe7854c2693c96432994c66212952541211b08cd7b16e15dbfb087f56df8aa27df35bd750137f021f61cd2a1af01f7ec469fc92ca8456e2236239224e47c44a74c77711f14af5fc85131f11f128220ea73060aaf15aebf65fe0f3eaba4b96b0334545131b5089df5813bfd4b1f801cf0dfe5a6f388077f02bae1811342732a047e287b56d6d25fc1cf6e001fec0b7c3ca3536a026fe4b7cd643f19bf1098e635b756b0b768d2adbc8809af893f8b44fe22b5ec5197c800df5a60f2e86bd2ec71a5089df54893fd643f16fe0020e9922af1969c01c883f888b950953f142036ad174134e55e2378ca92b5546d2e45f7c8ab7b117bbdb3c6cdc103882a30dc4c31d9cc5df0d453ccb7a657c69f26f16785382b47b9c013b34eff60f71153727cdcfab1eb78477273020c92420e5c42545a33a9fd9ace6cc6d2ec806ccba01b3261b30eb06cc9abe19d0f9f24edf0ce89cbe1990f3806c4036201b900d98570342fbf778e77940ca8dcccd780bb72362da05915d0d7f3b30aaf56b33a501db713e617de30cb8a55c0d6eb52b95d2802e939802972af1c7b175da8ae6350816b8a75c83fc58b9fbb350060c4c806ff03e7e5a3403ea7c8ff7704db9643e60ecb07c590c80dff0212eab7683f104f731f41cc16a9ee7e98cc1327c44fca30c8abf2b87c5cfb83eaaec38036674fea411cfb5ad280a11b182aff0355694e78aa6de1cfd0b8f95494a9ff817b75f74a3121ab8dba4a27131e086f25456dff8a1fab4666894ac058d7dca0dd2fd66df13921f931b59ba66c246bc6674da992c3f1f41f28392994c2693c9643299cc82f23f638d9a6c827273b40000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-02-21T23:52:01.267046+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda7930000057b4944415478daeddd5b8855551cc7f1ef1e4b1d352b0a29227a28a820128a9eea25288a881e829e328a88ca4a9a34ba97dd082cbb50be14613d54cf81907401a35743243224f4252a097530aa717266cebf87b5b767b1736e67edbdd79a59bf0fc8801cce597bff7ffbb6f6622d101111111111111111111111111111111111111111119105ac88dd803a330318062e074e8fdd9e0093c011e0107002a02892dbdd6905c02bfe33c083c092d86d0ad0038e01bb81edc02e6032b51024d31aaff8cf029b80e5b1dbd4a051602bf036309e520892684959fc15b8e26f647115bf721c7802d856fd470a4188de825af13701cb62b7a98dcdc4edeb83c0adc07e4823004351f74abff8cfb1788b0ffd03ed62e096d88df1450b40adf81b59bcc5afbb8ac8079e2f4a43bce23f4f5ec5073887841e6f3b0f40adf88f9157f1c1edf3f817ffd2695dfe5859fc95b8e28f905ff10756eebba5c0a5c01ae037e000817d0b9d9d01bce2bf808a3f676656edbbf3803780af801de5df278161ef33692a1bb8d2ccb698d9b8e5ed4b335b6e732898958535b32bcc6ca7994dd5be6bccccd65940005a3f0358ffc8df8c8efc392bf75b01dc087c0adcccffeb350cdc44401d5b0d40b911ab8017814771d7309985f5aff7f7021f0357cef0f1d504d4b1b59bc05af137a0e2cfca3b8d9f053c8e3b6856b5f99bad0440c59f3faff81701af0177d0417f41e301f08aff12f0082afeacbce25f03bc055c4b477d058dde03941b7206f0322afe9c94fb6c08b81d77b3771d1d7614357606a815ff2154fc59597f0cc47ae069e0dcaedbd048006ac57f9884faba13b706f732ec3e5c103a171c80b2f8abe91ff92afeec0cd7a5fb3a6e7c40b4b783413fec15ff1554fcb92a80eb71d7fbdb88fc6a78a0338077d7ba1a78153780b3a9e2fb7d9a31df9a55ed68b20d065c027c085c1071db4e0ab9042cc18dde5d1ff83d7505f037f02df04fb43d036b81cb1afc3e2bff5d4842a39d430ab702f7bcda4667d231dc10b19f89738a34dcf5b9c900800b7732c5878ec703cc53affadbe5e049eff2d60bf99e53486610882f99b16912870290390520730a40e61480cc290099530032a700644e01c89c0290390520730a40e61480cc2900d34bf2ed5dd31480e94dc56e40171480cc2900d34b6ae44e5b1480e9253ce342731480cc290099530032a700644e01c89c0290390520730a40e61480cc290099530032a700644e01c85caaf303f813290c0d3a13760023938323d5009c8d9b31f3af886d58dbc277a632ffd1492906c07073e6c55e5dab9ad3a7e942b5f19d034bf1345790c60e6aa31d05b00fd84922630e530cc062f73bf0006e05d1e3b11ba30074af000e034fe1a6d93b1cb3310a401c05300ebc0bdc8f9b0e2f0a0520ae1ef0397027f01d1106a22a001179f31f7e0fdc057c064c74d9060520322f04bfe0a6dadf42bfffa3f53382029080a228aa20fc899b797d04b73268eb8fc30a4042ca109c003e02ee01f6b6fd9b0a4062ca1018f00db00ef88299e72d0eea50520012e4dd17ecc32d1ef93eeeb1f1540e009383fe96029028efbee00fdc22929b81a3b58ffd087c12f23b29be0c124f511498d918f026aee077e35612ff09f800f8a1fadc20148005a00cc114ee7ee06bdc02dc6334b096424800aad7a5323f3d06d86f5ea12768b0b328e41ee05f60b4c93d9389a374dcdb379390004c007b626fc002b487e697a31958e853c00ee0d7d81bb10054a7fc83b8eb78324203b017780f773990e915b8c11fef00fb6337c637d04d607543626eb8ee36dc127223c099b1372851a3c056dc8291033fb2b521b825e590eda5c00db8feebab7141083dbb24357872003ddcfa87bb81edc02e6032a5e243433bd81bb7bf0c381fb70c7ac8346b6d2cdbdab549e0087008f78227a9235f444444444444444444444444444444444444444444441685ff00253a64d38f24d73c0000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda79300000b814944415478daeddd698c25551987f1e74e33c00c0cc8803a0aa2896824311834b805216aa22626444d5c10950c8b20c2f801098a2008c832b8129510231f484c4c4c70f9e086260622e2be44c0252e4c44503383c22c324b971fde7b87ea337567baa76fdf5355e7f92593e9ee7bd3395d75de7f9d3ab7ea144892244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992d47583dc0de882aaaae67c3f18b8d9dac0fdb2786eb17d483ad92ae014e050a0daaf5fa8c59a05b6000f030f018f023b2dfefde356db8b86e2ff08701e702006402e15b00bd8063c08dc037c1bf831b0191c092c845b6a8c86e2bf1cb80858417442b7ddf4d577caa0f6b347813b819b817b815943607edc4a0de651fce0b6cbad6904b601f824f02560ebe88786c1786e9984c5df39e9a8e07122046e62180206c078cb7237a04d92e23f0cb8028bbfed06cc3d1d58055c02bc0f98813d3f2dd093eccc43638aff42e0602cfe2e19cdcf3c029c097c6ff48223813d3902c0e2efa10a58035c0c1c99bb316d567c003414ff47b1f8bbac7e3a7032f086d10b9e0aeca9e8001853fcefc7e2efbad13e5b09bc1938247783daaad8006828fe2bb1f8fbe824e0d9b91bd1564506c098e2bf008bbf4f46fb6f35707ceec6b4d501b91b306d0dc57f15f19191c5df3f15711af0acdc0d69aba2460049f11f8ec55f8265c011a36f9c089cab9811c05e8aff202cfebe3b287703daaa881180c52f35ebfd08a0a1f83f069c8fc52ff57b0460f14b7bd7db114052fc4f01ae06de8bc5af2918f6bfe5c071c04b80a3811dc05f819f037fa7762763aefb147a190016bf7248faddb1c43cd35b89e21ff5bdadc09f88350b6e276e5fa6aaaa2c21d0bb006828fe6b8073b1f8b584927e77127003702a714b72bddf1d029c08ac079e439c966eced5ee5ecd018c297e8ffc5a325555d5fbdd0c701a701bf01aa2beeafdae7ea3d24ae2d2f3b5a39fe7b846a13701906cbc23806b89e2af2fe069f16b62923eb792b88bf456e08534af5f58ffba22169a399b8c572af6e214604cf19f83c5afe9380ab894f884a9be64fcb83e37a8bde7b9c08b89f50ca7aef3019014ff6a62d86ff16bc9247dee78a2cf9d46ccfacfb7cf8d42602531179045a703a0a1f8af25865416bfa6e155c464decb86dfef4f9f5b46c64b953b1b000dc5ff71e02c1696c2d2bc24fded40e06dc46de4c731fe7cbff53a1900c9ce389228feb544f18f746a47a8dd0683c1a8dfad02d611eb0d1e41c70f369d0b8031c57f56f2b7747267a87d92fe760cf19c887713e7ee9d2e7ee858003414ff75c491dfe2d7c425fded44e2e29ed7b2e7e7fb9dd59900b0f895c932e075c0f5c08b92d73adfdf3a110049f11f45ec8c33b1f83561495f5b411c642e23aee7efec64df38ad0f008b5f99ac063e485cae7b183d19f2a75a1d000dc57f03f01e2c7e4d58d2d79e47dca4f3167a7e1f496b0320d9214f258efc16bf96da2b88270bbf72f87d6f8b1f5a1a000dc57f03f1d18bc5af8949fad972e04dc4da112fa087e7fb4d5a17000dc57f2351fc33b59ff77687683a927e7628f160984b8853cd228a1f5a1600c94e791a51fcefc2e2d70425fdec19c42cff5a62b18e5e0ff953ad09008b5f199c405c4ff27af65cb9a708ad0880a4f89f4e14ff1958fc5a1a0362c59e1b897bf1d3d78a913d001a8a7f3df04e2c7e2d8d838983cb15c453838b39df6f9235001a8aff26e0742c7e2d8dc389bbf8d60dbf2e6ec89fca160016bf9658bd83cd12abee5c05bc1d1f06bb5b9600488a7f0d51fcefc0e2d764d43bd82ee0f9c43afcaf4e5e2fbe8f4d3d001a3e8219157f7d85e236ee9874cde636b6711aba74ce5c01ff22aeea5b93bcd6f6b64fc554032029fe6712137e5d28fe9159e288d29be5d417a822f6cfcc627fd114dbbb9ab92b4541bbfbd854e59a039821aebc3a9de635d3db68006c023e036c6c795b974a45ac8ab38eb843aeed9611ebf7d595b8dfc6ca190047d3bd955576005f031ec8f530c79c8623b8138847ad752100eacadb61f390f363c02e9d4bd6ed7e8c534921503b7debc21fdd8536b642a9e7b2923000a4a2190052c10c00a9600680543003402a98012015cc00900a660048053300a482190052c10c00a9600680543003402a98012015cc00900a660048053300a482190052c10c00a9600680543003402a98012015cc00900a660048053300a482190052c10c00a9600680543003408b512dfe57282703402a9801a085da016ccbdd084d8601a0855a061c90bb119a0c03400b35032ccfdd084d86012015cc00d0620c7237408b630048053300a482190052c10c00a9600680543003402a98012015cc00900a660048053300a482190052c10c00a9600680543003402a98012015cc00900a660048053300a482190052c10c00a9600680543003402a98012015cc00900a660048053300a482190052c10c00a960068054300360e12a80c1a0ac07e3d6fede2a775b343907e46e40c71c029c0efcbdaaaa12c3b3028e0156e46e8826c30098bf0a380cf8f0f0ebb286004f6e830130d3816dd0345269737bb33000166e86b23b52974f01da1e5a536700cc9f1d27746d3b8c026b50fbbe6b7fc39229f13c56651900bf02feccdc10e8f24866620c00f5dd00f83e7036f0d3e4b5e243c000505fa5c3fcbb80b3806f023b993b1a289601a092dc079c077c1ed882216000a838ff042e07ae04fe4de1f30206804ab405f82c703e703f734f178a0a010340c5195ed6bc13b8839817b82b794b31216000a8743f2142e0cbc0760a9b17300054a4c160b0fb1f718dc045c04dc06314140206808a5655bb6bfc3fc075c025c0060a991c340054b46424b00df822700ef0cbe4adbd0c0103409aab02ee24e605be03cc26aff58a01200d258bbcfc861809dc4a8c0c7a392f600048354908fc03b814b806d8480fe7050c00299184c066e053c085c01fe9d945430680d420991cdc0e7c859817b827796ba743c00090e6ef4744087c15d8410fe6050c00691f6a2301803f0017009f061ea7e3216000480bb711b81ab88c9828ecece4a00120cd53322fb015b8053817f86df2d68584c02cf044aebfc90090f6df2ee05bc4bcc00f985bf8fb0a81d1eb5b894b8fb33000a4fd907c54f80b62cdc1db80ffb1ef7981fa4ac50f128b9666610048fb293925d8005c0c5c4fdc58346e5ea0fef576e076e06fb9fe0603405aa4da1d858f01eb810f30771972981b0403e263c4db899b8fb23d6fd20090162919093c4114f65ae266a2cda3b70dffed228ef8d7011f021ecdd9769f0c242d8dbb813380538097036b88f981fb811f020f10a30020dfd3a60d0069829242de5455d5d7816f00cb898ffc7636bc2f1b03405a42c342afaaaada9ebb2d4d0c00690ada72c44fe59a04dc3d1492a620db95766d972b00769279f653c598a5d6d7da7a24ce25e7c7807fa1360b2a2d8101992fb56dbba9064092bef701ff257652a7eea052278cfad426e0f7b91bd356394700f703bfcbbd01d47b3f23e3a5b66d9733003611cf6a1f9d06380ad0a4d4efb4bb63f8bf1a4c3d0092d3803b805f33f79a696931ead7dbdf0d7c77f48213807bca7d2fc083c4d24af5b90047025aac01f008b19aefc6dc8d69b32c01d0300af81cf3bb8f5a1a6774f018005b804f108b74001efdc7c9360248ee9e5a0f7c813857ebecfa6aca22bdcdf671e229bfb71077de59fc7b9175cbd4eea30658453c7c611d71e7545afcb9f762dbda53baa683c306e2c87f1bb5893f0360bcec5b260981e5c0a944109c0a1c4ef369418e761b00f935f5818ab8d2ef4ee066e05e60d6a29f9f566da55a181c069c0cbc117829702c70103093b9cda3e166eec9d39255c4d07e1b31897c0fb130e7bd0c17dfb0f8e7afb55b6a1806cb81d5c031c469c10af215df80b88761171146ce4fe4314b4cf23d0c3c441cfd775af4fbc7ada6ce4a4e1f3df24b9224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499254a4ff031c98ac361399a5e60000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda79300001bd44944415478daeddd6bb0646b5ddff1ef9e3de720173181d2186f5454bc24222aa22218ef8a11a1c4a01113046234545ec4d25445a389788da66234562a42bc4588a288a0282a41c168a42060f01235014583b14451500494736666e7c5ea65afe973ce9c3d33fbd2ddcfe753b5ab7bf7deb3a7a767afe7ff5bcff3ef671500309c83aaa3a3a3f37e1e00c0193a50fc01603c17cefb090000674f00008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c48000080015d3cef27c0de3b3cef27005be060757ba53a5a7dc0b93a383af27bc8a938c82007d772a1e9389943019c2933009c860b4d835ad59757ef5dbd3d4b4e8ce7a87a5bf5d6ea0dd56babd754afab6e5b7cdf7c6c5cb9ae9f0e374100e0a42d8bff77545f70de4f08b6cc6dd5ef54bf50bda8faa9ea4dabaf09029c194b009ca465f1ffceea1f56b7af3eb724c0e80e9a7a620e361eff83ea05d5d3aa57ac1e3bccd200a74c00e0a42c8bff77554fae2eb51ef08ebae3c007fb6e1e603703f051d3f1328782d9f3aaafad5eb5fafcb0ba7cdeff08f69300c0495816ffefae9e94e20f77653314cc61603e5eae54df5afdaba6de01218053210070b3147fb8719b61e072ebdeacd7544fa85ed6d5c7199c085dd9dc0cc51f6ece41572f0f5c5cddbfbd7a60f5d2ea8b5a1f678e274e8c00c08d5a16ffef49f1879bb119046e693a9e0e9a9a039fba7adc71c589b104c08dd82cfe4f4cf18793b25c16988fb30bd537545f9177d470420400aed7b2f87f6fd31aa5e20f276b33041c351d63ffacfae6340672020400aec7b2f83fb3fafb29fe709ae6636a7ecbe041f598eaf90901dc240180e35a16ffff527d5e8a3f9c85f9d8badc74bcfd71f5614ddb097b7700374c1320c7a1f8c3f99a97006eafee5f7dfbe271b8210200776759fcbf2fc51fceda7c7c1d35bd4df072f577aacf6d1d0ce0ba5902e05a368bffe353fce1bc6c2e05fc56f5a0eacfcffb89b19bcc007057147fd82ef37177d8742cbe4fd35b70cb2c0037c00c00776659fcbfbf69aa51f187f3b7390bf01bd5835b5f75138ecd0c009b147fd85ef331381fa71f587dcaea6b6601b82e02004bcbe2ffec147fd866f3b1fad9ab5bd3b95c174b00cc368bffe352fc615bcd9711be50bdbe7affeacde7fda4d82d6600a8ab8bff0fa5f8c32e988fcd77ad3e74f598319d63f3cbc266f1ffbb29feb0ede66372de0af8e1ab5b633ac7e697656ccbe2ff9ca6e27f7b8a3fec82e5b1f981ab5bdb02736c02c0b8368bff673515ff8b29feb00b96c7e8fbac6e05008e4d001893e20ffb613e4edfabbae7793f19768b00309e65f1ffe1147fd855f3e581abee53dd72de4f88dd22008c6559fc9f5b3d36c51ff6c1c5ea5eabfb8e618ee5e2793f01ceccb2f8ff68f5e8147fd81717aa7738ef27c16e31033006c51ff69be397eb2600ec3fc51f803bb004b0df96c5fff9d567a4f8039019807da6f8037097cc00eca765f1ffb1ea5129fe002c9801d83f8a3f00774b00d82f73f13f48f107c670b8fab83307adc73f365802d81f73f1bf50bda07a648a3fb0bf0e9bae867879f1d83d9ac6bca3eaedabaf5d5a7d6d3ee175bd841501603f28fec028e6f1ee72d3f6c79fd834e67d70f580a66d912f557f58fd9feaa5d58f57af5dfdf939380cefe0e8e8e8bc9f03376759fc7fa2fad4147f18c57c7cff45d325817fa7f571bf8fe6e27da1fa82ea8b5b5f0af95ade56fd48f575d56fac1edbe7d7e958f400ecb6b9f81f7675f1bf25c51fd82f73f1ffa0ea65d5d39b8aff95a671eff2eafefc314fff5f6aba4ec2e3ab5faefec5eae70d3f3e0a00bb6b59fc5fd0d5c5bffc7203fb611ec72e579f5dbda27a68eba23f37fa5d58dd5fde5e6c1a238f5a8f8f5f5ffdc0ea670e3d4e0a00bbe95a67fe35f82f35b037e6e25df555d50f365df4e852d378b7ecfe5f5e1e79797f764bebd982cfa99ebd7a7cd865000160f76c16ff4f49f107f6cfc5a633fc5b9bced89fda34be5d6edde93f8f77d71af3e6af1fb59e15b8bd7a5cf52f57df73d8803401ee9665f1ffc9ea9353fc6164fbda0478b1e92cffbdaae7551fb6fafc70e3df77bde3ddfc7acd8dd347d58736f5062c37511b821980dd71d8f4cb794bf55329fec0fe99d7ee2f551fd7b4deff614d63ddb2f8dfdd59ffb57efed1e2ef38683d0bb0eba1e9ba0900bb61ee7e9d8bff27a5f803fb653e23bf527d51f592ea5d5aaff7d7c98c75730898a7fd1f553df0847ef64e1100b6df5cfc6f6d2afe9f90e20fec977986b3ea5baaa7adee2fd7fbebe4c7ba4b4dbb073e6af13c866127c0edb659fc3f3ec51fd82ff37aff3b3535fb3db2f5dbfb96ef0238c9b16ef3673d64753b540f8000b0bd147f60df1d3615ffbf553db77abfeeb893699dce58b71c433f204d806c8965f17f618a3fb05fe626becbd5a3ab97b72efe9b3b999ee65837ffecfb378db7431100b6cf5cfcef51fdd7a64e58c51fd81773b3df51f565d58f56f76eddecb77c7fff695afefcc3061c572d016c9765f17f61f5b129fec0fe98d7fb2f54df533da175e7ff6936fb71270480ed71ade2efa00076dd5cfcff7af59ceaa35b8781d36af6e31a0480ed3017ff7b364dfb3f22c51fd80fcbcd7d1e56fd70530870d9f273a607e0fc29fec0be9ad7fb2f574fac7ebe75f1b7b479ce0480f3b52cfe2f4af107f6c772739f6f6c5af35fee6a6a8c3b679600cecf7c20dcabe9ccffe129fec07e98d7fbef5d7d5ff598d661c07aff961000cec7b2f8bfa8a91946f107f6c15cfcdfb7fa91a64d7ece6a731fae832580b3a7f803fb68d9ecf7c8ea95ad8bff596eeec3310900674bf107f6d1f24a7e5f5cfd64d3defe67bdb90fd7c112c0d95916ff9f6e7a3b8ce20fecba796cab7a7af585abfba77d253f6e92007036e603e43e4d67fe1f95e20fecbe79bdff9d9b36f7f9db9dfe95fc382102c0e99b8bff3b369df97f448a3fb0fbe62bf93da469739f07a4d96fa7e801385dcbe2ff3329fec0ee9bebc6e5ea73ab97b62efe9afd768800707ae6e27fdfa6e2ffd0147f60b72d37f7796af5fd4d97d1d5ecb7832c019c8e65f1ffe9147f60f7cdebfdf7a89e517d76eb30a0d96f070900276ff3ccffc353fc81dd3617ff07346deef321abcf0fb3debfb32c019c2cc51fd827cbcd7d3eb1fac5a6e27f7b57177febfd3b4800383973f17fa7eac529fec06e5b6eeef394a6e5ccfbb75eef2febfd3b4d003819cbe2ff334d6f8b51fc815db56cf6fbb6ea3faeeedbdc678fe801b87973f1ffab4dc5ff4353fc81dd35aff7ff95ead9d52767739fbd2400dc9c65f17f71ebb531c51fd845f3e63e0faa9edb74453f9bfbec294b00376e2efef7ab5e92e20fecaeb989ef72f5d8ea65ad8bbfcd7df69400706396c5ffc5d58353fc81dd344feb1f555fdeb4adefbdb2b9cfdeb30470fd147f605fccebfd17abefaefe41ebce7fcd7e7b4e00b83e9bd3fe1f9ce20feca6b9f8bf7bd37aff47b4dedc47b3df002c011cdf5cfcef9fe20fecaeb99bff52f588ea95ad2f5466739f810800c7b32cfe2f4ef10776d3bcb9cfe5eac9d5cf55ef9acd7d862400dcbdb9f8bf73cefc81ddb5dcdce7df54dfd5baf3df7aff80f4005cdb5cfcdfa5a9f8ffcd147f60f7ccebfdf7a97ea0faf4d661c07affa00480bba6f803fb605eef7fffa666bf792cb3b9cfe02c01dc39c51fd875cbcd7d3ebdfa1f5d3d9669f61b9c00704773f1ff6bd5cfa6f803bb676ef63baabeb4faf1a6cb94dbdc87bf6409e06acbe2ff92ea0353fc81dd72b169dcaaa9d1efc9abfb9afdb88a00b0a6f803bbea6871fff6a671ec394deff377253fee942580c9e6b4bfe20f6cbb65d19f0b7cd54756af682afeb7378df3173296b141005817ff776d2afe1f90e20f6cb7a38dcf0faa3fa93eabfa85ea3d5b8f63f3f76bf6e32aa307808b4dc5ffdd9a76c452fc816db72ce6f338f596ea6b9ba6fde7b7fd19c7b8a6917b009617c27849f5c0147f60bbcdc57f1ea32e54afae7ea97acaea3157f2e358469d015816ff9f4df13f69478bdba38dc7801bb7b971cfebab3fa83e75f5d895acf7734c23ce00ccd36373f17fdf14ff93b6dc6064bef008e33ae8ea296bc7d78d5bbe7eb7356dedfb318baf5dc86bcc318d16002e3415a3f7689af657fc4fc73c00cd67238737f7e3d8130ad3c9396a1ab76e6d3ace367b02e06e8d1400e682f46ed58b52fccfc21bab9f68da83fcb6bcbea399b7a1bd6ff5e0cc009c84cdd770b321d06bcbb18d1400e6b3ff873775fb5f4aa3cc69bb4ff575d56b727632a20b4da1fb21d5cb33137412369b005dcc871b36520098cd5b642e1b201d38a7e3b0317fc798087c27ef60e376f33e1cdb88ef0238b89bcf39399b3b9531963b2b56c09618310070b6bc0d10fff7b08504000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c480000cec3d1793f01189d00009cb5a3eae0bc9f048c4e0000cec25cf0e7e26f0600ced9c5f37e02c0de3bac6e5bdd7f87147fd80a660080d33217fa3756bfddd5c5df12009c330100386db756efbeba6f0900b68400009c96f92cffded53dbbbaf89b018073260000a7ed4a531f80a20f5b440000cec272ca5f10802d20000067cdfa3f6c010100386b6600600b080000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c080040000189000c0693bd8b8653cfeef610b09009cb6a38d5bc6e1ff1eb6d88801c06074b646fc1d63e2cc1fb6d8c5f37e02e7e0f2ead6e074fa6ea97ea07a537598f0359a83a6e3edbe0982b075460c00f3bff92821e0b41cb47e7d1f74de4f86ade198832d32620070167afae681fe68f1c1b80e161f42006c89110380c1e7f42d3bffbdde2cf97d3819cb903d13b0b82ed6e50076cfb2d86f167c336e1c8b0000b07b3697d936cffe8500ee960000b09be6827fb9ba7d715f08e058040080ddb32cf2179b0aff5b9ade6e7b69f13d420077490000d83d9bcd7eb7579f59bdbc7520d85c2680ab080000bb67f3ecfed6ea57aa8755cf6d0a0147d5952c097017040080ddb49c01b852bd635391ffacea6b9ac6f70b4d4b02420077200000ecbeb901b0a671fdabaac757b735cd06cc4d82fa02f84b0200c0fe39ac9e557d74f5baa6eb72dc9ebe0016040080fd72d4341b70b1fac5eac3ab9f6b0a0157d217c08a0000b09f2e35cd04bca1fad8ea3b569f5fc87e01240000ecb3cbadc7f92facbe64757fde2f400818980000b0dfe629ff0bd5b7549f5ebd39cd81c3130000f6dfbc27c0c5ea27aa8756bf9ee6c0a1090000e3b8d414025e5d7d44f5fca61060d3a00109000063999b03df5a3da6faa6d69b06690e1c880000309e6573e097554f6a9a01d01c38100100604cf394ff61f59fab8fa97ebf757360690edc6b0200c0b8969b06bdb47a48d315056fc91505f79e0000c0dc17f0fbd5c3ab67348582d217b0b70400006add1770b9fafceacb5b2f11e80bd843020000b3b92fe0a0fac6eab1d5dbb269d05e120000589ad7fb0fabe735ed17f0ea6c1ab477040000eeccdc1cf86b4d21e085b9a2e05e110000b82b7373e09f568facfe7dae28b837040000ae65b969d017574f59ddd71cb8e3040000eecef28a824fab3ebefaa36c1ab4d30400008e637945c19f6dda34e855d93468670900005c8ff98a82afab1e56fd60eb4d833407ee10010080eb353707bebdfa7bd557b55e22d017b0230400006ec4f25d005f537d4e755b360dda19020000376a2eee87d5b3ab8faa7e3b9b06ed040100809b356f1af4aaa64d835e924d83b69e0000c04998fb02fea8fa84eae9d93468ab0900009c94e5a641ffb8faa7abfb360dda420200002769b969d0b7356d21fc27690edc3a020000276db969d00bab8756bfdad4177029cd815b410000e0b4cc9b06fd66d33b047e64f5f91c102c099c23010080d3343707beadfaccea1b9a6a8fe6c07326000070da96cd815f513d61f5d861ebbe801202ce940000c059b8b2ba3dac9e593da2fabdd69b0695be80332500007096e64d835e567d78f5d2d657143ccbbe80e5cfbfd43aa00c430000e0accdcd81afaf3ea6faded5e767dd1730fffc3f593da7a10800009c874b4d35e84af5c4eacb568f9fd5a641cbbd085eddd5c16308020000e7659ef23fa8bea97a4cf5d64e7fd3a0cd3e83ffb9ba3d3cef17e42c0900009ca7b9181f56cf6fba98d0ffee6cae2878b1e9ccffa7569f0fd507200000b00de6e6c05faf3eb2a9289fc61505e7407179f5f98bab5f593d260000c03998370d7a73f569d5bfeb64af2878b4b89debdfbf5edd0eb5fe5f020000db65b969d097565fb4ba7fb3cd81f3f71f342d2d5ca8beb37a49eb66c4a10800006c9be51505ff53f571d51b5a3707d6f1fb02e6ef9983c36dd5add52bab7fb2f89ee10800006ca3e51505ff5bd3a641af6cbd69d0bc867f574160f3b1f9cfdc5afd72d312c36d4d75500000802d336f1af4baeae1ad370d3a6c2ae8cb0d7c8ebabaf01fb52efc87ab3ff79ca6cd87fea841a7fe67020000db6e6e0ebcad69d3a0c737bd55f0e2ea63b95fc072caffc2e27b7eb3e922448fabfeacc18b7f090000ec86f95d0007d5b3aa0fae3ebffab1ea8dad3bfbe78fa3ea0f9bf61678c2eafb9fb9f8194317ff9a521100ec82796a7fbe8cf033561ff7ab1e58bd47758fea6d4d571a7c4dd33eff2dfedce563fe5d7b4f000060d7cc45fcb0e94cfe8dd5cb571f9be6a58065e320090000ecaee53b01e68fd9b21f40e1bf13020000bbee34ae13b0f7340102c08004000018900000b0fb4c7f73dd460a00f301f2f6d5ed70577e02f6d695ea2fcefb49b05b460a00b3b7ae6e0500605f5c6a7aef7b990de098460c007f96b78400bb6fd9f9fe96d657c98363192900cc07caefb64ecacbc70176cd3c7efddfeacfcffbc9b05b460c006faafedfc66300bb66bef84dd56b57b7238de9dca4d17e590e9ad6ca7e6df5f995f40200bb697902f31babdbd1c6746ec268bf2c87abdb972d1e330b00ec9ae54571aa7e61753bfc15ee38bed102c07c70fcfcea76de0a59080076cd7ccdfbd757af5a3d2600706ca306805fac7e65f19865006057cc272cf378f6c2eacd8d379e739346fc8599af07fdc3abcf97578c02d815f3f8fdecd5ad1319aecbc1d1d170756fee9c7dbfea97ab77685dfc1d40c0369ba7fd2f379dccfc7af521d903801b30e20cc0d1eadffdeaea59abc72e77f55b6a00b6d93c56fd87a6e27f78133f8b418d3803505300b8527d50f54b4d07cff2853013006c9bcdb3ffdfaa1e940d80b84123ce00d454fc0fabff557debeab14b29fcc0763adab8adfacaa6e2efec9f1b32ea0c40ada7fcdfb1fad5ea01ad93f59cb401cedbb247e9f6ea96ea05d5a3b274c94d187506a0a683e6b0e9e240ff68f5d8bc34e0a002b6c93cf57f4bf5c7d553168fc30d193900d4fa8cff45d5539b0ea62bad67008400e03ccd63d1bc6c59f5a4a68b9a1d66e31f6ec2e801a0d69706feeaea194dbb035e4a0800cecfbc37c9f2a4a4ea4baa1f6bbd9f09dcb0917b00969685fef9d56734adb55ddcf89ae936e0b42dc79bf90cff42f5f54d8d7f1772e6cf0930033099f706a87a74d3fe00b7ac1e9ff70898bf0fe0b42c8bffa5a671e942d312e5576e7c0fdc140160ed4aebd7e3f1d5bf5d7d7ed87a97ad7936c001089ca4e5947fad6720af3435297ff5ea6b962539319600ee6879803daefa8eea9d9a0ec4b911c7b200701296e3c83ce3385fa5f435d5e755afc8b43fa7c00cc01d2dafb3fd43d583ab1f6c7aad2eaebe7ee94efe8c24b5b6dcb4e4ce363081916d8e17cb31653eebffe6a63dfe5f916e7f4e8919806b5b76da7e5af5cfab8f5d7c7d3e682f74f54cc0e833049befa038c8e64a8ce9e81a8fcf7b8e2c77f27b6ef5b54d5b94976e7f4e910070f7e6599239817f52f585d5a756f7ddf8de799960f417752ef87303d3a5ac5dc25cec3783f01f34edecf7edd52b578fcd67fd8e194e8d00707c9b49fc3d9bb6e27c44f5b0eabdb227f79d797b758ff37e12b0456eab7ea7faef4d9b90bdb07ad3ea6b9b271c706a0480eb776707e83dabf7aedeb7fa1bd5fdaa7baf1e1fd151d35ae69f56bfd774c5b2bf48cf09e339aade56bda57a43f5daa6e6bedf6d0a0233859f332700dcb8793a6f9ef607b81e73ef90a97ece850070720ebaba19d00b3b7623242ccdc7c05cec8d0f9c3b01000006644d160006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c08004000018900000000312000060400200000c4800008001090000302001000006240000c080040000189000000003faff0a9606f9599445ed0000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "createAMeet": {
+      "id": 3212,
+      "api": {
+        "qs": {
+          "sendUpdates": "{{parameters.sendUpdates}}",
+          "conferenceDataVersion": 1
+        },
+        "url": "/calendars/{{encodeURL(parameters.calendar)}}/events",
+        "body": {
+          "end": "{{dateParameter(parameters.end, parameters.allDayEvent, environment.timezone, parameters.recurrence)}}",
+          "start": "{{dateParameter(parameters.start, parameters.allDayEvent, environment.timezone, parameters.recurrence)}}",
+          "colorId": "{{parameters.colorId}}",
+          "summary": "{{parameters.summary}}",
+          "location": "{{parameters.location}}",
+          "attendees": "{{parameters.attendees}}",
+          "reminders": "{{remindersParameter(parameters.overrides, parameters.useDefault)}}",
+          "recurrence": "{{parameters.recurrence}}",
+          "visibility": "{{parameters.visibility}}",
+          "description": "{{parameters.description}}",
+          "transparency": "{{parameters.transparency}}",
+          "conferenceData": {
+            "entryPoints": [
+              {
+                "entryPointType": "video"
+              },
+              {
+                "entryPointType": "more"
+              },
+              {
+                "entryPointType": "phone"
+              }
+            ],
+            "createRequest": {
+              "status": {
+                "statusCode": "success"
+              },
+              "requestId": "{{uuid}}",
+              "conferenceSolutionKey": {
+                "type": "hangoutsMeet"
+              }
+            },
+            "conferenceSolution": {
+              "key": {
+                "type": "hangoutsMeet"
+              },
+              "name": "Google Meet"
+            }
+          },
+          "guestsCanModify": "{{parameters.guestsCanModify}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{eventResponse(body)}}"
+        },
+        "encodeUrl": false
+      },
+      "rev": 2,
+      "crud": "create",
+      "name": "createAMeet",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Meeting",
+      "scope": [
+        "https://www.googleapis.com/auth/calendar"
+      ],
+      "expect": [
+        {
+          "name": "calendar",
+          "type": "select",
+          "label": "Calendar ID",
+          "options": "rpc://listCalendars",
+          "required": true
+        },
+        {
+          "name": "colorId",
+          "type": "select",
+          "label": "Color",
+          "options": "rpc://listColors",
+          "advanced": true
+        },
+        {
+          "name": "summary",
+          "type": "text",
+          "label": "Event Name",
+          "required": true
+        },
+        {
+          "name": "allDayEvent",
+          "type": "boolean",
+          "label": "All Day Event",
+          "required": true
+        },
+        {
+          "name": "start",
+          "time": true,
+          "type": "date",
+          "label": "Start Date",
+          "required": true
+        },
+        {
+          "name": "end",
+          "time": true,
+          "type": "date",
+          "label": "End Date",
+          "required": true
+        },
+        {
+          "name": "sendUpdates",
+          "type": "select",
+          "label": "Send notifications about the event creation",
+          "options": [
+            {
+              "label": "To All Guests",
+              "value": "all",
+              "default": true
+            },
+            {
+              "label": "To non-Google Calendar Guests",
+              "value": "externalOnly"
+            },
+            {
+              "label": "To None",
+              "value": "none"
+            }
+          ]
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "label": "Description",
+          "advanced": true
+        },
+        {
+          "help": "Geographic location of the event as free-form text.",
+          "name": "location",
+          "type": "text",
+          "label": "Location",
+          "advanced": true
+        },
+        {
+          "help": "If you set a custom reminder(s) this value will be overridden to a false value.",
+          "name": "useDefault",
+          "type": "boolean",
+          "label": "Use the default reminder settings for this event",
+          "advanced": true,
+          "mappable": false
+        },
+        {
+          "name": "overrides",
+          "spec": [
+            {
+              "name": "method",
+              "type": "select",
+              "label": "Method",
+              "options": [
+                {
+                  "label": "Email",
+                  "value": "email"
+                },
+                {
+                  "label": "Pop-up",
+                  "value": "popup"
+                }
+              ],
+              "required": true
+            },
+            {
+              "name": "minutes",
+              "type": "uinteger",
+              "label": "Minutes",
+              "required": true,
+              "validate": {
+                "max": 40320
+              }
+            }
+          ],
+          "type": "array",
+          "label": "Reminders",
+          "validate": {
+            "maxItems": 5
+          }
+        },
+        {
+          "name": "attendees",
+          "spec": [
+            {
+              "name": "displayName",
+              "type": "text",
+              "label": "Name"
+            },
+            {
+              "name": "email",
+              "type": "email",
+              "label": "Email",
+              "required": true
+            }
+          ],
+          "type": "array",
+          "label": "Attendees",
+          "advanced": true
+        },
+        {
+          "name": "transparency",
+          "type": "select",
+          "label": "Show me as",
+          "options": [
+            {
+              "label": "Busy",
+              "value": "opaque",
+              "default": true
+            },
+            {
+              "label": "Available",
+              "value": "transparent"
+            }
+          ],
+          "advanced": true,
+          "required": true
+        },
+        {
+          "name": "visibility",
+          "type": "select",
+          "label": "Visibility",
+          "options": [
+            {
+              "label": "Default",
+              "value": "default",
+              "default": true
+            },
+            {
+              "label": "Public",
+              "value": "public"
+            },
+            {
+              "label": "Private",
+              "value": "private"
+            }
+          ],
+          "advanced": true,
+          "required": true
+        },
+        {
+          "name": "guestsCanModify",
+          "type": "boolean",
+          "label": "Guests can modify the event",
+          "advanced": true,
+          "mappable": false,
+          "required": true
+        },
+        {
+          "name": "recurrence",
+          "spec": {
+            "help": "List of RRULE, EXRULE, RDATE and EXDATE lines for a recurring event, as specified in [RFC5545](https://tools.ietf.org/html/rfc5545#section-3.8.5).\ne.g.`RRULE:FREQ=WEEKLY;UNTIL=20250701T170000Z`",
+            "type": "text",
+            "label": "Value"
+          },
+          "type": "array",
+          "label": "Recurrence"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "google-meet",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/calendars/{{encodeURL(parameters.calendar)}}/events\",\n    \"encodeUrl\": false,\n    \"method\": \"POST\",\n    \"qs\": {\n        \"conferenceDataVersion\": 1,\n        \"sendUpdates\": \"{{parameters.sendUpdates}}\"\n    },\n    \"body\": {\n        \"colorId\": \"{{parameters.colorId}}\",\n        \"summary\": \"{{parameters.summary}}\",\n        \"start\": \"{{dateParameter(parameters.start, parameters.allDayEvent, environment.timezone, parameters.recurrence)}}\",\n        \"end\": \"{{dateParameter(parameters.end, parameters.allDayEvent, environment.timezone, parameters.recurrence)}}\",\n        \"description\": \"{{parameters.description}}\",\n        \"location\": \"{{parameters.location}}\",\n        \"reminders\": \"{{remindersParameter(parameters.overrides, parameters.useDefault)}}\",\n        \"attendees\": \"{{parameters.attendees}}\",\n        \"transparency\": \"{{parameters.transparency}}\",\n        \"visibility\": \"{{parameters.visibility}}\",\n        \"guestsCanModify\": \"{{parameters.guestsCanModify}}\",\n        \"recurrence\": \"{{parameters.recurrence}}\",\n        \"conferenceData\": {\n            \"createRequest\": {\n                \"requestId\": \"{{uuid}}\",\n                \"conferenceSolutionKey\": {\n                    \"type\": \"hangoutsMeet\"\n                },\n                \"status\": {\n                    \"statusCode\": \"success\"\n                }\n            },\n            \"entryPoints\": [\n                {\n                    \"entryPointType\": \"video\"\n                },\n                {\n                    \"entryPointType\": \"more\"\n                },\n                {\n                    \"entryPointType\": \"phone\"\n                }\n            ],\n            \"conferenceSolution\": {\n                \"key\": {\n                    \"type\": \"hangoutsMeet\"\n                },\n                \"name\": \"Google Meet\"\n            }\n        }\n    },\n    \"response\": {\n        \"output\": \"{{eventResponse(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "kind",
+          "type": "text",
+          "label": "Kind"
+        },
+        {
+          "name": "etag",
+          "type": "text",
+          "label": "Etag"
+        },
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Event ID"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "htmlLink",
+          "type": "text",
+          "label": "Html Link"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "label": "Description"
+        },
+        {
+          "name": "location",
+          "type": "text",
+          "label": "Location"
+        },
+        {
+          "name": "created",
+          "type": "date",
+          "label": "Created"
+        },
+        {
+          "name": "updated",
+          "type": "date",
+          "label": "Updated"
+        },
+        {
+          "name": "summary",
+          "type": "text",
+          "label": "Summary"
+        },
+        {
+          "name": "colorId",
+          "type": "text",
+          "label": "Color ID"
+        },
+        {
+          "name": "creator",
+          "spec": [
+            {
+              "name": "email",
+              "type": "text",
+              "label": "Email"
+            },
+            {
+              "name": "displayName",
+              "type": "text",
+              "label": "Display Name"
+            },
+            {
+              "name": "self",
+              "type": "boolean",
+              "label": "Self"
+            }
+          ],
+          "type": "collection",
+          "label": "Creator"
+        },
+        {
+          "name": "organizer",
+          "spec": [
+            {
+              "name": "email",
+              "type": "text",
+              "label": "Email"
+            },
+            {
+              "name": "displayName",
+              "type": "text",
+              "label": "Display Name"
+            },
+            {
+              "name": "self",
+              "type": "boolean",
+              "label": "Self"
+            }
+          ],
+          "type": "collection",
+          "label": "Organizer"
+        },
+        {
+          "name": "start",
+          "type": "date",
+          "label": "Start"
+        },
+        {
+          "name": "end",
+          "type": "date",
+          "label": "End"
+        },
+        {
+          "name": "recurrence",
+          "type": "array",
+          "label": "Recurrence"
+        },
+        {
+          "name": "recurringEventId",
+          "type": "text",
+          "label": "Recurring Event ID"
+        },
+        {
+          "name": "originalStartTime",
+          "spec": [
+            {
+              "name": "dateTime",
+              "time": true,
+              "type": "date",
+              "label": "Date Time"
+            }
+          ],
+          "type": "collection",
+          "label": "Original Start Time"
+        },
+        {
+          "name": "transparency",
+          "type": "text",
+          "label": "Transparency"
+        },
+        {
+          "name": "iCalUID",
+          "type": "text",
+          "label": "I Cal UID"
+        },
+        {
+          "name": "sequence",
+          "type": "number",
+          "label": "Sequence"
+        },
+        {
+          "name": "attendees",
+          "spec": [
+            {
+              "name": "email",
+              "type": "email",
+              "label": "Email"
+            },
+            {
+              "name": "displayName",
+              "type": "text",
+              "label": "Display Name"
+            },
+            {
+              "name": "responseStatus",
+              "type": "text",
+              "label": "Response Status"
+            }
+          ],
+          "type": "array",
+          "label": "Attendees"
+        },
+        {
+          "name": "guestsCanInviteOthers",
+          "type": "boolean",
+          "label": "Guests Can Invite Others"
+        },
+        {
+          "name": "hangoutLink",
+          "type": "url",
+          "label": "Hangout Link"
+        },
+        {
+          "name": "conferenceData",
+          "spec": [
+            {
+              "name": "createRequest",
+              "spec": [
+                {
+                  "name": "requestId",
+                  "type": "text",
+                  "label": "Request ID"
+                },
+                {
+                  "name": "conferenceSolutionKey",
+                  "spec": [
+                    {
+                      "name": "type",
+                      "type": "text",
+                      "label": "Type"
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Conference Solution Key"
+                },
+                {
+                  "name": "status",
+                  "spec": [
+                    {
+                      "name": "statusCode",
+                      "type": "text",
+                      "label": "Status Code"
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Status"
+                }
+              ],
+              "type": "collection",
+              "label": "Create Request"
+            },
+            {
+              "name": "entryPoints",
+              "spec": {
+                "spec": [
+                  {
+                    "name": "regionCode",
+                    "type": "text",
+                    "label": "Region Code"
+                  },
+                  {
+                    "name": "entryPointType",
+                    "type": "text",
+                    "label": "Entry Point Type"
+                  },
+                  {
+                    "name": "uri",
+                    "type": "text",
+                    "label": "Uri"
+                  },
+                  {
+                    "name": "label",
+                    "type": "text",
+                    "label": "Label"
+                  },
+                  {
+                    "name": "pin",
+                    "type": "text",
+                    "label": "Pin"
+                  }
+                ],
+                "type": "collection"
+              },
+              "type": "array",
+              "label": "Entry Points"
+            },
+            {
+              "name": "conferenceSolution",
+              "spec": [
+                {
+                  "name": "key",
+                  "spec": [
+                    {
+                      "name": "type",
+                      "type": "text",
+                      "label": "Type"
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Key"
+                },
+                {
+                  "name": "name",
+                  "type": "text",
+                  "label": "Name"
+                },
+                {
+                  "name": "iconUri",
+                  "type": "text",
+                  "label": "Icon Uri"
+                }
+              ],
+              "type": "collection",
+              "label": "Conference Solution"
+            },
+            {
+              "name": "conferenceId",
+              "type": "text",
+              "label": "Conference ID"
+            },
+            {
+              "name": "signature",
+              "type": "text",
+              "label": "Signature"
+            }
+          ],
+          "type": "collection",
+          "label": "Conference Data"
+        },
+        {
+          "name": "reminders",
+          "spec": [
+            {
+              "name": "useDefault",
+              "type": "boolean",
+              "label": "Use Default"
+            }
+          ],
+          "type": "collection",
+          "label": "Reminders"
+        },
+        {
+          "name": "eventType",
+          "type": "text",
+          "label": "Event Type"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n    \"https://www.googleapis.com/auth/calendar\"\n]",
+      "accountName": "google-meet",
+      "description": "Creates a new Google Meet in a specified calendar.",
+      "expectJsonc": "[\n    {\n        \"name\": \"calendar\",\n        \"label\": \"Calendar ID\",\n        \"type\": \"select\",\n        \"required\": true,\n        \"options\": \"rpc://listCalendars\"\n    },\n    {\n        \"name\": \"colorId\",\n        \"label\": \"Color\",\n        \"type\": \"select\",\n        \"options\": \"rpc://listColors\",\n        \"advanced\": true\n    },\n    {\n        \"name\": \"summary\",\n        \"label\": \"Event Name\",\n        \"type\": \"text\",\n        \"required\": true\n    },\n    {\n        \"name\": \"allDayEvent\",\n        \"label\": \"All Day Event\",\n        \"type\": \"boolean\",\n        \"required\": true\n    },\n    {\n        \"name\": \"start\",\n        \"label\": \"Start Date\",\n        \"type\": \"date\",\n        \"time\": true,\n        \"required\": true\n    },\n    {\n        \"name\": \"end\",\n        \"label\": \"End Date\",\n        \"type\": \"date\",\n        \"time\": true,\n        \"required\": true\n    },\n    {\n        \"name\": \"sendUpdates\",\n        \"label\": \"Send notifications about the event creation\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"label\": \"To All Guests\",\n                \"value\": \"all\",\n                \"default\": true\n            },\n            {\n                \"label\": \"To non-Google Calendar Guests\",\n                \"value\": \"externalOnly\"\n            },\n            {\n                \"label\": \"To None\",\n                \"value\": \"none\"\n            }\n        ]\n    },\n    {\n        \"name\": \"description\",\n        \"label\": \"Description\",\n        \"type\": \"text\",\n        \"advanced\": true\n    },\n    {\n        \"name\": \"location\",\n        \"label\": \"Location\",\n        \"type\": \"text\",\n        \"advanced\": true,\n        \"help\": \"Geographic location of the event as free-form text.\"\n    },\n    {\n        \"name\": \"useDefault\",\n        \"label\": \"Use the default reminder settings for this event\",\n        \"type\": \"boolean\",\n        \"advanced\": true,\n        \"mappable\": false,\n        \"help\": \"If you set a custom reminder(s) this value will be overridden to a false value.\"\n    },\n    {\n        \"name\": \"overrides\",\n        \"label\": \"Reminders\",\n        \"type\": \"array\",\n        \"validate\": {\n            \"maxItems\": 5\n        },\n        \"spec\": [\n            {\n                \"name\": \"method\",\n                \"label\": \"Method\",\n                \"type\": \"select\",\n                \"required\": true,\n                \"options\": [\n                    {\n                        \"label\": \"Email\",\n                        \"value\": \"email\"\n                    },\n                    {\n                        \"label\": \"Pop-up\",\n                        \"value\": \"popup\"\n                    }\n                ]\n            },\n            {\n                \"name\": \"minutes\",\n                \"label\": \"Minutes\",\n                \"type\": \"uinteger\",\n                \"required\": true,\n                \"validate\": {\n                    \"max\": 40320\n                }\n            }\n        ]\n    },\n    {\n        \"name\": \"attendees\",\n        \"label\": \"Attendees\",\n        \"type\": \"array\",\n        \"advanced\": true,\n        \"spec\": [\n            {\n                \"name\": \"displayName\",\n                \"label\": \"Name\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"email\",\n                \"label\": \"Email\",\n                \"type\": \"email\",\n                \"required\": true\n            }\n        ]\n    },\n    {\n        \"name\": \"transparency\",\n        \"label\": \"Show me as\",\n        \"type\": \"select\",\n        \"required\": true,\n        \"advanced\": true,\n        \"options\": [\n            {\n                \"label\": \"Busy\",\n                \"value\": \"opaque\",\n                \"default\": true\n            },\n            {\n                \"label\": \"Available\",\n                \"value\": \"transparent\"\n            }\n        ]\n    },\n    {\n        \"name\": \"visibility\",\n        \"label\": \"Visibility\",\n        \"type\": \"select\",\n        \"required\": true,\n        \"advanced\": true,\n        \"options\": [\n            {\n                \"label\": \"Default\",\n                \"value\": \"default\",\n                \"default\": true\n            },\n            {\n                \"label\": \"Public\",\n                \"value\": \"public\"\n            },\n            {\n                \"label\": \"Private\",\n                \"value\": \"private\"\n            }\n        ]\n    },\n    {\n        \"name\": \"guestsCanModify\",\n        \"label\": \"Guests can modify the event\",\n        \"type\": \"boolean\",\n        \"required\": true,\n        \"advanced\": true,\n        \"mappable\": false\n    },\n    {\n        \"name\": \"recurrence\",\n        \"label\": \"Recurrence\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\",\n            \"label\": \"Value\",\n            \"help\": \"List of RRULE, EXRULE, RDATE and EXDATE lines for a recurring event, as specified in [RFC5545](https://tools.ietf.org/html/rfc5545#section-3.8.5).\\ne.g.`RRULE:FREQ=WEEKLY;UNTIL=20250701T170000Z`\"\n        }\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"label\": \"Kind\",\n        \"name\": \"kind\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Etag\",\n        \"name\": \"etag\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Event ID\",\n        \"name\": \"id\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Status\",\n        \"name\": \"status\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Html Link\",\n        \"name\": \"htmlLink\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"description\",\n        \"label\": \"Description\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"location\",\n        \"label\": \"Location\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Created\",\n        \"name\": \"created\",\n        \"type\": \"date\"\n    },\n    {\n        \"label\": \"Updated\",\n        \"name\": \"updated\",\n        \"type\": \"date\"\n    },\n    {\n        \"label\": \"Summary\",\n        \"name\": \"summary\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"colorId\",\n        \"label\": \"Color ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Creator\",\n        \"name\": \"creator\",\n        \"spec\": [\n            {\n                \"label\": \"Email\",\n                \"name\": \"email\",\n                \"type\": \"text\"\n            },\n            {\n                \"label\": \"Display Name\",\n                \"name\": \"displayName\",\n                \"type\": \"text\"\n            },\n            {\n                \"label\": \"Self\",\n                \"name\": \"self\",\n                \"type\": \"boolean\"\n            }\n        ],\n        \"type\": \"collection\"\n    },\n    {\n        \"label\": \"Organizer\",\n        \"name\": \"organizer\",\n        \"spec\": [\n            {\n                \"label\": \"Email\",\n                \"name\": \"email\",\n                \"type\": \"text\"\n            },\n            {\n                \"label\": \"Display Name\",\n                \"name\": \"displayName\",\n                \"type\": \"text\"\n            },\n            {\n                \"label\": \"Self\",\n                \"name\": \"self\",\n                \"type\": \"boolean\"\n            }\n        ],\n        \"type\": \"collection\"\n    },\n    {\n        \"label\": \"Start\",\n        \"name\": \"start\",\n        \"type\": \"date\"\n    },\n    {\n        \"label\": \"End\",\n        \"name\": \"end\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"recurrence\",\n        \"label\": \"Recurrence\",\n        \"type\": \"array\"\n    },\n    {\n        \"name\": \"recurringEventId\",\n        \"label\": \"Recurring Event ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"originalStartTime\",\n        \"label\": \"Original Start Time\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"dateTime\",\n                \"label\": \"Date Time\",\n                \"type\": \"date\",\n                \"time\": true\n            }\n        ]\n    },\n    {\n        \"label\": \"Transparency\",\n        \"name\": \"transparency\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"I Cal UID\",\n        \"name\": \"iCalUID\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Sequence\",\n        \"name\": \"sequence\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"attendees\",\n        \"label\": \"Attendees\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"email\",\n                \"label\": \"Email\",\n                \"type\": \"email\"\n            },\n            {\n                \"name\": \"displayName\",\n                \"label\": \"Display Name\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"responseStatus\",\n                \"label\": \"Response Status\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"guestsCanInviteOthers\",\n        \"label\": \"Guests Can Invite Others\",\n        \"type\": \"boolean\"\n    },\n    {\n        \"name\": \"hangoutLink\",\n        \"label\": \"Hangout Link\",\n        \"type\": \"url\"\n    },\n    {\n        \"label\": \"Conference Data\",\n        \"name\": \"conferenceData\",\n        \"spec\": [\n            {\n                \"label\": \"Create Request\",\n                \"name\": \"createRequest\",\n                \"spec\": [\n                    {\n                        \"label\": \"Request ID\",\n                        \"name\": \"requestId\",\n                        \"type\": \"text\"\n                    },\n                    {\n                        \"label\": \"Conference Solution Key\",\n                        \"name\": \"conferenceSolutionKey\",\n                        \"spec\": [\n                            {\n                                \"label\": \"Type\",\n                                \"name\": \"type\",\n                                \"type\": \"text\"\n                            }\n                        ],\n                        \"type\": \"collection\"\n                    },\n                    {\n                        \"label\": \"Status\",\n                        \"name\": \"status\",\n                        \"spec\": [\n                            {\n                                \"label\": \"Status Code\",\n                                \"name\": \"statusCode\",\n                                \"type\": \"text\"\n                            }\n                        ],\n                        \"type\": \"collection\"\n                    }\n                ],\n                \"type\": \"collection\"\n            },\n            {\n                \"label\": \"Entry Points\",\n                \"name\": \"entryPoints\",\n                \"spec\": {\n                    \"spec\": [\n                        {\n                            \"name\": \"regionCode\",\n                            \"label\": \"Region Code\",\n                            \"type\": \"text\"\n                        },\n                        {\n                            \"label\": \"Entry Point Type\",\n                            \"name\": \"entryPointType\",\n                            \"type\": \"text\"\n                        },\n                        {\n                            \"label\": \"Uri\",\n                            \"name\": \"uri\",\n                            \"type\": \"text\"\n                        },\n                        {\n                            \"label\": \"Label\",\n                            \"name\": \"label\",\n                            \"type\": \"text\"\n                        },\n                        {\n                            \"name\": \"pin\",\n                            \"label\": \"Pin\",\n                            \"type\": \"text\"\n                        }\n                    ],\n                    \"type\": \"collection\"\n                },\n                \"type\": \"array\"\n            },\n            {\n                \"label\": \"Conference Solution\",\n                \"name\": \"conferenceSolution\",\n                \"spec\": [\n                    {\n                        \"label\": \"Key\",\n                        \"name\": \"key\",\n                        \"spec\": [\n                            {\n                                \"label\": \"Type\",\n                                \"name\": \"type\",\n                                \"type\": \"text\"\n                            }\n                        ],\n                        \"type\": \"collection\"\n                    },\n                    {\n                        \"label\": \"Name\",\n                        \"name\": \"name\",\n                        \"type\": \"text\"\n                    },\n                    {\n                        \"label\": \"Icon Uri\",\n                        \"name\": \"iconUri\",\n                        \"type\": \"text\"\n                    }\n                ],\n                \"type\": \"collection\"\n            },\n            {\n                \"label\": \"Conference ID\",\n                \"name\": \"conferenceId\",\n                \"type\": \"text\"\n            },\n            {\n                \"label\": \"Signature\",\n                \"name\": \"signature\",\n                \"type\": \"text\"\n            }\n        ],\n        \"type\": \"collection\"\n    },\n    {\n        \"label\": \"Reminders\",\n        \"name\": \"reminders\",\n        \"spec\": [\n            {\n                \"label\": \"Use Default\",\n                \"name\": \"useDefault\",\n                \"type\": \"boolean\"\n            }\n        ],\n        \"type\": \"collection\"\n    },\n    {\n        \"name\": \"eventType\",\n        \"label\": \"Event Type\",\n        \"type\": \"text\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 609,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "google-meet": {
+      "api": {
+        "info": {
+          "log": {
+            "sanitize": [
+              "request.headers.authorization"
+            ]
+          },
+          "url": "https://www.googleapis.com/oauth2/v2/userinfo",
+          "headers": {
+            "Authorization": "Bearer {{connection.accessToken}}"
+          },
+          "response": {
+            "uid": "{{body.id}}",
+            "error": {
+              "message": "[{{statusCode}}] {{body.error.message}}"
+            },
+            "metadata": {
+              "type": "email",
+              "value": "{{body.email}}"
+            }
+          }
+        },
+        "token": {
+          "log": {
+            "sanitize": [
+              "request.body.code",
+              "request.body.client_secret",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://accounts.google.com/o/oauth2/token",
+          "body": {
+            "code": "{{temp.code}}",
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "grant_type": "authorization_code",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "client_secret": "{{ifempty(parameters.clientSecret, common.clientSecret)}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}"
+            }
+          }
+        },
+        "refresh": {
+          "log": {
+            "sanitize": [
+              "request.body.client_secret",
+              "request.body.refresh_token",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://accounts.google.com/o/oauth2/token",
+          "body": {
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "grant_type": "refresh_token",
+            "client_secret": "{{ifempty(parameters.clientSecret, common.clientSecret)}}",
+            "refresh_token": "{{data.refreshToken}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] {{body.error_description}}"
+            }
+          },
+          "condition": "{{data.expires < addMinutes(now, 1)}}"
+        },
+        "authorize": {
+          "qs": {
+            "scope": "{{join(distinct(merge(oauth.scope, ifempty(parameters.scopes, emptyarray))), ' ')}}",
+            "prompt": "consent",
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "access_type": "offline",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "response_type": "code",
+            "include_granted_scopes": true
+          },
+          "url": "https://accounts.google.com/o/oauth2/v2/auth",
+          "response": {
+            "temp": {
+              "code": "{{query.code}}"
+            }
+          }
+        },
+        "invalidate": {
+          "qs": {
+            "token": "{{connection.accessToken}}"
+          },
+          "url": "https://accounts.google.com/o/oauth2/revoke",
+          "method": "POST",
+          "headers": {
+            "Authorization": "Bearer {{connection.accessToken}}"
+          }
+        }
+      },
+      "rev": 2,
+      "name": "google-meet",
+      "type": "oauth",
+      "label": "Google Meet",
+      "scope": [
+        "https://www.googleapis.com/auth/userinfo.email"
+      ],
+      "scopes": {},
+      "aliasTo": "google",
+      "appName": "google-meet",
+      "install": {
+        "common": {
+          "clientId": "{{parameters.clientId}}",
+          "clientSecret": "{{parameters.clientSecret}}"
+        }
+      },
+      "apiJsonc": "{\n    \"authorize\": {\n        \"qs\": {\n            \"scope\": \"{{join(distinct(merge(oauth.scope, ifempty(parameters.scopes, emptyarray))), ' ')}}\",\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"redirect_uri\": \"{{oauth.redirectUri}}\",\n            \"access_type\": \"offline\",\n            \"response_type\": \"code\",\n            \"include_granted_scopes\": true,\n            \"prompt\": \"consent\"\n        },\n        \"url\": \"https://accounts.google.com/o/oauth2/v2/auth\",\n        \"response\": {\n            \"temp\": {\n                \"code\": \"{{query.code}}\"\n            }\n        }\n    },\n    \"token\": {\n        \"url\": \"https://accounts.google.com/o/oauth2/token\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"code\": \"{{temp.code}}\",\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"grant_type\": \"authorization_code\",\n            \"redirect_uri\": \"{{oauth.redirectUri}}\",\n            \"client_secret\": \"{{ifempty(parameters.clientSecret, common.clientSecret)}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\",\n                \"refreshToken\": \"{{body.refresh_token}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.code\",\n                \"request.body.client_secret\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },\n    \"refresh\": {\n        \"condition\": \"{{data.expires < addMinutes(now, 1)}}\",\n        \"url\": \"https://accounts.google.com/o/oauth2/token\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"grant_type\": \"refresh_token\",\n            \"client_secret\": \"{{ifempty(parameters.clientSecret, common.clientSecret)}}\",\n            \"refresh_token\": \"{{data.refreshToken}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\",\n                \"refreshToken\": \"{{body.refresh_token}}\"\n            },\n            \"error\": {\n                \"message\": \"[{{statusCode}}] {{body.error_description}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.client_secret\",\n                \"request.body.refresh_token\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },\n    \"info\": {\n        \"url\": \"https://www.googleapis.com/oauth2/v2/userinfo\",\n        \"headers\": {\n            \"Authorization\": \"Bearer {{connection.accessToken}}\"\n        },\n        \"response\": {\n            \"uid\": \"{{body.id}}\",\n            \"metadata\": {\n                \"type\": \"email\",\n                \"value\": \"{{body.email}}\"\n            },\n            \"error\": {\n                \"message\": \"[{{statusCode}}] {{body.error.message}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.headers.authorization\"\n            ]\n        }\n    },\n    \"invalidate\": {\n        \"url\": \"https://accounts.google.com/o/oauth2/revoke\",\n        \"headers\": {\n            \"Authorization\": \"Bearer {{connection.accessToken}}\"\n        },\n        \"method\": \"POST\",\n        \"qs\": {\n            \"token\": \"{{connection.accessToken}}\"\n        }\n    }\n}",
+      "authorId": 609,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "advanced": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "advanced": true
+        }
+      ],
+      "scopeJsonc": "[\n    \"https://www.googleapis.com/auth/userinfo.email\"\n]",
+      "installSpec": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "required": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "required": true
+        }
+      ],
+      "scopesJsonc": "{\n}",
+      "installJsonc": "{\n    \"common\": {\n        \"clientId\": \"{{parameters.clientId}}\",\n        \"clientSecret\": \"{{parameters.clientSecret}}\"\n    }\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"advanced\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"text\",\n        \"label\": \"Client Secret\",\n        \"advanced\": true\n    }\n]",
+      "installSpecJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"required\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"text\",\n        \"label\": \"Client Secret\",\n        \"required\": true\n    }\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://www.googleapis.com/calendar/v3\",\n    \"headers\": {\n        \"Authorization\": \"Bearer {{connection.accessToken}}\"\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.authorization\"\n        ]\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error.message}}\"\n        }\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "dateParameter": {
+      "rev": 2,
+      "code": "function dateParameter(date, allDay, timezone, recurrence) {\n\n    if(!date) {\n        return ;\n    }\n    if(allDay) {\n        return {\n            date: iml.formatDate(date, 'YYYY-MM-DD'),\n            timeZone: timezone,\n            dateTime: null\n        };\n    }\n    else if (recurrence || iml.length(recurrence) > 0) {\n        return {\n            dateTime: iml.formatDate(date, 'YYYY-MM-DDTHH:mm:ssZ'),\n            timeZone: timezone,\n            date: null\n        };\n    }\n    else {\n        return {\n            dateTime: iml.formatDate(date, 'YYYY-MM-DDTHH:mm:ssZ'),\n            date: null\n        };\n    }\n}",
+      "name": "dateParameter",
+      "test": null,
+      "appName": "google-meet",
+      "arguments": "(date, allDay, timezone, recurrence)",
+      "appVersion": 1
+    },
+    "eventResponse": {
+      "rev": 2,
+      "code": "function eventResponse(body) {\n\n    if (Array.isArray(body)) {\n        body.forEach(item => {\n            if(item.start && item.end) {\n                if (item.start.date && item.end.date) {\n                    item.start = iml.parseDate(item.start.date);\n                    item.end = iml.parseDate(item.end.date);\n                }\n                else if (item.start.dateTime && item.end.dateTime) {\n                    item.start = iml.parseDate(item.start.dateTime);\n                    item.end = iml.parseDate(item.end.dateTime);\n                }\n            }\n        });\n    }\n    else {\n        if(body.start && body.end) {\n            if (body.start.date && body.end.date) {\n                body.start = iml.parseDate(body.start.date);\n                body.end = iml.parseDate(body.end.date);\n            }\n            else if (body.start.dateTime && body.end.dateTime) {\n                body.start = iml.parseDate(body.start.dateTime);\n                body.end = iml.parseDate(body.end.dateTime);\n            }\n        }\n    }\n\n    return body;\n}",
+      "name": "eventResponse",
+      "test": null,
+      "appName": "google-meet",
+      "arguments": "(body)",
+      "appVersion": 1
+    },
+    "colorRpcResponse": {
+      "rev": 2,
+      "code": "function colorRpcResponse(body, calendar) {\n\n    if (calendar) {\n        var arr = Object.values(body.calendar);\n        for (i = 0; i < iml.length(arr); i++) {\n            arr[i].id = i + 1;\n        }\n        return arr;\n    }\n    else {\n        var arr = Object.values(body.event);\n        for (i = 0; i < iml.length(arr); i++) {\n            arr[i].id = i + 1;\n        }\n        return arr;\n    }\n\n}",
+      "name": "colorRpcResponse",
+      "test": null,
+      "appName": "google-meet",
+      "arguments": "(body, calendar)",
+      "appVersion": 1
+    },
+    "remindersParameter": {
+      "rev": 2,
+      "code": "function remindersParameter(overrides, useDefault) {\n\n    if(overrides || iml.length(overrides)>0) {\n        return {\n            overrides: overrides,\n            useDefault: false\n        };\n    }\n    else if (useDefault && !overrides) {\n        return {\n            useDefault: useDefault\n        }\n    }\n    else return undefined;\n}",
+      "name": "remindersParameter",
+      "test": null,
+      "appName": "google-meet",
+      "arguments": "(overrides, useDefault)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-02-21T23:52:04.578539+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": null,
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "b13cb54d9d1ba49de87978450e94f277",
+  "versionFull": "1.1.0",
+  "compiledName": "google-meet",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 2,
+  "compilationError": "Failed to publish compiled app. Response status 502. <html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+  "installSpecJsonc": "[\n]"
+}

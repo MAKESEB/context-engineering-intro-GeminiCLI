@@ -1,0 +1,528 @@
+{
+  "rev": 23,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.xi-api-key"
+      ]
+    },
+    "baseUrl": "https://api.elevenlabs.io/v1",
+    "headers": {
+      "xi-api-key": "{{connection.apiKey}}"
+    },
+    "timeout": "{{common.timeout || 40000}}",
+    "response": {
+      "error": {
+        "429": {
+          "type": "RateLimitError",
+          "message": "[{{statusCode}}] {{body.detail.message || body.detail || 'Too many requests.'}}"
+        },
+        "message": "[{{statusCode}}] {{body.detail.message || body.detail}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "elevenlabs",
+  "_rpcs": {
+    "listModels": {
+      "api": {
+        "url": "/models",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.name}} ({{item.model_id}})",
+            "value": "{{item.model_id}}"
+          },
+          "iterate": "{{sort(body, 'model_id')}}"
+        }
+      },
+      "rev": 3,
+      "name": "listModels",
+      "label": "List Models",
+      "appName": "elevenlabs",
+      "apiJsonc": "{\n\t\"url\": \"/models\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"iterate\": \"{{sort(body, 'model_id')}}\",\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}} ({{item.model_id}})\",\t// highlight the model id because multiple models can have the same name but different capabilities (sts)\n\t\t\t\"value\": \"{{item.model_id}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "elevenlabs",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listVoices": {
+      "api": {
+        "url": "/voices",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.category+'/'+item.name}}",
+            "value": "{{item.voice_id}}"
+          },
+          "iterate": "{{body.voices}}"
+        }
+      },
+      "rev": 2,
+      "name": "listVoices",
+      "label": "List Voices",
+      "appName": "elevenlabs",
+      "apiJsonc": "{\n\t\"url\": \"/voices\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"iterate\": \"{{body.voices}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.category+'/'+item.name}}\",\n\t\t\t\"value\": \"{{item.voice_id}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "elevenlabs",
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {
+    "sandboxes": [
+      {
+        "allowed": false,
+        "version": 1
+      },
+      {
+        "allowed": true,
+        "version": 2
+      }
+    ],
+    "imlIsUserEditable": true
+  },
+  "label": "ElevenLabs",
+  "theme": "#000000",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "createTextToSpeech",
+        "universal"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda7930000008f4944415458c3edd5b10902310046e19743b4b2b6710907b0b570115770334b07b0b6161c40b94e0b7916de00e63c10f1ff205d125e52241011f165a566b20a300396400bec8131b00626c00eb89452b56d5d80ba52efea419daa73f5a4b6eaa28b7c5bd3b3a5e9c6c747ed1b3098042420013f1d30c87b3beab1e6086c802b70031ec096d75f701ef8822222fec01319c22eb7f6c384270000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000001064944415478daedd9314ec3401445d16b27ac800e5684e8580e3dac80ad50d053235183d8002b00421e850d722ca5c3f323e59e72c6d2bc7972f507244992244992745cbaa50f48b27b60d7eddb5fcdf27c03997fffdfd64b1730ba04ae806d9215f00cdc8d970438056e8033600b6c805be0a951bee52421c97576dd273919f748729ee475b2ff91e462fef72ca16fd543a3730eb680836501d501aa594075806a16501da09a055407a86601d501aa594075806a16501da09a055407a86601d501aab52a603edbee676b8b8fe7f76935167f031e18c6e0bf63f1e9a53f8147e0856180fa05bcb708d6ea61a41f2ffeb7cc30fb9f5acff26c68f03022499224499224e9b8fc00a3e05c555334b0350000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2023-07-17T09:45:24.318815+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda793000001684944415478daeddc416a14511485e1d3ad62541074e6c46d642bd98cb808713f0e4470018260561132920e37930c1c7455320896f6f93e78d3cbbb55fff825000000000000000000000000000000000000c0bf65b7f5051ec3cc24c95992f3242f93ccc2aebf925cee76bba519af925c2479bb30639fe46b926fc766b09199c9ccbc9b991f33739899df47cecdcc7cb8fbd16b337eceba8f4b33fe474fb7bec0239a244ffe38c7ec1f30a3ca7d1f8413278072022827807202282780720228278072022827807202282780720228278072022827807202282780720228278072022827807202282780720228278072022827807202282780720228278072022827807202282780720228278072022827807202282780726d01d43d057b9f530a60ff807dde2779b6f2d8f38b24cfb75ee46f3aa5c7a2af937c4ef226cb4fbd7f4f7258997195e45392d72b33be6cbd280000000000000000000000000000000000000000706a6e01da2372b9a07de4650000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda793000002e64944415478daedd7bd8a13611886e167d66c232cac88201e80cd169e918d561e902078041e97bf6ba32c3662762c924648e3ccc619f35c57932a2f2f33f3dd9324000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b419965e80751ac731d93d1f97493633466d937c4b723b0c1eb7b59973633982fdc1bb48f222bbc3374e183324f99ee46d929b1907ef32c99b244f93dc4ef8fe5992cf499e27b93ede55632a0158a7fb495e26b99a31e37d9277496e66ccd86477f89fcd98f130c9f95d5f20eec6d9d20b70d036c9cfa597d89bf2e6e73f2100ebe4cf32ff840040310180620200c504008a0900141300282600504c00a0980040310180620200c504008a0900141300282600504c00a0980040310180620200c504008a0900141300282600504c00a0980040310180620200c504008a0900141300282600504c00a0980040310180620200c504008a0900141300282600504c00a0980040310180620200c504008a0900141300282600504c00a0980040310180620200c504008a0900141300282600504c00a0980040310180620200c504008a0900141300282600504c00a0980040310180620200c504008a0900141300282600504c00a0980040310180620200c504008a0900141300282600504c00a0980040310180620200c504008a0900141300282600a7eb579271e925583701385d63920749328e933b2020274e00d66948723e73c69324af925ccc987195e4f1d21783e3d92cbd00079d25f991e443a6bd8587245f92bc4e7233638f8ffb39b733f6f894647bcc8bc574c3d20bf0a7fdcff57b491eed3fa7da26f99a643b0c7f7f9bd7b207000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070d86f2514372553a8caa70000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda793000008fa4944415478daedd9318ed4401445d1321a580a0101190b266645480836408888904c320184ee60be6bee392b782aa9dcb7edb500809c63adb5cef39cde0100bca0c38f3f00f4bc991e0000bc3c010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020e8697a00b0b5cf6bad0fd323d65a9fa607c06e8ef33ca737c04eee72618ee901cfbeaeb5de4f8f58f7390fd8864f0070cdb7e90137f37b7a00f0180100d7fc9c1e70337fa607008f1100708d3b03bc0a1e66708d3b03bc0a1e660010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900d8cfafe901c0fe0400ece7fbf400607f0200f6f3717a00b03f0100d71cd3039efd586b7d991e01eceb697a006ce6ddf4807f76bc1dde704e1f02f0b8e33cdd61b8e02e17e62e6f229c076cca27000008f20900aef14ff37fce0336e50d000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004fd05fa401d503b75be480000000049454e44ae426082",
+  "install": {
+    "common": {
+      "timeout": "{{parameters.timeout}}"
+    }
+  },
+  "ipmRepo": null,
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "universal": {
+      "id": 108616,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://api.elevenlabs.io/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "universal",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://api.elevenlabs.io`, e.g. `/v1/user/subscription`.",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "elevenlabs",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"url\": \"https://api.elevenlabs.io/{{parameters.url}}\", // Defines the fixed base URL and maps the relative path URL from the user.\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"method\": \"{{parameters.method}}\",\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"body\": \"{{body}}\",\n            \"headers\": \"{{headers}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "elevenlabs",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n\t{\n\t\t\"help\": \"Enter a path relative to `https://api.elevenlabs.io`, e.g. `/v1/user/subscription`.\",  // Gives instructions to the user about the relative path.\n\t\t\"name\": \"url\",                                                                        // Makes value accesible via \"{{parameters.url}}\"\".\n\t\t\"type\": \"text\",\n\t\t\"label\": \"URL\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"method\",          // Allows the user to select the method by themselves.\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Method\",\n\t\t\"default\": \"GET\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"GET\",\n\t\t\t\t\"value\": \"GET\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"POST\",\n\t\t\t\t\"value\": \"POST\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PUT\",\n\t\t\t\t\"value\": \"PUT\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PATCH\",\n\t\t\t\t\"value\": \"PATCH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"DELETE\",\n\t\t\t\t\"value\": \"DELETE\"\n\t\t\t}\n\t\t],\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n\t\t\"name\": \"headers\",         // Allows the user to add headers by themselves.\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"key\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Key\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"value\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Value\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Headers\",\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"qs\",              // Allows the user to set Query String by themselves.\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"key\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Key\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"value\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Value\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Query String\"\n\t},\n\t{\n\t\t\"name\": \"body\",            // Allows the user to set Body by themselves.\n\t\t\"type\": \"any\",\n\t\t\"label\": \"Body\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createTextToSpeech": {
+      "id": 108522,
+      "api": {
+        "qs": {
+          "optimize_streaming_latency": "{{parameters.optimize_streaming_latency}}"
+        },
+        "url": "/text-to-speech/{{parameters.voice_id}}",
+        "body": {
+          "text": "{{parameters.text}}",
+          "model_id": "{{parameters.model_id}}",
+          "voice_settings": "{{deleteObjIfEmpty(parameters.voice_settings)}}"
+        },
+        "method": "POST",
+        "headers": {
+          "accept": "audio/mpeg"
+        },
+        "response": {
+          "type": {
+            "200": "binary",
+            "400-500": "raw"
+          },
+          "output": {
+            "data": "{{body}}",
+            "fileName": "{{'ElevenLabs_' + formatDate(now, 'YYYY-MM-DDThh_mm_ss') + '.mp3'}}",
+            "fileSize": "{{headers.`content-length`}}"
+          }
+        }
+      },
+      "rev": 5,
+      "crud": "create",
+      "name": "createTextToSpeech",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Speech Synthesis",
+      "scope": [],
+      "expect": [
+        {
+          "help": "The voice to be used in generated speech.",
+          "name": "voice_id",
+          "type": "select",
+          "label": "Voice",
+          "options": "rpc://app%23elevenlabs@1/listVoices",
+          "required": true
+        },
+        {
+          "help": "The model to be used to generate speech.",
+          "name": "model_id",
+          "type": "select",
+          "label": "Model",
+          "options": "rpc://app%23elevenlabs@1/listModels",
+          "required": true
+        },
+        {
+          "help": "The text that will get converted into speech.",
+          "name": "text",
+          "type": "text",
+          "label": "Text",
+          "required": true
+        },
+        {
+          "name": "voice_settings",
+          "spec": [
+            {
+              "help": "Decreasing stability can make speech more expressive with output varying between re-generations. It can also lead to instabilities.\nIncreasing stability will make the voice more consistent between re-generations, but it can also make it sounds a bit monotone. Lowering is recommended on longer text fragments.",
+              "name": "stability",
+              "type": "number",
+              "label": "Stability",
+              "validate": {
+                "max": 1,
+                "min": 0
+              }
+            },
+            {
+              "help": "Low values are recommended if background artifacts are present in generated speech.\nHigh enhancement boosts overall voice clarity and target speaker similarity. Very high values can cause artifacts.",
+              "name": "similarity_boost",
+              "type": "number",
+              "label": "Similarity Boost",
+              "validate": {
+                "max": 1,
+                "min": 0
+              }
+            }
+          ],
+          "type": "collection",
+          "label": "Voice Settings"
+        },
+        {
+          "help": "Latency optimizations at some cost of quality.",
+          "name": "optimize_streaming_latency",
+          "type": "select",
+          "label": "Optimize Streaming Latency",
+          "options": [
+            {
+              "label": "Default Mode",
+              "value": "0"
+            },
+            {
+              "label": "Normal Optimizations",
+              "value": "1"
+            },
+            {
+              "label": "Strong Optimizations",
+              "value": "2"
+            },
+            {
+              "label": "Max Optimizations",
+              "value": "3"
+            },
+            {
+              "label": "Max Optimizations Without Text Normalizer",
+              "value": "4"
+            }
+          ]
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "elevenlabs",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/text-to-speech/{{parameters.voice_id}}\",\n\t\"method\": \"POST\",\n\t\"headers\": {\n\t\t\"accept\": \"audio/mpeg\"\n\t},\n\t\"qs\":{\n\t\t\"optimize_streaming_latency\": \"{{parameters.optimize_streaming_latency}}\"\n\t},\n\t\"body\": {\n\t\t\"text\": \"{{parameters.text}}\",\n\t\t\"model_id\": \"{{parameters.model_id}}\",\n\t\t\"voice_settings\": \"{{deleteObjIfEmpty(parameters.voice_settings)}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"fileName\": \"{{'ElevenLabs_' + formatDate(now, 'YYYY-MM-DDThh_mm_ss') + '.mp3'}}\",\n            \"data\": \"{{body}}\",\n            \"fileSize\": \"{{headers.`content-length`}}\"\n        },\n        \"type\": {\n            \"200\": \"binary\",\n            \"400-500\": \"raw\"\n        }\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "fileName",
+          "type": "filename",
+          "label": "File Name",
+          "semantic": "file:name"
+        },
+        {
+          "name": "data",
+          "type": "buffer",
+          "label": "Data",
+          "semantic": "file:data"
+        },
+        {
+          "name": "fileSize",
+          "type": "uinteger",
+          "label": "File Size"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "elevenlabs",
+      "description": "Synthesizes a text into speech.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"voice_id\",\n\t\t\"type\": \"select\",\n\t\t\"help\": \"The voice to be used in generated speech.\",\n\t\t\"options\": \"rpc://listVoices\",\n\t\t\"label\": \"Voice\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"model_id\",\n\t\t\"type\": \"select\",\n\t\t\"help\": \"The model to be used to generate speech.\",\n\t\t\"options\": \"rpc://listModels\",\n\t\t\"label\": \"Model\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"text\",\n\t\t\"type\": \"text\",\n\t\t\"help\": \"The text that will get converted into speech.\",\n\t\t\"label\": \"Text\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"voice_settings\",\n\t\t\"type\": \"collection\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"stability\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"help\": \"Decreasing stability can make speech more expressive with output varying between re-generations. It can also lead to instabilities.\\nIncreasing stability will make the voice more consistent between re-generations, but it can also make it sounds a bit monotone. Lowering is recommended on longer text fragments.\",\n\t\t\t\t\"validate\": {\n\t\t\t\t\t\"max\": 1,\n\t\t\t\t\t\"min\": 0\n\t\t\t\t},\n\t\t\t\t\"label\": \"Stability\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"similarity_boost\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"help\": \"Low values are recommended if background artifacts are present in generated speech.\\nHigh enhancement boosts overall voice clarity and target speaker similarity. Very high values can cause artifacts.\",\n\t\t\t\t\"validate\": {\n\t\t\t\t\t\"max\": 1,\n\t\t\t\t\t\"min\": 0\n\t\t\t\t},\n\t\t\t\t\"label\": \"Similarity Boost\"\n\t\t\t}\n\t\t],\n\t\t\"label\": \"Voice Settings\"\n\t},\n\t{\n\t\t\"name\": \"optimize_streaming_latency\",\n\t\t\"type\": \"select\",\n\t\t\"help\": \"Latency optimizations at some cost of quality.\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Default Mode\",\n\t\t\t\t\"value\": \"0\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Normal Optimizations\",\n\t\t\t\t\"value\": \"1\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Strong Optimizations\",\n\t\t\t\t\"value\": \"2\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Max Optimizations\",\n\t\t\t\t\"value\": \"3\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Max Optimizations Without Text Normalizer\",\n\t\t\t\t\"value\": \"4\"\n\t\t\t}\n\t\t],\n\t\t\"label\": \"Optimize Streaming Latency\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n\t\t\"name\": \"fileName\",\n\t\t\"type\": \"filename\",\n\t\t\"label\": \"File Name\",\n\t\t\"semantic\": \"file:name\"\n\t},\n    {\n        \"name\": \"data\",\n        \"type\": \"buffer\",\n        \"label\": \"Data\",\n        \"semantic\": \"file:data\"\n    },\n    {\n        \"name\": \"fileSize\",\n        \"label\": \"File Size\",\n        \"type\": \"uinteger\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "elevenlabs": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.xi-api-key"
+          ]
+        },
+        "url": "https://api.elevenlabs.io/v1/user/subscription",
+        "headers": {
+          "xi-api-key": "{{parameters.apiKey}}"
+        },
+        "response": {
+          "error": {
+            "message": "[{{statusCode}}] {{body.detail.message}}"
+          }
+        }
+      },
+      "rev": 3,
+      "name": "elevenlabs",
+      "type": "basic",
+      "label": "ElevenLabs",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "elevenlabs",
+      "install": {},
+      "apiJsonc": "{\n\t\"url\": \"https://api.elevenlabs.io/v1/user/subscription\",\n\t\"headers\": {\n\t\t\"xi-api-key\": \"{{parameters.apiKey}}\"\n\t},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"message\": \"[{{statusCode}}] {{body.detail.message}}\"\n\t\t}\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\n\t\t\t\"request.headers.xi-api-key\"\n\t\t]\n\t}\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "apiKey",
+          "type": "password",
+          "label": "API Key",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "installSpec": [],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"apiKey\",\n\t\t\"type\": \"password\",\n\t\t\"label\": \"API Key\",\n\t\t\"required\": true,\n\t\t\"editable\": true\n\t}\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://api.elevenlabs.io/v1\",\n    \"headers\": {\n        \"xi-api-key\": \"{{connection.apiKey}}\"\n    },\n    \"timeout\": \"{{common.timeout || 40000}}\",\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.detail.message || body.detail}}\",\n            \"429\": {\n                \"type\": \"RateLimitError\",\n                \"message\": \"[{{statusCode}}] {{body.detail.message || body.detail || 'Too many requests.'}}\"\n            }\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.xi-api-key\"\n        ]\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "deleteObjIfEmpty": {
+      "rev": 2,
+      "code": "function deleteObjIfEmpty(obj) {\n    if (Object.keys(obj).length === 0) return undefined;\n    else return obj;\n}",
+      "name": "deleteObjIfEmpty",
+      "test": null,
+      "appName": "elevenlabs",
+      "arguments": "(obj)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2023-07-19T19:55:58.459909+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": null,
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [
+    {
+      "name": "timeout",
+      "type": "uinteger",
+      "label": "Module Timeout",
+      "default": 300000
+    }
+  ],
+  "inviteToken": "0d8384e47d8c152438657efbd7543b38",
+  "versionFull": "1.0.9",
+  "compiledName": "elevenlabs",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n    \"common\": {\n        \"timeout\": \"{{parameters.timeout}}\"\n    }\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n    {\n        \"name\": \"timeout\",\n        \"label\": \"Module Timeout\",\n        \"type\": \"uinteger\",\n        \"default\": 300000\n    }\n]"
+}

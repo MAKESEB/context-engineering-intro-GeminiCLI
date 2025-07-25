@@ -1,0 +1,1356 @@
+{
+  "rev": 39,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.Authorization"
+      ]
+    },
+    "baseUrl": "https://api.linkedin.com/rest",
+    "headers": {
+      "Authorization": "Bearer {{connection.accessToken}}",
+      "LinkedIn-Version": "202501",
+      "X-Restli-Protocol-Version": "2.0.0"
+    },
+    "response": {
+      "error": {
+        "type": "DataError",
+        "message": "{{getErrorMessage(statusCode, body)}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "linkedin-ads-reports",
+  "_rpcs": {
+    "listCampaigns": {
+      "api": {
+        "qs": {
+          "q": "search",
+          "pageSize": 100
+        },
+        "url": "/adAccounts/{{parameters.account}}/adCampaigns",
+        "method": "GET",
+        "response": {
+          "limit": 100,
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{if(parameters.format = 'urn', 'urn:li:sponsoredCampaign:' + item.id, item.id)}}"
+          },
+          "iterate": "{{body.elements}}"
+        }
+      },
+      "rev": 9,
+      "name": "listCampaigns",
+      "label": "List Campaigns by Ad Account",
+      "appName": "linkedin-ads-reports",
+      "apiJsonc": "{\n    \"qs\": {\n        \"q\": \"search\",\n        \"pageSize\": 100\n    },\n    \"url\": \"/adAccounts/{{parameters.account}}/adCampaigns\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"limit\": 100,\n        \"output\": {\n            \"label\": \"{{item.name}}\",\n            \"value\": \"{{if(parameters.format = 'urn', 'urn:li:sponsoredCampaign:' + item.id, item.id)}}\"\n        },\n        \"iterate\": \"{{body.elements}}\"\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "linkedin-ads-reports",
+      "altAccountName": "linkedin-ads-reports2",
+      "parametersJsonc": "[\n]"
+    },
+    "listAdAccounts": {
+      "api": {
+        "qs": {
+          "q": "search",
+          "pageSize": 100
+        },
+        "url": "/adAccounts",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.name}} ({{item.status}})",
+            "value": "{{if(parameters.format === 'urn', 'urn:li:sponsoredAccount:' + item.id, item.id)}}"
+          },
+          "iterate": "{{body.elements}}"
+        },
+        "pagination": {
+          "qs": {
+            "pageToken": "{{body.metadata.nextPageToken}}"
+          },
+          "condition": "{{body.metadata.nextPageToken}}"
+        }
+      },
+      "rev": 9,
+      "name": "listAdAccounts",
+      "label": "List Ad Accounts",
+      "appName": "linkedin-ads-reports",
+      "apiJsonc": "{\n    \"qs\": {\n        \"q\": \"search\",\n        \"pageSize\": 100\n    },\n    \"url\": \"/adAccounts\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"limit\": 300,\n        \"output\": {\n            \"label\": \"{{item.name}} ({{item.status}})\",\n            \"value\": \"{{if(parameters.format === 'urn', 'urn:li:sponsoredAccount:' + item.id, item.id)}}\"\n        },\n        \"iterate\": \"{{body.elements}}\"\n    },\n    \"pagination\": {\n        \"condition\": \"{{body.metadata.nextPageToken}}\",\n        \"qs\": {\n            \"pageToken\": \"{{body.metadata.nextPageToken}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "linkedin-ads-reports",
+      "altAccountName": "linkedin-ads-reports2",
+      "parametersJsonc": "[\n]"
+    },
+    "interfaceAdStatisticsReport": {
+      "api": {
+        "temp": {
+          "interface": [
+            {
+              "name": "actionClicks",
+              "type": "number",
+              "label": "Action Clicks"
+            },
+            {
+              "name": "adUnitClicks",
+              "type": "number",
+              "label": "Ad Unit Clicks"
+            },
+            {
+              "name": "approximateMemberReach",
+              "type": "number",
+              "label": "Approx. Members Reach"
+            },
+            {
+              "name": "cardClicks",
+              "type": "number",
+              "label": "Card Clicks"
+            },
+            {
+              "name": "cardImpressions",
+              "type": "number",
+              "label": "Card Impressions"
+            },
+            {
+              "name": "clicks",
+              "type": "number",
+              "label": "Clicks"
+            },
+            {
+              "name": "commentLikes",
+              "type": "number",
+              "label": "Comment Likes"
+            },
+            {
+              "name": "comments",
+              "type": "number",
+              "label": "Comments"
+            },
+            {
+              "name": "companyPageClicks",
+              "type": "number",
+              "label": "Company Page Clicks"
+            },
+            {
+              "name": "conversionValueInLocalCurrency",
+              "type": "number",
+              "label": "Conversion Value In Local Currency"
+            },
+            {
+              "name": "costInLocalCurrency",
+              "type": "number",
+              "label": "Cost In Local Currency"
+            },
+            {
+              "name": "costInUsd",
+              "type": "number",
+              "label": "Cost In USD"
+            },
+            {
+              "name": "costPerQualifiedLead",
+              "type": "number",
+              "label": "Cost per Qualified Lead"
+            },
+            {
+              "name": "externalWebsiteConversions",
+              "type": "number",
+              "label": "External Website Conversions"
+            },
+            {
+              "name": "externalWebsitePostClickConversions",
+              "type": "number",
+              "label": "External Website Post Click Conversions"
+            },
+            {
+              "name": "externalWebsitePostViewConversions",
+              "type": "number",
+              "label": "External Website Post View Conversions"
+            },
+            {
+              "name": "follows",
+              "type": "number",
+              "label": "Follows"
+            },
+            {
+              "name": "fullScreenPlays",
+              "type": "number",
+              "label": "Full Screen Plays"
+            },
+            {
+              "name": "impressions",
+              "type": "number",
+              "label": "Impressions"
+            },
+            {
+              "name": "landingPageClicks",
+              "type": "number",
+              "label": "Landing Page Clicks"
+            },
+            {
+              "name": "leadGenerationMailContactInfoShares",
+              "type": "number",
+              "label": "Lead Generation Mail Contact Info Shares"
+            },
+            {
+              "name": "leadGenerationMailInterestedClicks",
+              "type": "number",
+              "label": "Lead Generation Mail Interested Clicks"
+            },
+            {
+              "name": "likes",
+              "type": "number",
+              "label": "Likes"
+            },
+            {
+              "name": "oneClickLeadFormOpens",
+              "type": "number",
+              "label": "One Click Lead Form Opens"
+            },
+            {
+              "name": "oneClickLeads",
+              "type": "number",
+              "label": "One Click Leads"
+            },
+            {
+              "name": "opens",
+              "type": "number",
+              "label": "Opens"
+            },
+            {
+              "name": "otherEngagements",
+              "type": "number",
+              "label": "Other Engagements"
+            },
+            {
+              "name": "qualifiedLeads",
+              "type": "number",
+              "label": "Qualified Leads"
+            },
+            {
+              "name": "reactions",
+              "type": "number",
+              "label": "Reactions"
+            },
+            {
+              "name": "sends",
+              "type": "number",
+              "label": "Sends"
+            },
+            {
+              "name": "shares",
+              "type": "number",
+              "label": "Shares"
+            },
+            {
+              "name": "textUrlClicks",
+              "type": "number",
+              "label": "Text URL Clicks"
+            },
+            {
+              "name": "totalEngagements",
+              "type": "number",
+              "label": "Total Engagements"
+            },
+            {
+              "name": "videoCompletions",
+              "type": "number",
+              "label": "Video Completions"
+            },
+            {
+              "name": "videoFirstQuartileCompletions",
+              "type": "number",
+              "label": "Video First Quartile Completions"
+            },
+            {
+              "name": "videoMidpointCompletions",
+              "type": "number",
+              "label": "Video Midpoint Completions"
+            },
+            {
+              "name": "videoStarts",
+              "type": "number",
+              "label": "Video Starts"
+            },
+            {
+              "name": "videoThirdQuartileCompletions",
+              "type": "number",
+              "label": "Video Third Quartile Completions"
+            },
+            {
+              "name": "videoViews",
+              "type": "number",
+              "label": "Video Views"
+            },
+            {
+              "name": "viralCardClicks",
+              "type": "number",
+              "label": "Viral Card Clicks"
+            },
+            {
+              "name": "viralCardImpressions",
+              "type": "number",
+              "label": "Viral Card Impressions"
+            },
+            {
+              "name": "viralClicks",
+              "type": "number",
+              "label": "Viral Clicks"
+            },
+            {
+              "name": "viralCommentLikes",
+              "type": "number",
+              "label": "Viral Comment Likes"
+            },
+            {
+              "name": "viralComments",
+              "type": "number",
+              "label": "Viral Comments"
+            },
+            {
+              "name": "viralCompanyPageClicks",
+              "type": "number",
+              "label": "Viral Company Page Clicks"
+            },
+            {
+              "name": "viralExternalWebsiteConversions",
+              "type": "number",
+              "label": "Viral External Website Conversions"
+            },
+            {
+              "name": "viralExternalWebsitePostClickConversions",
+              "type": "number",
+              "label": "Viral External Website Post Click Conversions"
+            },
+            {
+              "name": "viralExternalWebsitePostViewConversions",
+              "type": "number",
+              "label": "Viral External Website Post View Conversions"
+            },
+            {
+              "name": "viralFollows",
+              "type": "number",
+              "label": "Viral Follows"
+            },
+            {
+              "name": "viralFullScreenPlays",
+              "type": "number",
+              "label": "Viral Full Screen Plays"
+            },
+            {
+              "name": "viralImpressions",
+              "type": "number",
+              "label": "Viral Impressions"
+            },
+            {
+              "name": "viralLandingPageClicks",
+              "type": "number",
+              "label": "Viral Landing Page Clicks"
+            },
+            {
+              "name": "viralLikes",
+              "type": "number",
+              "label": "Viral Likes"
+            },
+            {
+              "name": "viralOneClickLeadFormOpens",
+              "type": "number",
+              "label": "Viral One Click Lead Form Opens"
+            },
+            {
+              "name": "viralOneClickLeads",
+              "type": "number",
+              "label": "Viral One Click Leads"
+            },
+            {
+              "name": "viralOtherEngagements",
+              "type": "number",
+              "label": "Viral Other Engagements"
+            },
+            {
+              "name": "viralReactions",
+              "type": "number",
+              "label": "Viral Reactions"
+            },
+            {
+              "name": "viralShares",
+              "type": "number",
+              "label": "Viral Shares"
+            },
+            {
+              "name": "viralTotalEngagements",
+              "type": "number",
+              "label": "Viral Total Engagements"
+            },
+            {
+              "name": "viralVideoCompletions",
+              "type": "number",
+              "label": "Viral Video Completions"
+            },
+            {
+              "name": "viralVideoFirstQuartileCompletions",
+              "type": "number",
+              "label": "Viral Video First Quartile Completions"
+            },
+            {
+              "name": "viralVideoMidpointCompletions",
+              "type": "number",
+              "label": "Viral Video Midpoint Completions"
+            },
+            {
+              "name": "viralVideoStarts",
+              "type": "number",
+              "label": "Viral Video Starts"
+            },
+            {
+              "name": "viralVideoThirdQuartileCompletions",
+              "type": "number",
+              "label": "Viral Video Third Quartile Completions"
+            },
+            {
+              "name": "viralVideoViews",
+              "type": "number",
+              "label": "Viral Video Views"
+            },
+            {
+              "name": "viralSubscriptionClicks",
+              "type": "number",
+              "label": "Viral Subscription Clicks"
+            },
+            {
+              "name": "subscriptionClicks",
+              "type": "number",
+              "label": "Subscription Clicks"
+            }
+          ]
+        },
+        "response": {
+          "output": "{{item}}",
+          "iterate": {
+            "condition": "{{contains(parameters.fields, item.name)}}",
+            "container": "{{temp.interface}}"
+          }
+        }
+      },
+      "rev": 9,
+      "name": "interfaceAdStatisticsReport",
+      "label": "Interface: Ad Statistics Report",
+      "appName": "linkedin-ads-reports",
+      "apiJsonc": "{\n    \"temp\": {\n        \"interface\": [\n            {\n                \"name\": \"actionClicks\",\n                \"type\": \"number\",\n                \"label\": \"Action Clicks\"\n            },\n            {\n                \"name\": \"adUnitClicks\",\n                \"type\": \"number\",\n                \"label\": \"Ad Unit Clicks\"\n            },\n            {\n                \"name\": \"approximateMemberReach\",\n                \"type\": \"number\",\n                \"label\": \"Approx. Members Reach\"\n            },\n            {\n                \"name\": \"cardClicks\",\n                \"type\": \"number\",\n                \"label\": \"Card Clicks\"\n            },\n            {\n                \"name\": \"cardImpressions\",\n                \"type\": \"number\",\n                \"label\": \"Card Impressions\"\n            },\n            {\n                \"name\": \"clicks\",\n                \"type\": \"number\",\n                \"label\": \"Clicks\"\n            },\n            {\n                \"name\": \"commentLikes\",\n                \"type\": \"number\",\n                \"label\": \"Comment Likes\"\n            },\n            {\n                \"name\": \"comments\",\n                \"type\": \"number\",\n                \"label\": \"Comments\"\n            },\n            {\n                \"name\": \"companyPageClicks\",\n                \"type\": \"number\",\n                \"label\": \"Company Page Clicks\"\n            },\n            {\n                \"name\": \"conversionValueInLocalCurrency\",\n                \"type\": \"number\",\n                \"label\": \"Conversion Value In Local Currency\"\n            },\n            {\n                \"name\": \"costInLocalCurrency\",\n                \"type\": \"number\",\n                \"label\": \"Cost In Local Currency\"\n            },\n            {\n                \"name\": \"costInUsd\",\n                \"type\": \"number\",\n                \"label\": \"Cost In USD\"\n            },\n            {\n                \"name\": \"costPerQualifiedLead\",\n                \"type\": \"number\",\n                \"label\": \"Cost per Qualified Lead\"\n            },\n            {\n                \"name\": \"externalWebsiteConversions\",\n                \"type\": \"number\",\n                \"label\": \"External Website Conversions\"\n            },\n            {\n                \"name\": \"externalWebsitePostClickConversions\",\n                \"type\": \"number\",\n                \"label\": \"External Website Post Click Conversions\"\n            },\n            {\n                \"name\": \"externalWebsitePostViewConversions\",\n                \"type\": \"number\",\n                \"label\": \"External Website Post View Conversions\"\n            },\n            {\n                \"name\": \"follows\",\n                \"type\": \"number\",\n                \"label\": \"Follows\"\n            },\n            {\n                \"name\": \"fullScreenPlays\",\n                \"type\": \"number\",\n                \"label\": \"Full Screen Plays\"\n            },\n            {\n                \"name\": \"impressions\",\n                \"type\": \"number\",\n                \"label\": \"Impressions\"\n            },\n            {\n                \"name\": \"landingPageClicks\",\n                \"type\": \"number\",\n                \"label\": \"Landing Page Clicks\"\n            },\n            {\n                \"name\": \"leadGenerationMailContactInfoShares\",\n                \"type\": \"number\",\n                \"label\": \"Lead Generation Mail Contact Info Shares\"\n            },\n            {\n                \"name\": \"leadGenerationMailInterestedClicks\",\n                \"type\": \"number\",\n                \"label\": \"Lead Generation Mail Interested Clicks\"\n            },\n            {\n                \"name\": \"likes\",\n                \"type\": \"number\",\n                \"label\": \"Likes\"\n            },\n            {\n                \"name\": \"oneClickLeadFormOpens\",\n                \"type\": \"number\",\n                \"label\": \"One Click Lead Form Opens\"\n            },\n            {\n                \"name\": \"oneClickLeads\",\n                \"type\": \"number\",\n                \"label\": \"One Click Leads\"\n            },\n            {\n                \"name\": \"opens\",\n                \"type\": \"number\",\n                \"label\": \"Opens\"\n            },\n            {\n                \"name\": \"otherEngagements\",\n                \"type\": \"number\",\n                \"label\": \"Other Engagements\"\n            },\n            {\n                \"name\": \"qualifiedLeads\",\n                \"type\": \"number\",\n                \"label\": \"Qualified Leads\"\n            },\n            {\n                \"name\": \"reactions\",\n                \"type\": \"number\",\n                \"label\": \"Reactions\"\n            },\n            {\n                \"name\": \"sends\",\n                \"type\": \"number\",\n                \"label\": \"Sends\"\n            },\n            {\n                \"name\": \"shares\",\n                \"type\": \"number\",\n                \"label\": \"Shares\"\n            },\n            {\n                \"name\": \"textUrlClicks\",\n                \"type\": \"number\",\n                \"label\": \"Text URL Clicks\"\n            },\n            {\n                \"name\": \"totalEngagements\",\n                \"type\": \"number\",\n                \"label\": \"Total Engagements\"\n            },\n            {\n                \"name\": \"videoCompletions\",\n                \"type\": \"number\",\n                \"label\": \"Video Completions\"\n            },\n            {\n                \"name\": \"videoFirstQuartileCompletions\",\n                \"type\": \"number\",\n                \"label\": \"Video First Quartile Completions\"\n            },\n            {\n                \"name\": \"videoMidpointCompletions\",\n                \"type\": \"number\",\n                \"label\": \"Video Midpoint Completions\"\n            },\n            {\n                \"name\": \"videoStarts\",\n                \"type\": \"number\",\n                \"label\": \"Video Starts\"\n            },\n            {\n                \"name\": \"videoThirdQuartileCompletions\",\n                \"type\": \"number\",\n                \"label\": \"Video Third Quartile Completions\"\n            },\n            {\n                \"name\": \"videoViews\",\n                \"type\": \"number\",\n                \"label\": \"Video Views\"\n            },\n            {\n                \"name\": \"viralCardClicks\",\n                \"type\": \"number\",\n                \"label\": \"Viral Card Clicks\"\n            },\n            {\n                \"name\": \"viralCardImpressions\",\n                \"type\": \"number\",\n                \"label\": \"Viral Card Impressions\"\n            },\n            {\n                \"name\": \"viralClicks\",\n                \"type\": \"number\",\n                \"label\": \"Viral Clicks\"\n            },\n            {\n                \"name\": \"viralCommentLikes\",\n                \"type\": \"number\",\n                \"label\": \"Viral Comment Likes\"\n            },\n            {\n                \"name\": \"viralComments\",\n                \"type\": \"number\",\n                \"label\": \"Viral Comments\"\n            },\n            {\n                \"name\": \"viralCompanyPageClicks\",\n                \"type\": \"number\",\n                \"label\": \"Viral Company Page Clicks\"\n            },\n            {\n                \"name\": \"viralExternalWebsiteConversions\",\n                \"type\": \"number\",\n                \"label\": \"Viral External Website Conversions\"\n            },\n            {\n                \"name\": \"viralExternalWebsitePostClickConversions\",\n                \"type\": \"number\",\n                \"label\": \"Viral External Website Post Click Conversions\"\n            },\n            {\n                \"name\": \"viralExternalWebsitePostViewConversions\",\n                \"type\": \"number\",\n                \"label\": \"Viral External Website Post View Conversions\"\n            },\n            {\n                \"name\": \"viralFollows\",\n                \"type\": \"number\",\n                \"label\": \"Viral Follows\"\n            },\n            {\n                \"name\": \"viralFullScreenPlays\",\n                \"type\": \"number\",\n                \"label\": \"Viral Full Screen Plays\"\n            },\n            {\n                \"name\": \"viralImpressions\",\n                \"type\": \"number\",\n                \"label\": \"Viral Impressions\"\n            },\n            {\n                \"name\": \"viralLandingPageClicks\",\n                \"type\": \"number\",\n                \"label\": \"Viral Landing Page Clicks\"\n            },\n            {\n                \"name\": \"viralLikes\",\n                \"type\": \"number\",\n                \"label\": \"Viral Likes\"\n            },\n            {\n                \"name\": \"viralOneClickLeadFormOpens\",\n                \"type\": \"number\",\n                \"label\": \"Viral One Click Lead Form Opens\"\n            },\n            {\n                \"name\": \"viralOneClickLeads\",\n                \"type\": \"number\",\n                \"label\": \"Viral One Click Leads\"\n            },\n            {\n                \"name\": \"viralOtherEngagements\",\n                \"type\": \"number\",\n                \"label\": \"Viral Other Engagements\"\n            },\n            {\n                \"name\": \"viralReactions\",\n                \"type\": \"number\",\n                \"label\": \"Viral Reactions\"\n            },\n            {\n                \"name\": \"viralShares\",\n                \"type\": \"number\",\n                \"label\": \"Viral Shares\"\n            },\n            {\n                \"name\": \"viralTotalEngagements\",\n                \"type\": \"number\",\n                \"label\": \"Viral Total Engagements\"\n            },\n            {\n                \"name\": \"viralVideoCompletions\",\n                \"type\": \"number\",\n                \"label\": \"Viral Video Completions\"\n            },\n            {\n                \"name\": \"viralVideoFirstQuartileCompletions\",\n                \"type\": \"number\",\n                \"label\": \"Viral Video First Quartile Completions\"\n            },\n            {\n                \"name\": \"viralVideoMidpointCompletions\",\n                \"type\": \"number\",\n                \"label\": \"Viral Video Midpoint Completions\"\n            },\n            {\n                \"name\": \"viralVideoStarts\",\n                \"type\": \"number\",\n                \"label\": \"Viral Video Starts\"\n            },\n            {\n                \"name\": \"viralVideoThirdQuartileCompletions\",\n                \"type\": \"number\",\n                \"label\": \"Viral Video Third Quartile Completions\"\n            },\n            {\n                \"name\": \"viralVideoViews\",\n                \"type\": \"number\",\n                \"label\": \"Viral Video Views\"\n            },\n            {\n                \"name\": \"viralSubscriptionClicks\",\n                \"type\": \"number\",\n                \"label\": \"Viral Subscription Clicks\"\n            },\n            {\n                \"name\": \"subscriptionClicks\",\n                \"type\": \"number\",\n                \"label\": \"Subscription Clicks\"\n            }\n        ]\n    },\n    \"response\": {\n        \"output\": \"{{item}}\",\n        \"iterate\": {\n            \"condition\": \"{{contains(parameters.fields, item.name)}}\",\n            \"container\": \"{{temp.interface}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "linkedin-ads-reports",
+      "altAccountName": "linkedin-ads-reports2",
+      "parametersJsonc": "[\n]"
+    }
+  },
+  "flags": {},
+  "label": "LinkedIn Ads Reports",
+  "theme": "#0976b4",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "generateAdStatisticsReport"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda793000001fc4944415458c3e5d64f884d511c07f0cf79f330646423f227a56427a31994b2940d1b65692fc986b2352b0b1656245b0ba5b1b292ad24f933251ba5fc49b2509864ccbc9fc53d576fdebcfbbcc9bb939a6f9dbae7777fe7febee79cfbfdfd7e2c77248808588d13d88f464df15a7882db984e2969e6e0701cd7315cf3a667d0c48d8898b7d3bd4b101c5662ac9cb41318eae23c8b69cc0d984463c14317bcc5591cc6397cace3389a15f6395cc2b53c7f8855d956cf5174e007a620a554da9ee1e75211588351fe4814c6f3290c145557d0c005acc83b3f8033830ede8b006cc11585129a72d2fa0b42916c923e93592f028ff1227fa8a5d0eea84296f7f03507dca050ca1426f146a1f55d3886dd3dc9444439aec67c9c6f7b272226b2fd5d44ec68b3ef8988cb11b1b1c35f446c8d88c958889ba5cf2072fe6b4ce0534a493932dee3223e542dfe270239d0777cc3f688188f884d6dca819778540b81b64047711f0f705771ff2566f1aa160219c338859d185148f64887cf973a098c605b876d73c77ca64e024316cab9b3b246d5e24110883e7c2a93585dad57df71968ac0e299fd8f04fab9eb45a357313aa8283c8d1c7c5fb6afc5497c56fc5cebb0be63ed284ee7f72d1caade567531aa135d8bd1a03bdf5e68950fed049eaba1e7eb825f785a4e9a29a5b2a8dc51b46063ea5347285abc5bcc6b7897317e03d188483c1d6d17810000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000004624944415478daeddb4da81b551806e0676eeed5fe4ab5fed142d5964a05a10a6a8b60172e445c29a22b45702182828a08ba702552411494e24e174a7121a20b370a6e0b054571a12d48c55a2b22d5d622adedbdf77371266d9a4c26c964aef9e97d6148c8e4cc39ef3b5fbebf336119cb58c6c58cace8c38880196cc4f5b864d40bad88791cce8f852ceba4dbf1494e7e0d9ec6e3d8800662d46c06448645fc8e0ff0264e14897001f9fc782122cec4f4603e2276474423bfc1e73053a0c3b5780c73a3be8535a28147b0b5fd4491001bf363da7025aeeb4780d92e9f4f3a66726e3d05b8a8303be4f8703e3a4c82981d91acaa008183f8043fe4e4b7e3416c1a35cb1274c4c0aa027c816772115a2fbe177bb073d44cbba0c302aa98ed013cd7249f65993cb9087c8de7f1dba899764187055411e023c9ecb566552deff7e3cb5133ed82a12d60a1887cc177be1935d32e18da02325d0aa85e138d2b061560063773ae682ac21c6e1f35b1a512001e9642de0522b4bcbf0b778f9ad8520ab0056fe31664cd0a522a3876e1755c356a625d505b22b40b9fe2737c2b09b903f7e09a51b32c416d8910a9b27ac2795527c1f1d56601ad9804e25dd75a458045a9d75636c96cdb64918f290a1de17ca99ab5cc7104dfe7afa7b1025748b5c616ac33b8f8b558c061bc84bf5b0847feba2035535e931a104dfc8517733259db9879dc8197a5107a00ef493ee6679c69b94e036b7113ee97ba3c1b06587bb960b947df1111274afa6bdf45c4faa23c201fbf39220eb78d391a1137968cb937224e45c46711b1ad25b294ad338b883b23627f9f7dc17f23e2be7e7a824b8532f567a488f2a4640165a9766bf1b50f4fe1c7aa6ba82a40dd8eef90f4b33ad28b7c9b08f015de50ee979aa8a51c2ebcd09038a077915526c2c7523ed273485d02d486663fa1a5af50057fa8588257cd036a8ffd2dce691db649e16e416abc1cc4d9c2adad2c6b8edd27458cb26dbc5a7b824b417e275ec56d589dcf730cefe395883859622587701c57974c35b64e90943fbc2555929749317f56aa2d9ec5436d62b5e3384ef69863a44eb0704c0ba107a43b5f84b95c809525d73f857f7aac61a4165036a621f511cad6b315eb4bcecf4b297319c6360caed43ba55d23a5c1ddb02839cd328cad0f98c3aa3ebe73e990028cad056443ac65d0796a1160927a00ad185b0bf8bf307ea970cde406b6cc69fa096452382dc354ff042aed584d9305f47353c62f15ae11636f014b6d35636f014b8db1b780a5c6d85bc058fa802a1da119a9323b1d11ed175c943a3959c198d5581511eda2477eaed7cdc8a48269654434ba5c63e03ca08a003748cf099ded727e85ceedf1cbf1aed4b428c22c36f798772dded1bde9d1907a89bd441c5a8055067f02e412dc5a61aef6b56e1ff21a1d98a65aa01fd4e60427157d85c105c9994d1b9a5bf43d05389a1fd38663f8a55f01f6ea6fb37152b0880f5df86c33daa240cb36d31e299c3d2aedb44caaaf08fc9993dfade09f63657f9b6b480f426d3299ff1fcaa45ce557fca4cbdee23296b18c8b1bff018f5563fc99bdcb0a0000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-03-21T16:53:10.982105+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda7930000092b4944415478daed9d5d8c25451580bf9e99fd819d15d665301a352ceeba02896020d118138d0f8231fa803f9848160dfe24620c12441378e001501f3498f8a0414c10c568fc09069e3086444d8c5124408c22ee66581464d90d0bc3b2cbecbd878753bdd33b7b676e7557ddeaeabee74b6e66ee4cd75fd7a9aad3e79cae02c3300cc3300cc3300cc3300c632a28ea261091f2d77960177001b0d0242f2398e7817fbacf2180a2a8d70db5ae769dbf19b81cd8035c0c6c0366dbbe1353ca107811f807f053e06ee0853a42e07da5ebfc05e046e06a740630f2e118700f7033f024f8cd065e02e03a7f23701b702d36e273e617c01780e77d046066dc059535ffc3c0e7b0cecf9dcb812fc2497db7266305c0b119f814f09ab65b678c650eedab37f95cec2b006f46153ea31b9c0bbcc3e7425f01d8019cdd76ab0c6f3603e7c1f865c05700ce0036b4dd2aa3165b7c2ef21500a37b8cd7003101e8335e7d6b02d05fbc6c3c2600fdc596802967e8739109407ff15a02e65aaa9c002f007b8145e0b0abf06b519bc30ee0f496ead617bc06771b02b004fc1ab80b780cedfc65f7bf8da810bc07b567bf1bb33f4c94d402b00fb809f80df0f2086fd55111f91fead1fa3df079e0abc099eddea64e32f0b928a5002c025f06ee83b57dd5e5df45e439e05be80cf10d606bc2ba4e0da994c02574e4afdbf955dc3503e00ee007786ab5c609bcdcf6a904e057ee532b66cd5dfb0af05de0a144759d2a5208c041e087c0cb01793c859b3d0c6fb2b1033c81062dd68e585d95e601340ad6f0231b4be03ef4993f94ffa03381e14736be8043c0f108f92cb9bc0c3fb2f106c67a61a48898d73490cd12b0401c6bde56e0ac04f5ed0bd92881e710c792773ef0c604f59d2a5208c02ee022f08b535f4d25cda59835b00ed91882ce401d3bb53bafd2f9bb818f24a8ebd491ca127819f019a068300bcc035f07de9af0bef4816c7400d038f59b802b81191f2170d79c065c037c127b02a88bd7484be90d5c00bee37ede292287e154eb604538ce016e003e8d0a90518f2c0342ce026e4515ba7b813f88c87ee0257484cfa353fda5c04751cddf5e466d46b621619b810f00ef079e45df653fe02afc3a341c6cbb6f038c35c96e091855f61bdcc7884f564aa0919e6c9c41463b64e30c3232a64d1da00f08eaea5e66250a77ce7d66697780651715dc179680478187817f01fbd138856574dddd843ece6e075e8fda33ce43cdd9d93ddda4128045741fbb65569eeb4b092dbf0fdda71c3903f7bd407727f1d9a3e808ba57de33ae6d659e8c2877664439ef03de3b225f71793ee8daf127345c5dd60b737346ad02f58394f68d0f016fc773038700e2d84f440411f984881c97e63c28225b9a7a034564b788ecf728e780885c54b71c57062272e3883c9744e44e11b944443695d7366c0722b25d44ae10913f8bc820e09e8ee3169fbaa65aa366089ffa7cee7a68d4d0eab44f005f729fbf164571ac288ac6c1ad2edd41e0e7c01568b87b8c78c95178d901522d0159ad7b9e3c8e76fc03d02ca279e48d5879f36911f81af034ea288bbd055f362161de955907df912d11ca02f837ba1d6ed4ce3fa9419ae732703bf06de204ce9e5484cf45a90460489c8e993405f05fe02bc01f61329d7fa2b01521f81eeecda988646508eaca12701c5d97ef87c976fe2a0ea1fb30ef8d9867564b40a87256676a0f29e73ee04790aef32be53c02fcb8463bc73195cea046bd566ae845513c5a14c5c18423ff44f98ebbd1c31f929152090c91ecd44a605becc52d3f11c8262a18badd2949a8cc02bf4323a492d0154390efc8eec3eb638f104719cc4a07e87aa700279973674564a6a959780ccf1267338cac42c242ed00ade8001567ce027a3ada85c05bd09dcc86a815ef2111f90beaf01a44502007c0dfd043b94232cb2a2ab8733a80ebfcade80b2d7b506fde3ca776ca32daf9bf046e1791ff43f3cd305cb98fa33baa84ec95985554700c1dc0b7d1c143d075c2996808fbd5a88f7f2d36003bd1edecce450fd57a3ab00acfa0c7c1850840ef748024b388ebfc59e03a749fc24d9e4967818f019fade4d394c368e04950537c2eead263604a1de09de8d16b7567c819f435b61d81e51f41678010b27206c530044dbe922ba37f0fcdcf48da8d46fe84cc02c7502108212b675097d8097c3020fd2cfad653c8ae28cb842f015e9833a82c6065b45e88067386b08bb05d510684cf005e51c15d52025395b393f03d8db6a11b63346580ee903a71ba121092d21014631fa22db47fb8b639831a30875afd42d94858d8f7909ecd005d3104cd12e7a49239c236b528df380ac10c410d98218e7534463ea1eded952128950e10cb9d1c431709ad475686a0ae440543bc7b12daded07a646508ea523c402e82daab25207b4350851847d31484dfdbd07a64a504a622c64c938bc29a64d6ec923328952128d68d0f1dc1a17d939521a84be4a2af24d145baa403d4292b8458c7d3b52d4859e900a9d6d5187b10c41a79a11649df48a4f5da3296aed801521a82cc0e30017279b6f621d6d4ddb6329a9500a4720611580ee4a303840a50ef0242a64907f06d6f70faae2c015d7306c5687328593983baf4dab62981534e2e826a86a00a5d730641f8bded9512988ab615afced1151da08b86a0d099245498b37206756964b56dc34f5a0f33049d4a2e86a05e05849821283d66089a6039a9da3cf1f45df106a624174350af9c415d7a3ccb455093f80252ee1134879e1e5e571886f80b6a817bfc1191bac22d2e7dac80ceb986f528ef57683db23a3062377007baf141d9b05210567f5ffd374177ebdae651ce3c700bf05c25bfb5ca19f57d16dd0e2e940dc0f5e8394725beed2d7fbe2b423dc6924a0016808f272867137059a236ad47b94b48db75184bdf4cc1464d4c00facb543a838c9a9800f497acec00467a4c00a61cd301a69ca8cea017897fb0a13159bc369af415807da875cde806afa0e71e8f3db7c057009e04fede76ab0c6f16f1ec2f5f013802fc8484a759198d1902f7a0b3f658c60a40650ab917b88b7cdca5c668ee47cf22169f636bbc660097d151e09ba8741d6dbb95c6291c077e0bdc400d7dcddb375fd94e7d2b7aa0c255a89b771e7b9c6c0b410f975a047e067c1f3800fe8756d58ed4a908c2022a006f03b6bbbccad0af9955dfcb787b612550a1745796068b7169aa31fb6ba529bfaf4e532db7499ab2aebeed8b55ee7a6906e8a1127bd1f3869f0286a9cf3d360cc3300cc3300cc3300cc3303ac2ab4c496169c81135da0000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda793000018624944415478daed9d79b06d475587bf73eebd8fe491bcbc90401e53489812926014082082c1148341c132c55068518a58804a513854890a825a251171368043e11f1452a00545180a041914880209a12013040c6420092124ef91bce1de73b67ff4ee9cbe3b777caff7f9f5e9f3fbaa4edd9b9bf3760fbb7bf55addabd702638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c6e819280b6f9a066001381ad8a1ae8f31536405d80f1c02180c34437faaa5b6131ee038e091c08f008f074e014e0486925e3066fadc057c07f82af065e01ae06660659ac2602a25b5137f089c0a9c073c07782261d2ef985a6b8d298f31b017b816f838703141201c9c8620e8bd8476f2df177811f0ebc099c051bdb7cc98d96304dc00bc0bb808b809fa350f7a7b72a2ee9f0cbc12783970426f2d31a61e0e02ef052e04ae029abe84402f4f4d26ff13803700cfc0abbe31db6105f822f026e023c0a80f2190fd89c9e47f30f056e0b97d9463cc9c700df00ae03390df1ce86bd7fd3ec04b8167e2c96fcc91701af0bbc043fb7878560190acfecf236cf81ddd67cf1833273c0b781d704c32c7b2d08706f040e055ed4f63cc91b300bc18f81958b5d01e31d9044052a9a7023f3ab5ae31663e3816783eb02be743736b004701cfce5d49630c004f06ce807c5a406e01b0073867ba7d62ccdc7012f0a49c0fcc2d004e2538fe1863f2b3049c4d46f7f92c02205147cec0eabf317df218c27e4016fad0007ca3cf98fe3811383ed7c3724ed605e098a9778731f3c580d24c804ee58c31fd316e3f59b0ba6eccec916da1cd2d00f2fa291a63ba34649c6736018c992d8614ac011863fa6591b0e19e059b00c6cc1e36018c99636c021833a764d5b26d0218335b8cda4f166c0218335b14ad01186366089b00c6cc16760432668e5920e3bc5d54b7a60046840cade3e4bf1709c11716b150336551b4009805136004dc06fc1ff0adf67313b08fc90eebd1847bd70f22642e3ebdfd79341608464fb679965b00943c3946840cac1f063e4ac8b8723b7037edea3f180cbac116970893fea184586c17004f27243b354645b679362f26c00f08c916df0e5c4950f9d74cb3d4f9db32b0dc34cd15c015841c6d2f24643d3a9320208c99265937016b370156804b80b7011f22a8f9dbceaf16bfdf34cdcdc0df1334885f057e05673c36d365858203829464028c818b819701ef06f60d0683234aaed8fefb31f075e0f5c06f02d7ab1b6acce152ab2350037c12f87de01b9037ab6afbac83c03b81dfc242c0cc28353a028d09eafeab091b7dd9532a779ef93ee00f805bd40d3773831d8136e00b8474ca57413f93ff9ec686678f091b8c6f050ea81b6faa6781820382a8b903b888294cfe0e07817f043e48c60d1a63d6a0e890604a13600cbc07f8004c6ff227e5dc0cfc0570b5b00fcc7c6013600dae211cd1ed9b76c18910b88cb0ff90edbeb6316b50ac06a06244b0c3a7adfa7759269c3e7c5fdd21a65ac614ac01a84c801b085e7ab29537113a970297abea61aa67841d81eec5b5c0b741bafa476e03fe136f069a19a01613e09bc05e752512e1f325c245236372537440108509b04cd000f60bca5e8fab81efaa2b61aa6440c19b800afd7b3fe5b9e2ee05ae5357c254c92219e76d0d26c018c1d1df261c006e5557c25449d11a80c20418017709caddac1f96d5953066336a3001b29e8b1a334fd4a001ec00760bcadd8821701f75254c9514ed07a06007707f75253aec24c411342637457b022a4c80258200907b0025ec061ea6ae84319b518309b0083c9c0254ee24a2f063294f2b317550b423906a153e9310c7bf041681f380e3d415315552743c00158f041e0374e3fa2bd8033c85b24c12530f45470452cdbe1381e722340312c1f313c069aa7a98ea19601360cd725f4050bd955ac0f1c0f329ef58d2d4854d8035d803bc0ac1e65b2270ce03ce557784315ba5161320f253c04b808569690149396703afc1bbffa65f56c818f8a61613207234215bcff9305553e024426e80a788db6fea27eba0aec904883c04b810f849e85708b4cf5e047e11780e75f6a7a998da4c80c89984fc00cf0406b98540d33471f21f07bc92901ecc29c3cd34b023d016390bf85be00260472e21903ce754421e8037010f5637d6cc0d0b649cb7b9d38397c6e9845c01a701ef68d37b1f56e0d064e21f039c03fc0ef06c323a6518b30586142c004a310152f630d9a07b1f7049d334d7d1c610dc4c18b4137f4838e33f8770ceff2cc25e43491a8f990fb23a02e51600a54e889d844dba7309b1fafe1bf834f0b5a6696e24088365261d3b245c333e86e0667c2e6153f171c003f0669fd191352458ed2640ca8030a1cf02ce20ecdcdf441008df21e4f6bb93a0d2ef061e48b865784afbfb0e75038c21733c80793001d66208ec6a3fa76fd08652351a33bf648d08342f26c0bcb5c1d48b1d818c99638a1600b362021833cbd811c8983965918203821863faa5e8906036018ce91f9b00c6cc2945e70634c6f4cb888235009b00c6f48b1d814c95344c06f720f9db22d6547b639eee02183d0d7000b81db805f81e70237003b0b7fd1c6272cc3522dccbb82fe12ec609ed673721f6e2f10477ee630921e1e76101ca1a10645eef0298e9b217b81cf81fe00ae06ac245acbd4c6e62ae7b353b89c5106f692e1184c2090441f0504250d6c71212c4ec69bf532345df06544be03b815b99a891317a4aac575431a3141db47d3068bf37ee7c0726995862c78f986cc4349d728e220cc85cfd3a02be0bdc95941357c754658eff3d4cda13ffb6c26ab53a7e272d23b627b6316dcbe1de826cda77f149e0df0857b06f8ff5dd4e5096e4bb6382067100d847b8c11905c4bb08b73d4f2544877e0693ebdb35056d7144a00df818f04784411f0732ac9ebc7162379def0cdbbf8d3bdf19769e3366f5a44b85c7d9c05f010fcad49efd6d7b3ecdbd8519495dd2bf75077b3ab9631bd20114dbdce591c05f028fde669d0f1056f8cf011f003e4f1060871589692bb4cf1d037b9ba6f90af015e05f0802e0a709d99ace22980bea45ea48c9ba1f529b09703b700d30ea6bb0addbf0b00aeda25567333106ae07ae9d667bdab68c69a3266d9115e04ae09dc0070971160e427f137f2d62594dd3dc097c0af82c41209f0bfc12f0e384f0f1b38c4d804289a6422e526da3647e4098f8ff045c8540007749ca5f6e9ae6db6dfd3e05bc18f80de06469050ba1360d20b57f15643da325a87b2afb752b9b4d23c2aaff77c0bb811fc27457fc2d3524d4a7699ae67ae0afdb3abf1a782ab3a70d645d146ad300b2ee906e959e3310c5d13bed89b5596187089b7b7f0e7c8d0256fd4d1b3418d034cd21e043c065c02f00bf4d38359815b27a02d6b609a826eb4d2dd6dfa09b061b9d378f80f703af259ce117b7eaaf47b2477013f037847d8e3f06eea7ae9b82da4c80dc13704bb42b0bcc870970376177ff0dccd8e45fd5b8f0ce968177b4ed7c2db391e0a5684720f548c81a3175ab741c556ad200ba1c04de4ec886741bcce6e48fb442603ff00f044de042e04475bd36a1e878006ab2da478741d6ac2d24024030d1ba2bcd18b818780b70db603098e9c91f69dbb00cbc17780f19536ff7445647a01a6f034ebd0ec944c82d80ba4e3bd3a4eb41f911e08d04cfc41ad9474823f729ca18c7eb9155ead6161044a22e2726401fed570dc6b4dc8f1332205f09b3adf6af45d29eab81d7015f55d769a3ea6213a0586adc03b8997076fe0da86ff2479276fd2ff0365af7e5027158f00d58eaa14d9b920c9e78f12617f75cdce9d9d760bdb2c704bbf8bf3aedac92a47def8f6d2e9078792b0bb59900123aa700591f8d4ea88e089790dec6f6ee04d4c02d04b7e63bd4155983ac1aa14d80bce4f644540a80eb803f04be0ef5affe91a49d9f206c08564d6d2680cc11a8a50a47a0f6886f653018ec1b0c06cdbc4cfe0efb08fe01df5357a443d645a1361340e20790980059cf6899042831532411789f013eaaae4f87a2fd00d4483c013be416820dcc8f0a5e1807800fd3de722c84a23d01d5934f52874ec8aa9c26400c0366745c420832530a7604da0089badca30910e3fe99299308f59b0861cd4ac18e409bb44729844ad0804c5e56085a402947a17604da004944a0699c02081c81cc84cb08b1194b60053b02ad8b6496744c80798c0958258960bf1eb8545d9f96a2350035259800b96f03aa85aa0941502e25acbe6a8a16006a3d5532593aa700b55c0736abf932e5b8063b22d03ae4be8cb3251213207722cb3165ac3adbed8721214bcf6ee024425cfe9d845c7e07082beaad849062b710528415e97198847bbb8e600aa823063933d006a83590dcc2e71e13a0c4c901ab26fd4e424cbd338127b73f1f41482f761461e02e32f16e3c445851af00be005cd234cde5845063250a835b0957a27f4c5c8fac666e6d41412597679255a28fb28b9b0991b6cd47014f035e003c81909b6f179baf523b091ac22984f45db7035f246415fa48d334df81a204dfdd040130de42dbfa246b87d46602a82302e53e0528d2112869ef038157022f051e72046d5f20680acf019e0e3c17783d7099201fc27a8c09a9cc9709a9c85564dd17aacd04506706ea6313b02857e064f23f1cf813e0028216908b9dc0f9042de2f780cf162404be4b7008520a80acbe26b59d02e45e81b74432387b3b062cc11128a9c3c3803f035e48dec99fb6fba984c41d4f2ba5fd84abc1ea8b41597d436a7304529b00b9fd104a74043a8ea09e5f40ff1ae4e30839fc4ac9dab397b017a0a4683f00356a47a06afd005a2137047e999061775af53a17b1169068787751860028362048097a9af23a7009edcf4e32f1ce067e8d60a74f8bfb1304ce6e753f10ecff3bc57528fa36a0da0458411b1128b7235049a7000bc0f3814709ca7e3af07890ef051c2498014a8a8e0854e50ab80d7a33010ad8057f14f073684c9207108e0695bbef109c970e88eb5074401035258404ab8a76c51d002f021e23aac60078267072522705cb8460a14a6c02144c1fa7002598007b082bb072c1381978acb81f46843d00e52253b40050afbed506045190acb44f024e53d5a3e51882abb1fabaf741b4e3dc998136297ffa79b4a7a0920ad5de01700e6102aa395d5c8f867014a8f4cdc81afabeb63d00b506d2477250759b76a2d9f95f8b9380fb0acb6f087e00a539671d36b599006a57e0aa4c80965d848b3e25b0bbad8f4a236ad09f0214ed08a4360124a7003dba022bd383474e2038e394c071ed4789faa4a9e84d403592d4600943f23b02a9ef37dc8f76d52d809d94b117a1c48e40a5d5a16302d4e6087402fddcf83b1c160aa8cb12da85336bd9359a0053a7471300f442f501e83df0224b84b8824a7e88d62cb30950307d4c7ef51ec02eca091cb380e81420d1c0d4a700455f0756af566a47a0dc5189876d9b947e00b92f381d0903f4c2487de5bce888406a1340ed08549b1fc090b0ebae7eaf9145f4d78225a1e7138a3e069c776ab3ffe38aabae478a7accaa4d329b009bb4c78e40f9680837e04a425d1f75e0d9a23500b5aaa8f603c87a468b3e33d080b0f3ae7eaf29ea3d00b52350565f13b53a951bf5cbe98370215fe307505c5872f42ab87a13306bf9b59900ea3ae4d6404a3001d413ae4b0926801d81d641ad2a4a4c809e93832a03829470ecd6455d9fdcfb3cdb256ba4e8da4c00b57a568206e436d54dd19b80eac12251cfa6710a2072041a1302619684da2491f89a24ace08840eba2b924de5f72507566a0dcb71b73b0435cfe21f48e40d928ede5e6688fda04e82537a0b03da59daca8eb52d522579b09a0392b9b9800b5a5062bf114401d25591275aa43b17b00ea8e91f869774e01721edba91d818604955bfd5e534a3805a8c6d9ac361340ad81f4a1010c40e608a4eecfb528c10fc08e40eba01e3092db733d27072d69f52d81124c00e5c259746a30f560554704ca6d1faa938396e808b4242e5f7d1dd88e401ba0dea0a9711350b907b116ea4d49f54953d6a3e1da4c00755e803e4c9021482302952600d4a8c7b823026d406d8e40ea63b8126f034a1c819277ac7e2745fb01a8519b00b95d814b3101d4ab5e8a5a23390efd0dcd62fd00d4034552be3066ff3ca21e63ea45262bb59900eaab9a0be45d1d4a380528cd11486d92a85da38b7604524b6735b5650652dbbb6ba176042a213350b18e40ea95421d10a48ff6ab856a69fb44eafe50e3cc401ba01e1cb565072ef11440ed98a4be0b50b400504f407566a03e4e01d43bcea5050429c115b89a93a6da4c00899756cf2640b78ca9374f55f03aa83512b50650b427a01af560cd1dc0439d1a4c1d90642dd42680fa2e40d18e40ea09a87605ae2d33508c47a07eaf29ea53007558f0a21d81d4ab85e48cb6e7e4a0256c02aadf6b8a5a6bad4a2b5377666ed44e1a350a00b5cabd569de6193b029546c704c8ed08b4d029639aa805d05a1c1497af76047240900d503b02f5a101a85d814bd300d4a700556999b599006afad8359f4bad6a03d463b6aaf7519b09a07604ca7d44346cdbe4cc4013d4d781d51181b28eb1da4c00491d7a3601aad971ce843a26e0327a3f80628f01d5a8076b8dea7f097548518f59757fd8116893f6d4e608a4763a51bbbe76513b02a9fd228ad600d42bb07ab0e68e193fa68c5300f57b4d519f4af814a060d436735f6d52a18e49b8166abf04f5266056adb03613402d006a740452bfd32e6a1340ad11659db3360132d0490e9ab34fed08746fd4f5519b99ce0cb4497bd41b34b551639b6699a23701d583457255731ad781858e406a957bad3a29512f328e08b401b56506ca1afde530501f43ae85243350c221ec08542c6ae99c7bd34ced8957a21f80ba2e552d72b59900929793980035660756abdc5dd44141ab5a646a330124e1ab7a3c058821b9540c292f33d0bc9f0214ed075002ea88ad39b9c704b01fc03da86f03da0f6003d48345e2a6994cce3e268c7af55597df452d00d477018a7605560f167550d0dc7701ec08746fd4d781d55192ed08b401b927e076a9711350bde276516f02aa439265dd98adcd0450e705e8c30418823433907ac275516b99ea316e47a00d50bf9c1ac38297a625aa1d8196d18e33fb016cc0405c87dc3101d5a7003126a0fabda69416a370da6435334bdbe039524e035e061c689a265ea53dc4e45aed4afb33fe1e05e03213f361c464a369a5eda371f23bed7f2f3139138ee59c0a1c93b13d3b80f3813d4dd38cdb72629090252626c72213d5709189ff7eac63da7eda762f33b96b3062b27f12ff1edb79167acd2ee5f1c04b80a526d845f1bdc477b1c464922c32d9b48bed1fb4df89bf2f24fd35ecf445fc3d9633049e867e1f201b595e6c6b9f2e006f055e2e6c4f9c046326ab675c91876bfc3db6bf398cdf874c2660faeca55cfdcae414200ee8edd465a3366fa75f16296bc0afb47d92b6793b7db15e9b61a2416e3446a2705009c56f02cf03aecca115e6d600d4aa625cdd6ba1c46338358bcc779f149d1bb02455d1981a29da11c818d32f456b006a13c098dac91a23c2268031b345d6db8836018c992d8a8e076013c0987e295a00d80430a65f8ade0434c6f44bd1c78036018ce997a205804d0063faa56801608c99216c0218335b38208831734cd6003136018c992d8af603b009604cbf142b0046c0fea9778731f345d648cdb935801ba7db17c6cc1d7b813b733d2c8b004842135dd156d018d30fd702fb723d2cb706f075ac0518d31763e0abc0815c0fcc2d006e06be32cd1e31668eb81df852ce07e6160077011f03ee9e568f1833475c0a7c19f2e589c82600920a7d02b87cbafd624cf5dc0dfc2b705bce87f6e1087403f0cfc01dfdf789317341037c10b818f26689ca2a00928afd3bf00e9cc6c9981c7c1e78233d2caa7db902ef032e6a2b6e8c397c6e04fe14b81af2e788cc2e00920a7e0b7833f035ec226ccc766980eb810b09fb6abd2488ededf65e922ff089c06b809f0576f6559e3115b1027c0e780bf071e0605fd9a17bbdbedb0a01809380571032f73e04df4234663dee206cf6bd99e059db6b6af8a9dcdf6f05c151c039c0cf03e701a7105269d794ccd398edd2000709c77b5f02de0bfc07f07de877f2c314037824dac00ee061c019c0a3db9f8f0076b5f589a99be33f88a9a063dae734777decc0314190c4f60cd6f84ecc111f89e5c414d0f1bbddefa49958d214d1695aea51dad4a42e4df273dc7946aa05c5f2372ba7fb9d6e39ddbac43674eb3262f5bb5fe8949bf64bacdf90d57b39dd94e5693991584efa9df5ca89df896d6e3ae5c47f9b8e91b49cf4f94356bfd3d8e6349e5e3a8ed2ba2c74ca6992efc472d2f7325ca79ccdc6eb7ee056e01ae01b844dbeab801f40ff133f228be0d31108c7b63fd317170741ecd0f86262878e92efc417970e8026794e3ab907c967dc296bc0ea013058a79cf43b4de73b74ea12cb8983272d279d6069a8a73870bada515718a5e5c4bf8d583d31d372e8d425b671ad72520110ebd2ac534e9c08b1dfd37797beb3589771a72ec34e5dd2be8c7549dfff46e50cb8b70048cb49bf13ff5f7cb7e942d21500b05a00c0c6e375d8f96eb79c3161e5bf2bb6755a93de18638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31a5f1ff1f7ce8aa4139bc450000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda79300003a684944415478daeddd79906c6959e7f16f6655dda56f2f7443d34dd30d2ab20ab2282a2822e2028c334ae8288e063a2a6368688c4be03a8e1333031a8ee18cbba0068afb86e2b88b1b8ab88020c200822dbb40b37437dd7d97aaca9c3fde3cd6b9d9b565ddca737e27dfef27a2e2d2c5bd594f9df39ef77dcebb822449aace08603a9df61d872449ead0c8c65f92a4fa8cfb0e40922475cf044092a40a990048925421130049922a6402204952854c002449aa90098024491532019024a9422600922455c8044092a40a990048925421130049922a6402204952854c002449aa90098024491532019024a9422600922455c8044092a40a990048925421130049922a6402204952854c002449aa90098024491532019024a9422600922455c8044092a40a990048925421130049922a6402204952854c002449aa90098024491532019024a9422600922455c8044092a40a9900489254a1f5be03e8c968f6e718b801783cf020e09ec047011b737f0f60bacbbfeff2fbc6b2f3fdbe7fffa458fafefd9362e9fbf74f8aa5efdf3f3596b3c01b8077027f03fc1d7007bbdfb795379a4eabf97dc7c0e59406ff11c027029f023c1438d1777092a4cedd09bc06f87de0af803703efa524052bdf38ae7a0230a6f472346ff99f053c19b877df814992e2bc03f83de077805700ef0226ac6832b0aa09c018384379d3ff1cca9bfec366df9324693fb7537a065e3cfb7a0bb0c58a2502ab98009ca68ce33f8bd2f8df03bbf825498b9952e60cdc0cbc00f839e0164a8fc04a58b504e02a4a37ff775026f58d2eede32449e22cf09bc07701afa3f4060cdeaa240023ca38ff33806f98fd6f49928ecb26f012e07f50e6076cf61dd0a55a8504e034f028e0cb2809c0e57d0724495a49dbc05f02ff07f813e0837d077429869e005c037c3ef045c0c7b3b37e5f92a465f947cae4c09f04ded877304735e404e01aca44bfaf026ec25d0d2549ddf910f0c7c07380bfed3b98a3186aa3798a32c3ff2b81fb0df8f790240dd315c05381ff097c74dfc11cc5101bce11f070e08b298dbf33fd25497d38017c32f04ce0cabe8359d4101380ab2993fd1e0facf51d8c24a96aa7802f059ec8c0dad441050b5c067c36f025c0c9be839124897290dcf75056a40dc69012800dca5bff3700f7ea3b1849925a1e0c3c8f32297d1086b40ae07ec02f008fc3717f49529e296579e0d3fb0ee43086d2037019f0e5c02760e32f49ca3402fe0df09ffa0ee430869200dc9332f16f28f14a92eab441d9a3e6b2be0339c8101ad475e029c07dfa0e4492a443f830e033fb0ee2204348004e5336fd718f7f49d2105c0d7c01e1bd004348001e49d965c9b17f49d210ac018f011ed67720fb494f003628b3feefdb772092242de026e06328c3d891d21380ab8027e0dbbf246958d629edd7157d07b297f404e01ae0d17d072149d282d6808fa3b46391d21380fb0137f61d8424490b1a01d713dc86a527008fed3b0049928e6883e05eecf404e093fa0e4092a423da003ebeef20f6929c008c28332825491aa235e0a1844e644f4e00ae04aeeb3b0849922ec1d594edece32427000fed3b0049922ed198d0bd6c921380e82d1425493a846d42dbdac8a066267d072049d225ba40687b969c0048923474134c00562a3649920e6384ab00562a3649920e2bb23d8b0c4a92242d577202b0dd770092245da229ce0158d8b4ef002449ba445342dbb3e4044092a4a15bc349802b159b244987b1414902e22437b2c9b149927418eb84b6679141cd448e994892b480310e012c2c72d6a424490b8a6ccf9213007b002449ab20b23d4b4e0024491abac8ee7fc84e0092639324e9b022dbb3c8a006109b2449873125b43d8b0c6a2672cc4492a4056ce324c085455e30499216b0096cf51dc46e9213007b00244943b745687b969c0048923474918d3f642700917b274b92b40077023c82c80b2649d202a684b667c909406cb78924490b886ccf921380edbe039024e9124d085dd5969c0048923474231c025858e40593246901eb84b667c90940726c92241dc60625098893dcc846664c92242d608dd0f62c322b99899c34b1a29a492acd4cd566ddea363b9331c7ec7465c51e6e2149619a3a338e09409d368173c079e02cf04ee03dc06dc09dec14d64de002e55e6c00d70357025700f7014e0297036780537dff5292142ab23d4b4e0074bc36817701ff0cbc1d780bf066e0adc02d9464e0dcec6bb3f5ef9aaeab29a5a13f095c06dc03b80eb809f870e061c0832989c189be7f59490ae210c082222fd8004d80bf00fe08780df08f94b7fdf3b3af450eaab87deebfd7d919dfba16780cf068e0f1c06329498224d52cb62d4b4e001c63be34e7803f005e04bc12b819b8eb987fc6163bc75cbe1d78c7ec67de087c2cf01f814f024ef77d3124a94791ed597202109b3585db02fe06f801e0e5946effaecea29e52e614bc09781bf00ae019c0d702f7c27b2aa93eed09d65122b39299c84913c126c0fb81e7035f01fc2aa511eeaaf19f779e32c7e00780a7023f4f197af0be4aaac916a1f55e720f40e4050bf521ca5bff4f032fe6ee63f57d99525616bc0af86acab0c0d7034fa24c2894a455b749687b969c00e86053caacfe1f037e7df6bf130f519a5092923fa54c44fc52e0db80abfb0e4c92966c1b138085250f4f24d8a6bc597f2b6596ffb9be033a8409f03ee0fb81bfa6242df7ec3b28495a220f035ab1d8fa36a58cef7f2bf0c70ca3f16fdb04fe1c7808f0dabe8391a4258b6ccf2283d281de0d7c33f01242bb960ee97dc0a701afeb3b1049aa4d72029038969de0bdc07703bfd27720c7f8fb3c9d329c11b95446922ec194d017b5e404c0c6e06253ca9afeafa32cad5b1553ca72c1afa2ec1be07d97b44aa684d66bc90980764c813700cf027ea1ef6096f4fbbd02f816ca190592b42a628f034e4e009263ebda7b806f027eafef4096689bb29ae13b813bfa0e46928ec90625098893dcc826c7d6a5b3c08f520ef3891c473a461780df077e62f6bf2569e89a43d3e22437b29163261d9b50bac67f859208d4e0bdc00b289b06ad7ac22369f5c5b6b3b18161e50f65f7bc17508ef0adc9eb28131ddf8889a0a4e18b6ccf921380da2bfe6dca9bff8ba86f49e436a507e0f994038e2469c822dbb3e404a076af049e43394ca7467702bf06bc94b273a0240d51e40a00c84e0022274d74e43cf05d94ed7e6bf66e4a0fc82d7d0722499720b2ad8d0c6a26366beac0ef51bac023bb8d3ab409fc3d652e406dc3209256c394d0b63632a8995a1bbfbb80e75126000ade4ad926d86100494334c149800babf58def7781bf23b4c0f4e00ee0cf701840d2306d025b7d07b19be404a0466781dfa09c92a7620afc157033264592866793d01e6d13802c6fc0f1eeddbc97d2337267df8148d2aa484e006a5c05f04f9413ff7477bf067ca0ef202469412342dbdac8a0666a5b0570967212de87fa0e24d49b29cb0223bbd224690fb17556720250db78ef9d9475ff1e82b3b73f00cef51d84242d2832093001c8710e78132e77dbcf5f50364992a4a17019a00ef4014a0f801300f7f60a4c90240dcb88d021ede40420f2822dc93665c39b3bfa0e24dc07283b034676a749d22ed6096dcf921380e4d88edb166502a0e3db077b23a1dd6992b48b0d4257b52537b29119d3924c805b7102e061bcb5ef002469016342dbdac8a0666a7bcbbb0b1380c3f827ea4a0e250ddb88d0614b13800c1b94c96d4e003cd8fb300190341c2342dbb3e404a036b7620fc061c4cea895a43d44d659c90940e4055b920b94f5ed91dd446162bbd3246917b16d59720210396b7249b6083d2e32900980a421f12c00ed6b449907e0fd381c130049431139fe0fd90d4eec455b820de006e054df810c803d009286648bd009de26001936803364df8f14f7c70440d2706c12da9ed9e0641801d7620fc0613c90e049359234671b1380958aedb84d817b0397f51dc8009800481a9ac8f62c32a801c4b60c57600fc0617c1275ad1091347c912f2dc98d6c4de3bc6b941e001380fddd4839594b927489921380c8319325ba07a581f3ed766f9f029ce83b08495ac094d0f62c3901a8a907004a02f020b2ef49df3e037b49240dcb94d0f6ccc626c795c043b181dbcb4dc02750964c4ad2508c710ec04ac5b60c23e0219475eebabba751964a463e4892b4870d428776931bd9e4d896e501c0876323376f9d32fbfff2be0391a405ad6302b0b0c8319325bb2ff0b1c0c9be0309f36194f911ae009034346342dbb3e4042072d664079e065cd7771041c694c97f1fd97720927404b1e7972427009117ac038f063e1727bb35aea32400f7e83b10493aa2c8f62c3901a8d51af0b5c023702ec01a65ecffb15856250dd388d0ba3cb9528d9c34d191fb03df4ad91eb86657034fa7ccfe97a4a132015850e405ebf0777f2af0948aafc3087822aefd97347c916d6d6450339163261d3a033c9b7adf7e6f043e0fb85fdf8148d22598103aa93d3901d8ee3b80008f00be9afaf6bfbf1a7826a517a4e6a12049c3b749687b969c00a8ec07f02ce0d3a96728e00cf039c0970357f51d8c245da24dec0158582d0dde416e009e43d90b7fd56d004f02be8db223a2240d5dec70767202901c5bd73e1a7811ab7d4d4694f1feaf033ea2ef6024e9988c08adbb23839ab10760c708f818e0057d07b244a7812f011e4776b994a445d80370049163263d7b26f042e0b2be033966cd863f5fb482bf9b244526012600c3f345c08f01d7f71dc83159039e00fc2fecfa97b47a6297017abadaf08c8167500ad4b703efec3ba0231a51f6f7ff32e02b8107f61d90242d49e4907672021079c1426c005f085c433937e0ed8466987b58a39ceef75cca413f97f71d90242dc93aa1ed59f21040726c094e5036ca7901f048ca9e0143708232d1efe729ebfd6dfc25adb20d4237344b6e642333a630eb9475f3bf42e911b882eceb7605e57c83e7018f21bbfc49d2715823b45e4e1e0218529776df1e007c2ff010e02780b752769f4a30a6eceef7304a77ff5701f7e93b2849ea4864e30f2600abe49ec0d753f60bf839e065c07b81db7a8a674c79e37f34f099c09367b1f9d62fa9262342dbb3e404408b3b017c2af070e075c09f017f05dc0cbc8d6e7a05d6807b038fa2bcf17f1a6586ff50e62848d2718bec05484e00222fd8008c297b04dc1bf838e0164a32f072e0a5c0df01678ff9678e2827f83d8af296ff48ca44bf1ba9ef2443496a8bedf54c4e0022674d0e48d3057f0565839d27029f07bc197835252978156509e1515d0e3c18f864ca663e0f02ee4f19f3378193a4223209484e0074bcaea4ccbc7f0ca55bfefdc0fb28430337036f02de31fbdecd94b903234a227686d2b09fa29c4af8a0d99f0fa1bcf95f0fdc0bcb9324cd8b1cff87ec0a7bbbef0056d835b3af07028f05ce53e6076ccfbece015b94fdabb7677f6e500af2294a42707af6bf25497bdb22b43d4b4e00220f4f5841eb649703491ab24d427b0122c72524495a114d2f6a9ce40420393649920e2b72527472239b1c9b24498731c2046061915d2692242d20b62d4b4e0022274d4892b48009a1ed597202109b354992b480c8f62c3901902469e8c6380760a5629324e930d609ddda3eb9914d8e4d92a4c3d8c004606191632692242d604c687b969c0044ce9a9424694126000b8abc6092242d28b23d4b4e0024491a3a57011c41e4a4094992163022b4ad8d0c6a263263922469015342dbb3e4042072cc4492a4054c284702c7494e00222f9824490bd82474555b72022049d2d099001c41e4988924490b881dce4e4e0092639324e9305c057004f6004892862eb60760bdef00f61139662269254c29138d47c005e02c707ef6df77016f9bfd799e5217ad01a7677f9e9bfd9b29702fe051c029e00eca78ef1a7072f6f761a72e8b3d154e4b35253409300190b4aaa6ad3f2f00ef997d7d00b8157813a5a1bf1978e7eceb8e4bfc995702d7019701d7cffef77d29c9c075c0870157cffedec9d99f57925d17ebd24c086dcf2c749256c99452d96e01ff04bc19781df05a4a43ff2fc0fbb9f4867e2fb7cfbe00fe7e97ff7f444900ae03ae9dfd791d7013f050e06380fbccfd7d0d5bec3d4c4e00622f9aa438134a77fd3f02ff17f84376dee86fa774f12798527a203e00bc7ef6bd11e5ccf813c03d8007038f9d7d7d227039a5b720b9bed6ded6099d6f975ca0222f98a4285b9431f9bf059e0fbc989cc6feb09a218a0b9484e59dc09f52128333c053802f001e4d49102e27bbeed6c536089dfb915c88ec0180b7532ab366fc6842b92e6bb3af6652d1a8f567f3f7362995e3848bc7a09a0929e3d9bf6f3e63cccea9552376b6af6c3e67cac5935926b3bfdfc4d22ee4cde74ce73e6332f719cd9f6b73b134315c065c417632f86eca7872f3fb34f762feda36ff5fbb8b7a73767d769b20d4bc15369f339efb7bd3d66734d776b4cb67acb53e67adf56fdbf7b81d0badcf19b5beda9fb14119b73ed1e375dfa48ce7ff11f04394eef6cd1ee3394ecd7303701bf04bb3af8f04fe2df064e02194a182d35857a66bd7cd51921380c849131d9a02df09bc829d0aa1a9b89b8677c4c55b26378d4d53b137d7b0dda84f5affdd7c46bb516e3e7bdafa8c76433d9dfb99ed5826733136b16ccdfddcbd62691ab9e6fb4f069e0ddcd0f7cdd8e71efd14f0735c9c20b593b4e6f7695fafe6beb51bff76d234697daf7d4f9bbfdb5cdf260998cc7d9fb97bd18e65fe5ec3ddeff36eb1349f31021e087c3365bcba4b9bc09d9471fc97ceaefd2b66d7a0066f06fe37f003c0c7015f083c067800655ec106d9c972ad221b7f30014836a2cc50fe87be03e9d14d9471dd5423ca58ee6bfb0ea487dfbbcb6ef673c03b80bf9e7dbd9ad2e57faeef0bd1936de0e5c05f517a023e81323cf068e0a380ab301148d2bcf0c4494e00145a683a14b976764e6c76bf02a69499fcbf07fc3a65d9debbf0a0b0c6943291f08dc06f0237029f0c7c366502e1957d07a87f15594f2427009117ac434df76ecd4e925d0ea664f7502c4b7b7869596e077e0df815e0cf295dff434808fb30a12c6dfc00f0ff803fa024019f0f3c827ee76a6867482d4e720210396bb243edf1de5a2bbe0d421f9c99667e436d96b9b3d979e025c00b813fa34cf4d3e14c29f324de08fc20f027c0d380afa06c4694fc2cadbac86b9f9c00c8713cd5e5164ac3f5abecac91d7d19ca5cc93b899328fe8d9c0c713da10adb8d8a1dce404a0f671be66e955cd62cfd19e1953e73d3aee2ecd2de02dc0732863fdb7f5fd0bae90f703bf459944f9adc0a7e2dc80ae352b7ee2242700b5767b374694b1bb9a87009a8358528d2887c0d4669de34b006ea1ecdaf72394257d35cea958b60b946bfbd5947901cfa02ce1ac3179ed43ec8b4c72022087008690fca4c7976a9bd245fd3cca2cfff7125a49ae880965ff841fa56c9ef474e0abb8f8dc012d47b3915a9ce404a0f6c6afbd214ead9a1e9054cd16ae4348548ed3a5ae02985026a83d9b7250cfaaece037041728d7fc66ca5e023f44397b40cbd36c761627b9914d8ead0bb167487764c4f176352f43b3e3626de677375cc436f032e01b59aded7b87640adc45e909f866cade0a5aaec87a2cb991adb9f16b44169a8e0c21018acdec3bfadd1735a5cc48ffef94b7d0f4fbbbeaa6940982df8c132f9729b69c272700b58f0736fbc0d72c76f2cc4cad2b359af3091631a1ece4f75cca3aff1a7b4e126d53365bfa3aca1c011dbff6616c51921380d8aca943b5270017c82e07cd4a8dda2cba0cf002f03bc0d7531a1b65390ffc22f035c02bfb0e664545d663c99300b5f751b1b5883d46b3a5c637d945cae405ca09763f4c39de5a99ce518603de4719a27962df01ad90d8ad80937b009263eb42adfbccb79d24bb176442a9386b4bd2da4710ef6793b2abdff760e33f0417282b037e9c7212a98ec73aa1ed5964500388ad0b53eaee0168ceb18fcc9c679a7b549bc38c693647d63e9772488d866113f86de0677062e0715927f44526b991adb5e16babf91a5cca52b3aed4ba0a60c4fe75c7949dad7d5fd777b05ad86dc06f509669a63f834310dbcec60686052ff9de746593ec24a8e6b300f62a9f53e0cdc0f7528ea5d5f04c298dff8f5112b9e467700862370a4b6e64222f580f6abe0e17fa0ee0106a9c48bbdfa4a6d701df09fc64df41ea926c02bf4999c0f94eeaae878e43e4f54b4e0054e7f872db10deae6bbc471376afd05e0b7c13f022dce16f15dc09fc34a527e0837d073360ae023882c849131d8add3ca24327c82ea313ea5ca9b1db5900ef05fe1ba5dbbfc66bb2aa3e4459c2f9624cea8eeaa03933bd890c6a263263ead0947a279941f043d33284898acbfabddb3d00dbc0afe10e7fabea56e0fb29733b22bbb20720b21e4fae606b2f68b56f05dc34aec9e5a059aa589bf9c4f4f5c0cf52de16b59a5e4f591ab8d577200374a9a7672e4d720250fb9bc488b2114e64e6d891f3843e383363ca3daa4d7b63930b94cd7e5c32b6da2e00bf0cfc25d94979a24d42dbb3e4044075ce306fdb22bfb219c244c5e3d6ae375e02bc9032614cabed2d944981f6f42ce6b03b67762e3901a8f9cdb7d1cc03a855fa413b534a765fdb3d6ae600bc1df841e0ad7d07a44e6c537a015e457e629e24f65a252700c9b175c15500e5ed3ab9716d1280da34639a3f01fc3996d39adc09fc4f5ce9b1a8c8f62cb98b39b9e2d7f20d6105c4fc6cf85afc3df0a4be83506ffe08f813e0a97d073210b1754464563253fb5bc51096c12dd3100e43aa751580ea3605be0f57041c56ec8b427203630290dd43d305570148995e82673d1c56ec706e720220453e3473d28729a465f946e096be831880d83a22390188bd681d4a3f0d6fd94e925d46a70ce3c0226919de00fc42df410c407bdf8c2891410d20b62e4ca8738679db06d963ec134a02507392a6ba3d0f38db7710e1d609adc7921b597b00f227c12dd3105601c0308629a4657917655580f6b646685d969c00d45eb14616980e4dc9df09708c133555b73b80dfc11501fb19115a8f9900e41aca1bf032a56f3632227fb7426999b6809702ffdc7720c14c007424e9a7e149d2cdc05fe34bdb5e625fe6921380e4d8bad07481d72cfd34445701486512e09f52860374776342ebb1e4463639b62e34bb4745169c0e341b2125fffe134cd224809701efef3b886091f558ed8d6cbac8a5231d89dd3e53d2ddbc9d3214e0337b77b1d7243901d8ee3b809e8da8f3acf9b6d873b467c63809500238875b03ef659bd0f62c390188cd9a3ad2cc308fec3aea48fa5900233c0b4082f29cbe949208e862b19b85252700f2fec42e9f69498f4feac294b214f0d57d0712689bd01799e4062639b62e34c7e1d6dc037082ec7230a1f452d47c8fa4c61dc06ff71d44a8c83a22b9724d8ead0bb54f821bc271c85342337ba9076781bfec3b885026000baab9f16b24df9f651b420214bbc187d48309f01ee0cd7d071226b61e4b6e606a7fb31a53f7324028936792cb815b014b17bb1df89bbe83083321b41e4b4e0062b3a60e9900649703976a4a17bb15f8dbbe830813db9b999c002874ed6887d2770204ef91d47617f03a4a4f808ad8ad80932759d59e9c34fbcc47668e1d3949762fc884b2eeb9e67bd4b7661ec61aa5ce68be3666df6b36616996949e6718474d0fd504b805780bf0d17d07136283d0f6cc042057b30cb0564da51e9939cfd47e8ffa7082921836bb30de04dc177828706f7612818f04ae05de09bc6bf66f27c0ab286fa7af053e4099b97e1e0f753a4eef075e8f0940638dd01799e404c0ecbceee38087b0c4ce5500cb35a234e657511af71b8007018f023e8ad2c05c79c0673c768fef6f53f6af7f19f047940d6c6e013e48e9c6aef5b93b0eb7e14a80b6d897d9e404a0f637abd871a30ea50f817816c0f11b0397531af6fb030f011e037cfceccfe37a26d6800f9b7d7d11a5d17a15f072ca5af657531282f37d5f9001ba1df807caf3ebf351ca74e4cb4c7202a0e0d9a31dd9ec3b804388ecda1ba011700de5cdfe538187010fa0bcf15fdec1cfbf0af894d9d7bb815702bf4be921b81927b52deaddb3affbf51d88f6660290adf65e90212cb1dbea3b80157082d255ff85c05328ddfd67e8afebf47ae0a9c0e329fbdbbf18f8334acfc01092d2041fa0ccbf300108eecd4d4e006a7fb39a60023084b3009c3c7669ae059e013c13783439cffd18b81ab807f070e0e9c08f032fa4ec79affddd494902b43397254e72021099317568cace24b31a8701621f9a96214c544cf648e0eb80cf02ee49e633dfecf6f848e0db8053c0f3310938c8ed944d81542496ede804a0f68a754cf6fd59b6a6714d4e7e86706051a231f049c073285dff27fb0ee8104694e586df48b9e73f8249c07ece02ff4299443984fbbb4c1e077c049117ac43cd9b4764e6d891f364978331566e8b5a073e1df81ee0710ceffadd007c13f0ddc0bdfa0e26d826653f00e74c946b10399cebdb4bb6214c825ba66db27b00c0676811ebc013296ffe8f2267bc7f51f7a4cc598092c8bcadef80026d533660ba8b6e567124db22f44526b9f2aaf9cdb7d1cc03a8557a0234a564f7b5ced358c498b28eff87810792ddfb781857005f4a4962be1d27bcede67d9404a076b1f578f243981c5b17628f90ecd006a10fce4c9300687f23ca863bcf071eccea3cdb67807f475932a8bbbb801b293522ebb1e40731f282a93343d866b7f68d9a0eeb1465ccfc917d07b204d7024fc3f5eef3b6293b299eed3b10ed2d3901a8fded7708cbe096690827b6350716696f1bc0d703ffbeef4096f8fb3d91b29ac1b270b14df29fe12ec4ae664a6e604c00b2e76874c15500c3f78994a573abec5aca50c0410713d5a6d90c28b2f1eb50ec706e720220c54e9e69498faf4f3700df41d9e37f959d009e4439c3403b36810f6102105b47242700b117ad23cd04b39a1f9e93649783294e72dacb3a6587bfc7f51d48476ea4cc05b8b6ef40826c518e578e5c03dfa17542dbdac8a0666a1f4f738679195f4d2ea3cd59003527697bb99eb2c7ffe9be03e9c888b2c1d1c7f41d48900965b7c4da13803542dbb3e4ca55c193473a3062182b01747723ca8cffc7f71d48c76e023e967a929e839ca3ac04881cffeed03aa1f5587202507ba1892c301d1ac22a80dacf6bd8cb09e059d43941f2b38107f41d448809e519496e67ba10bb5158f28d31013009384fe8833333227fb7c23e7c32f0e4be83e8c9a3282b1f6a4c7ee69da79c0a18d9fddd2113001dc910f6c25fb6da93a0a1390d7c0bf5eeffbe0e7c2e708fbe0309b08d936421b80e4b4e009263eb42d3055eb321ac02b8d07710613e017842df41f4ec7194a38393cb6e576ea5ac04a859ec304864500388ad0bcd36b3b55622cd4648c9bfff04576acc7b160e8b9ca6ec0c58fb7500b88d320c50b3d85d5d23839aa9bdeb1bb2efcfb20de5fe2727285dbb27f0197d0711604ce9053001286a7f46625773253730b54f021c536653d7ec02d9e5c07b74b1a7e0d8379406eff194d302a52d42f742484e002233a68e9da0eeec393d01186102d0f6c564d7295dba0ff070bc1eefa76c075cb3d81d5d6b2f9ce96abf3fb5fffe43721fe0a1d49db0b66d000fc32570db3899799bd01799e40a3639b62e4c2905a7e60a35bd07644259e6941c63571e8e8d5ddb08f870bc26dbc0d9be83081059472437b2c9b175a1590550ab11f995e794d0ccbe070f002eeb3b88202728bd22e96578d99a17999aeb3230015858ed0506b2efcfb20da17175b7c61d0f00aee83b8830d70057f71d44cfeea41c0854b3d8b62cb98149affc976d8c6f0f9b649703270116570237905d9ff4e10c9e15712765326fcd89f284d07a2cf9818dcd9a3a547b02907ed4ae6701145700f722bb3ee9c37594bd116a577b921c3b9ceb039b2d72ed688736c87f73a87d86339486eec6be830874257015f96578994684befd7628b69d8d0d0cdf7e9b7de62333c78e9c24bb1c34ab006a772565fb5b5d6c0d27465a8f951799c87a2c3901a8396b869dd9b3b56af6cf4e2e07ce702eae997d25dfab3edc0bb837755f97d8eeef0ead6102b0b0da0b0dd4fdf0b80a6018d629e3dc91155c80f432bc6ccda15e358b6d676303a3eeb75fc8be375d49ef3af42c8052c1df132bf9bd9ca1ee247144191eaaf91a8c094d046d64f2253780cb3684a3766b7ff31d01d77b1df67465df01f4cca5b2c1c94f7202107bd13a54fb0cf321541cb5dfa393b807c07eaea2eede917394bd006a163b5498fcd026c7d685090e839c20bb1c4c28c314353b0d5cdb7710c1ee4f49926a751b700b75f76436139ae344063513993175684a70e6d88121fcee4398a8b86c6b0c63bf86be9ca0eee1916d863194b76c91cf477202507bc55afb56c04358623784038bbae02e80fbabbd2eabfd19f138e02388bc601d1a5177d72194eef5e47230064ef51d44cfce6205bf9f29be01a71febbd6c5b840ee72627002a93876a7e70d27b00c0c6cfad5ef7773d753fc3f8fbb345e833929c00d45e6820bff15bb6f45500cddb5dcd65f581e4dfa73e5d43d90ba066b5af0298105a47242700c9b17561c2ce44c05aa5f7804ca97b19e008b89cec7bd4b7351c263a4bdd2f33b1139a931bd9c80ba6cec43e342d356fd5dc18790d0e945ccf76a1f6f211fbfb2717ccc831930ec5ae1ded48f3761dfbf050ee4fcd9bbc0ce11ef5cd4980753f23b0d39b1b27b981310128ebab6b769eec72e04a0dbb770f32a15ca39a9d22bf376f992684d663c90980348486a5e68a0d86718ffa1659f977a8f67626b68e48be31b117ad2353f24fc35bb6536497d12965aff39a9dc2a590fb19e124c0dab7cb5e23b41e8b0c6aa6f64ac5b1c33276985c469bb3006a4dd29a2190e47bd43787f286b19fc732c5d6639141e95fc54e1ee9c8105602d46e8cf5c8416a7e86c1f2b146683d967c6322b74eec506481e9d826d995a7ab00ca2a00cbeadeb62993596b56fb24c0d8df3d390148aef8bbe0db6fa93893cbc10877c13b8be5743f13dc09aff69d1063f7ca484e00e4d8d91092a09aef0f943a24fd1e497d8a6d6763030b8fad0bb56f330b65825972e332c5eeddd364dfa3be8d28d7a866b5ef83107bb47b72239b1c5b176adf667644fe590013ea4ed286708ffab686c34435af9481e09ecce446b6e602d3a8b97b75280950adf7a73194fbd417af8d629f91e404c0ddb35c3fbc4976391853f7db5d3304927c8ffad66ce855b313d49d286f11fa8c242700911953c7d2c7c0972dbdebd05500657cb7f625bbfb71b7489f91d81799e404407537fe50ca677202a0728f4c00f66692680fc83626002b155b17a6944253731290de0332a1748127c7b86cb59f867890317059df41f4ec0e4ce423eb88e4463639b62ec44e1ce9c888fc32d02469b56a5601686fcee5f14c932926000babb9f16b24df9f651b42e31abbbca743b59f577118b55f9f9aeb3108beffc93726bdf25fb6daf79987e0c93333b58fefba0ae060139c0458fb2a8009a1cf487202109b357528f9fe746108ab006aefdead7d27c483b80ac07922b1c3b9b53730e96a9f5d3d845de66ade09104a02947e8ffa567b9258fb3312dbcec60646e8dec91d9a927f1ceeb29d22bb1c34ab006a769aec7bd4b731a51cd72cbd276fd9d6097d46921380dadf2aa6d4dd03d0ac02482e07cd3daab5721b512ab6c8ca2d48723dabe58b7d46920b66ad956a5bcd33ac5d0590af19dbacf91a1ca4e9c9ab59ed4320b11b9a25270035bffd42fedb6f17d2bb0ec738c1a9f62190836c0377f51d44cfce50775d6602a023892c341d1ac2e4a1da9fa14dafc1be9aa59235ab79a92c04273fc90f6eec45ebd016752701e95d87538691a42c53fa76cd7d1b612f51ed6701c4f6e6262700c9b1756182c32027c82e07b51ff53aa2cc708facdc42b80aa0ec8350f38b4cecb6e69141cdd45ea9340f4cadd7610813ec86305171d9d2ef51df622bff0ed5fe8c40e873925c306b2f34b56f053c842576cd32b85a354320b53fabfba97d392fd4fd8c805b011f49e405eb906387f9fbccdbbd0b67c9be477df32c00e7896c119a042627001ac656b8cb34847d106a7fbbd924b4720b31c204a976b13bba26270035377c8dc842d3a1f4e543cd262f3597d593d8c0ed67045cd677103dab7d1f84d87a3c3901488ead0bcdb851cd8dcb3ad9e5a0f65dde6a3f0ef930d67098e82cc18d604722ebf1e4ca35f282a933cd2a80e48a2339b62e791df6975ccf2edb09ea9ecc0cc1cf4772c1acbd5b7144dd0f4e33c33cf6e1c1951a43b8477dabbd97e86ae0ded4fd42173b97c9042057ed0900e4af0270a586ddbb079950ae51ad469423a36be63240e9086c58f2798f0e1659f977a8e6b7ff68c90940ed85a6f66d66a14c9e4a2ea31ef452deee92ef51df9aed926b56fb33123b993932a899dad7573bbe1afce0cc4c085ee3db816608a4f667753f23f20fb55aa621ece8b96c6b84d6639141e95fd5de7508f93d4135576ce05ef787517b19a9bd7cac115a8f25df98da77176b0a4ccd95477a0f88ab00ca305564e5166242dd5de063dc0a784c683d969c00445eb00e0de134bc653b4f763970239c728f6a2fa7fbd906eeec3b881eb90a20f8f9484e0094ff06bc6c4348826abe3f50ea90f47b24f529b69d8d0d2c3cb62e3493006b96de75e82a80f276977c8ffa56fb5900533c0d714ce844d9e4463639b62e4ca97b1260b3115272e332a1ee24ad99e19e7c8ffab686ab00ecc90c7d46921bd99a0b4ca3e6eed529f96520f6c1ee50cd49ea61a497612d5f6c5d969c00d45eb18c7182d926d9e5a0f64980cd1048ed2b76f653fb3091bd44a50724b21e4b4e002233a68e9da0ee07e702d9e5a0f60400ca3ef726007b3301f019897d91494e00e4fd895d3fdb921edfb28d09addc42b813a05b9a6f13fa8c243730c9b175a1990458730f40fa2a80096e84731293a0fdac0167fa0ea24753e0aebe830810d99e45063580d8ba103b71a42343d862d6951a75ef847818f600b80a20f6774fae60632f5a8792efcfb20da171ad7d1540738f7c56f7975e8e97ade67a2c5af28df1a1f1edea02d9e5a0d9e7bc66e7c8be477d9b50f74638ae022873002227ca262700be5564df9f2e0ce1a85d9334eda7f65500e02a80d83aacf606265d64d6d8a121bc39d4bc13200ce31ef5adf606b0f66724b69d8d0d8cd0bd933b3461186fc0cb7492ec325afb51af00a7f059dd8fc344d663eb843e23c995ab6f1575f70034ab0092cbc194728f6aaddc9a5500c9f548df86b09a65996a5fcd041e067424b5179a11753f3c43590590fc0c2d5b533e9393b4be353d79b5aa7d192494c63fb21e4faebc6a7efb05979841e95e8f7c70663cafa1cc70afbd9cee679bba37c219538e43aeb98cc4ee689a9c0028b4d07468084960edcfd096d7605fae02b0072036f9497e70632f5a876a9f3c933ec37c4addddbb50260126dfa3be8da87b12a0670104cf654a4e009263ebc28461bc012fd309b2cb41ed95db081380838c29d7a8564d0f48cd2f32239c04b8b0da2b95e681a9f53a0c610e44cd93347538b54f14059f91d87a2cb960a6cf005fb6dab7021ec212bbd8ccbe23cd412fb53fabfb69ca71ad9a6724b611ec80c7011f41e405ebd00867989f27bb1cd4debd0b65867bf23deadb0438db77103db21e2b49726412989c00a8f400d49c390fe1a4b9da9fa1d8834e82a497617ff7e58a3d0e39b9f2aab9e1537182ec72d0748127c7b86c2709addc428c81337d07d1a32975f78040700f597202901c5b1726b3af9a1b97f41e90da970136bbbc9900ecadf6b300a694cda26a2f2391f55872231b79c1d499e6fe27571cc9b12983ab007c4e627fffe48219db6dd291e6a0955a0d6115802b354a0f48edcfea7eec25caefc95bb6a637378e0940aeda1300c85f0550fb2e6f60f7ee4126d47d1600b852267632737202a0d042e3ef2f2dc472ac48c90940726c5da8bdeb10ca9b437239f0a097fc7bd4b71170baef207a56f376d9103c0492fce026c7d685668959cd6f0f1b649703cf7a2f4b356bde0df120cd4a895a0d612ecfb2ad11fa8c2457aeca1effeec294d0cc792ec69a2b3767b91facf6e7b8f6f211bb1572f28da97d77b1e6309c9a1b97f41e105701941e90c8ca2dc4843251b256cd3e0835979131a1f55872021079c13a54f303d3483f46d47dcecb3db2acee6d9bba5701380722f8f9484e00e4d8d998e08767a6e6fb03c338b6b96f5e9fbac5b6b3b18185c7d6055701e4771d4e7015c019b2ef51df6a7f036eb602aed9182701ae546c5d88dd3daa23433847bc59a9512b77793bd81aae02489fcbb36cb1bd64c98d6ccd050676665747169c0e0c61767dec83dda1d85dce420ca11c6bb9629f91e404a0e6b75f28f7a6e63707c8df67bef649804df76ef23deadb94ba37c2699e919a13e56d429f91e404203263ea58edfbcc5f20bb1c781640990351fb92ddfdd4be5b64ed1b214119023101d0c26aef625e233b01001bbf31a1955b087b899ccc6c0fc08ac5d68529a185a643e95d87134a2f45728ccb567b0fc841d680cbfa0ea24753e04ef213f9655f83c8f62c32a801c4d685e681a9b57119c216b3b54ff06a566ad47c0d0e527b1778ed2b65a22557b0562ad9f767d986d00352fb108d07bd1c4e7a395eb69aeb31087e3e926f8c63ab75ef330fa57b3db9f26cf639afd979b2ef51df6a3f0bc05500a52d8b6ccf92130085ee1ed5a14d82b3e7199334eda7f6550050f7100804d7612600d96a1f3bdb20ffcda1f67b54fbdbdd61d4bc0a007c4662dbd9d8c0f0ed77c230de8097e924d965d4b300e0143eabfb7198287f3f8f655b23f41949ae5c7dab081d37eac810b642ae7d12dc10ce6be8db1056b32c53adcf46db1aa1652032a899da0bce88ba9799358d6b322bf7d20b52f3353848d39357ab661964cd49e298d07a3cf9c14daffc97adf6256690df7538c6f1ddf3584ef7b30ddcd577103d1a53f771c8cd3588acc792130085169a0e0d2109acfd19dac204603fb51f0604ae02887d994baebc222f58c76a9f0498de75e83ee7651260723dd2b7da0f8cf219099e2793fce026c7d685092e9f39417639a8fded6e444900222bb710b5af0268f641a8f945a6992c1b27b972adbd5299567e0d62bbcd5a6a9ea4a9c3a97da228f88cc4d663c905b3f6ed459bad80630bcf920d6189dd88ba77026c0e7aa9fd59dd4fed3d792e152d6520f2193101c855fb39e290bfcf7cedddbb5066b827dfa3be4df12c80da9f91d82439390150dd3d00501e9ae41e00f0198a3de824487a19f6775f2e138023a8b9e16b44169a0ea5ef33dfcc704e8e71d94e6225bf9f3170a6ef207a34a5ee7d1020b81e4f4e0022674d76a8293435372ee9cb001ddf2df7c804606f63ca4a895ab90aa088acc7921300c959f61abac88abf63b16fc0b5fffec90940ec45eb48ed33cca1bc5d272700cd4a8d5a354320b53fabfbf12c00e732b90ae008222f58874c00ca263bc9e5c019ce65867b7292d6b72970b6ef207a56f31008044f66aebd8149b7df2622edeef1e91eff76b73f8ff219cdff5ee667cc7fd6508c29f355da711f744de6afc551ae2b73ff7e999f31ff595a4c5346dae6afe741cff041f7e6309fc12e9f7398cf988fe1a8654d61921380e4de89ae3c1bf84a7666d2365d892729276c6d0377b6be7f9a926d6fb1b33e7b6df6fd9394c938e766ff6e7df6fd35ca1bcab9d9dfdf002ea35cffb3ec9c477072f67d669f7d819d37e05373b134139f9a58cecefdcc13b358cece7ee67c2c67673ff3fec00d7ddf84037c21f084d9efd1dca3f675d99a5d972d764e463b35bb7ecd355f9b5ddb8dd9f79aef37d7653cfbec6632d509caccf2d12e3ff3f45c2cb4eec585d9b56d62b96cf66f2eecf23337b87bb9383dfb39675bb1dc005cdff74d087613f053c01dec6c9ddc7e5eb65adf6fee45f35cac51eef3063bcfeefc33da948b09a55c3427efcd978bcbb8b81e69f6b0383dfbeff6f79b58da3f739d9d32ba5b2ced72d18ee524f0d0be6f42cf6287404c00b23d6eeebf9bcc7a7409df3f8ecfe82b96441f35fbeae2f74fba1743ba477dba1cf82c8e762ff6fabee56258d6085dd5969c00d88d7477a363f8fe717c465fb10c412df762c8f7a80f968b7a8d09bd2ec96fd9c993bf24493a8c31a12fb4c90940e405932469012342dbb3e4044092a4a18b3d0d313901488e4d92a4c3d86d196884e44636393649920e63af7d1c7a97dcc8468e994892b480d89d0093130057014892866e42d9f8294e72021099314992b480d843cd9213004992866e1b13808545ce9a94246901539c04b8b0c80b2649d20222dffe213b0188bd6892241d52ec51dac90940e4ac49499216b04de8aab6e4044092a4a18b7cfb87ec04c0390092a4a18b6d6763030b8f4d92a4c35803d6fb0e6237c98dac3d0092a4a1f334c023889c342149d202c684ce033001902469794698004892549d310e012c2cf2824992b400e700ac586c92241dc688d0b36d921bd9c88c4992a405c4b665c9098093002549433721b43d330190246979b6086dcf921300499286ce04e00862c74d24493aa4c8c61fb21380c8599392242d28b2ad8d0c4a92a41531c19d001716db6d2249d2214d096dcf4c0024495a9e2dec019024a93ab113da4d0024495a9e7542dbdac8a0665edb770092245da26de096be83d84d7202702b70a1ef202449ba041780f7f61dc46e9213806de0357d072149d2116d03ef9cfd1927390198027fd3771092241dd136f0f7b80ae0485ed2770092241dd116f0f2be83d84b7a02f046e0837d072149d211dc0efc63df41ec253d01f820a5fb4492a421995256b3ddda77207b494f006e03feb6ef2024495ad004f86b4a3b16293d01380bfc25c1175092a45ddc4e99c87eaeef40f6929e004c8157026fe83b10499216f01a4a0f76e40a00c84f0000fe05f82de07cdf81489274087701bf0ebcbbef40f6338404600bf879ca660a9224a5fb67e067087efb8761240050b2a85f26fc624a92aa37017e92012c611f4da78369531f00fc21f0e17d072249d21e5e033c9a9208441b4a0f00942180ffca00b22a495295fe0578260368fc615809c039e0f7811fa32c0f942429c56dc07f66409bd70d290100781ff07ccaec4a4992124c80ffc2c0daa6a1250053e06d9424e0557d072349aade04f859e01728abd60663680900948bfd77c08b703e8024a93f53e0f5c08f03efef3b98450d310100f810656f803fc40d822449dd9b00ef00be8fb265fde0acf71dc025b81978eeec7778327055df014992aa709672ccef0f002f6420b3fee70d691f80bd3c08f802e08b818f64b8bd1a92a46c534a57ff6f52c6fdff02d8ec3ba8a35a850400e072e009c057039f32fb6f49928ecb36f04f945dfe7e91d2fd3fc837ffc6aa240050defc3f02f81ae03f00d7f61d902469256c514ea6fd41cae174b7b3025bd3af5202d0b82ff0d9c097018f01467d0724491aacdb80df067e9ad2e57f57df011d97554c00004e018f049e4449061e39fb9ec98024e92053ca6ab39701bf04bc14783b035be77f90554d001a97033752e6073c0df868e03ae04cdf814992e2dc41d9cfffd5c08b296ffcefa16c45bf72563d01689c04ae001e4249021e043c187804252118f2724849d2d19ca72c297f23f056e04d94bdfc5f4f19e71fec0cffc3a82501688c8135ca70c0659486ff064a0fc10329cb08af666772c73a3bcb0ab7675fcde78c2833409bef8f677f7fadf5f7a7ad9fd9fefb93d667cc7ff67aebef4f67df1fcdbe379e7d6f32f7f9edbf3b69c5d2c43e997daded12fb64f6dfa3d6dfdd2b9666c6eb7c2c5bad58c6ad9fb7572cedbfcbecbfb776b92e4d2ca3b9582673b1cc5fc769eb3e4ce77ee6fadce7cfc7327f5de6af6113cb782e961117c7beb54b79695fc3762cd37d62d96a7d7efb779abf2ef3df6fffccad3dbedfbe86f3d771dafa99ed3237e1eef76efebab463a115dffc7569ffccf9ebd2d8ed67b6af4bbb4cb763697f7f9b8b7fd776999b7fbedae5a27d5ddacfd7fc33b135f7f7f7bb2eed58da6568fe3eb76369fe6efbe7b69fb9f6356c1aacf958a6bb7c76bbde599b8ba55da7b5fffefc3dda2b966d76bacbe7cb68fbbab49f97dd9eb9f67d6e62997ffed75a7fbf5d7677ab5f9b37fc5b29c7f6be9ab2a3ec794a97ffd9d6cf5c79b52500bb5e03760a63bbb03715ce1a3b05ae79789b8bb6cdc59542f319cd433ae2e207779b8b1b29b8b8221ab73e676d2ec6762cdbfbc4c23eb1b41b91edb9cf69b41fe6f5562c532e6ea04607c4d2aeccf68aa5f9dada2396f90a67839dc4a3fd394da5b0c5cec33b6dc5d84ec436b8b8c1689701e63ea31dcb748f5826dcfd779a8f85b9cf998fa5fdf94d3c4d2c9b733f63be4c34d7b6fd19ed789a46a17d6d9bff6faf5876fb79f3b1b42bfbbd6299ce7dce762b96f6f3d1fcff4dd96adfe776b9da2d16b83891988fa51dc7649f58d6f689a5ddd8cf9789f9fbdcbe8eede7b6dd484d0e8865638f58da0d60f377dbf7bc7d9fc707c4326d7dc6a4f5194d2ccde76e7071e2d1fe8cf91789f633d7c4d2dc9ff55d6219cfc532d92396e6dfec16cb6ef56bbbccb4139abd12a06a1b41130049922ae4ae79922455c8044092a40a990048925421130049922a6402204952854c002449aa90098024491532019024a9422600922455c8044092a40a990048925421130049922a6402204952854c002449aa90098024491532019024a9422600922455c8044092a40a990048925421130049922a6402204952854c002449aa90098024491532019024a9422600922455c8044092a40a990048925421130049922a6402204952854c002449aa90098024491532019024a9422600922455c8044092a40a990048925421130049922af4ff0174ff5c64dbfad6c20000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "generateAdStatisticsReport": {
+      "id": 14780,
+      "api": {
+        "url": "{{buildRestliUrl('/adAnalytics', temp.parameters)}}",
+        "temp": {
+          "parameters": {
+            "q": "statistics",
+            "fields": "{{join(add(parameters.fields, 'dateRange', 'pivotValues'), ',')}}",
+            "pivots": "{{convertArrayToFormat(parameters.pivots)}}",
+            "accounts": "{{convertArrayToFormat(parameters.accounts, true)}}",
+            "campaigns": "{{convertArrayToFormat(parameters.campaigns, true)}}",
+            "dateRange": "{{dateRangeFormat(environment.timezone, parameters.startDate, parameters.endDate)}}",
+            "campaignType": "{{(if(parameters.campaignType, '(value:' + (parameters.campaignType[] || parameters.campaignType) + ')', undefined))}}",
+            "objectiveType": "{{if(parameters.objectiveType, '(value:' + parameters.objectiveType + ')', undefined)}}",
+            "timeGranularity": "{{if(parameters.timeGranularity, '(value:' + parameters.timeGranularity + ')', undefined)}}"
+          }
+        },
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{parseReport(item)}}",
+          "iterate": "{{body.elements}}"
+        },
+        "encodeUrl": false
+      },
+      "rev": 46,
+      "crud": "read",
+      "name": "generateAdStatisticsReport",
+      "epoch": null,
+      "flags": {},
+      "label": "Generate an Ad Statistics Report",
+      "scope": [
+        "r_ads",
+        "r_ads_reporting"
+      ],
+      "expect": [
+        {
+          "name": "pivots",
+          "type": "select",
+          "label": "Pivots",
+          "options": [
+            {
+              "label": "Company",
+              "value": "COMPANY"
+            },
+            {
+              "label": "Account",
+              "value": "ACCOUNT"
+            },
+            {
+              "label": "Share",
+              "value": "SHARE"
+            },
+            {
+              "label": "Campaign",
+              "value": "CAMPAIGN"
+            },
+            {
+              "label": "Conversion",
+              "value": "CONVERSION"
+            },
+            {
+              "label": "Creative",
+              "value": "CREATIVE"
+            },
+            {
+              "label": "Campaign Group",
+              "value": "CAMPAIGN_GROUP"
+            },
+            {
+              "label": "Conversation Node",
+              "value": "CONVERSATION_NODE"
+            },
+            {
+              "label": "Conversation Node Option Index",
+              "value": "CONVERSATION_NODE_OPTION_INDEX"
+            },
+            {
+              "label": "Serving Location",
+              "value": "SERVING_LOCATION"
+            },
+            {
+              "label": "Objective Type",
+              "value": "OBJECTIVE_TYPE"
+            },
+            {
+              "label": "Card Index",
+              "value": "CARD_INDEX"
+            },
+            {
+              "label": "Impression Device Type",
+              "value": "IMPRESSION_DEVICE_TYPE"
+            }
+          ],
+          "multiple": true,
+          "required": true,
+          "validate": {
+            "maxItems": 3
+          }
+        },
+        {
+          "help": "Either `Accounts` or `Campaigns` must be provided.",
+          "name": "accounts",
+          "spec": {
+            "type": "select",
+            "label": "Account URN",
+            "options": "rpc://app%23linkedin-ads-reports@1/listAdAccounts?format=urn",
+            "required": true
+          },
+          "type": "array",
+          "label": "Accounts"
+        },
+        {
+          "help": "Either `Accounts` or `Campaigns` must be provided.",
+          "name": "campaigns",
+          "spec": {
+            "rpc": {
+              "url": "rpc://app%23linkedin-ads-reports@1/listCampaigns?format=urn",
+              "label": "Search",
+              "parameters": [
+                {
+                  "name": "account",
+                  "spec": {
+                    "type": "integer"
+                  },
+                  "type": "select",
+                  "label": "Ad Account ID",
+                  "options": "rpc://app%23linkedin-ads-reports@1/listAdAccounts",
+                  "required": true
+                }
+              ]
+            },
+            "type": "text",
+            "label": "Campaign URN",
+            "required": true
+          },
+          "type": "array",
+          "label": "Campaigns"
+        },
+        {
+          "name": "timeGranularity",
+          "type": "select",
+          "label": "Time Granularity",
+          "options": [
+            {
+              "label": "All",
+              "value": "ALL"
+            },
+            {
+              "label": "Daily",
+              "value": "DAILY"
+            },
+            {
+              "label": "Monthly",
+              "value": "MONTHLY"
+            },
+            {
+              "label": "Yearly",
+              "value": "YEARLY"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "Please note that it's possible that you will not be able to retrieve certain combinations of metrics and pivots due to limitations of LinkedIn's API. Unsupported combinations will be represented by metrics returned as equal to 0 despite the fact that the affected metrics are higher than 0 in LinkedIn's web UI.\n\nFor example, you cannot pivot by `Campaign` and `Conversion` and get `Clicks`. Clicks would come out as 0 in this case.",
+          "name": "fields",
+          "type": "select",
+          "label": "Fields",
+          "dynamic": true,
+          "options": [
+            {
+              "label": "Approx. Members Reach",
+              "value": "approximateMemberReach"
+            },
+            {
+              "label": "Action Clicks",
+              "value": "actionClicks"
+            },
+            {
+              "label": "Ad Unit Clicks",
+              "value": "adUnitClicks"
+            },
+            {
+              "label": "Card Clicks",
+              "value": "cardClicks"
+            },
+            {
+              "label": "Card Impressions",
+              "value": "cardImpressions"
+            },
+            {
+              "label": "Clicks",
+              "value": "clicks"
+            },
+            {
+              "label": "Comment Likes",
+              "value": "commentLikes"
+            },
+            {
+              "label": "Comments",
+              "value": "comments"
+            },
+            {
+              "label": "Company Page Clicks",
+              "value": "companyPageClicks"
+            },
+            {
+              "label": "Conversion Value In Local Currency",
+              "value": "conversionValueInLocalCurrency"
+            },
+            {
+              "label": "Cost In Local Currency",
+              "value": "costInLocalCurrency"
+            },
+            {
+              "label": "Cost In USD",
+              "value": "costInUsd"
+            },
+            {
+              "label": "Cost per Qualified Lead",
+              "value": "costPerQualifiedLead"
+            },
+            {
+              "label": "External Website Conversions",
+              "value": "externalWebsiteConversions"
+            },
+            {
+              "label": "External Website Post Click Conversions",
+              "value": "externalWebsitePostClickConversions"
+            },
+            {
+              "label": "External Website Post View Conversions",
+              "value": "externalWebsitePostViewConversions"
+            },
+            {
+              "label": "Follows",
+              "value": "follows"
+            },
+            {
+              "label": "Full Screen Plays",
+              "value": "fullScreenPlays"
+            },
+            {
+              "label": "Impressions",
+              "value": "impressions"
+            },
+            {
+              "label": "Landing Page Clicks",
+              "value": "landingPageClicks"
+            },
+            {
+              "label": "Lead Generation Mail Contact Info Shares",
+              "value": "leadGenerationMailContactInfoShares"
+            },
+            {
+              "label": "Lead Generation Mail Interested Clicks",
+              "value": "leadGenerationMailInterestedClicks"
+            },
+            {
+              "label": "Likes",
+              "value": "likes"
+            },
+            {
+              "label": "One Click Lead Form Opens",
+              "value": "oneClickLeadFormOpens"
+            },
+            {
+              "label": "One Click Leads",
+              "value": "oneClickLeads"
+            },
+            {
+              "label": "Opens",
+              "value": "opens"
+            },
+            {
+              "label": "Other Engagements",
+              "value": "otherEngagements"
+            },
+            {
+              "label": "Qualified Leads",
+              "value": "qualifiedLeads"
+            },
+            {
+              "label": "Reactions",
+              "value": "reactions"
+            },
+            {
+              "label": "Sends",
+              "value": "sends"
+            },
+            {
+              "label": "Shares",
+              "value": "shares"
+            },
+            {
+              "label": "Text URL Clicks",
+              "value": "textUrlClicks"
+            },
+            {
+              "label": "Total Engagements",
+              "value": "totalEngagements"
+            },
+            {
+              "label": "Video Completions",
+              "value": "videoCompletions"
+            },
+            {
+              "label": "Video First Quartile Completions",
+              "value": "videoFirstQuartileCompletions"
+            },
+            {
+              "label": "Video Midpoint Completions",
+              "value": "videoMidpointCompletions"
+            },
+            {
+              "label": "Video Starts",
+              "value": "videoStarts"
+            },
+            {
+              "label": "Video Third Quartile Completions",
+              "value": "videoThirdQuartileCompletions"
+            },
+            {
+              "label": "Video Views",
+              "value": "videoViews"
+            },
+            {
+              "label": "Viral Card Clicks",
+              "value": "viralCardClicks"
+            },
+            {
+              "label": "Viral Card Impressions",
+              "value": "viralCardImpressions"
+            },
+            {
+              "label": "Viral Clicks",
+              "value": "viralClicks"
+            },
+            {
+              "label": "Viral Comment Likes",
+              "value": "viralCommentLikes"
+            },
+            {
+              "label": "Viral Comments",
+              "value": "viralComments"
+            },
+            {
+              "label": "Viral Company Page Clicks",
+              "value": "viralCompanyPageClicks"
+            },
+            {
+              "label": "Viral External Website Conversions",
+              "value": "viralExternalWebsiteConversions"
+            },
+            {
+              "label": "Viral External Website Post Click Conversions",
+              "value": "viralExternalWebsitePostClickConversions"
+            },
+            {
+              "label": "Viral External Website Post View Conversions",
+              "value": "viralExternalWebsitePostViewConversions"
+            },
+            {
+              "label": "Viral Follows",
+              "value": "viralFollows"
+            },
+            {
+              "label": "Viral Full Screen Plays",
+              "value": "viralFullScreenPlays"
+            },
+            {
+              "label": "Viral Impressions",
+              "value": "viralImpressions"
+            },
+            {
+              "label": "Viral Landing Page Clicks",
+              "value": "viralLandingPageClicks"
+            },
+            {
+              "label": "Viral Likes",
+              "value": "viralLikes"
+            },
+            {
+              "label": "Viral One Click Lead Form Opens",
+              "value": "viralOneClickLeadFormOpens"
+            },
+            {
+              "label": "Viral One Click Leads",
+              "value": "viralOneClickLeads"
+            },
+            {
+              "label": "Viral Other Engagements",
+              "value": "viralOtherEngagements"
+            },
+            {
+              "label": "Viral Reactions",
+              "value": "viralReactions"
+            },
+            {
+              "label": "Viral Shares",
+              "value": "viralShares"
+            },
+            {
+              "label": "Viral Total Engagements",
+              "value": "viralTotalEngagements"
+            },
+            {
+              "label": "Viral Video Completions",
+              "value": "viralVideoCompletions"
+            },
+            {
+              "label": "Viral Video First Quartile Completions",
+              "value": "viralVideoFirstQuartileCompletions"
+            },
+            {
+              "label": "Viral Video Midpoint Completions",
+              "value": "viralVideoMidpointCompletions"
+            },
+            {
+              "label": "Viral Video Starts",
+              "value": "viralVideoStarts"
+            },
+            {
+              "label": "Viral Video Third Quartile Completions",
+              "value": "viralVideoThirdQuartileCompletions"
+            },
+            {
+              "label": "Viral Video Views",
+              "value": "viralVideoViews"
+            },
+            {
+              "label": "Viral Subscription Clicks",
+              "value": "viralSubscriptionClicks"
+            },
+            {
+              "label": "Subscription Clicks",
+              "value": "subscriptionClicks"
+            }
+          ],
+          "multiple": true,
+          "required": true,
+          "validate": {
+            "maxItems": 18
+          }
+        },
+        {
+          "name": "startDate",
+          "type": "date",
+          "label": "Start Date",
+          "required": true
+        },
+        {
+          "name": "endDate",
+          "type": "date",
+          "label": "End Date"
+        },
+        {
+          "name": "objectiveType",
+          "type": "select",
+          "label": "Objective Type",
+          "options": [
+            {
+              "label": "Lead Generation",
+              "value": "LEAD_GENERATION"
+            },
+            {
+              "label": "Creative Engagement",
+              "value": "CREATIVE_ENGAGEMENT"
+            },
+            {
+              "label": "Website Traffic",
+              "value": "WEBSITE_TRAFFIC"
+            },
+            {
+              "label": "Video View",
+              "value": "VIDEO_VIEW"
+            },
+            {
+              "label": "Brand Awareness",
+              "value": "BRAND_AWARENESS"
+            },
+            {
+              "label": "Website Conversion",
+              "value": "WEBSITE_CONVERSION"
+            },
+            {
+              "label": "Website Visit",
+              "value": "WEBSITE_VISIT"
+            },
+            {
+              "label": "Engagement",
+              "value": "ENGAGEMENT"
+            },
+            {
+              "label": "Job Applicant",
+              "value": "JOB_APPLICANT"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "name": "campaignType",
+          "type": "select",
+          "label": "Campaign Type",
+          "options": [
+            {
+              "label": "Text Ad",
+              "value": "TEXT_AD"
+            },
+            {
+              "label": "Sponsored Updates",
+              "value": "SPONSORED_UPDATES"
+            },
+            {
+              "label": "Sponsored InMails",
+              "value": "SPONSORED_INMAILS"
+            },
+            {
+              "label": "Dynamic",
+              "value": "DYNAMIC"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "linkedin-ads-reports",
+      "samples": null,
+      "apiJsonc": "{\n\t\"temp\": {\n\t\t\"parameters\": {\n\t\t\t\"q\": \"statistics\",\n\t\t\t\"pivots\": \"{{convertArrayToFormat(parameters.pivots)}}\",\n\t\t\t\"accounts\": \"{{convertArrayToFormat(parameters.accounts, true)}}\",\n\t\t\t\"campaigns\": \"{{convertArrayToFormat(parameters.campaigns, true)}}\",\n\t\t\t\"campaignType\": \"{{(if(parameters.campaignType, '(value:' + (parameters.campaignType[] || parameters.campaignType) + ')', undefined))}}\",\n\t\t\t\"timeGranularity\": \"{{if(parameters.timeGranularity, '(value:' + parameters.timeGranularity + ')', undefined)}}\",\n\t\t\t\"objectiveType\": \"{{if(parameters.objectiveType, '(value:' + parameters.objectiveType + ')', undefined)}}\",\n\t\t\t\"fields\": \"{{join(add(parameters.fields, 'dateRange', 'pivotValues'), ',')}}\",\n\t\t\t\"dateRange\": \"{{dateRangeFormat(environment.timezone, parameters.startDate, parameters.endDate)}}\"\n\t\t}\n\t},\n\t\"url\": \"{{buildRestliUrl('/adAnalytics', temp.parameters)}}\",\n\t//\"url\": \"https://bruno.requestcatcher.com/brunoTest/pivots=List((value%3ACOMPANY)%2C(value%3AACCOUNT)%2C(value%3ASHARE))\",\n\t\"encodeUrl\": false,\n\t\"method\": \"GET\",\n\t//deprecated\n\t/* \"qs\": {\n        \"q\": \"statistics\",\n        \"fields\": \"{{join(add(parameters.fields, 'dateRange', 'pivotValues'), ',')}}\",\n        \"timeGranularity\": \"{{parameters.timeGranularity}}\",\n        \"objectiveType\": \"{{parameters.objectiveType}}\",\n        \"{{...}}\": \"{{mergeObjects(array2qs(parameters.pivots, 'pivots'), array2qs(parameters.accounts, 'accounts'), array2qs(parameters.campaigns, 'campaigns'), array2qs(parameters.campaignType, 'campaignType'), encodeDateRange(environment.timezone, parameters.startDate, parameters.endDate))}}\"\n    }, */\n\t\"response\": {\n\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\"iterate\": \"{{body.elements}}\",\n\t\t\"output\": \"{{parseReport(item)}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "startDate",
+          "type": "date",
+          "label": "Start Date"
+        },
+        {
+          "name": "endDate",
+          "type": "date",
+          "label": "End Date"
+        },
+        {
+          "name": "pivotValues",
+          "spec": [
+            {
+              "name": "urn",
+              "type": "text",
+              "label": "URN"
+            }
+          ],
+          "type": "array",
+          "label": "Pivot Values"
+        },
+        "rpc://app%23linkedin-ads-reports@1/interfaceAdStatisticsReport"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"r_ads\",\n\t\"r_ads_reporting\"\n]",
+      "accountName": "linkedin-ads-reports",
+      "description": "Generates an ad statistics report.",
+      "expectJsonc": "[\n    {\n        \"name\": \"pivots\",\n        \"type\": \"select\",\n        \"label\": \"Pivots\",\n        \"required\": true,\n        \"multiple\": true,\n        \"options\": [\n            {\n                \"label\": \"Company\",\n                \"value\": \"COMPANY\"\n            },\n            {\n                \"label\": \"Account\",\n                \"value\": \"ACCOUNT\"\n            },\n            {\n                \"label\": \"Share\",\n                \"value\": \"SHARE\"\n            },\n            {\n                \"label\": \"Campaign\",\n                \"value\": \"CAMPAIGN\"\n            },\n            {\n                \"label\": \"Conversion\",\n                \"value\": \"CONVERSION\"\n            },\n            {\n                \"label\": \"Creative\",\n                \"value\": \"CREATIVE\"\n            },\n            {\n                \"label\": \"Campaign Group\",\n                \"value\": \"CAMPAIGN_GROUP\"\n            },\n            {\n                \"label\": \"Conversation Node\",\n                \"value\": \"CONVERSATION_NODE\"\n            },\n            {\n                \"label\": \"Conversation Node Option Index\",\n                \"value\": \"CONVERSATION_NODE_OPTION_INDEX\"\n            },\n            {\n                \"label\": \"Serving Location\",\n                \"value\": \"SERVING_LOCATION\"\n            },\n            {\n                \"label\": \"Objective Type\",\n                \"value\": \"OBJECTIVE_TYPE\"\n            },\n            {\n                \"label\": \"Card Index\",\n                \"value\": \"CARD_INDEX\"\n            },\n            {\n                \"label\": \"Impression Device Type\",\n                \"value\": \"IMPRESSION_DEVICE_TYPE\"\n            }\n        ],\n        \"validate\": {\n            \"maxItems\": 3\n        }\n    },\n    {\n        \"name\": \"accounts\",\n        \"type\": \"array\",\n        \"label\": \"Accounts\",\n        \"help\": \"Either `Accounts` or `Campaigns` must be provided.\",\n        \"spec\": {\n            \"label\": \"Account URN\",\n            \"type\": \"select\",\n            \"required\": true,\n            \"options\": \"rpc://listAdAccounts?format=urn\"\n        }\n    },\n    {\n        \"name\": \"campaigns\",\n        \"type\": \"array\",\n        \"label\": \"Campaigns\",\n        \"help\": \"Either `Accounts` or `Campaigns` must be provided.\",\n        \"spec\": {\n            \"label\": \"Campaign URN\",\n            \"type\": \"text\",\n            \"required\": true,\n            \"rpc\": {\n                \"label\": \"Search\",\n                \"url\": \"rpc://listCampaigns?format=urn\",\n                \"parameters\": [\n                    {\n                        \"name\": \"account\",\n                        \"label\": \"Ad Account ID\",\n                        \"type\": \"select\",\n                        \"spec\": {\n                            \"type\": \"integer\"\n                        },\n                        \"required\": true,\n                        \"options\": \"rpc://listAdAccounts\"\n                    }\n                ]\n            }\n        }\n    },\n    {\n        \"name\": \"timeGranularity\",\n        \"type\": \"select\",\n        \"label\": \"Time Granularity\",\n        \"required\": true,\n        \"options\": [\n            {\n                \"label\": \"All\",\n                \"value\": \"ALL\"\n            },\n            {\n                \"label\": \"Daily\",\n                \"value\": \"DAILY\"\n            },\n            {\n                \"label\": \"Monthly\",\n                \"value\": \"MONTHLY\"\n            },\n            {\n                \"label\": \"Yearly\",\n                \"value\": \"YEARLY\"\n            }\n        ]\n    },\n    {\n        \"name\": \"fields\",\n        \"type\": \"select\",\n        \"label\": \"Fields\",\n        \"required\": true,\n        \"multiple\": true,\n        \"dynamic\": true,\n        \"help\": \"Please note that it's possible that you will not be able to retrieve certain combinations of metrics and pivots due to limitations of LinkedIn's API. Unsupported combinations will be represented by metrics returned as equal to 0 despite the fact that the affected metrics are higher than 0 in LinkedIn's web UI.\\n\\nFor example, you cannot pivot by `Campaign` and `Conversion` and get `Clicks`. Clicks would come out as 0 in this case.\",\n        \"options\": [\n            {\n                \"label\": \"Approx. Members Reach\",\n                \"value\": \"approximateMemberReach\"\n            },\n            {\n                \"value\": \"actionClicks\",\n                \"label\": \"Action Clicks\"\n            },\n            {\n                \"value\": \"adUnitClicks\",\n                \"label\": \"Ad Unit Clicks\"\n            },\n            {\n                \"value\": \"cardClicks\",\n                \"label\": \"Card Clicks\"\n            },\n            {\n                \"value\": \"cardImpressions\",\n                \"label\": \"Card Impressions\"\n            },\n            {\n                \"value\": \"clicks\",\n                \"label\": \"Clicks\"\n            },\n            {\n                \"value\": \"commentLikes\",\n                \"label\": \"Comment Likes\"\n            },\n            {\n                \"value\": \"comments\",\n                \"label\": \"Comments\"\n            },\n            {\n                \"value\": \"companyPageClicks\",\n                \"label\": \"Company Page Clicks\"\n            },\n            {\n                \"value\": \"conversionValueInLocalCurrency\",\n                \"label\": \"Conversion Value In Local Currency\"\n            },\n            {\n                \"value\": \"costInLocalCurrency\",\n                \"label\": \"Cost In Local Currency\"\n            },\n            {\n                \"value\": \"costInUsd\",\n                \"label\": \"Cost In USD\"\n            },\n            {\n                \"value\": \"costPerQualifiedLead\",\n                \"label\": \"Cost per Qualified Lead\"\n            },\n            {\n                \"value\": \"externalWebsiteConversions\",\n                \"label\": \"External Website Conversions\"\n            },\n            {\n                \"value\": \"externalWebsitePostClickConversions\",\n                \"label\": \"External Website Post Click Conversions\"\n            },\n            {\n                \"value\": \"externalWebsitePostViewConversions\",\n                \"label\": \"External Website Post View Conversions\"\n            },\n            {\n                \"value\": \"follows\",\n                \"label\": \"Follows\"\n            },\n            {\n                \"value\": \"fullScreenPlays\",\n                \"label\": \"Full Screen Plays\"\n            },\n            {\n                \"value\": \"impressions\",\n                \"label\": \"Impressions\"\n            },\n            {\n                \"value\": \"landingPageClicks\",\n                \"label\": \"Landing Page Clicks\"\n            },\n            {\n                \"value\": \"leadGenerationMailContactInfoShares\",\n                \"label\": \"Lead Generation Mail Contact Info Shares\"\n            },\n            {\n                \"value\": \"leadGenerationMailInterestedClicks\",\n                \"label\": \"Lead Generation Mail Interested Clicks\"\n            },\n            {\n                \"value\": \"likes\",\n                \"label\": \"Likes\"\n            },\n            {\n                \"value\": \"oneClickLeadFormOpens\",\n                \"label\": \"One Click Lead Form Opens\"\n            },\n            {\n                \"value\": \"oneClickLeads\",\n                \"label\": \"One Click Leads\"\n            },\n            {\n                \"value\": \"opens\",\n                \"label\": \"Opens\"\n            },\n            {\n                \"value\": \"otherEngagements\",\n                \"label\": \"Other Engagements\"\n            },\n            {\n                \"value\": \"qualifiedLeads\",\n                \"label\": \"Qualified Leads\"\n            },\n            {\n                \"value\": \"reactions\",\n                \"label\": \"Reactions\"\n            },\n            {\n                \"value\": \"sends\",\n                \"label\": \"Sends\"\n            },\n            {\n                \"value\": \"shares\",\n                \"label\": \"Shares\"\n            },\n            {\n                \"value\": \"textUrlClicks\",\n                \"label\": \"Text URL Clicks\"\n            },\n            {\n                \"value\": \"totalEngagements\",\n                \"label\": \"Total Engagements\"\n            },\n            {\n                \"value\": \"videoCompletions\",\n                \"label\": \"Video Completions\"\n            },\n            {\n                \"value\": \"videoFirstQuartileCompletions\",\n                \"label\": \"Video First Quartile Completions\"\n            },\n            {\n                \"value\": \"videoMidpointCompletions\",\n                \"label\": \"Video Midpoint Completions\"\n            },\n            {\n                \"value\": \"videoStarts\",\n                \"label\": \"Video Starts\"\n            },\n            {\n                \"value\": \"videoThirdQuartileCompletions\",\n                \"label\": \"Video Third Quartile Completions\"\n            },\n            {\n                \"value\": \"videoViews\",\n                \"label\": \"Video Views\"\n            },\n            {\n                \"value\": \"viralCardClicks\",\n                \"label\": \"Viral Card Clicks\"\n            },\n            {\n                \"value\": \"viralCardImpressions\",\n                \"label\": \"Viral Card Impressions\"\n            },\n            {\n                \"value\": \"viralClicks\",\n                \"label\": \"Viral Clicks\"\n            },\n            {\n                \"value\": \"viralCommentLikes\",\n                \"label\": \"Viral Comment Likes\"\n            },\n            {\n                \"value\": \"viralComments\",\n                \"label\": \"Viral Comments\"\n            },\n            {\n                \"value\": \"viralCompanyPageClicks\",\n                \"label\": \"Viral Company Page Clicks\"\n            },\n            {\n                \"value\": \"viralExternalWebsiteConversions\",\n                \"label\": \"Viral External Website Conversions\"\n            },\n            {\n                \"value\": \"viralExternalWebsitePostClickConversions\",\n                \"label\": \"Viral External Website Post Click Conversions\"\n            },\n            {\n                \"value\": \"viralExternalWebsitePostViewConversions\",\n                \"label\": \"Viral External Website Post View Conversions\"\n            },\n            {\n                \"value\": \"viralFollows\",\n                \"label\": \"Viral Follows\"\n            },\n            {\n                \"value\": \"viralFullScreenPlays\",\n                \"label\": \"Viral Full Screen Plays\"\n            },\n            {\n                \"value\": \"viralImpressions\",\n                \"label\": \"Viral Impressions\"\n            },\n            {\n                \"value\": \"viralLandingPageClicks\",\n                \"label\": \"Viral Landing Page Clicks\"\n            },\n            {\n                \"value\": \"viralLikes\",\n                \"label\": \"Viral Likes\"\n            },\n            {\n                \"value\": \"viralOneClickLeadFormOpens\",\n                \"label\": \"Viral One Click Lead Form Opens\"\n            },\n            {\n                \"value\": \"viralOneClickLeads\",\n                \"label\": \"Viral One Click Leads\"\n            },\n            {\n                \"value\": \"viralOtherEngagements\",\n                \"label\": \"Viral Other Engagements\"\n            },\n            {\n                \"value\": \"viralReactions\",\n                \"label\": \"Viral Reactions\"\n            },\n            {\n                \"value\": \"viralShares\",\n                \"label\": \"Viral Shares\"\n            },\n            {\n                \"value\": \"viralTotalEngagements\",\n                \"label\": \"Viral Total Engagements\"\n            },\n            {\n                \"value\": \"viralVideoCompletions\",\n                \"label\": \"Viral Video Completions\"\n            },\n            {\n                \"value\": \"viralVideoFirstQuartileCompletions\",\n                \"label\": \"Viral Video First Quartile Completions\"\n            },\n            {\n                \"value\": \"viralVideoMidpointCompletions\",\n                \"label\": \"Viral Video Midpoint Completions\"\n            },\n            {\n                \"value\": \"viralVideoStarts\",\n                \"label\": \"Viral Video Starts\"\n            },\n            {\n                \"value\": \"viralVideoThirdQuartileCompletions\",\n                \"label\": \"Viral Video Third Quartile Completions\"\n            },\n            {\n                \"value\": \"viralVideoViews\",\n                \"label\": \"Viral Video Views\"\n            },\n            {\n                \"value\": \"viralSubscriptionClicks\",\n                \"label\": \"Viral Subscription Clicks\"\n            },\n            {\n                \"value\": \"subscriptionClicks\",\n                \"label\": \"Subscription Clicks\"\n            }\n        ],\n        \"validate\": {\n            \"maxItems\": 18\n        }\n    },\n    {\n        \"name\": \"startDate\",\n        \"type\": \"date\",\n        \"label\": \"Start Date\",\n        \"required\": true\n    },\n    {\n        \"name\": \"endDate\",\n        \"type\": \"date\",\n        \"label\": \"End Date\"\n    },\n    {\n        \"name\": \"objectiveType\",\n        \"type\": \"select\",\n        \"label\": \"Objective Type\",\n        \"advanced\": true,\n        \"options\": [\n            {\n                \"label\": \"Lead Generation\",\n                \"value\": \"LEAD_GENERATION\"\n            },\n            {\n                \"label\": \"Creative Engagement\",\n                \"value\": \"CREATIVE_ENGAGEMENT\"\n            },\n            {\n                \"label\": \"Website Traffic\",\n                \"value\": \"WEBSITE_TRAFFIC\"\n            },\n            {\n                \"label\": \"Video View\",\n                \"value\": \"VIDEO_VIEW\"\n            },\n            {\n                \"label\": \"Brand Awareness\",\n                \"value\": \"BRAND_AWARENESS\"\n            },\n            {\n                \"label\": \"Website Conversion\",\n                \"value\": \"WEBSITE_CONVERSION\"\n            },\n            {\n                \"label\": \"Website Visit\",\n                \"value\": \"WEBSITE_VISIT\"\n            },\n            {\n                \"label\": \"Engagement\",\n                \"value\": \"ENGAGEMENT\"\n            },\n            {\n                \"label\": \"Job Applicant\",\n                \"value\": \"JOB_APPLICANT\"\n            }\n        ]\n    },\n    {\n        \"name\": \"campaignType\",\n        \"type\": \"select\",\n        \"label\": \"Campaign Type\",\n        \"advanced\": true,\n        \"options\": [\n            {\n                \"label\": \"Text Ad\",\n                \"value\": \"TEXT_AD\"\n            },\n            {\n                \"label\": \"Sponsored Updates\",\n                \"value\": \"SPONSORED_UPDATES\"\n            },\n            {\n                \"label\": \"Sponsored InMails\",\n                \"value\": \"SPONSORED_INMAILS\"\n            },\n            {\n                \"label\": \"Dynamic\",\n                \"value\": \"DYNAMIC\"\n            }\n        ]\n    },\n    {\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 10\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": "linkedin-ads-reports2",
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"startDate\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Start Date\"\n\t},\n\t{\n\t\t\"name\": \"endDate\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"End Date\"\n\t},\n\t{\n\t\t\"name\": \"pivotValues\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Pivot Values\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"urn\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"URN\"\n\t\t\t}\n\t\t]\n\t},\n\t\"rpc://interfaceAdStatisticsReport\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "linkedin-ads-reports": {
+      "api": {
+        "info": {
+          "log": {
+            "sanitize": [
+              "request.headers.authorization"
+            ]
+          },
+          "url": "https://api.linkedin.com/v2/me",
+          "headers": {
+            "authorization": "Bearer {{connection.accessToken}}"
+          },
+          "response": {
+            "uid": "{{body.id}}",
+            "data": {
+              "id": "{{body.id}}"
+            },
+            "metadata": {
+              "type": "text",
+              "value": "{{getMetadata(body)}}"
+            }
+          }
+        },
+        "token": {
+          "log": {
+            "sanitize": [
+              "request.body.code",
+              "request.body.client_secret",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://www.linkedin.com/oauth/v2/accessToken",
+          "body": {
+            "code": "{{temp.code}}",
+            "client_id": "{{ifempty(data.clientId, if(common.clientId2, common.clientId2, common.clientId))}}",
+            "grant_type": "authorization_code",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "client_secret": "{{ifempty(data.clientSecret, if(common.clientSecret2, common.clientSecret2, common.clientSecret))}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}",
+              "developerApplication": "{{ifempty(parameters.developerApplication, common.developerApplication)}}"
+            },
+            "expires": "{{addSeconds(now, body.refresh_token_expires_in)}}"
+          }
+        },
+        "refresh": {
+          "log": {
+            "sanitize": [
+              "request.body.client_secret",
+              "request.body.refresh_token",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://www.linkedin.com/oauth/v2/accessToken",
+          "body": {
+            "client_id": "{{ifempty(data.clientId, if(common.clientId2, common.clientId2, common.clientId))}}",
+            "grant_type": "refresh_token",
+            "client_secret": "{{ifempty(data.clientSecret, if(common.clientSecret2, common.clientSecret2, common.clientSecret))}}",
+            "refresh_token": "{{data.refreshToken}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}",
+              "developerApplication": "{{ifempty(parameters.developerApplication, common.developerApplication)}}"
+            },
+            "expires": "{{addSeconds(now, body.refresh_token_expires_in)}}"
+          },
+          "condition": "{{data.refreshToken && data.expires < addMinutes(now, 1)}}"
+        },
+        "authorize": {
+          "qs": {
+            "scope": "{{join(distinct(merge(oauth.scope, ifempty(parameters.scope, emptyarray))), ',')}}",
+            "client_id": "{{ifempty(parameters.clientId, if(common.clientId2, common.clientId2, common.clientId))}}",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "response_type": "code"
+          },
+          "url": "https://www.linkedin.com/oauth/v2/authorization",
+          "response": {
+            "temp": {
+              "code": "{{query.code}}"
+            }
+          }
+        }
+      },
+      "rev": 13,
+      "name": "linkedin-ads-reports",
+      "type": "oauth",
+      "label": "LinkedIn Ads Reports",
+      "scope": [
+        "r_liteprofile"
+      ],
+      "scopes": {},
+      "aliasTo": "linkedin2",
+      "appName": "linkedin-ads-reports",
+      "install": {},
+      "apiJsonc": "{\n\t\"authorize\": {\n\t\t\"qs\": {\n\t\t\t\"scope\": \"{{join(distinct(merge(oauth.scope, ifempty(parameters.scope, emptyarray))), ',')}}\",\n\t\t\t\"client_id\": \"{{ifempty(parameters.clientId, if(common.clientId2, common.clientId2, common.clientId))}}\",\n\t\t\t\"redirect_uri\": \"{{oauth.redirectUri}}\",\n\t\t\t\"response_type\": \"code\"\n\t\t},\n\t\t\"url\": \"https://www.linkedin.com/oauth/v2/authorization\",\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"code\": \"{{query.code}}\"\n\t\t\t}\n\t\t}\n\t},\n\t\"token\": {\n\t\t\"url\": \"https://www.linkedin.com/oauth/v2/accessToken\",\n\t\t\"method\": \"POST\",\n\t\t\"body\": {\n\t\t\t\"code\": \"{{temp.code}}\",\n\t\t\t\"client_id\": \"{{ifempty(data.clientId, if(common.clientId2, common.clientId2, common.clientId))}}\",\n\t\t\t\"grant_type\": \"authorization_code\",\n\t\t\t\"redirect_uri\": \"{{oauth.redirectUri}}\",\n\t\t\t\"client_secret\": \"{{ifempty(data.clientSecret, if(common.clientSecret2, common.clientSecret2, common.clientSecret))}}\"\n\t\t},\n\t\t\"type\": \"urlencoded\",\n\t\t\"response\": {\n\t\t\t\"data\": {\n\t\t\t\t\"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n\t\t\t\t\"accessToken\": \"{{body.access_token}}\",\n\t\t\t\t\"refreshToken\": \"{{body.refresh_token}}\",\n\t\t\t\t\"developerApplication\": \"{{ifempty(parameters.developerApplication, common.developerApplication)}}\"\n\t\t\t},\n\t\t\t\"expires\": \"{{addSeconds(now, body.refresh_token_expires_in)}}\"\n\t\t},\n\t\t\"log\": {\n\t\t\t\"sanitize\": [\"request.body.code\", \"request.body.client_secret\", \"response.body.access_token\", \"response.body.refresh_token\"]\n\t\t}\n\t},\n\t\"refresh\": {\n\t\t\"condition\": \"{{data.refreshToken && data.expires < addMinutes(now, 1)}}\",\n\t\t\"url\": \"https://www.linkedin.com/oauth/v2/accessToken\",\n\t\t\"method\": \"POST\",\n\t\t\"body\": {\n\t\t\t\"client_id\": \"{{ifempty(data.clientId, if(common.clientId2, common.clientId2, common.clientId))}}\",\n\t\t\t\"grant_type\": \"refresh_token\",\n\t\t\t\"client_secret\": \"{{ifempty(data.clientSecret, if(common.clientSecret2, common.clientSecret2, common.clientSecret))}}\",\n\t\t\t\"refresh_token\": \"{{data.refreshToken}}\"\n\t\t},\n\t\t\"type\": \"urlencoded\",\n\t\t\"response\": {\n\t\t\t\"data\": {\n\t\t\t\t\"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n\t\t\t\t\"accessToken\": \"{{body.access_token}}\",\n\t\t\t\t\"refreshToken\": \"{{body.refresh_token}}\",\n\t\t\t\t\"developerApplication\": \"{{ifempty(parameters.developerApplication, common.developerApplication)}}\"\n\t\t\t},\n\t\t\t\"expires\": \"{{addSeconds(now, body.refresh_token_expires_in)}}\"\n\t\t},\n\t\t\"log\": {\n\t\t\t\"sanitize\": [\"request.body.client_secret\", \"request.body.refresh_token\", \"response.body.access_token\", \"response.body.refresh_token\"]\n\t\t}\n\t},\n\t\"info\": {\n\t\t\"url\": \"https://api.linkedin.com/v2/me\",\n\t\t\"headers\": {\n\t\t\t\"authorization\": \"Bearer {{connection.accessToken}}\"\n\t\t},\n\t\t\"response\": {\n\t\t\t\"uid\": \"{{body.id}}\",\n\t\t\t\"metadata\": {\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"value\": \"{{getMetadata(body)}}\"\n\t\t\t},\n\t\t\t\"data\": {\n\t\t\t\t\"id\": \"{{body.id}}\"\n\t\t\t}\n\t\t},\n\t\t\"log\": {\n\t\t\t\"sanitize\": [\"request.headers.authorization\"]\n\t\t}\n\t}\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "advanced": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "advanced": true
+        },
+        {
+          "help": "You can retrieve your application's ID by visiting https://www.linkedin.com/developers/apps and selecting your application. The numeric ID in your browser's address bar is your application ID. For example `urn:li:developerApplication:12345`.",
+          "name": "developerApplication",
+          "type": "text",
+          "label": "Developer Application URN",
+          "advanced": true
+        },
+        {
+          "name": "scope",
+          "type": "array",
+          "label": "Scope",
+          "advanced": true
+        }
+      ],
+      "scopeJsonc": "[\n\t\"r_liteprofile\"\n]",
+      "installSpec": [],
+      "scopesJsonc": "{\n}",
+      "installJsonc": "{\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"clientId\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Client ID\",\n\t\t\"advanced\": true\n\t},\n\t{\n\t\t\"name\": \"clientSecret\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Client Secret\",\n\t\t\"advanced\": true\n\t},\n\t{\n\t\t\"name\": \"developerApplication\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Developer Application URN\",\n\t\t\"help\": \"You can retrieve your application's ID by visiting https://www.linkedin.com/developers/apps and selecting your application. The numeric ID in your browser's address bar is your application ID. For example `urn:li:developerApplication:12345`.\",\n\t\t\"advanced\": true\n\t},\n\t{\n\t\t\"name\": \"scope\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Scope\",\n\t\t\"advanced\": true\n\t}\n]",
+      "installSpecJsonc": "[\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    },
+    "linkedin-ads-reports2": {
+      "api": {},
+      "rev": 4,
+      "name": "linkedin-ads-reports2",
+      "type": "oauth",
+      "label": "LinkedIn OpenID (aliased)",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": "linkedin-openid",
+      "appName": "linkedin-ads-reports",
+      "install": {},
+      "apiJsonc": "{\n    // this connection is aliased to \"linkedin-openid\" connection.\n    // \"inkedin-openid connection\" is located in LinkedIn v2 app. \n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "advanced": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "advanced": true
+        }
+      ],
+      "scopeJsonc": null,
+      "installSpec": [],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": null,
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://api.linkedin.com/rest\",\n    \"headers\": {\n        //\"LinkedIn-Version\": \"202304\", // valid until April 15th, 2024\n        \"LinkedIn-Version\": \"202501\", //! valid until January 15th, 2026\n        \"Authorization\": \"Bearer {{connection.accessToken}}\",\n        \"X-Restli-Protocol-Version\": \"2.0.0\"\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.Authorization\"\n        ]\n    },\n    \"response\": {\n        \"error\": {\n            \"type\": \"DataError\",\n            \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n        }\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "array2qs": {
+      "rev": 5,
+      "code": "function array2qs(array, name) {\n\t//not used\n\tif (!Array.isArray(array) || !name) return undefined;\n\treturn array.reduce((acc, val, idx) => {\n\t\tacc[`${name}[${idx}]`] = val;\n\t\treturn acc;\n\t}, {});\n}",
+      "name": "array2qs",
+      "test": "undefined",
+      "appName": "linkedin-ads-reports",
+      "arguments": "(array, name)",
+      "appVersion": 1
+    },
+    "getMetadata": {
+      "rev": 3,
+      "code": "function getMetadata(body) {\n\tconst getName = (value) => {\n\t\tif (!value || !value.localized) {\n\t\t\treturn false\n\t\t}\n\t\tconst keys = Object.keys(value.localized)\n\t\tif (!keys || !keys.length) {\n\t\t\treturn false\n\t\t}\n\t\treturn value.localized[keys[0]]\n\t}\n\tconst firstName = getName(body.firstName)\n\tconst lastName = getName(body.lastName)\n\treturn firstName + ' ' + lastName\n}",
+      "name": "getMetadata",
+      "test": null,
+      "appName": "linkedin-ads-reports",
+      "arguments": "(body)",
+      "appVersion": 1
+    },
+    "parseReport": {
+      "rev": 15,
+      "code": "function parseReport(report) {\n    if (typeof report !== 'object' || report === null) return undefined;\n    const pivotValues = report.pivotValues ? report.pivotValues.map((pivotValue, index) => {\n        return {\n            urn: pivotValue,\n        };\n    }): undefined;\n\n    let startDate = null;\n    if (report.dateRange && report.dateRange.start) {\n        const dateRangeStart = report.dateRange.start;\n        startDate = iml.parseDate(\n            `${dateRangeStart.year}-${dateRangeStart.month}-${dateRangeStart.day}`,\n            'YYYY-M-D'\n        );\n    }\n\n    let endDate = null;\n    if (report.dateRange && report.dateRange.end) {\n        const dateRangeEnd = report.dateRange.end;\n        endDate = iml.parseDate(\n            `${dateRangeEnd.year}-${dateRangeEnd.month}-${dateRangeEnd.day}`,\n            'YYYY-M-D'\n        );\n    }\n\n    delete report.dateRange;\n    return {\n        ...report,\n        pivotValues,\n        startDate,\n        endDate,\n    };\n}",
+      "name": "parseReport",
+      "test": "it('returns \"undefined\" if input does not pass the validation', () => {\n    assert.strictEqual(parseReport('not an object'), undefined);\n    assert.strictEqual(parseReport(null), undefined);\n});\n\nit('if there are \"pivotValues\" in the report, parses them and return array of objects { \"urn\": <pivotValue> } in \"pivotValues\" key in the output', () => {\n    const input = {\n        pivotValues: ['value1', 'value2'],\n    };\n\n    const expected = {\n        pivotValues: [{ urn: 'value1' }, { urn: 'value2' }],\n        startDate: null,\n        endDate: null,\n    };\n\n    assert.deepEqual(parseReport(input), expected);\n});\n\nit('if there are both \"dateRange.start\" and \"dateRange.end\" in the report, parses them and return as \"startDate\" and \"endDate\" keys in the output', () => {\n    const input = {\n        pivotValues: [],\n        dateRange: {\n            start: {\n                year: 2024,\n                month: 1,\n                day: 1,\n            },\n            end: {\n                year: 2024,\n                month: 2,\n                day: 1,\n            },\n        },\n    };\n\n    const expected = {\n        pivotValues: [],\n        startDate: iml.parseDate('2024-1-1', 'YYYY-M-D'),\n        endDate: iml.parseDate('2024-2-1', 'YYYY-M-D'),\n    };\n\n    assert.deepEqual(parseReport(input), expected);\n});\n",
+      "appName": "linkedin-ads-reports",
+      "arguments": "(report)",
+      "appVersion": 1
+    },
+    "mergeObjects": {
+      "rev": 3,
+      "code": "function mergeObjects(target, ...sources) {\n\treturn Object.assign(target || {}, ...sources);\n}",
+      "name": "mergeObjects",
+      "test": null,
+      "appName": "linkedin-ads-reports",
+      "arguments": "(target, ...sources)",
+      "appVersion": 1
+    },
+    "buildRestliUrl": {
+      "rev": 14,
+      "code": "function buildRestliUrl(endpoint, parameters) {\n\n\tlet url = endpoint;\n\n\tlet queryParams = [];\n\tif (parameters) {\n\t\tqueryParams = Object.entries(parameters)\n\t\t\t.map(([key, value]) => value ? `${key}=${encodeURIComponent(value)}` : undefined)\n\t\t\t.filter(i => i)\n\t}\n\n\tif (queryParams.length > 0) {\n\t\turl += `?${queryParams.join(\"&\")}`;\n\t}\n\n\treturn url;\n}",
+      "name": "buildRestliUrl",
+      "test": "it('return only url endpoint if no query string parameters', () => {\n    const url = '/adAnalytics';\n    const input1 = null;\n    const input2 = {};\n    const output = '/adAnalytics';\n    assert.deepEqual(buildRestliUrl(url), output);\n    assert.deepEqual(buildRestliUrl(url, input1), output);\n    assert.deepEqual(buildRestliUrl(url, input2), output);\n});\nit('return url endpoint along with query string', () => {\n    const url = '/adAnalytics';\n    const input = {\n        \"q\": \"statistics\",\n        \"fields\": \"actionClicks,adUnitClicks,clicks,costInLocalCurrency,costInUsd,externalWebsiteConversions,impressions,totalEngagements,dateRange,pivotValues\",\n        \"pivots\": \"List((value:CAMPAIGN))\",\n        \"accounts\": \"List(urn%3Ali%3AsponsoredAccount%3A512427088)\",\n        \"campaigns\": \"List(urn%3Ali%3AsponsoredCampaign%3A285661824,urn%3Ali%3AsponsoredCampaign%3A297245514)\",\n        \"dateRange\": \"(start:(year:2022,month:1,day:6),end:(year:2024,month:1,day:30))\",\n        \"campaignType\": \"(value:TEXT_AD)\",\n        \"objectiveType\": \"(value:LEAD_GENERATION)\",\n        \"timeGranularity\": \"(value:DAILY)\"\n    };\n    const output = '/adAnalytics?q=statistics&fields=actionClicks%2CadUnitClicks%2Cclicks%2CcostInLocalCurrency%2CcostInUsd%2CexternalWebsiteConversions%2Cimpressions%2CtotalEngagements%2CdateRange%2CpivotValues&pivots=List((value%3ACAMPAIGN))&accounts=List(urn%253Ali%253AsponsoredAccount%253A512427088)&campaigns=List(urn%253Ali%253AsponsoredCampaign%253A285661824%2Curn%253Ali%253AsponsoredCampaign%253A297245514)&dateRange=(start%3A(year%3A2022%2Cmonth%3A1%2Cday%3A6)%2Cend%3A(year%3A2024%2Cmonth%3A1%2Cday%3A30))&campaignType=(value%3ATEXT_AD)&objectiveType=(value%3ALEAD_GENERATION)&timeGranularity=(value%3ADAILY)';\n    \n    assert.deepEqual(buildRestliUrl(url, input), output);\n});\n",
+      "appName": "linkedin-ads-reports",
+      "arguments": "(endpoint, parameters)",
+      "appVersion": 1
+    },
+    "dateRangeFormat": {
+      "rev": 13,
+      "code": "function dateRangeFormat(timezone, start, end) {\n\n\tif (!start) return;\n\n\tconst [startYear, startMonth, startDate] = iml.formatDate(start, \"YYYY-M-D\", timezone).split(\"-\");\n\n    const startFormat = `start:(year:${Number(startYear)},month:${Number(startMonth)},day:${Number(startDate)})`;\n\n    if(end) {\n\t\tconst [endYear, endMonth, endDate] = iml.formatDate(end, \"YYYY-M-D\", timezone).split(\"-\");\n\n        const endFormat = `end:(year:${Number(endYear)},month:${Number(endMonth)},day:${Number(endDate)})`;\n\n        return `(${startFormat},${endFormat})`;\n    }\n\n    return `(${startFormat})`;\n \n}",
+      "name": "dateRangeFormat",
+      "test": "it('return \"undefined\" if no any value', () => {\n    assert.deepEqual(dateRangeFormat('Europe/Prague', null, null), undefined);\n});\nit('return value if only start has value', () => {\n    const start = new Date(2024, 3, 7);\n    const output = '(start:(year:2024,month:4,day:7))';\n    assert.deepEqual(dateRangeFormat('Europe/Prague', start, null), output);\n});\nit('return value if both start and end have value', () => {\n    const start = new Date(2024, 3, 7);\n    const end = new Date(2024, 3, 14);\n    const output = '(start:(year:2024,month:4,day:7),end:(year:2024,month:4,day:14))';\n    assert.deepEqual(dateRangeFormat('Europe/Prague', start, end), output);\n});\n",
+      "appName": "linkedin-ads-reports",
+      "arguments": "(timezone, start, end)",
+      "appVersion": 1
+    },
+    "encodeDateRange": {
+      "rev": 5,
+      "code": "function encodeDateRange(timezone, start, end) {\n\t//not used\n\tif (!start) return undefined;\n\n\tlet output = {};\n\tconst [startYear, startMonth, startDate] = iml.formatDate(start, \"YYYY-M-D\", timezone).split(\"-\");\n\toutput[`dateRange.start.day`] = Number(startDate);\n\toutput[`dateRange.start.month`] = Number(startMonth);\n\toutput[`dateRange.start.year`] = Number(startYear);\n\n\tif (end) {\n\t\tconst [endYear, endMonth, endDate] = iml.formatDate(end, \"YYYY-M-D\", timezone).split(\"-\");\n\t\toutput[`dateRange.end.day`] = Number(endDate);\n\t\toutput[`dateRange.end.month`] = Number(endMonth);\n\t\toutput[`dateRange.end.year`] = Number(endYear);\n\t}\n\n\treturn output;\n}",
+      "name": "encodeDateRange",
+      "test": "undefined",
+      "appName": "linkedin-ads-reports",
+      "arguments": "(timezone, start, end)",
+      "appVersion": 1
+    },
+    "getErrorMessage": {
+      "rev": 3,
+      "code": "function getErrorMessage(statusCode, body) {\n\tif (body && body.message) {\n\t\treturn `${statusCode}: ${body.message}`\n\t}\n\treturn String(body).substring(0, 300)\n}",
+      "name": "getErrorMessage",
+      "test": null,
+      "appName": "linkedin-ads-reports",
+      "arguments": "(statusCode, body)",
+      "appVersion": 1
+    },
+    "convertArrayToFormat": {
+      "rev": 8,
+      "code": "function convertArrayToFormat(array, isURN = false) {\n\n    if(!array || !Array.isArray(array) || array.length === 0) return;\n\n    return 'List(' + array.map(value => isURN ? value.replace(/:/g, '%3A') : `(value:${value})`).join(',') + ')';\n\n}",
+      "name": "convertArrayToFormat",
+      "test": "it('return \"undefined\" if no any value', () => {\n    assert.deepEqual(convertArrayToFormat(null), undefined);\n});\nit('return value if array value is URN type', () => {\n    const input = ['urn:li:sponsoredCampaign:1234567', 'urn:li:sponsoredCampaign:12345678', 'urn:li:sponsoredCampaign:123456789'];\n    const output = 'List(urn%3Ali%3AsponsoredCampaign%3A1234567,urn%3Ali%3AsponsoredCampaign%3A12345678,urn%3Ali%3AsponsoredCampaign%3A123456789)';\n    assert.deepEqual(convertArrayToFormat(input, true), output);\n});\nit('return value if array value is not URN type', () => {\n    const input = ['COMPANY', 'CAMPAIGN'];\n    const output = 'List((value:COMPANY),(value:CAMPAIGN))';\n    assert.deepEqual(convertArrayToFormat(input), output);\n});\n",
+      "appName": "linkedin-ads-reports",
+      "arguments": "(array, isURN = false)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-04-13T13:48:48.034175+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": null,
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "40936015550bc2a0d21d08444ee407c4",
+  "versionFull": "1.0.17",
+  "compiledName": "linkedin-ads-reports",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

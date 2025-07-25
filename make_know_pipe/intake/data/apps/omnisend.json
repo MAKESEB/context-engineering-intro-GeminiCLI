@@ -1,0 +1,2470 @@
+{
+  "rev": 33,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.X-API-KEY"
+      ]
+    },
+    "baseUrl": "https://api.omnisend.com/v3",
+    "headers": {
+      "X-API-KEY": "{{connection.apiKey}}"
+    },
+    "response": {
+      "error": {
+        "403": {
+          "type": "ConnectionError",
+          "message": "Invalid Token."
+        },
+        "message": "[{{statusCode}}] {{body.error}} {{if(body.fields; ErrorParse(body.fields))}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "omnisend",
+  "_rpcs": {
+    "GetContactID": {
+      "api": {
+        "qs": {
+          "limit": 100
+        },
+        "url": "/contacts",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{checkNames(item)}}",
+            "value": "{{item.contactID}}"
+          },
+          "iterate": "{{body.contacts}}"
+        },
+        "pagination": {
+          "qs": {
+            "offset": "{{(pagination.page - 1) * 100}}"
+          },
+          "condition": "{{body.paging.next}}"
+        }
+      },
+      "rev": 3,
+      "name": "GetContactID",
+      "label": "Get Contact ID",
+      "appName": "omnisend",
+      "apiJsonc": "{\n\t\"url\": \"/contacts\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"limit\": 100\n\t},\n\t\"response\": {\n\t    \"limit\": 300,\n\t\t\"iterate\": \"{{body.contacts}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{checkNames(item)}}\",\n\t\t\t\"value\": \"{{item.contactID}}\"\n\t\t}\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"offset\": \"{{(pagination.page - 1) * 100}}\"\n\t\t},\n\t\t\"condition\": \"{{body.paging.next}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "omnisend",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "getEventList": {
+      "api": {
+        "url": "/events",
+        "method": "GET",
+        "response": {
+          "limit": 250,
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.eventID}}"
+          },
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "name": "getEventList",
+      "label": "Get Event List",
+      "appName": "omnisend",
+      "apiJsonc": "{\n\t\"url\": \"/events\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": 250,\n\t\t\"iterate\": \"{{body}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.eventID}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "omnisend",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "GetCustomEventFields": {
+      "api": {
+        "url": "/events/{{parameters.eventID}}",
+        "method": "GET",
+        "response": {
+          "output": "{{parseListFields(body.fields)}}"
+        }
+      },
+      "rev": 3,
+      "name": "GetCustomEventFields",
+      "label": "Get Custom Event Fields",
+      "appName": "omnisend",
+      "apiJsonc": "{\n\t\"url\": \"/events/{{parameters.eventID}}\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": \"{{parseListFields(body.fields)}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "eventID",
+          "type": "text",
+          "label": "Event ID"
+        }
+      ],
+      "accountName": "omnisend",
+      "altAccountName": null,
+      "parametersJsonc": "[\n   {\n      \"name\": \"eventID\",\n\t  \"type\": \"text\",\n\t  \"label\": \"Event ID\"\n   }\n]"
+    },
+    "getWatchContactsMessage": {
+      "api": {
+        "response": {
+          "output": {
+            "type": "html",
+            "label": "<div style='color: #69502E; background: #F9ECD7; border-radius: 5px; padding: 12px 16px 12px 16px; font-size: 12px;'>The module can handle up to 3,200 contacts in your account. If your account exceeds this limit, the module will not process all contacts and will generate an error.</div>"
+          }
+        }
+      },
+      "rev": 2,
+      "name": "getWatchContactsMessage",
+      "label": "Get Watch Contacts Message",
+      "appName": "omnisend",
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"type\": \"html\",\n\t\t\t\"label\": \"<div style='color: #69502E; background: #F9ECD7; border-radius: 5px; padding: 12px 16px 12px 16px; font-size: 12px;'>The module can handle up to 3,200 contacts in your account. If your account exceeds this limit, the module will not process all contacts and will generate an error.</div>\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "omnisend",
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {},
+  "label": "Omnisend",
+  "theme": "#000000",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Events",
+      "modules": [
+        "TriggerCustomEvent",
+        "GetEvent",
+        "ListCustomEvents",
+        "CreateCustomEvent"
+      ]
+    },
+    {
+      "label": "Contacts",
+      "modules": [
+        "watchNewContacts",
+        "CreateSubscriber",
+        "GetListContact",
+        "UpdateContact",
+        "GetContact"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "UnniversalModule"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda7930000016c4944415458c3ed95cd2a455118869f8d8408e5afcc19191b19198b944c5c81a10b307205462ec1d040cac0df05503297481828873a7ef318d8b2da287b397b9b9cb7d6607dbbbdd6b356effb2da8abae7f5692f70715a0011803a68036600f5803aa49927bc97c9ba7635abdf2538fea92da9802160ad0aeeef85517ea485e8086088e0e60f09b7af70ff59a03dc02a7dfd4af81b388f57eafc00313ea7970fd557531c603b1294880516092f7146c039bc043de144467267bd242e357a47e851d349f01e001b8015e4b3b756abc4e75433d5457d471b5b9d0c69301e8520f02e757d465b5ef231d6503a8beaaab6a772c409e46f408ec03d5a0960033c0fc0768913780daaaceaa27999b3856870bf74300329776bf500b857b2180e850b73200eb31a988798c00ee80dd4c6d08e8cdbb506e80a0f91c01cfc1a71ea0bf70804097c07d306f01baca04a864009a787f194b0378025e827902349609603afea4bf00d44475805a024479e20d949e5ea1d9eaa0ed0000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000002a04944415478daed9a3d6b154114404f5e243110151545896222b1b050b110114182765aab7f43fbf80bc4c2d24ead6cc4c6221622821141ad043fe2172a51d01024891af2752cde3e58e4f9769f24e37b933930b0c5c0ee3dbb7be7ce652091482412894422b13ae9087933b576b90618cc460598069e0113001d1d411f2b5cf0d938a05e533fa973d998519fa8e7d475395171900b7e487de1df9953afa81ba2929005dfaf3eb6980575b826adedc9bdfde112c1d778abee0921a012c8432f70a289f9fdc0d19ac01804f4005b9a7caedd211e2c94807f2148020825e00730dec4fc45602c26013f813b947fab6f808710495194ad027dea688915604e3d1fcd329813807a28abf8fec64ff592da1b4df075240c66418ea9d3eaacfa55bdab9e55d7860c3ef80f96055701fa8001aa35c2c76c4c4124ff7d229148b403cb9e6e734bd80e602d30097c0796a0f532fc4a09e802ae0243c017e025f000b80fbc06e65b51c6b20950bbd5913a9d9e71f5ba7a4ced8caeda2b10906742bda86e8faae66f4280ea6256fe1efc9f1256723b5c145105384e35571caac98b4940d90cb71fb84cb50f185cc24a09906a57a72c47800b5497cdf626b7ed3da9de54bf976c85cfa8a7a3488a3909ddea29f591ba5442c23d7563db0ba8236240bd5d42c06cd61469ffafa08e8441f569090937d4ae6804fc21e18cd5be5f233eabfb420908d216cfd5fc2364edee066c030ed7c4452120c714708bc64552474d40088209c87d05a36427411ab017581f95801cef8177057376025b631530053c2f98b3896a2e885280c08782393dc0ae580500bca2f15ea113d81c9d805c229ca778bbdc09f19c10f9936fc06cc19c664e94b49d8049e057c19c35310b58a0b85fd019b38096d9e9b4f221a924200948029280242009480256af80a80e4bff0b4b216ef21b6ae46ade986dcbeb0000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-05-20T09:55:56.501898+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda793000005b54944415478daeddd5b88555500c6f1ff996966489d51464d51091f8684ee14a51161be4811d64be58b6f6184580fdd1f428848eaa91e4a88828882a088a01b111916657623a422d0ac072f8597b1ccbccc8cf3f5b0f6c1adcc9473f6de7366aff5fde0bc0d6bef75d677d6ecbdd6da6b839999999999999999999999999999999999999999d55ea3dd2730592435eb3b1f580a2c1be3bbf81ef802d8079c6a34e2ff7aa2af61d6f05dc0d5c02ae0166000983ec69f1f03f600ef01ef025f02275308427424353fd3253d2469bf26e6b0a4a725cd6d966535916bfc85925e95747c828ddf3422e96d498b1d821ac91a6bb6a437248db6d8f84da392de91b4c821a881ac91ba246d90345cb0f1f35e9634cd0198c2725dffad920e95d8f8927454d29db1f5021ded3e810af402f700fd25973b1db81b98d5ee0a9629c6002c03aeafa8eca5c072209a5e209a00e41ae40aa0afa2c3cc006e063adb5ddfb24413804cb381aa7419630f22d5526c01e804a6557c8cd944741d105b0026433f0e80c5c20198b8fdc0c1769f4459620bc01070a0e2630c027fb7bba265892d00c781f781d10a8ff1190ec0d4939bb3ff96d04d57e12f420088658d403401c8f901d85c51d95b80adedaea08d233719749da4bd254f061d90b432b6c9a0e8640dd421e901b5be10e46c2392364aea74e3d7804e2f057bb684108c487a4552bf1bbf46b210cc90f4b8a4232d36fe51499b245de0aebf86b246eb91b45ad2d79286ceb1e187247d25698dbc0aa8de74e602d1b5923e54582d744ca7d70b8e66bff641499f485a2f69410abffa386e66cf41ae21fb8025c03ce0526011b01bf88e709fbf13f813e2b9d7ff2ff1d7701c63fdb2536870333333333333333333334b4e6d06bf7363f77381c5c029c2a4cd206173a721f078fe449dd7ee1368c15dc0a384001c060e01bb088b35f749da467870c38188496e5e7fe3180b3846b3cf71493f4a7a315b04b2d0ebf822910bc093e7b8aae7a4a4ed929e91748dc2be41d12ff088560b01c8f70ebf4b7a41d2950ec199627c30e46ccded61d7026f02f703defc3153c700b47a55d7206c11fb14f01a61bf9fe44350c700146db12e602521046b80ae944350c700946500780e780ce84d35042907006026f008b001e84b3104a90700a007b88fd01324f7108803107403eb8175405203470ec069e7030f132e1093b93b7000ce34177802b804d208411d0350e5fe3f105e2df320a147885e1d03b099f02e9f7f2a3cc6edc06d90462f501bb9f98039926e92f4bcc2d62d55f85cd23c07608aca82d02d6985c27b7d4e941c802149eb3c673085e57a84990a7b02ed293904df28db27c0a6b02c040d49ab24ed2c3100c392ee752f5003b9de6085a41d2586e0537983a87ac88560b5a4832505e0b0a4e5b1f60275bc0d1c576e01e85bc026c2c2d1a266017710d97715b5ecd73a5fd296927a815f240db807a8973f809780132594b508b816e21b188a3200b97f051f00db4a28b207b8a1ddf5aa429401c819045e07464a28eb2a604ebb2b54b6680390eb053e02769450e412c2be8251893600397b08934745f50217b6bb32654b210023c0c7c070c1723a808b80464c1782510720f76fe067c283a445dd48e809a2117500727e03b697504e0ff57ca27a5ca904e008f06b09e50c10ee06a2914a00007ea2f8d0701fb0a0dd152953f401c85d076c256c075f5427c43322187d00724629fe5c61077079bb2b52a694027080302650d4c554ff8afa49935200f612de2a5a542f11dd09a4140051ce9c4054520a808d21b50094b142a89bb0c94414520bc0ae12ca984f7886300a4904203716b09b6c03c902bab34f14920840ce7ee064bb4f622a492d004314bf0e6850a33d96ff4f6a0118a6f8e3e50db2e1e018a4168053141f0e760f60f17000262e8e69c08c0390380720710e40e21c80c4390089730012e70024ce01489c0390380720710e40e21c80c4390089730012e70024ce01684d346b021c80d6784958c244394f184d090ec0c489ea5f5c35691c80c4fd0bcbb7e75ffee5dd7f0000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda79300000cc24944415478daeddd798c5e5519c7f1efdb4ef75ac48a942222959652232dad0a22c608242e212a1ad744e386d1c4ed0f4c5412340ab18a891197a0c604b7d844458db8262e41405ca05a5744ab52d12e6815284ca733f3f8c7b9136e6686e930edfb9e73effd7e920914e8f461ee3dbff7dc73ce3d0724499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224496ab35eee02d47f1101e95aaf0256cee2b7f48003c01dc068afe76dd2565ed996aa1a3dc023480d7f35700970261087f9edf3803b81f701b701f700bb80300cdac5abd932b54ffb47032703af072e001603c7901af7acbe15f03f6004d8095c0efc01f807306210b48357b125aa86bf10d8005c085c049c02ac00e61fe9b707ee06fe057c0fb816b8053860104899450411b12022de1a113b236234fa672c22f645c41511b1a2fab373ff08a4ee99687c11f1f088b82422fed6c7863fd9bd11f18588d864084803566bfc4f8b886d55831cb4b188b83e229e1b11f30d0169006a8dffdc88d89ea1e14f765b443cd31090fa6c52e3bf3577cb9f1402cf8e88798680d42755e3df1011bfc8dde2a7f1bb88382f1c13688cd9ce09ab0055a35a01bc0ed894bb9e696c003e086caed5ab8219000d5135a625c00b80570343b96b7a109b81b790161da970064003d43e49cf07aea0ecc6d5232d427ac1a4da552003a0394e002e26ade92f7df9dd0ae045a477100c8182190085ab359e0b80f372d7f3103c83f41ec2912e43561f1900cdb0127831b03c77210fc16260cb44cdf602ca640014acd6689e063c25773d73f054d280a5bd80421900e55b043c8fd96de4519a95c0d9c082dc85687a0640f97aa4e9bfa67a3cb00e7c0c28910150a85a63390d589fbb9e23b09ed483f15e2b9017a56c43c02b813372177284ff0febf131a0480640d98668c6bcbf1aca00d0202c274d0baa30068006610b707aee22349501a041580e2ccd5d84a632003408ceff15ca00903acc00903acc00d020ec06f6e52e425319001a841dc09f7317a1a90c80f2b561006d0c18cf5d84a63200ca3602dc443a97afc946684790b58e0150a8ead0cd71601b29049aea2ee0bba41050610c80f2dd03eccf5dc411b8991400789270790c80f28d908ee26eea27e87ee0fedc45687a0640c1aa4fcc00be0dfc31773d73b01bf816703077219a9e01d00c7f01aea77903693700d781ddff521900cd30027c8df489da147b806f00f7e52e440fce00285ced93f367c055c070ee9a66e9fbc0b540f8e95f2e03a001aa067480d49dbe3d773db3f047e0b3f8e95f3c03a0597e0f5c09eccd5dc80cee073e06fc087cf62f9d01d010b585415f063e40ea1194669c34eaff3560dcc62f1d651141443c2a223e131187a21c6311f1cd88585bd598fb4725b5cf44e38a88c746c4e722627fee961f11a311717d446cb1f14b7d560b816323e24311f1efcc8dff3b11714644f46cfcd200d442e09888787744eccdd0f8f745c4351171aa9ffcd280d542606944bc34226e8c88830368f80723627b44bc3a2296dbf8a58caa06d88b883511715944ec8a3440387e141bfd78a4eefeae88b83422d645c43c1b7eb3394fd32255635c049c0b6c269d2bb896742edf5ca77c0318252d43fe14696f821b81834ef3359f57b085aa20980f9c096c002e049e433a6bb057fd75ba4008d2f65d63d5afc7482f217d9db4a7df4f80111b7e7b78255bacd63d5f0d9c433a9f6f01a987b00e7804701c2910f602ff027e00fc95746f8c9036f4b8035cd5d7465ed10ea905c212d2515dc703279142e10ee04ee07fc0a88d5d92244992244992244992244992244992244992244992244992244992244992244992244992e6c8e35ffaa87646df26e071c0307088f4731f067e4f3a8967e218ae51f0082e0d8e775a1f5501702af0796023e9b0cd89f3b98681df00ffad7efd27d2a9bbdb81ff500b050341fde29dd54755006c01ae051e7398ff7c0cb89b140a7755ff6c3bb00df867f5ef0f823d041d3dde497d5405c0465200ac99c3b718017e4d3ab4730ff0516027308e61a0a3602877019ad142e049d5d728294c7603bb808f01bb22620418330834170640730c0167577f7f08388b74a4f78f81ef47c44e0c023d44de2d7d74141e010efb479006137f4b1a68bc19f81570c820d06cd80368b61eb004782270060f3c1afc2c226e05460c02cd645eee023aa047ff7b5a3d601169adc107802f026f005647c4444f449ac200689789203805d80a5c059c072c3108341d03a0ff820716ff0ccac4a3c145c0e780cb81d381f98680ea0c80fecbf9103e0f38117833f005e015c0527b039a6000f45f8ffc3fe705c066e0fdc07b81558021a0ec3766170469e55e095601af073e4e0a849e21d06d0640ff95d6c21e063c0ff804f01260c810e82e03a09be69356126e05de081c6f08749301d06d2793c605de059c6008748f01a065c0c5c03b31043ac7a5c082b466e062d28cc5d688b8137cd5b80bec0168c262d20cc17b804781d3845d6000a86e21f032d298c0316008b49d01a0c99601af04de4aea15a8c50c004de758d2e3c045b84ea0d50c003d981381f791d60bf828d052068066720af016e084dc85a83f0c00cd641e7021f03a60a5bd80f6310074384b814b8017e37e02ad6300683656006f03ce04c703dac400e8bf925e073e126b809793c2402d6100f4df1ee016d2d15e4d3604bc8a3435e83e022de162ef3eaa3592d349bbf49e059c465a65d7d49ffd0f81d7007f07df17683aaf5e9fd5426021693aed6ce039a42ef51369de6abb11e023c0a5780049e379f506a80a831e290c5601af055e48ea2134e95afc94f438f027b017d0645eb90c6abd8221e0c9a42ef579a485374d3046da57f0ed78fa90343713db7347c4a2887876445c171107a2196e8988cd6e312e1da15a101c1f115b23624f448ce56ee187311e115747c44203a0b99c062c40afd79b788ede035c417abebe0918cd5ddb4c65930631d7838b83a4a3a2ea09f4226253447c332246737fd4cfa217b0d80068267b0085a97a0201fc1a7807f065e050eeba1eac5ce0026043ee4234370640816a21f03bd26ebdd790e6df4b7412f0745c1dd8480640a16a536b7f236dd4b98d3297132f24bd29d894294cd5180005ab85c03f810f033fa7bca3c6200d04aec95d841e3a03a070b510f8157019b033774dd358026c0416f818d02c064003d442e0c7c095c0bdb96b9a6411f026aafd02d41c0640435421300a7c15f812e5ad11380e580bae09681203a079ee02ae066ecf5dc824cb48af3cafcb5d8866cf00689049e3011f010ee4ae69922790a605d5100640c35421300e5c07dc9abb9e4916e16340a31800cdb51bf836707fee426a1693ce16b417d0100640738d915608de94bb90499e009c9abb08cd8e01d040b5b180bb801b80e1dc35d50c01cbc1c7802630009a6d14f8247063ee426a1e063c93b444588533001aaad60bd84f5a2a5c9227910e1755e10c80e61b063e0decc85d48cd5aaa71001f03ca66003458ad17f04bca5a18740c703e693c40053300dae110698bee525e179e079c8c01503c03a01d46493b0795d40b500318000d577b0cb81db82d773d354b8005b98bd0cc0c80f618067e4b398f01e700cfc7adc28a6600b4c7286955e07db90ba91c073c0bd70314cd006881da63c0bd94130090ee2fcf0d2b9801d02e7fa0ac3704edfb17ce0068977dc05728e70dc1c53815583403a02526ed205cca41224f219d7aec8ac0421900edd3a39ce7ee55c0737120b0580640fbfc87f482502996e17d562c2f4cfbec208d0394b21ec0be7fc10c80f6b91ff801654d071a028532005aa436105852831b02e6e72e42d33300d46f1ba9760a56790c00f5db6adc1ca45806403bdd5d7d956031701ade6b45f2a2b4d30ed29901e3b90b218d01acc51581453200dae91e5200943213b088721627a9c6006899da4cc041ca9a0d50810c00a9c30c00a9c30c00a9c30c00a9c30c000d8ab300053200da6b9472de087c24e9d05015c60068af5dc0df731751792c6949b00a6300b4d73f2827001e091c9bbb084d6500b4d718e56c0edac37bad485e94f61a211d15369abb1095cb0068af31602fe50c04aa400640bbdd47196f04aa500640bb8de00b419a8101d06ea53cffcfa3da0fc05d81ca6200b45b29af04f78005b98bd05406400bd5f60418a38c0000efb5227951daada40028a50ed51800ed5652a3f36c800219001a9492c24815034083620014c800903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00903acc00d020043096bb084d650068107ad5970a63006850bcd70ae445d1a08ce72e405319001a8471603877119aca00d02044f545afe75040490c00a9c30c00a9c30c00a9c3fe0f8d564ff9ce9eac1f0000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda793000017aa4944415478daeddd79b0af7741dff1f70d01126435042420100442d1c6000682108a5482026e2055ab52dc97aa858260ddb75ac40dadc354a7d68a536bad544445088b488a08080242085b5418645314688084e0ed1fcf612490907beff99df3fd3dbfefeb35f34c984ce6f2b999c9fdbdcff37b960200a673a4eae8d1a3a377000087e8880f7f0098cf49a3070000874f0000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0844e1e3d00381037aa6e595d7fc3bfee91eaefab7756578efe4d02274e00c0eeb941f5c8ea7baadb1cc0afff877bbff6ab47ff468113270060dd4e6ef949ff66d5d1eac3d597568fab4e3fa0ffcf2fac2ea99ed23f9d6138a97a7bf5b7a3ff8500c7e6c8d1a347476f004eccf5aa73abefad1e3c7a4cf573d50f55ef1f3d04b876ce00c0badcbc3aa3e527fdbb558fa93e67f4a83d8fa9feb1faa5ea94eabd2dd70a5c3e7a18f0899c0180ed77bdea16d5a9d5b756ff7ef4a0637451f5f3d52bab77e5cc006c150100dbeb94960ffe735a3ef81fd43a6fdd7d4bf553d5f35b42c07502b00504006ca79b540fa91eddf23dffaef8e9ea4773360086730d006ca747554f1e3de2003c6eefaf2200061300b05d4eab3ea3faacd1430ed0e35a2e16fcefd5bbf395000ce12b00d81e37ae7eb07aece82187e807ab9fa83e327a08ccc6190018ef162db7f67d7df59da3c71cb287576fad9edb7236c02d8370489c0180b1cea87ea4fac6d14306bba8fafeea85a387c02cd6784b11ec8a1bb73c3c67f60fffaaf3abefa8ee3c7a08cc4200c01837ae7ea07fba2a9e7a44f50d2d674536fd1643e0e3f80a000e9f0fff4feea2eabbab978c1e02bbcc1900385c3efcafddf9d5c35ade72e842653820ce00c0e1f1e17f7c9ed1f2a6c3d78e1e02bbc81900383c5f9b0fffe3f1c5d5235bc209d830010087e326d5ed478f58a1c757df9708808d130070f04eaf7e3c3ffd9fa8c7b7dc22e87a00d820010007ef112d1f609cb8afacee377a04ec12010007e7f4ea9cea76a387ec807f5e3da8e5ab1460039c528383f3e5d553468fd8218f6f7973e04f576e5f827d7206000ec6a9d5ad468fd8415f549d3b7a04ec0201009b77a4fa8aea5b470fd941e757f7183d0276810080cdbb5bf5d52dd700b079e7e4ba0ad83701009b777ef5f9a347ecb06fae7e34cf55807d1100b0596755f71d3d62028fac2e183d02d64c00c0665dd072f53fc0561300b039b7a93e7bf488899c5e5d7ff408582b01009b737ecbd5ff1c8e47565f5fdd6cf410582301009b71b3eaeed50d470f99c89d5b1eb4f465a387c01a0900d88c7f9597fd8c729dd103608d0400004c4800006b77a75c0700c74d00006bf7dd2d4f5e048e830080fdbb5175dbd12326f7397932201c170100fb739d969f3ebf6bf490c93db8e51d01c0311200b03fe7565f93dbff463bbd3a6df40858130100fb7376759fd123008e970000800909000098900000800909006057dcbabac1e811b0160200d815df5c3d60f408580b0100ec8a5b57b71c3d02d6420000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000bbe28aea83a347c05a08006057fc7ef58ad123602d0400b02b9e595d327a04ac85000080090900009890000080090900d89f7756ef183d02e0780900d89fe7563f59fdfde82193bbb2fad0e811b0260200f6e7b2ea7fed1d8cf3dcea35a347c09a0800d8bfb757af1c3d6262efaa7ea57ad5e821b026020058bb5fa92e1c3d02d64600006bf797d5fb468f80b51100b019ef68f92a00601504006cc685d52f8f1e31a92b470f80351200b0191fac2eaefe61f490c95c54bd76f408582301009b7351f59ba3474ce4f5d58f552f1d3d04d64800c0e6bc3db7a21da69fad9e337a04ac950080cdbab4e5275380ad260060b32eac9e3c7ac4042e69b9fd0f3841020036ef6ff70e0ec625d577e5f43fec8b0080cdfbe3ea475bee0a60f39e9c0f7fd83701009bf7eeea3f57bf387ac80eba2c4ffd838d100070702eab2e1f3d6287bcaf7a6a6efb838d100070705e5a3dbd3a3a7ac88ef8bdeaa7ab378f1e02bb4000c0c1b9a4fab9eaff8e1eb2035e57fd5acb6d96c006080038582f697960cddb460f59b95fc8857fb05102000ede73aaefcd5d0127ea952d6753800d3a72f4a8af27e1907c4bf55f468f58998bab47e7a77fd8386700e0f0bcaa7a76cb9b03b9767f553d211ffe702004001c9e3fadbebb7afee8212bf0daeaf12d8f56060e800080c3f5172d0f097adde8215beccaea67aaff5d5d317a0cec2a010087efd9d563ab3f48087cbc57b75cf1fff2d14360d7b90810c67a42f5c4d123b6c4bbaaef68f9c91f3860ce00c0587f51fd4ecbad6e33fb8bea47aa178c1e02b3700600b6c337554fa94e1e3d64808babc7e4823f38540200b6c339d5d7540facce1e3de690fc79f597d57fadfe70f418988d0080edf205d58f55ffacfa94d1630ed0eb5b7eeaf7c10f830800d83ee7545f5d5dd0ee9d0db8b87a53f54bd533478f81990900d85e0faebebdba5375e7d163f6e9e2ea8d2d6ff47b7a5e910cc30900d86ed7abbeacfa81ea33478f3941afadbeaf7a463ef8616b0800588787565f577da8ba4375b7eafaa3477d12af6cf9e03fb5fa959cee87ad2300607dce6d794efee757371d3de66a5cdcf2a4c3678d1e025c330100eb7456f5552d770b5c51ddb5bafba02d7fddf208dff7b79c95f8d596c71c035b4c00c06ef8bcea87abf35aae1b380c57b6fcb4ff94eab7aabf1ffd2f013876020076c7792db70f9ed6552fb63bb9ba4bcb5982e37dd2e025d5abaa8f7cdcdf3fd2f213ffffa85e38fa370e1c3f0100bbefa496eb051e56dda83aa525123e75efb869cba9fbf7b7bc90e7a3c747aaa7b5bc9cc71f14b0630400cce706d5a75767ee1db7a96e58bdb3e5097dafaf2ead3e307a2870700400004cc8eb80016042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400d835a7549f5a9d3c7a08c036f38724bbe2ecea21d50daad3aa7757975dcd3f7752f5b7d50bab378c1e0d308a006017dcbe7a6cf5c863fce7df533db77a59759d8ff9fb475ac2e14fab3755978ffe8d011c9423478f1e1dbd01f6eb5f564fadced8c0aff577d58babd7547fd312032f1bfd1b04d8346700d80527b5b9eb594eab1eba777ca8baa8bab0abfeb77252f5d6ea792d9100b03a02805df091ea8a03f8754fa91eb8777cbcb755cfa99e563dbbfaf0e87f0900c74300b00b0e2a003e995b578faaee59ddbb7a7fcb3504d7a92eae9e557d60f4bf18806b2200607feeba777cac3755d7ab7e73f438806b220060f3ee583dbafaf4eaba7b7fefe4960b0a2f1c3d0ea004001c947bed1d1feb65d5d1966b07008612007078cead9e543da3e51903d7adfe2441000c2000e0709db3777cd48b5bc2e08d2d5f0fbc77f440600e0200c6baf7def1c6eafed5ff6979be00c0811200b01deeb4779cd37246e048cbfb0a5e347a18b09b04006c97cfdd3b6af9f0fffeea05a34701bb4700c0f6ba4ff5e3d51f54a7b69c1178eee851c06e1000b0ddeeb37754bdbcfa9e4400b00102805d709d9627efedba7b543fdcf215c19f2404807d1000b02e1f3d23f09296870ab9630038219b7a852a8c34e26540a3ddabfac9bde3218979e038f94303d6eb1e7bc717546757bfdbf22642806b250060fdceaece6cf96ae0bfb55c1bf0bed1a380ed26006037dca8e5ab803b5617b4bc6fe0c2eacad1c380ed240060b79cb577dcb7e5ee88df1b3d08d84e02805d30cb6d80c7e333abc757f76c7992a0bb0580ab1000b0bbeebb77dcbe7a6df58ed18380ede1364076c18cb7011e8f07543f537d73cbc58200ce00c004cea8fe75f5852d6f19fca5d18380f10400cce366d5a3aa3b54cfae9e3f7a10308e0080b99cb777dcaf7a42cb1b068109b90600e6745ecb6384ef377a0830860080799d57fd78f59f5a2e140426e22b0098dbf97bc7ad5ade23e056419884330040d503ab5fa8ee3f7a0870389c01006ab955f011d565d5253913003bcf1900e0635d90330130056700808ff5d1330157546faede3a7a107030040070752e68796ae0cf572f1d3d06d83c5f010057e7f496c707ff6c9e15003b4900009fcc7d5a1e1ffc69a387009b2500806bf3a0ea17736120ec1401005c9b33aa87b7bc4df0baa3c7009be12240e0583db43a5afd46f5ead16380fd1100c0b1ba6b75e7ea6d0900583d5f0100c7e3e4eaab736700ac9e00008ed7bdaa1faace1d3d043871020038110fa89e9c3301b05a020038519f5b9d377a0470620400b01f0fcb590058250100ecc7bdaa27250260750400b05ff7da3b8015f11c006013bea43aadfaddeac5a3c700d74e00009b709fbde39d090058055f01009bf495d5bf183d02b8760200d8a47b56ffa1badbe821c0272700804d7b50cbd701c0161300ec8a23a3077015e756b71d3d02b86602805df091ea8ad123b88a8756df569d317a0870f50400bbe0bdd55b478fe02a3eb5fac6eafea38700574f00b00b2ead7eb5faf3d143b88a9b578fce5d01b0950400bbe0b2ea19d5131301dbe6dceaeea347009fc88380d8151fa89e59bdabfaacead35b5e597b97ea86a3c74dee01d573aad78c1e02fc9323478f1e1dbd010ec24daab35b2e42bba0fafad18326f6c1ea65d50f552f183d065808006670c79608f87075b3eac1f95e7a84c7544f1e3d0258f80a8019bc69efa8ba7ef5bcea3bab7f337a18c028ce0030ab3b559fd772bdc0d756371d3d68027f567d5f75e1e8218000805b56df5afddbeaf4d16326f09aeab18900184e00407d5a75efea562d57ac3f7cf4a01df7e8eae7478f80d9b90600ea1dd5efecfdef3faaaeacbe62f4a81d765a75bd3cbe19867206003ed19daafb55f7ad1e357acc0e7a63f50bd56f54ef193d06662500e09adda17a42cb4582a78e1eb363de56fdbbea69a387c0ac3c0a18aed9a5d58f543f5bbd7bf4981d73ebbd0318c43500f0c9fd4df58bd54bab7b545f5edd75f4a81d71f396e7325c3e7a08ccc81900b876ef6879d9d093aadf1e3d66877cd5dee1eb1518c03500707cee5c7d6ecba3841f357acc0eb8b4e55a80df1f3d0466e32b00383e6fd83b4a006cc21daa33478f8019f90a004ecc0baaafac7e6df4901df0c5d5dd478f80d938030027e6aff68ef754e755678d1eb4629f5f9d5bbd62f41098893300b03f2fabbea97aeae8212b776675c3d1236026ce00c0fefc437551f577d54daa2f193d68a5bea87a7e5e120487c61900d88c8bab1fab9e357ac84addb5ba57cb73018043200060735ed1f2befbdf1d3d64a5beae7ae0e811300b01009b73b425029e3b7ac84a9d59dd6ef40898850080cdfbc3ea27aa378f1e02704d04006cde9bab9fcc63834fc429a307c02c04001c8cf7b55c0bf0a2d14356e61b7327051c0a010007e7e5d5f7b67c25c0b1b94bf5c4ea41a387c0ae13007070aea85e988b028fd75daacf183d02769d008083f7acdc1a086c19010007efe2ea71d5af8f1eb22277ab6e3d7a04ec32010087e34dd54b468f58912fabbea5bae5e821b0ab04001c9e3faa9e3e7ac44a9c567d5b75fee821b0ab04001c9e8b5bae707ffee8212b71f3eaf4d12360570900385c2fc91bef802d2000e0f03d2f670180c104001cbe3fcb598063f50dd5fd468f805d2400608cbfa9de3f7ac40adca3ba4f75f2e821b06b04008cf1aceaa9a347acc49756e78d1e01bb4600c018efae7e2a11702cee599d357a04ec1a0100e3fc75cb0b83b876d71d3d00768d00008009090018ebe9f91ae0589c3a7a00ec1a010063bda5fa8144c0b5f9f6ea0b468f805d220060bcb754af183d62cbddb1bafde811b04b0400b01667b5bc2408d8000100acc5fdaacf1c3d0276850080edf0f4ea3fb67c1dc0d53ba73a73f408d8150200b6c35f574faa7e7bf4902d765275cae811b02b04006c8ff7556f1d3d62cb3dace54c00b04f0200589307260060230400b02647aaeb8f1e01bb4000c0767946f53f478f00769f0080ed7269cbab82df3b7a08b0db04006c9f9755cf1f3d02d86d0200b6cfebf29a60e0800900d84e1f183d608bddac3a79f408583b0100accdb7e5cd80b06f0200b6d36f55bf3a7ac496ba6dcb6393ef3f7a08ac990080edf4b6ea35a3476cb1b3ab3b8f1e016b2600006042020000262400607bbdbd7ad7e811c06e1200b0bd5e5c3d67f40860370900d85e7f55bd76f40860370900d86e4fab7e7bf40860f70800d86e6f687937009fe806a307c09a0900d87e1f193d604b3da67ac8e811b056020058abdb560fdffb2b709c0400b0668fa8ee3d7a04ac910000d6ec86d58d478f80351200b0fdae1c3d00d83d0200b6dfab722700b0610200b6df8baa0b478f00768b0080edf7e1ea97ab5f1f3d04d81d0200d6e12dd5ab478f00768700008009090000989000008009090060ed1e567df6e811b036020058bb0baab3478f80b51100c0da9d54dd227f9ec171f11f0cb00b6e539d367a04ac89000076c1edaa9b8f1e016b2200603d5e5fbd61f4882d2500e0380900588f3fae9e397ac4963aab3a63f40858130100ebf1beea692d2f07e2aa3e65ef008e910080757951f5bcd123b6d491d103604d0400accbd1eaff8d1e01ac9f000080090900009890000080090900009890000080090900009890000080090900009890000080090900009890000080090900009890000076c5a755a78c1e016b2100607d2eabae1c3d620bdda5bad5e811b0160200d6e7cdd5eb468fd8426756b7183d02d64200c0fa5c5abd7ef4882d74bbeae6a347c05a0800589f3756af193d620bdd260100c74c00c03a7d70f4802d75f2e801b016020000262400609d3e3c7a00b06e0200d6e955d5cb478f00d64b00c03abda77af7e811c07a090058a70fed1d00274400c03a7d28770200fb2000609d3e547d60f40860bd0400acd3d1bd03e084080058a7cb730d00b00f0200d6e968f58fa34700eb250060bd8e8c1eb0854e193d00d64200c03af90ae0eaf9330d8e91ff58609d7c0570f54ecd0b81e098080058a7cbf70eaeeaa4fcb906c7c47f28b05ece0000274c0000c0840400ac97af008013260060bd7c05009c30010000131200c02e39a5baeee811b0060200d8259757578e1e016b2000805de22d89708c0400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400b04b8eee1dc0b51000c02ef960f5e1d123600d0400b04b4eadae3b7a04ac81000076c991bd03b816020000262400006042020000262400805de2364038460200d8257f97db00e19808006097f8e91f8e910000800909000098900000800909000098900000800909000098900000800909000098d0ff07b6e2d093f1bf35b60000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "GetEvent": {
+      "id": 33404,
+      "api": {
+        "url": "/events/{{parameters.eventID}}",
+        "method": "GET",
+        "response": {
+          "output": "{{parseDateTime(body, 'createdAt', 'updatedAt')}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "GetEvent",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Custom Event",
+      "scope": [],
+      "expect": [
+        {
+          "name": "eventID",
+          "type": "select",
+          "label": "Event ID",
+          "options": {
+            "store": "rpc://app%23omnisend@1/getEventList"
+          },
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "omnisend",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/events/{{parameters.eventID}}\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": \"{{parseDateTime(body, 'createdAt', 'updatedAt')}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "eventID",
+          "type": "text",
+          "label": "Event ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "systemName",
+          "type": "text",
+          "label": "System Name"
+        },
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "label": "Enabled"
+        },
+        {
+          "name": "createdAt",
+          "type": "date",
+          "label": "Create at"
+        },
+        {
+          "name": "updatedAt",
+          "type": "date",
+          "label": "Update at"
+        },
+        {
+          "name": "fields",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Name"
+              },
+              {
+                "name": "systemName",
+                "type": "text",
+                "label": "System Name"
+              },
+              {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+              },
+              {
+                "name": "required",
+                "type": "boolean",
+                "label": "Required"
+              },
+              {
+                "name": "Locked",
+                "type": "boolean",
+                "label": "Locked"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Fields"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "omnisend",
+      "description": "Retrieves information about a custom event.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"eventID\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Event ID\",\n\t\t\"required\": true,\n\t\t\"options\": {\n            \"store\": \"rpc://getEventList\"\n\t\t}\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"eventID\",\n        \"type\": \"text\",\n\t\t\"label\": \"Event ID\"\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n\t\t\"label\": \"Name\"\n    },\n    {\n        \"name\": \"systemName\",\n        \"type\": \"text\",\n\t\t\"label\": \"System Name\"\n    },\n    {\n        \"name\": \"enabled\",\n        \"type\": \"boolean\",\n\t\t\"label\": \"Enabled\"\n    },\n    {\n        \"name\": \"createdAt\",\n        \"type\": \"date\",\n\t\t\"label\": \"Create at\"\n    },\n    {\n        \"name\": \"updatedAt\",\n        \"type\": \"date\",\n\t\t\"label\": \"Update at\"\n    },\n    {\n        \"name\": \"fields\",\n        \"type\": \"array\",\n\t\t\"label\": \"Fields\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"type\": \"text\",\n\t\t            \"label\": \"Name\"\n                },\n                {\n                    \"name\": \"systemName\",\n                    \"type\": \"text\",\n\t\t            \"label\": \"System Name\"\n                },\n                {\n                    \"name\": \"type\",\n                    \"type\": \"text\",\n\t\t            \"label\": \"Type\"\n                },\n                {\n                    \"name\": \"required\",\n                    \"type\": \"boolean\",\n\t\t            \"label\": \"Required\"\n                },\n                {\n                    \"name\": \"Locked\",\n                    \"type\": \"boolean\",\n\t\t            \"label\": \"Locked\"\n                }\n            ]\n        }\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "GetContact": {
+      "id": 33405,
+      "api": {
+        "url": "/contacts/{{parameters.contactID}}",
+        "method": "GET",
+        "response": {
+          "output": "{{parseDateTime(body, 'createdAt', 'birthdate', 'statuses[]date', 'optIns[]date', 'customProperties.externalCreated', 'identifiers[]channels.sms.statusDate', 'identifiers[]channels.email.statusDate')}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "GetContact",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Contact",
+      "scope": [],
+      "expect": [
+        {
+          "name": "contactID",
+          "type": "select",
+          "label": "Contact ID",
+          "options": {
+            "store": "rpc://app%23omnisend@1/GetContactID"
+          },
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "omnisend",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/contacts/{{parameters.contactID}}\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": \"{{parseDateTime(body, 'createdAt', 'birthdate', 'statuses[]date', 'optIns[]date', 'customProperties.externalCreated', 'identifiers[]channels.sms.statusDate', 'identifiers[]channels.email.statusDate')}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "contactID",
+          "type": "text",
+          "label": "Contact ID"
+        },
+        {
+          "name": "createdAt",
+          "type": "date",
+          "label": "Create at"
+        },
+        {
+          "name": "firstName",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "lastName",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "country",
+          "type": "text",
+          "label": "Country"
+        },
+        {
+          "name": "countryCode",
+          "type": "text",
+          "label": "Country Code"
+        },
+        {
+          "name": "state",
+          "type": "text",
+          "label": "State"
+        },
+        {
+          "name": "city",
+          "type": "text",
+          "label": "City"
+        },
+        {
+          "name": "postalCode",
+          "type": "text",
+          "label": "Postal Code"
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "label": "Address"
+        },
+        {
+          "name": "gender",
+          "type": "text",
+          "label": "Gender"
+        },
+        {
+          "name": "phone",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Phone"
+        },
+        {
+          "name": "phoneNumber",
+          "type": "text",
+          "label": "Phone Number"
+        },
+        {
+          "name": "birthdate",
+          "type": "date",
+          "label": "Birthday"
+        },
+        {
+          "name": "sent",
+          "type": "number",
+          "label": "Sent"
+        },
+        {
+          "name": "opened",
+          "type": "number",
+          "label": "Opened"
+        },
+        {
+          "name": "clicked",
+          "type": "number",
+          "label": "Clicked"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "tags",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Tags"
+        },
+        {
+          "name": "lists",
+          "type": "text",
+          "label": "Lists"
+        },
+        {
+          "name": "statuses",
+          "spec": [
+            {
+              "name": "status",
+              "type": "text",
+              "label": "Status"
+            },
+            {
+              "name": "date",
+              "type": "date",
+              "label": "Date"
+            }
+          ],
+          "type": "collection",
+          "label": "Statuses"
+        },
+        {
+          "name": "optIns",
+          "spec": [
+            {
+              "name": "date",
+              "type": "date",
+              "label": "Date"
+            }
+          ],
+          "type": "collection",
+          "label": "Opt Ins"
+        },
+        {
+          "name": "doubleOptIns",
+          "spec": [
+            {
+              "name": "date",
+              "type": "date",
+              "label": "Date"
+            }
+          ],
+          "type": "collection",
+          "label": "Double Opt Ins"
+        },
+        {
+          "name": "customProperties",
+          "spec": [
+            {
+              "name": "externalCreated",
+              "type": "Date",
+              "label": "External Created"
+            }
+          ],
+          "type": "collection",
+          "label": "Custom Properties"
+        },
+        {
+          "name": "identifiers",
+          "spec": {
+            "spec": [
+              {
+                "name": "id",
+                "type": "text",
+                "label": "ID"
+              },
+              {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+              },
+              {
+                "name": "channels",
+                "spec": [
+                  {
+                    "name": "email",
+                    "spec": [
+                      {
+                        "name": "status",
+                        "type": "text",
+                        "label": "Status"
+                      },
+                      {
+                        "name": "statusDate",
+                        "type": "date",
+                        "label": "Status Date"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "Email"
+                  },
+                  {
+                    "name": "sms",
+                    "spec": [
+                      {
+                        "name": "status",
+                        "type": "text",
+                        "label": "Status"
+                      },
+                      {
+                        "name": "statusDate",
+                        "type": "date",
+                        "label": "Status Date"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "SMS"
+                  }
+                ],
+                "type": "collection",
+                "label": "Channels"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Identifiers"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "omnisend",
+      "description": "Retrieves information about a specified contact.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"contactID\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Contact ID\",\n\t\t\"required\": true,\n\t\t\"options\": {\n            \"store\": \"rpc://GetContactID\"\n\t\t}\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"email\",\n        \"type\": \"email\",\n\t\t\"label\": \"Email\"\n    },\n    {\n        \"name\": \"contactID\",\n        \"type\": \"text\",\n\t\t\"label\": \"Contact ID\"\n    },\n    {\n        \"name\": \"createdAt\",\n        \"type\": \"date\",\n\t\t\"label\": \"Create at\"\n    },\n    {\n        \"name\": \"firstName\",\n        \"type\": \"text\",\n\t\t\"label\": \"First Name\"\n    },\n    {\n        \"name\": \"lastName\",\n        \"type\": \"text\",\n\t\t\"label\": \"Last Name\"\n    },\n    {\n        \"name\": \"country\",\n        \"type\": \"text\",\n\t\t\"label\": \"Country\"\n    },\n    {\n        \"name\": \"countryCode\",\n        \"type\": \"text\",\n\t\t\"label\": \"Country Code\"\n    },\n    {\n        \"name\": \"state\",\n        \"type\": \"text\",\n\t\t\"label\": \"State\"\n    },\n    {\n        \"name\": \"city\",\n        \"type\": \"text\",\n\t\t\"label\": \"City\"\n    },\n    {\n        \"name\": \"postalCode\",\n        \"type\": \"text\",\n\t\t\"label\": \"Postal Code\"\n    },\n    {\n        \"name\": \"address\",\n        \"type\": \"text\",\n\t\t\"label\": \"Address\"\n    },\n    {\n        \"name\": \"gender\",\n        \"type\": \"text\",\n\t\t\"label\": \"Gender\"\n    },\n    {\n        \"name\": \"phone\",\n\t\t\"label\": \"Phone\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        }\n    },\n    {\n        \"name\": \"phoneNumber\",\n        \"type\": \"text\",\n\t\t\"label\": \"Phone Number\"\n    },\n    {\n        \"name\": \"birthdate\",\n        \"type\": \"date\",\n\t\t\"label\": \"Birthday\"\n    },\n    {\n        \"name\": \"sent\",\n        \"type\": \"number\",\n\t\t\"label\": \"Sent\"\n    },\n    {\n        \"name\": \"opened\",\n        \"type\": \"number\",\n\t\t\"label\": \"Opened\"\n    },\n    {\n        \"name\": \"clicked\",\n        \"type\": \"number\",\n\t\t\"label\": \"Clicked\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n\t\t\"label\": \"Status\"\n    },\n    {\n        \"name\": \"tags\",\n\t\t\"label\": \"Tags\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        }\n    },\n    {\n        \"name\": \"lists\",\n        \"type\": \"text\",\n\t\t\"label\": \"Lists\"\n    },\n    {\n        \"name\": \"statuses\",\n        \"type\": \"collection\",\n\t\t\"label\": \"Statuses\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"status\",\n\t\t\t\t\"label\": \"Status\",\n\t\t\t\t\"type\": \"text\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"date\",\n\t\t\t\t\"label\": \"Date\",\n\t\t\t\t\"type\": \"date\"\n\t\t\t}\n\t\t]\n    },\n    {\n        \"name\": \"optIns\",\n        \"type\": \"collection\",\n\t\t\"label\": \"Opt Ins\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"date\",\n\t\t\t\t\"label\": \"Date\",\n\t\t\t\t\"type\": \"date\"\n\t\t\t}\n\t\t]\n    },\n    {\n        \"name\": \"doubleOptIns\",\n        \"type\": \"collection\",\n\t\t\"label\": \"Double Opt Ins\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"date\",\n\t\t\t\t\"label\": \"Date\",\n\t\t\t\t\"type\": \"date\"\n\t\t\t}\n\t\t]\n    },\n    {\n        \"name\": \"customProperties\",\n\t\t\"label\": \"Custom Properties\",\n        \"type\": \"collection\",\n        \"spec\": [\n           {\n\t\t   \t\t\"name\": \"externalCreated\",\n\t\t\t\t\"type\": \"Date\",\n\t\t\t\t\"label\": \"External Created\"\n\t\t   }\n        ]\n    },\n    {\n        \"name\": \"identifiers\",\n\t\t\"label\": \"Identifiers\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"id\",\n                    \"type\": \"text\",\n\t\t            \"label\": \"ID\"\n                },\n                {\n                    \"name\": \"type\",\n                    \"type\": \"text\",\n\t\t            \"label\": \"Type\"\n                },\n                {\n                    \"name\": \"channels\",\n\t\t            \"label\": \"Channels\",\n                    \"type\": \"collection\",\n                    \"spec\": [\n                        {\n                            \"name\": \"email\",\n\t\t                    \"label\": \"Email\",\n                            \"type\": \"collection\",\n                            \"spec\": [\n                                {\n                                    \"name\": \"status\",\n                                    \"type\": \"text\",\n\t\t                            \"label\": \"Status\"\n                                },\n                                {\n                                    \"name\": \"statusDate\",\n                                    \"type\": \"date\",\n\t\t                            \"label\": \"Status Date\"\n                                }\n                            ]\n                        },\n\t\t\t\t\t\t{\n                            \"name\": \"sms\",\n\t\t                    \"label\": \"SMS\",\n                            \"type\": \"collection\",\n                            \"spec\": [\n                                {\n                                    \"name\": \"status\",\n                                    \"type\": \"text\",\n\t\t                            \"label\": \"Status\"\n                                },\n                                {\n                                    \"name\": \"statusDate\",\n                                    \"type\": \"date\",\n\t\t                            \"label\": \"Status Date\"\n                                }\n                            ]\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "UpdateContact": {
+      "id": 33406,
+      "api": {
+        "url": "/contacts/{{parameters.contactID}}",
+        "body": {
+          "city": "{{parameters.city}}",
+          "tags": "{{parameters.tags}}",
+          "state": "{{parameters.state}}",
+          "gender": "{{parameters.gender}}",
+          "address": "{{parameters.address}}",
+          "country": "{{parameters.country}}",
+          "lastname": "{{parameters.lastName}}",
+          "birthdate": "{{parameters.birthdate}}",
+          "firstname": "{{parameters.firstName}}",
+          "postalCode": "{{parameters.postalCode}}",
+          "countryCode": "{{parameters.countryCode}}",
+          "phoneNumber": "{{parameters.phoneNumber}}",
+          "customProperties": "{{parseCustomProperties(parameters.customProperties)}}"
+        },
+        "method": "PATCH",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 5,
+      "crud": "update",
+      "name": "UpdateContact",
+      "epoch": null,
+      "flags": {},
+      "label": "Update a Contact",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "contactID",
+          "type": "select",
+          "label": "Contact ID",
+          "options": {
+            "store": "rpc://app%23omnisend@1/GetContactID"
+          },
+          "required": true
+        },
+        {
+          "name": "firstName",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "lastName",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "country",
+          "type": "text",
+          "label": "Country"
+        },
+        {
+          "help": "ISO Country code. You can find all country codes in Guides part. Example: CZ, UA, RU, US, GE etc.",
+          "name": "countryCode",
+          "type": "text",
+          "label": "Country Code",
+          "validate": {
+            "max": 2,
+            "min": 2
+          }
+        },
+        {
+          "name": "state",
+          "type": "text",
+          "label": "State"
+        },
+        {
+          "name": "city",
+          "type": "text",
+          "label": "City"
+        },
+        {
+          "name": "postalCode",
+          "type": "text",
+          "label": "Postal Code"
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "label": "Address"
+        },
+        {
+          "name": "gender",
+          "type": "text",
+          "label": "Gender"
+        },
+        {
+          "name": "phoneNumber",
+          "type": "text",
+          "label": "Phone Numbers"
+        },
+        {
+          "name": "birthdate",
+          "type": "date",
+          "label": "Birthday Date"
+        },
+        {
+          "name": "tags",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Tags"
+        },
+        {
+          "name": "customProperties",
+          "spec": [
+            {
+              "help": "Enter a custom property name without spaces.",
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            },
+            {
+              "name": "type",
+              "type": "select",
+              "label": "Type",
+              "options": [
+                {
+                  "label": "Text",
+                  "value": "text",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "text",
+                      "label": "Value"
+                    }
+                  ]
+                },
+                {
+                  "label": "Number",
+                  "value": "number",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "number",
+                      "label": "Value"
+                    }
+                  ]
+                },
+                {
+                  "label": "Boolean",
+                  "value": "boolean",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "boolean",
+                      "label": "Value"
+                    }
+                  ]
+                },
+                {
+                  "label": "Date",
+                  "value": "date",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "date",
+                      "label": "Value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "array",
+          "label": "Custom Properties"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "omnisend",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/contacts/{{parameters.contactID}}\",\n\t\"method\": \"PATCH\",\n\t\"body\": {\n\t\n\t\t\"firstname\": \"{{parameters.firstName}}\",\n\t\t\"lastname\": \"{{parameters.lastName}}\",\n\t\t\"country\": \"{{parameters.country}}\",\n\t\t\"countryCode\": \"{{parameters.countryCode}}\",\n\t\t\"state\": \"{{parameters.state}}\",\n\t\t\"city\": \"{{parameters.city}}\",\n\t\t\"postalCode\": \"{{parameters.postalCode}}\",\n\t\t\"address\": \"{{parameters.address}}\",\n\t\t\"gender\": \"{{parameters.gender}}\",\n\t\t\"phoneNumber\": \"{{parameters.phoneNumber}}\",\n\t\t\"birthdate\": \"{{parameters.birthdate}}\",\n\t    \"tags\": \"{{parameters.tags}}\",\n\t\t\"customProperties\": \"{{parseCustomProperties(parameters.customProperties)}}\"\n\t\t\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{body}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "contactID",
+          "type": "text",
+          "label": "Contact ID"
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "label": "Phone Number"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "omnisend",
+      "description": "Updates a contact module.",
+      "expectJsonc": "[\n    {\n        \"name\": \"contactID\",\n        \"type\": \"select\",\n        \"label\": \"Contact ID\",\n        \"required\": true,\n        \"mode\": \"edit\",\n        \"options\": {\n            \"store\": \"rpc://GetContactID\"\n        }\n    },\n    {\n        \"name\": \"firstName\",\n        \"type\": \"text\",\n        \"label\": \"First Name\"\n    },\n    {\n        \"name\": \"lastName\",\n        \"type\": \"text\",\n        \"label\": \"Last Name\"\n    },\n    {\n        \"name\": \"country\",\n        \"type\": \"text\",\n        \"label\": \"Country\"\n    },\n    {\n        \"name\": \"countryCode\",\n        \"type\": \"text\",\n        \"label\": \"Country Code\",\n        \"help\": \"ISO Country code. You can find all country codes in Guides part. Example: CZ, UA, RU, US, GE etc.\",\n        \"validate\": {\n            \"min\": 2,\n            \"max\": 2\n        }\n    },\n    {\n        \"name\": \"state\",\n        \"type\": \"text\",\n        \"label\": \"State\"\n    },\n    {\n        \"name\": \"city\",\n        \"type\": \"text\",\n        \"label\": \"City\"\n    },\n    {\n        \"name\": \"postalCode\",\n        \"type\": \"text\",\n        \"label\": \"Postal Code\"\n    },\n    {\n        \"name\": \"address\",\n        \"type\": \"text\",\n        \"label\": \"Address\"\n    },\n    {\n        \"name\": \"gender\",\n        \"type\": \"text\",\n        \"label\": \"Gender\"\n    },\n    {\n        \"name\": \"phoneNumber\",\n        \"type\": \"text\",\n        \"label\": \"Phone Numbers\"\n    },\n    {\n        \"name\": \"birthdate\",\n        \"type\": \"date\",\n        \"label\": \"Birthday Date\"\n    },\n    {\n        \"name\": \"tags\",\n        \"type\": \"array\",\n        \"label\": \"Tags\",\n        \"spec\": {\n            \"type\": \"text\"\n        }\n    },\n    {\n        \"name\": \"customProperties\",\n        \"type\": \"array\",\n        \"label\": \"Custom Properties\",\n        \"spec\": [\n            {\n                \"name\": \"name\",\n                \"label\": \"Name\",\n                \"help\": \"Enter a custom property name without spaces.\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"type\",\n                \"label\": \"Type\",\n                \"type\": \"select\",\n                \"options\": [\n                    {\n                        \"label\": \"Text\",\n                        \"value\": \"text\",\n                        \"nested\": [\n                            {\n                                \"type\": \"text\",\n                                \"label\": \"Value\",\n                                \"name\": \"value\"\n                            }\n                        ]\n                    },\n                    {\n                        \"label\": \"Number\",\n                        \"value\": \"number\",\n                        \"nested\": [\n                            {\n                                \"type\": \"number\",\n                                \"label\": \"Value\",\n                                \"name\": \"value\"\n                            }\n                        ]\n                    },\n                    {\n                        \"label\": \"Boolean\",\n                        \"value\": \"boolean\",\n                        \"nested\": [\n                            {\n                                \"type\": \"boolean\",\n                                \"label\": \"Value\",\n                                \"name\": \"value\"\n                            }\n                        ]\n                    },\n                    {\n                        \"label\": \"Date\",\n                        \"value\": \"date\",\n                        \"nested\": [\n                            {\n                                \"type\": \"date\",\n                                \"label\": \"Value\",\n                                \"name\": \"value\"\n                            }\n                        ]\n                    }\n                ]\n            }\n        ]\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"email\",\n        \"type\": \"email\",\n\t\t\"label\": \"Email\"\n    },\n    {\n        \"name\": \"contactID\",\n        \"type\": \"text\",\n\t\t\"label\": \"Contact ID\"\n    },\n\t{\n        \"name\": \"phone\",\n        \"type\": \"text\",\n\t\t\"label\": \"Phone Number\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "GetListContact": {
+      "id": 33407,
+      "api": {
+        "qs": {
+          "email": "{{lower(parameters.email)}}",
+          "limit": 100,
+          "phone": "{{parameters.phone}}",
+          "status": "{{parameters.status}}",
+          "segmentID": "{{parameters.segmentID}}"
+        },
+        "url": "/contacts",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{parseDateTime(item, 'createdAt', 'birthdate', 'statuses[]date', 'optIns[]date', 'customProperties.externalCreated', 'identifiers[]channels.sms.statusDate', 'identifiers[]channels.email.statusDate')}}",
+          "iterate": "{{body.contacts}}"
+        },
+        "pagination": {
+          "qs": {
+            "offset": "{{(pagination.page - 1) * 100}}"
+          },
+          "condition": "{{body.paging.next}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "GetListContact",
+      "epoch": null,
+      "flags": {},
+      "label": "Search Contacts",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Limit of outputting bundles.",
+          "name": "limit",
+          "type": "number",
+          "label": "Limit",
+          "default": 10
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email Address"
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "label": "Status",
+          "options": [
+            {
+              "label": "Subscribed",
+              "value": "subscribed"
+            },
+            {
+              "label": "Unsubscribed",
+              "value": "unsubscribed"
+            },
+            {
+              "label": "Nonsubscribed",
+              "value": "nonSubscribed"
+            }
+          ]
+        },
+        {
+          "name": "segmentID",
+          "type": "text",
+          "label": "Segment ID"
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "label": "Phone"
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "omnisend",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/contacts\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"limit\": 100,\n        \"email\": \"{{lower(parameters.email)}}\",\n        \"status\": \"{{parameters.status}}\",\n        \"segmentID\": \"{{parameters.segmentID}}\",\n        \"phone\": \"{{parameters.phone}}\"\n    },\n    \"response\": {\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": \"{{parseDateTime(item, 'createdAt', 'birthdate', 'statuses[]date', 'optIns[]date', 'customProperties.externalCreated', 'identifiers[]channels.sms.statusDate', 'identifiers[]channels.email.statusDate')}}\",\n        \"iterate\": \"{{body.contacts}}\"\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"offset\": \"{{(pagination.page - 1) * 100}}\"\n        },\n        \"condition\": \"{{body.paging.next}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "email",
+          "type": "text",
+          "label": "Email"
+        },
+        {
+          "name": "contactID",
+          "type": "text",
+          "label": "Contact ID"
+        },
+        {
+          "name": "createdAt",
+          "type": "date",
+          "label": "Create at"
+        },
+        {
+          "name": "firstName",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "lastName",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "country",
+          "type": "text",
+          "label": "Country"
+        },
+        {
+          "name": "countryCode",
+          "type": "text",
+          "label": "Country Code"
+        },
+        {
+          "name": "state",
+          "type": "text",
+          "label": "State"
+        },
+        {
+          "name": "city",
+          "type": "text",
+          "label": "City"
+        },
+        {
+          "name": "postalCode",
+          "type": "text",
+          "label": "Postal Code"
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "label": "Address"
+        },
+        {
+          "name": "gender",
+          "type": "text",
+          "label": "Gender"
+        },
+        {
+          "name": "phone",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Phone"
+        },
+        {
+          "name": "phoneNumber",
+          "type": "text",
+          "label": "Phone Number"
+        },
+        {
+          "name": "birthdate",
+          "type": "date",
+          "label": "Birthday Date"
+        },
+        {
+          "name": "sent",
+          "type": "number",
+          "label": "Number"
+        },
+        {
+          "name": "opened",
+          "type": "number",
+          "label": "Opend"
+        },
+        {
+          "name": "clicked",
+          "type": "number",
+          "label": "Clicked"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "tags",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Tags"
+        },
+        {
+          "name": "lists",
+          "type": "text",
+          "label": "Lists"
+        },
+        {
+          "name": "statuses",
+          "spec": [
+            {
+              "name": "status",
+              "type": "text",
+              "label": "Status"
+            },
+            {
+              "name": "date",
+              "type": "date",
+              "label": "Date"
+            }
+          ],
+          "type": "collection",
+          "label": "Statuses"
+        },
+        {
+          "name": "optIns",
+          "spec": [
+            {
+              "name": "date",
+              "type": "date",
+              "label": "Date"
+            }
+          ],
+          "type": "collection",
+          "label": "Opt Ins"
+        },
+        {
+          "name": "doubleOptIns",
+          "spec": [
+            {
+              "name": "date",
+              "type": "date",
+              "label": "Date"
+            }
+          ],
+          "type": "collection",
+          "label": "Double Opt Ins"
+        },
+        {
+          "name": "customProperties",
+          "spec": [
+            {
+              "name": "externalCreated",
+              "type": "date",
+              "label": "External Created"
+            }
+          ],
+          "type": "collection",
+          "label": "Custom Properties"
+        },
+        {
+          "name": "identifiers",
+          "spec": {
+            "spec": [
+              {
+                "name": "id",
+                "type": "text",
+                "label": "ID"
+              },
+              {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+              },
+              {
+                "name": "channels",
+                "spec": [
+                  {
+                    "name": "email",
+                    "spec": [
+                      {
+                        "name": "status",
+                        "type": "text",
+                        "label": "Status"
+                      },
+                      {
+                        "name": "statusDate",
+                        "type": "date",
+                        "label": "Status Date"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "Email"
+                  },
+                  {
+                    "name": "sms",
+                    "spec": [
+                      {
+                        "name": "status",
+                        "type": "text",
+                        "label": "Status"
+                      },
+                      {
+                        "name": "statusDate",
+                        "type": "date",
+                        "label": "Status Date"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "SMS"
+                  }
+                ],
+                "type": "collection",
+                "label": "Channels"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Identifiers"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "omnisend",
+      "description": "Searches for contacts.",
+      "expectJsonc": "[\n    {\n        \"name\": \"limit\",\n        \"type\": \"number\",\n        \"label\": \"Limit\",\n        \"default\": 10,\n        \"help\": \"Limit of outputting bundles.\"\n    },\n    {\n        \"name\": \"email\",\n        \"type\": \"email\",\n        \"label\": \"Email Address\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"select\",\n        \"label\": \"Status\",\n        \"options\": [\n            {\n                \"label\": \"Subscribed\",\n                \"value\": \"subscribed\"\n            },\n            {\n                \"label\": \"Unsubscribed\",\n                \"value\": \"unsubscribed\"\n            },\n            {\n                \"label\": \"Nonsubscribed\",\n                \"value\": \"nonSubscribed\"\n            }\n        ]\n    },\n    {\n        \"name\": \"segmentID\",\n        \"type\": \"text\",\n        \"label\": \"Segment ID\"\n    },\n    {\n        \"name\": \"phone\",\n        \"type\": \"text\",\n        \"label\": \"Phone\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"email\",\n        \"type\": \"text\",\n        \"label\": \"Email\"\n    },\n    {\n        \"name\": \"contactID\",\n        \"type\": \"text\",\n        \"label\": \"Contact ID\"\n    },\n    {\n        \"name\": \"createdAt\",\n        \"type\": \"date\",\n        \"label\": \"Create at\"\n    },\n    {\n        \"name\": \"firstName\",\n        \"type\": \"text\",\n        \"label\": \"First Name\"\n    },\n    {\n        \"name\": \"lastName\",\n        \"type\": \"text\",\n        \"label\": \"Last Name\"\n    },\n    {\n        \"name\": \"country\",\n        \"type\": \"text\",\n        \"label\": \"Country\"\n    },\n    {\n        \"name\": \"countryCode\",\n        \"type\": \"text\",\n        \"label\": \"Country Code\"\n    },\n    {\n        \"name\": \"state\",\n        \"type\": \"text\",\n        \"label\": \"State\"\n    },\n    {\n        \"name\": \"city\",\n        \"type\": \"text\",\n        \"label\": \"City\"\n    },\n    {\n        \"name\": \"postalCode\",\n        \"type\": \"text\",\n        \"label\": \"Postal Code\"\n    },\n    {\n        \"name\": \"address\",\n        \"type\": \"text\",\n        \"label\": \"Address\"\n    },\n    {\n        \"name\": \"gender\",\n        \"type\": \"text\",\n        \"label\": \"Gender\"\n    },\n    {\n        \"name\": \"phone\",\n        \"label\": \"Phone\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        }\n    },\n    {\n        \"name\": \"phoneNumber\",\n        \"type\": \"text\",\n        \"label\": \"Phone Number\"\n    },\n    {\n        \"name\": \"birthdate\",\n        \"type\": \"date\",\n        \"label\": \"Birthday Date\"\n    },\n    {\n        \"name\": \"sent\",\n        \"type\": \"number\",\n        \"label\": \"Number\"\n    },\n    {\n        \"name\": \"opened\",\n        \"type\": \"number\",\n        \"label\": \"Opend\"\n    },\n    {\n        \"name\": \"clicked\",\n        \"type\": \"number\",\n        \"label\": \"Clicked\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n        \"label\": \"Status\"\n    },\n    {\n        \"name\": \"tags\",\n        \"label\": \"Tags\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        }\n    },\n    {\n        \"name\": \"lists\",\n        \"type\": \"text\",\n        \"label\": \"Lists\"\n    },\n    {\n        \"name\": \"statuses\",\n        \"type\": \"collection\",\n        \"label\": \"Statuses\",\n        \"spec\": [\n            {\n                \"name\": \"status\",\n                \"label\": \"Status\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"date\",\n                \"label\": \"Date\",\n                \"type\": \"date\"\n            }\n        ]\n    },\n    {\n        \"name\": \"optIns\",\n        \"type\": \"collection\",\n        \"label\": \"Opt Ins\",\n        \"spec\": [\n            {\n                \"name\": \"date\",\n                \"label\": \"Date\",\n                \"type\": \"date\"\n            }\n        ]\n    },\n    {\n        \"name\": \"doubleOptIns\",\n        \"type\": \"collection\",\n        \"label\": \"Double Opt Ins\",\n        \"spec\": [\n            {\n                \"name\": \"date\",\n                \"label\": \"Date\",\n                \"type\": \"date\"\n            }\n        ]\n    },\n    {\n        \"name\": \"customProperties\",\n        \"label\": \"Custom Properties\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"externalCreated\",\n                \"type\": \"date\",\n                \"label\": \"External Created\"\n            }\n        ]\n    },\n    {\n        \"name\": \"identifiers\",\n        \"label\": \"Identifiers\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"id\",\n                    \"type\": \"text\",\n                    \"label\": \"ID\"\n                },\n                {\n                    \"name\": \"type\",\n                    \"type\": \"text\",\n                    \"label\": \"Type\"\n                },\n                {\n                    \"name\": \"channels\",\n                    \"label\": \"Channels\",\n                    \"type\": \"collection\",\n                    \"spec\": [\n                        {\n                            \"name\": \"email\",\n                            \"label\": \"Email\",\n                            \"type\": \"collection\",\n                            \"spec\": [\n                                {\n                                    \"name\": \"status\",\n                                    \"type\": \"text\",\n                                    \"label\": \"Status\"\n                                },\n                                {\n                                    \"name\": \"statusDate\",\n                                    \"type\": \"date\",\n                                    \"label\": \"Status Date\"\n                                }\n                            ]\n                        },\n                        {\n                            \"name\": \"sms\",\n                            \"label\": \"SMS\",\n                            \"type\": \"collection\",\n                            \"spec\": [\n                                {\n                                    \"name\": \"status\",\n                                    \"type\": \"text\",\n                                    \"label\": \"Status\"\n                                },\n                                {\n                                    \"name\": \"statusDate\",\n                                    \"type\": \"date\",\n                                    \"label\": \"Status Date\"\n                                }\n                            ]\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "CreateSubscriber": {
+      "id": 33408,
+      "api": {
+        "url": "/contacts",
+        "body": {
+          "city": "{{parameters.city}}",
+          "tags": "{{parameters.tags}}",
+          "state": "{{parameters.state}}",
+          "gender": "{{parameters.gender}}",
+          "address": "{{parameters.address}}",
+          "country": "{{parameters.country}}",
+          "lastName": "{{parameters.lastName}}",
+          "birthdate": "{{formatDate(parameters.birthdate, 'YYYY-MM-DD')}}",
+          "createdAt": "{{parameters.createdAt}}",
+          "firstName": "{{parameters.firstName}}",
+          "postalCode": "{{parameters.postalCode}}",
+          "countryCode": "{{parameters.countryCode}}",
+          "identifiers": "{{parameters.identifiers}}",
+          "customProperties": "{{parseCustomProperties(parameters.customProperties)}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "CreateSubscriber",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Contact",
+      "scope": [],
+      "expect": [
+        {
+          "name": "firstName",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "lastName",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "help": "Tags are labels you create to organize and manage your audience. When creating a new contact we strongly advice to add source tag, i.e. 'source: shopify'",
+          "name": "tags",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Tags"
+        },
+        {
+          "help": "Contact's identifiers (supported types: email, phone). At least one identifier is required. Only one identifier per type can be provided.",
+          "name": "identifiers",
+          "spec": {
+            "spec": [
+              {
+                "name": "type",
+                "type": "select",
+                "label": "Type",
+                "options": [
+                  {
+                    "label": "Email",
+                    "value": "email",
+                    "nested": [
+                      {
+                        "name": "channels",
+                        "spec": [
+                          {
+                            "name": "email",
+                            "spec": [
+                              {
+                                "name": "status",
+                                "type": "select",
+                                "label": "Channel Status",
+                                "options": [
+                                  {
+                                    "label": "Subscribed",
+                                    "value": "subscribed"
+                                  },
+                                  {
+                                    "label": "Unsubscribed",
+                                    "value": "unsubscribed"
+                                  },
+                                  {
+                                    "label": "Nonsubscribed",
+                                    "value": "nonSubscribed"
+                                  }
+                                ],
+                                "required": true
+                              },
+                              {
+                                "name": "statusDate",
+                                "type": "date",
+                                "label": "Status Date",
+                                "required": true
+                              }
+                            ],
+                            "type": "collection",
+                            "label": "Email"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Channels"
+                      },
+                      {
+                        "name": "id",
+                        "type": "email",
+                        "label": "Email",
+                        "required": true
+                      },
+                      {
+                        "name": "source",
+                        "type": "text",
+                        "label": "Source"
+                      },
+                      {
+                        "help": "Send welcome message (will be sent only if welcome workflow is turned on) or not.",
+                        "name": "sendWelcomeMessage",
+                        "type": "boolean",
+                        "label": "Send Welcome Message",
+                        "required": true
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Phone",
+                    "value": "phone",
+                    "nested": [
+                      {
+                        "name": "channels",
+                        "spec": [
+                          {
+                            "name": "sms",
+                            "spec": [
+                              {
+                                "name": "status",
+                                "type": "select",
+                                "label": "Channel Status",
+                                "options": [
+                                  {
+                                    "label": "Subscribed",
+                                    "value": "subscribed"
+                                  },
+                                  {
+                                    "label": "Unsubscribed",
+                                    "value": "unsubscribed"
+                                  },
+                                  {
+                                    "label": "Nonsubscribed",
+                                    "value": "nonSubscribed"
+                                  }
+                                ],
+                                "required": true
+                              },
+                              {
+                                "name": "statusDate",
+                                "type": "date",
+                                "label": "Status Date",
+                                "required": true
+                              }
+                            ],
+                            "type": "collection",
+                            "label": "SMS",
+                            "required": true
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Channels"
+                      },
+                      {
+                        "name": "id",
+                        "type": "text",
+                        "label": "Phone Number",
+                        "required": true
+                      },
+                      {
+                        "name": "source",
+                        "type": "text",
+                        "label": "Source"
+                      },
+                      {
+                        "help": "Send welcome message (will be sent only if welcome workflow is turned on) or not.",
+                        "name": "sendWelcomeMessage",
+                        "type": "boolean",
+                        "label": "Send Welcome Message",
+                        "required": true
+                      }
+                    ]
+                  }
+                ],
+                "required": true
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Identifiers",
+          "required": true
+        },
+        {
+          "name": "country",
+          "type": "text",
+          "label": "Country"
+        },
+        {
+          "help": "ISO Country code. You can find all country codes in Guides part. Example: CZ, UA, RU, US, GE etc.",
+          "name": "countryCode",
+          "type": "text",
+          "label": "Country Code"
+        },
+        {
+          "name": "state",
+          "type": "text",
+          "label": "State"
+        },
+        {
+          "name": "city",
+          "type": "text",
+          "label": "City"
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "label": "Address"
+        },
+        {
+          "name": "postalCode",
+          "type": "text",
+          "label": "Postal Code"
+        },
+        {
+          "name": "gender",
+          "type": "select",
+          "label": "Gender",
+          "options": [
+            {
+              "label": "Male",
+              "value": "m"
+            },
+            {
+              "label": "Female",
+              "value": "f"
+            }
+          ]
+        },
+        {
+          "name": "birthdate",
+          "type": "date",
+          "label": "Birthday Date"
+        },
+        {
+          "name": "customProperties",
+          "spec": [
+            {
+              "help": "Enter a custom property name without spaces.",
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            },
+            {
+              "name": "type",
+              "type": "select",
+              "label": "Type",
+              "options": [
+                {
+                  "label": "Text",
+                  "value": "text",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "text",
+                      "label": "Value"
+                    }
+                  ]
+                },
+                {
+                  "label": "Number",
+                  "value": "number",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "number",
+                      "label": "Value"
+                    }
+                  ]
+                },
+                {
+                  "label": "Boolean",
+                  "value": "boolean",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "boolean",
+                      "label": "Value"
+                    }
+                  ]
+                },
+                {
+                  "label": "Date",
+                  "value": "date",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "date",
+                      "label": "Value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "array",
+          "label": "Custom Properties"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "omnisend",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/contacts\",\n\t\"method\": \"POST\",\n\t\"body\": {\n        \"createdAt\": \"{{parameters.createdAt}}\",\n        \"firstName\": \"{{parameters.firstName}}\",\n        \"lastName\": \"{{parameters.lastName}}\",\n        \"tags\": \"{{parameters.tags}}\",\n        \"identifiers\": \"{{parameters.identifiers}}\",\n        \"country\": \"{{parameters.country}}\",\n        \"countryCode\": \"{{parameters.countryCode}}\",\n        \"state\": \"{{parameters.state}}\",\n        \"city\": \"{{parameters.city}}\",\n        \"address\": \"{{parameters.address}}\",\n        \"postalCode\": \"{{parameters.postalCode}}\",\n        \"gender\": \"{{parameters.gender}}\",\n        \"birthdate\": \"{{formatDate(parameters.birthdate, 'YYYY-MM-DD')}}\",\n        \"customProperties\": \"{{parseCustomProperties(parameters.customProperties)}}\"\n    },\n\t\"response\": {\n\t\t\"output\": \"{{body}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "contactID",
+          "type": "text",
+          "label": "Contact ID"
+        },
+        {
+          "name": "firstName",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "lastName",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "label": "Phone"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "omnisend",
+      "description": "Creates or updates a subscriber with all provided values, i.e. name, phone number, tag, etc.",
+      "expectJsonc": "[\n    {\n        \"name\": \"firstName\",\n        \"type\": \"text\",\n        \"label\": \"First Name\"\n    },\n    {\n        \"name\": \"lastName\",\n        \"type\": \"text\",\n        \"label\": \"Last Name\"\n    },\n    {\n        \"name\": \"tags\",\n        \"type\": \"array\",\n        \"label\": \"Tags\",\n        \"help\": \"Tags are labels you create to organize and manage your audience. When creating a new contact we strongly advice to add source tag, i.e. 'source: shopify'\",\n        \"spec\": {\n            \"type\": \"text\"\n        }\n    },\n    {\n        \"name\": \"identifiers\",\n        \"type\": \"array\",\n        \"label\": \"Identifiers\",\n        \"help\": \"Contact's identifiers (supported types: email, phone). At least one identifier is required. Only one identifier per type can be provided.\",\n        \"required\": true,\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"type\",\n                    \"type\": \"select\",\n                    \"label\": \"Type\",\n                    \"required\": true,\n                    \"options\": [\n                        {\n                            \"label\": \"Email\",\n                            \"value\": \"email\",\n                            \"nested\": [\n                                {\n                                    \"name\": \"channels\",\n                                    \"type\": \"collection\",\n                                    \"label\": \"Channels\",\n                                    \"spec\": [\n                                        {\n                                            \"name\": \"email\",\n                                            \"type\": \"collection\",\n                                            \"label\": \"Email\",\n                                            \"spec\": [\n                                                {\n                                                    \"name\": \"status\",\n                                                    \"type\": \"select\",\n                                                    \"label\": \"Channel Status\",\n                                                    \"required\": true,\n                                                    \"options\": [\n                                                        {\n                                                            \"label\": \"Subscribed\",\n                                                            \"value\": \"subscribed\"\n                                                        },\n                                                        {\n                                                            \"label\": \"Unsubscribed\",\n                                                            \"value\": \"unsubscribed\"\n                                                        },\n                                                        {\n                                                            \"label\": \"Nonsubscribed\",\n                                                            \"value\": \"nonSubscribed\"\n                                                        }\n                                                    ]\n                                                },\n                                                {\n                                                    \"name\": \"statusDate\",\n                                                    \"type\": \"date\",\n                                                    \"label\": \"Status Date\",\n                                                    \"required\": true\n                                                }\n                                            ]\n                                        }\n                                    ]\n                                },\n                                {\n                                    \"name\": \"id\",\n                                    \"type\": \"email\",\n                                    \"label\": \"Email\",\n                                    \"required\": true\n                                },\n                                {\n                                    \"name\": \"source\",\n                                    \"type\": \"text\",\n                                    \"label\": \"Source\"\n                                },\n                                {\n                                    \"name\": \"sendWelcomeMessage\",\n                                    \"type\": \"boolean\",\n                                    \"label\": \"Send Welcome Message\",\n                                    \"help\": \"Send welcome message (will be sent only if welcome workflow is turned on) or not.\",\n                                    \"required\": true\n                                }\n                            ]\n                        },\n                        {\n                            \"label\": \"Phone\",\n                            \"value\": \"phone\",\n                            \"nested\": [\n                                {\n                                    \"name\": \"channels\",\n                                    \"type\": \"collection\",\n                                    \"label\": \"Channels\",\n                                    \"spec\": [\n                                        {\n                                            \"name\": \"sms\",\n                                            \"type\": \"collection\",\n                                            \"label\": \"SMS\",\n                                            \"required\": true,\n                                            \"spec\": [\n                                                {\n                                                    \"name\": \"status\",\n                                                    \"type\": \"select\",\n                                                    \"label\": \"Channel Status\",\n                                                    \"required\": true,\n                                                    \"options\": [\n                                                        {\n                                                            \"label\": \"Subscribed\",\n                                                            \"value\": \"subscribed\"\n                                                        },\n                                                        {\n                                                            \"label\": \"Unsubscribed\",\n                                                            \"value\": \"unsubscribed\"\n                                                        },\n                                                        {\n                                                            \"label\": \"Nonsubscribed\",\n                                                            \"value\": \"nonSubscribed\"\n                                                        }\n                                                    ]\n                                                },\n                                                {\n                                                    \"name\": \"statusDate\",\n                                                    \"type\": \"date\",\n                                                    \"label\": \"Status Date\",\n                                                    \"required\": true\n                                                }\n                                            ]\n                                        }\n                                    ]\n                                },\n                                {\n                                    \"name\": \"id\",\n                                    \"type\": \"text\",\n                                    \"required\": true,\n                                    \"label\": \"Phone Number\"\n                                },\n                                {\n                                    \"name\": \"source\",\n                                    \"type\": \"text\",\n                                    \"label\": \"Source\"\n                                },\n                                {\n                                    \"name\": \"sendWelcomeMessage\",\n                                    \"type\": \"boolean\",\n                                    \"label\": \"Send Welcome Message\",\n                                    \"help\": \"Send welcome message (will be sent only if welcome workflow is turned on) or not.\",\n                                    \"required\": true\n                                }\n                            ]\n                        }\n                    ]\n                }\n            ]\n        }\n    },\n    {\n        \"name\": \"country\",\n        \"type\": \"text\",\n        \"label\": \"Country\"\n    },\n    {\n        \"name\": \"countryCode\",\n        \"type\": \"text\",\n        \"label\": \"Country Code\",\n        \"help\": \"ISO Country code. You can find all country codes in Guides part. Example: CZ, UA, RU, US, GE etc.\"\n    },\n    {\n        \"name\": \"state\",\n        \"type\": \"text\",\n        \"label\": \"State\"\n    },\n    {\n        \"name\": \"city\",\n        \"type\": \"text\",\n        \"label\": \"City\"\n    },\n    {\n        \"name\": \"address\",\n        \"type\": \"text\",\n        \"label\": \"Address\"\n    },\n    {\n        \"name\": \"postalCode\",\n        \"type\": \"text\",\n        \"label\": \"Postal Code\"\n    },\n    {\n        \"name\": \"gender\",\n        \"type\": \"select\",\n        \"label\": \"Gender\",\n        \"options\": [\n            {\n                \"label\": \"Male\",\n                \"value\": \"m\"\n            },\n            {\n                \"label\": \"Female\",\n                \"value\": \"f\"\n            }\n        ]\n    },\n    {\n        \"name\": \"birthdate\",\n        \"type\": \"date\",\n        \"label\": \"Birthday Date\"\n    },\n    {\n        \"name\": \"customProperties\",\n        \"type\": \"array\",\n        \"label\": \"Custom Properties\",\n        \"spec\": [\n            {\n                \"name\": \"name\",\n                \"label\": \"Name\",\n                \"help\": \"Enter a custom property name without spaces.\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"type\",\n                \"label\": \"Type\",\n                \"type\": \"select\",\n                \"options\": [\n                    {\n                        \"label\": \"Text\",\n                        \"value\": \"text\",\n                        \"nested\": [\n                            {\n                                \"type\": \"text\",\n                                \"label\": \"Value\",\n                                \"name\": \"value\"\n                            }\n                        ]\n                    },\n                    {\n                        \"label\": \"Number\",\n                        \"value\": \"number\",\n                        \"nested\": [\n                            {\n                                \"type\": \"number\",\n                                \"label\": \"Value\",\n                                \"name\": \"value\"\n                            }\n                        ]\n                    },\n                    {\n                        \"label\": \"Boolean\",\n                        \"value\": \"boolean\",\n                        \"nested\": [\n                            {\n                                \"type\": \"boolean\",\n                                \"label\": \"Value\",\n                                \"name\": \"value\"\n                            }\n                        ]\n                    },\n                    {\n                        \"label\": \"Date\",\n                        \"value\": \"date\",\n                        \"nested\": [\n                            {\n                                \"type\": \"date\",\n                                \"label\": \"Value\",\n                                \"name\": \"value\"\n                            }\n                        ]\n                    }\n                ]\n            }\n        ]\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"email\",\n        \"type\": \"email\",\n\t\t\"label\": \"Email\"\n    },\n    {\n        \"name\": \"contactID\",\n        \"type\": \"text\",\n\t\t\"label\": \"Contact ID\"\n    },\n    {\n        \"name\": \"firstName\",\n        \"type\": \"text\",\n\t\t\"label\": \"First Name\"\n    },\n    {\n        \"name\": \"lastName\",\n        \"type\": \"text\",\n\t\t\"label\": \"Last Name\"\n    },\n    {\n        \"name\": \"phone\",\n        \"type\": \"text\",\n\t\t\"label\": \"Phone\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "ListCustomEvents": {
+      "id": 33409,
+      "api": {
+        "url": "/events",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{parseDateTime(item, 'createdAt', 'updatedAt')}}",
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "ListCustomEvents",
+      "epoch": null,
+      "flags": {},
+      "label": "List Custom Events",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Limit of outputting bundles.",
+          "name": "limit",
+          "type": "number",
+          "label": "Limit",
+          "default": 100
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "omnisend",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/events\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t    \"limit\": \"{{parameters.limit}}\",\n\t\t\"output\": \"{{parseDateTime(item, 'createdAt', 'updatedAt')}}\",\n\t\t\"iterate\": \"{{body}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "eventID",
+          "type": "text",
+          "label": "Event ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "systemName",
+          "type": "text",
+          "label": "System Name"
+        },
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "label": "Enabled"
+        },
+        {
+          "name": "createdAt",
+          "type": "text",
+          "label": "Create at"
+        },
+        {
+          "name": "updatedAt",
+          "type": "text",
+          "label": "Update at"
+        },
+        {
+          "name": "fields",
+          "spec": {
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Name"
+              },
+              {
+                "name": "systemName",
+                "type": "text",
+                "label": "System Name"
+              },
+              {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+              },
+              {
+                "name": "required",
+                "type": "boolean",
+                "label": "Required"
+              },
+              {
+                "name": "Locked",
+                "type": "boolean",
+                "label": "Locked"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Fields"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "omnisend",
+      "description": "Returns a list of custom events.",
+      "expectJsonc": "[\n    {\n        \"name\": \"limit\",\n        \"type\": \"number\",\n        \"label\": \"Limit\",\n        \"default\": 100,\n        \"help\": \"Limit of outputting bundles.\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"eventID\",\n        \"type\": \"text\",\n\t\t\"label\": \"Event ID\"\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n\t\t\"label\": \"Name\"\n    },\n    {\n        \"name\": \"systemName\",\n        \"type\": \"text\",\n\t\t\"label\": \"System Name\"\n    },\n    {\n        \"name\": \"enabled\",\n        \"type\": \"boolean\",\n\t\t\"label\": \"Enabled\"\n    },\n    {\n        \"name\": \"createdAt\",\n        \"type\": \"text\",\n\t\t\"label\": \"Create at\"\n    },\n    {\n        \"name\": \"updatedAt\",\n        \"type\": \"text\",\n\t\t\"label\": \"Update at\"\n    },\n    {\n        \"name\": \"fields\",\n        \"type\": \"array\",\n\t\t\"label\": \"Fields\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"name\",\n                    \"type\": \"text\",\n\t\t            \"label\": \"Name\"\n                },\n                {\n                    \"name\": \"systemName\",\n                    \"type\": \"text\",\n\t\t            \"label\": \"System Name\"\n                },\n                {\n                    \"name\": \"type\",\n                    \"type\": \"text\",\n\t\t            \"label\": \"Type\"\n                },\n                {\n                    \"name\": \"required\",\n                    \"type\": \"boolean\",\n\t\t            \"label\": \"Required\"\n                },\n                {\n                    \"name\": \"Locked\",\n                    \"type\": \"boolean\",\n\t\t            \"label\": \"Locked\"\n                }\n            ]\n        }\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "UnniversalModule": {
+      "id": 33410,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://api.omnisend.com/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "UnniversalModule",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://api.omnisend.com`.  e.g. `/v3/contacts`.",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "omnisend",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"https://api.omnisend.com/{{parameters.url}}\",\n    \"method\": \"{{parameters.method}}\",\n    \"qs\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n\t},\n    \"headers\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n\t},\n\t\"body\": \"{{parameters.body}}\",\n\t\"type\": \"text\",\n    \"response\": {\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n\t\t\t\"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "omnisend",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"help\": \"Enter a path relative to `https://api.omnisend.com`.  e.g. `/v3/contacts`.\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"required\": true,\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ]\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n    },\n    {\n        \"name\": \"qs\",\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"body\",\n\t\t\"label\": \"Body\",\n\t\t\"type\": \"any\"\n\t},\n\t{\n\t\t\"name\": \"headers\",\n\t\t\"label\": \"Headers\",\n\t\t\"type\": \"collection\"\n\t},\n\t{\n\t\t\"name\": \"statusCode\",\n\t\t\"label\": \"Status code\",\n\t\t\"type\": \"number\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchNewContacts": {
+      "id": 35309,
+      "api": {
+        "qs": {
+          "limit": 200
+        },
+        "url": "/contacts",
+        "method": "GET",
+        "response": {
+          "error": {
+            "200": {
+              "message": "[{{statusCode}}] The module has reached its limit because your account has more than 3200 contacts."
+            },
+            "message": "[{{statusCode}}] {{body.error}} {{if(body.fields; ErrorParse(body.fields))}}"
+          },
+          "limit": "{{parameters.limit}}",
+          "valid": "{{!(pagination.page === 3200/200 && body.paging.next)}}",
+          "output": "{{parseDateTime(item, 'createdAt', 'birthdate', 'statuses[]date', 'optIns[]date', 'customProperties.externalCreated', 'identifiers[]channels.sms.statusDate', 'identifiers[]channels.email.statusDate')}}",
+          "iterate": "{{body.contacts}}",
+          "trigger": {
+            "id": "{{item.contactID}}",
+            "date": "{{item.createdAt}}",
+            "type": "date",
+            "order": "asc"
+          }
+        },
+        "pagination": {
+          "qs": {
+            "offset": "{{(pagination.page - 1) * 200}}"
+          },
+          "condition": "{{body.paging.next}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "watchNewContacts",
+      "epoch": {
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{item.createdAt}}",
+            "label": "{{item.firstName}} {{item.lastName}}({{item.identifiers[1].id}})"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch New Contacts",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "omnisend",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/contacts\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"limit\": 200\n    },\n    \"response\": {\n        \"valid\": \"{{!(pagination.page === 3200/200 && body.paging.next)}}\",\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error}} {{if(body.fields; ErrorParse(body.fields))}}\",\n            \"200\": {\n                \"message\": \"[{{statusCode}}] The module has reached its limit because your account has more than 3200 contacts.\"\n            }\n        },\n        \"iterate\": \"{{body.contacts}}\",\n        \"trigger\": {\n            \"id\": \"{{item.contactID}}\",\n            \"date\": \"{{item.createdAt}}\",\n            \"type\": \"date\",\n            \"order\": \"asc\"\n        },\n        \"output\": \"{{parseDateTime(item, 'createdAt', 'birthdate', 'statuses[]date', 'optIns[]date', 'customProperties.externalCreated', 'identifiers[]channels.sms.statusDate', 'identifiers[]channels.email.statusDate')}}\",\n        \"limit\": \"{{parameters.limit}}\"\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"offset\": \"{{(pagination.page - 1) * 200}}\"\n        },\n        \"condition\": \"{{body.paging.next}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "email",
+          "type": "text",
+          "label": "Email"
+        },
+        {
+          "name": "contactID",
+          "type": "text",
+          "label": "Contact ID"
+        },
+        {
+          "name": "createdAt",
+          "type": "date",
+          "label": "Create at"
+        },
+        {
+          "name": "firstName",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "lastName",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "country",
+          "type": "text",
+          "label": "Country"
+        },
+        {
+          "name": "countryCode",
+          "type": "text",
+          "label": "Country Code"
+        },
+        {
+          "name": "state",
+          "type": "text",
+          "label": "State"
+        },
+        {
+          "name": "city",
+          "type": "text",
+          "label": "City"
+        },
+        {
+          "name": "postalCode",
+          "type": "text",
+          "label": "Postal Code"
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "label": "Address"
+        },
+        {
+          "name": "gender",
+          "type": "text",
+          "label": "Gender"
+        },
+        {
+          "name": "phone",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Phone"
+        },
+        {
+          "name": "phoneNumber",
+          "type": "text",
+          "label": "Phone Number"
+        },
+        {
+          "name": "birthdate",
+          "type": "date",
+          "label": "Birthday Date"
+        },
+        {
+          "name": "sent",
+          "type": "number",
+          "label": "Number"
+        },
+        {
+          "name": "opened",
+          "type": "number",
+          "label": "Opend"
+        },
+        {
+          "name": "clicked",
+          "type": "number",
+          "label": "Clicked"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "tags",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Tags"
+        },
+        {
+          "name": "segments",
+          "type": "text",
+          "label": "Segments"
+        },
+        {
+          "name": "lists",
+          "type": "text",
+          "label": "Lists"
+        },
+        {
+          "name": "statuses",
+          "spec": [
+            {
+              "name": "status",
+              "type": "text",
+              "label": "Status"
+            },
+            {
+              "name": "date",
+              "type": "date",
+              "label": "Date"
+            }
+          ],
+          "type": "collection",
+          "label": "Statuses"
+        },
+        {
+          "name": "optIns",
+          "spec": [
+            {
+              "name": "date",
+              "type": "date",
+              "label": "Date"
+            }
+          ],
+          "type": "collection",
+          "label": "Opt Ins"
+        },
+        {
+          "name": "doubleOptIns",
+          "spec": [
+            {
+              "name": "date",
+              "type": "date",
+              "label": "Date"
+            }
+          ],
+          "type": "collection",
+          "label": "Double Opt Ins"
+        },
+        {
+          "name": "customProperties",
+          "spec": [
+            {
+              "name": "externalCreated",
+              "type": "date",
+              "label": "External Created"
+            }
+          ],
+          "type": "collection",
+          "label": "Custom Properties"
+        },
+        {
+          "name": "identifiers",
+          "spec": {
+            "spec": [
+              {
+                "name": "id",
+                "type": "text",
+                "label": "ID"
+              },
+              {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+              },
+              {
+                "name": "channels",
+                "spec": [
+                  {
+                    "name": "email",
+                    "spec": [
+                      {
+                        "name": "status",
+                        "type": "text",
+                        "label": "Status"
+                      },
+                      {
+                        "name": "statusDate",
+                        "type": "date",
+                        "label": "Status Date"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "Email"
+                  },
+                  {
+                    "name": "sms",
+                    "spec": [
+                      {
+                        "name": "status",
+                        "type": "text",
+                        "label": "Status"
+                      },
+                      {
+                        "name": "statusDate",
+                        "type": "date",
+                        "label": "Status Date"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "SMS"
+                  }
+                ],
+                "type": "collection",
+                "label": "Channels"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Identifiers"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n    \"response\": {\n        \"limit\": 300,\n        \"output\": {\n            \"date\": \"{{item.createdAt}}\",\n            \"label\": \"{{item.firstName}} {{item.lastName}}({{item.identifiers[1].id}})\"\n        }\n    }\n}",
+      "parameters": [
+        "rpc://app%23omnisend@1/getWatchContactsMessage",
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 2,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "omnisend",
+      "description": "Triggers when a new contact is created.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"email\",\n        \"type\": \"text\",\n        \"label\": \"Email\"\n    },\n    {\n        \"name\": \"contactID\",\n        \"type\": \"text\",\n        \"label\": \"Contact ID\"\n    },\n    {\n        \"name\": \"createdAt\",\n        \"type\": \"date\",\n        \"label\": \"Create at\"\n    },\n    {\n        \"name\": \"firstName\",\n        \"type\": \"text\",\n        \"label\": \"First Name\"\n    },\n    {\n        \"name\": \"lastName\",\n        \"type\": \"text\",\n        \"label\": \"Last Name\"\n    },\n    {\n        \"name\": \"country\",\n        \"type\": \"text\",\n        \"label\": \"Country\"\n    },\n    {\n        \"name\": \"countryCode\",\n        \"type\": \"text\",\n        \"label\": \"Country Code\"\n    },\n    {\n        \"name\": \"state\",\n        \"type\": \"text\",\n        \"label\": \"State\"\n    },\n    {\n        \"name\": \"city\",\n        \"type\": \"text\",\n        \"label\": \"City\"\n    },\n    {\n        \"name\": \"postalCode\",\n        \"type\": \"text\",\n        \"label\": \"Postal Code\"\n    },\n    {\n        \"name\": \"address\",\n        \"type\": \"text\",\n        \"label\": \"Address\"\n    },\n    {\n        \"name\": \"gender\",\n        \"type\": \"text\",\n        \"label\": \"Gender\"\n    },\n    {\n        \"name\": \"phone\",\n        \"label\": \"Phone\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        }\n    },\n    {\n        \"name\": \"phoneNumber\",\n        \"type\": \"text\",\n        \"label\": \"Phone Number\"\n    },\n    {\n        \"name\": \"birthdate\",\n        \"type\": \"date\",\n        \"label\": \"Birthday Date\"\n    },\n    {\n        \"name\": \"sent\",\n        \"type\": \"number\",\n        \"label\": \"Number\"\n    },\n    {\n        \"name\": \"opened\",\n        \"type\": \"number\",\n        \"label\": \"Opend\"\n    },\n    {\n        \"name\": \"clicked\",\n        \"type\": \"number\",\n        \"label\": \"Clicked\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n        \"label\": \"Status\"\n    },\n    {\n        \"name\": \"tags\",\n        \"label\": \"Tags\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        }\n    },\n    {\n        \"name\": \"segments\",\n        \"type\": \"text\",\n        \"label\": \"Segments\"\n    },\n    {\n        \"name\": \"lists\",\n        \"type\": \"text\",\n        \"label\": \"Lists\"\n    },\n    {\n        \"name\": \"statuses\",\n        \"type\": \"collection\",\n        \"label\": \"Statuses\",\n        \"spec\": [\n            {\n                \"name\": \"status\",\n                \"label\": \"Status\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"date\",\n                \"label\": \"Date\",\n                \"type\": \"date\"\n            }\n        ]\n    },\n    {\n        \"name\": \"optIns\",\n        \"type\": \"collection\",\n        \"label\": \"Opt Ins\",\n        \"spec\": [\n            {\n                \"name\": \"date\",\n                \"label\": \"Date\",\n                \"type\": \"date\"\n            }\n        ]\n    },\n    {\n        \"name\": \"doubleOptIns\",\n        \"type\": \"collection\",\n        \"label\": \"Double Opt Ins\",\n        \"spec\": [\n            {\n                \"name\": \"date\",\n                \"label\": \"Date\",\n                \"type\": \"date\"\n            }\n        ]\n    },\n    {\n        \"name\": \"customProperties\",\n        \"label\": \"Custom Properties\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"externalCreated\",\n                \"type\": \"date\",\n                \"label\": \"External Created\"\n            }\n        ]\n    },\n    {\n        \"name\": \"identifiers\",\n        \"label\": \"Identifiers\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"id\",\n                    \"type\": \"text\",\n                    \"label\": \"ID\"\n                },\n                {\n                    \"name\": \"type\",\n                    \"type\": \"text\",\n                    \"label\": \"Type\"\n                },\n                {\n                    \"name\": \"channels\",\n                    \"label\": \"Channels\",\n                    \"type\": \"collection\",\n                    \"spec\": [\n                        {\n                            \"name\": \"email\",\n                            \"label\": \"Email\",\n                            \"type\": \"collection\",\n                            \"spec\": [\n                                {\n                                    \"name\": \"status\",\n                                    \"type\": \"text\",\n                                    \"label\": \"Status\"\n                                },\n                                {\n                                    \"name\": \"statusDate\",\n                                    \"type\": \"date\",\n                                    \"label\": \"Status Date\"\n                                }\n                            ]\n                        },\n                        {\n                            \"name\": \"sms\",\n                            \"label\": \"SMS\",\n                            \"type\": \"collection\",\n                            \"spec\": [\n                                {\n                                    \"name\": \"status\",\n                                    \"type\": \"text\",\n                                    \"label\": \"Status\"\n                                },\n                                {\n                                    \"name\": \"statusDate\",\n                                    \"type\": \"date\",\n                                    \"label\": \"Status Date\"\n                                }\n                            ]\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n]",
+      "parametersJsonc": "[\n    \"rpc://getWatchContactsMessage\",\n    {\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 2,\n        \"required\": true\n    }\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "CreateCustomEvent": {
+      "id": 33411,
+      "api": {
+        "url": "/events",
+        "body": {
+          "name": "{{parameters.name}}",
+          "email": "{{parameters.email}}",
+          "phone": "{{parameters.phone}}",
+          "fields": "{{parseCustomProperties(parameters.customProperties)}}",
+          "systemName": "{{parameters.systemName}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "crud": "create",
+      "name": "CreateCustomEvent",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Custom Event",
+      "scope": [],
+      "expect": [
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "systemName",
+          "type": "text",
+          "label": "System Name",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "label": "Phone"
+        },
+        {
+          "name": "customProperties",
+          "spec": [
+            {
+              "help": "Enter a custom property name without spaces.",
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            },
+            {
+              "name": "type",
+              "type": "select",
+              "label": "Type",
+              "options": [
+                {
+                  "label": "Text",
+                  "value": "text",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "text",
+                      "label": "Value"
+                    }
+                  ]
+                },
+                {
+                  "label": "Float",
+                  "value": "number",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "number",
+                      "label": "Value"
+                    }
+                  ]
+                },
+                {
+                  "label": "Integer",
+                  "value": "uinteger",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "uinteger",
+                      "label": "Value"
+                    }
+                  ]
+                },
+                {
+                  "label": "Boolean",
+                  "value": "boolean",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "boolean",
+                      "label": "Value"
+                    }
+                  ]
+                },
+                {
+                  "label": "DateTime",
+                  "value": "date",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "date",
+                      "label": "Value"
+                    }
+                  ]
+                },
+                {
+                  "label": "Email",
+                  "value": "email",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "email",
+                      "label": "Value"
+                    }
+                  ]
+                },
+                {
+                  "label": "URL",
+                  "value": "url",
+                  "nested": [
+                    {
+                      "name": "value",
+                      "type": "url",
+                      "label": "Value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "array",
+          "label": "Custom Properties"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "omnisend",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/events\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"name\": \"{{parameters.name}}\",\n\t\t\"systemName\": \"{{parameters.systemName}}\",\n\t\t\"email\": \"{{parameters.email}}\",\n\t\t\"phone\": \"{{parameters.phone}}\",\n\t\t\"fields\": \"{{parseCustomProperties(parameters.customProperties)}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{body}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "omnisend",
+      "description": "Creates a custom event.",
+      "expectJsonc": "[\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n\t\t\"label\": \"Name\"\n    },\n    {\n        \"name\": \"systemName\",\n        \"type\": \"text\",\n\t\t\"label\": \"System Name\",\n\t\t\"required\": true\n    },\n    {\n        \"name\": \"email\",\n        \"type\": \"email\",\n\t\t\"label\": \"Email\"\n    },\n    {\n        \"name\": \"phone\",\n        \"type\": \"text\",\n\t\t\"label\": \"Phone\"\n    },\n    {\n        \"name\": \"customProperties\",\n        \"type\": \"array\",\n\t\t\"label\": \"Custom Properties\",\n        \"spec\": [\n            {\n\t\t\t    \"name\": \"name\",\n\t\t\t\t\"label\": \"Name\",\n\t\t\t\t\"help\": \"Enter a custom property name without spaces.\",\n\t\t\t\t\"type\": \"text\"\n\t\t\t},\n\t\t\t{\n\t\t\t    \"name\": \"type\",\n\t\t\t\t\"label\": \"Type\",\n\t\t\t\t\"type\": \"select\",\n\t\t\t\t\"options\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Text\",\n\t\t\t\t\t\t\"value\": \"text\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\"label\": \"Value\",\n\t\t\t\t\t\t\t\t\"name\": \"value\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Float\",\n\t\t\t\t\t\t\"value\": \"number\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\t\t\"label\": \"Value\",\n\t\t\t\t\t\t\t\t\"name\": \"value\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Integer\",\n\t\t\t\t\t\t\"value\": \"uinteger\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\t\t\t\t\"label\": \"Value\",\n\t\t\t\t\t\t\t\t\"name\": \"value\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Boolean\",\n\t\t\t\t\t\t\"value\": \"boolean\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"type\": \"boolean\",\n\t\t\t\t\t\t\t\t\"label\": \"Value\",\n\t\t\t\t\t\t\t\t\"name\": \"value\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"DateTime\",\n\t\t\t\t\t\t\"value\": \"date\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"type\": \"date\",\n\t\t\t\t\t\t\t\t\"label\": \"Value\",\n\t\t\t\t\t\t\t\t\"name\": \"value\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Email\",\n\t\t\t\t\t\t\"value\": \"email\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"type\": \"email\",\n\t\t\t\t\t\t\t\t\"label\": \"Value\",\n\t\t\t\t\t\t\t\t\"name\": \"value\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"URL\",\n\t\t\t\t\t\t\"value\": \"url\",\n\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"type\": \"url\",\n\t\t\t\t\t\t\t\t\"label\": \"Value\",\n\t\t\t\t\t\t\t\t\"name\": \"value\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n        ]\n    }\t\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "TriggerCustomEvent": {
+      "id": 33412,
+      "api": [
+        {
+          "url": "/events/{{parameters.eventID}}",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "fields": "{{body.fields}}"
+            },
+            "output": null
+          }
+        },
+        {
+          "url": "/events/{{parameters.eventID}}",
+          "body": {
+            "email": "{{lower(parameters.email)}}",
+            "phone": "{{parameters.phone}}",
+            "fields": "{{parseRequestListFields(parameters.fields, temp.fields)}}"
+          },
+          "method": "POST",
+          "response": {
+            "output": "{{body}}"
+          }
+        }
+      ],
+      "rev": 4,
+      "crud": null,
+      "name": "TriggerCustomEvent",
+      "epoch": null,
+      "flags": {},
+      "label": "Trigger a Custom Event",
+      "scope": [],
+      "expect": [
+        {
+          "name": "eventID",
+          "type": "select",
+          "label": "Event ID",
+          "options": {
+            "store": "rpc://app%23omnisend@1/getEventList",
+            "nested": "rpc://app%23omnisend@1/GetCustomEventFields"
+          }
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "label": "Phone"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "omnisend",
+      "samples": null,
+      "apiJsonc": "[\n\t{\n\t\t\"url\": \"/events/{{parameters.eventID}}\",\n\t\t\"method\": \"GET\",\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"fields\": \"{{body.fields}}\"\n\t\t\t},\n\t\t\t\"output\": null\n\t\t}\n\t},\n\t{\n\t\t\"url\": \"/events/{{parameters.eventID}}\",\n\t\t\"method\": \"POST\",\n\t\t\"body\": {\n\t\t\t\"email\": \"{{lower(parameters.email)}}\",\n\t\t\t\"phone\": \"{{parameters.phone}}\",\n\t\t\t\"fields\": \"{{parseRequestListFields(parameters.fields, temp.fields)}}\"\n\t\t},\n\t\t\"response\": {\n\t\t\t\"output\": \"{{body}}\"\n\t\t}\n\t}\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "omnisend",
+      "description": "Triggers a custom event in Omnisend.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"eventID\",\n        \"type\": \"select\",\n\t\t\"label\": \"Event ID\",\n\t\t\"options\": {\n            \"store\": \"rpc://getEventList\",\n            \"nested\": \"rpc://GetCustomEventFields\"\n\t\t}\n\t},\n    {\n        \"name\": \"email\",\n        \"type\": \"email\",\n\t\t\"label\": \"Email\"\n    },\n    {\n        \"name\": \"phone\",\n        \"type\": \"text\",\n\t\t\"label\": \"Phone\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "omnisend": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.X-API-KEY"
+          ]
+        },
+        "url": "https://api.omnisend.com/v3/contacts",
+        "headers": {
+          "X-API-KEY": "{{parameters.apiKey}}"
+        },
+        "response": {
+          "error": {
+            "403": {
+              "type": "ConnectionError",
+              "message": "[403] Invalid authorization token."
+            },
+            "message": "[{{statusCode}}] {{body.error}} {{if(body.fields; ErrorParse(body.fields))}}"
+          }
+        }
+      },
+      "rev": 6,
+      "name": "omnisend",
+      "type": "basic",
+      "label": "Omnisend",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "omnisend",
+      "install": {},
+      "apiJsonc": "{\n\t\"url\": \"https://api.omnisend.com/v3/contacts\",\n\t\"headers\": {\n\t\t\"X-API-KEY\": \"{{parameters.apiKey}}\"\n\t},\n\t\"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error}} {{if(body.fields; ErrorParse(body.fields))}}\",\n\t\t\t\"403\": {\n                \"type\": \"ConnectionError\",\n                \"message\": \"[403] Invalid authorization token.\"\n            }\n        }\n    },\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.X-API-KEY\"]\n\t}\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "apiKey",
+          "type": "password",
+          "label": "API Key",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "installSpec": [],
+      "scopesJsonc": "{\n}",
+      "installJsonc": "{\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"apiKey\",\n        \"type\": \"password\",\n        \"label\": \"API Key\",\n        \"editable\": true,\n        \"required\": true\n    }\n]",
+      "installSpecJsonc": "[\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n\t\"baseUrl\": \"https://api.omnisend.com/v3\",\n    \"headers\": {\n        \"X-API-KEY\": \"{{connection.apiKey}}\"\n    },\n\t\"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error}} {{if(body.fields; ErrorParse(body.fields))}}\",\n\t\t\t\"403\": {\n                \"type\": \"ConnectionError\",\n                \"message\": \"Invalid Token.\"\n            }\n        }\n    },\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.X-API-KEY\"]\n\t}\n}",
+  "countries": null,
+  "_functions": {
+    "ErrorParse": {
+      "rev": 3,
+      "code": "function ErrorParse(fields) {\n\tlet output = \"\\n\";\n\t\n\tfor(let key in fields){\n\t\toutput += fields[key] + \"\\n\";\n\t}\n\t\n\treturn output;\n}",
+      "name": "ErrorParse",
+      "test": null,
+      "appName": "omnisend",
+      "arguments": "(fields)",
+      "appVersion": 1
+    },
+    "checkNames": {
+      "rev": 3,
+      "code": "function checkNames(item) {\n\tif(item.firstName && !item.lastName){\n\t\treturn item.firstName;\n\t}else if(item.lastName && !item.firstName){\n\t\treturn item.lastName;\n\t}else if(item.firstName && item.lastName){\n\t\treturn item.firstName + \" \" + item.lastName;\n\t}else return item.contactID;\n}",
+      "name": "checkNames",
+      "test": null,
+      "appName": "omnisend",
+      "arguments": "(item)",
+      "appVersion": 1
+    },
+    "parseDateTime": {
+      "rev": 4,
+      "code": "function parseDateTime(object, ...fields) {\n  fields.forEach(field => {\n    const path = field.split(/\\.|\\[\\]/);  // split by '.' or '[]'\n    parse(object, path);\n  });\n  function parse(obj, path, index = 0) {\n    const property = obj[path[index]];\n    if (!property) {\n      return;\n    }\n    if (path.length - 1 === index) {\n      obj[path[index]] = iml.parseDate(property);\n    } else {\n      if (Array.isArray(property)) {\n        index++;\n        property.forEach(item => {\n          parse(item, path, index);\n        });\n      } else {\n        parse(property, path, ++index);\n      }\n    }\n  }\n  return object;\n}",
+      "name": "parseDateTime",
+      "test": null,
+      "appName": "omnisend",
+      "arguments": "(object, ...fields)",
+      "appVersion": 1
+    },
+    "parseListFields": {
+      "rev": 3,
+      "code": "function parseListFields(list) {\n  if (!list.length) {\n    return null;\n  }\n\n  const listFields = list\n    .map(field => ({\n\t\tname: field.systemName,\n\t\ttype: iml.convertToFieldTypeIntegromat(field.type),\n\t\tlabel: iml.capitalize(field.name),\n\t\trequired: field.required\n\t}));\n\n  return {\n    name: 'fields',\n    type: 'collection',\n    spec: listFields,\n    label: 'Fields'\n  };\n}",
+      "name": "parseListFields",
+      "test": null,
+      "appName": "omnisend",
+      "arguments": "(list)",
+      "appVersion": 1
+    },
+    "parseEventFields": {
+      "rev": 3,
+      "code": "function parseEventFields() {\n\t// NOT USED\n}",
+      "name": "parseEventFields",
+      "test": null,
+      "appName": "omnisend",
+      "arguments": "()",
+      "appVersion": 1
+    },
+    "parseCustomProperties": {
+      "rev": 3,
+      "code": "function parseCustomProperties(inputCustomProperties) {\n\tif(inputCustomProperties){\n\t\tlet ModifiedCustomProperties = {};\n\t\t\tfor(let i = 0; i < inputCustomProperties.length; i++){\n\t\t\t\tModifiedCustomProperties[inputCustomProperties[i].name] = inputCustomProperties[i].value;\n\t\t\t}\n\t\treturn ModifiedCustomProperties;\n\t}\n}",
+      "name": "parseCustomProperties",
+      "test": null,
+      "appName": "omnisend",
+      "arguments": "(inputCustomProperties)",
+      "appVersion": 1
+    },
+    "parseRequestListFields": {
+      "rev": 3,
+      "code": "function parseRequestListFields(userFields, apiFields) {\n\tconst findFieldByName = userFieldName => apiFields.find(apiField => apiField.systemName === userFieldName);\n\tfor (let userFieldName in userFields) {\n\t\tconst field = findFieldByName(userFieldName);\n\t\tif (field.type === 'date') {\n\t\t\tuserFields[userFieldName] = iml.formatDate(userFields[userFieldName], 'YYYY-MM-DD');\n\t\t} else if (field.type === 'dateTime') {\n\t\t\tuserFields[userFieldName] = iml.parseDate(userFields[userFieldName]);\n\t\t}\n\t}\n\t\n\treturn userFields;\n}",
+      "name": "parseRequestListFields",
+      "test": null,
+      "appName": "omnisend",
+      "arguments": "(userFields, apiFields)",
+      "appVersion": 1
+    },
+    "convertToFieldTypeIntegromat": {
+      "rev": 3,
+      "code": "function convertToFieldTypeIntegromat(type) {\n\tswitch(type) {\n\t\tcase \"int\":\n\t\t\treturn \"integer\";\n\t\tcase \"float\":\n\t\t\treturn \"number\";\n\t\tcase \"bool\":\n\t\t\treturn \"boolean\";\n\t\tcase \"string\":\n\t\t\treturn \"text\";\n\t\tcase \"email\":\n\t\t\treturn \"email\";\n\t\tcase \"url\":\n\t\t\treturn \"url\";\n\t\tcase \"date\":\n\t\tcase \"dateTime\":\n\t\t\treturn \"date\";\n\t}\n}",
+      "name": "convertToFieldTypeIntegromat",
+      "test": null,
+      "appName": "omnisend",
+      "arguments": "(type)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-05-20T09:56:04.214477+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Omnisend is a marketing automation platform built for growing ecommerce businesses that have graduated their basic email marketing tools.",
+  "iconColor32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000002a44944415458c3c597ef4b535118c73f677793cda9e49a961921a6a662a6998521a5604441af2a909084885ef457f48ff4a6570612480842bf837a29b2e9567353b3e5efa9337fc0b67b4e2f64b2b5f9abbb9b0fdc17f779e07c3f7ccfb9cf73aeb8d7f344718461394af1430328a5502ab7861d08402985aeeb3befbaaee70cc47a107187c3cee59666ea6babd1a5c433ea6378c44b2c164708611e80520a87dd4eef83fb745ebb8aa6690074b4b73138f49697af5e9348240c41ecb905524a2e369de77a7bdb8e38405e9e8d9b5d1dd4d65421a534e4c0ae004a298410d4545762b3651a959fefa0aab2c290f8be0e00c4e3f17faa19061042a0147846fd6c6c6c66d423cb2bf8be050c1fc23d1db0580463fe00fd038344d77e03db5bb31459a6af7f80a9e9b0b95f8110025dd7191c7a87cf1fe06c650552977c0f86088767512873019210524a8213538c87267772c9c768ec0b902a68466405486db36609ef0a90fcfe61bb11492911c28210e6c0647540d334eedcbe41a1d3492038412038416479c51447b202082168a83bc785f3f524120966e6e6f9f0e92bef3f7f617d7d038b2577d7887d57b25aad9c395d4e4ff75d9e3eeea5b4c46db8ff1f0a20199a66e14a6b338f1e7653545498b3fb4056005dd7191ef132bfb0982174a9b9915b5d9d003981d0ea1b5b9ea526b66780623c3489c7eba7c4ede254d9c9b47a6969091eaf8fe8da9a39b320b9e874f817cf5ff4119afc91562f71bb686d69ca890b7b4e434dd3985f5864e8cdc7b43b214063431d0e87dd90f89e00a920de313f8b4b91b47c79d9098ebb8acd73201560351ae56778262d5f50e0a4d4ed361f00201e4f303bb79096b359adb88a8f19123fb0034a295656a37f172828709a0f908ccdadad8c5c5e9eedff01c462f18cfd16c2f84c38f00a52ca2c07ce78273cf2bfe33f78e4092392c7f78e0000000049454e44ae426082",
+  "iconColor64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000005494944415478daed9a5b6f13571080bfb35e3b36b6e384c4b9710be44242d390925028508a40ad404515aaa8d49b682bd4aa0f3cf517f4aff4a1ad2a5481e8034805414b01458202099090421292d8046c875cf0656def9e3e244e51916a1b3bdd4dc8bceeccee99efcccc39ab1971f8d3af242fb128662fc06c590660f602cc966500662fc06c79e901a8c57ea1941229414a83ccf92a004551104298edefc202300c8910b0b2dcc7aaba5aca7da5e886413832412038ced368142184a540140d80611894f97cecdbb38b9ddbbba8aef2e370d891529248688c8c053877e11257baaf92d03414c51ad9571400866150575bc3d1231fd2ded6fa9c736ef70a5a3736d1b0be9ea6867a7e387e92a7d1188a0522a1e06d905252eaf5f2f9271fd0d1feca7feeacc361e7edbdbb79ffbd03a8361b529a7f0b2f08c06cc193ecdeb98d8ef6b6dc3ea828ecdbb38b4d2d4d188661b6ff854780d7e361c7f62e6cb6dc5fe571bbd9b1ad0b9b05a2a020008694f82b2ba8ada9cedb7643fd5adcee15a63a5f3000a4c4ebf5e02c71e46deaf57a70399d8b3b0200d2e934fa0be4723a9d46d775539d2f18801082c8c41366669ee66d1b0a47884663a65f8a0a071099a07fe07e5e76524a6ef6f691d034539d2f0a80642acdb9f317999c9aced96e707884cbdd57e7dfb1680100288ae0ceddbf3871ea34894422ab7e3832c18fc74f120a472c711d2ef82a2c84404ac999b31748681a870eeea7a6daffdcceeabacebdc1617efaf9143db7fa4cdff9a201c840d0759db3e7ffa0efee3d5eefeca0a5b991329f17c39084c2117a6ef771ed7a2f4f26272df54758b4bfc159872481e0434e041fe2b0db71381c4829d1924952a91442289608fb0501908190d9d9543a4d2a9d9e7f66b3d9ccf675e101fc1bc662106bc5e332806500cb009601fccf92f729601806869408fe39f6164bc52f18809492d6e646aaabfd84c21384c21126a7a6d1346dd1c2c81b4057e7660e1ddc4f3c9e606a7a86b14090dbfd03f4deea67341024954a59b60b54308067c5e572e27239a9a9f6d3f95a3b9353d3f4f4dee1dc6f97b83b708fb4ae5beeda5b5400cf8a1082f2321f6fbdf9065b3a5ee5e2e56e7e397d9647a1308ac5d3a2e85be4f57a38f0ce5ebe39f6256d2dcdf3bd03abca82c4a81082a6c60d1cfbfa0bb66ed93cd72db62684054dd22a7f25473ffb88cd6dad4b09407ef9ecaface0c8c787595d576b895658c100a2d118e967fef37391fa756b387ce85d9c2525968b04dba6f6ce6ff3310804c7b93f388caaaaf82b56a2aab91d24b535553c1c7fccf0833114c53aa7425e00841068c924a36341febcdecba35084756b56e3f1b8b37fc866a3bcccc7b51b3d24e66e8e5690bc23400881a228a4759da1e151861e8cd0d4b01e5fa937ab6d99af9440709ca1e111cb5c925e7815b3200477fa07f8eefbe3393546545565e7f6adac70b92c530b0aee0c298ac28ddedb9cf9f5424e55beb1613d6bd7acc2309600800c042925e77fbfc4c85820abbed7e3a66dd346b3fd2e1e800c847064822bddd772d26f696ec4e97458220d8a06404ab87ef31653d33359f557afaaa5bcac6ce90080d9266970fc11a339a481afb494ea2affd20200108f27181c1ac9aae770d8a9abcd7faec8d20032c5f0c16820eb692084a0baaa72de664900c8c8e350182d87c98f8a95e5a8b605ebcc99034008c1e4d434b178f6418952af17d56e7ec3b4b8112004f1789c582c9e55d5e52cc1aedacdf6bfc8110068c924d1582cab6e49490976bb8ad90741d16b809ed6d1b464563d5555e76606965811340c032d991d80cd668d6991e2039092543265b65fe6014042da0223b0a60190484bcc009b06608ec2a29105aa428b8780f965d864f91b9df4f7493aec17fc0000000049454e44ae426082",
+  "installSpec": [],
+  "inviteToken": "a5e888b18a3416b3ab7c2fb599f3081a",
+  "versionFull": "1.2.6",
+  "compiledName": "omnisend",
+  "iconColor128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000b104944415478daed9dd9731cc51d80bf9ed99d9556de43d6611d960f21842d648caf328ee3008132c5110c846052b8921449f19097fc0bf94bf2421529484802a900017c10835d101b9f924f595a4bb225add6d24ada7b673a0fab15c296c1c6b3bbb399fe5ea5ea9e567ffdeb569fe2e57d6f4814ae45abf407282a8b12c0e528015c8e12c0e528015c8e12c0e528015c8e12c0e528015c8e12c0e528015c8e12c0e528015c8e12c0e5782afd013f0429975ec1164254fad3aa8eaa11404a89655948099a26d0351d4dd39052625ad6fccf2c344d20845032dc218e17c09212cbb4a8f1f96859d1c49ad51dac6c6f251c0a6218069669924ca599884e3214196678f41a53d33358d63732286e8f630528b6787f6d2dbd3debd8b17d0bebbaef231c0e6178bdb754ac6559249249ae8f4d70e2e4598e7c758c91d1b1f9a8a0863ab74338714b9894122925f7ad5dc3cf9e7e924d1b7ba9abf3df716b364d93d16b637c7af030870e1f652e9144d795044ba1f73cb4e58f95fe88c548291142b073fb565effd55e7a7bd6e1f3197715ca354d23140ad2b3ae9ba686e544ae8e303b9740d3547770338eea02a49408048feffa11bf7ce505eac3a17b4acfe733f8c98f1f21180cf0a737dfe6daf531745daf74311d8563e262a1cf976cdbf230affe62cf3d57fe4201358d4d1b7bd9b7f745c2a110966555baa88ec23102589645477b2b2fbff82ccbebc3b6a62d8460ebe68d3cbdfb71745dbfed3c821b718400524a0cafc1534f3ec6dad51d25c9c3e3f1f0d34777b2aebb4b458145384200cbb2e8ea5cc3f66d9b4afa7f7bc3f27a1edfb503c330541498a7e2024829d1349d6d5b36da1efa9762c383eb59b5b24d4581791c21403814a4677d775966edeaeb43ac7fe0fe85bcdd4ec505b02cc98ae6469a1b1bca929faeeb74ae5d8de1f556bae88ea0e20200ac686aa4b6b6a6ccf9d5aa08800304100242a1001e4ff9e6a4028165d4d6944f38275351018a2dd0e7f39575c1c6e3d1f178745400a8b000c5415f26932deba83c9f37c99b266aa5d8015d809430333b4b3e9f2f5b9e73730952a974a58bee082a2e0040341a239dce942dbf89c94952e9b4da2c820304d034c1f5f10926266365c9cfb22c86222364b3b94a17dd11545c002104d3f119ce5db85496fca6e333f49fbf08481501708800f9bcc9b1e3a7988ecf943cbfbefe0b44ae8eaa6d62f338e2afa0eb1a172f0f72fcc4e992e6333d1de7e0e123a433aaff2fe20801841064b2193efcf800c323a325c9c3344d0e1d3e4adfb98baaf52fc2317f094dd3188c0cf3ee7b1f3233336b6bda524a4e9de9e75fffde4f3e9f57ad7f118e11a07898e3c897c778f7bd0f989d9bb3255d292567fb2ff0e69fdf2576634ab5fe9b70d4a65021049665f1d1278748a733bcb4e769563437fde0f472b93c5f9f3ccd5b7ff907c323d755e52f81a304808204a665b2ffd0e75c1b1be7f96776d3fbe00377b578635916d1688cfd9f7dc1a7070f331d8fa3699a0afd4be03801a0208144d277ee02578747d9fcf006763eb295fbd6ae261058b6e4caa19492743a437432c689d367f9e2e87f191c1ac69296da0afe1d38f264d0620a873e25757e3f2bdb5ae9ec5ccdcab61642a12086d7c09216c9648ae8648cc1a1ab0c454688c66298a6a95afd1de0c808b098e209e0642acdf94b035cb83c80a6e9783d9ec2cf90987993bc99c7b20ab37b9a2654abbf431c2f0014ff43004d2b54aa94925c3e77cbef783c6a9077b754850037a3c2ba7da826e37294002e4709e07294002e4709e07294002e4709e07294002e4709e07294002e4709e07294002e4709e07294002ea7e4cbc14bddc2a196739d4349059052a2eb3a353e1ff97c9e6c2e876916eef5478026d4ddfe95a6a4025896a4ada591d7f6be347f0834ce646c8aeb63e38c4f4489dd9862663641decc236061dbb612a27c943c02f87c06dd5d6ba99fbf03d0b22cb2d92cc9649ac91b37188a0c337025c2a58141c627a2a4d2858b1bd486cef250962d618b47019aa6515353434d4d0dcb9787e9eeea24bb2bc7743ccee0d0554e9de9e74cdf79c626a26a676f1970c49e40c3f0d2dcd4487353239b1fdec0d8449493a7fa38fad571060623e472392542897084008bf17abd74b4b7d1dedac28eed5b387ee23407ff738481c108a6a9de01b21bc7095044d3341a1b96b3fb8947d9f4502f870e1f65ff679f139d8ca96860238e9f081242d0dcdcc84b7b9ee10fbfff2d5b376d44084d5df66c138e8d00b77ca847a7675d37ad2d2bf8f0e3037cf4c921e612097502e81e717c04b899fa70889fbff02cbfd9f70acd8d8d98a6a9eefcbd07aa4e00009f61f0d8ae1dbcf1fa6b74ac6c5f3840aab87baa5200f8e631a8dffdfa555675b4ab31c10fa46a0580c200b1b7671dafefdb4b5b6b0ba66956fa93aa8eaa16000a126ce85dcfbebd2f521f56cfc2dd2d552f007cf32cdc0bcf3d85cf30b0d478e08ef9bf10000acfc23df1d82e76eddc0ef36f0f2bbe9fb20850ae393bbfbf96e79fd94d57e75a4cd515dc11251540084867b24cc6a6c8e5ca733b777b5b0b7b9edb4da0ae4e8d07ee8092be1e2e8420954cd177ee2223a3d79152120c2cc330bc259dcb6f6a6a2076638a812b1184501b4cbe8b920b6049497c6696cb57227c7dea2c578622783d1e1a1aeaf196e8e9368fc7437d38cc99be73ead9f8efa1a40200f3b77669689a462e9767f4da1827cff433118dd1dcd44838142c490b0d05032413a98577085414589a920bb098a20cb95c8ec1c8552e5eba427d3848cb8a26dbaf71d5348d7028c099fe0bc4e333ea9ad8db5056018a1477024f4dc7e93f7f91da9a5a5675b4dbbeb25757e7673a1ee7dc85cb0bf92abe4dc59a851085cb1ca7a6e3bcf5cedf39f0d917b6bf1ca6eb3adbb76da6a9b141cd0bdc868ac7455dd7994b2478e76fffe4d889d3b65754477b2b1b7b7b906a7268492a2e001424988ec779fbafef331419b6356dc330d8b2e921fc7e3faafa6fc511024061d016191ee1fd0f3e26914cda9af6fd5d6b59b5b20dcb54134337e318018410084de3cb6327f9ead8095bc3752818a0b7e781c235f4aa1bf8168e11000a670553a9349f1c384cecc6947de96a1a0faeef26b0ac4e3d187d138e12000a4fc80d0c46f8fae419ecacad552bdb696d6956eb0337e13801841064b3398e7c798cf8ac7daf870502cbe8ea5c831020d5707001c7090085903d7025c2a5cb83b6a5e9f178e8ea5c53587f50f5bf802305100212c924274ef791b37172a863653bc140400d0417e150010a53b6e7ce5f626a6adab6741b1bea696e6ac0b29400451c290014ba81f189492257ed7b4ad6efafa5bdb5a5d24573148e150020954e73f9caa06d2377afd74b7b7bebc243540a070b509cb4191c1a26954adb96ee8aa6467c8651e9e23906c70a0085c1e0f5f1096666ed794718a0b9a981ba3abf8a00f3385a004dd3988ecf30363e615b9aa160806070993a3b308fa3050048a7d28c8d476d4bcfe7f3110e06d55cc03c8e17c0b44ca29393b60d040dc3201c0e55ba588ec1d10214068230118d91cd666d49d3ebf5501f0e15a6845537e06c018a4c4dc5c964ec1140084128184088aa287ac971fc5f4108984d24c8d8140100eafcb5e86a973050150214f6082412f6ed12f2fb6bf178d4dd425005022004996c96d9b9846d49d6d6d4a07baae67eac92e278010490cbe56cdd27e8abf1e1d175b53b882a1000c0cc9b241329dbd2f319061e8f073519502502589665eb2050d7757560749eaa104022c96432b6a5e7f57ae62380a23a0490858b26ec9ab811a2705a5975005520407159389bcdd82880285c5ba34681ce17a0482693535bba4b40d50860f7c9614581aa11409dee2d0d5523403e9f575d4009a81a014c75237849a81a010a95af266feca64a0450fd7fa9a8120114a54209e07294002e4709e07294002ee77fa91d107d6e1e80e20000000049454e44ae426082",
+  "iconColor256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300001a704944415478daeddd69571dd781eef167ef5d55671e400c028190b0ac018d963cc94ed28edd499cf8e676af75efbaafeeebfb39f2a1faae4ed276dbee78901c0d8e660984c40c02ce613a630dbb5f140703461282834e71eaf9ade578ad0cf626a6feb5f7ae49fceffffbff3488289464a30740448dc300108518034014620c00518831004421c600108518034014620c00518831004421c600108518034014620c00518831004421c600108518034014620c00518831004421c600108518034014620c00518831004421c600108518034014620c00518831004421c600108518034014620c00518831004421c6001085180340146246a30710165a6b789e86d6fab9ff1d2104a4141042347ab814120cc01ef13c0f9ef7f3837dfd412e8404b486ebbad0f023e1ba1a8006e047404a01293951a3bdc100d4917f96f7a0b586d680941211cb422a95403a954226edff118958b02c0b524ab8ae8b4ab50abb6a6379a58085c5452c2dad60a55040a95c81eb7af03c6f351c92b303aa2b06a00e6a07bee7690821904c24d0d1de86de435d38dc7b083d87bad092cd209d4e41490565282829fde580001cc785f6346cc741a158443ebf80b189498c8e4e607c721acf66e7b05228c2715c0821a0144340f5c100ec426d5def791e9452686fcbe2587f1f064e1ec7f163fd38d0da82582c8a48c43fdb6f672aafb5867bb80703278fa3542a2397cf63f8e928ee3d18c4e0d013cce572b06d67f5afc7fd02da1d0660873ccf5fbb4b21d0de7600674f9fc0c5f367d17fb40f99740ad168144abdfada5d0801c3306018061289385a5bb3e8ed39840be74ee3c9c818aeddb8853bf71e60762e07c771a19482948c00ed0c03b0039ee7c1753dc4e3319c1d3889cbef5dc2a913c7d092cdc034cdba9e95a59488c5a28846236869c9a2ffc8615c383b80efae5ec3edbb0fb0522802d8deec82683306e015f8bbf41e00a0e750173e78ef122ebf7b09dd5d9db02c6b4fa7e34208442c0b1ded6dc8663238d2d78b2b3f5cc77f7d7b15135333abb301ee0dd0ab5103e72efda9d183d80ff4eae53a25154e9d38867ffdec77f8f0f23be8ec68affb59ff45fc2582423a95446f4f37dadb0f6065a580f95c1eaeebae5e5e6404687b18806dd05ac3715c442216de79eb3cfef58f9fe2dc99534826e20d9b7a0b216059160e7674a0bbbb13a55219b37339d8b6cd08d0b67109f012b5337fc4b2f0eea50bf89f9ffd16fd470e4329d5e8a1f9cb828885136fbe8168d4df27f8eeca3594ca6528a518017a29ee1cbd84eb7a30948177df0ed6c1bf9e520a470ef7e08f7ff80d2ebf7709a669f9f716bce0b663228001782177f50ebcf3674fe18fbfff4d200ffe1a29257a0f75e3b34f3fc1a50b676028b5b66149f43c0cc073789e07ed691cedebc5ef7ffb098e1ce90decc15f23a5445f6f0f7effdb5fe3f8b1feb59f83e87918802dd42ef7b56633f8e4a30f3170f2182cd36cf4b0b6452985378ff5e3371fff12ed075ae1ae3e9b40b41506600baeebc1324dbc7df11cdebe781eb158acd1437a25b16814e7ce0ee0f27b1711b5225c0ad07331009b789e06b446dfe11e7c78f91d1c686d69f49076a4259bc18797dfc51bfd7dab3f1723403fc7006ce2791e92c904de7fe72df41d0efebaff79a49438d475101fbc7709a96462ed3165a2f51880756a67c9bede43b870ee0c52c944a387b42bf1780c674f9fc2b1fe2300c4962f28a1706300d6f13c0f89780ce7cf9e467b5bebbe7fc0460881b6b6565c38771ac9441c5a7319401bedefdff03aaabdc5a7b3a31d674f9f44729f9ffd6b62d128064e1d47d7c14e68cdbd00da880158e5ba1e4cc340ff91c3e8683fb0efcffe354208b41d68c58937fb6199269701b44173fc96d785462c16c389e36f209188377a3075158b46f1c6d13ea45249f82f1c25f23100f869fadfd1de8ac33dddfbe6a69fed8a442cf41dee416b4b96cb00da8001807f404821d0d9de8e6c3603d124d3fff552c9240e7575424ac96500ad69bedff41dd01a508681b6b6565896d5e8e1ec8948d442575727224dfaf3d1ce3000aba2110b9d1d6db0ace69afed798a68903ad2dab3f1f6700e4630000001aa66922934ec3349af31d298652c866d28846228d1e0a0548e80350db008c45a34826134d73f96f33a514e2f11822110b5a83b705130006608d54024613bf55570881582cbaef9e6ca4bdc500acb24c0bb158ac6967000020a55a7b753867000430001b34ebd99fe879188055b66da3542e37f599517bdeda63c18c1d010cc01ad7f360db4ed3de25a7b546b95c41b95c69f4502840421f00ff231a40b95446a1506cda00b8ae87954201a552b9d143a100097d006a6cdbc1d2f20a6cdb69f450f684eb3a58291451a9562104f73bc8c700000004aab68db9f979b8aedbe8c1ec09db76303f9f43a55a05c0839f7c0cc0aaaa6d63766e1e954ab5d143d913e54a051353d3a8569bf3e7a39d6100004829e0791e2626a7915b5868ca2b01a57219d333b3f03c0d293903201f0300ff0dba420073f3798c8d4f36dd59d2b66d4c4e4e633e9707a09bfa66277a35fc4d5823502c96f078f8298ac552a3075357c562090f0787b1b0b004aeff693d06609594fe46e0e0e327989dcb35cf32406b2c2e2d6368f8292ad52aa7ffb40103b0aab60c989e99c583474328959be37a79b952c183874318191d8710e0f49f36e06fc33a4248ac148ab879eb2e72b985460fa72ee6730bb879eb0e96570a1082ffb86923fe46ace34f8f351e0f3fc5ad3bf750dee7b38052b98cbbf71fe2d1e0b0ffde434eff691306601d2104a494585e29e0bbabd7313135b36f6f0dd65a637ae6197eb87613f9c5a5d5250e03401b31009bd4d6c88f9f8ce0dbef7fc0c2e252a387b4238b4bcbb872f506ee3f1c82d6bcf64f5b6300b6a09444a954c6b757aee1cedd07fbee09ba4aa5823bf71ee0bbabd750289678f6a7e76200b62084805412b3b3f3f8eb175f63f0f1937df38c80e779181b9fc4e7fff9374c4ccd4029c9b33f3d1703f01c4a4a68000f0787f1d72fbec6f8c454e0f7033ccfc3d4f40cfefcf957b8fb607075eacf7fc4f47cfced7801a5246cc7c1f59bb7f1d72fbec6f4f4b3c046c03ff89fe12f9f7f8d2b3fdc80e3d8508aff78e9c5d4c0b94b7f6af42082cabf2a2050a95631393d03db76d075b01dc94422506bea9f0efeaff0d5dfbec74aa108a554a0c648c1c400bcc45a042a554c4e4da35028a2bded0052a96420a6d7aeeb62746c027ff9fc2b7cfdcd95d5839f9b7eb43d0cc036d42250ad563136318d5c3e8f44228e4c3a05d3341a72b0d5def1f7f0d163fcdb9fbfc07757afa3502cc23078e6a7ed6300b6c97f77a080e3b8989a7e86b1f149082190c9a4108d44d6fef3bda6b586e779989bcbe1bbabd7f0fffff2056eddb98f4ab5ca839f5e59737e086f8f0821a09484eb7978fc6404f985453c793a8a0fde7f1b47fb7a914ea7a094dab3bfbfebba585e296064741cdf5df93baeddbc8d5c2e0f08c1839f76840178454208184ac1131e72f9057cf5cd153c7afc0417ce0ee0edb7cea1b7a71b89441ca669d6e580d45ac3b66d140a458c4d4ce1c77fdcc18d5b773031390ddb7656aff3377e2f82f6270660876a77d7d536e166666671ebce7d0c9c7c13a74f1dc791be5e24130944a31198a6f94a07a9e779b06d1be572052b8502c6c62771fbee03dc7f388489a969542a553f443cebd32e3100bb503b083d4fa36adb783a3a8e89c9695cbb790b87ba0fe2704f370ef7f6a0a7fb20d2e9144cc384611a3094827fdcfef48d3e4f7ba8566dd8b68da5a5658c4f4e63746c1ca36393989c9e413ebf88aa6daf2d4378d6a77a6000ea404a0129153ccf83e3ba78363b8fd9d979dcbdf708f1780cd96c1aadd92c5ab219a4d329c4625158960901ff65a4b6e3a05c2e63717119f98545e41616b0b0b08462b104dbb6a1011ef8b42718803a925242cada4ebd86ed38585c5ac2c2e212464627d6f60f36dfa4a3b586ebb9701c175a6b68e8d537f7090829a1e4ebb9c240e1c300ec01ff6cbdf100f73ced6fe83936aab6ff710e2100cfd31b2e210a21a0f8f41ebd260cc06bb039084441c10525518831004421c600108518034014620c00518831004421c600108518034014620c00518831004421c600108518034014620c00518831004421c600108518034014620c00518831004421c600108518034014620c00518831004421c600108518034014620c00518831004421c600108518034014620c00518831004421c600108518034014620c005188198d1e403d68ade1ba1e000d40acfdfb420042c8d53f8b1dfff5899ad5be0e80d61a42085896858865015aa36a3b705d17b663436b0dcf73d7fd2ffc0848292084601428f4f67d00b4067ababbf0eb5f7d80783c8a85c5252c2d2d637979054bcb2b585c5ac6ca4a012b8522cae50aaa76159ea70178a8054108b11605a230d9e70100b4f6d0924de3fcd901b41d68816d3b703dd7ffb3eba2542a63697919b37339cccecd6376761e73b91ce6e7f3585a5e41b15482e338705d60fd0c414a6e8f50f3dbd701a81142c0340c589605cbb236fc67fe32c083e338a8da36aa151be54a050b8b8b989e99c5c8e838c6c62731379ff3670b85225cd783e7f93304c6809a59530400f0b7ffb6228480520a4a2944221120e947a1eb60078ef51fc1db6f9d43a158c4dc7c1e63e393187cfc04e31393989dcba1582ac3b66d789eb7ba4c905c265053699a00bc8ada066024124124124126934667473bde387a18efbdf31672f9058c8e4d6070e8091e3f19c1ccb359148a25388ebbb65fc0590135835006602b4a29241209241209b4b664d1d77b0817cf9fc1ec5c0e8f1e0fe3fe83410c3f1d452eb780aa6dc3f3344340fb1e03b00529e5daec209bcde0706f372e5d3887f18949dcba731f0f1e0d61726a06c5529921a07d8d017809292562b118a2d1283ada0fe0cd63fd989979861f6fddc3ad3bf7f0746c02a5528921a07d8901d82621040cc3403693463a954477d7415cbc70163fdebe8b7fdcba8be19131945667044a71b390f60706e015d5ae2aa4d3292493097476b6e3fcd9015cbf790bd76fdec2d8f814aab60d29256f2ea2c0630076414a894c3a85543281839d1d38337002df5eb9861b3fdec67c2e0fc7f1a09482948c000513035007b5109c3e75025d073b3170f238fef6ed55dc7f388842b104ad391ba0606200ea482985b603ad78ff9d8be83dd4852b7fbf81efaf5ec7c4d40c5cd7e3de00050e035067fe0d46168ef4f5a2a5258bc33d87f0f9977fc3fd8743a854ab504af24a01050603b047a494c866d278e7d205741decc07f7efd2daefcfd06e6e6f3500a508a11a0c66300f6506d3670f4c861fc4b32898ef6367cfee537189f9c82e3b85c1250c3f134f41a4829d1de7e001fffd387f83fffeb7f60e0e49b5052c2715c68ad77ff3720da21ce005e13210492c904deb9780199540afffe1f5fe2fa8f7760db5528a53813a08660005e232104a2d1084e9d3c8e783c86783c86ef7fb88162b104c36004e8f5e312a0014cd3f0f7053efb1d7efdcbcb4826e2705c2e07e8f563001a442985de9e6e7cf6e927f8e89797914a2418017aed1880061242e0606707fef0bb8ff14fbf781fc9789c1b83f45a31000d26a544d7c14efce1771fe357bf781ff1780c2e6702f49a300001509b097cfacf1fe183772fc1342dce04e8b5600002424a899e435df8c3a71fe3d2853330945afdda11d1de610002444a89bede1efcfeb71fe3c49b6f000023407b8a010818a5148e1febc7a7bff9083ddd5df0bcda370a88ea8f0108a0683482f36707f0cf1fff02075a5be07a1ef703684f300001954ea770f9dd4b78ff9db710312d2e05684f300001d676a0159f7cf40b9c1938012104970254770c4080f95706baf1c9471fa2bbab73f59b855c0a50fd344900049af5311acb323170ea047ef5e17b4826e2bc4988ea6a9f07c03f10b4f6a0d1bc074566753fe0dc99535c0a505da9817397fed4e841ec8e402c1a415767272ccbf47fa8267b15b710fecf68452c8c8e8e63716965ed03a744bbd1140158291431f4f80946c727915f58845cfb82af6a9ad76e29a5904c26502a9731fc7414b6edf0e5a2b46bfb3a00b5b3a0ebba585a5ec1e8f824861e3fc1c3c1c798989c86ebbab02c13a66936c55b772ccb443c1ec7e8d80466e7e6d7fe3f20daa97d1d809a9fa6c31a95aa8d5c7e0163e3937834348cf18929680d442c0b96b5bf432084403c1685e338187afc14a572851f1ca15d698a0000fec121a55c9df24bb89e8742a188f1c9690c0e3dc1e4d40c94944826138858d6be9d3e1b8681783c8ea9e9194c4ecd406b34d57e07bd5e4d1380f56a31f00f0c8d62b184c9a9693c1e1e413ebf8044228e6422b16fdfc317b14c48293134fc042b85226701b4634d19809af521f03c8d954201a36313189f9c82e779c8a6d388c5a2fbeee0310c03d1680473f3398c8d4fc175bd7d3ba3a1c66aea00d4ac0f81e3ba989d9bc7c8e8384ae5325ab219a453c97d770059a605210486869e6079a5c05900ed48280250530b811040a158c2d8f81472f93c32e93432e9f4beda20544ac1324dccccce617c620aaec75900bdba5005a046acde2750a9563135fd0cd333cf904a25d1d6da0ad3341b3dbc6db34c139ee7e1d1e0300adc0ba01d08ed87418410300cffb55bf71e0ca254aea05aa9e2d2c5734825938d1edeb6589685fea37d78a3bf0fb3f339789e07a554a38745fb48286700353fdd3f2090cb2f60e6d91cd229ff239e8661ec8bb3a9691aa8566d3c1a1c46a552e532805e49a80300fcb41c0080fcc2229ecdcea3b5358b8e363f024167180622110b4f47c630fd6c76ed6722da0e9e2e56292521a5c4f0d351fcdbbf7f8e4743c3705db7d1c3da966c2683d3a78e23118ff149417a250cc03ab507871e0e0ee3cffff12546c726f6c501158fc77066e0243a3bdaa135f8d210da36066013a5245cd7c5cd7fdcc5175f7d83b9f95ca387f452524a74b41f40ff91c3300d635f448b828101d8a47675a0582ae1bbabd771edc63f502a951a3dac974a24e2387bfa245a5a32d05af3ad41b42d0cc0168410504a21975fc097fff53d86869f067e3f201289a0ff681f0e751d84106000685b1880e7a8ed073c1d19c337dffd80f9f97ca387f452a95402fd470fc3322dee03d0b630002fa09484ed38b876f3366edeba8352b9dce821bd50221ec7c9e3c790cda6b90ca06d61005ec05f0a48e4f20bf8e6fb1f3039391de80d36c330d075b073751920380ba09762005ea27667dde3e1515cfff13696570a8d1ed20ba59209bcd17f0496657206402fc5006c839402c552093fdeba8b9999d940cf021289388e1f3b8a6c86cb007a3906601bfc4788059e8e8ce3c7db77b112e059806118e8eaea44f7c14e082118007a2106609ba41428954ab875fb1e66e7e6033d0b88c762e8ede9866128ee03d00b3100db24a5040430323681bbf71fa1540aee1581782c86bede4388456340137f3189768f0178054248148a25dcbefb000b8b4b8d1ece73452c13bd3ddd686f6f85d6bc29889e8f017805fecb453d8c8c8de3e9c828aad56aa387b4252125b2d90cba3ada21a50cf472851a8b017805b517882c2c2ce1eefd475829141b3da4e78a462238d4dd8548c4022700f43c0cc02b9252a06adb7834f404b373f3d03a9867d748c442777727a29148537f39997687017845b5b70a3f9b9dc3d3913194cbc15c06589685aece0eb4b664010d2e03684b0cc08e08148a253c1a1cc64a2198f704082190cd6670b0a39db705d37331003b20a5ff45e291b171e4f20b813dbb5a9685b6b6d67df16e436a0c0660076acb80d9b91cc6c72761db76a387b4a568c4427797bf0fc0fb01682b0cc08ef9cf078c8c4da054ae347a305b320c036d075a9188c7783f006d8901d82121041cc7c1d8c4240a01bd1c580b404b4b060003403fc700ec9094025a03d3ab9f16731ca7d143da522c16436b4b961b81b425066087fc9b8280954209d333cf50a904f572a08903ad2ddc08a42d3100bb2250ae54303935836a4037024dc3407b5b2ba211abd143a100620076a1b60f303df30ce580be2fb03603884422dc03a09f610076c1df07d098cf2f607169193a80f70328a5d0dada82543201801b81b41103b00b420840004b8bcb989999452580cb002925128938329914243702691306609704044a950a6666e7027b4350c4b2904c24007e3084366100eaa05aade2d9b35954037a25c0344d64d22928c52b01b41103b04bb5ebebb9fc222ad560ce004cc340269386a154a3874201c300ec92940200b0b4bc8c6231a877042a64d36998a6013e1340eb3100bb248400a0b1bc5cc0e2e252203f22aa0c03c96402266f06a24d18803a29572ac82f2ec10ee02dc15208a492094463513e14441b3000752160db0e72f9053876f002a094422219473c166df450286018803ab11d078b019d0100fe4b42a391081f0aa20d18803a711c078b4bcb819c0100fea3c189441c009700f41306a00e6a1b818562118e1bcc004821118fc556c74ae46300eac0ff0827502c9602fb58b0321462b1e8da654b228001a80b21fc3f4aa5320ac562205f126a2885683402837703d23a0c401df8d36a814aa58a52a91cc8000821108d46b904a00d1880bad1a8da36560ac540de0c24a5402cca25006dc400d48dff7290426003a0108958300d13bc1d986a18803ad15ac3715c144ba5405e67afcd00046700b40e03502742009ef6502a95e005f083a142084829b807401b30007523e0382e0ac512ec00de0c2484402c165bfd4a1023403e06a08eb4d6b0ab3674009700420818868254125a6bde0d48001880bad25aa3542ec30be0c1559bfaf3dc4feb310075523bc082780f406d7c9669424afe23a79ff0b7a18e84f06f07769c80be1acc34f98520da8001a893daf300aee705f29160ff2a8084e27b01691d06a04e84a8dd0be0047213d01f247827206dc000d459b55a45a55a0de62ebbf63f14c27b01a88601a833d7f550ad5403b919b8fe2ec020f6895e3f06a08eb4d6fe25c0809e60d79ff9033943a1d78e01a82321045cd7f5f701827880057048d4580c409d0821200450ad54512c958339c50ee8cc841a8701a8335dfb97201e6c418c123514035027fefdf58d1ec54b04314ad4500c409dfc6c832d883508e090a8b118803aaa3520b09b809c01d0260cc01e703d2f90f7017006409b310075e6791eaad56a205f0bc619006dc600ec81404eff01ce00e867188030e10c80366100ea2cb0677f803300fa1906a0aefc5b81031b01ce00681306a0ce827a0b803fb8460f808286010813ce00681306204c3803a04d188030e10c80366100c2843300da84010813ce00681306204c3803a04d188030e10c80366100c2843300da84010813ce00681306204c3803a04d188030e117816893ff0665b4fcb71a3ffe470000000049454e44ae426082",
+  "iconColor512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000028e64944415478daeddd5f6f1b579ae7f1df880c65922259a234b62158b622c7de6c301ea43ddd99be9b8b790b7bb9d7fb3ae68dedc5decdf634d201d208b6659b9222b5a2c854b1f8af68d294bc17cc2917295214299255e4f97e80c0966ccb651b48fdce739ef39c7ff81ffff37f7d120000b0ca5ad40f000000168f0000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808592513f00300fddeed54cbe4e329988fa8f0200734100c04a09bff8dbedcebdbed6fa7a2af87a040100ab860080a57397d57d3299503299eefb5c269d96df6af57d3ffcb9db7eafdb7e4fc20180654400c052312fe261abfbf5f59492c98432e9de8b7f239b9153c8f7fd1cc7290cfdba9e57edffb85a53a3e94b92fc564bddeed5c8dfb3dbbd220400583a0400c4daa8957736db7bc90f7bd99b977c71d391246d6f156ffcfa62d191eb7a43bf76f9d20dbeef56bc201c78d59a24a9d1f483aac1a80a01810040dc1100105bc356ddebeb29e5731bc10bdf710a2a6e3adade2aaa587424499b8ea3423e77e3ebe536b2c1f7eb8da65e7df375dfc783aab5ba24a9e2799224d7f554be74835060aa047eaba56673701b21450800106b0400c4cae04a3abcd21ff5d2372f7cf382cf64d24aa552b7fe3e835b01c3b6067625753abd00e2fb2dd51b4d556b75553cefd63060fe1ce13f0b610040dc1000101b832bfef5f59432e9b49eec3c96e314f4f2abfdbe17bea4be97be31eee53f89f0d7ca64d2ca6d64f564e7715031180c04a5c36379d59a2eca970355012a0200e2850080488d5af13fdcde0a56fbe117ff939dc7775ae1cf9af9fdccb7a662f0a8d309aa03473f9f687babd817044c55808a0080b821002032831dfdd96c5a0fb7b7b4f76c57c54d472f5fec4f55de5f24f32ca63a60b6095ebed897eb7a3a785bd2d1f1495f4580930300e2800080851bb6ea37a5fefd2f9f697baba8e7fb7b91adf62715ae0e384e41bbea1d2b3c3d3b97d43b8d10de1a183c3940100010050200226156fdffb85d0c5efc66c5ff64e7b1a4f8adf62791c9f402cd939dc73a3d3bd7cb17fb3a785352e9f058a767e77a5fee1d355c5f5fce3f1f80e54700c0c28457fee172ffcbaff6f57c7f4f857c4e8f1e6e2fed4b3f2c954af56d0ff87e4b9b4eefe48213da1608f706500900b04804002c44b8c37f70d5bff77457b98dec52aff86f63fe4c4f761eab90cfe9f9fe9ede958ef4a73fffa5af1ac04901008b4400c05c8d5bf59b237eabce54041ca7a05c68ec30d50000512100606ec2ab7ef3f27ffdedab1bab7edb384e41994c5a857c4ec5a21334091ebc3b0ccd0ea01a0060be0800980bb39235a37b4dc9ff5ffff07a69bafbe729954a69f7c98e721b596d3a4ef0f9d3b373d5ea0d49e2a82080b94a7cf3cffff21f513f04568b59f9279389e0e5ffddef7fa757fff4df79f90f585b5b53fac103ed3ed9d1dada9a128984aab5bada9d8edaed8ed6d6d6b4b6b616f56302584154003053832bff7ffae6bfe9e557fb7afdedab95e9f09fa5706f40d8d1f189cece2f24510900301f0400cc8c59f9875ffe7ffceeb5f69eeef2f2bf83470fb7f5fadb57c1ad869274767ef15b1f053d0100668b00809918b5f2df7bbaabdd273b513fde5208f70584510900300f0400dcdbb8953f2693c9a4f5ea9baffb3e472500c0ac11003033acfc67c3f405844340a3e9eb7dbb3730884a0080592000e05e4ce93f9bedcdbe67e53f3b839580bffef437d5ea0d2a010066820080a999d27f369bd6cbe75feabbdfff8e95ff0c994ac0ded35db9ae17dc30682a0100701f04004c25dcf4f7707b4bdffdfe777abebf77a3810df7674e074892fefc170605019809020026165ef99bd9fecff7f7f4f2ab2f39ea3707a9544a8f1e6eebf9fe9eca97aebc6a4d17e5cbdfc606b31500603a8c18c3d432e9b4f69eedea8fdff5c6fbf2f29f9f542aa5273b8ff5f2456fa852266ddf1d0a00668b0a0026122efd3fd9791c74fcdb78a9cfa2859b024b87c7f25bade00641aa0000264500c09d0d96fef7bf7ca6e7fb7b4cf95b10f377bcf77457fb5f3e93a4d00d826c0500980c01001333a5ff972ff629fd2f582a95526e23ab972ff625f56e0ffc7c853000dc1d01007742e93f3ed80a00300b3401e24e7ac367a49dc70fe538054aff1132b7076e3a8ef6bf7ca687db5b4a26136ab73b4150038071a800602cf352c9e7367aa5ffaff655c8e778f947ecc9ce63555eeccbad786a347db602004c840a00ee6c239bd1cbaff619f813237b4f7b816c239b89fa51002c192a00b85578d6bf53c8ab5874f464e7317bff31e0380549d2f3fd3dedbd2da9d1f455ab37827f33fa0100dc860a004632c7fe92c94470ec6fefe9ae1ca740f93f261ca7a0423ea7e2a6a38d6c26e805008071a800602c73ec6f7bab18f5a36008732c905e000093a00280b136b21915371df6fe632a93496bd371e8050030110200860a9ffb770af960e80f7bfff1f464e7b18a45474e21af6cb6f76fc4914000b72100e056f9dc4670e63c9349b3f71f43662e80e9cf085f14440800300a010037849bff4cf99f73ffcbe1e557bd4a0dcd8000c6210060a470f31f7bfff197dbc8f6b60106aa0000300c0100b732cd7f580e9b8e131c090480db100030d24636a3edada20af91ccd7f4b209349ab90cf697bab28a7908ffa7100c41c01007d06bbff8b4587f2ff9248a5527af4703ba8d8701a00c06d0800188aeeffe564fe9d380d00601c02000274ffaf06460303b80b020086620f79b9d10700601c02004662f6ff72e2382080bb2000e0864c3a2dc729d000b8e48a9b4ed48f0020c6080018aab8e968d371a27e0c4cc9fcdb310f00c0280400dcc04b63b985e70100c02804000cc5002000586d04006005058d8085bcd6d739c609e0260200fa30017075310c08405832ea07403cf072581d83839b92c904ffbe006ea00200aca84da7370b0000862100a04f3299e8fb9831c0cb8f61400086210060287309100060351100700365e3e537aa72432f00008300000080850800b8c1f3aa513f02eea9d3197e05f0608f07007b11003054c5f3a27e0400c01c11003092efb746ae24b13cfc562bea470010430400f4a1496c35f87eefa5cf760e8051080090c4def02a621b07c06d0800e8d36e77e4556b725d4ff54633eac7c11406b76da8ea0018860000aca07aa329d7f5e4556b6ab77b81802a0f8030020046aad6eac15e320060b510007043a3e9ab7ce946fd189892efb754add5a37e0c00314700c0506ec5a3896cc9952f5d359a7ed48f0120a6080018c975bda81f0153aa789edc8a17f56300883102006ef05bade0fc382701964fd000e8551902046024020086f2aa35fa009618ff7600c62100a0cffa7a4addee951a4d5f6ec5a3996c49b9154fa767e7927affa6003088008040f89cb8d906a878bd523277022c874ea7138436bfd50a8600310300c0200200fa981745b3d96222e092e9743af2fd5610da78f903b80d0100b72a5fba0c045a22a767e737260002c03004008c64fa009807b01cccea9ff3ff00ee820080914c1fc0c19b12db004bc01cff2b1d1e73fc0fc05804000c654e039c9e9d731a6089942f5d79d55ad48f01600910007003a701968fe75555add5e5563c5d942fd5ed5e697d3d45032080910800186ad8690073ae1cf1d2e974546f34f5ae74a4a3e313359bbdf23f2f7f00b7210060ac46d3d7c1db922a9ec7698018f2fd968e7e3ea1f90fc044080018cb6fb574747c4233604cd1fc07601a0400dc6ad86860fa00e2c34cfe3b785bd2e9d979b0f70f00e310003052329908f691df975d1d1d9fe85de948bf5e94090131d0e974f4eb4559ef4a47f2bcaa6af546f063ecff03188700803b33bd00473f9fd00b1003e1bdffd3b3f360f21f2f7f00774100c09dd10b102ff54653076f4aecfd03984a32ea0740fcf55694bd5e808bf2a54a87c73afaf944b98dac3299b45229f69c17c96cbf1cfd7c125cfbcbde3f80495101c09d0cce053878d36b3a632b60f17cbfa583b7873a7853d2d1f189de975d49fd3d1b00300e15004ccc540124a9f0efff461560c1ccd09fd2e1b12eca97513f0e80254500c09d85b7020ede1d4a52b01520891030679d4e2768fce3d81f80fb620b0053612b60f17cbfa5d3b3734aff0066820a0026924c26d4ed5e49ea6d057cffc38fbd1ff8c36bb602e6acde68eafffed7f794fe01cc040100131b762a607baba8423ea7470fb7090133162efd970e8f75f0ee90dbfe00dc1b5b00984af854c0e9d9b90ede96f4fd0f3fb2153007bedfd28f3ffd3ffde79fbed7e9d939b7fd0198092a00b8b75abda1bffef4374952b1e8e8d5375fb31d300366e57f7a76aefffcd3f73a3a3ee91bf70b00f74100c0d4cc5680d40b0147c7272a6e3a92a457df7c4d00b827b3f2374d7f67e7179244e91fc04c1000702fa629b0ddeef45e50bf35056e3a8e245109984278e56f46fd5e942fd56e7778f90398190200ee2d5c09088780ca8b7d2a015308affcbfffe1475d942f69fa0330730400cc049580fb1bb5f26f365bbcfc01cc1c01003333ac12e0563cfdf1bbd75402ee80953f8045220060a66e540242f69eee322760884ea7a35f2fcabd11bfbfbdfccfce2fd8f30730570400ccdc6025a0d1f42549aeebe9f9fe9e5e7ef52521e037e6e5fffd0f3feae02dddfe0016870080b9085702deb75dfdf5a7bfc9f3aac18fdb3e3530bcdfffae74a483b725fdf5a7bfa9566fb0f207b0100400cccde09c80d3b37379fffbff68ef6d497ffceeb524591902064bfea5c3639d9e9d07437e78f90358040200e62a3c32f87ddbed9b6467b6049eec3c56269396b4ba570a773a1d49bab1ea3725ff76bbf7e3bcfc012c0a01000b11beb3def405785e55e54b57efb68a7afded2be536b22b1b00240d5df5fbad56dfdf0f2f7f008b4200c04298175bb82fa0566fc8abd6b4f76c5792f47c7f4ff54653b98dec4acc0d30fbfcf54653d55abd6fd56fcef74bacfa0144830080850af705489fab0147c727da7b5b5271d3d1cb17fb4b7f6430bccfefba5ef0e26f347df9ad5670befff3df09002c1601000b37ac1af0beecaad1f4f564e7b1a4cffd01857c4eb98daca4784f1334ab7d497d2bfef2a5dbd7e4c75e3f80b82000203283d5805abda18377873a3d3bd74636d35711d8749c201cc42d04848ff4553c4f076f4a722b9e3caf1aecf377bb5792d8eb07101f0400442a5c0d907aa7059acd966af5465011702b9e8a9b8e2abf0581423e27497d950169fec120dcc92ff556fa9254add555f1bca0d46f5efc832bfef09f1700a24600402c98c141e1d302b57a433ffdedadf2b90d6d64332a1d1ecb710a2a6e3adade2aaa5874824060c2c0bc42c060439f79e1972fdd60b5ef556b7d7bfc52ffe9075efe00e2840080d808bf20cd0b34dc23b0be9e0ac28053c80f0d0392820a8161c2c124ccea5eeaadf025ddfad20faff62556fc00e28f0080581a5611907a5501bfd5d245f95299745a1bd98c24058140928a9b8e24697babd8fbb8e8f47d8d4dc751c5f3826f07b96eef73e54bb7f771a5f7b179e14b0a56fa9286aef6cd9f0100e28a0080d81a7c8186fb04ccb7efcbbd97b4e9aa37a1c029e4832d03c3048351cc8b5e52706fc160593fbcca3758ed03584604002c8d515501a3dbbd92df6a05150223934e4ff4fb98957df8eb9a97fba8df9b973f80654300c05219f5a235d58161ab74533198d6fa7a2af8fabce801ac0a02005642f838e1b055bab962d77c3beef3a3be3e00ac0a020056caa817753299eefb76dce70160d5ad45fd00000060f1080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808508000000588800000080850800000058880000008085080000005888000000808592513f00fa75bb5713ff9a643211f5630300960c012046cccbbfddeedce9e7afafa7fa7e1d4100007057048098c8a4d392a48d6ca6eff38da6dff7b1df6af57d1cae188cab1e1010000006012062ddee55f0627eb2f358fb5f3ed3f65631f8f1f2a52b49722b9e24c9f3aabd6fab3549bd80604241b77b35a67ad0ab18100400000480088557ec1bd98c1ca7a07ffdc36b15f2394952b556d7f3fd3d553c4f92e4ba5ef0f3ef120ca4fe8a81f9fd6eab14100e00c00e048088b5db1d2593bdf27f71d391243d7ab82d49ca6d6425f52a0346bdd1ecfbf5d55a5d92fa4242381c848381a9168caa14acafa7fa2a120080d545008850329950bbddffb9423ea754aa57aa37df86394ea1efe35d499d4e47bedf5be9d71b4d556bf53b0702497d5b08e16f873d2f00603510002234cd91bf61c2412193492bb7910daa06e18ac1b0606042c1b80a01d50100582d0480080dab004c2b1c02c2df0f570cc2d58270a560300c48fd5b06d2edd5014201002c1f02408466550198542693eeab14982ac1b00a41e9f0b82f0c349bfdc710a90c00c07222004468961580bb1a56293055025321f8f5a2ac4dc751b1e8687bab3874ab4052b05d20dd0c330402008837024084a2aa00dc26954ae9d1c3ed91d581c1ed82d3b373d5ea8d21a70a528400008831024084a2a800dc452a951a5a1df0bc6ad03bf0ae74a4f2a52bc729dc6822947ae186aa0000c41701204271ac00dc6658ef40b83270f0b61484818bf2655fbf00bd0200102f048008c5b50230cae07c02c729e8d16fa70a4ecfce552c3a4110700af91b470ba5fed043180080e8100022b46c1580614c1878f9d597c1f14233be385c1518de2b409f000044850010a165ab008c12ae0c84ab02f54653c5a2a38337a5be5e818bf2a5a49b7d02840100581c02408456a102308c0904a65f60efe96ed02b70f0a614cc1618ec13a02200008b430088d0aa540086195515d8743ecf16080701898a00002c12012042ab5a0118259349ebc9ce6315f239556b75bd7cb1af833725b9154f47c7277d15014e0d00c07c110022b4ca158041831501335760d371f4ae74a4e2a6d35711183c3540100080d9220044c8b60ac0a0511581d2e1f1905303f40700c02c1100226453056018337170588f80133a3e68e608d01f0000b343008890ed158030b345602a02cff7f7f4ae7424e76d89fe000098030240846caf000c1aac0814f239158b4ed01f10ae0648f40700c07d100022440560b4f0ad849b8e73a33fe07dd995d4ab06000026470088101580db998a4026930efa03a4de1d04665b80de0000980e0120425400eea6af3fe0dfff4d473f9ff46d0b500d0080c91100224405e0eec2fd01665bc09c1618560da0120000b7230044880ac074c2f303c24d8207ef0e43770b303700006e430088101580e9847b034c35c018363780200000371100224405e07e86f5061cbc29e9fb1f7e1cb869906a00000c220044880ac0fd0df60618e171c292181c040003080011a202305b994c5aafbef9baaf41f0af3ffd2d3825402500003e230044880ac06c857b030af95cf0794e0900c04d0480085101989f470fb7f5fadb57c12901fa0200a01f0120425400e6c33407ee3ed9e93b25405f00007c460088101580f9333303f487d7dade2a4a7ffe4bdff4402a01006c450088101580f91bd617609a03a90400b01901204254001627954a29b7910dfa02a45e73e0d9f985daed8ea80400b00d012042540016cb710a729cc28dcf9f9d5f48a21200c02e048008510188c6a387dbc1d0a0e2a623fdf023950000d6210044880a40344c5fc0ab6fbefefcc9df4280442500801d080011a202102dc72904930325497db302a80400586d0480085101889ee909a8bcd897a4dec0207d9e1a480800b0aa080011a202100fe13b04a45e08a02700c0aa230044880a403c989e00e97325809e0000ab8e0010212a00f132ac27804a008055450088101580f819ec09a0120060551100224405209e4c4f8024b9154f92a804005839048008510188a76173021a4d5fefdbbd0b84a804005805048008510188b770254052708110950000ab800010212a00f1662a017b4f77e5ba9e3cafdabb4ab8eddeff8b0340c4080011a202b01c1e3ddcd6eb6f5ff53ef8f35fb84618c04a588bfa016cc6cb6339a452293d7ab8ade7fb7bdafff299761e3ffcad7ad321c401585a540022c4cb6379a452293dd9792cfde1b5a4deb4c0c3e6a9242a01009613012042f4002c974c26ad273b8f5579b12fb7e2a9d1f4d90e00b0b4080011a202b05cccb860d31428f54e06bc2fbb5a5f4f45fd78003011024084a8002c1fd30f609a023daf2abfd5e2f640004b8726c0085101584e834d810fb7b7680a04b07408001162b5b8bc4c53e0cb17fb7afded2b65d2e9a81f090026c2164084582d2eb7f0a4c0d2e1315b0100960a012042f4002cb7f0a4c0ef7eff3b49d2c1bb43359b2d312a1840dcb10510212a00ab21b791edeb070080654005204254005683e31424e9c67c0013f0a8040088232a0011a202b03a1ca7a0bda7bb7af9d5be9eec3c0e4e0500405c510188101580d562b60224c9abd618150c20d6080011a202b05acc568024edbd2d055b01bd4a004d8100e2852d0060861ca7a0423ed7b7150000714405206266867ca3e9cbad78aad6ea7ad4e90473e7b17c466d0500409c100022944c26fab6013cafaa77a5a3e0e3423ea7dc4656526fe80ca1603904a7023c4f7bcf76fb4e055011001017896ffef95ffe23ea87b0d9f5f527adadade963b7abd687b64e4ecff4f6dda17cbfa56aadae7aa3a18f1fbb4a3f78a0b5b5352512bc4096c183070fb4f60f6bea743eaa5e6fa852adaad56a6b6d6d4d6b6becbc01881e012062e665d0ed5ea9dde9a8f5e1832e2b9e6ab5ba2edd8aca9715b96e4557d757f2fd0f6ab73bfa747dad0f1fda048298fb747dad643229df6fa956abcbabd6944c2608000062810010136b6b6bbabefe14fc576f3455a95655f1aaba742b3afdfb2f3afdfb2f3afbe557bd2f5f2a994c521588b9b5b535a51f3cd0d5f5954efffe8bea8d46f0ef4b0800103502408c98f2f0f5f527b5db1d7dfcd895efb7e4556baa7855557fab0a5c5d5f0fad0a1006e22591e8adf6bf487e21f7b7aa4eebc307b60200c402012086cccb21994c04ffb5db1d5d5d5da9f5e1c38daa40a7f351c96452ddee95d20fd6090131924824f4e9fa5a57d7576a347d55bcaa7cbfc5560080c8110062ca8480f07f92d46ab583aa40bdd150c5abaa5e6fc8f75b4a2413540462c854013a9d8f3a393d53ebc30749622b0040a408004bc26c0d84ab02d7d79fd4ee7454a95675f6cbafbab828f75504e81188874422a1f483757dfa24952f5d556b75b53bbd7b02080100a242005822831581c15e01d327602a0257d757fa22f905d5801848247adb3883c702d90a00101502c0121bec1590a476a7a376a713f408b8152f0802f407448b638100e28400b0e4865504c23d02b55a5d8da6af8d8dac7cff83525f7c4135202283c7022b5e5512db0000a241005821831581ebeb4fc1a9818b8b72dfb600d580c533c7027dff837cbfa546a3a97aa3a976bbc3b140000b47005831e16a80f4f9d440c5abaad168aad1f4d5e97cd4a74fa21a10814422a1d4175fe87df95257d7d7aad6ea1c0b0410092e035a519f2f9df97c81d045f9528da62fcfabaa7ce9aaf2625fafbef99a4b8622606e0b3c3a3ed1fbb21bf5e300b0100160c59920d0ed5ea9d96ca9d96cc96fb5fa7eceded35d3d7ab84d105890f06d814e21af6c36ad6ef78adb02012c145b009608f7075c5f7fd2fb4bb76f4b209fcbd117b040e15e00460403880201c022e1de8076bb23af5a53b3e9ab5e6f686d6d8dbe80051aec056044308045230058267c6c30994c047303ccf0a07c3ec704c105f9f0a1ad643229d7ade8d2ad301700c04211002c353837c09c12b8bebe26042c0873010044890060b1b5b535a5525f7cbe68e8c307d56a75952f5da5525fa8e8388480390acf0538fdfb2fc11d01cc0500b0080400f4cd0cf0aa35fd83a4542ac5d0a005187647c0c78f5db60200cc1dc700d13733a0ddeee8a27ca9ef7ff8516ec59324e536b2bd1fe598e05ce436b22a161ded7ff94ca767e76a365bf7ffa20030060100815e1048a9d96ce9b0792a492a6e3a92a457df7c2d8910300f994c5a7b4f77e5ba9e36b2190603015808b600d0c7ec3d5f5d5de963f7637099d0a387ff4863e09c241209a51facebd327a97ce9aad9f4d5ee7468060430570400dc604240b827207c3ae0c18307513fe2ca31bd0067bffcaa4bb7c2602000734700c050c32a01260438853c558039f8747dcd6020000bc3ff5930523299d0fa7aaf27e0ecfc42a5c363bd2b1de9d78bb23a9d4ed48fb7929eefefa9b8e968239b89fa5100ac382a00b895a904b4db1d5d5d5d056383f3b99c0af95cd48fb752180c0460913805803babd51b3a3d3b97f3b6a462d1516e23ab4c26cdc98019317f8f9b8e23c729289fdb50adde90246e0a04307304008c658e074ad2fbb2aba3e393bee3810480d949a5522ae473c13680dfea5de1bcbecedf3180d92200e04e92c984badd2b49d2d9f985f4c38f927aab55aa00b395dbc86a7baba8bd67bb6a347d060301980b36167167a62950922eca973405ce11cd8000e68d26404cc4cc07f8f8b1ababab2b2512096d6c6455741ce603ccc8dada9abadd2b2592099a0101cc0d5b0098d8fa7aefce805abda1a3e313496c05cc522a95d2a387dbaad6ea379a01016056584e6062e1ad80c3e353795e95ad80191b6c064c267b93024d1f0600dc17010053091f493b3d3bd7c1db928e7e3e91efd3b0364bdb5b4539857cd48f0160051100706f662be0e04d49a767e7540166247c4d70269d8efa7100ac180200a616de0a6054f0ec996b82b7b78a9c060030730400dc8bd90a68b73b3a3d3b57f9d2652b60864c15c029e483b0451f00805920006066fc564bdffff0a30ede94546f34a37e9ca5974aa594c9a4fb46031b840000f74500c0bd99ad806ef72a181074f4f3893cafca56c03d8d3a0d0000f74500c04c98ad8066b325af5a0b1a02d90a980d331a18006685008099bb285fcaad787a573a622b60064c1f4071d3e1340080992100602e8e8e4f54be7455add5a37e94a5c7690000f34000c0cc847b01ccb1c08ae7d10b30039c0600306b0400cc54f85820bd00b371db6900009816010073432fc0ec7037008059230060ae4c2f006683bb0100cc0a010033c75c80f929167bdb009c0600705f0400ccc5e05c00d7f5e805b8a7dc46569b4eef382000dc17010073d768fa3a785b52c5f3a27e94a596c9a455c8e7380e0860260800983bbfd592e755b9236006380e0860560800982bd30b707a762eb7e2a95aabd30730258e030298250200e6c6f4014852adde90e75555f13cf97e8b1030258e030298150200e68ac140f3c3714000f74100c0c2349abedc8a4733e03de536b2bd79001c0704700f04002c0ccd80b3636e070480691100b0103403ced6a6e3701c10c0bd10003077e166405305a019707a661e0000dc0701000b316c3220db00d349a552cc0300706f04002c5ca3e9ab7ce9eae8e7134e034c69d43c00420080bb220060e1fc564b6ec5a30a700fa3e60100c05d11001009ae099e1de60100980601000b654e039899009c06b89fedad62d48f0060491100b0309c0698ada01190814000a64000c042711a60b6361d060201980e01009131a701aab53aa701a690c9f456fd0c0402300d020022c5dd00f7c3402000d322002032a60f806d80e9311008c0b492513f00ece6556b1c079c522ad57be19b8140c96482973f803ba30280480c3b0e88c9991020a9ef24004100c03804002cdca8e3809e57e538e014980808601a04004482e380b3c74440009320002036380e389ddc469689800026460040e4cc3c008e034ea7de68321110c0c408008805733b202697dbc84a121301014c840080c899464049f4014c69d3712489898000ee8c008058601ec0f43299b40af91c7d000026420040a4ccf43ae601cc06270100dc15010091314701bbdd2bf9adcfddffcc02989c19092c8991c000ee8451c088856ef72a1808648e0286a7dc61344602039806150044ca5401daed0e0381668491c000ee820080d86120d0e44c15203c1218006e4300406c3010e87e0af95cdfc7dc0900e0360400c48a5bf1a27e84a5c7490000774100406c988140f4014c8f590000ee8a0080d86120d074cc4860ee040070170400c48a57ad45fd084bcdcc02008071080088052602ce0e970201b80b020022179e0818c644c0c9994b8100601c020062c5340272147072994c6fdf7f7babc8ad8000c6220020168655017cbf4515604283b3000060140200628591c000b01804006085985b019d423e68ac048061080088a5f2a5cb9d0033c285400086210020761a4d5f9268049c502a955226930e4e0270211080db1000104bdc09703f4c0304300e0100b1e5ba5ed48fb074ccb5c083d8060030880080d831b300247112600ae1a3806c030018850080d8e252a0e915379d601850bbcd2c0500371100104b5c0a0400f3450000569453c847fd0800628c008058595f4fa9dbbde256c07bdade2a46fd0800628e0080d8a0610d0016870080d8e8bb08a8f579022017024d26b79195d49b050000a31000101b831500732d30e380a7c7302000a31000102bc3ae0596a8024caa5874a27e04003147000000c0420400c452bbdd9157adc9753da6014ea9b8e944fd0800628c0000ac20732320008c420040ec556b751a010160c608008835ee03b81f731f00000c220020b61a4d3fea47584a994cefe81fd30001dc860080d8ab785ed48fb074c2570203c0300400c44ef8fa5ab7e245fd384b877e090077410040ecacafa7a27e84a566b60000e0360400c49eeb7a513f0200ac1c020062cb6fb5e47955496218d0148a45474e211ff5630088290200b082cc8d80125b2a00862300000060210200628f6140b33178c32200bb1100106b5eb516f52300c04a2200002b2695eadff34f2613513f1280182200000060210200628715ebfd743a1d653269ae0406702b020062a7dbbd0a8eae359a3ee3802734b8050000c31000b014aab57ad48fb054cc7d008e5388fa5100c4140100b1c5b1b5e9711f0080710800889d513d009d4e67c2af04001885008058f35b5c6d0b00f3400000565c26cd7600809b0800883d7323200060760800580a15cf0b3adb0100f74700c052a11110006683008058e328e074460d03e2ef138041000000c0420400c45abb4dc91f00e6810080583377026032f44a0018870080580a4f03f4aa354952bdd18cfab196061702011887008058335b00aeeb45fd2800b0520800000058880000ac207a00008c43000056103d0000c621000000602102006289897500305f0400c452f8182026470f0080710800c00aa20700c03804002c8d6aad1ef52300c0ca2000000060210200b082e80100300e01004bc5f75b513fc252a00700c03804002c85f2a51bf52300c04a2100000060210200b082e80100300e01005841f40000188700000080850800000058880000ac207a00008c43000056103d0000c6210020f61a4d3fea4700809543000000c04204006005d10300601c0200b082e80100300e010000000b11000000b01001005841f4000018870000ac207a00008c43000000c042040000002c44000056103d0000c62100002b881e0000e310000000b010010000000b11008015440f0080710800c00aa20700c038040000002c44000000c04204006005d10300601c0200b082e80100300e010000000b11000000b01001005841f4000018870000ac207a00008c43000000c042040000002cf4ff01b539cb79e31d9b8c0000000049454e44ae426082",
+  "installJsonc": "{\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

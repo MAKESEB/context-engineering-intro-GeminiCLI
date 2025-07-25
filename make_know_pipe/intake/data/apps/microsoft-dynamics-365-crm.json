@@ -1,0 +1,1477 @@
+{
+  "rev": 19,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "{{connection.host}}/api/data/v9.2",
+    "headers": {
+      "authorization": "Bearer {{connection.accessToken}}"
+    },
+    "response": {
+      "error": {
+        "message": "[{{statusCode}}] {{parseError(body)}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "microsoft-dynamics-365-crm",
+  "_rpcs": {
+    "parseURL": {
+      "api": {
+        "response": {
+          "output": {
+            "help": "Enter a path relative to `{{connection.host}}`.\nFor example: `/api/data/v9.2/WhoAmI`.",
+            "name": "url",
+            "type": "text",
+            "label": "URL",
+            "required": true
+          }
+        }
+      },
+      "rev": 2,
+      "name": "parseURL",
+      "label": "Parse URL",
+      "appName": "microsoft-dynamics-365-crm",
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"help\": \"Enter a path relative to `{{connection.host}}`.\\nFor example: `/api/data/v9.2/WhoAmI`.\",\n\t\t\t\"name\": \"url\",\n\t\t\t\"type\": \"text\",\n\t\t\t\"label\": \"URL\",\n\t\t\t\"required\": true\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "microsoft-dynamics-365-crm",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listLookupMetadata": {
+      "api": [
+        {
+          "qs": {
+            "$filter": "LogicalName eq '{{parameters.logicalName}}'"
+          },
+          "url": "/EntityDefinitions",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "LogicalCollectionName": "{{get(body.value, '1.LogicalCollectionName')}}"
+            },
+            "output": null
+          }
+        },
+        {
+          "url": "/{{temp.LogicalCollectionName}}",
+          "method": "GET",
+          "headers": {
+            "Prefer": "odata.maxpagesize=100"
+          },
+          "response": {
+            "temp": {
+              "target": "{{parameters.logicalName}}"
+            },
+            "limit": 300,
+            "output": {
+              "label": "{{item.name || 'Entity ID: ' + resolveLookupItemID(item, parameters.logicalName)}}",
+              "value": "{{temp.LogicalCollectionName + '(' + resolveLookupItemID(item, parameters.logicalName) + ')'}}"
+            },
+            "iterate": "{{body.value}}"
+          },
+          "pagination": {
+            "url": "{{body.`@odata.nextLink`}}",
+            "condition": "{{ifempty(body.`@odata.nextLink`, false)}}"
+          }
+        }
+      ],
+      "rev": 2,
+      "name": "listLookupMetadata",
+      "label": "List Lookup Metadata",
+      "appName": "microsoft-dynamics-365-crm",
+      "apiJsonc": "[\n\t{\n        \"url\": \"/EntityDefinitions\",\n        \"method\": \"GET\",\n        \"qs\": {\n           \"$filter\": \"LogicalName eq '{{parameters.logicalName}}'\"\n        },\n        \"response\": {\n            \"temp\": {\n                \"LogicalCollectionName\": \"{{get(body.value, '1.LogicalCollectionName')}}\"\n            },\n            \"output\": null\n        }\n    },\n\t{\n\t\t\"url\": \"/{{temp.LogicalCollectionName}}\",\n\t\t\"method\": \"GET\",\n\t\t\"headers\": {\n\t\t\t\"Prefer\": \"odata.maxpagesize=100\"\n\t\t},\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"target\": \"{{parameters.logicalName}}\"\n\t\t\t},\n\t\t\t\"limit\": 300,\n\t\t\t\"iterate\": \"{{body.value}}\",\n\t\t\t\"output\": {\n\t\t\t\t\"label\": \"{{item.name || 'Entity ID: ' + resolveLookupItemID(item, parameters.logicalName)}}\",\n\t\t\t\t\"value\": \"{{temp.LogicalCollectionName + '(' + resolveLookupItemID(item, parameters.logicalName) + ')'}}\"\n\t\t\t}\n\t\t},\n\t\t\"pagination\": {\n\t\t\t\"url\": \"{{body.`@odata.nextLink`}}\",\n\t\t\t\"condition\": \"{{ifempty(body.`@odata.nextLink`, false)}}\"\n\t\t}\n\t}\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "microsoft-dynamics-365-crm",
+      "altAccountName": null,
+      "parametersJsonc": "[]"
+    },
+    "listEntitiesRecords": {
+      "api": [
+        {
+          "qs": {
+            "$filter": "LogicalName eq '{{parameters.logicalName}}'"
+          },
+          "url": "/EntityDefinitions",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "LogicalCollectionName": "{{get(body.value, '1.LogicalCollectionName')}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] Entity name is not defined."
+            },
+            "valid": "{{length(body.value) === 1}}",
+            "output": null
+          }
+        },
+        {
+          "url": "/{{temp.LogicalCollectionName}}",
+          "method": "GET",
+          "headers": {
+            "Prefer": "odata.maxpagesize=100"
+          },
+          "response": {
+            "limit": 300,
+            "output": {
+              "label": "{{item.name || 'Entity ID: ' + resolveLookupItemID(item, parameters.logicalName)}}",
+              "value": "{{resolveLookupItemID(item, parameters.logicalName)}}"
+            },
+            "iterate": "{{body.value}}"
+          },
+          "pagination": {
+            "url": "{{body.`@odata.nextLink`}}",
+            "condition": "{{ifempty(body.`@odata.nextLink`, false)}}"
+          }
+        }
+      ],
+      "rev": 2,
+      "name": "listEntitiesRecords",
+      "label": "List Entities Records",
+      "appName": "microsoft-dynamics-365-crm",
+      "apiJsonc": "[\n    {\n        \"url\": \"/EntityDefinitions\",\n        \"method\": \"GET\",\n        \"qs\": {\n            \"$filter\": \"LogicalName eq '{{parameters.logicalName}}'\"\n        },\n        \"response\": {\n\t\t\t\"valid\": \"{{length(body.value) === 1}}\",\n\t\t\t\"error\": {\n\t\t\t\t\"message\": \"[{{statusCode}}] Entity name is not defined.\"\n\t\t\t},\n            \"temp\": {\n                \"LogicalCollectionName\": \"{{get(body.value, '1.LogicalCollectionName')}}\"\n            },\n            \"output\": null\n        }\n    },\n    {\n        \"url\": \"/{{temp.LogicalCollectionName}}\",\n        \"method\": \"GET\",\n\t\t\"headers\": {\n\t\t\t\"Prefer\": \"odata.maxpagesize=100\"\n\t\t},\n        \"response\": {\n            \"iterate\": \"{{body.value}}\",\n\t\t\t\"limit\": 300,\n\t\t\t\"output\": {\n\t\t\t\t\"label\": \"{{item.name || 'Entity ID: ' + resolveLookupItemID(item, parameters.logicalName)}}\",\n\t\t\t\t\"value\": \"{{resolveLookupItemID(item, parameters.logicalName)}}\"\n\t\t\t}\n        },\n\t\t\"pagination\": {\n\t\t\t\"url\": \"{{body.`@odata.nextLink`}}\",\n\t\t\t\"condition\": \"{{ifempty(body.`@odata.nextLink`, false)}}\"\n\t\t}\n    }\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "microsoft-dynamics-365-crm",
+      "altAccountName": null,
+      "parametersJsonc": "[]"
+    },
+    "listEntityParameters": {
+      "api": [
+        {
+          "qs": {
+            "$expand": "Attributes"
+          },
+          "url": "/EntityDefinitions(LogicalName='{{parameters.logicalName}}')",
+          "response": {
+            "temp": {
+              "items": "{{filterEntityParameters(body.Attributes, parameters.type)}}"
+            }
+          }
+        },
+        {
+          "response": {
+            "output": {
+              "help": "{{resolveParameterHelp(item.Description.LocalizedLabels[].Label, item.DisplayName.LocalizedLabels[].Label)}}",
+              "name": "{{resolveParameterName(item.LogicalName, item.AttributeType)}}",
+              "type": "{{resolveParameterType(item.AttributeType, item.LogicalName)}}",
+              "label": "{{ifempty(item.DisplayName.LocalizedLabels[].Label, item.SchemaName)}}",
+              "options": "{{resolveParameterOptions(item, parameters.logicalName)}}"
+            },
+            "iterate": "{{temp.items}}",
+            "wrapper": [
+              {
+                "name": "properties",
+                "spec": "{{output}}",
+                "type": "collection",
+                "label": "Entity Properties"
+              }
+            ]
+          },
+          "condition": "{{parameters.type == 'create'}}"
+        },
+        {
+          "response": {
+            "output": {
+              "help": "{{resolveParameterHelp(item.Description.LocalizedLabels[].Label, item.DisplayName.LocalizedLabels[].Label)}}",
+              "mode": "{{resolveParameterMode(item.AttributeType)}}",
+              "name": "{{resolveParameterName(item.LogicalName, item.AttributeType)}}",
+              "type": "{{resolveParameterType(item.AttributeType, item.LogicalName)}}",
+              "label": "{{ifempty(item.DisplayName.LocalizedLabels[].Label, item.SchemaName)}}",
+              "options": "{{resolveParameterOptions(item, parameters.logicalName)}}"
+            },
+            "iterate": "{{temp.items}}",
+            "wrapper": [
+              {
+                "name": "properties",
+                "spec": "{{output}}",
+                "type": "collection",
+                "label": "Entity Properties"
+              }
+            ]
+          },
+          "condition": "{{parameters.type == 'update'}}"
+        },
+        {
+          "response": {
+            "output": {
+              "name": "{{resolveParameterName(item.LogicalName, item.AttributeType, parameters.type)}}",
+              "type": "{{resolveParameterType(item.AttributeType, item.LogicalName, parameters.type)}}",
+              "label": "{{ifempty(item.DisplayName.LocalizedLabels[].Label, item.SchemaName)}}"
+            },
+            "iterate": "{{temp.items}}"
+          },
+          "condition": "{{parameters.type == 'interface'}}"
+        }
+      ],
+      "rev": 2,
+      "name": "listEntityParameters",
+      "label": "List Entity Parameters",
+      "appName": "microsoft-dynamics-365-crm",
+      "apiJsonc": "[\n    {\n        \"url\": \"/EntityDefinitions(LogicalName='{{parameters.logicalName}}')\",\n        \"qs\": {\n            \"$expand\": \"Attributes\"\n        },\n        \"response\": {\n            \"temp\": {\n                \"items\": \"{{filterEntityParameters(body.Attributes, parameters.type)}}\"\n            }\n        }\n    },\n    {\n        \"condition\": \"{{parameters.type == 'create'}}\",\n        \"response\": {\n            \"iterate\": \"{{temp.items}}\",\n            \"output\": {\n                \"name\": \"{{resolveParameterName(item.LogicalName, item.AttributeType)}}\",\n                \"type\": \"{{resolveParameterType(item.AttributeType, item.LogicalName)}}\",\n                \"label\": \"{{ifempty(item.DisplayName.LocalizedLabels[].Label, item.SchemaName)}}\",\n                \"help\": \"{{resolveParameterHelp(item.Description.LocalizedLabels[].Label, item.DisplayName.LocalizedLabels[].Label)}}\",\n                \"options\": \"{{resolveParameterOptions(item, parameters.logicalName)}}\"\n            },\n            \"wrapper\": [\n                {\n                    \"name\": \"properties\",\n                    \"type\": \"collection\",\n                    \"label\": \"Entity Properties\",\n                    \"spec\": \"{{output}}\"\n                }\n            ]\n        }\n    },\n    {\n        \"condition\": \"{{parameters.type == 'update'}}\",\n        \"response\": {\n            \"iterate\": \"{{temp.items}}\",\n            \"output\": {\n                \"name\": \"{{resolveParameterName(item.LogicalName, item.AttributeType)}}\",\n                \"type\": \"{{resolveParameterType(item.AttributeType, item.LogicalName)}}\",\n                \"label\": \"{{ifempty(item.DisplayName.LocalizedLabels[].Label, item.SchemaName)}}\",\n                \"help\": \"{{resolveParameterHelp(item.Description.LocalizedLabels[].Label, item.DisplayName.LocalizedLabels[].Label)}}\",\n                \"options\": \"{{resolveParameterOptions(item, parameters.logicalName)}}\",\n                \"mode\": \"{{resolveParameterMode(item.AttributeType)}}\"\n            },\n            \"wrapper\": [\n                {\n                    \"name\": \"properties\",\n                    \"type\": \"collection\",\n                    \"label\": \"Entity Properties\",\n                    \"spec\": \"{{output}}\"\n                }\n            ]\n        }\n    },\n    {\n        \"condition\": \"{{parameters.type == 'interface'}}\",\n        \"response\": {\n            \"iterate\": \"{{temp.items}}\",\n            \"output\": {\n                \"name\": \"{{resolveParameterName(item.LogicalName, item.AttributeType, parameters.type)}}\",\n                \"type\": \"{{resolveParameterType(item.AttributeType, item.LogicalName, parameters.type)}}\",\n                \"label\": \"{{ifempty(item.DisplayName.LocalizedLabels[].Label, item.SchemaName)}}\"\n            }\n        }\n    }\n]",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "logicalName"
+        },
+        {
+          "name": "type"
+        }
+      ],
+      "accountName": "microsoft-dynamics-365-crm",
+      "altAccountName": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"logicalName\"\n\t},\n\t{\n\t\t\"name\": \"type\"\n\t}\n]"
+    },
+    "listEntityDefinitions": {
+      "api": {
+        "qs": {
+          "$select": "LogicalName, LogicalCollectionName, DisplayCollectionName"
+        },
+        "url": "/EntityDefinitions",
+        "method": "GET",
+        "response": {
+          "limit": 1000,
+          "output": {
+            "label": "{{item.DisplayCollectionName.LocalizedLabels[].Label}}",
+            "value": "{{item.LogicalName}}"
+          },
+          "iterate": {
+            "condition": "{{item.LogicalCollectionName !== null}}",
+            "container": "{{body.value}}"
+          }
+        }
+      },
+      "rev": 3,
+      "name": "listEntityDefinitions",
+      "label": "List Entity Definitions",
+      "appName": "microsoft-dynamics-365-crm",
+      "apiJsonc": "\t\t\t\t\t\t\n{\n\t\"url\": \"/EntityDefinitions\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"$select\": \"LogicalName, LogicalCollectionName, DisplayCollectionName\"\n\t},\n\t\"response\": {\n\t\t\"limit\": 1000,\n\t\t\"iterate\": {\n\t\t\t\"container\": \"{{body.value}}\",\n\t\t\t\"condition\": \"{{item.LogicalCollectionName !== null}}\"\n\t\t},\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.DisplayCollectionName.LocalizedLabels[].Label}}\",\n\t\t\t\"value\": \"{{item.LogicalName}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "microsoft-dynamics-365-crm",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listPicklistAttributeMetadata": {
+      "api": {
+        "qs": {
+          "$expand": "OptionSet",
+          "$select": "LogicalName"
+        },
+        "url": "/EntityDefinitions(LogicalName='{{parameters.logicalName}}')/Attributes({{parameters.metricId}})/Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.Label.LocalizedLabels[].Label}}",
+            "value": "{{item.Value}}"
+          },
+          "iterate": "{{body.OptionSet.Options}}"
+        }
+      },
+      "rev": 2,
+      "name": "listPicklistAttributeMetadata",
+      "label": "List Picklist Attribute Metadata",
+      "appName": "microsoft-dynamics-365-crm",
+      "apiJsonc": "{\n\t\"url\": \"/EntityDefinitions(LogicalName='{{parameters.logicalName}}')/Attributes({{parameters.metricId}})/Microsoft.Dynamics.CRM.PicklistAttributeMetadata\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"$select\": \"LogicalName\",\n\t\t\"$expand\": \"OptionSet\"\n\t},\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"iterate\": \"{{body.OptionSet.Options}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.Label.LocalizedLabels[].Label}}\",\n\t\t\t\"value\": \"{{item.Value}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "microsoft-dynamics-365-crm",
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {},
+  "label": "Microsoft Dynamics 365 - CRM",
+  "theme": "#00265f",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Records",
+      "modules": [
+        "watchRecords",
+        "createRecord",
+        "updateRecord",
+        "getRecord",
+        "searchRecords",
+        "deleteRecord"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "makeAPICall"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000002cf4944415458c3edd64f8855651806f0dfbd73479d2b3a3aa395a363698129a109455194b850170a631a262d6a51a1810a4661105851bb68d142dbb46c13314410823b75d3b2682528b87261494d3144a4cde7e27b65cee03de7dcb95704a1172ee79e73deef7b9fe779ff9c8fffad074b294929ad4a294da49416a694ee797029a54329a5cb29a5f17e00347b5c3780ed5884463f847a05308e6730d34ff079032848fd3cd676025048d1ee94d2bedbf777538116f6d4ac1dc149bca22645bd00d880176b149ac0d3ba4851d7000a9befc15885eb388ed631bf6dad79b25f89fd15005b388ead35244630886b5d01282cdc892d15aefbf146cd76cbf125a6f0f67c6a60095ec38292f74fe1532cad20d1c6c738106a366b0114d8efc00b9d5cb00e5fe0b18aadda72671c2a3eecb606867118431dde0de03d3c57c621d4fb502ece390a560228b07f09db4adc9a78b026f867726db43a2daeb3711c539efb4a0e78486edd8e644b0104fb268e2869ab2eada16226740450907e17deec2378addd01a010fc11b96546ee2980b025f8449ee755761d37e4a9d693cd298c60bf00efe36007ff14417fc4199cc32a6cee1b40041fc43bf23c2f82bb898bf816df07884d727decc5c325fbd79ed55a85e06dbc8b136607ce4dfc84af7016a37819bbb13e7ca6f033fec234fec6bff1ee0779880d950288e063f808af470a122ee114bec30abc2a8fdadf711a57f06b04bd21b75a334835e37e69a4737995020d7c80b7e2d934bec6e7b82c4fb9fff04d5c4743f227e33a16008743c585857d87b0ac2e0503722109d6273119ac46b111cfc66f53f82ed6e769b8086026643d2f8fdc8b72fb4dc847ef3591923f7015bfc4ff69fc13aa3483f9e2603c1aaaac88fbb692966f440dac960b6e582eb07572a55f8a5c5fc39f660b6c061a8d59110a03ac2977533b723f8647f184dcae8fcbdf97491c6c14160fe081083015cce604e9d50ae01605a0adf80d17ee461aef6fbb056b91da1b808d49420000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000006294944415478daedda6b8c5d551507f0df99e94ccbb4f516da29465b3b522c28a2912a4a5a44e38bd468418adac408468d4a14a389464dc4b7418daf98f085f8c96734fac117061212fcc2074c1483af982a36155362a1c552d069e7f861eddb6e6f9ddbb9e79c7bcf0cce4a4eeeb9f79ebdcffaffd7da6badfd6059966559fe9fa518f50bcbb2ecde4ee1df385e142357e3a48cb5047e277e8a8f6232fbfd892d65592acbb228cbf2d632645f59969bda2460a41e9064032e4df7e32de9d02a0117636b9ba05b212073f32bb0ba6de0232720c95abcb46dd06d1270119edd36e85c568ce22599fbbf026737d0cf56acc41f3057a78e18a50774f0aa06fab9003fc46d7851ddce4649c025784ed5c699f55f97fad98c672c7a0232c55f2d82601d792ade907daf5d438fca039e822bab36ce487cbda8231a93a1129029fe126cabd9ddd3f1b6a6751e8507acc41e4c54699c481cc33bf1aca6951b0501cfc5e535c04bedaf1f8672432320537e8f9800559573f0116c1c869ec32e8466b0bb4ac34460811bf0b23a4a64c6381feb702f668ba2188e07642fdcad42aecedabf12378a69735d5db68b02eae7a95f0c37066cc05e03e6ea9e72f733986e00fc167c59a4d0f5b28cd43801d94b7789eaaf8a7412f8ed0da8b4015f344f201e96077444d41e28f525f226f0415c534781d4d7937033ae9eefb94609c8ac7f252eabd0b610c5ce7bd508d0a9af35f834aeeb8773181ed0c1dbb1aa42db3df8a41a2b4619f84f89e2a92f918da5c1ccfaaf11cbde83ca4e7c498d9a21e9d011967f87050cc1a6eb8069bc4b94bf83ca0bb0a906f0eefb6fc69b178aad11023205de881736d1670599111eb4db0043bb490f384f8cb9ca454b0dd9885bf1f2411bd60e82c39ead2d50a6c5a46b60a94540cf5edff52d81af254da4c18e285c2a97ac4b9280ccfad7c926174b4d2a11d033c37abf8aab3d8b41ea0c8175b849ccb496ac0c4c40cf42c5aeb6018c94809ea9eefb8c686b6d511090817f263eabde3adfff92560e0a0d3a04a6f17935b6b83229f17b1c4edfebee1a559205b970b2fe143ea1deb89fc5fdb81b77a6eb91047ec7a224a06795e6ad06f79a391cc05df84902ff004ea4ff27c5d4f5c58b8e80047e05de830f2465172a47710f7e80dbf1e70cf4b898fa5e2296beae516d0a3d3c0232f037e0e362089c494a1c147bf7df11d63e9afe1b135bda3b9d5a327b5a5bc0fb1290c04f8a35f99b9c394095f82bbe876fe3b7389efeeb883582abc4747546f5cab19b8a0a113b1e48df57aa98924f6b94c0afc58744ae3f6b01c0bf896fe04fe9b722017d2dae15ae3ed5d3ee388e090f79446483877124bb8ea6671ec7bf529b39e14d7f17718528c93bb508c8f2fc26b126bf577f4b1dc4b7c442c41f13a8719122df244e726c11e7811fc46fb01f7f49a41d487d3c94083896818c72b3cfd99f4cdf8bc430ad54d6afe8e96c875853db61fec2e451fc085fc12f9345268495f7a6b68f893870af38c8b41f878445e77ac165ef2f924e93e20cf164f73ebd633cd36b4258fedd2a2e869c2420c9e5c9a29be779760ebfc2e7f063e196c472d44e11d07e815b84758f75816600c7c566c5d965594ee35c3c395d1b4575b92e3db3462cadafcac077092893ee6bd52cc7f3c6dbfb803f8caf0bab1fc87e2f84dbde21ac9b9f7a5e85e9b22cb788bdb86d6277767302bb4ec485092d95c1bd04cc37867e8d8fe1674e3fdb5f96657924ddaf1681ef623c5fc482ad09ec94960f452f8480de33ebb3f8be4883fb38356eb329f1b9789ea8e22ec38562f775c9cc12e753f408be80af3a55c87481af170714778983cf5b9d791bac1455e0ac88f2ddeb84141413a16349a7ee35913e0b431a263901f727b00fe3c3f8aeff2e5d2f14bbac578bd4d3ade04a1107ba6d0f89b477307dfe43a4bac3e999474500ed929113309e745a2986cd1a91dfcf1133d13c684ea7dfd76424d522e036b1abf290485f65b2c0a5788bb0f8fa04e4be44d8be74ed1755d921fc53a4c159fae7f24124cb242b4471d611f165b308ae1788403b93c839ab0f29c569373d2f194b1d5e2bb2c32151c8fc2e017f30013dd124c806c8994aa49c2782f0f6f43923526657d11bf1b5a228e625607562f371fc2d812ddb065a819031314cb689b875855353fbfbfa117052960ae805123229e2cc634f146ccbb22ccb524ffe03a922c39e0e0d3e760000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-11-22T12:33:31.54622+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000d774944415478daed9d7b8c5d5515c67fd39969a7d376da0e6d693b2dd8da626d8182b4052df2106a4505ac3c0499b6428d80a028e111355a15d0041f44240a015f24c490f822be351a5f60103120021541516a29505afa18fa6066b67f7cfb78f73d73e7ce9dfb387bdf7bf7979c4c7b7b3b679dbdbebdf6da6badbd0e444444444444444444444444444444444434055a7c0b90258c31c933b702fd002d2d4d350443d0144f6f150f70287029b0187800b80d78bed949d0f030c6608ce934c6dc6d721834c6dc6c8c69750812d188b00438c618b3cde463933166563313608c6f016a0d47b92b80eed43f7700edbe65f489862780452b703c4de2f38c06cd428059c031be850811cd4280a3d10e202285862680b3fe9f88d6fb88141a9a001653d1fa1f5100cd408025c022df42848a86258063fe4f0626fb962754342c012c262202440c834627c06260a96f2142464312c031ffa73034fa17e1a0210960311158e55b88d0d1e65b801ae208e028df4238d6a81b38019804dc073c05b11ea1eab0993f8c311bcdc878da1873482db3815696a9c6986f1b630ed834f4c3c6986589ac3ed1a84bc014e0cdbe8570947b1af04e94796c018e04dee35b3e685c022c43831c02c601670163539ff7a02ca5573414019c19f756e404868065281711241a8a0016b309c0fbb7646c057a81837ccb331c1a8600ceec7f2370986f792c960267fa16a2181a860016edc03b18bade660a4bc631c085a8182558341a015e832c4008580e9ce35b8891d0100448397f3d01c83216b80438d8ebc09480862080c5543cafb7a91cc41adf03520aea9e00cea0bf810042bf2808750575528350f704b06805ce063a7d09e010f1ddc09b7c0f48a96814022c024ef52d0472423f401d1d36a96b0238b3ee0c608e6739c602575267f587754d008b1928d1e20529129eef7b30468bba2540cae3f69df899077c14e5faeb0a754b008bf1c079788afc59128e03ae46a78fea0ef55e11b40255d9640ec7029d03acf53d1005649b0cbc05f9467f04ee07061aa202c956d2b41a636e2ba1eaa7ea15414ed5d111b6c74039f87e2d9a5358b9ba8c3177d80a24638c79ce18736ea10aa47a5e0216036ff378ff29c0a7d0d62f0858e5b6035701ebc86d47670017a125330f75470087c1e7e221eeefe4f9af004ef73d1e05c6651df02186c622a651e0806cdd11c0621e1e326dce20af410408c2874a25c3ae6314bb91ba2280f3a0679171d18773efa381eb51f2c93b1cb98e05bec828eb0fea8a0016b350bcdd873b3b1bb89140d67d47f9af05be5c8e5c754300e761cf44873eb2bef704e4f49de27b2c52e3712852fef2727e4fdd10c0623ab09e0cd75e3bd06dc8b15a47008da61ce5cf02be4405a4ac0b02a4e2ed99357b72eedb0b5c83e75ac314a6a335ff8c4a7e495d10c0621adacb66926a4d79d637005dbe07c091eb20e073682b5c91450a9e00a9b5bfac75ae827b1e07dc849c3fefb072752347b4972ae82f780258cc00de4b06b3df51fee1c02d0472c6c099f99f477e50558e950511c818e1a141fbfe6519deefd548f9de9b4b3a32cd40cabf802a4edca00960d183667f56b276a0408ff7f37c8ef267a3a5e86caa6cb5832540aac8f2a80c6fdd092c0ce8f9e70137a3c457d5b7a0c112c06201b0816c7d15efbde31de52f414bd149b5ba57904ea0c9bdda650381845d337e76d039873ba9a1f2215002581c43609536b58643fcd3816f01afabf53d83238053627d399ecff97978ee76e4f0de8e96bf9a23280238e66f153ae6dd6c381cf834191e2a0d8a0016ddc087a993b37555c678323ede160c019cd97f0101ecc17d0d43d6370c8600168b80cb087f7bda300882008e03f4419a6cdbe71bde09e098fed528ea179121bc13c06226702dcde9f87985570238818f4b50e42b226378238063fa4f400408c51a35157c0ffa34e063d44137ad4685170238a6fffdd4513f9d4644e604483576b88c003a6637337c2d013dc04654e614e1119912c0c9f45d0dacf4fdf01119122075ac7b03019cb089c88800a993b59f209c9739343db25c0266009f218082cb881c6a4e0067ddbf96005ee414918f9a12c031fdeb818b6b7dbf2aa1a97c939a2924b5dfdf88ced78786ed405feab356c23a055c53d484008ef217a3e34c211677ee02be0ebc98fa7c9abd9a02b5acbc99057c81307af883caad76029b50e3c49f02bf05bdbed521ed7274f6be29507502d881ec421eff6acfcf67806dc043c0af90c21f474428f4dede2ed4f0b9694ad2aafaa056f91d28c3d78b1f87ca003b80bf003f077e8d66fdcb50f865cd4e72ea429a2c3955350238bd74ae402f4dc87a16bd0cfc0df81932ef8f601dbc62fd711db97b11719bc6014c1ebc6238efc97b1f1ac4f115fdc2d23100fc07f825f003d410793b94a4f4e4f9175ab92fa4094bd22a2680633ed733ca2e9515600ff067e0bb68b63fcd089db01da54f40c7ae5e8faa918e471db59b6aff9fa0220238ca5f8bfad674d75056033c8bd6f5bb9127bf0b869fed8ed227a1635727a335fe08b4d5ab87c0544d5136011cb3bf16edf56bb577ee079e00be63afc781fe12943e1e9daf5f8576234b91890f65a60721475904703a665f047c96dabc1dfb00f0207017700fb019469ced6da8a3c62ae0ede88512dd0432d829ec61e851b03632b64aa3268093dcb914f824ea9b5f4dec05ee03be89d6f717a1e8f60da4e495e8e55127a3353de452b3ddc08f80c1d4e733d02b6832c3a808e0f4ccbd1abd94a09af1fdbdc0ef803b805f50647d772cd061a853e61af4e2a85aec3e0c52543fb24afb8157ec9ff7d96bbffdfb01fb6ffdf6e780fdbf0659a136fb9c3f04be973c5f2a0a99e93b074b228023e074d4307903d5db2fef03fe00dc861cbcddc9c00c2343276ae0783e5adb7b28cf6c0e2225f5d9eb251440da8eacce36fbe71d888c3bad6c7d28e6b00f29bcdfb906c857faffc527b70c25844a3fe35cd49534538c480067e017a2f6a4a79739e069bc02fc09b815cd8882e159e7fe0721855f80b66e23b56e35481989729f07b6225f6233b005ed2a1245ef418add8f94492179aa0dc79a5d8c9cd64c519400cee09f843cfd6a344e1c041e438abf1b29a098e2e7a036b1bda8a4acd01ad98f66e9f3c033c03f9deb19e03944823e44bc9a2bb614a49ce9cbf1b02d1d96004e5c7f3df071aa93d2fd2ff00db4ceff1b8a2afe55a880742d7a2142e2d4bd8266ec66e01f884c9b80a7d08cde81cc73104a2e04e7197b90337d399ea2904308e0083717bd0d731d95b72dd98342b537a1ccdc6011c5cf434a5f8b5ab6ee059e44fbff8781bf027f47267c1732f33555b623db1844c476e403b53bd758e76ab3df6b436b7f0bb9b5bf05f9522b50f3c7c578dcb1e411c079d0a5c05750b8b492911d001e40cbc78f817d23ccf8f3505fe00e14eabd0565f59e025ea08ae6dbb96f2b5a5626a06ae529f6ea76aea9f6b3c9c8f79880761c1df6e738f2953ec6b95c61939b7690238757b40df3d955547e5cfb39e4d9df8a4c739ee21c054c464eddb1c8cbbe0699f56d5430bb9ddfdf8206bc0b399207a3debb3df69a693f4b949c28772c52a87725d51285083091cadab4f4a3e28beb514067b088025bd0803f8af2f67b61740a4f297a0252720fb228f3ed752852743722c23886cecea644210224a6ab1c3c8bde61733b25a4659149dc52c2f7f4e5fcb5b80bcde405a8b9d422b455ed41249840d8d1c020508800e5b42a1b40e5561b817b0133924247a9f00e5463b81065f28e42566a2e9ad5edc4d95c16aa5110b213f82a7a81d10b50be939652780f52f672d43377115aab3b88caae1a2a25c063e8acdf3d1449d1168393569e8e72f62b51a877095ab79baa442b6b944b8001e027c047900357f2ac7766793b72ce8e4319bc152806d0499ce199a11c02ec4131821b2992aa759152fa3c548ab51a297d7699724454018506be9836b72047ef4ee040898a6f41ebf9092891b412293d0b0fdd908bc019f233766ed6ce757c93c85d12f54bae36e7f3e43b758f4204d88f4dc9a6f0287025aac03525946475a2377dad41b37d0195e7ba930cdf7e1433e82397aadd85f2002f397fdf8d2c569ffdfe3e72b97c970c2e01926d70a2f476143718679f69a2bdbaec35050591dc68e1247201a520227ec3a11001fa50edddb1f6010cf07b54efff108c589d331329fc5d289a389a2447324bfb9012b7a19dc55672e9dbade452b83b510a772f224532ab334904a5e212ed76bcc6236274a33ac999e4471e67218777322294d758451e019cea94afa1f5fd4454777f97fd395cf6ae0545dcce418a5f42f1d99ee4e97720a56e46d9c1a7ed7db622c5bf442e856b0adddf271c59061101f75b999f4d8d4f82b1c87a4c45c43804f9440beccf39883493c888180547332574fa61ddefb4a0b2ac5e94c8994f7e147110cdd0179192ff852a7c9f440adf42ee8876cdb37aa12115c61e8fac460fca822e4299c224ba3999ca9ce50751b1ec0e778c0bfec2120f58cc47a769d621260fa275772b2ac4781ce5e99f404519db90a23333d1a1c319038326cacbc06663ccfdf6f336e457cc4591cf2351a6f630b4948c76cbdc32e207c321b5c69f8f4ab3a6a2d9fc88bd362113be1d99c3a8e82ac119ff71a87a78218a902e4711d343284e887b81d380ddae4e4ad24e6ad69f8ac2b18fa2d9fd028157e0342252e71ba7a3256305da662f451622f1c3fa5109ff0d90afa7d112a0133964c1d4d54508290b310759869310117e83baa1ec4ceb2c6ab041e138e9add82ae73861232222222222222222222222222222229a18ff03d9e0e1d23d722c6e0000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300001c644944415478daed9d79b45d557dc73f2fe4657a99270281844c2490040c100421611e050db351144191e26c9d8ab55670288ea5a4ae56d72ad6da516d57ab9656a52e97555b6a51d11a1101651e0c908190840ca77f7ccfe1ee7778c9bbefdd619fe1fb59ebac7bdfcbcd7dfb0cbfeffeedbd7ffbf703638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c6c4a02776034c674892247b3b1b58052c0276023f057e006c04e8e9f123604ca548928424497a9224393f4992db9324d996883d49926c4e92e4ab4992ac483f17bbb9c698769119759224a72549f240b277be9f24c9420b8031152235fef1692fbf2ff62449f2a1d45388dd6c138911b11b603ac262e0c5837ca607380d9812bbb1261e16800a11f4e4c700539bf82f07026362b7dbc4c302503d7a51ef3fb289cfee8757826a8d05a07a4c0756c66e8429071680eab11c9813bb11a61c58002a4230fe7f313031767b4c39b000548b09c0f1b11b61ca8305a05a1c021c19bb11a63c58002a40e0fe1f07cc88dd1e531e2c00d5611470225a0634a6292c00d561168347ff19d30f0b4075380a382876234cb9b000949c74fcdf83dcffbed8ed31e5c202500da621013066485800aac1116807a03143c202506282e5bf55c0e4d8ed31e5c302507e2601ab6337c294130b40f9390c0d018c193216809212b8ff27a1494063868c05a0dc4c004ec6493dcc30b100949b438115b11b61ca8b05a084e4dc7f6ffe31c3c602505ec6a3acbebe8766d8f8e1292f4b80a36337c2941b0b40c908dcff938199b1db63ca8d05a09c4c40eebf67ff4d4b34933bde148fc3d0f65f3300819734063de3db815de06ac8792c00252278b04fc7b3ff2f20b83ef3800b8163d164e943c037816f2449f28c45c09492b4f0e7e42449be9db487079324995d85e2a04155e4556949f45db973dd9224c9e79224d9bf0ae76b6a48fa809f9424c953168001afcdfcd4f8f7c6ae24493e9e24496f15ceb91d7812b024040fec19b8a26f3f826b73112a8cba37f603d6024b63b7b9285800cac50c34fb6f5ec854e03c067fa6f7c713a8cf63012817c7e2deab1f41ef7f3ccded8be8c5c9539ec7025002d2877c3fe06c140360fa330ab9ffcd5e1b2f03a45800cac341c0a9b11b5150960167c66e4419b100149cc0c53d11981fbb3d452248897e11303b767bca8805a01c8c06ce45916da63f0b51d08f1906168072b00865fe352981677421ba3e661858000a4cf0909f895ddc81980bbc024d909a616001283e9390fbef7b95920bfc5916bb3d65c60f55f1391a07ae0cc45ce072bca1ad252c000525ede546a0dedfa1bf2941ef7f29b03c767bca8e05a0d8ccc6ebdb03b108780deefd5bc602504072597f3dc39d12acfbbf0a383c767baa8005a0b88c055e8ed7fef32c4702e067b70df82216976528facff07cefdf0b5c8d827f4c1bb000148cc0fd7f29302b767b8a40704d4e002e89dd9e2a61012826b390009806e38137a2fdfca64d58000a44d0d3adc2935c40bf6b721e704eecf6540d0b40f11803ac01c6c56e48813818782bf2024c1bb100148fa5a8ea4fed0982a1ae44d9904c9bb1001484c0d57d197060ecf6c426b81ec70057e10d3f1dc102502c0e44635d23fa90eb3f377643aa8a05a00004bddda978f22fbc1e17a06028d3212c00c5611c4a6ee1c83fb10078079ef8eb281680e2b00247fe85117f6f025e14bb3d55c702109960a6fb426a5ef03370fdcf42bbfdfc7c76185fe062301f47fe651c0cbc179816bb2175c00210915cdcff82d8ed89497a2d46a270dfe363b7a72e5800e2331de5b6ab6d728b9cebff3abce6df352c0091c825fd70ce3fadf5bf8f9acf83741b0b405cc6a2edad7db11b128b540847016f038e8bdd9eba515bb7b320ac004e89dd8858045ed01a14efef0ea90982d4681351dcc84e6033b0aba76768754f2d001108aafd5e02cc8cdd9ec81c0efc3e2ed93d2881601e8452a29f091c006c047e007c3149929f00342b041680781c0a9c1fbb11b1481fe689c075c011b1db537402e33f0cb819798ee164e98b510af97702b72649d29408d8e5ea3239b7775eecf644bc063d6897dfc5b1db53220e003e069cce0b574a7a8025c01fa1cea5292c0071988d96fe6a77fd73ab1fbf8bf73e0c4a7acdfad050e9dc413ebe8c74035570adf74aed1ec0980437e46cea5dd5662ef04114f567f641305f742dcde5451881f6508c6ee6fb2d00dd6732aa683b2a7643ba4dfa308f43a1be2e773e0841877109ba66639bfcaf1368727ecf02d025829b7932355cef0ec6fd57e08d3e83921b2a7d04458c364b4f7a0c8a6f42771987966f6ab5c73d277eefa5c6814fcd105cafa5c027d066b18e6001e802c10d7d09cafa534716001fc6e9bd9ae56064fc2b3bf9472c00dd6334eafd6b55ea3b15bf49c007f02ebf4149afd75424966775faef5900bac7d168f6bf36045b7cdf0c5c4693e3d2ba122cf7bd0f584b17ecd302d0610223584b8dca5a05c39e8b516ebfa696a5ea4ab029ea2d68c9afb71b7fd702d01d96a17cffb52030fee380eb71769f7d12a4857b2df01eba5815ca02d041821b7b193027767bbacc7ce0468610965a4702b1bc14b8812ecf1159003acf6214f65b0b8249ac1b80d5b1db53647229e16e24c210d102d02182c097cb8085b1dbd3c5731e03bc0bf5689ef4db0b81f19f027c9a48cba31680ceb2889a184230dcb90acdfa776512ab8ce4e6486e22e230c902d0017231dc8b63b7a78be7fb72e00f502cba1980e05aad40fbfaa3e642b000748e8574692d3726c1037d02da8b3e2b769b8a4a70ad9621e3ef68945f3354fae18c416e567749ecf674e95c0f073e490dbc9de1125cab25c8f80b5106ce02d01916a0debf0ef9edb398f5daed706c96c0f81701eb285022580b401b096ef46528775b6549cf751adaaa5aab10e7a1103c130b51cf7f5aec36855800dacf22e05554b8f74f1feaf1c0fb5172133f47039033fe7568734fa156847ce3da44b0eebf960a8ffdd3f31c8db2cf5e8397fb066400b7bf70c60f168076b304782515bdaec1c6a66b5042cf665354d58adc84df6728a8f183eb02b4852008e6722a1afb9e3bc73f4039fd4d8edccac83a0a9e00a6923d552496a1f1702195be15725b7b3fcad0f2d3d586e03a1d09fc1905377eb000b44ce016bf960ee66e8b7c7e00e7001f47c5294c8ee03aad04fe9c926c84b200b487a350d86f551907bc0ee7f31b90c0f84f44c65f9a98080b400b04595c5e8f0a3656951138a3cf8004c67f06f059d41994060bc030c9c5c0af89dd1ed37d82a5df3568cc7f78ec360d150b406bf4a125b119b11b62ba4b30f7f36ae04f51f877e9b0000c839cdb774eecf698ee12243eb916f8142af65a4a1c07307ca6a207c0ebe1352235fe092812f21d94fcfe5b008648d0fb5f4049967a4c7b48effd74e00fd1aa48e923212d00c3630ef0065cdbbe1604a23f0f253db9888ad84e254ea25b04b3be97a34a3fa6e2e452787d0245f75526dad39380436739702515deee6b446eb2f716b497bf32c60ff6009a267d187a91eb5f8b34df7526b8df97a0fd0f958c82b4003441d013ac46b9fe4c3d38092df35536d1a98700cd3309782b0efaa9130750f172ee168041c82dfb9d11bb3da6ab24ad7f45b1b10034c721c09ba8c0baaf312116807d90f6fefba172572b62b7c798766301d80b81eb7f2c4af6e1653f53392c00fb663cf03654fcc298ca61011880a0f75f039c17bb3dc6740a0bc0de99877affbed80d31a65358007204137f6fa064e99d8c192a168080c0f55f8526fe7c7d4ca5f103fe42a602efa2c2e19fc66458005282deffd538e2cfd4040b407f5e8422fe46c56e8831ddc002c0f3bd7f1f2a78b928767b8ce916b51780c0f5bf14b830767b8ce926b5178094c3508657aff99b5a516b01487bffb1c8f897c76e8f31dda6b60290dbe77f59ecf6181383da0a40ca12e03d94bcb88331c3a5960290f6fee3d0acff11b1db634c2c6a270081eb7f31b0968aa579366628d44e00529621d77f7cec861813935a0940dafb4f04ae0396c66e8f31b1a98d000465bdaec0013fc60035118060dc7f1c5af377514f63a88900a4cc42659de7c56e883145a1f20210d4787b2b707aecf61853242a2d0081ebff32e01a9cdadb987e54560002e35f0a7c0065fa31c60454560052a620e377b49f31035049010832fbbe11e5f637c60c40e5042070fdcf43137f4eef65cc5ea8940004c6bf0cb81e9819bb4dc614994a0940ca0ce006e0c8d80d31a6e8544600d2de7f14f076e0fcd8ed31a60c54420002d77f2d9af81b19bb4dc69481d20b4060fc27a150dfc9b1db542292d6bfc29499d20b40ca42e0a338ce7fa86c017635f1b9117835a592945a00d2de7f1af021e0f8d8ed29213f013635f1b95e6052ecc69af6535a01488d7f0cf06ee0229cda6ba86c00fe06d8dec46727e062a995a49402901aff08e04a34e9d71bbb4d2563031a327d0ba0a76750ed5c8cc2aa4dc528dd6c792ed2effda87732fb2601b6018f00ff05fc2df06d60e7be8c3f9748c5a9d32b48a9042078208f076e040e8cdda602b31bd808fc12f83ef0dfc08f8047811dd054cf0f301d974baf2ca51180c0f80f053e81eaf999feec027e8b0cfdbbc0f780bb9010ec69d2e0817ed7fb346045ec13339da13402907200f031e084d80d29103b81c7801f02df41867f2ff00c34ddcbef8d19c0d5a8888aa920a51080b4379a8296fb5e16bb3d056017f038f03fc06dc8f07f8dc6f9ad1a7d7e927575ec93359da3f0021094f1ba0e7835255db96803bb917b1f1afdbdc0b3d0bad16704aeff39c0dbf00a4ba529b400041b7cde8296fbea168d96a0409d9f02df488fbb80add03ea37ffe8f358c7f35f0713cc95a790a2b0041569fab80df03fa62b7a98b6c43b3f7b701ff8e26f59e86f61b7d4670bdcf41f32c87c7be08a6f3145200822a3e6bd1defec9b1dbd40576a125baef005f07fe137802d8dd29a3877ebdfe0c24b66fc7517fb5a17002103c9017a0b5fe19b1dbd4c9d30536033f06be067c13b81b780e3ad7db433f919d8eea25bc1eadae8c8e7d514cf728940004c67f2ef0496076ec3675885dc0fdc8e0bf0adc4e875d7ce85724653a4a9bb60a05f91c8197fa6a4961042030fe33813fa17a5b7b13b4fdf6c7c0bf00b702f73148386e4b7fb0714dfb8083816391d11f07cc4161d4de4455630a2100c1837a2a7033dadf5f15f6a0b1fd6dc057801f004f41677afbe05a4e0416a1442927a168be99d8c53701d1052078604f01d6a19d67556007f00bd4dbff73fa7e47878d7e120a913e0589e911a82252f4fb6c8a49d40723176fbe8ef2c7f7676efeedc097d012de230c310ebfa93fd4b8761380256822ef34940d790aae83689a209a00040ff01994bfe74fd092ddb7807f409b7036427bddfce09a8d45eefd69e8fa1d8d3223d9e8cd90882200b970d39bd00ebf32b21bcde67f0df87b94626b7b877afb5e3471b71a5db79700fb63f77ea824e8be3543e5c3cebbfef004ebcf17009f020e897d1186c14e14a9f7e5f4f815b0ab03bd7d0fead98f4309504e05e652bf90e876b20d78a8c9cf8ea5e202dbd5930bc24d5f81c24dcbb6cebf03b813f83b34b1f7006d1cdfe75cfca5281ee26cb4663f1e2fd9b583bbd11ccd5e09eec34c2a3eacea9a00041b7bae44e1bd65aadbb71df85fe00bc0bfa265bd76efc01b8142704f41158d4f4caf51e5ddd02ef214f0c7c0834d7c7614d55a8e1e90ae0840fa80f7a16abdefa13cb1fddb502aadbf4286ff5b688fe1e77afb235139b373d18cfe98d8275e7092bdbc66f4d0df5bda8e7afe4f23efad997b38951ad497ecb80004c93cde075c4b3976f56d43013b9f474b794f425b0dbf07f5ee27a394e627a13d0f5571f1131400b513853d67c7eef4d881f2183c8bb6366f4f7f97bd66ef9f4bbf23fb9eecfdeef4fbb3233fa937023ddbfba56d7918b9fd0f024993f7f168607eec0bd9693a2600410f7710cae4f34a8a3f79b50d3d28b7a050dd761b7e2f5aee3c1fb9f9cb91075074f620630c8f67d1fe854d6843d396f4d81cfc2efcfd561a46bf83fe82901974fe556ad9c1fd117982fbb4861a649cee880004c6bf0c2596388b628f6577a09c7a7f81b6e26e80b6a5d6024de0ad042e454b7807518cc9a5ccb0b35e776b7aee1b90f865af4fa3f1f393e9ebd3c890b31e3aebe17712c1683bc0d168385679da2e00c1437f3232fe95b14f721fec44d9766e01fe11e5d96ba7e1cf44c13a97a2f5fb2974d7cddf835ce96d348cfbf1f478347d7d02cd6d3c818c7b1b0d51d849f32e73e949efdb789481aa16d990da2a00c14cffa5c0f514770cb51ba5d6fa4b14b9f720b43599e65c94bcf432e04574d6cddf858c3673c91f4263de8751b6e087d3df3d8e44201b5fef6cc7395785606ee635c8fdaf056d1380f4024e428924df4e314b492568edfeaf91f1df4b1b7ab8f4dc47a2f1fd25c0c528bab15d0935131a13679b90413f80a210ef4702f610eac99f458260036f925cb5a9eba8516e84960520b878f3810fa05eaf68cb5809727fff09f81c0ae66939d5567aeea3d156dbb568726f0ec31fdf27c8fdde8a7af30750ce80fb50daeffb91a16f46463e940a3f6600829eff7cb44c7850ec367593960420b878ab818fa0f8f4a23d8d5bd1269d75a84456cb5b7283cac42b91cb781e8acb1fca1727a8b7de82760cde83d6aa7f95be7f1019fa56e4e6dbd0db4c30e6bf022d53d762dc1f326c0108f2f55f8e2ededcd827936327caa6fb19b4277f330cdf88024f671c8acdbf02cde84f6770c3cf8c7d13eac5ef46731077a5ef9f40957cb6b7d246d31cc152df5168c26f0de5884f693b431680c010e602ef463d6091d64b13e432df8222f81e82b619fe6ae0b568effd540636fccc8ddf9cfeedf5e9f17364f0bf45c6def1c49f4604f7b017ddb715c8e8cf47e5e66a7b13862400c12cf729c00791cb5fa4f5fd4d28edd63ae067b4b0512767f8ab50caec33d14467f8a559efbe01ed10bc33fddb3fa7e1c6d77aac1e0c15f74b8f91c1fbece791683e253b46e5def7069f1b197c4716f69b3d87590051168908ba8733800528bc7701ce87080c410082f1d2d5c03b29d64ebee750ddfb9b50f59c6dad185b30c67f094a977d0e8dfd0b7b500ffe288a21b8333dd6d370e52bb9761e88e2486490d9311ab9d01391404e4c8f09e9313e7ded43c638d0916dbd1d810c7bc400474ff01a1e04afe1fe803de9fb4c68aa77535aa4290108c64cef426e7f51964912e037c067d14ebdc7a065777f149adcbb1aade54f463dfcddc8e07f8432fbae47ee7c5b0a72c62430ec51347ade316829773aca4930353da6a5bf9f828c7d72fa7e1c8d5eba37785f240fd1e418ca106015aacf5714e3df8a72ea7f1a1965abeefe48e41e663d7e2f2ac4793b0a13fe19eae14b65f081718f40469df5d6d3d1cac5ccf49895fe3c2dfdb7e9e9e732177c14ee452bc7a002902bd651842a3d09ea896f42e3fd675a34fc112886610d703c72eddf8ff6ff3f845cfa421b7c6e926b6c7a4c456bda07a3e5ad03909167c704fa8fb18b7b82a66334eb018ca318853a36025f44937cbf8296ddfd116842e830d4db7f114de675b41edf7009da9c19f934147874305a9599838c7e360db73c1b5b17ef844c749a158011c4ddcabb07b803d50abc95f625decc4283efa1401377c1acf9583481360309f0fcf4380419fbfe3426d66ce466c89421e1e1d3286e7f1d0a876d8b3b9e7e4716631f859cebde877aed7928e5f72294926a1e0d431f4b31b6119b8a50640148d038fca3c0bfd1a1aa3a5d3b99fe4b6859afbe24381622377e3232f622df1b53118afa906d413bf63e89a2fa0a3d093710c178bd0f8dd597a04cbf8bd3f7f390b18fc34b65261245138004adaf7f0ccdf0b714d0d3b546f777e527a331fa5294116919da1a9c2dabd9d84d612892006c47b9f63f02fc1f14b7d70f0c7e345a6e5b88127fac400539e7a248b8a2e7403435a72802f028cad7fe396053d10c7f80cd2487a268c16390c11f88d6d58b723d8d698ad80fec1e9477ff83c0b729d0fa7b30869f8c66e48f0e8e39a887f78cbc29353105602b9ae8bb11c5f34775f973853a6621433f2e3d162321882d98c6b495580ff4c368a2eff3b410cadb2a41c0cd24e4d69f80c2818f42a1b36371708da930dd1680046dac793ff01fb4b1b066d30d6814289d8636ff9c84363a1d86c6f776eb4d6de8a600ec40b9f7af475b6bbbe6f207463f134ddc9d8a8c7e211acbbb9737b5a45b02f034dabd7733b0b11b861f18fd7434637f06eaed17a0f5781bbda93ddd1080fb50baf02f03cf75d2f88389bc29684dfe6c549967110abfb5d11b13d049014850328df702df85ceb8fcb9dc7d4b501dc2b3d1fa7c3e7f5f9d4868a4c5ca5ef7043f87ff46f09a274cb915a6e40a5ff70b7e3625a25901c84a3a37cb6e94ade73a9428b3edc61fb8f8b35192d2f3510ebf99947f222f41d7302c899dbddf86f64a3c43a3e26ef6ba2d3db607aff9aabed97765dfbf8bfe8210121a7966e861baaf5efaa710cb128c64f90ab2adcad96b982370342fcc2dd88b45a4ab342b00db4837e534f9d95b801b500aadb6197fd0dbf72117ffe5a8b75f841ea8229320e30b8d712b2ac89955dc7d1a253dd988321c874756663b2bad9d1dbbe95f6a3b7a0875709fc20cc06136df5e240859f2d0c9e911e6180cf3104e45c211660a767ab23630a800f4f4f46437f456540c63e63e3ebe11ede0bb19d8d266c3ef41013aa70317a135fb6914e3214890116e4f8f6751c2d0b0faee86e0352bb39d1974d6333f47da0bc736e25608dafebc28357d211bf77a54ee9888b65087c7feb96332f244c6a4ffc71baf0661287300df43867d1d035751790485f47e81364df605d98817a3defe02b4cbaedbb507b3de3b73ad37a1fd0b8fa4af99b13f961e1b9008eca05166bbd446dd2d72895ac261e7a3a4c349e82714d9f0630c12802cf7e10134d2a31d94fe3c01791e63b038004d0a40ea05ec421b769e00ae416be8239141dc91fedbb76831b8271792bb12151b7d29ba899d1cdb6746fe6c7a3c4ea3eaee23b963038df1f67314289d585d088422f3ba40e27b17bc4020b2d46ab3d0733487460ec5396833d7786a985a6d48271a5cd4fd51e4dc441acabc09da52826b222ac175395ac26bb79bbf1b196e56cde77e9417f0c1e078088dc733232fbd5b6e1a04cff11864f45390201c921ef351bcc86c1a054dcab40fe4eba85af5a061f6433aa940753357b76502c39f8c8275ae40517a135bfceaccd0b72091ba3f3dee0bde3f4e6306bd101368a6f304cf7126f04f02f7e4f23cf4a1c9c743d024f3021a791a67d258c928f503134dd572413b670157a289bda15669cddcc02da847bf373d7e1dbc3e416399cceeba1990e0b9c8e61f9e42c2701b32f46c2973368a39594c23c55b9613a2543516ba2e003957ff4c54896715cd551cda8d7aecacccf63da83e40763c8ad6c7b71161a391a92681c7b0353d1e4b92e48ef49fc7a0e5cb396858bc04383c7d9d49c113c574b561a9f18f054e06ae45013ce3f7f2f15d34d6c9ef45f30c77a3499e7bd3df3f8367d84d0482e72d9b847c3c49921fa6bfcbe61516d0c80b79049a5b988c44a3100f6c57042058ce3b16f81de03c1ad576a1d1b33f8d8c7b7d7afc128dd99f4affbd3019838cc9133c9bd94ad2c349927c17ad5e4d444b91cb9118ac409ec2742418ed9ee84e9af960470520986d5d82960ed7a2008e1dc85dff0df0f3f4588fdcf827b1b19b8a903ec3bb49233d9324590f7c09cd75cd42dec18af4588e860dad26a27994c6d2e8bedbd789930ec6f9b3804b8157a2e5bcf5c09da8d2eefab4a19b91bb6f37ded48e5c78fb2c94a4e698f4588a3c84a16497de0a5c854466509b6abbc505c934e7a159fd4968ecfe0b1a11723676630620f09a27a0a2afc7a0bc94c7a2398489ec3d8a3141056edf4c93a1f89d1280acb0e51e5257c4066fccd049ed69248a49588a76bcae429ec23434b7b607cd937d05f830f070b3f666ab34a62404c38509688561258a49d88ccadbdf4149aa6919638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c3175e7ff013cd32362d72c36ce0000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300002f004944415478daeddd77985e7599fff1f7a4575220102040a8a12480482f8220bd4540449a08a8802b22880d14b1821d5decbd8b756da8bbfedc752d28bad85051a4290222209d5092df1ff7336692cc4ca69cf3dca7bc5fd775ae673221cfdc6748e6fb39df0a9224a9757a00962d5b965d872449eaa21e1b7f4992da674c76019224a9fb0c009224b590014092a41632004892d442060049925ac8002049520b190024496a21038024492d64009024a9850c009224b590014092a41632004892d442060049925ac8002049520b190024496a21038024492d64009024a9850c009224b590014092a41632004892d442060049925ac8002049520b190024496a21038024492d64009024a9850c009224b590014092a41632004892d442060049925ac8002049520b190024496a21038024492d64009024a9850c009224b590014092a41632004892d442060049925ac8002035cf04fcb72d6935fc2121d5df06c085c00f81fb8025c0a3c08dc06780a70363b38b94542d3dcb962dcbae41d2c84c055e0f9c453cf50fe63ae005c0f7b28b96540d0600a99e3602be096c338c3fb314b888080d925ace0020d5cfdac04f804d46f8e72f00de987d1392721900a4fab9123868147f7e29f034e0fbd93722298f0140aa97c5c0570a789f6b816d893020a9855c0520d5cb7905bdcf36c0c1d93723298f0140aa8f75813d0a7cbfa3b36f48521e0380541ffb033d05bedf6ed93724298f0140aa8ffd0a7ebf0db36f48521e27014af5f15760fd82dfb3c81e054935620f80540fdb507ce32fa9c50c00523d1c985d80a466310048f56000905428e70048d53719b8abf35a34e700482d650f80547dfb504ee32fa9c50c0052f51d905d80a4e6310048d5379a837f24a95fce0190aa6d23e0a612dfdf3900524bd90320559b4fff924a610090aaedb0ec02243593430052754d01fe41b92b001c02905aca1e00a9baf6c5e57f924a620090aacbee7f49a5710840aaa61ee016605e17be8ea416b20740aaa6ed29bff197d4620600a99aecfe97542a0380544d060049a5720e80543d73815be94e40770e80d452f60048d57308fedb9454327fc848d563f7bfa4d239042055cb4462f7bf695dfa7a0e01482d650f80542d4fa57b8dbfa416330048d5b238bb0049ede01080541d6380bf02eb76f16b3a0420b5943d005275ec42771b7f492d660090aae3c8ec0224b5870140aa8ec5d905486a0f0380540d5b010bb28b90d41e0600a91a16671720a95d0c0052352cce2e4052bbb80c50cab7017033394bf25c0628b5943d0052bea3b02196d465060029dfd1d905486a1f8700a45c7389ddffc6267d7d7b1ea496b20740cab598bcc65f528b1900a45c76ff4b4ae1108094674de036607c620d0e01482d650f8094e770721b7f492d660090f21c935d80a4f6720840ca310bb81d98905c874300524bd90320e5584c7ee32fa9c50c00528e63b30b90d46e0e0148dd5785d9ffbd1c02905aca1e00a9fb16538dc65f528b1900a4ee7b66760192e41080d45d6b017fa33a3d000e01482d650f80d45d47519dc65f528b1900a4ee72f6bfa44a700840ea9e7588a37fc76517d2874300524bd9032075cf33a856e32fa9c5fc612475cff1d905a811d605f601b602d6001e06ae077e085c975d9ceac32100a93b3606fe4cf5badcab568f06b613f01ae02006eebdbd06b804b822bb58559f430052771c878dad46662c70297015700883ffdc7e12f079e04a62c7496940f60048ddf16b60517611fd309454db58a2413f7a047ff63a62a8e0f6ec9b5035d90320956f21d56cfc557d9732b2c61f6001f055dc774203300048e57b567601aaa55d801717f01ee765df88aac92100a95c3dc40ced4db20b19a43e55d395c484bfd1fa27b001f040f60da95aec0190cab50bd56dfc555d1b010714f45e33892da8a5151800a4721d975d806ae9d914fbf379ffec1b52f538042095671c702bb0767621837008a07a7a883d23362ef03d7f01ec987d63aa167b00a4f21c40b51b7f55d3d328b6f107989d7d53aa1e0380549e13b30b502d9d59c27bfab35eab7008402ac71ac06dc094ec4256c321806a9907dc48f1e7b4dc0ccccfbe39558ba9502ac7d154bff157f59c8187b4a94b0c0052394eca2e40b53319787e76116a0f038054bc0d80bdb38b50ed9c00ac955d84dac3002015ef78fcb7a5e1e9015e945d84dac51f5252f1ecfed7701d481c1a25758d01402ad60ec036d945a8765e9e5d80dac7002015cbb5ff1aae5d71ce88121800a4e28c23c6ffa5e1f0e95f290c0052710e01d6c92e42b5b215707876116a270380549c53b20b50edbc027f0e2b895b014bc5588b38f96f427621c3e456c07936077e477776fe732b60adc2e42915e378ead7f82bd72b71db5f25320048c5784e7601aa95cd70c588921900a4d1dbbe73494375013efd2b9901401abd53b20b50ad6c8a4fffaa000380343a1370edbf86e7d5f8f4af0a300048a373283027bb08d5c642e2d43f299d01401a1d27ff69385e0f8ccd2e42020380341aeb00076517a1dad8153822bb08a99701401ab99380f1d945a836de881b2fa9420c00d2c89d9e5d806ae340e0a9d945487d1900a491d91b58905d846aa18778fa972ac500208dcc69d905a8368e0776c82e425a99870149c3378b38f86772762105704cba5c93813f001b26d7e161405a853d00d2f09d40331a7f95ef5cf21b7fa95ff60048c3f74b60bbec220a620f4079e6027f04a66717823d00ea873d00d2f0ec44731a7f95ebb554a3f197fa65009086c7a57f1a8aed8053b38b9006630090866e2af0acec22540b6fc12d7f5571060069e88ec32e5dadde61c0fed94548ab63009086ceee7fadce44e01dd945484361009086661171988b3498f381cdb28b9086c200200dcd19d905a8f2e603afc82e421a2a0380b47ad38013b38b50e5bd0398925d843454060069f58e07d6c82e42957610b038bb0869380c00d2ea9d995d802a6d22f0aeec22a4e132004883db15d83ebb0855daf9c0e6d94548c365009006e7e43f0d663e4efc534d1900a481cd068ecd2e4295f64e9cf8a79a320048033b058ffdd5c09e0e1c995d8434520600a97f3dc0f3b38b50654dc7897faa390380d4bffd802db28b5065bd0198975d84341a0600a97f4efed3407602ceca2e421a2d0380b4aaf58023b28b50258d073e8447fdaa010c00d2aa9e4bfca09756f67260dbec22a422f42c5bb62cbb06a94ac6033711bd006dd0935d408d6c055c43ecfc573737137b1648ff620f80b4a263684fe3afa11b037c907a36fe52bf0c00d28a5e985d802ae905c01ed94548457208405a6e47e0eaec22bacc2180d5db14f8153035bb9051700840abb007405acea77fad6c0c31ebbfce8dbfd42f038014d6069e995d842ae72c609fec22a4321800a4f03c9ce0a5156d0a5c925d8454160380144bffdcf94f7d8d013e8c5dff6a300380044701eb6717a14a3907d83bbb08a94c060009cece2e4095b20d71d88fd4680600b5dd0ec0eed945a832c6039f002665172295cd00a0b673e99ffa7a15110aa5c6732320b5d91ce016dafdb4e74640cbed02fc1018975d4809dc0848abb007406d7606ed6efcb5dc34e05334b3f197fae55f76b5d54462931709e03260b3ec22d40adb129b8eed016c4ccc3bb913b816f816f025e0e16e14e21080daea39c047b28ba8008700e068e08bd94594cc21807c0b80770207ade6bfbb935885f26e606999051900d4463dc4e12e8bb20ba980b60780f589bf0b6b661752320340aee3888da5a60ce3cffc37114eef2eab28e700a88df6c7c65ff1f3efe334bff157ae67019f66788d3fc41914df23e6a794c200a0363a37bb0055c24b80fdb28b50a3ed027c9491b7b5db133d07a57008406db310f835767df76aebf76117e07f8909586de01040f7cd037e06ac5bc07b1d0c7cbbe802ed0150db9c437b1b3d85e9c067684fe3afee9b047c99621a7f80979651a401406db20e704276114af77e6093ec22d4681f02762af0fdf6a1b830f12f0600b5c959b8f14fdb9d4a4cca92caf2328a7fd0e801f62cba500380da6212706676114ab535b1e18f5496c328ef24c98d8a7e430380dae26462ef7fb5d354e00b94b8a44aadb708f82c30b6a4f79f51f41b1a00d4063dc4e43fb5d7e5440f80548675806f506ec02c7cf2b201406d7008b05576114a732af0ecec22d4589380af021b6617325c0600b5c1f9d90528cd42624f75a90c3dc4463dbb66173212060035ddaec0ded94528c53462dc7fb85bb04a43f51ae0f8ec2246ca00a0a67b7976014af36160cbec22d4582702afca2e62340c006ab2ad81c3b38b508a738063b38b5063ed4d04cc5aef2a6a005093bd14ff8eb7d19ec09bb38b50632d00be024cc82e64b4fce1a8a6da801a8fcd69c4e60257e03eff2ac7dac0b78059d98514c100a0a63a0f1b81b619476cc452f89ee9123199f4eb34e81c0903809a684de0f4ec22d4756f260e4d918a3616f81cb0737621453200a889fe8dd8fa55edf12ce0c5d945a8b1fe9d064e283600a869a6100140edb13d71fcaa54865702676417510603809ae6b9c05ad945a86bd622b66175b31f95e124e0f5d94594c500a026190f9c9b5d84ba662c31e9aff0635225e020a267a9d66bfd07630050931c4f0d0fe4d088bd05785a76116aa45d886da46bbfd67f30060035450f1efad32627e1a43f95634b62b95f9947fb568201404d7124b04d7611ea8a5d810f6617a1465a0ff80e3027bb906e3000a8292ec82e405db101b10debc4ec42d438b388c6bf35c388060035c141c08ed945a8745388c67f6e76216a9ca9c0378185d985749301404d706176012a5d0ff011e0c9d985a8712610c172b7ec42bacd00a0badb17d823bb0895ee55c033b38b50e38c053e03ec9f5d48060380eaee95d905a874c702176517a1c6e901de0b1c9d5d48160380ea6c7760bfec2254aa5d818fe3cf2a15efcdc4cea1ade53f2ad59963ffcd361ff80f605276216a9c8b8197641791cd00a0bada9998fdaf669a416cc6b27676216a9cf38057671751050600d5d5ab69f01edd2dd77bf67aab9664a92b9e4f6c212d0c00aaa71d8143b28b5069fe1d7b7754bc9381f7e083c3bf1800544717e13fe2a63a9f869ebdae54c712fb48d8e6f5e1374375b303706876112ac5b1c025d945a87116039f228696d487014075e3d87f33ed85cbfd54bcc380cf03e3b30ba922ffb1a94e9e041c915d840ab700f82a2ef753b10e04be486cf5ab7e18005427afc1a7ffa6990b7c1b989d5d881a653f3c3572b50c00aa8b9d80c3b38b50a1a6025f2336fc918ab21fb181d4e4ec42aa6e5c7601d2105d8c4fff4d321eb882087652519e4a84ca29d985d4813d00aa83dd8183b38b50617a800fe15e0e2ad653816f60e33f640600d5c1c5d905a8506f263665918a62e33f02060055dddec0d3b28b5061cec5435854acfd816f62e33f6c060055dd6bb30b50614ec07dd855ac4370c2df881900546507004fc92e42853800b76255b18e04be8c8dff88f98f5155d503bc3ebb08156217e04bb8218b8a7334f0055ce73f2a060055d5625c22d6048b806f01d3b20b51631c077c16b7f71d350380aa680c8efd37c1a6c07770973f15e714e2601f1bff021800544527000bb38bd0a8ac07fc27b06e76216a8c1710f3483cd5af20060055cd78e0a2ec22342ab3802b818db30b5163bc0c7837ee065a280380aae654a2eb58f534955893bd6d76216a8c8b814bb0f12f9c6701a84aa600afce2e42a3721eb05b76116a841ee06dc08bb30b692a0380aae46c62ec58f5e5523f15612cf07ee0b4ec429acc00a0aa980dbc34bb0849e926009f068ec92ea4e90c00aa8a571093c724b5d75462d3a803b30b69030380aa600362898fa4f69a494c20dd3dbb90b63000a80a5e83fb794b6db63ef06ddcffa3ab5c06a86c5b03cfce2e42529a05c00fb0f1ef3a7b0094ed4db8b397d4563b129b46ad955d481bd903a04c7b014764172129c5fec0f7b1f14f630050961ee0add945484a713cf00d3c2532950140598e0576ce2e4252d79d4b9ce8e7a651c99c03a00c138037661721a9abc6006f075e945d8882014019ce0236c92e4252d74c043e41f4fca9220c00eab699c085d94548ea9a99c057807db20bd18a0c00eab657026b661721a92b362626fb6d9d5d8856e5244075d326c00bb38b90d4153b033fc1c6bfb20c00eaa64b8149d945482addd38935feeb6417a2811900d42d7b0247671721a974e7005f04a66417a2c1390740ddd0432cffe9c92e445269c601ef02cecc2e4443630050379c08ec945d84a4d2ac017c1e3828bb100d9d0140659b421cf823a999e601df04b6cd2e44c3e31c0095ed7ce2ac6f49cdb303701536feb56400509936200280a4e63918f81f0cf8b5650050992e05a6661721a91427e1697eb566005059f6048ecb2e4292d43f0380ca3006b80c97fd495265190054865389c94192a48a3200a868338037641721491a9c0140457b35b076761192a4c1190054a4adf0b43f49aa0503808a7419303ebb0849d2ea190054946700fb671721491a1a03808a3015785b761192a4a13300a8081712dbfe4a926ac200a0d15a00bc38bb0849d2f01800345a970113b38b90240d8f0140a371347060761192a4e1330068a4a602efc82e4292343206008dd4c538f14f926acb00a091d80e7851761192a491330068b87a80cb8171d985489246ce00a0e13a0dd823bb0849d2e81800341c73804bb28b90248d9e0140c3f11660cdec222449a36700d050ed039c9c5d8424a91806000dc524e0fdc404404952031800341417025b641721492a8e0140abb310383fbb084952b10c001acc18a2eb7f42762192a462190034983381ddb38b902415cf00a081cc03de905d8424a91c06000de4726046761192a4721800d49f670147641721492a8f01402b9b035c965d8424a95c0600adec5d44089024359801407d1d011c975d8424a97c0600f59a09bc37bb084952771800d4ebadc07ad9454892bac3002080a701a766172149ea1e0380d6003e8c27fd4952ab1800f40e60c3ec222449dd650068b78380e764172149ea3e03407bcd043e845dff92d44a0680f67a17b07e761192a41c0680763a1c3829bb0849521e0340fbac057c20bb0849522e0340fbbc17989b5d8424299701a05d4e068ec92e429294cf00d01e1be131bf92a40e03403b8c013e462cfd9324c900d012e702fb64172149aa0e0340f32d025e975d8424a95a0c00cd3611f8243029bb104952b518009aed4dc076d9454892aac700d05c0702e764172149aa26034033cd013e8e07fd4892066000689e1ea2f15f27bb1049527519009ae76ce0e0ec222449d5660068966d814bb28b9024559f01a039a6009fc3257f92a421300034c7bb80adb28b9024d58301a0198e074ecb2e4292541f0680fadb02785f761192a47a3100d4db44e0b3c0f4ec422449f56200a8b7b7033b64172149aa1f03407d1d039c955d8424a99e0c00f5b409f081ec222449f56500a89f49c0178059d9854892eacb00503fefc6717f49d2281900eae5d9c0e9d9454892eacf00501fdb02efc92e4292d40c06807a5803f822b1dfbf2449a36600a8878f029b671721496a0e0340f59d0f1c955d8424a9590c00d5b62ff0c6ec222449cd6300a8aef9c0e78071d98548929ac700504d93812f0373b20b9124359301a09a3e003c29bb0835deb212deb327fba6240d8d01a07a5e049c985d845ae1ee12de7372f64d491a1a0340b5ec03bc35bb08b5c65f4a78cfa9d9372569680c00d5311ff83c4efa53f7fc6f09ef3933fba6240d8d01a01aa601ff01ac9d5d885ae57325bce7fcec9b92343406807c63804f127bfd4bddf223e0c725bcefc6d9372669680c00f92e06166717a156791438a384f75d1797ae4ab56100c8751c704176116a9565c07381df96f0debb64df9ca4a13300e4d909f808ae9b56f73c0c9c0c7ca2a4f7df33fb06250d9d0120c7fac05771cdb4bae7bbc0cec0a74afc1a8766dfa4a4a173c959f74d05be06ac975d881aef77c03780cf02bf2cf96b6d0e6c997dc39286ce00d05d63804f033b6417a246ba1ff86fe09bc077809bbaf8b54fcebe7949c36300e8aeb703476617a146b99ee851fa0fe027c06309358c039e93fd8d90343c0680ee7901b1cfbf341a4f003f234e8bfc1af0c7ec82806388792d926ac400d01d8700976517a1da7a04f82fe00aa27bbf8c437c46aa07786576119286cf0050beed882d57c76617a25a799068ecaf00beddf975151d072cca2e42d2f01900ca358f98853d3dbb10d5c29d2c1fcfff2eb024bba0d59806bc25bb084923630028cf4ce04a22044803f927b127c4a781ef1363fc7571318efd4bb5650028c744e02bc0c2ec425449f7124ff95f2496eb3d9a5dd0083c153827bb0849236700285eefe97efb6417a24a7990180efa0cd1e857bd7b7f307388ed84dd4954aa310340f1de013c23bb0855c22344a3df3b7bffa1ec820a3089e8dd72684baa390340b1ce07cece2e42a9960157011f05be408cf137c5d8ce7ded915d88a4d1330014e744e0d2ec2294e64f44b7f8a7811bb38b29c118e2f4cae3b20b91540c0340310ec6a37ddbe84ee229ffa3c0cfb38b29d124e0e3c0b1d985482a8e0160f4f62466738fcf2e445df110b156ff73c0b7c8d97bbf9bd621c6fc77cb2e4452b10c00a3b33d31c96b4a76212ad532e209ff83c0e781fbb20bea927d89218db9d985482a9e0160e43623b6689d915d884a7307f031a28bffbaec62ba683af03ae085b8d44f6a2c03c0c8cc230e675927bb1015ee51e0ebc45e0edf041ecf2ea88bc60227006fc0657e52e31900866f2d6223978db20b51a1ae2326727e9c78f26f9309c0338197035b671723a93b0c00c33383d8dfdf1f92cdf030f025626cff7f89b1fe36d98e78e23f85d8dd4f528b1800866e1a31eb7bc7ec42346ad702ef073e05dc935d4c174d2256ad1c0e1c01cccf2e48521e03c0d04c2166fbef9e5d8846ec516239dbe5c4d37e5b6cccf2067f4fe2a02a4932000cc124e2b8d6bdb30bd1885c4f74f17f0cf87b76315d3016d89968f00f0516651724a99a0c00839b087c19d83fbb100dcb13c44cfef710ab359a3eb63f83d88df270e0206076764192aacf0030b0f1c46e6f076717a221bb1bf830f03ee086ec624a3607380c388a08a876ed4b1a160340ffc611e7b62fce2e4443f20be0df89c0f6487631259a071c0d1c43cc4771931e4923660058d578a2f13f26bb100dea51e00ae269ff47d9c594683ef1947f14d1e87be094a4421800563481d8eb7d7176211ad0df89257cef076ecd2ea6241b01cf20fe1edae84b2a850160b909c413e591d985a85fbf012e230ea7696237ff1ca2d7e9046cf42575810120f4cef63f24bb10ad6029b1f9d265c46cfea699413ce51f0fec472ce193a4ae3000c43affaf10cba7540d0f12ebf6df4ef366f34f2496eb9d0c1c48f43c4952d7b53d004c211aff03b20b1100b7136bf7df03dc955d4c81c6101b493d8be8e69f955d9024b53900cc20b6f7dd33bb10712df04ee208de25d9c514682131a6ff4c624b5e29cb8325bca7bd5735d7d6003007f836b04376212df77de0adc4098b4dd9ad6f0e31a67f0ab07d763152c78d25bce7d4ec9bd2e8b43100cc03be8347fa66594a9cadf036e0c7d9c514643cb163e4c9c4f8be4f46aa9a1f96f09e6b65df9446a76d016053e0bbc026d985b4d0a3c412beb7115dfe4db08868f48f07d6cb2e461ac052628973d136c8be318d4e9b02c042a2f15f37bb90967980388defedc05fb38b29c04c625cff39c093b38b9186e00a8a5f4db306b076f68d6974da1200762526fcad995d488bdc05bc8bd8a3ffeeec620ab017703ab143dfe4ec62a421ba0738bf84f75d889b55d55e1b02c021440276c24a77fc8398d87739f1f45f67b3806703cf03b6ca2e461aa6c788a5a765f4bced9a7d731abda60780e7001f68c17d56c1df80b710dfef87b28b19851e605fe269ffe978ccaeeae91ea2f1ff4e49efff94ec1bd4e835b961bc00781d765395ed16e052e023d47b8ffe39c0a944c3bf597631d2082d05be08bc04f84b495f6302119255734d0c006388b1e7176417d27037006f023e41ccf0afabdd80b388b17d9ff655842544f7fb6344287e0c789cd8eba26f487e64a53fb37490f79c409c1531becfebb83e7ff64662a9df15c09f4bbebf0380e95df83eaa644d0b0093804f01476717d2603701af073e4efc50aba3a9c4d2bdb370b39eb6780cb88f9897d2f7f5fecef510f070e77a6880d7953f7e84f837b0a4733d4ebdc3f0509d905d808ad1a400b026b1afff5ed98534d42dc01b89aefec7b28b19a12d813389b5fb33b38bd1902d251aeb7b881525f7f4b9fafefa3efa6fdcefa7dec35355b2167182a51aa02901600b6299dfe6d98534d0adc025c45afe3aeed33f163812783eb03fce09c9f6107067e7fa479fd7de06fc9e7eaebba8e7dfbd263a93e86955033421003c8578f29f9d5d48c3fc9d78e27f3ff57c7a9a019c069c0d6c945d4c832d05ee05ee20fecedcd1b96e254e77ecfd5c6fa3ff7076c11ab1e9c4bf273544dd03c0b3896567eebd5e9cbb8827fecba9e70feb05c40fa967e3de0fa3b19468bcff06dcd6e7f5b6953e7707f59d0ba2e13917f7ff6f94ba06801ee062e042ecd22dca03c065c4263effcc2e66987a8899c92f000e25568268604f100df85ffb5c7feb5c7fe9fcfa56ec76d7721b52ce8e824a54c7003019f810318b5ba3b78418df7f13d100d4c914e024e0df88ad49151e22266ddedc79fd0bcb1bf61b3aaf6d98adaee25c8e3d6a8d53b700b02ef03560c7ec421ae009e274be8b88a57d75b22ed1cdff3cda39f7e371963fb9df00fc8158fb7d23f1fff2ceec02d528a701876517a1e2d52900ec41ec703537bb909a5b067c95183ef95d7631c3b435701eb10eb9e99bf63c085c0ffca9f3dadbc0df403ccd3beeae6e58440c0daa81ea12009e4b9c2ae764bfd1f931318ef7e3ec428669af4edd4d1bdf7f8868d8ffc4f286bef7e3db88b026659943acb0b2ebbfa1aa1e00c6036f035e985d48cd5d0fbc92e841a94ba33286d870e45ca2f7a7ce6e27bae9ff40fcbfb8aef3f10d0cbefdab94651af07560d3ec42549e2a078039c01780bdb30ba9b17f10dbf6be97fa4cfa9a4cecd4770eb1735f5d2c25bae8af057e4f34f4bfef5c776717270dc374a2f1df25bb1095abaa016017e2508b0db30ba9a9878971bb4b884d5aea6016b18cef85c0dad9c50c621931b3feda95aedf51ef6390258809b6df0076c82e44e5ab62007801f0761cef1f89a5c461481752de51a0459b4374f39f05ac915dcc4afe09fcba73fd0af82dd1d0df975d98548245c42aabf9d985a83baa1400a611dbcebabe7f647e0abc18f849762143b42e31a3ff0cf227192d23d6ccff16f8bfceeb35c404bdbacc999046e3f9c03b882138b5445502c096c09788655e1a9e5b8197019fa11e8dd586c0cb8153c959caf738f047e0174468ba06f80d71629cd4361b00ef260ecc52cb5421001c47ece73f3dbb909a798858217129b166bceab62096f29d4cf786771e63f953fdaf88c6fe1aeaf1fd92ca3499e8817b39f93d704a921900261163fd67667f136a6619b19cef25c464b4aa5b085c003c83389ab7ccefcb75c0d5c43e073f279eecddcf5e5a6e0631dfe61caa3dd9565d90150016029fc5fddb87eb17c08b801f65173204db11db0c2fa69c039b6e077e065cd579bd1a27e749fd190bec47ccaf3a0a7b5bd5911100ce24baae9d6c327477114fd11fa4fa1bc76c4b34fc4fa7b8867f09f144ffd33ed7cdd9372a55d454e258ecdd817d88bd543cc657abe86600984d9ce2f7f4ec9bae91a5c08781571021a0ca16120dff518c7ebbde7f10ddf83fea5c3fc7ae7c75cf38a2119d4c0c554eee734d1ae4e349c4c4d6b19dd771c46ea613887f13933bbf37becfeff5d5c3aa136397b0e2e4de65c0239dcf2f217e464ced5c6b001b112b6c3c265dabd5ad00f014627dfa06d9375c233f27f644f8597621abb100b89818e31f49c3bf8cd8fbfe477daeeba8c78a0655c7786026b1a1d48cce35bd734d231ac7697d7e3d7da5dfeffbeb49d937237543d901a087e8ba7e0de54e006b92bb89efd907a87677ff7ce0d5c0490cefefd1526266fe7f77ae1fe2f1b50a3d44c33dbb73adb9d26bdfcfcf5ce99a925dbc54376506801ee07dc499ed5abda5c04789c6ff8eec6206b12e3124f13c86b68e7f29311bff7f88c6fe0715bf3f156b26b04ee75a9bd8f9710ed188cfea7c7ecdceeb1c9a7fccb35419650680f3b1f11faa5f113b71fd34bb9041cc26361cfa37067fda5a4a6c9dfb3fc413fe0ff0309ca6194f04c1f53ad7ba2c6fe4e776aede5fdb9d2e55545901600be0b5d93757030f01af2356453c965dcc00a60067032f259ed8fa730bf09f44a3ff5fc459f6aaa7d9c45c9d79c0fa44e33e97e50dfeba9dcb213da9e6ca0a00afc4aebcd5f90ef1347d7d76210318079c06bc8a6808faba17f83ef0ff80ef1107e4a8faa6108dfb86acd8c8cfebfc7a03a2cb5e520b941100a601cfccbeb10abb83181ef964762103e8018e015e4ff4e440ec9f7f15f174ff5fc450c5e3d9856a1593886560f3818d89c67d436093cee5f23049ff524600d813c7fdfab30cf818b1856f55c7c47725b667de8d588bff29e0ebc07789a371956f16d1986f066cd579dd8468f4e762032f6988ca08005b65df5405fd8198e4f783ec4206b005f006a20bf84a62bbe15f50ed65884dd5438cb56fd6e7dab4736d46ac6797a4512b2300cc1afd5b34c6e3c05b898d721ec92ea61fe3819d88c6e56c9cbcd74d5388e0b5a0736d4a84e72d88b5f09254aa3202c068b7816d8adf1093e8aece2e64108f115beefe38bb90069b0b6cddb936033607b624baecfdb722294de671c04df538f016e2a9dffdebdb634d601ba2a1effbba4e766192d41f0340b1ae019e4b8c9fab99a6038b88e38e17108dfc226ce825d58c01a0188f1293e8de447537f4d1f0f410cbe89e441c71bc1dd1d06f815df7921ac000307a3f074e27b6f3553d4d241af7ed89c67e1ba2e17742aba4c632008cdce3c0a5c458bf4ffdf5318e986dbf1bf0e4ceb58838b35d925ac3003032d7032752edc37b147fbf17108dfc4ec453fdf6c0d4ecc224299b0160789611471cbf8438c847d5328f78b2df83d8d5707b3c934292fa650018ba3b8053816f651722209ee29f4434f8bb108dfedceca224a92e0c0043f305e04ce0aeec425a6c0ba2917f32f174bf1dfefd95a411f307e8e0fe496c915bd593fb9a6a2c311b7f2f60f7ceeb7ad945495293180006f613e004e0c6ec425a6002f164bf17719ae45e782ebd2495ca00b0aa2788e57d17e199f765994274e73f8578c2df1d8f9096a4ae3200ace80ee2a9ff7bd98534cc786246fed3807d89a77c1b7c494a640058ee4ae014e0efd98534400fb1d9ce014483bf0fb187be24a9220c007162df05c0db8975fe1a994d800381a7027b036b671724491a58db03c01f81e38853fc343c9388aefc4381fd89fdf3254935d1e600f059e2e8de07b30ba9914d8806ff506202dfe4ec82244923d3c600b004380fb83cbb901a98448ce11f4834fa9b661724492a46db02c02dc031c0d5d98554d83ce070e04862f29e7be94b5203b529005c099c0cfc23bb908ae90176060e239ef2b7ef7c4e92d4606d08004b81d70317773e56accbdf0b580c1c05ac9f5d9024a9bb9a1e00ee2436f6f9cfec422a600a7030d1e81f02ccce2e489294a7c901e027c412bf5bb20b49348de8d63f1a380837e3912475343500bc0f7811f068762109a60147104ffa87124ffe9224ada069016009f042e083d98574d92462339e93b0d197240d419302c0df88aeeeabb20be99271c45efbc7114ffc33b20b9224d5475302c04f81a703b76517d2054f2696331e87fbed4b9246a80901e093c0f38047b20b29d1a6c08944a3bf65763192a4faab7300584a9ce27749762125994eec5a782271c29e9bf348920a53460078bc0b75df073c0bf85617be56378d211afb53880d7a9ccca7be1e260eaf7aa8f3fa30d1f3b5a4f3fa483fbf5e023c41ac8879acf3f11222403fd2e7f7faeafdef0633911543e9386283293a9f9f084ce87c6e42e7d7e33bd7a4ceeb38e240a92903bcf6fd5852c1ca080077975cf34dc45ef5bf2df9eb74d33ca2d13f15d838bb1815ea01e09f9deb1ee05e22c0dedbf9bdfb3ad7fd2bbdf636f20ff4f9b8ad3b59f61041602ab006b1d47546e7750da2b76cfa4abf371398d5e77556e7f7c764df8c54156504806b4bacf72a627dfb1d257e8d6e194f2cd93b9dd8a4676c76411ad4bdc05dfd5c77aff4eb7b58b1c1ef468f58d32d2302d083c0df47f13e63887030abcf351b9803acd5b9e6006baef4390fc45223951100ae229e5aa615fcbe9f279e92eb3ed96f43a2d13f1d5837bb98167b9408927700b7775eef241a98ded77ff4f9f592ec82356a4b895076cf30ffdc7462c5cddcceb54ee7eaef63872b541b6504800789c6fab402dff30dc0ab8827813a1a031c089c413cf5fbb45f9efb893d21fa5eb7118d7c6f437f3bd108d4f5ef93baebfecef5e721fcb7b381f58803b67a5f57fe786d1c8a500594b50ae075c4213c9346f93e8f0367021feae637a540b3892074268eed17e19fc4d90e7fe973dd02dccaf2c6fefeec22d56a7777aec1e6288d27e6fd6c40f4086eb8d2c71b12f315a4529515006e06ce032e1fc57b3c001c0b5cd9ed6f4a01b621ce22380167f20fd5e34463fe579637ec37b062636fe3ae26780cb8b1730d6406309f7870d818d888080df3897d416666df84eaafcc7d00de43fc653d7f047ff66fc061c03509df93911a4bec467836b057763115b48458c1d1fb83ef863e1fff85186fb74b5e0af702bfea5cfd599b08069b009b11a160b3ceb54e76f1aa87b237027a29f103fe6d0c7d72cc0f80e3896edd3a984e74f3bf88083c6db594186b5fb971effdf86fb477199b54b4bf77ae9ff6f37bd3591e083605b6001674aeb5b20b5775f42c5bd69587ae8d88497cc7337010f80df016e0d3d4a3a1d89078da3f9df61cc4f30431bcf3a795ae1b89a7fbbaafd0909a6e361104b6e8f3ba25b039b16193aaeb0dc08545be61b70240af35807d8831f2358906e346e0c7c0efbb59c8286c0bbc8c989f50e7ad9407b28ce87df923ab36f47f66d55de324d5df38a2b7602b60ebceeb564438989a5d9c800604803adb9b68f80fa219fbf2df07fc81085ed7110dfc1f81eb899de724a987e8c15db8d2b5256e90d46d850780263ec116a907388298c8b847763123741bcb1bfa3ff679bd1927dd491adc326278ef26e01b7d3e3f8e98f3b41db008d89ee81d9d4f331e905ac100d0bf31c0d1c02b8027651733044b89a194df77aeeb8946ffb7947f3683a4f6799cf839733df0a53e9f9f4604826d811d581e105c0e5d410680158d059e4174b36c935dcc00ee229606fd963877e1379dd7fbb20b93d47a0f003fe95cbdc6124b169f04ec4804831d8809894a6400086389497d1713b361abe0019637eebf241afcdf12014092eae20996f7167ca1f3b91e62b8a0370cec0c3c9938a0495dd2f600d0031c03bc9698d492612931be764d9febd7c48e7892d444cb58be5748ef10420fb12c7127a2a76047626e81ab104ad2d600d0431c2bfc2aba3bc67f3ff154ff4b62acfe974483ff60f6374492922d2356245d077caaf3b9b1c4c3d993813d8950b090384f41a3d4c600b00fb1e1d08e257f9dbb88c6fd6ae017c4b8fd9f71e6bd240dd513c430e8b5c0273a9f9b4c0482dd88de823d88d316354c6d0a00db026f248ee32dda6d4423ff73e0ff88a7fc9bb26f58921ae861e0879dabd77c6017a297603762f5419bdab71169c3376853e035c436c4459cc17d13cb9fe87f4934fab765dfa424b5d84d9debf39d5f4f257a09f6227a0876c3131457d1e400309358c77f36306984efd1db8dff63a2a1bf1ab83dfbc62449837a903858ee079d5f8f219676ef438482a750bf53130bdfa1b5895b018f07ce002e22ce1b18aa7b8927fbabfb5cb764df8c24a9703dc459074fe973ad9f5dd46a9c0c7cb2d06f42c302c061c05b8953ae06d33bb1e42ae238cd9f12b3f2eb700aa124a9789b1267be3c15d897ea4d2c5c406ce35e98a60480cd817702870cf0fb77108d7d6f837f35b1d18e2449fdd98a0802fb124307993b17fe9a98d858a8ba078069c005c08b597e32d532e077c08f88b1fb1f113b504992341263883d63f605f623860c2677f1eb9f027cbce837ad6b00e82166f55f428cf35f4d34f657114b43dc2e5792549649c492c3033bd742ca3b05f12a622543e143d4750b0063883da3f70596104ff7ff073c9a5d9824a9b5d6030e20c2c00114375c701bb184f1e6328aae5b0098808dbd24a9bac6128df6419d6b0746d63b7013703071b47b29ea16002449aa9379c011c091c464c209abf9ef9f003e06bc14b8bbccc20c00922475c70ce2a9fe10620ec146c4d0f643c4d2f4ef128d7f5726ae1b002449ca3196d8bcee918c2f6e009024a9858a381c479224d58c014092a41632004892d442060049925ac8002049520b190024496a21038024492d64009024a9850c009224b590014092a41632004892d442060049925ac8002049520b190024496a21038024492d64009024a9850c009224b590014092a41632004892d442060049925ac8002049520b190024496a21038024492d64009024a9850c009224b590014092a41632004892d442060049925ac8002049520b190024496a21038024492d64009024a9850c009224b590014092a41632004892d442060049925ac8002049520b190024496a21038024492df4ff01b48baff41a96c2120000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "getRecord": {
+      "id": 75276,
+      "api": [
+        {
+          "qs": {
+            "$filter": "LogicalName eq '{{parameters.logicalName}}'"
+          },
+          "url": "/EntityDefinitions",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "LogicalCollectionName": "{{get(body.value, '1.LogicalCollectionName')}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] Entity name is not defined."
+            },
+            "valid": "{{length(body.value) === 1}}",
+            "output": null
+          }
+        },
+        {
+          "url": "/{{temp.LogicalCollectionName}}({{parameters.id}})",
+          "method": "GET",
+          "response": {
+            "output": "{{parseResponse(body)}}"
+          }
+        }
+      ],
+      "rev": 4,
+      "crud": "read",
+      "name": "getRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Record",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "logicalName",
+          "type": "select",
+          "label": "Record Type",
+          "options": {
+            "store": "rpc://app%23microsoft-dynamics-365-crm@1/listEntityDefinitions",
+            "nested": [
+              {
+                "mode": "edit",
+                "name": "id",
+                "type": "select",
+                "label": "Record ID",
+                "options": "rpc://app%23microsoft-dynamics-365-crm@1/listEntitiesRecords",
+                "required": true
+              }
+            ]
+          },
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "microsoft-dynamics-365-crm",
+      "samples": null,
+      "apiJsonc": "[\n    {\n        \"url\": \"/EntityDefinitions\",\n        \"method\": \"GET\",\n        \"qs\": {\n            \"$filter\": \"LogicalName eq '{{parameters.logicalName}}'\"\n        },\n        \"response\": {\n            \"valid\": \"{{length(body.value) === 1}}\",\n            \"error\": {\n                \"message\": \"[{{statusCode}}] Entity name is not defined.\"\n            },\n            \"temp\": {\n                \"LogicalCollectionName\": \"{{get(body.value, '1.LogicalCollectionName')}}\"\n            },\n            \"output\": null\n        }\n    },\n    {\n        \"url\": \"/{{temp.LogicalCollectionName}}({{parameters.id}})\",\n        \"method\": \"GET\",\n        \"response\": {\n            \"output\": \"{{parseResponse(body)}}\"\n        }\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23microsoft-dynamics-365-crm@1/listEntityParameters?type=interface"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "microsoft-dynamics-365-crm",
+      "description": "Retrieves an existing record.",
+      "expectJsonc": "[\n    {\n        \"name\": \"logicalName\",\n        \"type\": \"select\",\n\t\t\"options\": {\n\t\t\t\"store\": \"rpc://listEntityDefinitions\",\n\t\t\t\"nested\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": \"rpc://listEntitiesRecords\",\n\t\t\t\t\t\"label\": \"Record ID\",\n\t\t\t\t\t\"mode\": \"edit\",\n\t\t\t\t\t\"required\": true\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"mode\": \"edit\",\n        \"label\": \"Record Type\",\n\t\t\"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://listEntityParameters?type=interface\"\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "makeAPICall": {
+      "id": 74377,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "{{connection.host}}/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "makeAPICall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "name": "hidden",
+          "type": "hidden",
+          "label": "Hidden"
+        },
+        "rpc://app%23microsoft-dynamics-365-crm@1/parseURL",
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "microsoft-dynamics-365-crm",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"url\": \"{{connection.host}}/{{parameters.url}}\",\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"method\": \"{{parameters.method}}\",\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"body\": \"{{body}}\",\n            \"headers\": \"{{headers}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status Code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "microsoft-dynamics-365-crm",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n\t{\n        \"name\": \"hidden\",\n        \"type\": \"hidden\",\n        \"label\": \"Hidden\"\n    },\t\n    \"rpc://parseURL\",\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ],\n        \"required\": true\n    },\n    {\n        \"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"name\": \"headers\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"type\": \"text\",\n                \"label\": \"Key\"\n            },\n            {\n                \"name\": \"value\",\n                \"type\": \"text\",\n                \"label\": \"Value\"\n            }\n        ],\n        \"type\": \"array\",\n        \"label\": \"Headers\",\n        \"default\": [\n            {\n                \"key\": \"Content-Type\",\n                \"value\": \"application/json\"\n            }\n        ]\n    },\n    {\n        \"name\": \"qs\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"type\": \"text\",\n                \"label\": \"Key\"\n            },\n            {\n                \"name\": \"value\",\n                \"type\": \"text\",\n                \"label\": \"Value\"\n            }\n        ],\n        \"type\": \"array\",\n        \"label\": \"Query String\"\n    },\n    {\n        \"name\": \"body\",\n        \"type\": \"any\",\n        \"label\": \"Body\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"body\",\n        \"type\": \"any\",\n        \"label\": \"Body\"\n    },\n    {\n        \"name\": \"headers\",\n        \"type\": \"collection\",\n        \"label\": \"Headers\"\n    },\n    {\n        \"name\": \"statusCode\",\n        \"type\": \"number\",\n        \"label\": \"Status Code\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createRecord": {
+      "id": 74657,
+      "api": [
+        {
+          "qs": {
+            "$filter": "LogicalName eq '{{parameters.logicalName}}'"
+          },
+          "url": "/EntityDefinitions",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "LogicalCollectionName": "{{get(body.value, '1.LogicalCollectionName')}}"
+            },
+            "output": null
+          }
+        },
+        {
+          "url": "/{{temp.LogicalCollectionName}}",
+          "body": "{{mergeCollections(formatInput(omit(parameters.properties, parameters.additionalProperties)), toCollection(parameters.additionalProperties, 'key', 'value')}}",
+          "method": "POST",
+          "response": {
+            "error": {
+              "message": "[{{statusCode}}] {{parseError(body)}}"
+            },
+            "valid": {
+              "type": "ValidationError",
+              "message": "Unable to create {{temp.LogicalCollectionName}}. Please check your input.",
+              "condition": "{{getEntityId(headers)}}"
+            },
+            "output": {
+              "id": "{{getEntityId(headers)}}"
+            }
+          }
+        }
+      ],
+      "rev": 5,
+      "crud": "create",
+      "name": "createRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Record",
+      "scope": [],
+      "expect": [
+        {
+          "name": "logicalName",
+          "type": "select",
+          "label": "Record Type",
+          "options": {
+            "store": "rpc://app%23microsoft-dynamics-365-crm@1/listEntityDefinitions",
+            "nested": [
+              "rpc://app%23microsoft-dynamics-365-crm@1/listEntityParameters?type=create"
+            ]
+          },
+          "required": true
+        },
+        {
+          "help": "Additional properties to be included in the record. These override properties in __Entity Properties__ provided.",
+          "name": "additionalProperties",
+          "spec": {
+            "spec": [
+              {
+                "help": "The provided property key must belongs to the __Record Type__ specified.",
+                "name": "key",
+                "type": "text",
+                "label": "Key",
+                "required": true
+              },
+              {
+                "name": "value",
+                "type": "any",
+                "label": "Value"
+              }
+            ],
+            "type": "collection",
+            "label": "Property"
+          },
+          "type": "array",
+          "label": "Additional Properties",
+          "labels": {
+            "add": "Add property"
+          },
+          "advanced": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "microsoft-dynamics-365-crm",
+      "samples": null,
+      "apiJsonc": "[\n\t{\n\t\t\"url\": \"/EntityDefinitions\",\n\t\t\"method\": \"GET\",\n\t\t\"qs\": {\n\t\t\t\"$filter\": \"LogicalName eq '{{parameters.logicalName}}'\"\n\t\t},\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"LogicalCollectionName\": \"{{get(body.value, '1.LogicalCollectionName')}}\"\n\t\t\t},\n\t\t\t\"output\": null\n\t\t}\n\t},\n\t{\n\t\t\"url\": \"/{{temp.LogicalCollectionName}}\",\n\t\t\"method\": \"POST\",\n        \"body\": \"{{mergeCollections(formatInput(omit(parameters.properties, parameters.additionalProperties)), toCollection(parameters.additionalProperties, 'key', 'value')}}\",\n\t\t\"response\": {\n\t\t\t\"output\": {\n\t\t\t\t\"id\": \"{{getEntityId(headers)}}\"\n\t\t\t},\n\t\t\t\"valid\": {\n\t\t\t\t\"condition\": \"{{getEntityId(headers)}}\",\n\t\t\t\t\"type\": \"ValidationError\",\n\t\t\t\t\"message\": \"Unable to create {{temp.LogicalCollectionName}}. Please check your input.\"\n\t\t\t},\n\t\t\t\"error\": {\n\t\t\t\t\"message\": \"[{{statusCode}}] {{parseError(body)}}\"\n\t\t\t}\n\t\t}\n\t}\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Record ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "microsoft-dynamics-365-crm",
+      "description": "Creates a new record.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"logicalName\",\n\t\t\"type\": \"select\",\n\t\t\"options\": {\n\t\t\t\"store\": \"rpc://listEntityDefinitions\",\n\t\t\t\"nested\": [\n\t\t\t\t\"rpc://listEntityParameters?type=create\"\n\t\t\t]\n\t\t},\n\t\t\"label\": \"Record Type\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"additionalProperties\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Additional Properties\",\n\t\t\"help\": \"Additional properties to be included in the record. These override properties in __Entity Properties__ provided.\",\n\t\t\"labels\": {\n\t\t\t\"add\": \"Add property\"\n\t\t},\n\t\t\"advanced\": true,\n\t\t\"spec\": {\n\t\t\t\"type\": \"collection\",\n\t\t\t\"label\": \"Property\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"key\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Key\",\n\t\t\t\t\t\"help\": \"The provided property key must belongs to the __Record Type__ specified.\",\n\t\t\t\t\t\"required\": true\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"value\",\n\t\t\t\t\t\"type\": \"any\",\n\t\t\t\t\t\"label\": \"Value\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Record ID\"\n\t}\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deleteRecord": {
+      "id": 75279,
+      "api": [
+        {
+          "qs": {
+            "$filter": "LogicalName eq '{{parameters.logicalName}}'"
+          },
+          "url": "/EntityDefinitions",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "LogicalCollectionName": "{{get(body.value, '1.LogicalCollectionName')}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] Entity name is not defined."
+            },
+            "valid": "{{length(body.value) === 1}}",
+            "output": null
+          }
+        },
+        {
+          "url": "/{{temp.LogicalCollectionName}}({{parameters.id}})",
+          "method": "DELETE",
+          "response": {
+            "output": null
+          }
+        }
+      ],
+      "rev": 3,
+      "crud": "delete",
+      "name": "deleteRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Delete a Record",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "logicalName",
+          "type": "select",
+          "label": "Record Type",
+          "options": {
+            "store": "rpc://app%23microsoft-dynamics-365-crm@1/listEntityDefinitions",
+            "nested": [
+              {
+                "mode": "edit",
+                "name": "id",
+                "type": "select",
+                "label": "Record ID",
+                "options": "rpc://app%23microsoft-dynamics-365-crm@1/listEntitiesRecords",
+                "required": true
+              }
+            ]
+          },
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "microsoft-dynamics-365-crm",
+      "samples": null,
+      "apiJsonc": "[\n    {\n        \"url\": \"/EntityDefinitions\",\n        \"method\": \"GET\",\n        \"qs\": {\n            \"$filter\": \"LogicalName eq '{{parameters.logicalName}}'\"\n        },\n        \"response\": {\n            \"valid\": \"{{length(body.value) === 1}}\",\n            \"error\": {\n                \"message\": \"[{{statusCode}}] Entity name is not defined.\"\n            },\n            \"temp\": {\n                \"LogicalCollectionName\": \"{{get(body.value, '1.LogicalCollectionName')}}\"\n            },\n            \"output\": null\n        }\n    },\n    {\n        \"url\": \"/{{temp.LogicalCollectionName}}({{parameters.id}})\",\n        \"method\": \"DELETE\",\n        \"response\": {\n            \"output\": null\n        }\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "microsoft-dynamics-365-crm",
+      "description": "Deletes an existing record.",
+      "expectJsonc": "[\n    {\n        \"name\": \"logicalName\",\n        \"type\": \"select\",\n\t\t\"options\": {\n\t\t\t\"store\": \"rpc://listEntityDefinitions\",\n\t\t\t\"nested\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": \"rpc://listEntitiesRecords\",\n\t\t\t\t\t\"label\": \"Record ID\",\n\t\t\t\t\t\"mode\": \"edit\",\n\t\t\t\t\t\"required\": true\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"mode\": \"edit\",\n        \"label\": \"Record Type\",\n\t\t\"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "updateRecord": {
+      "id": 75280,
+      "api": [
+        {
+          "qs": {
+            "$filter": "LogicalName eq '{{parameters.logicalName}}'"
+          },
+          "url": "/EntityDefinitions",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "LogicalCollectionName": "{{get(body.value, '1.LogicalCollectionName')}}"
+            },
+            "output": null
+          }
+        },
+        {
+          "url": "/{{temp.LogicalCollectionName}}({{parameters.id}})",
+          "body": "{{mergeCollections(formatInput(omit(parameters.properties, parameters.additionalProperties)), toCollection(parameters.additionalProperties, 'key', 'value')}}",
+          "method": "PATCH",
+          "response": {
+            "error": {
+              "message": "[{{statusCode}}] {{parseError(body)}}"
+            },
+            "valid": {
+              "type": "ValidationError",
+              "message": "Unable to update {{temp.LogicalCollectionName}}. Please check your input.",
+              "condition": "{{getEntityId(headers)}}"
+            },
+            "output": {
+              "id": "{{getEntityId(headers)}}"
+            }
+          }
+        }
+      ],
+      "rev": 6,
+      "crud": "update",
+      "name": "updateRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Update a Record",
+      "scope": [],
+      "expect": [
+        {
+          "name": "logicalName",
+          "type": "select",
+          "label": "Record Type",
+          "options": {
+            "store": "rpc://app%23microsoft-dynamics-365-crm@1/listEntityDefinitions",
+            "nested": [
+              {
+                "mode": "edit",
+                "name": "id",
+                "type": "select",
+                "label": "Record ID",
+                "options": "rpc://app%23microsoft-dynamics-365-crm@1/listEntitiesRecords",
+                "required": true
+              },
+              "rpc://app%23microsoft-dynamics-365-crm@1/listEntityParameters?type=update"
+            ]
+          },
+          "required": true
+        },
+        {
+          "help": "Additional properties to be included in the record. These override properties in __Entity Properties__ provided.",
+          "name": "additionalProperties",
+          "spec": {
+            "spec": [
+              {
+                "help": "The provided property key must belongs to the __Record Type__ specified.",
+                "name": "key",
+                "type": "text",
+                "label": "Key",
+                "required": true
+              },
+              {
+                "name": "value",
+                "type": "any",
+                "label": "Value"
+              }
+            ],
+            "type": "collection",
+            "label": "Property"
+          },
+          "type": "array",
+          "label": "Additional Properties",
+          "labels": {
+            "add": "Add property"
+          },
+          "advanced": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "microsoft-dynamics-365-crm",
+      "samples": null,
+      "apiJsonc": "[\n    {\n        \"url\": \"/EntityDefinitions\",\n        \"method\": \"GET\",\n        \"qs\": {\n            \"$filter\": \"LogicalName eq '{{parameters.logicalName}}'\"\n        },\n        \"response\": {\n            \"temp\": {\n                \"LogicalCollectionName\": \"{{get(body.value, '1.LogicalCollectionName')}}\"\n            },\n            \"output\": null\n        }\n    },\n    {\n        \"url\": \"/{{temp.LogicalCollectionName}}({{parameters.id}})\",\n        \"method\": \"PATCH\",\n        \"body\": \"{{mergeCollections(formatInput(omit(parameters.properties, parameters.additionalProperties)), toCollection(parameters.additionalProperties, 'key', 'value')}}\",\n        \"response\": {\n            \"output\": {\n\t\t\t\t\"id\": \"{{getEntityId(headers)}}\"\n\t\t\t},\n\t\t\t\"valid\": {\n\t\t\t\t\"condition\": \"{{getEntityId(headers)}}\",\n\t\t\t\t\"type\": \"ValidationError\",\n\t\t\t\t\"message\": \"Unable to update {{temp.LogicalCollectionName}}. Please check your input.\"\n\t\t\t},\n\t\t\t\"error\": {\n\t\t\t\t\"message\": \"[{{statusCode}}] {{parseError(body)}}\"\n\t\t\t}\n        }\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Record ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "microsoft-dynamics-365-crm",
+      "description": "Updates an existing record.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"logicalName\",\n\t\t\"type\": \"select\",\n\t\t\"options\": {\n\t\t\t\"store\": \"rpc://listEntityDefinitions\",\n\t\t\t\"nested\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": \"rpc://listEntitiesRecords\",\n\t\t\t\t\t\"label\": \"Record ID\",\n\t\t\t\t\t\"mode\": \"edit\",\n\t\t\t\t\t\"required\": true\n\t\t\t\t},\n\t\t\t\t\"rpc://listEntityParameters?type=update\"\n\t\t\t]\n\t\t},\n\t\t\"label\": \"Record Type\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"additionalProperties\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Additional Properties\",\n\t\t\"help\": \"Additional properties to be included in the record. These override properties in __Entity Properties__ provided.\",\n\t\t\"labels\": {\n\t\t\t\"add\": \"Add property\"\n\t\t},\n\t\t\"advanced\": true,\n\t\t\"spec\": {\n\t\t\t\"type\": \"collection\",\n\t\t\t\"label\": \"Property\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"key\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Key\",\n\t\t\t\t\t\"help\": \"The provided property key must belongs to the __Record Type__ specified.\",\n\t\t\t\t\t\"required\": true\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"value\",\n\t\t\t\t\t\"type\": \"any\",\n\t\t\t\t\t\"label\": \"Value\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Record ID\"\n\t}\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchRecords": {
+      "id": 78925,
+      "api": [
+        {
+          "qs": {
+            "$filter": "LogicalName eq '{{parameters.logicalName}}'"
+          },
+          "url": "/EntityDefinitions",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "PrimaryIdAttribute": "{{get(body.value, '1.PrimaryIdAttribute')}}",
+              "LogicalCollectionName": "{{get(body.value, '1.LogicalCollectionName')}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] Entity name is not defined."
+            },
+            "valid": "{{length(body.value) === 1}}",
+            "output": null
+          }
+        },
+        {
+          "qs": {
+            "$orderby": "createdon desc"
+          },
+          "url": "/{{temp.LogicalCollectionName}}",
+          "method": "GET",
+          "headers": {
+            "Prefer": "odata.maxpagesize=100"
+          },
+          "response": {
+            "limit": "{{parameters.limit}}",
+            "output": "{{parseResponse(item)}}",
+            "iterate": "{{body.value}}",
+            "trigger": {
+              "id": "{{get(item, temp.PrimaryIdAttribute)}}",
+              "date": "{{parseDate(item.createdon, 'YYYY-MM-DDTHH:mm:ssZ')}}",
+              "type": "date",
+              "order": "desc"
+            }
+          },
+          "pagination": {
+            "url": "{{body.`@odata.nextLink`}}",
+            "condition": "{{ifempty(body.`@odata.nextLink`, false)}}"
+          }
+        }
+      ],
+      "rev": 5,
+      "crud": "read",
+      "name": "watchRecords",
+      "epoch": {
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{parseDate(item.createdon, 'YYYY-MM-DDTHH:mm:ssZ')}}",
+            "label": "{{item.name || 'Record ID: ' + get(item, temp.PrimaryIdAttribute)}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Records",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "microsoft-dynamics-365-crm",
+      "samples": null,
+      "apiJsonc": "[\n    {\n        \"url\": \"/EntityDefinitions\",\n        \"method\": \"GET\",\n        \"qs\": {\n            \"$filter\": \"LogicalName eq '{{parameters.logicalName}}'\"\n        },\n        \"response\": {\n\t\t\t\"valid\": \"{{length(body.value) === 1}}\",\n\t\t\t\"error\": {\n\t\t\t\t\"message\": \"[{{statusCode}}] Entity name is not defined.\"\n\t\t\t},\n            \"temp\": {\n                \"LogicalCollectionName\": \"{{get(body.value, '1.LogicalCollectionName')}}\",\n\t\t\t\t\"PrimaryIdAttribute\": \"{{get(body.value, '1.PrimaryIdAttribute')}}\"\n            },\n            \"output\": null\n        }\n    },\n\t{\n\t\t\"url\": \"/{{temp.LogicalCollectionName}}\",\n\t\t\"method\": \"GET\",\n\t\t\"headers\": {\n\t\t\t\"Prefer\": \"odata.maxpagesize=100\"\n\t\t},\n\t\t\"qs\": {\n\t\t\t\"$orderby\": \"createdon desc\"\n\t\t},\n\t\t\"response\": {\n\t\t\t\"iterate\": \"{{body.value}}\",\n\t\t\t\"trigger\": {\n\t\t\t\t\"id\": \"{{get(item, temp.PrimaryIdAttribute)}}\",\n\t\t\t\t\"date\": \"{{parseDate(item.createdon, 'YYYY-MM-DDTHH:mm:ssZ')}}\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"order\": \"desc\"\n\t\t\t},\n\t\t\t\"output\": \"{{parseResponse(item)}}\",\n\t\t\t\"limit\": \"{{parameters.limit}}\"\n\t\t},\n\t\t\"pagination\": {\n\t\t\t\"url\": \"{{body.`@odata.nextLink`}}\",\n\t\t\t\"condition\": \"{{ifempty(body.`@odata.nextLink`, false)}}\"\n\t\t}\n\t}\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23microsoft-dynamics-365-crm@1/listEntityParameters?type=interface"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n    \"response\": {\n\t\t\"limit\": 300,\n        \"output\": {\n            \"date\": \"{{parseDate(item.createdon, 'YYYY-MM-DDTHH:mm:ssZ')}}\",\n            \"label\": \"{{item.name || 'Record ID: ' + get(item, temp.PrimaryIdAttribute)}}\"\n        }\n    }\n}",
+      "parameters": [
+        {
+          "name": "logicalName",
+          "type": "select",
+          "label": "Record Type",
+          "options": "rpc://app%23microsoft-dynamics-365-crm@1/listEntityDefinitions",
+          "required": true
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 2,
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "accountName": "microsoft-dynamics-365-crm",
+      "description": "Triggers when a new record has been created.",
+      "expectJsonc": null,
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://listEntityParameters?type=interface\"\n]",
+      "parametersJsonc": "[\n\t{\n        \"name\": \"logicalName\",\n        \"type\": \"select\",\n\t\t\"options\": \"rpc://listEntityDefinitions\",\n        \"label\": \"Record Type\",\n\t\t\"required\": true\n    },\n    {\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 2,\n        \"required\": true\n    }\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "searchRecords": {
+      "id": 75314,
+      "api": [
+        {
+          "qs": {
+            "$filter": "LogicalName eq '{{parameters.logicalName}}'"
+          },
+          "url": "/EntityDefinitions",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "LogicalCollectionName": "{{get(body.value, '1.LogicalCollectionName')}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] Entity name is not defined."
+            },
+            "valid": "{{length(body.value) === 1}}",
+            "output": null
+          }
+        },
+        {
+          "qs": {
+            "$top": "{{parameters.top}}",
+            "$apply": "{{parameters.apply}}",
+            "$expand": "{{parameters.expand}}",
+            "$filter": "{{parameters.filter}}",
+            "$select": "{{parameters.select}}",
+            "$orderby": "{{parameters.orderby}}"
+          },
+          "url": "/{{temp.LogicalCollectionName}}",
+          "method": "GET",
+          "headers": {
+            "Prefer": "odata.maxpagesize=100"
+          },
+          "response": {
+            "limit": "{{parameters.limit}}",
+            "output": "{{parseResponse(item)}}",
+            "iterate": "{{body.value}}"
+          },
+          "pagination": {
+            "url": "{{body.`@odata.nextLink`}}",
+            "condition": "{{ifempty(body.`@odata.nextLink`, false)}}"
+          }
+        }
+      ],
+      "rev": 5,
+      "crud": "read",
+      "name": "searchRecords",
+      "epoch": null,
+      "flags": {},
+      "label": "Search Records",
+      "scope": [],
+      "expect": [
+        {
+          "name": "logicalName",
+          "type": "select",
+          "label": "Record Type",
+          "options": "rpc://app%23microsoft-dynamics-365-crm@1/listEntityDefinitions",
+          "required": true
+        },
+        {
+          "help": "The filter parameter value. Use [this](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api) article to get available values.",
+          "name": "filter",
+          "type": "text",
+          "label": "Filter"
+        },
+        {
+          "help": "A comma-separated list of fields. Use this parameter to get exact fields. Check [this](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api) article to get available values.",
+          "name": "select",
+          "type": "text",
+          "label": "Select"
+        },
+        {
+          "help": "Set this field to expand your response. Check [this](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api) article to get available values.",
+          "name": "expand",
+          "type": "text",
+          "label": "Expand"
+        },
+        {
+          "help": "Set this field to order response. Check [this](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api) article to get available values.",
+          "name": "orderby",
+          "type": "text",
+          "label": "Order by"
+        },
+        {
+          "help": "By using `$apply` you can aggregate and group your data dynamically. Check [this](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api) article to get available values.",
+          "name": "apply",
+          "type": "text",
+          "label": "Apply"
+        },
+        {
+          "help": "You can limit the number of results returned by using the `$top` system query option.",
+          "name": "top",
+          "type": "uinteger",
+          "label": "Top"
+        },
+        {
+          "help": "Number of records to return.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "microsoft-dynamics-365-crm",
+      "samples": null,
+      "apiJsonc": "[\n    {\n        \"url\": \"/EntityDefinitions\",\n        \"method\": \"GET\",\n        \"qs\": {\n            \"$filter\": \"LogicalName eq '{{parameters.logicalName}}'\"\n        },\n        \"response\": {\n\t\t\t\"valid\": \"{{length(body.value) === 1}}\",\n\t\t\t\"error\": {\n\t\t\t\t\"message\": \"[{{statusCode}}] Entity name is not defined.\"\n\t\t\t},\n            \"temp\": {\n                \"LogicalCollectionName\": \"{{get(body.value, '1.LogicalCollectionName')}}\"\n            },\n            \"output\": null\n        }\n    },\n    {\n        \"url\": \"/{{temp.LogicalCollectionName}}\",\n        \"method\": \"GET\",\n\t\t\"headers\": {\n\t\t\t\"Prefer\": \"odata.maxpagesize=100\"\n\t\t},\n\t\t\"qs\": {\n\t\t\t\"$filter\": \"{{parameters.filter}}\",\n\t\t\t\"$select\": \"{{parameters.select}}\",\n\t\t\t\"$expand\": \"{{parameters.expand}}\",\n\t\t\t\"$orderby\": \"{{parameters.orderby}}\",\n\t\t\t\"$apply\": \"{{parameters.apply}}\",\n\t\t\t\"$top\": \"{{parameters.top}}\"\n\t\t},\n        \"response\": {\n            \"iterate\": \"{{body.value}}\",\n\t\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\t\"output\": \"{{parseResponse(item)}}\"\n        },\n\t\t\"pagination\": {\n\t\t\t\"url\": \"{{body.`@odata.nextLink`}}\",\n\t\t\t\"condition\": \"{{ifempty(body.`@odata.nextLink`, false)}}\"\n\t\t}\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23microsoft-dynamics-365-crm@1/listEntityParameters?type=interface"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "microsoft-dynamics-365-crm",
+      "description": "Searches for records or lists them all.",
+      "expectJsonc": "[\n    {\n        \"name\": \"logicalName\",\n        \"type\": \"select\",\n\t\t\"options\": \"rpc://listEntityDefinitions\",\n        \"label\": \"Record Type\",\n\t\t\"required\": true\n    },\n\t{\n        \"name\": \"filter\",\n\t\t\"type\": \"text\",\n        \"label\": \"Filter\",\n        \"help\": \"The filter parameter value. Use [this](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api) article to get available values.\"\n    },\n\t{\n        \"name\": \"select\",\n\t\t\"type\": \"text\",\n        \"label\": \"Select\",\n        \"help\": \"A comma-separated list of fields. Use this parameter to get exact fields. Check [this](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api) article to get available values.\"\n    },\n\t{\n        \"name\": \"expand\",\n\t\t\"type\": \"text\",\n        \"label\": \"Expand\",\n        \"help\": \"Set this field to expand your response. Check [this](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api) article to get available values.\"\n    },\n\t{\n        \"name\": \"orderby\",\n\t\t\"type\": \"text\",\n        \"label\": \"Order by\",\n        \"help\": \"Set this field to order response. Check [this](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api) article to get available values.\"\n    },\n\t{\n        \"name\": \"apply\",\n\t\t\"type\": \"text\",\n        \"label\": \"Apply\",\n        \"help\": \"By using `$apply` you can aggregate and group your data dynamically. Check [this](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api) article to get available values.\"\n    },\n\t{\n        \"name\": \"top\",\n\t\t\"type\": \"uinteger\",\n        \"label\": \"Top\",\n        \"help\": \"You can limit the number of results returned by using the `$top` system query option.\"\n    },\n    {\n        \"name\": \"limit\",\n        \"label\": \"Limit\",\n        \"type\": \"uinteger\",\n        \"help\": \"Number of records to return.\",\n        \"default\": 10\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://listEntityParameters?type=interface\"\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "microsoft-dynamics-365-crm": {
+      "api": {
+        "info": {
+          "log": {
+            "sanitize": [
+              "request.headers.authorization"
+            ]
+          },
+          "url": "{{connection.host}}/api/data/v9.2/WhoAmI",
+          "temp": "{{parseJWT(connection.idToken)}}",
+          "headers": {
+            "authorization": "Bearer {{connection.accessToken}}"
+          },
+          "response": {
+            "uid": "{{temp.oid}}",
+            "metadata": {
+              "type": "text",
+              "value": "{{temp.preferred_username}} - {{connection.host}}"
+            }
+          }
+        },
+        "token": {
+          "log": {
+            "sanitize": [
+              "request.body.code",
+              "request.body.client_secret",
+              "request.body.code_verifier",
+              "response.body.access_token",
+              "response.body.refresh_token",
+              "response.body.id_token"
+            ]
+          },
+          "url": "https://login.microsoftonline.com/{{ifempty(parameters.tenantId, 'organizations')}}/oauth2/v2.0/token",
+          "body": {
+            "code": "{{temp.code}}",
+            "client_id": "{{parameters.clientId}}",
+            "grant_type": "authorization_code",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "client_secret": "{{parameters.clientSecret}}",
+            "code_verifier": "{{temp.code_verifier}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "scope": "{{temp.scope}}",
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "idToken": "{{body.id_token}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] {{parseError(body)}}"
+            }
+          }
+        },
+        "refresh": {
+          "log": {
+            "sanitize": [
+              "request.body.client_secret",
+              "request.body.refresh_token",
+              "response.body.access_token",
+              "response.body.refresh_token",
+              "response.body.id_token"
+            ]
+          },
+          "url": "https://login.microsoftonline.com/{{ifempty(parameters.tenantId, 'organizations')}}/oauth2/v2.0/token",
+          "body": {
+            "scope": "{{data.scope}}",
+            "client_id": "{{parameters.clientId}}",
+            "grant_type": "refresh_token",
+            "client_secret": "{{parameters.clientSecret}}",
+            "refresh_token": "{{data.refreshToken}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] {{parseError(body)}}"
+            }
+          },
+          "condition": "{{data.expires < addMinutes(now, 15)}}"
+        },
+        "authorize": {
+          "qs": {
+            "scope": "{{temp.scope}}",
+            "prompt": "consent",
+            "client_id": "{{parameters.clientId}}",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "response_mode": "query",
+            "response_type": "code",
+            "code_challenge": "{{base64url(sha256(temp.code_verifier, 'base64'))}}",
+            "code_challenge_method": "S256"
+          },
+          "url": "https://login.microsoftonline.com/{{ifempty(parameters.tenantId, 'organizations')}}/oauth2/v2.0/authorize",
+          "temp": {
+            "scope": "{{replace(join(oauth.scope, ' '), '{host}', parameters.host)}}",
+            "code_verifier": "{{uuid}}"
+          },
+          "response": {
+            "temp": {
+              "code": "{{query.code}}"
+            },
+            "valid": {
+              "type": "AccountValidationError",
+              "message": "[{{query.error}}] {{query.error_description}}",
+              "condition": "{{!query.error}}"
+            }
+          }
+        }
+      },
+      "rev": 9,
+      "name": "microsoft-dynamics-365-crm",
+      "type": "oauth",
+      "label": "Microsoft Dynamics 365 - CRM",
+      "scope": [
+        "openid",
+        "profile",
+        "email",
+        "offline_access",
+        "{host}/.default"
+      ],
+      "scopes": {
+        "email": "Access user primary email",
+        "openid": "Enable OpenID Connect sign in",
+        "profile": "Access user profile",
+        "offline_access": "Access resources on behalf of the user",
+        "{host}/.default": "Access data."
+      },
+      "aliasTo": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "install": {},
+      "apiJsonc": "{\n\n    // All `ifempty(parameters.tenantId, 'organizations')` are placeholders for future development of the app for multi-tenant.\n\t\n    \"authorize\": {\n        \"temp\": {\n\t\t\n            // {host} is a placeholder to put host URL as the prefix of the scope.\n            // For example, `{host}/AX.FullAccess` -> `https://example.cloudax.dynamics.com/AX.FullAccess`.\n\t\t\t\n            \"scope\": \"{{replace(join(oauth.scope, ' '), '{host}', parameters.host)}}\",\n            \"code_verifier\": \"{{uuid}}\"\n        },\n        \"qs\": {\n            \"scope\": \"{{temp.scope}}\",\n            \"client_id\": \"{{parameters.clientId}}\",\n            \"redirect_uri\": \"{{oauth.redirectUri}}\",\n            \"response_type\": \"code\",\n            \"response_mode\": \"query\",\n            \"prompt\": \"consent\",\n            \"code_challenge_method\": \"S256\",\n            \"code_challenge\": \"{{base64url(sha256(temp.code_verifier, 'base64'))}}\"\n        },\n        \"url\": \"https://login.microsoftonline.com/{{ifempty(parameters.tenantId, 'organizations')}}/oauth2/v2.0/authorize\",\n        \"response\": {\n            \"valid\": {\n                \"condition\": \"{{!query.error}}\",\n                \"message\": \"[{{query.error}}] {{query.error_description}}\",\n                \"type\": \"AccountValidationError\"\n            },\n            \"temp\": {\n                \"code\": \"{{query.code}}\"\n            }\n        }\n    },\n    \"token\": {\n        \"url\": \"https://login.microsoftonline.com/{{ifempty(parameters.tenantId, 'organizations')}}/oauth2/v2.0/token\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"code\": \"{{temp.code}}\",\n            \"client_id\": \"{{parameters.clientId}}\",\n            \"grant_type\": \"authorization_code\",\n            \"redirect_uri\": \"{{oauth.redirectUri}}\",\n            \"client_secret\": \"{{parameters.clientSecret}}\",\n            \"code_verifier\": \"{{temp.code_verifier}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n            \"error\": {\n                \"message\": \"[{{statusCode}}] {{parseError(body)}}\"\n            },\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\",\n                \"refreshToken\": \"{{body.refresh_token}}\",\n                \"idToken\": \"{{body.id_token}}\",\n                \"scope\": \"{{temp.scope}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.code\",\n                \"request.body.client_secret\",\n                \"request.body.code_verifier\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\",\n                \"response.body.id_token\"\n            ]\n        }\n    },\n    \"refresh\": {\n        \"condition\": \"{{data.expires < addMinutes(now, 15)}}\",\n        \"url\": \"https://login.microsoftonline.com/{{ifempty(parameters.tenantId, 'organizations')}}/oauth2/v2.0/token\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"client_id\": \"{{parameters.clientId}}\",\n            \"grant_type\": \"refresh_token\",\n\t\t\t\n            // The list of scopes are required for refresh call.\n\t\t\t\n            \"scope\": \"{{data.scope}}\",\n            \"client_secret\": \"{{parameters.clientSecret}}\",\n            \"refresh_token\": \"{{data.refreshToken}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n            \"error\": {\n                \"message\": \"[{{statusCode}}] {{parseError(body)}}\"\n            },\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\",\n                \"refreshToken\": \"{{body.refresh_token}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.client_secret\",\n                \"request.body.refresh_token\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\",\n                \"response.body.id_token\"\n            ]\n        }\n    },\n    \"info\": {\n        \"url\": \"{{connection.host}}/api/data/v9.2/WhoAmI\",\n        \"headers\": {\n            \"authorization\": \"Bearer {{connection.accessToken}}\"\n        },\n        \"temp\": \"{{parseJWT(connection.idToken)}}\",\n        \"response\": {\n            \"uid\": \"{{temp.oid}}\",\n            \"metadata\": {\n                \"type\": \"text\",\n                \"value\": \"{{temp.preferred_username}} - {{connection.host}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.headers.authorization\"\n            ]\n        }\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "help": "Host URL without trailing slash. For example: `https://example.cloudax.dynamics.com`.",
+          "name": "host",
+          "type": "url",
+          "label": "Host",
+          "required": true
+        },
+        {
+          "help": "This can be found in the [Microsoft Azure Portal](https://portal.azure.com) under the `Azure Active Directory` > `App registrations`.",
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "required": true
+        },
+        {
+          "help": "This can be found in the [Microsoft Azure Portal](https://portal.azure.com) under the `Azure Active Directory` > `App registrations` > Your app > `Certificates & secrets`.",
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "required": true
+        },
+        {
+          "help": "This can be found in the [Microsoft Azure Portal](https://portal.azure.com) under the `Azure Active Directory`.",
+          "name": "tenantId",
+          "type": "text",
+          "label": "Tenant ID",
+          "advanced": true
+        }
+      ],
+      "scopeJsonc": "[\n    \"openid\",\n    \"profile\",\n    \"email\",\n    \"offline_access\",\n    \"{host}/.default\"\n]",
+      "installSpec": [],
+      "scopesJsonc": "{\n    \"openid\": \"Enable OpenID Connect sign in\",\n    \"profile\": \"Access user profile\",\n    \"email\": \"Access user primary email\",\n    \"offline_access\": \"Access resources on behalf of the user\",\n    \"{host}/.default\": \"Access data.\"\n}",
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n\n    // tenantId, clientId and clientSecret are optional only for multi-tenant app.\n\t\n    {\n        \"name\": \"host\",\n        \"type\": \"url\",\n        \"label\": \"Host\",\n        \"help\": \"Host URL without trailing slash. For example: `https://example.cloudax.dynamics.com`.\",\n        \"required\": true\n    },\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"help\": \"This can be found in the [Microsoft Azure Portal](https://portal.azure.com) under the `Azure Active Directory` > `App registrations`.\",\n\t\t\"required\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"text\",\n        \"label\": \"Client Secret\",\n        \"help\": \"This can be found in the [Microsoft Azure Portal](https://portal.azure.com) under the `Azure Active Directory` > `App registrations` > Your app > `Certificates & secrets`.\",\n\t\t\"required\": true\n    },\n    {\n        \"name\": \"tenantId\",\n        \"type\": \"text\",\n        \"label\": \"Tenant ID\",\n        \"help\": \"This can be found in the [Microsoft Azure Portal](https://portal.azure.com) under the `Azure Active Directory`.\",\n\t\t\"advanced\": true\n    }\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n\t\"baseUrl\": \"{{connection.host}}/api/data/v9.2\",\n    \"headers\": {\n        \"authorization\": \"Bearer {{connection.accessToken}}\"\n    },\n\t\"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{parseError(body)}}\"\n        }\n    },\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.authorization\"]\n\t}\n}",
+  "countries": null,
+  "_functions": {
+    "deb": {
+      "rev": 2,
+      "code": "function deb(value) {\n\tdebug(value)\n\treturn value\n}",
+      "name": "deb",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(value)",
+      "appVersion": 1
+    },
+    "parseJWT": {
+      "rev": 2,
+      "code": "function parseJWT(token) {\n    var base64Url = token.split('.')[1];\n    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');\n    var jsonPayload = iml.decodeURL(iml.toString(iml.toBinary(base64, 'base64')).split('').map(function(c) {\n        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);\n    }).join(''));\n\n\treturn JSON.parse(jsonPayload);\n}",
+      "name": "parseJWT",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(token)",
+      "appVersion": 1
+    },
+    "base64url": {
+      "rev": 2,
+      "code": "function base64url(text) {\n\ttext = iml.replace(text, '+', '-');\n\ttext = iml.replace(text, '/', '_');\n\ttext = iml.replace(text, '=', '');\n\ttext = iml.replace(text, '\\n', '');\n\treturn text;\n}",
+      "name": "base64url",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(text)",
+      "appVersion": 1
+    },
+    "parseDates": {
+      "rev": 2,
+      "code": "function parseDates(obj) {\n    // new Date('work item 275760') === \"+275759-12-31T22:00:00.000Z\"\n    const digitsAtEndValidator = (str) => {\n      let strValid = true;\n      let currentPosition = -1;\n  \n      while (currentPosition * -1 <= 7) {\n        const currentSubstr = str.slice(currentPosition);\n  \n        if (JSON.stringify(new Date(currentSubstr)) !== \"null\") {\n          strValid = false;\n        } else {\n          if (currentPosition * -1 > 6) {\n            strValid = true;\n          }\n        }\n        currentPosition--;\n      }\n  \n      return strValid;\n    };\n  \n    function dateWithoutTime(date) {\n      const formatPatterns = [\n        // ISO,\n        /^[0-9]+-([0][1-9]|[1][0-2])-([0][1-9]|[1-2][0-9]|[3][0-1])$/,\n        // US\n        /^([1-9]|[1][0-2])\\/([1-9]|[1-2][0-9]|[3][0-1])\\/[0-9]+$/,\n        // European\n        /^([0-2][0-9]|[3][0-1])\\/([0][1-9]|[1][0-2])\\/[0-9]+$/,\n      ];\n  \n      let matchFound = false;\n  \n      formatPatterns.forEach((formatPattern) => {\n        const match = date.match(formatPattern);\n  \n        if (match) {\n          matchFound = true;\n        }\n      });\n  \n      return matchFound;\n    }\n  \n    for (let [key, value] of Object.entries(obj)) {\n      if (value) {\n        if (\n          typeof value === \"string\" &&\n          value.length > 7 &&\n          JSON.stringify(new Date(value)) !== \"null\" &&\n          digitsAtEndValidator(value) &&\n          !dateWithoutTime(value)\n        ) {\n          const formatDate = iml.formatDate(value, \"MM-DD-YYYY HH:mm:ss\");\n          obj[key] = iml.parseDate(formatDate, \"MM-DD-YYYY HH:mm:ss\", \"UTC\");\n        } else if (Array.isArray(value)) {\n          obj[key] = value.map((item) =>\n            iml.parseDates(item, \"MM-DD-YYYY HH:mm:ss\", \"UTC\")\n          );\n        } else if (typeof value === \"object\") {\n          obj[key] = iml.parseDates(value, \"MM-DD-YYYY HH:mm:ss\", \"UTC\");\n        }\n      }\n    }\n    return obj;\n  }\n  ",
+      "name": "parseDates",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(obj)",
+      "appVersion": 1
+    },
+    "parseError": {
+      "rev": 2,
+      "code": "function parseError(body) {\n\tif (typeof body !== 'object' || body === null) return 'Something wrong. Please try again.';\n\t\n\tif (typeof body.error === 'object' && body.error !== null) {\n\t\tif (body.error.innererror) {\n\t\t\tif (body.error.innererror.internalexception) {\n\t\t\t\treturn body.error.innererror.internalexception.message;\n\t\t\t}\n\t\t\treturn body.error.innererror.message;\n\t\t}\n\t\treturn body.error.message;\n\t} else {\n\t\treturn body.error_description || body.Message;\n\t}\n}",
+      "name": "parseError",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(body)",
+      "appVersion": 1
+    },
+    "formatInput": {
+      "rev": 2,
+      "code": "function formatInput(obj) {\n    Object.keys(obj).map(item => {\n        if(item.indexOf('_wrapper') !== -1) delete obj[item]\n    })\n    if(obj.entityimage !== null && obj.entityimage !== undefined) {\n        obj.entityimage = iml.base64(obj.entityimage)\n    }\n    return obj\n}",
+      "name": "formatInput",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(obj)",
+      "appVersion": 1
+    },
+    "getEntityId": {
+      "rev": 2,
+      "code": "function getEntityId(headers) {\n\tif (!headers[\"odata-entityid\"]) return undefined;\n\tconst entityId = /\\(([^\\(]+)\\)$/.exec(headers[\"odata-entityid\"]);\n\tif (!Array.isArray(entityId)) return undefined;\n\treturn entityId[1];\n}",
+      "name": "getEntityId",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(headers)",
+      "appVersion": 1
+    },
+    "parseResponse": {
+      "rev": 3,
+      "code": "function parseResponse(parameters) {\n\tif (typeof parameters !== 'object' || parameters === null) {\n\t\treturn parameters;\n\t}\n\n\tif (Array.isArray(parameters)) {\n\t\treturn parameters.map(item => iml.parseResponse(item));\n\t}\n\n\tlet params = Object.assign({}, parameters);\n\n\tObject.entries(parameters).forEach(([key, value]) => {\n\t\tif (Array.isArray(value)) {\n\t\t\tparams[key] = value.map(item => iml.parseResponse(item));\n\t\t\treturn;\n\t\t}\n\n\t\tif (typeof value === 'object' && value !== null) {\n\t\t\tparams[key] = iml.parseResponse(value);\n\t\t\treturn;\n\t\t}\n\n\t\tconst ISO_8601 = /^\\d{4}(-\\d\\d(-\\d\\d(T\\d\\d:\\d\\d(:\\d\\d)?(\\.\\d+)?(( ?[+-]\\d\\d:?\\d\\d)|Z)?)?)?)?$/i;\n\t\tconst isNumeric = /^-?\\d+$/;\n\n\t\tif (typeof value === 'string' && ISO_8601.test(value) && !isNumeric.test(value)) {\n\t\t\tparams[key] = new Date(value.replace(/\\s+/g, ''));\n\t\t\treturn;\n\t\t}\n\t});\n\n\treturn params;\n}",
+      "name": "parseResponse",
+      "test": " \n\nit('does not throw errors for any input', function() {\n\n    const input = {\n        \"string\": \"text\",\n        \"number\": 1,\n        \"bool\": true,\n        \"date\": \"2023-01-01T02:00:00+02:00\",\n        \"array\": [1, 2, 3],\n        \"object\": { \"nested\": true },\n        \"complex\": [\n            {\n                \"nested\": 1\n            }\n        ]\n    }\n    assert.doesNotThrow(() => { parseResponse(undefined) }, Error )\n    assert.doesNotThrow(() => { parseResponse(\"value\") }, Error )\n    assert.doesNotThrow(() => { parseResponse(1) }, Error )\n    assert.doesNotThrow(() => { parseResponse(true) }, Error )\n    assert.doesNotThrow(() => { parseResponse({}) }, Error )\n    assert.doesNotThrow(() => { parseResponse({ \"key\": \"value\" }) }, Error )\n    assert.doesNotThrow(() => { parseResponse([]) }, Error )\n    assert.doesNotThrow(() => { parseResponse([\"array\"]) }, Error )\n    assert.doesNotThrow(() => { parseResponse(input) }, Error )\n});\n\nit('when the input is not an object, returns the input itself', function() {\n    assert.deepEqual(parseResponse(undefined), undefined )\n    assert.deepEqual(parseResponse(null), null )\n    assert.deepEqual(parseResponse(\"value\"), \"value\" )\n    assert.deepEqual(parseResponse(0), 0 )\n    assert.deepEqual(parseResponse(true), true )\n});\n\nit('returns a valid output for valid object inputs', function() {\n    const input = {\n        \"string\": \"text\",\n        \"number\": 1,\n        \"bool\": true,\n        \"date\": \"2023-01-01T02:00:00+02:00\",\n        \"array\": [1, 2, 3],\n        \"object\": { \"nested\": true },\n        \"complex\": [\n            {\n                \"nested\": 1\n            }\n        ]\n    } \n    \n    const output = {\n        \"string\": \"text\",\n        \"number\": 1,\n        \"bool\": true,\n        \"date\": new Date(\"2023-01-01T00:00:00.000Z\"),\n        \"array\": [1, 2, 3],\n        \"object\": { \"nested\": true },\n        \"complex\": [\n            {\n                \"nested\": 1\n            }\n        ]\n    }\n    assert.deepEqual(parseResponse(input), output )\n});\n\n",
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(parameters)",
+      "appVersion": 1
+    },
+    "mergeCollections": {
+      "rev": 9,
+      "code": "function mergeCollections(target, ...sources) {\n    const isCollection = (object) =>\n        typeof object === 'object' &&\n        object !== null &&\n        !Array.isArray(object) &&\n        !(object instanceof Date);\n\n    if (!isCollection(target)) {\n        throw new Error('mergeCollections: merge target is not a collection.');\n    }\n\n    // Deep clone for vm2 -> isolated-vm\n    const output = JSON.parse(JSON.stringify(target));\n\n    return sources.reduce((acc, source) => {\n        if (!isCollection(source)) return acc;\n        return Object.assign(acc, source);\n    }, output);\n}",
+      "name": "mergeCollections",
+      "test": "it('should throw an error if target is not collection', () => {\r\n    assert.throws(() => mergeCollections());\r\n    assert.throws(() => mergeCollections(null));\r\n    assert.throws(() => mergeCollections(new Date()));\r\n    assert.throws(() => mergeCollections(true));\r\n    assert.throws(() => mergeCollections(1));\r\n    assert.throws(() => mergeCollections(''));\r\n    assert.throws(() => mergeCollections([]));\r\n    assert.doesNotThrow(() => mergeCollections({}));\r\n});\r\n\r\nit('should merge sources to target', () => {\r\n    const input = [\r\n        { a: 1 },\r\n        { b: 2 },\r\n        { c: 3 },\r\n    ];\r\n\r\n    const output = {\r\n        a: 1,\r\n        b: 2,\r\n        c: 3,\r\n    };\r\n    assert.deepStrictEqual(mergeCollections(...input), output);\r\n});\r\n\r\nit('should skip non-collection source', () => {\r\n    const input = [\r\n        { a: 1 },\r\n        null,\r\n        { c: 3 },\r\n    ];\r\n\r\n    const output = {\r\n        a: 1,\r\n        c: 3,\r\n    };\r\n    assert.deepStrictEqual(mergeCollections(...input), output);\r\n});\r\n",
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(target, ...sources)",
+      "appVersion": 1
+    },
+    "resolveLookupItemID": {
+      "rev": 2,
+      "code": "function resolveLookupItemID(item, entityName) {\n    return item[entityName + 'id']\n}",
+      "name": "resolveLookupItemID",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(item, entityName)",
+      "appVersion": 1
+    },
+    "resolveParameterHelp": {
+      "rev": 2,
+      "code": "function resolveParameterHelp(help, label) {\n    if(help === `${label}.`) return undefined\n    if(help !== null && help !== undefined && help.length !== 0) {\n        if(help[help.length - 1] === '.') return `${help[0].toUpperCase()}${help.toLowerCase().slice(1)}`\n        return `${help[0].toUpperCase()}${help.toLowerCase().slice(1)}.`\n    }\n   return undefined\n}",
+      "name": "resolveParameterHelp",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(help, label)",
+      "appVersion": 1
+    },
+    "resolveParameterMode": {
+      "rev": 2,
+      "code": "function resolveParameterMode(type) {\n    if(type === 'Picklist' || type === 'Lookup' || type === 'Owner') return 'edit'\n\n    return 'choose'\n}",
+      "name": "resolveParameterMode",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(type)",
+      "appVersion": 1
+    },
+    "resolveParameterName": {
+      "rev": 2,
+      "code": "function resolveParameterName(name, type, action) {\n    \n    if(action !== 'interface') {\n\n        if(type === 'Lookup') {\n            return `${name}_wrapper`\n        }\n        if(type === 'Owner') {\n            return `${name}@odata.bind`\n        }\n\n    }\n    \n    return name\n}",
+      "name": "resolveParameterName",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(name, type, action)",
+      "appVersion": 1
+    },
+    "resolveParameterType": {
+      "rev": 3,
+      "code": "function resolveParameterType(type, logicalName, action) {\n    if(logicalName === 'entityimage') return 'buffer'\n    if(action === 'interface' && (type === 'Picklist' || type === 'Lookup' || type === 'Owner')) return 'text'\n    switch(type) {\n        case 'String':\n            return 'text'\n        case 'Boolean':\n            return 'boolean'\n        case 'BigInt':\n        case 'Integer':\n            return 'integer'\n        case 'Decimal':\n        case 'Money':\n            return 'number'\n        case 'DateTime':\n            return 'text'\n        case 'Picklist':\n        case 'Lookup':\n        case 'Owner':\n            return 'select'\n        case 'Uniqueidentifier':\n            return 'uuid'\n        default:\n            return 'text'\n    }\n}",
+      "name": "resolveParameterType",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(type, logicalName, action)",
+      "appVersion": 1
+    },
+    "filterEntityParameters": {
+      "rev": 2,
+      "code": "function filterEntityParameters(properties, requestType) {\n\tlet props = [...properties];\n\n\tif (requestType === 'create') {\n\t\treturn props.filter(prop => prop.IsValidForCreate)\n\t\t\t.sort((a, b) => a.SchemaName.localeCompare(b.SchemaName))\n\t}\n\n\tif (requestType === 'update') {\n\t\treturn props.filter(prop => prop.IsValidForUpdate)\n\t\t\t.sort((a, b) => a.SchemaName.localeCompare(b.SchemaName))\n\t}\n\n\tif (requestType === 'interface') {\n\t\treturn props.filter(prop => prop.IsValidForRead)\n\t}\n\n\treturn props;\n}",
+      "name": "filterEntityParameters",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(properties, requestType)",
+      "appVersion": 1
+    },
+    "resolveParameterOptions": {
+      "rev": 2,
+      "code": "function resolveParameterOptions(item, logicalName) {\n    if (item.AttributeType === 'Picklist') {\n\t\treturn `rpc://listPicklistAttributeMetadata?logicalName=${logicalName}&metricId=${item.MetadataId}`\n\t}\n    if (item.AttributeType === 'Owner') {\n\t\treturn `rpc://listLookupMetadata?logicalName=${item.Targets[0]}`\n\t}\n\tif (item.AttributeType === 'Lookup') {\n\t\treturn item.Targets.map(target => {\n            if(item.Targets.length === 1) {\n                return {\n                    \"label\": target,\n                    \"value\": target,\n                    \"nested\": [\n                        {\n                            \"name\": item['LogicalName'] + '@odata.bind',\n                            \"type\": \"select\",\n                            \"options\": `rpc://listLookupMetadata?logicalName=${target}`,\n                            \"label\": iml.ifempty(item.DisplayName.LocalizedLabels[0].Label, item.SchemaName)\n                        }\n                    ]\n                }\n            } else {\n                return {\n                    \"label\": target,\n                    \"value\": target,\n                    \"nested\": [\n                        {\n                            \"name\": item['LogicalName'] + `_${target}@odata.bind`,\n                            \"type\": \"select\",\n                            \"options\": `rpc://listLookupMetadata?logicalName=${target}`,\n                            \"label\": iml.ifempty(item.DisplayName.LocalizedLabels[0].Label, item.SchemaName)\n                        }\n                    ]\n                }\n            }\n\t\t})\n\t}\n\treturn undefined;\n}",
+      "name": "resolveParameterOptions",
+      "test": null,
+      "appName": "microsoft-dynamics-365-crm",
+      "arguments": "(item, logicalName)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-12-12T13:23:50.956958+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "It's a set of integrated, data-driven software solutions that improve how you interact and do business with your customers.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "803cd8dc5500a49e2281d91d20ef70d5",
+  "versionFull": "1.1.4",
+  "compiledName": "microsoft-dynamics-365-crm",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": null,
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": null
+}

@@ -1,0 +1,2840 @@
+{
+  "rev": 19,
+  "base": {
+    "ca": "{{connection.ca}}",
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "{{resolveAddress(connection)}}",
+    "headers": {
+      "accept": "application/json",
+      "authorization": "Basic {{base64(connection.username + \":\" + connection.password)}}"
+    },
+    "response": {
+      "error": {
+        "message": "[{{statusCode}}] {{body.winstrom.message || body.winstrom.results[].errors[].message || body}}"
+      },
+      "valid": "{{body.winstrom.success != \"false\"}}"
+    }
+  },
+  "beta": false,
+  "docs": "Powered by Integromat.",
+  "name": "flexibee",
+  "_rpcs": {
+    "NacistEvidence": {
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/evidence-list",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.evidenceName}}",
+            "value": "{{item.evidencePath}}"
+          },
+          "iterate": {
+            "condition": "{{parameters.io != 'in' || (parameters.io == 'in' && item.importStatus != 'NOT_DIRECT')}}",
+            "container": "{{sortItems(body.evidences.evidence, 'evidenceName')}}"
+          }
+        }
+      },
+      "rev": 3,
+      "name": "NacistEvidence",
+      "label": "Načtení typů evidence",
+      "appName": "flexibee",
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/evidence-list\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": {\n            \"label\": \"{{item.evidenceName}}\",\n            \"value\": \"{{item.evidencePath}}\"\n        },\n        \"iterate\": {\n            \"condition\": \"{{parameters.io != 'in' || (parameters.io == 'in' && item.importStatus != 'NOT_DIRECT')}}\",\n            \"container\": \"{{sortItems(body.evidences.evidence, 'evidenceName')}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "_spolecnost",
+          "type": "text",
+          "required": true
+        }
+      ],
+      "accountName": "flexibee",
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"text\",\n        \"required\": true\n    }\n]"
+    },
+    "NacistSampleData": {
+      "api": {
+        "qs": {
+          "limit": 1,
+          "order": "lastUpdate@D"
+        },
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}",
+        "method": "GET",
+        "response": {
+          "output": "{{prepareBundle(item)}}",
+          "iterate": "{{getResponse(body.winstrom, parameters._evidence)}}"
+        }
+      },
+      "rev": 3,
+      "name": "NacistSampleData",
+      "label": "Načtení sample dat",
+      "appName": "flexibee",
+      "apiJsonc": "{\n    \"qs\": {\n        \"limit\": 1,\n        \"order\": \"lastUpdate@D\"\n    },\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": \"{{prepareBundle(item)}}\",\n        \"iterate\": \"{{getResponse(body.winstrom, parameters._evidence)}}\"\n    }\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "_spolecnost",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "_evidence",
+          "type": "text",
+          "required": true
+        }
+      ],
+      "accountName": "flexibee",
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"text\",\n        \"required\": true\n    },\n    {\n        \"name\": \"_evidence\",\n        \"type\": \"text\",\n        \"required\": true\n    }\n]"
+    },
+    "NacistPodevidenci": {
+      "api": {
+        "qs": {
+          "limit": 0
+        },
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{resolveLabel(item, parameters._evidence)}}",
+            "value": "{{parseNumber(item.id)}}"
+          },
+          "iterate": "{{getResponse(body.winstrom, parameters._evidence)}}"
+        }
+      },
+      "rev": 3,
+      "name": "NacistPodevidenci",
+      "label": "Načtení podevidence",
+      "appName": "flexibee",
+      "apiJsonc": "{\n    \"qs\": {\n        \"limit\": 0\n    },\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": {\n            \"label\": \"{{resolveLabel(item, parameters._evidence)}}\",\n            \"value\": \"{{parseNumber(item.id)}}\"\n        },\n        \"iterate\": \"{{getResponse(body.winstrom, parameters._evidence)}}\"\n    }\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "_spolecnost",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "_evidence",
+          "type": "text",
+          "required": true
+        }
+      ],
+      "accountName": "flexibee",
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"text\",\n        \"required\": true\n    },\n    {\n        \"name\": \"_evidence\",\n        \"type\": \"text\",\n        \"required\": true\n    }\n]"
+    },
+    "NacistSpolecnosti": {
+      "api": {
+        "url": "/c",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.nazev}}",
+            "value": "{{item.dbNazev}}"
+          },
+          "iterate": "{{body.companies.company}}"
+        }
+      },
+      "rev": 3,
+      "name": "NacistSpolecnosti",
+      "label": "Načtení společností",
+      "appName": "flexibee",
+      "apiJsonc": "{\n    \"url\": \"/c\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": {\n            \"label\": \"{{item.nazev}}\",\n            \"value\": \"{{item.dbNazev}}\"\n        },\n        \"iterate\": \"{{body.companies.company}}\"\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "flexibee",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "nacteniBankovniUcet": {
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/bankovni-ucet",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.nazev}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{get(body, 'winstrom.bankovni-ucet')}}"
+        }
+      },
+      "rev": 2,
+      "name": "nacteniBankovniUcet",
+      "label": "Načtení Bankovní Učet",
+      "appName": "flexibee",
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/bankovni-ucet\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"iterate\": \"{{get(body, 'winstrom.bankovni-ucet')}}\",\n        \"output\": {\n            \"label\": \"{{item.nazev}}\",\n            \"value\": \"{{item.id}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "flexibee",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "NacistParametryPriloh": {
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/priloha/properties",
+        "method": "GET",
+        "response": {
+          "output": "{{transformProperty(body.properties.property, item)}}",
+          "iterate": {
+            "container": "{{body.properties.property}}"
+          }
+        }
+      },
+      "rev": 3,
+      "name": "NacistParametryPriloh",
+      "label": "Načtení parametrů příloh",
+      "appName": "flexibee",
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/priloha/properties\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": \"{{transformProperty(body.properties.property, item)}}\",\n        \"iterate\": {\n            \"container\": \"{{body.properties.property}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "_spolecnost",
+          "type": "text",
+          "required": true
+        }
+      ],
+      "accountName": "flexibee",
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"text\",\n        \"required\": true\n    }\n]"
+    },
+    "getUniversalParameters": {
+      "api": {
+        "response": {
+          "output": [
+            {
+              "help": "Enter a path relative to `{{resolveAddress(connection)}}/c/{{parameters._spolecnost}}`. For example: `/smlouva`.",
+              "name": "url",
+              "type": "text",
+              "label": "URL",
+              "required": true
+            }
+          ]
+        }
+      },
+      "rev": 3,
+      "name": "getUniversalParameters",
+      "label": "GetUniversalParameters",
+      "appName": "flexibee",
+      "apiJsonc": "{\n    \"response\": {\n        \"output\": [\n            {\n                \"name\": \"url\",\n                \"type\": \"text\",\n                \"label\": \"URL\",\n                \"help\": \"Enter a path relative to `{{resolveAddress(connection)}}/c/{{parameters._spolecnost}}`. For example: `/smlouva`.\",\n                \"required\": true\n            }\n        ]\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "flexibee",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "NacistParametryEvidence": {
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}/properties",
+        "method": "GET",
+        "response": {
+          "output": "{{transformProperty(body.properties.property, item, parameters.edit == 'yes')}}",
+          "iterate": {
+            "condition": "{{(parameters.io == 'out' && (parameters.detail == 'full' || (parameters.detail == 'id' && item.inId == 'true') || (parameters.detail == 'summary' && item.inSummary == 'true'))) || (parameters.io != 'out' && item.isVisible == 'true' && item.isWritable == 'true')}}",
+            "container": "{{body.properties.property}}"
+          },
+          "wrapper": "{{if(parameters.io == 'in' && parameters.edit != 'yes' && polozkovaEvidence(parameters._evidence), add(output, 'rpc://NacistParametrySubEvidence?_evidence=' + parameters._evidence + '-polozka'), output)}}"
+        }
+      },
+      "rev": 3,
+      "name": "NacistParametryEvidence",
+      "label": "Načtení parametrů evidence",
+      "appName": "flexibee",
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}/properties\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": \"{{transformProperty(body.properties.property, item, parameters.edit == 'yes')}}\",\n        \"iterate\": {\n            \"condition\": \"{{(parameters.io == 'out' && (parameters.detail == 'full' || (parameters.detail == 'id' && item.inId == 'true') || (parameters.detail == 'summary' && item.inSummary == 'true'))) || (parameters.io != 'out' && item.isVisible == 'true' && item.isWritable == 'true')}}\",\n            \"container\": \"{{body.properties.property}}\"\n        },\n        \"wrapper\": \"{{if(parameters.io == 'in' && parameters.edit != 'yes' && polozkovaEvidence(parameters._evidence), add(output, 'rpc://NacistParametrySubEvidence?_evidence=' + parameters._evidence + '-polozka'), output)}}\"\n    }\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "_spolecnost",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "_evidence",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "io",
+          "type": "text",
+          "required": true,
+          "validate": {
+            "enum": [
+              "in",
+              "out"
+            ]
+          }
+        },
+        {
+          "name": "edit",
+          "type": "select",
+          "options": {
+            "store": [
+              {
+                "label": "Yes",
+                "value": "yes"
+              }
+            ],
+            "placeholder": "No"
+          }
+        }
+      ],
+      "accountName": "flexibee",
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"text\",\n        \"required\": true\n    },\n    {\n        \"name\": \"_evidence\",\n        \"type\": \"text\",\n        \"required\": true\n    },\n    {\n        \"name\": \"io\",\n        \"type\": \"text\",\n        \"required\": true,\n        \"validate\": {\n            \"enum\": [\n                \"in\",\n                \"out\"\n            ]\n        }\n    },\n    {\n        \"name\": \"edit\",\n        \"type\": \"select\",\n        \"options\": {\n            \"store\": [\n                {\n                    \"label\": \"Yes\",\n                    \"value\": \"yes\"\n                }\n            ],\n            \"placeholder\": \"No\"\n        }\n    }\n]"
+    },
+    "NacistParametrySubEvidence": {
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}/properties",
+        "method": "GET",
+        "response": {
+          "output": "{{transformProperty(body.properties.property, item, parameters.edit == 'yes')}}",
+          "iterate": {
+            "condition": "{{item.isVisible == 'true' && item.isWritable == 'true'}}",
+            "container": "{{body.properties.property}}"
+          },
+          "wrapper": {
+            "name": "polozkyDokladu",
+            "spec": "{{output}}",
+            "type": "array",
+            "label": "Položky dokladu",
+            "editable": true
+          }
+        }
+      },
+      "rev": 3,
+      "name": "NacistParametrySubEvidence",
+      "label": "Načtení parametrů sub-evidence",
+      "appName": "flexibee",
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}/properties\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": \"{{transformProperty(body.properties.property, item, parameters.edit == 'yes')}}\",\n        \"iterate\": {\n            \"condition\": \"{{item.isVisible == 'true' && item.isWritable == 'true'}}\",\n            \"container\": \"{{body.properties.property}}\"\n        },\n        \"wrapper\": {\n            \"name\": \"polozkyDokladu\",\n            \"spec\": \"{{output}}\",\n            \"type\": \"array\",\n            \"label\": \"Položky dokladu\",\n            \"editable\": true\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "_spolecnost",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "_evidence",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "edit",
+          "type": "select",
+          "options": {
+            "store": [
+              {
+                "label": "Yes",
+                "value": "yes"
+              }
+            ],
+            "placeholder": "No"
+          }
+        }
+      ],
+      "accountName": "flexibee",
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"text\",\n        \"required\": true\n    },\n    {\n        \"name\": \"_evidence\",\n        \"type\": \"text\",\n        \"required\": true\n    },\n    {\n        \"name\": \"edit\",\n        \"type\": \"select\",\n        \"options\": {\n            \"store\": [\n                {\n                    \"label\": \"Yes\",\n                    \"value\": \"yes\"\n                }\n            ],\n            \"placeholder\": \"No\"\n        }\n    }\n]"
+    }
+  },
+  "flags": {},
+  "label": "ABRA FlexiBee",
+  "theme": "#ffc92d",
+  "_hooks": {
+    "flexibee": {
+      "api": {
+        "output": {
+          "id": "{{parseNumber(item.id)}}",
+          "version": "{{parseNumber(item.`@in-version`)}}",
+          "evidence": "{{item.`@evidence`}}",
+          "externals": "{{item.`external-ids`}}",
+          "operation": "{{item.`@operation`}}"
+        },
+        "iterate": {
+          "condition": "{{item.`@evidence` == data._evidence && (length(data._operace) == 0 || contains(data._operace, item.`@operation`))}}",
+          "container": "{{body.winstrom.changes}}"
+        },
+        "respond": {
+          "body": "",
+          "type": "text",
+          "status": 200
+        },
+        "verification": {
+          "respond": {
+            "body": "OK",
+            "type": "text",
+            "status": 200
+          },
+          "condition": "{{body.winstrom == null}}"
+        }
+      },
+      "rev": 6,
+      "name": "flexibee",
+      "type": "web",
+      "flags": {},
+      "label": "ABRA FlexiBee",
+      "scope": [],
+      "attach": [
+        {
+          "qs": {
+            "url": "{{webhook.url}}",
+            "format": "JSON"
+          },
+          "url": "/c/{{parameters._spolecnost}}/hooks",
+          "method": "PUT"
+        },
+        {
+          "url": "/c/{{parameters._spolecnost}}/hooks",
+          "method": "GET",
+          "response": {
+            "data": {
+              "externalHookId": "{{getHookID(body.winstrom.hooks, webhook.url)}}"
+            }
+          }
+        }
+      ],
+      "detach": {
+        "url": "/c/{{webhook._spolecnost}}/hooks/{{webhook.externalHookId}}",
+        "method": "DELETE"
+      },
+      "update": null,
+      "aliasTo": null,
+      "appName": "flexibee",
+      "apiJsonc": "{\n    \"output\": {\n        \"id\": \"{{parseNumber(item.id)}}\",\n        \"version\": \"{{parseNumber(item.`@in-version`)}}\",\n        \"evidence\": \"{{item.`@evidence`}}\",\n        \"externals\": \"{{item.`external-ids`}}\",\n        \"operation\": \"{{item.`@operation`}}\"\n    },\n    \"iterate\": {\n        \"condition\": \"{{item.`@evidence` == data._evidence && (length(data._operace) == 0 || contains(data._operace, item.`@operation`))}}\",\n        \"container\": \"{{body.winstrom.changes}}\"\n    },\n    \"respond\": {\n        \"body\": \"\",\n        \"type\": \"text\",\n        \"status\": 200\n    },\n    \"verification\": {\n        \"respond\": {\n            \"body\": \"OK\",\n            \"type\": \"text\",\n            \"status\": 200\n        },\n        \"condition\": \"{{body.winstrom == null}}\"\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": "rpc://app%23flexibee@1/NacistEvidence"
+                },
+                "required": true
+              }
+            ]
+          },
+          "required": true
+        },
+        {
+          "help": "Pokud nevyberete žádnou operaci, bude scénář zachytávat všechny typy operací, jako kdybyste vybrali vše.",
+          "name": "_operace",
+          "type": "select",
+          "label": "Operace",
+          "options": [
+            {
+              "label": "Vložení záznamu",
+              "value": "create"
+            },
+            {
+              "label": "Úprava záznamu",
+              "value": "update"
+            },
+            {
+              "label": "Smazání záznamu",
+              "value": "delete"
+            }
+          ],
+          "multiple": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "attachJsonc": "[\n    {\n        \"qs\": {\n            \"url\": \"{{webhook.url}}\",\n            \"format\": \"JSON\"\n        },\n        \"url\": \"/c/{{parameters._spolecnost}}/hooks\",\n        \"method\": \"PUT\"\n    },\n    {\n        \"url\": \"/c/{{parameters._spolecnost}}/hooks\",\n        \"method\": \"GET\",\n        \"response\": {\n            \"data\": {\n                \"externalHookId\": \"{{getHookID(body.winstrom.hooks, webhook.url)}}\"\n            }\n        }\n    }\n]",
+      "detachJsonc": "{\n    \"url\": \"/c/{{webhook._spolecnost}}/hooks/{{webhook.externalHookId}}\",\n    \"method\": \"DELETE\"\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://app%23flexibee@1/NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": \"rpc://app%23flexibee@1/NacistEvidence\"\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true\n    },\n    {\n        \"help\": \"Pokud nevyberete žádnou operaci, bude scénář zachytávat všechny typy operací, jako kdybyste vybrali vše.\",\n        \"name\": \"_operace\",\n        \"type\": \"select\",\n        \"label\": \"Operace\",\n        \"options\": [\n            {\n                \"label\": \"Vložení záznamu\",\n                \"value\": \"create\"\n            },\n            {\n                \"label\": \"Úprava záznamu\",\n                \"value\": \"update\"\n            },\n            {\n                \"label\": \"Smazání záznamu\",\n                \"value\": \"delete\"\n            }\n        ],\n        \"multiple\": true\n    }\n]"
+    }
+  },
+  "global": false,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "NacistEvidenci",
+        "NacistDetail",
+        "NacistPrilohy",
+        "NahratPrilohu",
+        "odemknoutZaznam",
+        "PridatDoEvidence",
+        "PridatStitky",
+        "SledovatEvidenci",
+        "SmazatVEvidenci",
+        "StornoVEvidenci",
+        "UpravitVEvidenci",
+        "UpravitVEvidenci2",
+        "WatchChanges",
+        "zamknoutZaznam",
+        "MakeAPICall",
+        "NacitaniBankovnichVypisu",
+        "SpustitAutomatickeParovaniPlateb",
+        "SpustitAktualizaciInfoFirmach",
+        "SpustitNacteniBankVypisu"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda7930000022d4944415458c3edd6bb6b54411406f0df6e12340a8aef806fad148316319252d04ec146b0131b511041b011fc1744b0b110c1c24625209656a2a0a245107ce2038951444c40635063b2637167f566b3776793c6c2fd609acb99f9bef3cd39672e2db4f0bfa3d44c5008211fdfcc9e0a944ae9d09908588ed3e84228082d631067f0a1591149f2b84e86102643634c8410ae8710f68510da73ce15a2dca48ecd38da44fc0b3cc6266cccb9373b0171733b8e6143827c0cf7f01373d187ce593b9053be13079a70e91186e29915ac4177ca8594a50b71028b12719ff13012e7cfeec5e2193b9053bc1fbb12e4153cc088a95d15b0143d2815b9d0c88175388e8e8480b732fb2b05ab1b2b6b12fb83f682ec4b381c3737c2189ec9664351c3b7e13b2ee05743013985bd38248d6bb8835391a81e2a91f8169e8610a60ca77a57d0292bbcae04f910cee12aeec7644a35ab8cf7f8286bcbf9b587fc1190cb7e0ff63691fd450ce05bb4f74bcd3594f0034f64b36115b6d6704d736045cc7e5e827c200aa8e22e6ed439ef0d3ee51ce9c1b2690ee4141dc48e04f978b4fe5deedb042ec93aa21cc9beca0ab43a1b826c266c47b9ca59ce916fc111e9e17413fd642f5daea05ee2322623d9f33ad742d6596bab8957c93a643dbf3e413e82b318cd7fcc89e88fd7338cd7a617255921f6610e7fdb705bb47e50f15bdf862bb85d439ac730ce63b7acf28b66c312acc6abea885c10ef27f5808f60b4e827239ed516b34cfd898ccb06540b2db4f06ff11bac6fd79db326d6370000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda7930000047a4944415478daeddadbaf5d531406f0df3aa7a517a9129752d7ba95ba3655ad87861012121e08e1c12d211597f0971089208890b845244da489201e78a0414aa317d51ea12e5597866aabede95e1ec6dace3abbfbecb3f6da5349ac2fd90f3b6bee31c7f7cd31c71873ae4d83060d1a3468d0a04183060d1a34f8ff214b6d30cff3b6dd653813ad043efe8637b123cb92bb9c5e803ccfe7e779be314f8777f23c5f56d84eeaef506af29882fb704622b3dfe1532cc4b149d9a714a0b432cb706b22b3a3f8506c81d9b804c329a320690460161ec69189ec7d890d253fcfc1a948b61592085072e6065c9588fc2e7c803ded69301d4b302dd11c4923e0243c884312d9fb0c5b3a7c6c890858409a2818588052d9bb1b172622ff333ed2bd840e63b1c809ffae00a5155884bb12916f15e47fd1bd4fc9453558d8e1c3c117a0c0343c84e31309f00dd6541877517bce4144a82d4069d26b707d22f27b45e2dba977979a8b8ab344f41d075f8002478bb237339100ebb1a9a25f2dccc7e9d48f825a029426bb0d972622ffbb687a46fbf8cda1220a66d49d749008381bf70e68a38cd5f8417f07b49628bfe7512f0afa76bed4efdf8fd31291df8a4fc4deaec3e16235bbcfbe0428297c196e49447e3f56897ebfce5937c751a21467fd46419df03d5c24be2312093082b509ec5c8013e96f2b542e2125a337e2ca44e4b7e363c5ea0d682bc36e3ca98f44da6f0d3d59da7eff153c8d273057fddba34c748e737116d6e679aecaed51a52d50eaf7efc1f989c87f85c745f67f51ac5aabe6671f3ec79fa22c1e56d58949052885fe62dc99887c8ea78cedfd5745fb3b5cc35686eff175f1fd04910f2ae582aa4970bae8f78f4b24c02a3c5ffabe0dcf8a3b807e73c11e21e4de92208b44973a98002505afc57589c8efc6a3a2f697f7e9db7877329f3a9089adb4b5245c2e2ad4620c4d160555263b4694bddaed660756e28d0ef26d619ec18faa4541861de2fcd02d799e2b9276cfad30a100a51fdd2e124b0a6c13abbf6b1c93312156e3b58ab6727c214a69d6e5d90c2c15e785fe0528b000cb2b8cab8a17c471f78012557ccff192f117a1dd90895ba34d3dc6b4304f9c59268c82ae931483a7e281c2480aac174d4a6b92fafc2d9e3396d4ba615424bec992e61471953e6ba20107085052ea72dc9c88fca8a8f99b7b0d2a09b312efeb5e16b342a42d26cf1539e688dba3ae51305198b5fbfdd98904780f2f7790ec853f4442fcb58364269a9d75a2f9a9824cdc1fcee926c238014a0f6fc21589c8efc0230599c9bd1d13681556387095378b645ab55fc895de2a753eec1601a7887e7f6a22015ec75b1de4aa88b05f24cd91c2cff65be20dfa3f33e4e2add23cc647c1df0294fafde5a286a6c0163ca67742eb85914284d182c406f5ee0d72717bbd54c75ba5a10e4596e28e44e489f67635d557bf8dd2f815c6de138c14e4eb7c7211dde3aecfcac7e129e2acbfcfd8c1a22e86b0b110a06ff21dd82ecae7d5c6b7bc7590893f6dac1357ef61ac50635864ca81eed94b13edc44f830a50f26de680e4cbd889d1fffcbf4d1a3468d0a04183060d1a3468d0a041837f067f01f77ca220da82d7ca0000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-04-29T19:04:18.783388+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda793000009884944415478daed9dfbaf1d5515c73f736e0be5d90242412c506d798aad96da6b0c44a34620312818d088262a1af1cd0f26fe0726fee233c6f75b401188123186a8f1893c8b945e4b2eb716cba34079b4f596def6dc33fef09d23fb9e9e39671e7b66ef26eb939c34ede999597bcf9a356badbdd61e300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300ce35022092d4019d234edcb3c11b1ec5d204d9258c55bc8a2d0021425bbf8001b80cf0387859669800ef008f005e0f1d0c214e59051808ca381cf019785166408fb81ddc0eb81dbd234ed1e0a56a0135a80223877ff65c025a1e5c9610a7818381b58352077b41c120a90712af019e088d0820c61177017700058024c02478616aa08d12b8073177d08b820b43c39dc0f3c891cd31e701af0ea01f9a3247a05c8580b5c439c9eff93c046c0bdd21d603d707c68e1c611b5026477cfe1c0a7d15d151b5d64fa77b1503953e04464b19298ad40b40ae04cdadb802b42cb93c30c72fef22cd31a60c5c078a2225a05c83801b80e3836b42043d80bdc09eccbf93e4561eb0660716861f38852019cbbe5bdc045a1e5c9e121e05146cf610f3813386b605cd110a50264ac063e419cc9aa6781bbd1051ec761c80a1c1d5ae86144a700d95d32017c1c2555622305ee059ea15854d243398c35cef8a2212a057026e78dc0d5a1e5c9613bf060c9df7480752832888aa81420e318e4f8bd2cb42043d88f1cbf3d94cb49a42827b01ee8c46405a251006752de095c1c5a9e1c1e06a6a93e6fe703a70f8c3728d12840c62b50be7f49684186b007f807b2025548d1fac0244a6e4541140ae0147a7c18785d6879727800adf3d799b31ef02ae01c67dc41894201325e8b1420c67cff53c07d2cccf7576511aa198822b9155c0106f2fd2b42cb33847914f33f8f1fe54c815390c207b7024115c019fcdb81cb83ce443edb80cd9e8f99a047ddc9a10717dc02a070ef3a14fec5c63ee0ef28efeff3d194024b51867022a41508a600cea0df075c186c0646b319f837cdcdd339c02b07e6a355425b80b3806b51ea37365e40cffef9868e9fa2f2b6490286bd4114c0c9f75f4bb652161929f2fa77d06c54d203ce2060f958eb0ae00cf242e2cdf73f81cabcda6002a5888f0b31d0508f807ebeff8440e71f451765fccae6fbab9202cb5154d07af958ab0ae00cee7214fac5c834b085f613526b8197b73dd8101660054afa44930f779845ab7d732d9f374599c14960519b56a0350570f2fdd79065c122e441b4de1fe2c6e821877835b4e710b63dd075c49befdf09dc43b132afa6389c96bb8a5a51804c9b9720d37f6a5b832b410f5dfc6709ab9c3df4887c0db463051a570067101703ef6a7c44d5f80fb029b410191dd450d24a84d4d623e04414f6c558193b07fc0db576a7e82e0cf99947e563eb68212c6cb4e4da11fe6a54e81923d348094e0f2d8843022c439d4733699ad2d45e036dd4dc9f4dbcf9fec7812f021f045612d601744950d3c9061495542d431b4b638f80ecee5f849a3b5637759e9afc18f829f07364fe3b117c2690459a42eb048d761535a2008eb017a1f6ae18d9047c075df85fa2c59f58acd40cf0342d741535e9041e4bbcf9fe03c0d7d15a3f28fcfb1ef05fc28681095a86de8214334561f35a68c60a78570047c82b506b778cfc01f805e03a577f047ed7c49c94a0872efe6e5e52c4044504273571c2a6067b1af1e6fb5f00be94fd09fc5f09e680ef53bff4bb2a09aa3edecac19b4d1c872a89bd7715791da893efff0899d98a909b900518165a3d04dc489868e0002a41cbdb6fe03ce4147a7d1478530047a80bd0864e31b20df81a7060f0e2677f4f5144b089761dc27ed8f704c37d907e57d11bf06c557d9bba23506b57ebebda05e801df667cca770772087d5702e791a065e87fa1629451f2af04ce057f56c08b0238c25c429cbb7882167b7e08e466d59c7fbf0339856df80229ca46ee64bcc2f5bb8a96fa3ab9cf019e44bcf9fe1781afa02ddd8ab017f82e8ac59bb40209ea389aa658db598a9a49bc7515d556004788f7a367548cdc0efc1a189b5377bedf8812444d328f4c7f99fac30429c0293e04f06501ce053e463c99349767d0dd3f5bf4079912f4809fa13d019a781424c8226da3fc6613cb5086b076f958ad810de4fb573530493ef8096aefaab2a2b61df801cd2cc6f4f3fd55ea0f7b78ea2aaaac00ce49df04bca78109f2c116e09bc07cd98beffcffdf007fc5af75eb877dfdfd85abd0df94bad6e6d9754ddb52e4f8c5b8276e17f80672b0eab0073984cfe1c7214cb2634e51afedac876a186a7515555200e764ef06deea61529ae02fc0f550c9f433f0bbbb805fe16f7f8069fcec3750bbaba88e053803f814f1bdba0574877d19adf2d52253822eaa1dd84abd394b50bc5f34ec1b478ac2efca9b52971e4c76920ecaf7aff1308826b815adecf92ca59a410e65b7c631ba28ec9bc56f7e610dda60abf4a3a0940238075f8fcaa862e43114f6cdf9baf8ce716e452de3551cc204e5fa1fc5ff6613c7507153ea2ae6ec48e0b3784a447826454bba4d75f63e8fd609dcf5fa222468956f335af5f34d7f53ead25d458515c039e8a5c03b1a18840f1e401ebbf7f7f639c7fb33f05bcadfc55bd17a7f53a9e57e57d151657e54d6022c47615fa993b4c41cf05594bc69844c09f6a3e4d063149bbf04598c2d345b67d0437e40a9aea2420ae01cec0348cb62e40ee016f0eaf8e53105dc40b138be5fe635f85a9926e8771515de67b98c05380fe5fb43ef2b348ce750d8b7bbe91339ca7513f04f463b84095a8b98c14fd8378e1415e116de947aecc5cc0eb218f82459ee39426e00fe04addcfd7d9e420ee7a890ae8bacc58bb45b6d7c3ed94bb6c629c14805707efc66e0aa160750864750cab7b557b53ae7f97df61976e204f923db69f7e2a7c8479ba44092ae88395f861cbf209b188da1077c0bdd6521d88b1cc241ef3ec9be9ba25ee2a8cebcac227be3ca282b90ab00ce8fae04de12601045b813a568db34fd0c9c6f2370330b9ff1292f75f7846a34598c92432377601d670156a2677f8caf3d9b458edfd3a104700a47ae479e7e075df05da89024e44ed03d549c3bb27c6ca80238f9fe8f228722466e43a55eaddffd43d80efc08e5227a28df5f365bd804fd4da997e7fd878314c0d19449e2cdf7ef40f9febda1057194ef76b4d1c44e54e6d5b706213f20df2d7753eabcfd0116a3b5fe2eda3e25263a28fcba7be002846637ea3bb8946225de6d91a047c1c9a8ededa02f17e0ece3bb9c385fda085ae79f8de8e2bb8fcda3883359b60f8f2ba486611886611886611886611886611886611886611886611886611886611886611886611886611886611886611846abfc0f094a9b929e0ce65b0000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda793000014094944415478daeddd79971dc579c7f1efd56861114820402c6633082404483658e29043f081e3355e120836768cb1310e36c1e105e45d6477f61dc74e8ced1012fb98c4b1133006cc2ab48184d082563348689f99ca1f4fb7a734cc72bb6f775755f7ef738e8f9783efd4eddbfd7475d5d3cf03222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222224dea851e40db39e7002e03ee004e025ce831256216b00df826f056afa753b50eb3430fa0cdb28b7f0ef035e0c1d0e349cc28f028b01ef88973ce2908546f56e801b45576f103dc047c26f47812f40af032b0123837f460da4a01a05e0b80df05ce093d90c41c029eccfefd4ce07dc06c2fa84a4514006ae09da8b7011f0c3d9e04bd046c617c8d6a1970299c706ca5020a00f5b904b81f3839f44012b30f781a18c9febbc38ee16ae094d0836b1b05808a6577a821e08bc07b438f273163c033c06e4edca1725840bd0a340ba89202403dae03be808e6f515b8117997cab7436703db6262015d1095aa1ecce740af0007051e8f124e618f033603f93e7a7386031f01e60966601d55000a88877427e08f864e8f1246803b091e993d37ac00ae0fcd0836d0b05806a2dc6127e4e0f3d90c41cc0b6fd8ecef0cf39ecd8ae02e66816303805800a7827e26f0137861e4f621cf03cb09dfe52d31d7005965ead05c1012900546739f0652cf557fab71bf83996fadbaf93b06dc153430f3e750a0003f2f2fdef0396861e4f6246b13dff5f50ecc534872db25e039a050c42016000de8977337067e8f1246833b086726f480e61dbad6787fe1229530018dc422cdf5f27623187b16dbf83947b2ddd016761c956da162c4901a024ef84bb1df840e8f124e865601383d5a4e8618f0117821e05ca500018ccbbb17cff93420f24316f024f01c707fc1c07ccc7b605e786fe52295200286142beffcad0e3498c039e0576524d452a072c01ae04cd028a520028ef7ae06e740c8bda8eedfb5779a5cec566014ac02a48276f41d91de654acccd785a1c79398e3d8c2df30d5d6a374c005c0b5a05940110a00057827d687814f841e4f825ec56afcd56116f6a2d0e2d05f32250a00c59d876dfb9d167a20893908fc1438423dd5a81db0087b341bd22ca03f0a007dca4ea81ecaf72feb05e075ea2f45bf1c2b1ea247813e280014b31cb81795532f6a0f56e9a748be7f190eabc7b00a6dcdf64501a00fd99d642ef055b2ed26e9db2876f1efa59946340ecbcf58069a05cc44016006de09f47ee0d3a1c793a0d799bacc575de660a5c41786fef2b15300e8cf19d8c2dfa2d00349cc516cdbef6d9a6d43e7b066222b819e6601535300988677e2fc26706be8f124683dd6e127444faf595800382ff441889902c0cc2e43f9fe65bc8595f93a16e8ef3bec11405d85a6a10030052fdfff1eb20c33e99b039e037610be03f5326c51500b8293500098de2ae0f3e83815b5130b006381c7e1182f1fa6ae4293d0893d8909f9feef0a3d9ec48c60affa162df35517075c8ce5706816308102c004de09f251e063a1c793a04d58b18f98a8abd014140026773ecaf72fe310b6ed779838eefe3987b56857f9b00914003c5ebeffe7801b428f27416bb0429f315dfcb91eb6987b41e881c44401e09dae41f9fe65ecc39efd4706fda09aa8abd02414003213f2fd97841e4f62c6b0e61e13db7ac726ef2ab404b420080a00c00927c22dc01da1c793a0edd8ebbe295c51f3b059c0fcd003898102c0b83351be7f19c7b08cbfa9da7ac7c661a5dcd455080500ff04b8039b0148311bb1d6de295cfcb9216c47a0f3cd5c3a1f00329763cffef3420f2431fdb6f58e4dde55e83a3a5e3eacd30120fbe167035f42f9fe65bc006c23adbb7fae075c4dc7bb0a753600783ff86ae02ed23c8943da453365beeae2b044afd57478e6d7d90090998fe5fb2b39a498b26dbd633386bdeeddd9ae429d0c00de0ffd31e0d7428f2741af51bead776c3add55a8930120730176f7d77e7031470853e6ab2e0e7bf763051d2c1fd6b900e0e5fbdf853dff49316bb10e3f6d3a773adb55a84d3f62112bb095ffa1d00349cc3076f71fb4ad776c1c9608d6b9ae429d0a00d90f3b0fdbf3bf3cf4781253755bef185d055c0add5910ec4c00f07ed05bb12abf52cc0ee228f35517bfabd0c9a107d394ce0480cc222cdf5f95618a398ebdea3b4c7beffe6041e0523ad455a81301c0fb213f8575f891625ec516ffba20ef2a7446e88134a1130120b304f80a1dcefa2ae920b6f057575befd8386c3760251dd8166c7d00f0f2fdbf4cf60aa814f22296f8d3858b3f9777153a3ff4409af8a2ade545ef1bb03a7f5d3a89abb097b4f3fdcb72c0023ad055a8d50120731ab6f0a71e71c5e46dbdf7d0ddc0b9946cbbb8ad41a0b501c0fbc13e8ed5f89762b6d27c5bef98e45d8556614d625aa9b50120f32e2cdfbfb53f604df2b6de07e8eedd1f2c085c84d50d68e52ca0950120fba166617dfdde177a3c09da8095faeaf2c59f9b8d550e6a65adc85606808cf2fdcbd94fd8b6deb17158edc05676156a5d00c87ea09380fbc9da424bdff2b6dedbd1dddf9777156a5da3d856058009f9feb7871e4f8276622ffcb435dfbfacbc7cd82a606e9b6601ad0a0099b38007e9482a678546684799afba382c9bf40a68cf82606b0280f783dc09dc1c7a3c09da4c7c6dbd639377156a4dd7e8d60480cc95c07d589d37e9df616cdbef10bafb4fc761a5e4ae8576cc025ad101d7cbf7bf17581e7a3c095a83bdf1e7e86ee24fbf7ad80ed346ac196ad2920f005e14be11e5fb97b10bd8821aa31431821db7879d7363bd5ebaa75cf2012093e7fb9f1b7a20891903fe0cbbfbff1eb67daa19c0f47ad87ac952e06260b3738e548340d201c0bbfb7f12f848e8f124e839e0af817d58a1945bd016e0747a587d843558e190d558a9b4d47a23fe521b16012f041ec0eab949ff8e007f8cddcdf6331e08d2bc9535c3019bb0677f8775154aba7c58b201c0cbf7bf1b2be72cc53c067cdbfbef4f008f841e54c47a584dc40d8ccf92f2f2610b420faeac6403406625700fcaf72f6a1ff0fbc09b40fefc7a1cf807dad7f4a32aa3c07ae02dc667490eab33916c57a1247f682fdfff77c8eab84b21ff0cfc0898b878b501f827f422d0443d6cdabf99772e92e65d85925c804e2e007851f603c06da1c793a08dc0d78163fec5effde7ef6049419a558d3b8665491ee69d6b240e4b3b4fb27c58720120733696efbf30f440123302fc2556e9672afbb005c137d18220d831781d5bed9fee782c23c1ae42490500efc07e06f8d5d0e349d093c0df036eb27d6bef7ffb09f09f2800f4b02ec86b99be1fa2c3ba09ad26b1ae42490580cc52e0b7b11558e9dfdbc01f6277b2296541e028f0775886608ae748551cb628dacff6a8032ec1fa0b26330b48e6c7cd0ee81cece257be7f71ff4eb6cdd767d6dacbd862e148e88107d2c35e8dde48ffc951b3b1b580645acf251100bc68fa2bc067438f27413b803fc0660133ca028403fe052b1092c47952b151601d9624d5efa350de55e83d24523e2ca51ff6742cdf7f71e88124c661fbfb4f42df77ffdc2ee06fb0c0d1a5f5801ef006f60854e6ff7b2d8974158a3e007851f4d7810f871e4f825ec256fe478a5cfcde3ffb5fc00fe94e00e8616b206b29d70fd1ef2a3427f65940f40120733196ef9fd40a6b048e017f8a25f81496058143d8b6e00ed2395f06f51a36031824e82dc5de15887a4130ea1fd4cbf7ff025696598af91fe09b5078ea3fd18bd87a40db7b04f6b06628eb186cf1d361e5c3561379539aa80340e6bd580050665a31c358beffde413e240b1ca3d88ec01ad23867ca1ac356fdab288c9a7715ba06e29d0544fb636607ec646cea7f49e8f124e85fb167f7aa8a556c03fe96c9d361dba087edf7bf4275455186b0ae426785fe725389320078d1f243d8e29f14b3197bd7ff481517bff719dfc75e226a630018c116feaadcf170d8c51f6d57a1280340e61cacb167b2ef5a07328a2dda3d57c3671fc83e7b37719f3b45f5b06e485ba93eb8e5db8217427c8f02d1fd8813f2fd6f0a3d9e043d834dd52b2d56e97dd633d81b836d291dd6c31e6bd6524f692f07cc27eb2a14facb4e145d00c82cc3eafb2bdfbf9843c01f616faf552e0b0223c043d8d662ace74f110e7b64da457d8f367957a12b21ae5940543fa097ef7f1f59ad3529e407d8ddb9ee2ab59bb0b70a8f92f67a400f4bf55d4ffd5b9c73b1e4a0d3437f695f3401c08b8a3761d37f296637b6edb7bfce3fe2059647b03a82d19c43258c61339961ea0f640eeb2e1c5557a1d87ebc0558beff39a10792a08780ff85daeffeb961e0af48b792705ee62bef88d484bc7c5834efb3441100bc68f81bc007438f27416bb1061fc79bb8f8bdbff138e956123e8e1db726fb213a601156c57a28865940140120730956e453f9fec51c07fe9c863bfb7a9584ff115b448be95c9a71f8d896df76c2cc5e9663efb7047f1408fea365076008f822caf72fe3ffb04abea1da53adcffefef1413fa8213decaebf9630d58f1dd6c4663556d93aa8e00120731d96ef1fcb7852b11f2bf4b12bc41ff70a877c07789a34ded7c8cb7ced21dcda8503de4d045d85825e70d9173f059bfa5f14722c89fa1e56bc337473ca3d58e110bf69468c26ebee134ade556861c841040b00caf71fd856acc8e7a19017bff7b77f84bd2b107300c8bbfb1429f355178735135949c0ae42a1a7dc8bb16dbfa8922312308655ed7d3af440e09741e04836a6ad843faf261d26f6a83459779f50666101e0bc9003689c17ed3e8b15fa94629ec7f6e04723eb4bff12568024c64ac27999af985e6776d82340b0ae422123f57254dfbf8ca3c09f60e9b8d1c802d1185639e805e29a0584def69bc9326c51b0f105c1c67fa409f9fe4b9bfefb2df0187691855ef89bca0eec6dc483c471b1f9dd7d629c99386c3b7035b620dea846038017dd6e06ee6cfacbb6c0096dbd63e305a41f02ff4d1c01c061557e624e59765862d07268761610629ab6105bf83b3bc0df4eddb798bcad776cdec6b6057712f651a04c779f50666329c28d76156aecc7f1a2daed586b6f29e615acc4f7d1982f7e6f6ccf020f13b692f00856e1f700f1defd730e7b09aed1f2614d47e74b81fb8920053231795bef17420fa41f5ee1906f601760885980dfdd27f68bdf1ff3b5c0054dfdc1467e182fdfff1e6cdf538af919d3b4f58ed86b585bb2a6b7de7a585e42dedd27150ecb895945435d859a8cccd7037737fc37dbe02096f1b73df4408af002d5a3d80b4b4d47ae2d0cdedd2704075c819510ab7d41b0f68bd1cbf7ff1a59655429e4518ab5f58ecd30b62db897662ec6bcccd73ad2ed64340f9b05ccaffb0fd51a00bce8f511e013757f99167a037bdbef40e88194e105ac9f6241ac8995ad2abbfb84e2b09b65ed5d859a988e9f8b6dfb9dd6c0df6a138715db780292bdfbe7e33e86d50c78957acfb9bcbb4f9365beea3284ed08d4ba5d5edb8f9145ad1ef039e0c63abf444bad01fe82826dbd23b601db15a8a3f67e2e2ff35565779f50f2ae42d751e3b660dd3380e5c0bd589283f4ef18f075ecd5d5e4798543be073c453de75d0f4b437e9df42f7eff3b5d4d562ba38e20504b00c8063a17f80a59330429e4c75837de64a7fe53d88dbd32fc26d55ea47e779f1065beeae2b047e7d5d8c260e52a0f0013f2fd3f5dd79169b1616ce16f4fe88154c90b643fc61a9854c9616f47d6d9dd279431e0326aea2a54d723c019c08344dc1639620f935d202dbbfbe70e638b9b5ba8e6fccbb7fd3690eeb6df4c6aeb2a5469009890ef7f6bed87a57d5ea3c2b6deb1f1bed34bd82bcd555412cecb7c0dd3bebb7fce61e9c12ba8b87c581d3380cb50be7f19a3d81b743f0f3d903a654160149be93ccf60e760dedd6713e96ffbcda496ae4295058009f9fe2b9a3c322df12c16002a6deb1db16dd87b028314e83c8665fc35d9dd271487bd2a5c6957a1aa6700ab80cfd7f0b96d77186bebbd25f4409ae005b8c7c8ea1b94f9182c886ca3fd17bfef2aecadda4a16042bb950b3819c0a3c80754095627e804d89dbbaf03795fdd882e00e8a5dc47e779f543a125521ef2ab48a8a1eb1070e005e14fa28f0f1504726617bb06dbfb7420fa4495ea07b06f82ec556f063e8ee138ac3660057c1e0b380aaa6eae7a17cffb2be81ed8d77edeeef3718fd167637efe77c8ca9bb4f287957a13306fda081028097ef7f177043e8a392a07558ca6f236dbd23b6197888fe2a098f62c72d86ee3ea1386c376025036e0b563103b806e5fb973182bdecd3685befd878ef097c1f787ca67f9cf8bafb849277153a7fd00f29258b3af3b07cff25a18f46821ec716c0522bf35597bdd8f1d8cdd477f6bcbbcf11ba7bf7cf3960010376152a1500bc3ff67ee053a18f44820e600b7f3b430f24065e007c02f80f267fb6ef616ffac5dadd2794a5c0e5506e417090478033b17cff45a18f4082fe0d3bd13bb7f0378323d85b901b39f1dcccbbfbac23ceee3ea1e45d855651b2ab50e100e045993b805b421f81046dc3eefe0775f18ff38ec53aec3d01bf92b0c38242ccdd7d427158bd80aba1f82ca0ec0ce072e0abd4f48e728b39ec7df8a7420f24465e83d147183f467999af57e8eeb6df4cf2ae428567e3850240165d66035fc21a184831b1b6f58ecd1b587ec42f18dff64ba1bb4f280eab1d58b8ab50df01c0fbd01bb07c7ffd18c51cc55a7bbd1a7a20319b5038e4316cd12f2ff3a57f4dfdaf59d84b781742ff8f0245f7eee701b731fe2286f467086b8e11735befd81cc0b60587b1bc7f99590fdb15d8469fa9d57d9f89594499854d35e684fea6097a1b3b991500fae09d6fa7a0b74b8b18c502a6f24b44444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444a469ff0fe5371ac2a072bcd30000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda793000024314944415478daeddd79b45e757deff1f74942420c8320612a85cb65018a1811441199044292ced5dbd1dada5aab56cbe0048288282a286082577bb583bdf5eab5b72a8280226244bc2a210c611ec21ce62910424848cee91f3fa8499ae10ccff3fbeebdbfefd75aac4592739efd794ececafe9cbdf7effb03499294ce00c0d0d050740e499254d180277f4992f219171d409224d56701902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80bae4b78121fff3bf4aff5d026c55e53b5bea030b80ba622270567408a5b1025800cc8c0e228d9605405df17e60f7e8104ae35c6009b007b06b741869342c00ea82ed8113a343288d47803b56fbf54c60203a943452160075c1e780cda343288df328b7005eb42df0bae850d2485900d47607006f8d0ea1346e00ee5fc7ef1f0a6c1a1d4e1a090b80da6c0038072fbfaa8e2160ee7afe6c327044744069242c006ab37700fb4787501a17018f6fe0cff705b6890e290d9705406db505705a7408a5b114b871231f330e9705aa452c006aab5381eda243288def00cf0ee3e376035e111d561a0e0b80da684fe0bdd12194c6bdc0dd23f8f82381f1d1a1a58db100a88de6009b4487501a3f00568de0e3b706de101d5ada180b80dae6f78019d12194c6cf800746f179070153a2c34b1b6201509b4c02ce8c0ea1345602f347f9b99380e9d16f40da100b80dae4839487aca41ace07168fe1f3a7013b44bf09697d2c006a8b1d8113a243288d2780dbc6f81a03b82c500d6601505b9c096c161d42699c0b3cd783d7d9997225406a1c0b80dae040e04fa243288d5b81453d7cbd238009d16f4a5a9b05404d378e32ef5faae54794b9ffbdb2057048f49b92d6660150d3bd13d82f3a84d2b80478b40faffb064a11901ac302a026db12f8647408a5f11cb0a04faf3d011f0854c35800d4649f04a64687501adf059ee9e3ebbf02f8f5e83729bdc802a0a6da0b784f7408a5f120b0b0c2716645bf51e945160035d56c7c725af59c4f99fcd76f3be0332d6a080b809ae82d384655f55c4bb90250cb9b8089d16f5ab200a86926019f8b0ea13406819f563ee6144a0990425900d434c703bb4687501a1752c6fed6b63f65db60298c05404db213f0e1e8104ae329e0a6a0638fc76dad15cc02a026390bf750573de701cb028fbf07b07bf41741795900d41407037f181d4269dc09dc1d1d82f2b0abff0e2b84df786a02e7fdabb61f521e008c3615787d7408e564015013bc1bd8273a84d2f809f0507488d51c024c8e0ea17c2c008ab615706a7408a5b102b8263ac45a36a56c192c55650150b4d3806da243288df3284fff37cdbec0b6d121948b054091f606de151d42693c0adc1e1d623d0670b74055660150a43994f5d0520de7516e0134d5ae944db0a42a2c008af207c0e1d12194c68dc0a2e810c37024966255620150844d71debfea1902e6468718a6ad80374687500e1600453801d8253a84d2f801f0587488117823b0597408759f0540b5ed8cf3fe55cf52e086e810233411382a3a84bacf02a0dacec6a127aae7bb9412d036af02768c0ea16eb300a8a64381b74487501af75166feb7d5ace800ea360b806a198ff3fe55d7c5c0aae81063b0138ec8561f590054cb7b8069d12194c6cf69c7b2bf8d391cd8243a84bac902a01ab6c679ffaa6725302f3a448f6c4ed92c48ea390b806af814a50448355c002c8e0ed14307005b468750f75800d46fd380774687501a4f02b74687e8b109b84f80fac002a07e3b07479baa9ef38065d121fae0e5383c4b3d6601503ffd3165e99f54c36dc03dd121fa682665d740a9272c00ea97c9c019d12194caa594b9ff5db53df0dae810ea0e0b80fae544cad85fa9864b8187a34354701830293a84bac102a07ef86fc007a343288de5c0b5d1212a79096ea3ad1eb100a81fcea66cf92bd5f05d604974888a5e0bbc2c3a84dacf02a05e3b1cf8fde8104ae34160617488cac60133a243a8fd2c00eaa5f1c09ce8104ae502e0f9e810017607f6880ea176b300a897de07ec1d1d42692c00ee8f0e11e828fc375c63e0378f7a651be094e8104a6310b82c3a44b09751c6044ba3620150af7c1ad82a3a84d2b80878223a44031c425919208d980540bdb00ff08ee8104ae369e0a6e8100d310938323a84dac902a05e3807bf9754cff9c0b3d1211a641f60bbe8106a1fffd1d658bd1538383a84d2b80bb8333a44c30c00b3a243a87d2c001a8b29c0e9d12194ca25940700b5a65d70058e46c802a0b13809d8293a84d2b81c78203a44831d014c880ea1f6b00068b47605de1f1d4269ac00e6478768b89702074587507b5800345ab3715732d5f33de0a9e8102d7020b0797408b5830540a3311df89de8104ae331e0d6e8102db1096542a0b45116008dd4049cf7afbacea7dc02d0f0ec8dcfe668182c001aa9a381574487501a3703f7468768a199d101d47c16008dc454e063d12194ca8fa303b4d4af01af890ea166b30068244e07b68c0ea1347e083c1a1da2c50e0726468750735900345cfb016f8f0ea1349ea56cf7abd1db0c38343a849acb02a0e172debf6a3a0f581a1da2035e8fbb746a3dfc075dc3f1e794f5c5520d8b8085d1213a623c3e10a8f5b000686336033e131d42a95c08ac8a0ed1217b5026774a6bb00068634e06768c0ea134ae021e8c0ed1413329bb064affc902a00dd90d38263a84d25805fc2c3a44476d0bec1f1d42cd6201d086ccc179ffaae742e0c9e8101d7618b069740835870540eb3303f8cde8104ae349cad43ff5cf64ca6c0009b00068dd36c179ffaaeb7bc0b2e81009ec076c131d42cd6001d0ba1c0bec191d4269dc0edc151d228971b82c502fb000686ddb011f8d0ea1542e0586a24324b21bf0f2e8108a6701d0dace00b6880ea134e6020f458748683a65489012b3006875fb53a6fe49352c07ae8e0e91d4d6c01ba243289605402f1a00be80c34254cff9c092e810891d044c890ea1381600bde82f281b8748353c04dc161d22b949945b014aca022080cd71debfeaba10783e3a849806ec101d42312c0002f818b07d7408a5711d705f740801e5969fcb0293b2006877e0e8e8104a6310b82c3a84d6b033f0aae810aacf02a0d9c0c4e8104ae362e0f1e810fa2f8e04264487505d1680dc7e0bf88de8104a6309707d7408add316c0c1d12154970520af89c0d9d12194caf9c0b3d121b45e07e210b0542c00791d47b9ff2fd57037704774086dd004ca2ea04ac20290d3f6c049d12194ca25940700d56c7b01bf1e1d4275580072fa2c65edbf54c3cf80fba34368d866e144d0142c00f91c00fc597408a5f13c303f3a8446640760dfe810ea3f0b402e03c039d8ee55cf05c0e2e8101ab137514605abc32c00b9fc1565c73fa986c7815ba2436854a600874687507f5900f2d802f8547408a5f23dca96bf6aa7d751b60d56475900f2f838b05d7408a5713365e99fda6b3cee13d06916801cf604de171d42a9cc8d0ea09ed81df8efd121d41f16801ce6009b4487501a97008f448750cfccc4734527f997da7dbf8bd3bd54cfb3c082e810eaa9a994e701d43116806e9b049c151d42a97c0f78263a847aee5060727408f59605a0db3e00ec161d4269dc0fdc1e1d427db12970447408f59605a0bb76043e121d42a95c04ac8c0ea1bed917d8363a847ac702d05d9f03368b0ea134aec179ff5d3780cb023bc502d04d07027f1a1d4269ac022e8f0ea12a76a5ec18a80eb00074cf38cabc7fa996ef034f4487503547528604a9e52c00ddf3d7c07ed12194c662e0c6e810aa6a2bca5546b59c05a05bb6044e8b0ea1542e00964587507507e13346ad6701e8964f50867648352c04ee880ea1101381e9d12134361680eed80bf8dbe8104ae55260283a84c24ca32c37564b5900ba633630213a84d2f809f0607408859b151d40a36701e88637e3e538d5b31cb83a3a841a6127e0d5d121343a1680f6db1438333a8452b900783a3a841ae308dc6db4952c00edf721ca700ea98687815ba243a85136070e890ea191b300b4db4ec0f1d12194ca45c0f3d121d43807509621ab452c00ed762630253a84d2b801b8273a841a6902ee13d03a1680f63a18f8a3e8104a6388f2e4bfb43e2f0776890ea1e1b300b493f3fe55dbc5c063d121d4783329bb06aa052c00edf42e609fe8104a6309707d7408b5c2f6b817496b5800da672bcac85fa9960b80a5d121d41a6f02264587d0c65900dae793c036d12194c63dc0edd121d42a2fa19400359c05a05df606de1d1d42a95c020c468750ebec0fbc2c3a8436cc02d02e7380f1d12194c62f8045d121d44ae38019d121b4611680f6f81fc0e1d12194c6f3c015d121d46abb037b4487d0fa5900dac179ffaaedfbc0e2e8106abda3f03cd358fec5b4c309386043f53c0edc181d429df032ca9860359005a0f976063e1c1d42a95c48d9f257ea8543282b03d4301680e63b0b981c1d4269dc02dc151d429d3289b265b01ac602d06c87521efe936a994b99fb2ff5d26b80eda243684d1680e61a8ff3fe55d78f8187a343a893068059d121b4260b4073bd1b98161d42692c03ae890ea14edb0578657408fd8a05a099b6c679ffaaeb3b944d7fa47e9a0e4c880ea1c2bf88663a8d5202a41aee019e06de1e1d449d7729f046e0b2e820f20a40134d03fe263a84523986b2c9d453d141d4690f00f7510ac0e6d161640168a27370debfeaf909701ef020f0bf700580fa631098f7c2ff6f429910a860168066f923cad23fa98655949ffe5ff4559c01a0feb88535474bef0dec141d2a3b0b40734c063e1b1d42a97c09b86eb55f2f074e0556460753a72c07ae5dc7efcf8c0e969d05a0393e4219fb2bd5f024e564bfb69f0297478753a75c03ac58c7efff1ab04f74b8cc2c00cdb00bf0a1e8104ae524caa63feb720af06c744075c262e0d60dfcf911c0c4e8905959009ae16cca96bf520d3702ffb0813fbf0ff8e7e890ea84796cf8c1d2cd289b0529800520dee1c09ba343289563d9f87dfe2f018ba283aad5eea12cfddb980380ada2c366640188351e98131d42a97c0bf8d1303e6e196520d5607460b5d220307f981f3b1e98111d38230b40acf75296c348352c078e1fc1c75fccafd66e4b237103231b2dbd27b06b74e86c2c0071b6013e1e1d42a97c16b873849f7332a53848c3b50cb87e149f3793b26ba02ab100c4f914def7523d0f30ba39130b816f448757ab5c053c3f8acfdb16d83f3a7c26168018fb007f1d1d42a97c107866949f7b16f068f41b502b3c46298da37518ae88aac60210e31cfcdaab9e5f02df1cc3e72f054ec77d02b471637d6664326565942af02454df9f02074787501a43c0d18cfde47d2e6b8e0d96d67607f0480f5e673f606af49bc9c00250d714e08ce8104ae59f802b7bf03a43c089b84f80d66d2570758f5e6b1c2e0bacc20250d789b80396ea5942798abf576e02be1dfda6d448d7536e15f5ca6e94a581ea230b403dbb021f880ea1543e0e3cd4e3d7fc346b6eeb2a2da5acfbefb5a3284382d42716807a3e0f4c8a0ea1341602ffb30faffb3465ef0ae9455702abfaf0ba5b53c604ab4f2c00754c077e373a8452398e756fc1da0bff870deff0a63c1e06eeeee3eb1f4c79764a7d6001e8bf09c0ece8104ae542e0823ebefe10653b61f709c86d88fe8f8a9e041c19fd46bbca02d07f7f07ec151d4269aca40cfde9b7ab808ba2dfac42dd0e3c5ee138af0676887eb35d6401e8afa9c029d12194ca6ce0964ac7fa38bd7df25bedf13cbd5bf6b73103947d02d4631680fefa0cb0657408a5f128650bdf5a1e07be18fda615e25ae0b98ac7db197855f49bee1a0b40ffec07fc657408a57202f054e5637e85fe3e04a6e6791ab839e0b847529ea9528f5800fac779ffaae91ae05f028ebb8a729bcb7d02f29847cc03a05b000745bff92ef104d51f6f030e8c0ea1548e21eea9fc9f0273a3bf00aae27e6051e0f1df482902ea010b40ef6d46d9394daae5ebc0e5c1194ea6ee3d61d537486ff695188b09940981ea010b40ef7d14d8313a84d27816f8487408e001cac643eaae5b68c618e85702bf1e1da20b2c00bdb51b706c7408a5f269e0bee8102f980d3c181d427db19cf2e47f53cca22c0fd41858007a6b36cefb573df7d2acb9fc2ba9bb0c51f55c4dff464b8fc60ec06ba243b49d05a0776600bf151d42a91c072c8b0eb1968b805f4687504f3d09dc161d621d0ec71fb8c6c402d01b9b0073a2432895cb80ef4487588f932893e2d40df368e632cf29c0a1d121dacc02d01bc7007b4687501a8394efb9a6ba13f8467408f5c43d34fbb98ed751b60dd6285800c66e3bca1228a996bf07164487d88833a8b3518cfa6715303f3ac4468cc77d0246cd023076a7e3600ad5b398b2094fd32dc379186d7723b0243ac430ec4e5981a511b2008ccdfec05f4487502a1f051e8b0e314cdf02ae8b0ea1515946bbfeee66e0f96cc4fc828dde00f0055c8baa7a6e02be1c1d62844ea45c4a56bbcca72ceb6c8ba9941fc834021680d1fb73e0f5d12194cab1b4eb1f65289791cf8d0ea111790cb8233ac4281c064c8e0ed1260343434d5cddd1789b53d6c56e1f1d44699c0bbc393ac4286d4ed9ab60cbe8201a960b8147a3438cd2fc17f26b18bc02303a1fc393bfea590e7c283ac4182cc139196d7107ed3df903ec076c1b1da22d2c0023b73b70747408a57226edbc24bbbaaf02b74787d006ad04ae8a0e314603b82c70d82c0023371b98181d42693c487796d39d4c1962a466ba8eb2bb64dbed0abc223a441b580046e63781df880ea1543e043c131da247ae002e8e0ea1757a86f2c066574ca70c09d206f810e0f04d046ea0dc02906ab8027803cd9cc33e5a5381b99439ee6a8eb994b1bf5df263cac3a75a0faf000cdfb178f2573d4394674dba74f287f280d957a243680d0fd1bd933fc041c066d1219acc02303cdb5326b049b5fc0b6517b62efa22706f740801a56076f5fb6c22e55680d6c302303c6750d6324b353c43d952b7ab56019fa07b5737dae836e089e8107d340dd8313a4453590036ee00e06dd12194caa9347b0bd65eb814efcf465b015c131da28259d1019aca02b06103c03938ef5ff5dc41f99ecbe0a3c073d12112bb961c5fff9d285702b4160bc086fd256e30a1ba8ea1fc6496c17dc0d7a24324f514704b74888a8e0436890ed1342e035cbf2d28f7c7b68b0ea2347e48d9d6349389c065385abbb61f018ba2435476396569a05ee01580f53b054ffeaa672565a969362b280fd9aa9e45e43bf94399a9e18654abb100acdb9ec0df4587502a5f006e8e0e11e4bb945ddcd47f83c095d121824c20df15b60db200acdb1cbc5fa47a1ea32c8bcbec64f23cfb10e966cafdffac5e01ec121da2292c00ffd5ef604b545d27028ba34304bb05f87674888e7b0e58101da20166e1ca2ec08700d73689b221c66ed14194c602605fdc250fca83b73f065e161da4a37e4e79b0597021de76f20ac05ade8f277fd575349efc5ff434e5f69b7aef49e0f6e8100df226ca0f7ca959007e6547caa558a9966f023f8d0ed1305fa7ecbaa9deba02472fafee25c061d121a259007ee5b3b87394ea59061c1f1da2810629a390574607e990bb293bfe694daf23f9ed260b407120f0d6e8104ae574dc116f7de603174587e8885578af7b7dc691fc816f1f022cdf04f380fda283288dfb28b32696450769b0a9c02538b865ac169063c39fb1f806499f8ff00a00bc034ffeaaeb0378f2df9847812f478768b96781eba343b4c00c929e0bb35f01d892d2fca64607511a9703874487688989c005c0eed1415aea72caee92dab81f02bf880e515bcad6b39a53f1e4af7a0629cbfe343c2b80cfe00381a3f1289efc47e250caca8054321780bd80f74687502a5fa1ecc1aee19b4bd92d5023332f3a40cb4c028e880e515be602309bb2398454c362e063d1215aea13c092e8102db29072054023f31a92ed009bb500fc3e303d3a84523905ff511ead7b81af4587688995c0d5d1215a6a80b24f401a191f029c44d9116bd7e8204ae366601adecb1e8b2994f9edeee4b6615703d7458768b97f076e8a0e5143c62b001fc293bfea3a0e4ffe63b514381bf74dd8902594cdcc3436d349727b385b01d80938213a8452390fb8383a44475c00fc323a4483cda74cfed3d8bc94321db6f3b21580cf512e254a35ac003e181da24306814f51ae06684d0f01f74487e8908380cda343f45ba6027030f0c7d12194cad99427b2d53b3701df890ed1304394ddfed43b9b90e041f12c0f018e03ae02f6890ea2341e02f6c0e56bfdb015e576c08ed1411ae216bc35d22fff042c8a0ed12f59ae00fc0d9efc55d7f178f2ef9727812fe20381506e33b9d94fff747a59608602b015f0c9e8104ae54a5cb7de6fdfc2a98a50be06cba34374d88e74f887c70c05e013c036d12194c61065de7f8a7b6b815600a7937b57c5a7283326d45f475036a6ea9cae1780bd81f74487502aff8af7636bb912f841748840f3b068d6b0191dddc1b3eb05600e303e3a84d2780638313a443267018f448708701f707f7488440ea0dc4eee942e1780b700874787502aa7010f448748e67ee09fc9f593f020e5ea87ea190f1c151da2d7baba0c7053cad218e786ab963b295b4cfb40567d53806f526ef9657023168028ff0adc151da257ba7a05e0783cf9abaee3f0e41f6529f079727cfd9fc3d50f916652760dec842e16809d290540aae547c0f9d12192fb0930373a44055703cf4787486c5be0b5d1217aa58b05e04c60727408a5b11238363a8418a43c10f87874903e7a02b82d3a847813e53673eb75ad001c0afc417408a5f245dc82b5291602ff373a441f39efbf1926534a40eb75a9008c07ce890ea1541e074e8d0ea1357c956efe947c37f0707408fda7d70253a3438c55970ac0bb8069d12194ca4994b9f46a8e27802f51260576c52a607e7408ad611c30233a442fde44176c8df3fe55d775c03f4687d03a7d1ff84574881eba8132644acdb21bb0677488b1e84a01388d5202a45a8ea1fc64a6e65901cca61b57679e05ae8f0ea1f53a8a164f9bed42019846d9ee57aae5ff51969da9b9aea51b4b33e753569aa899b6065e1f1d62b4ba5000cea1c50d4cadf31cf0e1e8101a96af502634b6d5232dcf9fc521946994add3f602f08794a57f522d6700f74487d0b03c405915d0d6c139f3a20368582651b60c6e9d361780c9c0e7a243289545c067a3436844ce05ae8a0e310a0b81c7a24368d8f60176880e31526d2e002750c6fe4ab57c90f25096da63296558d353d14146e079cac85fb5c700659f8056696b01d805efc3aaae9f01ff161d42a3f273e087d12146e03a2c9a6db4332ddb91b2ad05e02c3a328b59ad304859f6a7761aa43c10d886673796e068e9369b0e4c880e315c6d2c0087036f890ea154fe112fc9b6dd42ca159ca62fa9bb925258d44e5b0007458718aeb61580f1c09ce8104ae529e0a3d121d413ff062c880eb1010f02f74687d098bd9152041aaf6d05e06f69d93d16b5dec78147a343a8279e00fe817299bd698670d95f574ca04c086cbc3615806d70e735d5752be5097275c75ce0b2e810eb702bdd185dace295b460955a9b0ac069c056d12194cab1b477888cd66d05e52ac0a2e820ab590e5c131d423d3793b23cb0b1da5200f601de191d42a95c00fc203a84fae23ae03c9af3b0ddb59412a06ed98172ee6aacb61480735a9455edb702787f7408f5d53728dbec465b0cdc121d427d730465547023b5e1a4fa27c0c1d12194ca1ce0f6e810eaab0780af512605469a47790050dd3485b259502335bd004cc1d9ebaaeb61caf326eabeef53a60446b98f5244d46dafa76c1bdc384d2f001f01768a0ea1544e009e8e0ea12a9652760b7c28e0d88394a13feabef1c08ce810ebd2e402b02b65f315a996f9c0ff8e0ea1aaaea05c09a8fd40e04d583433d903d82d3ac4da9a5c00cea6c10f4fa8738680a3f17e6c36839407026fae78cce768f64442f5c70c1a76ce6d5498d54c077e2f3a8452f93af08be8100ab110f816b0acd2f1aec2f912194d05f68f0eb1ba26168009c0ece8104a6529e5debff23a9f3aa3781fc71526991d064c8e0ef1a2261680f7017b4587502a9f06ee8f0ea1504f50ae023dd2e7e338ef3fb74d293bda3642d30ac054cae62b522d770167458750235c06fc98fe3d0772176599a972db0fd8363a0434af007c1ad8323a8452793f8e6155b102f82665639e5e5b495965220d50f60908d7a402b01ff057d12194caa5c077a343a851160017d2fb527803f15307d51cbb022f8f0ed1a402e0bc7fd5b48ab2db9fb4b673294feaf7ca52e0fae837a5c6398a3224284c534eb87f061c181d42a9fc3dcdd80c46cd733ff0efc0633d7abdab2885535add56c01b220334a1006c069c111d42a93c019c121d428d760970790f5ee711e0cee837a3c63a98720e0cd184027012b0637408a57232a50448ebb394321c68ac6bf6af887e236ab489c09151078f2e00bb01c70567502ed7035f8e0ea156f825e54ac08a517efeed94c13fd286bc9aa01f82a30bc0e771debfea3a06efc76a7806290f045e338acf7d1eb83afa0da83566451c34b200cc007e3bf0f8cae7dbc0dce8106a9585c0f7802747f8790ba8b7b780da6f27605aed834615804d803941c7564ecfe1f6d21a9def033f1fc1c73f4dd9ee571a892329e7c66aa20ac0d1c09e41c7564e6702774787502b3d41191835dca7f9afa4dc3e90466273e0a09a078c2800db011f0b38aef25a049c1e1d42adf653e0276c7c1bdf0780fba2c3aab50e045e5aeb601105e033c01601c7555ec7e318568dcd0aca96c10b36f03183b8db9fc6660230bdd6c16a1780fd81b7573ea672fb39f08de810ea84059465814fade7cf6f0516478754ebed05ec52e340350bc00065deff40c5632ab741caf32652af5cc8ba87fb2c6774cb05a5759945857365cd02f036e0808ac793be4a6f377591ee072e02ee59ebf7af65f40383a4b56d07ecdbef83d42a009be3bc7fd5f5347062740875d2a5c0ff0756bef0ebc5c02dd1a1d43987d3e74179b50ac0c9c0f6958e25017c82b2118bd46bcf506e05bcb8c5ef3c60283a943ae725c061fd3cc0c0d050dfbf6f77a76cbb3ab1df07925e701bb0371b5fb2258dd678e07d9427b6af8c0ea3ce1a04be449ff694a8710560369efc55d77178f2577fada23c0be0c95ffd340e98d9af17af7105409224354cf46e8092242980054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac802204952421600499212b20048929490054092a4842c009224256401902429210b80244909590024494ac80220495242ff018c9c34cd8fc362200000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": "https://www.flexibee.eu",
+  "_modules": {
+    "MakeAPICall": {
+      "id": 24887,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "{{connection.ca}}/c/{{parameters._spolecnost}}/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "MakeAPICall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": "rpc://app%23flexibee@1/getUniversalParameters"
+          },
+          "mappable": true,
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"{{connection.ca}}/c/{{parameters._spolecnost}}/{{parameters.url}}\",\n    \"method\": \"{{parameters.method}}\",\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"response\": {\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://NacistSpolecnosti\",\n            \"nested\": \"rpc://getUniversalParameters\"\n        },\n        \"required\": true,\n        \"mappable\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"required\": true,\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ]\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n        \"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n        \"default\": [\n            {\n                \"key\": \"Content-Type\",\n                \"value\": \"application/json\"\n            }\n        ]\n    },\n    {\n        \"name\": \"qs\",\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"body\",\n\t\t\"label\": \"Body\",\n\t\t\"type\": \"any\"\n\t},\n\t{\n\t\t\"name\": \"headers\",\n\t\t\"label\": \"Headers\",\n\t\t\"type\": \"collection\"\n\t},\n\t{\n\t\t\"name\": \"statusCode\",\n\t\t\"label\": \"Status code\",\n\t\t\"type\": \"number\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "NacistDetail": {
+      "id": 24888,
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}/{{parameters.id}}",
+        "method": "GET",
+        "response": {
+          "output": "{{prepareBundle(getResponse(body.winstrom, parameters._evidence, 0))}}"
+        }
+      },
+      "rev": 5,
+      "crud": null,
+      "name": "NacistDetail",
+      "epoch": null,
+      "flags": {},
+      "label": "Načíst detail záznamu",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": "rpc://app%23flexibee@1/NacistEvidence",
+                  "nested": [
+                    {
+                      "help": "Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).",
+                      "name": "id",
+                      "type": "text",
+                      "label": "ID",
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": "rpc://app%23flexibee@1/NacistSampleData",
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}/{{parameters.id}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": \"{{prepareBundle(getResponse(body.winstrom, parameters._evidence, 0))}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": "rpc://app%23flexibee@1/NacistParametryEvidence?io=out&detail=full",
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Načte detail záznamu ve zvolené evidenci dle zadaného identifikátoru.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://app%23flexibee@1/NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": \"rpc://app%23flexibee@1/NacistEvidence\",\n                        \"nested\": [\n                            {\n                                \"help\": \"Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).\",\n                                \"name\": \"id\",\n                                \"type\": \"text\",\n                                \"label\": \"ID\",\n                                \"required\": true\n                            }\n                        ]\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    }\n]",
+      "samplesJsonc": "\"rpc://app%23flexibee@1/NacistSampleData\"",
+      "altAccountName": null,
+      "interfaceJsonc": "\"rpc://app%23flexibee@1/NacistParametryEvidence?io=out&detail=full\"",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "PridatStitky": {
+      "id": 24889,
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}",
+        "body": {
+          "winstrom": "{{wrapTag(parameters)}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": {}
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "PridatStitky",
+      "epoch": null,
+      "flags": {},
+      "label": "Přidat štítky",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "type": "select",
+                "label": "Evidence",
+                "options": "rpc://app%23flexibee@1/NacistEvidence",
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        },
+        {
+          "help": "Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).",
+          "name": "id",
+          "type": "text",
+          "label": "ID",
+          "required": true
+        },
+        {
+          "help": "Štítky oddělujte čárkou.",
+          "name": "tags",
+          "type": "text",
+          "label": "Štítky"
+        },
+        {
+          "help": "Pokud nezaškrtnete, budou nové štítky přidány k již uloženým. Pokud zaškrtnete a nevypníte žádný štítek, budou štítky ze záznamu odebrány.",
+          "name": "overwrite",
+          "type": "boolean",
+          "label": "Přepsat původní štítky",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}\",\n    \"body\": {\n        \"winstrom\": \"{{wrapTag(parameters)}}\"\n    },\n    \"method\": \"POST\",\n    \"response\": {\n        \"output\": {\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Přidá štítek ke zvolenému záznamu.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://app%23flexibee@1/NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": \"rpc://app%23flexibee@1/NacistEvidence\",\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    },\n    {\n        \"help\": \"Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).\",\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"ID\",\n        \"required\": true\n    },\n    {\n        \"help\": \"Štítky oddělujte čárkou.\",\n        \"name\": \"tags\",\n        \"type\": \"text\",\n        \"label\": \"Štítky\"\n    },\n    {\n        \"help\": \"Pokud nezaškrtnete, budou nové štítky přidány k již uloženým. Pokud zaškrtnete a nevypníte žádný štítek, budou štítky ze záznamu odebrány.\",\n        \"name\": \"overwrite\",\n        \"type\": \"boolean\",\n        \"label\": \"Přepsat původní štítky\",\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "WatchChanges": {
+      "id": 24890,
+      "api": {},
+      "rev": 3,
+      "crud": null,
+      "name": "WatchChanges",
+      "epoch": null,
+      "flags": {},
+      "label": "Sledovat změny v evidenci (webhook)",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n}",
+      "approved": false,
+      "hookName": "flexibee",
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "number",
+          "label": "ID"
+        },
+        {
+          "name": "evidence",
+          "type": "text",
+          "label": "Evidence"
+        },
+        {
+          "name": "operation",
+          "type": "text",
+          "label": "Operace"
+        },
+        {
+          "name": "version",
+          "type": "number",
+          "label": "Verze"
+        },
+        {
+          "name": "externals",
+          "spec": {
+            "type": "number"
+          },
+          "type": "array",
+          "label": "Externí ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "Spustí se, pokud dojde ve zvolené evidenci ke zvoleným změnám.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"number\",\n        \"label\": \"ID\"\n    },\n    {\n        \"name\": \"evidence\",\n        \"type\": \"text\",\n        \"label\": \"Evidence\"\n    },\n    {\n        \"name\": \"operation\",\n        \"type\": \"text\",\n        \"label\": \"Operace\"\n    },\n    {\n        \"name\": \"version\",\n        \"type\": \"number\",\n        \"label\": \"Verze\"\n    },\n    {\n        \"name\": \"externals\",\n        \"spec\": {\n            \"type\": \"number\"\n        },\n        \"type\": \"array\",\n        \"label\": \"Externí ID\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "NacistPrilohy": {
+      "id": 24891,
+      "api": {
+        "qs": {
+          "detail": "full"
+        },
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}/{{parameters.id}}/prilohy",
+        "method": "GET",
+        "response": {
+          "output": "{{prepareBundle(item)}}",
+          "iterate": "{{body.winstrom.priloha}}"
+        }
+      },
+      "rev": 5,
+      "crud": null,
+      "name": "NacistPrilohy",
+      "epoch": null,
+      "flags": {},
+      "label": "Načíst přílohy",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "sort": "text",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": [
+                    {
+                      "label": "Přijaté faktury",
+                      "value": "faktura-prijata"
+                    },
+                    {
+                      "label": "Adresy firem",
+                      "value": "adresar"
+                    },
+                    {
+                      "label": "Vydané faktury",
+                      "value": "faktura-vydana"
+                    },
+                    {
+                      "label": "Ostatní pohledávky",
+                      "value": "pohledavka"
+                    },
+                    {
+                      "label": "Ostatní závazky",
+                      "value": "zavazek"
+                    },
+                    {
+                      "label": "Prodejní kasa",
+                      "value": "prodejka"
+                    },
+                    {
+                      "label": "Vzájemné zápočty",
+                      "value": "vzajemny-zapocet"
+                    },
+                    {
+                      "label": "Banka",
+                      "value": "banka"
+                    },
+                    {
+                      "label": "Pokladna",
+                      "value": "pokladni-pohyb"
+                    },
+                    {
+                      "label": "Interní doklady",
+                      "value": "interni-doklad"
+                    },
+                    {
+                      "label": "Přijaté objednávky",
+                      "value": "objednavka-prijata"
+                    },
+                    {
+                      "label": "Přijaté nabídky",
+                      "value": "nabidka-prijata"
+                    },
+                    {
+                      "label": "Přijaté poptávky",
+                      "value": "poptavka-prijata"
+                    },
+                    {
+                      "label": "Vydané objednávky",
+                      "value": "objednavka-vydana"
+                    },
+                    {
+                      "label": "Vydané nabídky",
+                      "value": "nabidka-vydana"
+                    },
+                    {
+                      "label": "Vydané poptávky",
+                      "value": "poptavka-vydana"
+                    },
+                    {
+                      "label": "Příjemky/výdejky",
+                      "value": "skladovy-pohyb"
+                    },
+                    {
+                      "label": "Ceník",
+                      "value": "cenik"
+                    },
+                    {
+                      "label": "Kontakty",
+                      "value": "kontakt"
+                    },
+                    {
+                      "label": "Zakázky",
+                      "value": "zakazka"
+                    },
+                    {
+                      "label": "Dodavatelské smlouvy",
+                      "value": "dodavatelska-smlouva"
+                    },
+                    {
+                      "label": "Odběratelské smlouvy",
+                      "value": "smlouva"
+                    },
+                    {
+                      "label": "Položky smluv",
+                      "value": "smlouva-polozka"
+                    },
+                    {
+                      "label": "Uzel stromu",
+                      "value": "strom"
+                    },
+                    {
+                      "label": "Události, aktivity",
+                      "value": "udalost"
+                    }
+                  ],
+                  "nested": [
+                    {
+                      "name": "id",
+                      "type": "text",
+                      "label": "ID záznamu",
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"detail\": \"full\"\n    },\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}/{{parameters.id}}/prilohy\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": \"{{prepareBundle(item)}}\",\n        \"iterate\": \"{{body.winstrom.priloha}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": "rpc://app%23flexibee@1/NacistParametryPriloh",
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Načte seznam všech příloh u zvoleného záznamu.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://app%23flexibee@1/NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"sort\": \"text\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": [\n                            {\n                                \"label\": \"Přijaté faktury\",\n                                \"value\": \"faktura-prijata\"\n                            },\n                            {\n                                \"label\": \"Adresy firem\",\n                                \"value\": \"adresar\"\n                            },\n                            {\n                                \"label\": \"Vydané faktury\",\n                                \"value\": \"faktura-vydana\"\n                            },\n                            {\n                                \"label\": \"Ostatní pohledávky\",\n                                \"value\": \"pohledavka\"\n                            },\n                            {\n                                \"label\": \"Ostatní závazky\",\n                                \"value\": \"zavazek\"\n                            },\n                            {\n                                \"label\": \"Prodejní kasa\",\n                                \"value\": \"prodejka\"\n                            },\n                            {\n                                \"label\": \"Vzájemné zápočty\",\n                                \"value\": \"vzajemny-zapocet\"\n                            },\n                            {\n                                \"label\": \"Banka\",\n                                \"value\": \"banka\"\n                            },\n                            {\n                                \"label\": \"Pokladna\",\n                                \"value\": \"pokladni-pohyb\"\n                            },\n                            {\n                                \"label\": \"Interní doklady\",\n                                \"value\": \"interni-doklad\"\n                            },\n                            {\n                                \"label\": \"Přijaté objednávky\",\n                                \"value\": \"objednavka-prijata\"\n                            },\n                            {\n                                \"label\": \"Přijaté nabídky\",\n                                \"value\": \"nabidka-prijata\"\n                            },\n                            {\n                                \"label\": \"Přijaté poptávky\",\n                                \"value\": \"poptavka-prijata\"\n                            },\n                            {\n                                \"label\": \"Vydané objednávky\",\n                                \"value\": \"objednavka-vydana\"\n                            },\n                            {\n                                \"label\": \"Vydané nabídky\",\n                                \"value\": \"nabidka-vydana\"\n                            },\n                            {\n                                \"label\": \"Vydané poptávky\",\n                                \"value\": \"poptavka-vydana\"\n                            },\n                            {\n                                \"label\": \"Příjemky/výdejky\",\n                                \"value\": \"skladovy-pohyb\"\n                            },\n                            {\n                                \"label\": \"Ceník\",\n                                \"value\": \"cenik\"\n                            },\n                            {\n                                \"label\": \"Kontakty\",\n                                \"value\": \"kontakt\"\n                            },\n                            {\n                                \"label\": \"Zakázky\",\n                                \"value\": \"zakazka\"\n                            },\n                            {\n                                \"label\": \"Dodavatelské smlouvy\",\n                                \"value\": \"dodavatelska-smlouva\"\n                            },\n                            {\n                                \"label\": \"Odběratelské smlouvy\",\n                                \"value\": \"smlouva\"\n                            },\n                            {\n                                \"label\": \"Položky smluv\",\n                                \"value\": \"smlouva-polozka\"\n                            },\n                            {\n                                \"label\": \"Uzel stromu\",\n                                \"value\": \"strom\"\n                            },\n                            {\n                                \"label\": \"Události, aktivity\",\n                                \"value\": \"udalost\"\n                            }\n                        ],\n                        \"nested\": [\n                            {\n                                \"name\": \"id\",\n                                \"type\": \"text\",\n                                \"label\": \"ID záznamu\",\n                                \"required\": true\n                            }\n                        ]\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "\"rpc://app%23flexibee@1/NacistParametryPriloh\"",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "NahratPrilohu": {
+      "id": 24892,
+      "api": [
+        {
+          "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}",
+          "body": {
+            "winstrom": "{{wrapAttachment(parameters)}}"
+          },
+          "method": "POST",
+          "response": {
+            "output": "{{body}}"
+          },
+          "condition": "{{parameters.typK == 'typPrilohy.odkaz' && parameters._evidence != 'smlouva-polozka' && parameters._evidence != 'dodavatelska-smlouva' &&  parameters._evidence != 'smlouva'}}"
+        },
+        {
+          "url": "/c/{{parameters._spolecnost}}/smlouva",
+          "body": {
+            "winstrom": {
+              "smlouva": {
+                "id": "{{parameters.smlouva_id}}",
+                "polozkySmlouvy": {
+                  "smlouva-polozka": {
+                    "id": "{{parameters.id}}",
+                    "prilohy": [
+                      {
+                        "link": "{{parameters.link}}",
+                        "typK": "{{parameters.typK}}",
+                        "nazSoub": "{{parameters.name}}",
+                        "contentType": "{{parameters.type}}"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "method": "PUT",
+          "response": {
+            "output": "{{body}}"
+          },
+          "condition": "{{parameters.typK == 'typPrilohy.odkaz' && parameters._evidence == 'smlouva-polozka'}}"
+        },
+        {
+          "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}.xml",
+          "body": "{{wrapAttachmentBase64(parameters)}}",
+          "type": "raw",
+          "method": "PUT",
+          "headers": {
+            "Content-Type": "{{parameters.type}}"
+          },
+          "response": {
+            "output": "{{body}}"
+          },
+          "condition": "{{parameters._evidence == 'dodavatelska-smlouva' ||  parameters._evidence == 'smlouva' && parameters.typK != 'typPrilohy.odkaz' }}"
+        },
+        {
+          "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}/{{parameters.id}}/prilohy/new/{{encodeURL(parameters.name)}}",
+          "body": "{{parameters.data}}",
+          "type": "binary",
+          "method": "PUT",
+          "headers": {
+            "Content-Type": "{{parameters.type}}"
+          },
+          "response": {
+            "output": "{{body}}"
+          },
+          "condition": "{{parameters.typK != 'typPrilohy.odkaz' && parameters._evidence != 'dodavatelska-smlouva' &&  parameters._evidence != 'smlouva'}}"
+        }
+      ],
+      "rev": 7,
+      "crud": null,
+      "name": "NahratPrilohu",
+      "epoch": null,
+      "flags": {},
+      "label": "Nahrát přílohu",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "sort": "text",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": [
+                    {
+                      "label": "Přijaté faktury",
+                      "value": "faktura-prijata"
+                    },
+                    {
+                      "label": "Adresy firem",
+                      "value": "adresar"
+                    },
+                    {
+                      "label": "Vydané faktury",
+                      "value": "faktura-vydana"
+                    },
+                    {
+                      "label": "Ostatní pohledávky",
+                      "value": "pohledavka"
+                    },
+                    {
+                      "label": "Ostatní závazky",
+                      "value": "zavazek"
+                    },
+                    {
+                      "label": "Prodejní kasa",
+                      "value": "prodejka"
+                    },
+                    {
+                      "label": "Vzájemné zápočty",
+                      "value": "vzajemny-zapocet"
+                    },
+                    {
+                      "label": "Banka",
+                      "value": "banka"
+                    },
+                    {
+                      "label": "Pokladna",
+                      "value": "pokladni-pohyb"
+                    },
+                    {
+                      "label": "Interní doklady",
+                      "value": "interni-doklad"
+                    },
+                    {
+                      "label": "Přijaté objednávky",
+                      "value": "objednavka-prijata"
+                    },
+                    {
+                      "label": "Přijaté nabídky",
+                      "value": "nabidka-prijata"
+                    },
+                    {
+                      "label": "Přijaté poptávky",
+                      "value": "poptavka-prijata"
+                    },
+                    {
+                      "label": "Vydané objednávky",
+                      "value": "objednavka-vydana"
+                    },
+                    {
+                      "label": "Vydané nabídky",
+                      "value": "nabidka-vydana"
+                    },
+                    {
+                      "label": "Vydané poptávky",
+                      "value": "poptavka-vydana"
+                    },
+                    {
+                      "label": "Příjemky/výdejky",
+                      "value": "skladovy-pohyb"
+                    },
+                    {
+                      "label": "Ceník",
+                      "value": "cenik"
+                    },
+                    {
+                      "label": "Kontakty",
+                      "value": "kontakt"
+                    },
+                    {
+                      "label": "Zakázky",
+                      "value": "zakazka"
+                    },
+                    {
+                      "label": "Dodavatelské smlouvy",
+                      "value": "dodavatelska-smlouva"
+                    },
+                    {
+                      "label": "Odběratelské smlouvy",
+                      "value": "smlouva"
+                    },
+                    {
+                      "label": "Položky smluv",
+                      "value": "smlouva-polozka"
+                    },
+                    {
+                      "label": "Uzel stromu",
+                      "value": "strom"
+                    },
+                    {
+                      "label": "Události, aktivity",
+                      "value": "udalost"
+                    }
+                  ],
+                  "nested": [
+                    {
+                      "name": "id",
+                      "type": "text",
+                      "label": "ID záznamu",
+                      "required": true
+                    },
+                    {
+                      "help": "Používat pouze pro `Položky smluv`. ID smlouvy, kam připojit tuto položku smlouvy.",
+                      "name": "smlouva_id",
+                      "type": "text",
+                      "label": "Smlouva ID"
+                    },
+                    {
+                      "name": "typK",
+                      "type": "select",
+                      "label": "Typ přílohy",
+                      "default": "typPrilohy.soubor",
+                      "options": [
+                        {
+                          "label": "Soubor",
+                          "value": "typPrilohy.soubor",
+                          "nested": [
+                            {
+                              "help": "Např. `image/jpeg` nebo `application/pdf`.",
+                              "name": "type",
+                              "type": "text",
+                              "label": "Typ souboru",
+                              "required": true
+                            },
+                            {
+                              "name": "name",
+                              "type": "text",
+                              "label": "Název souboru",
+                              "required": true,
+                              "semantic": "file:name"
+                            },
+                            {
+                              "name": "data",
+                              "type": "buffer",
+                              "label": "Data",
+                              "required": true,
+                              "semantic": "file:data"
+                            }
+                          ]
+                        },
+                        {
+                          "label": "Odkaz",
+                          "value": "typPrilohy.odkaz",
+                          "nested": [
+                            {
+                              "help": "Např. `image/jpeg` nebo `application/pdf`.",
+                              "name": "type",
+                              "type": "text",
+                              "label": "Typ souboru",
+                              "required": true
+                            },
+                            {
+                              "name": "name",
+                              "type": "text",
+                              "label": "Název souboru",
+                              "required": true
+                            },
+                            {
+                              "name": "link",
+                              "type": "text",
+                              "label": "Odkaz",
+                              "required": true
+                            }
+                          ]
+                        }
+                      ],
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "[\n    {\n        \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}\",\n        \"body\": {\n            \"winstrom\": \"{{wrapAttachment(parameters)}}\"\n        },\n        \"method\": \"POST\",\n        \"response\": {\n            \"output\": \"{{body}}\"\n        },\n        \"condition\": \"{{parameters.typK == 'typPrilohy.odkaz' && parameters._evidence != 'smlouva-polozka' && parameters._evidence != 'dodavatelska-smlouva' &&  parameters._evidence != 'smlouva'}}\"\n    },\n    {\n        \"url\": \"/c/{{parameters._spolecnost}}/smlouva\",\n        \"body\": {\n            \"winstrom\": {\n                \"smlouva\": {\n                    \"id\": \"{{parameters.smlouva_id}}\",\n                    \"polozkySmlouvy\": {\n                        \"smlouva-polozka\": {\n                            \"id\": \"{{parameters.id}}\",\n                            \"prilohy\": [\n                                {\n                                    \"nazSoub\": \"{{parameters.name}}\",\n                                    \"link\": \"{{parameters.link}}\",\n                                    \"typK\": \"{{parameters.typK}}\",\n                                    \"contentType\": \"{{parameters.type}}\"\n                                }\n                            ]\n                        }\n                    }\n                }\n            }\n        },\n        \"method\": \"PUT\",\n        \"response\": {\n            \"output\": \"{{body}}\"\n        },\n        \"condition\": \"{{parameters.typK == 'typPrilohy.odkaz' && parameters._evidence == 'smlouva-polozka'}}\"\n    },\n    {\n        \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}.xml\",\n        \"body\": \"{{wrapAttachmentBase64(parameters)}}\",\n        \"type\": \"raw\",\n        \"method\": \"PUT\",\n        \"headers\": {\n            \"Content-Type\": \"{{parameters.type}}\"\n        },\n        \"response\": {\n            \"output\": \"{{body}}\"\n        },\n        \"condition\": \"{{parameters._evidence == 'dodavatelska-smlouva' ||  parameters._evidence == 'smlouva' && parameters.typK != 'typPrilohy.odkaz' }}\"\n    },\n    {\n        \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}/{{parameters.id}}/prilohy/new/{{encodeURL(parameters.name)}}\",\n        \"body\": \"{{parameters.data}}\",\n        \"type\": \"binary\",\n        \"method\": \"PUT\",\n        \"headers\": {\n            \"Content-Type\": \"{{parameters.type}}\"\n        },\n        \"response\": {\n            \"output\": \"{{body}}\"\n        },\n        \"condition\": \"{{parameters.typK != 'typPrilohy.odkaz' && parameters._evidence != 'dodavatelska-smlouva' &&  parameters._evidence != 'smlouva'}}\"\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "winstrom",
+          "spec": [
+            {
+              "name": "@version",
+              "type": "text",
+              "label": "Version"
+            },
+            {
+              "name": "success",
+              "type": "text",
+              "label": "Success"
+            },
+            {
+              "name": "stats",
+              "spec": [
+                {
+                  "name": "created",
+                  "type": "text",
+                  "label": "Created"
+                },
+                {
+                  "name": "updated",
+                  "type": "text",
+                  "label": "Updated"
+                },
+                {
+                  "name": "deleted",
+                  "type": "text",
+                  "label": "Deleted"
+                },
+                {
+                  "name": "skipped",
+                  "type": "text",
+                  "label": "Skipped"
+                },
+                {
+                  "name": "failed",
+                  "type": "text",
+                  "label": "Failed"
+                }
+              ],
+              "type": "collection",
+              "label": "Stats"
+            },
+            {
+              "name": "results",
+              "spec": {
+                "spec": [
+                  {
+                    "name": "id",
+                    "type": "text",
+                    "label": "Entity ID"
+                  },
+                  {
+                    "name": "request-id",
+                    "type": "text",
+                    "label": "Request ID"
+                  },
+                  {
+                    "name": "ref",
+                    "type": "text",
+                    "label": "URL Postfix"
+                  }
+                ],
+                "type": "collection"
+              },
+              "type": "array",
+              "label": "Results"
+            }
+          ],
+          "type": "collection",
+          "label": "Winstrom"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Nahraje přílohu ke zvolenému záznamu.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://app%23flexibee@1/NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"sort\": \"text\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": [\n                            {\n                                \"label\": \"Přijaté faktury\",\n                                \"value\": \"faktura-prijata\"\n                            },\n                            {\n                                \"label\": \"Adresy firem\",\n                                \"value\": \"adresar\"\n                            },\n                            {\n                                \"label\": \"Vydané faktury\",\n                                \"value\": \"faktura-vydana\"\n                            },\n                            {\n                                \"label\": \"Ostatní pohledávky\",\n                                \"value\": \"pohledavka\"\n                            },\n                            {\n                                \"label\": \"Ostatní závazky\",\n                                \"value\": \"zavazek\"\n                            },\n                            {\n                                \"label\": \"Prodejní kasa\",\n                                \"value\": \"prodejka\"\n                            },\n                            {\n                                \"label\": \"Vzájemné zápočty\",\n                                \"value\": \"vzajemny-zapocet\"\n                            },\n                            {\n                                \"label\": \"Banka\",\n                                \"value\": \"banka\"\n                            },\n                            {\n                                \"label\": \"Pokladna\",\n                                \"value\": \"pokladni-pohyb\"\n                            },\n                            {\n                                \"label\": \"Interní doklady\",\n                                \"value\": \"interni-doklad\"\n                            },\n                            {\n                                \"label\": \"Přijaté objednávky\",\n                                \"value\": \"objednavka-prijata\"\n                            },\n                            {\n                                \"label\": \"Přijaté nabídky\",\n                                \"value\": \"nabidka-prijata\"\n                            },\n                            {\n                                \"label\": \"Přijaté poptávky\",\n                                \"value\": \"poptavka-prijata\"\n                            },\n                            {\n                                \"label\": \"Vydané objednávky\",\n                                \"value\": \"objednavka-vydana\"\n                            },\n                            {\n                                \"label\": \"Vydané nabídky\",\n                                \"value\": \"nabidka-vydana\"\n                            },\n                            {\n                                \"label\": \"Vydané poptávky\",\n                                \"value\": \"poptavka-vydana\"\n                            },\n                            {\n                                \"label\": \"Příjemky/výdejky\",\n                                \"value\": \"skladovy-pohyb\"\n                            },\n                            {\n                                \"label\": \"Ceník\",\n                                \"value\": \"cenik\"\n                            },\n                            {\n                                \"label\": \"Kontakty\",\n                                \"value\": \"kontakt\"\n                            },\n                            {\n                                \"label\": \"Zakázky\",\n                                \"value\": \"zakazka\"\n                            },\n                            {\n                                \"label\": \"Dodavatelské smlouvy\",\n                                \"value\": \"dodavatelska-smlouva\"\n                            },\n                            {\n                                \"label\": \"Odběratelské smlouvy\",\n                                \"value\": \"smlouva\"\n                            },\n                            {\n                                \"label\": \"Položky smluv\",\n                                \"value\": \"smlouva-polozka\"\n                            },\n                            {\n                                \"label\": \"Uzel stromu\",\n                                \"value\": \"strom\"\n                            },\n                            {\n                                \"label\": \"Události, aktivity\",\n                                \"value\": \"udalost\"\n                            }\n                        ],\n                        \"nested\": [\n                            {\n                                \"name\": \"id\",\n                                \"type\": \"text\",\n                                \"label\": \"ID záznamu\",\n                                \"required\": true\n                            },\n                            {\n                                \"name\": \"smlouva_id\",\n                                \"type\": \"text\",\n                                \"label\": \"Smlouva ID\",\n                                \"help\": \"Používat pouze pro `Položky smluv`. ID smlouvy, kam připojit tuto položku smlouvy.\"\n                            },\n                            {\n                                \"name\": \"typK\",\n                                \"type\": \"select\",\n                                \"label\": \"Typ přílohy\",\n                                \"default\": \"typPrilohy.soubor\",\n                                \"options\": [\n                                    {\n                                        \"label\": \"Soubor\",\n                                        \"value\": \"typPrilohy.soubor\",\n                                        \"nested\": [\n                                            {\n                                                \"help\": \"Např. `image/jpeg` nebo `application/pdf`.\",\n                                                \"name\": \"type\",\n                                                \"type\": \"text\",\n                                                \"label\": \"Typ souboru\",\n                                                \"required\": true\n                                            },\n                                            {\n                                                \"name\": \"name\",\n                                                \"type\": \"text\",\n                                                \"label\": \"Název souboru\",\n                                                \"required\": true,\n                                                \"semantic\": \"file:name\"\n                                            },\n                                            {\n                                                \"name\": \"data\",\n                                                \"type\": \"buffer\",\n                                                \"label\": \"Data\",\n                                                \"required\": true,\n                                                \"semantic\": \"file:data\"\n                                            }\n                                        ]\n                                    },\n                                    {\n                                        \"label\": \"Odkaz\",\n                                        \"value\": \"typPrilohy.odkaz\",\n                                        \"nested\": [\n                                            {\n                                                \"help\": \"Např. `image/jpeg` nebo `application/pdf`.\",\n                                                \"name\": \"type\",\n                                                \"type\": \"text\",\n                                                \"label\": \"Typ souboru\",\n                                                \"required\": true\n                                            },\n                                            {\n                                                \"name\": \"name\",\n                                                \"type\": \"text\",\n                                                \"label\": \"Název souboru\",\n                                                \"required\": true\n                                            },\n                                            {\n                                                \"name\": \"link\",\n                                                \"type\": \"text\",\n                                                \"label\": \"Odkaz\",\n                                                \"required\": true\n                                            }\n                                        ]\n                                    }\n                                ],\n                                \"required\": true\n                            }\n                        ]\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\r\n    {\r\n        \"name\": \"winstrom\",\r\n        \"type\": \"collection\",\r\n        \"spec\": [\r\n            {\r\n                \"name\": \"@version\",\r\n                \"type\": \"text\",\r\n                \"label\": \"Version\"\r\n            },\r\n            {\r\n                \"name\": \"success\",\r\n                \"type\": \"text\",\r\n                \"label\": \"Success\"\r\n            },\r\n            {\r\n                \"name\": \"stats\",\r\n                \"type\": \"collection\",\r\n                \"spec\": [\r\n                    {\r\n                        \"name\": \"created\",\r\n                        \"type\": \"text\",\r\n                        \"label\": \"Created\"\r\n                    },\r\n                    {\r\n                        \"name\": \"updated\",\r\n                        \"type\": \"text\",\r\n                        \"label\": \"Updated\"\r\n                    },\r\n                    {\r\n                        \"name\": \"deleted\",\r\n                        \"type\": \"text\",\r\n                        \"label\": \"Deleted\"\r\n                    },\r\n                    {\r\n                        \"name\": \"skipped\",\r\n                        \"type\": \"text\",\r\n                        \"label\": \"Skipped\"\r\n                    },\r\n                    {\r\n                        \"name\": \"failed\",\r\n                        \"type\": \"text\",\r\n                        \"label\": \"Failed\"\r\n                    }\r\n                ],\r\n                \"label\": \"Stats\"\r\n            },\r\n            {\r\n                \"name\": \"results\",\r\n                \"type\": \"array\",\r\n                \"spec\": {\r\n                    \"type\": \"collection\",\r\n                    \"spec\": [\r\n                        {\r\n                            \"name\": \"id\",\r\n                            \"type\": \"text\",\r\n                            \"label\": \"Entity ID\"\r\n                        },\r\n                        {\r\n                            \"name\": \"request-id\",\r\n                            \"type\": \"text\",\r\n                            \"label\": \"Request ID\"\r\n                        },\r\n                        {\r\n                            \"name\": \"ref\",\r\n                            \"type\": \"text\",\r\n                            \"label\": \"URL Postfix\"\r\n                        }\r\n                    ]\r\n                },\r\n                \"label\": \"Results\"\r\n            }\r\n        ],\r\n        \"label\": \"Winstrom\"\r\n    }\r\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "NacistEvidenci": {
+      "id": 24893,
+      "api": {
+        "qs": {
+          "limit": "{{parameters.limit}}",
+          "order": "{{parameters.order}}",
+          "detail": "{{parameters.detail}}"
+        },
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}/{{if(parameters.filtr; '(' + encodeURL(parameters.filtr) + ')'; '')}}",
+        "method": "GET",
+        "response": {
+          "output": "{{prepareBundle(item)}}",
+          "iterate": "{{getResponse(body.winstrom, parameters._evidence)}}"
+        },
+        "encodeUrl": false
+      },
+      "rev": 5,
+      "crud": null,
+      "name": "NacistEvidenci",
+      "epoch": null,
+      "flags": {},
+      "label": "Hledat v evidenci",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": "rpc://app%23flexibee@1/NacistEvidence"
+                },
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        },
+        {
+          "name": "detail",
+          "type": "select",
+          "label": "Detail",
+          "default": "summary",
+          "options": [
+            {
+              "label": "Identifikátor",
+              "value": "id"
+            },
+            {
+              "label": "Přehled",
+              "value": "summary"
+            },
+            {
+              "label": "Plný detail",
+              "value": "full"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "Např. `email = 'info@flexibee.eu'`. Nápověda k formátu filtru je k dispozici v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/filters).",
+          "name": "filtr",
+          "type": "text",
+          "label": "Filtr",
+          "multiline": true
+        },
+        {
+          "help": "Např. `id`. Nápověda k formátu orderu je k dispozici v [oficiální dokumentaci](https://podpora.flexibee.eu/cs/articles/4722194-razeni-zaznamu).",
+          "name": "order",
+          "type": "text",
+          "label": "Order",
+          "multiline": true
+        },
+        {
+          "help": "K získání všech záznamů z dané evidence je nutné doplnit parametr `limit = 0`.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 20,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "flexibee",
+      "samples": "rpc://app%23flexibee@1/NacistSampleData",
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}/{{if(parameters.filtr; '(' + encodeURL(parameters.filtr) + ')'; '')}}\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"limit\": \"{{parameters.limit}}\",\n        \"detail\": \"{{parameters.detail}}\",\n        \"order\": \"{{parameters.order}}\"\n    },\n    \"response\": {\n        \"output\": \"{{prepareBundle(item)}}\",\n        \"iterate\": \"{{getResponse(body.winstrom, parameters._evidence)}}\"\n    },\n    \"encodeUrl\": false\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": "rpc://app%23flexibee@1/NacistParametryEvidence?io=out",
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Načte záznamy ze zvolené evidence odpovídající zadaným kritériím.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://app%23flexibee@1/NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": \"rpc://app%23flexibee@1/NacistEvidence\"\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    },\n    {\n        \"name\": \"detail\",\n        \"type\": \"select\",\n        \"label\": \"Detail\",\n        \"default\": \"summary\",\n        \"options\": [\n            {\n                \"label\": \"Identifikátor\",\n                \"value\": \"id\"\n            },\n            {\n                \"label\": \"Přehled\",\n                \"value\": \"summary\"\n            },\n            {\n                \"label\": \"Plný detail\",\n                \"value\": \"full\"\n            }\n        ],\n        \"required\": true\n    },\n    {\n        \"help\": \"Např. `email = 'info@flexibee.eu'`. Nápověda k formátu filtru je k dispozici v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/filters).\",\n        \"name\": \"filtr\",\n        \"type\": \"text\",\n        \"label\": \"Filtr\",\n        \"multiline\": true\n    },\n    {\n        \"help\": \"Např. `id`. Nápověda k formátu orderu je k dispozici v [oficiální dokumentaci](https://podpora.flexibee.eu/cs/articles/4722194-razeni-zaznamu).\",\n        \"name\": \"order\",\n        \"type\": \"text\",\n        \"label\": \"Order\",\n        \"multiline\": true\n    },\n    {\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 20,\n        \"required\": true,\n        \"help\": \"K získání všech záznamů z dané evidence je nutné doplnit parametr `limit = 0`.\"\n    }\n]",
+      "samplesJsonc": "\"rpc://app%23flexibee@1/NacistSampleData\"",
+      "altAccountName": null,
+      "interfaceJsonc": "\"rpc://NacistParametryEvidence?io=out\"",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "zamknoutZaznam": {
+      "id": 24894,
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}",
+        "body": {
+          "winstrom": "{{prepareAction(parameters, if(prameters.proucetni, 'lock-for-ucetni', 'lock'))}}"
+        },
+        "method": "POST"
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "zamknoutZaznam",
+      "epoch": null,
+      "flags": {},
+      "label": "Zamknout záznam",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": "rpc://app%23flexibee@1/NacistEvidence",
+                  "nested": [
+                    {
+                      "help": "Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).",
+                      "name": "id",
+                      "type": "text",
+                      "label": "ID",
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        },
+        {
+          "name": "proucetni",
+          "type": "boolean",
+          "label": "Zámek pro účetní",
+          "default": false,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}\",\n\t\"body\": {\n\t\t\"winstrom\": \"{{prepareAction(parameters, if(prameters.proucetni, 'lock-for-ucetni', 'lock'))}}\"\n\t},\n\t\"method\": \"POST\"\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Uzamkne konkrétní záznam ve zvolené evidenci.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": \"rpc://NacistEvidence\",\n                        \"nested\": [\n                            {\n                                \"help\": \"Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).\",\n                                \"name\": \"id\",\n                                \"type\": \"text\",\n                                \"label\": \"ID\",\n                                \"required\": true\n                            }\n                        ]\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    },\n    {\n        \"name\": \"proucetni\",\n        \"type\": \"boolean\",\n        \"label\": \"Zámek pro účetní\",\n        \"default\": false,\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "SmazatVEvidenci": {
+      "id": 24895,
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}",
+        "body": {
+          "winstrom": "{{prepareAction(parameters; \"delete\")}}"
+        },
+        "method": "POST"
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "SmazatVEvidenci",
+      "epoch": null,
+      "flags": {},
+      "label": "Smazat záznam",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": "rpc://app%23flexibee@1/NacistEvidence",
+                  "nested": [
+                    {
+                      "help": "Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).",
+                      "name": "id",
+                      "type": "text",
+                      "label": "ID",
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}\",\n    \"body\": {\n        \"winstrom\": \"{{prepareAction(parameters; \\\"delete\\\")}}\"\n    },\n    \"method\": \"POST\"\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Smaže konkrétní záznam ve zvolené evidenci.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://app%23flexibee@1/NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": \"rpc://app%23flexibee@1/NacistEvidence\",\n                        \"nested\": [\n                            {\n                                \"help\": \"Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).\",\n                                \"name\": \"id\",\n                                \"type\": \"text\",\n                                \"label\": \"ID\",\n                                \"required\": true\n                            }\n                        ]\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "StornoVEvidenci": {
+      "id": 24896,
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}",
+        "body": {
+          "winstrom": "{{prepareAction(parameters; \"storno\")}}"
+        },
+        "method": "POST"
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "StornoVEvidenci",
+      "epoch": null,
+      "flags": {},
+      "label": "Storno záznamu",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": "rpc://app%23flexibee@1/NacistEvidence",
+                  "nested": [
+                    {
+                      "help": "Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).",
+                      "name": "id",
+                      "type": "text",
+                      "label": "ID",
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}\",\n    \"body\": {\n        \"winstrom\": \"{{prepareAction(parameters; \\\"storno\\\")}}\"\n    },\n    \"method\": \"POST\"\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Stornuje konkrétní záznam ve zvolené evidenci. Lze použít pouze pro doklady.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://app%23flexibee@1/NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": \"rpc://app%23flexibee@1/NacistEvidence\",\n                        \"nested\": [\n                            {\n                                \"help\": \"Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).\",\n                                \"name\": \"id\",\n                                \"type\": \"text\",\n                                \"label\": \"ID\",\n                                \"required\": true\n                            }\n                        ]\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "odemknoutZaznam": {
+      "id": 24897,
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}",
+        "body": {
+          "winstrom": "{{prepareAction(parameters, 'unlock')}}"
+        },
+        "method": "POST"
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "odemknoutZaznam",
+      "epoch": null,
+      "flags": {},
+      "label": "Odemknout záznam",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": "rpc://app%23flexibee@1/NacistEvidence",
+                  "nested": [
+                    {
+                      "help": "Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).",
+                      "name": "id",
+                      "type": "text",
+                      "label": "ID",
+                      "required": true
+                    }
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}\",\n\t\"body\": {\n\t\t\"winstrom\": \"{{prepareAction(parameters, 'unlock')}}\"\n\t},\n\t\"method\": \"POST\"\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Odemkne konkrétní záznam ve zvolené evidenci.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": \"rpc://NacistEvidence\",\n                        \"nested\": [\n                            {\n                                \"help\": \"Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).\",\n                                \"name\": \"id\",\n                                \"type\": \"text\",\n                                \"label\": \"ID\",\n                                \"required\": true\n                            }\n                        ]\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "PridatDoEvidence": {
+      "id": 24898,
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}",
+        "body": {
+          "winstrom": "{{prepareBody(parameters)}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": {
+            "id": "{{parseNumber(body.winstrom.results[].id)}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "PridatDoEvidence",
+      "epoch": null,
+      "flags": {},
+      "label": "Přidat záznam",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": "rpc://app%23flexibee@1/NacistEvidence?io=in",
+                  "nested": "rpc://app%23flexibee@1/NacistParametryEvidence?io=in"
+                },
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}\",\n    \"body\": {\n        \"winstrom\": \"{{prepareBody(parameters)}}\"\n    },\n    \"method\": \"POST\",\n    \"response\": {\n        \"output\": {\n            \"id\": \"{{parseNumber(body.winstrom.results[].id)}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uinteger",
+          "label": "ID",
+          "required": true
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Přidá nový záznam do zvolené evidence.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://app%23flexibee@1/NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": \"rpc://app%23flexibee@1/NacistEvidence?io=in\",\n                        \"nested\": \"rpc://app%23flexibee@1/NacistParametryEvidence?io=in\"\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uinteger\",\n        \"label\": \"ID\",\n        \"required\": true\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "SledovatEvidenci": {
+      "id": 24899,
+      "api": {
+        "qs": {
+          "limit": "{{parameters.limit}}",
+          "order": "lastUpdate@D",
+          "detail": "{{parameters.detail}}"
+        },
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}/{{if(parameters.filtr, '(' + parameters.filtr + ')', '')}}",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{prepareBundle(item)}}",
+          "iterate": "{{getResponse(body.winstrom, parameters._evidence)}}",
+          "trigger": {
+            "id": "{{parseNumber(item.id)}}",
+            "date": "{{parseDate(item.lastUpdate)}}",
+            "type": "date",
+            "order": "desc"
+          }
+        }
+      },
+      "rev": 5,
+      "crud": null,
+      "name": "SledovatEvidenci",
+      "epoch": {
+        "response": {
+          "limit": 500,
+          "output": {
+            "date": "{{parseDate(item.lastUpdate)}}",
+            "label": "{{resolveLabel(item, parameters._evidence)}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Sledovat změny v evidenci",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "flexibee",
+      "samples": "rpc://app%23flexibee@1/NacistSampleData",
+      "apiJsonc": "{\n    \"qs\": {\n        \"order\": \"lastUpdate@D\",\n        \"limit\": \"{{parameters.limit}}\",\n        \"detail\": \"{{parameters.detail}}\"\n    },\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}/{{if(parameters.filtr, '(' + parameters.filtr + ')', '')}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": \"{{prepareBundle(item)}}\",\n        \"iterate\": \"{{getResponse(body.winstrom, parameters._evidence)}}\",\n        \"trigger\": {\n            \"id\": \"{{parseNumber(item.id)}}\",\n            \"date\": \"{{parseDate(item.lastUpdate)}}\",\n            \"type\": \"date\",\n            \"order\": \"desc\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": "rpc://app%23flexibee@1/NacistParametryEvidence?io=out",
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n    \"response\": {\n        \"limit\": 500,\n        \"output\": {\n            \"date\": \"{{parseDate(item.lastUpdate)}}\",\n            \"label\": \"{{resolveLabel(item, parameters._evidence)}}\"\n        }\n    }\n}",
+      "parameters": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": "rpc://app%23flexibee@1/NacistEvidence"
+                },
+                "required": true
+              }
+            ]
+          },
+          "required": true
+        },
+        {
+          "name": "detail",
+          "type": "select",
+          "label": "Detail",
+          "default": "summary",
+          "options": [
+            {
+              "label": "Přehled",
+              "value": "summary"
+            },
+            {
+              "label": "Plný detail",
+              "value": "full"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "Např. `email = 'info@flexibee.eu'`. Nápověda k formátu filtru je k dispozici v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/filters).",
+          "name": "filtr",
+          "type": "text",
+          "label": "Filtr"
+        },
+        {
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 100,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Spustí se, pokud bude ve zvolené evidenci vytvořen nebo upraven záznam.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": "\"rpc://app%23flexibee@1/NacistSampleData\"",
+      "altAccountName": null,
+      "interfaceJsonc": "\"rpc://app%23flexibee@1/NacistParametryEvidence?io=out\"",
+      "parametersJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://app%23flexibee@1/NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": \"rpc://app%23flexibee@1/NacistEvidence\"\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true\n    },\n    {\n        \"name\": \"detail\",\n        \"type\": \"select\",\n        \"label\": \"Detail\",\n        \"default\": \"summary\",\n        \"options\": [\n            {\n                \"label\": \"Přehled\",\n                \"value\": \"summary\"\n            },\n            {\n                \"label\": \"Plný detail\",\n                \"value\": \"full\"\n            }\n        ],\n        \"required\": true\n    },\n    {\n        \"help\": \"Např. `email = 'info@flexibee.eu'`. Nápověda k formátu filtru je k dispozici v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/filters).\",\n        \"name\": \"filtr\",\n        \"type\": \"text\",\n        \"label\": \"Filtr\"\n    },\n    {\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 100,\n        \"required\": true\n    }\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "UpravitVEvidenci": {
+      "id": 24900,
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}",
+        "body": {
+          "winstrom": "{{prepareBody(parameters)}}"
+        },
+        "method": "POST"
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "UpravitVEvidenci",
+      "epoch": null,
+      "flags": {},
+      "label": "Upravit/vytvořit záznam",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": "rpc://app%23flexibee@1/NacistEvidence",
+                  "nested": [
+                    {
+                      "help": "Pokud není zadáno, bude vytvořen nový záznam. Můžete také přidat nová identifikátorů jako externího ID. Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).",
+                      "name": "id",
+                      "spec": {
+                        "type": "text"
+                      },
+                      "type": "array",
+                      "label": "ID"
+                    },
+                    "rpc://app%23flexibee@1/NacistParametryEvidence?io=in&edit=yes"
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}\",\n    \"body\": {\n        \"winstrom\": \"{{prepareBody(parameters)}}\"\n    },\n    \"method\": \"POST\"\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Upraví konkrétní záznam ve zvolené evidenci. Pokud záznam neexistuje, vytvoří ho.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://app%23flexibee@1/NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": \"rpc://app%23flexibee@1/NacistEvidence\",\n                        \"nested\": [\n                            {\n                                \"help\": \"Pokud není zadáno, bude vytvořen nový záznam. Můžete také přidat nová identifikátorů jako externího ID. Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).\",\n                                \"name\": \"id\",\n                                \"type\": \"array\",\n                                \"spec\": {\n                                    \"type\": \"text\"\n                                },\n                                \"label\": \"ID\"\n                            },\n                            \"rpc://app%23flexibee@1/NacistParametryEvidence?io=in&edit=yes\"\n                        ]\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "UpravitVEvidenci2": {
+      "id": 24901,
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/{{parameters._evidence}}",
+        "body": {
+          "winstrom": "{{prepareBody(parameters, true)}}"
+        },
+        "method": "POST"
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "UpravitVEvidenci2",
+      "epoch": null,
+      "flags": {},
+      "label": "Upravit záznam",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "_evidence",
+                "type": "select",
+                "label": "Evidence",
+                "options": {
+                  "store": "rpc://app%23flexibee@1/NacistEvidence",
+                  "nested": [
+                    {
+                      "help": "Nezapomeňte uvést existující ID. Můžete také přidat nová identifikátorů jako externího ID. Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).",
+                      "name": "id",
+                      "spec": {
+                        "type": "text"
+                      },
+                      "type": "array",
+                      "label": "ID",
+                      "required": true
+                    },
+                    "rpc://app%23flexibee@1/NacistParametryEvidence?io=in&edit=yes"
+                  ]
+                },
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/{{parameters._evidence}}\",\n    \"body\": {\n        \"winstrom\": \"{{prepareBody(parameters, true)}}\"\n    },\n    \"method\": \"POST\"\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uinteger",
+          "label": "User ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Upraví konkrétní záznam ve zvolené evidenci.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://app%23flexibee@1/NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"_evidence\",\n                    \"type\": \"select\",\n                    \"label\": \"Evidence\",\n                    \"options\": {\n                        \"store\": \"rpc://app%23flexibee@1/NacistEvidence\",\n                        \"nested\": [\n                            {\n                                \"help\": \"Nezapomeňte uvést existující ID. Můžete také přidat nová identifikátorů jako externího ID. Více informací o typech identifikátorů naleznete v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/identifiers/).\",\n                                \"name\": \"id\",\n                                \"type\": \"array\",\n                                \"label\": \"ID\",\n                                \"spec\": {\n                                    \"type\": \"text\"\n                                },\n                                \"required\": true\n                            },\n                            \"rpc://app%23flexibee@1/NacistParametryEvidence?io=in&edit=yes\"\n                        ]\n                    },\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uinteger\",\n        \"label\": \"User ID\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "NacitaniBankovnichVypisu": {
+      "id": 24902,
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/bankovni-ucet/{{parameters.id}}/nacteni-vypisu",
+        "body": "{{parameters.bankovnich_vypisu}}",
+        "type": "binary",
+        "method": "POST",
+        "response": {
+          "output": {}
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "NacitaniBankovnichVypisu",
+      "epoch": null,
+      "flags": {},
+      "label": "Načítání bankovních výpisů",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": "rpc://app%23flexibee@1/NacistSpolecnosti",
+          "mappable": true,
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID bankovního účtu",
+          "required": true
+        },
+        {
+          "help": "Nápověda k nastavení banky pro nahrávání výpisů v [oficiální dokumentaci](https://podpora.flexibee.eu/cs/articles/3422093-nastaveni-banky).",
+          "name": "bankovnich_vypisu",
+          "type": "buffer",
+          "label": "Soubor bankovního výpisu",
+          "required": true,
+          "semantic": "file:data"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/bankovni-ucet/{{parameters.id}}/nacteni-vypisu\",\n    \"method\": \"POST\",\n    \"type\": \"binary\",\n    \"body\": \"{{parameters.bankovnich_vypisu}}\",\n    \"response\": {\n        \"output\": {}\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Nahraje nový bankovní výpis.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": \"rpc://NacistSpolecnosti\",\n        \"required\": true,\n        \"mappable\": true\n    },\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"ID bankovního účtu\",\n        \"required\": true\n    },\n    {\n        \"name\": \"bankovnich_vypisu\",\n        \"type\": \"buffer\",\n        \"label\": \"Soubor bankovního výpisu\",\n        \"required\": true,\n        \"semantic\": \"file:data\",\n        \"help\": \"Nápověda k nastavení banky pro nahrávání výpisů v [oficiální dokumentaci](https://podpora.flexibee.eu/cs/articles/3422093-nastaveni-banky).\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "SpustitNacteniBankVypisu": {
+      "id": 28930,
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/bankovni-ucet/{{parameters.id}}/nacteni-vypisu",
+        "body": "{{parameters.bankovnich_vypisu}}",
+        "method": "PUT",
+        "response": {
+          "output": null
+        }
+      },
+      "rev": 3,
+      "crud": "update",
+      "name": "SpustitNacteniBankVypisu",
+      "epoch": null,
+      "flags": {},
+      "label": "Spustit načtení bankovních výpisů",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": {
+            "store": "rpc://app%23flexibee@1/NacistSpolecnosti",
+            "nested": [
+              {
+                "name": "id",
+                "type": "select",
+                "label": "ID bankovního účtu",
+                "options": "rpc://app%23flexibee@1/nacteniBankovniUcet",
+                "required": true
+              }
+            ]
+          },
+          "mappable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/bankovni-ucet/{{parameters.id}}/nacteni-vypisu\",\n    \"method\": \"PUT\",\n    \"body\": \"{{parameters.bankovnich_vypisu}}\",\n    \"response\": {\n        \"output\": null\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Spustit načtení bankovních výpisů.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": {\n            \"store\": \"rpc://NacistSpolecnosti\",\n            \"nested\": [\n                {\n                    \"name\": \"id\",\n                    \"type\": \"select\",\n                    \"label\": \"ID bankovního účtu\",\n                    \"options\": \"rpc://nacteniBankovniUcet\",\n                    \"required\": true\n                }\n            ]\n        },\n        \"required\": true,\n        \"mappable\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "SpustitAktualizaciInfoFirmach": {
+      "id": 28929,
+      "api": {
+        "url": "/c/{{parameters._spolecnost}}/adresar/{{if(parameters.filtr, '(' + parameters.filtr + ')/', '/')}}aktualizovat-vse.json",
+        "method": "GET",
+        "response": {
+          "output": {
+            "stats": "{{body.winstrom.stats}}",
+            "results": "{{body.winstrom.results}}"
+          }
+        }
+      },
+      "rev": 5,
+      "crud": "read",
+      "name": "SpustitAktualizaciInfoFirmach",
+      "epoch": null,
+      "flags": {},
+      "label": "Spustit aktualizaci informací o firmách",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": "rpc://app%23flexibee@1/NacistSpolecnosti",
+          "mappable": true,
+          "required": true
+        },
+        {
+          "help": "Např. `email = 'info@flexibee.eu'`. Nápověda k formátu filtru je k dispozici v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/filters).",
+          "name": "filtr",
+          "type": "text",
+          "label": "Filtr"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/adresar/{{if(parameters.filtr, '(' + parameters.filtr + ')/', '/')}}aktualizovat-vse.json\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": {\n            \"results\": \"{{body.winstrom.results}}\",\n            \"stats\": \"{{body.winstrom.stats}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "results",
+          "spec": [
+            {
+              "name": "id",
+              "type": "uinteger",
+              "label": "ID Firmy"
+            }
+          ],
+          "type": "array",
+          "label": "Výsledky"
+        },
+        {
+          "name": "stats",
+          "spec": [
+            {
+              "name": "created",
+              "type": "text",
+              "label": "Vytvořeno"
+            },
+            {
+              "name": "updated",
+              "type": "text",
+              "label": "Upraveno"
+            },
+            {
+              "name": "deleted",
+              "type": "text",
+              "label": "Smazáno"
+            },
+            {
+              "name": "skipped",
+              "type": "text",
+              "label": "Přeskočeno"
+            },
+            {
+              "name": "failed",
+              "type": "text",
+              "label": "Nezdařeno"
+            }
+          ],
+          "type": "collection",
+          "label": "Statistika"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Spustit aktualizaci informací o firmách.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": \"rpc://NacistSpolecnosti\",\n        \"required\": true,\n        \"mappable\": true\n    },\n    {\n        \"help\": \"Např. `email = 'info@flexibee.eu'`. Nápověda k formátu filtru je k dispozici v [oficiální dokumentaci](https://www.flexibee.eu/api/dokumentace/ref/filters).\",\n        \"name\": \"filtr\",\n        \"type\": \"text\",\n        \"label\": \"Filtr\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"results\",\n        \"type\": \"array\",\n        \"label\": \"Výsledky\",\n        \"spec\": [\n            {\n                \"name\": \"id\",\n                \"label\": \"ID Firmy\",\n                \"type\": \"uinteger\"\n            }\n        ]\n    },\n    {\n        \"name\": \"stats\",\n        \"label\": \"Statistika\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"created\",\n                \"type\": \"text\",\n                \"label\": \"Vytvořeno\"\n            },\n            {\n                \"name\": \"updated\",\n                \"type\": \"text\",\n                \"label\": \"Upraveno\"\n            },\n            {\n                \"name\": \"deleted\",\n                \"type\": \"text\",\n                \"label\": \"Smazáno\"\n            },\n            {\n                \"name\": \"skipped\",\n                \"type\": \"text\",\n                \"label\": \"Přeskočeno\"\n            },\n            {\n                \"name\": \"failed\",\n                \"type\": \"text\",\n                \"label\": \"Nezdařeno\"\n            }\n        ]\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "SpustitAutomatickeParovaniPlateb": {
+      "id": 28923,
+      "api": {
+        "qs": {
+          "mod": "{{parameters.mod}}",
+          "obdobi": "{{parameters.obdobi}}",
+          "zauctovat-rozdil": "{{parameters.zauctovat_rozdil}}",
+          "ignorovat-rozdil-castka": "{{parameters.ignorovat_rozdil_castka}}"
+        },
+        "url": "/c/{{parameters._spolecnost}}/banka/{{if(parameters.filtr, '(' + parameters.filtr + ')/', '/')}}automaticke-parovani",
+        "method": "PUT",
+        "response": {
+          "output": null
+        }
+      },
+      "rev": 4,
+      "crud": "update",
+      "name": "SpustitAutomatickeParovaniPlateb",
+      "epoch": null,
+      "flags": {},
+      "label": "Spustit automatické párování plateb",
+      "scope": [],
+      "expect": [
+        {
+          "name": "_spolecnost",
+          "type": "select",
+          "label": "Společnost",
+          "options": "rpc://app%23flexibee@1/NacistSpolecnosti",
+          "mappable": true,
+          "required": true
+        },
+        {
+          "name": "mod",
+          "type": "select",
+          "label": "Párovací mód",
+          "options": [
+            {
+              "label": "VS + částka + účet",
+              "value": "varCasUcet"
+            },
+            {
+              "label": "VS + částka (výchozí hodnota)",
+              "value": "varCas"
+            },
+            {
+              "label": "Jen VS",
+              "value": "jenVar"
+            },
+            {
+              "label": "Jen částka (VS nemusí souhlasit)",
+              "value": "jenCastka"
+            }
+          ]
+        },
+        {
+          "name": "obdobi",
+          "type": "select",
+          "label": "Období",
+          "options": [
+            {
+              "label": "Aktualni",
+              "value": "aktualni"
+            },
+            {
+              "label": "Aktualni Predchozi",
+              "value": "aktualni-predchozi"
+            },
+            {
+              "label": "Vsechna",
+              "value": "vsechna"
+            }
+          ]
+        },
+        {
+          "help": "Jak velký rozdíl mezi úhradou a uhrazovaným dokladem ignorovat (výchozí hodnota 0.0).",
+          "name": "ignorovat_rozdil_castka",
+          "type": "number",
+          "label": "Ignorovat rozdíly do"
+        },
+        {
+          "name": "zauctovat-rozdil",
+          "type": "boolean",
+          "label": "Zaúčtovat Rozdíl"
+        },
+        {
+          "help": "Např. `datVyst >= '2022-03-01'`. Nápověda k formátu filtru je k dispozici v [oficiální dokumentaci](https://podpora.flexibee.eu/cs/articles/4722195-filtrovani-zaznamu).",
+          "name": "filtr",
+          "type": "text",
+          "label": "Filtr"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flexibee",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/c/{{parameters._spolecnost}}/banka/{{if(parameters.filtr, '(' + parameters.filtr + ')/', '/')}}automaticke-parovani\",\n    \"method\": \"PUT\",\n    \"qs\": {\n        \"mod\": \"{{parameters.mod}}\",\n        \"obdobi\": \"{{parameters.obdobi}}\",\n        \"ignorovat-rozdil-castka\": \"{{parameters.ignorovat_rozdil_castka}}\",\n        \"zauctovat-rozdil\": \"{{parameters.zauctovat_rozdil}}\"\n    },\n    \"response\": {\n        \"output\": null\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flexibee",
+      "description": "Spustit automatické párování plateb.",
+      "expectJsonc": "[\n    {\n        \"name\": \"_spolecnost\",\n        \"type\": \"select\",\n        \"label\": \"Společnost\",\n        \"options\": \"rpc://NacistSpolecnosti\",\n        \"required\": true,\n        \"mappable\": true\n    },\n    {\n        \"name\": \"mod\",\n        \"label\": \"Párovací mód\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"label\": \"VS + částka + účet\",\n                \"value\": \"varCasUcet\"\n            },\n            {\n                \"label\": \"VS + částka (výchozí hodnota)\",\n                \"value\": \"varCas\"\n            },\n            {\n                \"label\": \"Jen VS\",\n                \"value\": \"jenVar\"\n            },\n            {\n                \"label\": \"Jen částka (VS nemusí souhlasit)\",\n                \"value\": \"jenCastka\"\n            }\n        ]\n    },\n    {\n        \"name\": \"obdobi\",\n        \"label\": \"Období\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"label\": \"Aktualni\",\n                \"value\": \"aktualni\"\n            },\n            {\n                \"label\": \"Aktualni Predchozi\",\n                \"value\": \"aktualni-predchozi\"\n            },\n            {\n                \"label\": \"Vsechna\",\n                \"value\": \"vsechna\"\n            }\n        ]\n    },\n    {\n        \"name\": \"ignorovat_rozdil_castka\",\n        \"label\": \"Ignorovat rozdíly do\",\n        \"type\": \"number\",\n        \"help\": \"Jak velký rozdíl mezi úhradou a uhrazovaným dokladem ignorovat (výchozí hodnota 0.0).\"\n    },\n    {\n        \"name\": \"zauctovat-rozdil\",\n        \"label\": \"Zaúčtovat Rozdíl\",\n        \"type\": \"boolean\"\n    },\n    {\n        \"help\": \"Např. `datVyst >= '2022-03-01'`. Nápověda k formátu filtru je k dispozici v [oficiální dokumentaci](https://podpora.flexibee.eu/cs/articles/4722195-filtrovani-zaznamu).\",\n        \"name\": \"filtr\",\n        \"type\": \"text\",\n        \"label\": \"Filtr\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "cs",
+  "_accounts": {
+    "flexibee": {
+      "api": {
+        "ca": "{{parameters.ca}}",
+        "qs": {},
+        "log": {
+          "sanitize": [
+            "request.headers.authorization"
+          ]
+        },
+        "url": "{{resolveAddress(parameters)}}/c",
+        "body": {},
+        "method": "GET",
+        "headers": {
+          "accept": "application/json",
+          "authorization": "Basic {{base64(parameters.username + \":\" + parameters.password)}}"
+        },
+        "response": {
+          "error": {
+            "message": "{{ifempty(body.winstrom.message, body.winstrom.results[].errors[].message)}}"
+          },
+          "valid": "{{body.winstrom.success != \"false\"}}"
+        }
+      },
+      "rev": 6,
+      "name": "flexibee",
+      "type": "basic",
+      "label": "ABRA FlexiBee",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "flexibee",
+      "install": {},
+      "apiJsonc": "{\n\t\"ca\": \"{{parameters.ca}}\",\n\t\"qs\": {},\n\t\"url\": \"{{resolveAddress(parameters)}}/c\",\n\t\"body\": {},\n\t\"method\": \"GET\",\n\t\"headers\": {\n\t\t\"accept\": \"application/json\",\n\t\t\"authorization\": \"Basic {{base64(parameters.username + \\\":\\\" + parameters.password)}}\"\n\t},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"message\": \"{{ifempty(body.winstrom.message, body.winstrom.results[].errors[].message)}}\"\n\t\t},\n\t\t\"valid\": \"{{body.winstrom.success != \\\"false\\\"}}\"\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.authorization\"]\n\t}\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "type",
+          "type": "select",
+          "label": "Typ instalace",
+          "default": "cloud",
+          "options": [
+            {
+              "label": "Online v cloudu",
+              "value": "cloud",
+              "nested": [
+                {
+                  "help": "Zadejte FlexiBee URL bez `.flexibee.eu`.",
+                  "name": "domain",
+                  "type": "text",
+                  "label": "Doména",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "label": "Na vlastním serveru",
+              "value": "onpremise",
+              "nested": [
+                {
+                  "name": "protocol",
+                  "type": "select",
+                  "label": "Protokol",
+                  "default": "https",
+                  "options": [
+                    {
+                      "label": "HTTP",
+                      "value": "http"
+                    },
+                    {
+                      "label": "HTTPS",
+                      "value": "https",
+                      "nested": [
+                        {
+                          "help": "Vyplňte, pokud na serveru používáte self-signed certifikát.",
+                          "name": "ca",
+                          "type": "cert",
+                          "label": "Certifikát",
+                          "advanced": true
+                        }
+                      ]
+                    }
+                  ],
+                  "required": true
+                },
+                {
+                  "help": "Zadejte IP adresu nebo doménu serveru.",
+                  "name": "host",
+                  "type": "text",
+                  "label": "Adresa",
+                  "required": true
+                },
+                {
+                  "name": "port",
+                  "type": "port",
+                  "label": "Port",
+                  "default": 5434,
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "editable": true,
+          "required": true
+        },
+        {
+          "name": "username",
+          "type": "text",
+          "label": "Uživatelské jméno",
+          "editable": true,
+          "required": true
+        },
+        {
+          "name": "password",
+          "type": "password",
+          "label": "Heslo",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "installSpec": [],
+      "scopesJsonc": "{\n}",
+      "installJsonc": "{\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"type\",\n        \"type\": \"select\",\n        \"label\": \"Typ instalace\",\n        \"default\": \"cloud\",\n        \"options\": [\n            {\n                \"label\": \"Online v cloudu\",\n                \"value\": \"cloud\",\n                \"nested\": [\n                    {\n                        \"help\": \"Zadejte FlexiBee URL bez `.flexibee.eu`.\",\n                        \"name\": \"domain\",\n                        \"type\": \"text\",\n                        \"label\": \"Doména\",\n                        \"required\": true\n                    }\n                ]\n            },\n            {\n                \"label\": \"Na vlastním serveru\",\n                \"value\": \"onpremise\",\n                \"nested\": [\n                    {\n                        \"name\": \"protocol\",\n                        \"type\": \"select\",\n                        \"label\": \"Protokol\",\n                        \"default\": \"https\",\n                        \"options\": [\n                            {\n                                \"label\": \"HTTP\",\n                                \"value\": \"http\"\n                            },\n                            {\n                                \"label\": \"HTTPS\",\n                                \"value\": \"https\",\n                                \"nested\": [\n                                    {\n                                        \"help\": \"Vyplňte, pokud na serveru používáte self-signed certifikát.\",\n                                        \"name\": \"ca\",\n                                        \"type\": \"cert\",\n                                        \"label\": \"Certifikát\",\n                                        \"advanced\": true\n                                    }\n                                ]\n                            }\n                        ],\n                        \"required\": true\n                    },\n                    {\n                        \"help\": \"Zadejte IP adresu nebo doménu serveru.\",\n                        \"name\": \"host\",\n                        \"type\": \"text\",\n                        \"label\": \"Adresa\",\n                        \"required\": true\n                    },\n                    {\n                        \"name\": \"port\",\n                        \"type\": \"port\",\n                        \"label\": \"Port\",\n                        \"default\": 5434,\n                        \"required\": true\n                    }\n                ]\n            }\n        ],\n        \"editable\":true,\n        \"required\": true\n    },\n    {\n        \"name\": \"username\",\n        \"type\": \"text\",\n        \"label\": \"Uživatelské jméno\",\n        \"editable\":true,\n        \"required\": true\n    },\n    {\n        \"name\": \"password\",\n        \"type\": \"password\",\n        \"label\": \"Heslo\",\n        \"editable\":true,\n        \"required\": true\n    }\n]",
+      "installSpecJsonc": "[\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"ca\": \"{{connection.ca}}\",\n    \"baseUrl\": \"{{resolveAddress(connection)}}\",\n    \"headers\": {\n        \"accept\": \"application/json\",\n        \"authorization\": \"Basic {{base64(connection.username + \\\":\\\" + connection.password)}}\"\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.winstrom.message || body.winstrom.results[].errors[].message || body}}\"\n        },\n        \"valid\": \"{{body.winstrom.success != \\\"false\\\"}}\"\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.authorization\"\n        ]\n    }\n}",
+  "countries": [
+    "cz"
+  ],
+  "_functions": {
+    "raise": {
+      "rev": 3,
+      "code": "function raise(data) {\n\tthrow new Error(JSON.stringify(data));\n}",
+      "name": "raise",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(data)",
+      "appVersion": 1
+    },
+    "wrapTag": {
+      "rev": 3,
+      "code": "function wrapTag(parameters) {\n\treturn {\n\t\t[parameters._evidence]: {\n\t\t\tid: parameters.id,\n\t\t\tstitky: parameters.tags ? parameters.tags : undefined,\n\t\t\t'stitky@removeAll': parameters.overwrite\n\t\t}\n\t}\n}",
+      "name": "wrapTag",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(parameters)",
+      "appVersion": 1
+    },
+    "getHookID": {
+      "rev": 3,
+      "code": "function getHookID(hooks, url) {\n\tif (!Array.isArray(hooks)) return null;\n\tconst hook = hooks.filter(hook => hook.url === url)[0];\n\treturn hook && parseInt(hook.id) || null;\n}",
+      "name": "getHookID",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(hooks, url)",
+      "appVersion": 1
+    },
+    "sortItems": {
+      "rev": 3,
+      "code": "function sortItems(items, prop) {\n\treturn items.sort((a, b) => {\n\t\tif (a[prop] < b[prop])\n\t\t\treturn -1;\n\t\tif (a[prop] > b[prop])\n\t\t\treturn 1;\n\t\treturn 0;\n\t})\n}",
+      "name": "sortItems",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(items, prop)",
+      "appVersion": 1
+    },
+    "getResponse": {
+      "rev": 3,
+      "code": "function getResponse(body, evidence, nth) {\n\tif (nth === null || nth === undefined) return body[evidence];\n\treturn body[evidence][nth];\n}",
+      "name": "getResponse",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(body, evidence, nth)",
+      "appVersion": 1
+    },
+    "prepareBody": {
+      "rev": 3,
+      "code": "function prepareBody(parameters, failOnCreate = false) {\n\tconst payload = {};\n\tconst wrapper = {\n\t\t'@version': '1.0',\n\t\t[parameters._evidence]: [\n\t\t\tpayload\n\t\t]\n\t}\n\n\tif (failOnCreate) {\n\t\tpayload['@create'] = 'fail';\n\t}\n\t\n\tfor (let key in parameters) {\n\t\tif (key !== '_spolecnost' && key !== '_evidence' && parameters[key] != null) {\n\t\t\tif (key === 'polozkyDokladu') {\n\t\t\t\tpayload[key] = parameters[key].map(item => {\n\t\t\t\t\tlet payload2 = {};\n\t\t\t\t\tfor (let key2 in item) {\n\t\t\t\t\t\tif (item[key2] != null) {\n\t\t\t\t\t\t\tpayload2[key2] = item[key2];\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\treturn payload2;\n\t\t\t\t});\n\t\t\t} else if (Buffer.isBuffer(parameters[key])) {\n\t\t\t\tpayload[key] = parameters[key].toString('base64');\n\t\t\t} else {\n\t\t\t\tpayload[key] = parameters[key];\n\t\t\t}\n\t\t}\n\t}\n\treturn wrapper\n}",
+      "name": "prepareBody",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(parameters, failOnCreate = false)",
+      "appVersion": 1
+    },
+    "resolveLabel": {
+      "rev": 3,
+      "code": "function resolveLabel(item, evidence) {\n\tswitch (evidence) {\n\t\tcase 'kontakt': return item.jmeno +' '+ item.prijmeni;\n\t\tdefault:\n\t\t\tif (item.nazev) return item.nazev;\n\t\t\tif (item.kod) return item.kod;\n\t\t\treturn 'ID: '+ item.id;\n\t}\n}",
+      "name": "resolveLabel",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(item, evidence)",
+      "appVersion": 1
+    },
+    "prepareAction": {
+      "rev": 3,
+      "code": "function prepareAction(parameters, action) {\n\treturn {\n\t\t'@version': '1.0',\n\t\t[parameters._evidence]: [\n\t\t\t{\n\t\t\t\tid: [\n\t\t\t\t\tparameters.id\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t[parameters._evidence + '@action']: action\n\t};\n}",
+      "name": "prepareAction",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(parameters, action)",
+      "appVersion": 1
+    },
+    "prepareBundle": {
+      "rev": 3,
+      "code": "function prepareBundle(bundle) {\n\tconst numeric = /^-?(?:0(?:\\.\\d+)?|[1-9]\\d*(?:\\.\\d+)?)$/;\n\tconst datetime = /^\\d{4}-\\d{2}-\\d{2}[+-]\\d{2}:\\d{2}$/;\n\n\tif(bundle.lastUpdate) bundle.lastUpdate = iml.parseDate(bundle.lastUpdate, 'YYYY-MM-DDTHH:mm:ss.SSSZZ');\n\t\n\tfor (let name in bundle) {\n\t\tif (bundle[name] === 'null' || bundle[name] === '') {\n\t\t\tbundle[name] = null;\n\t\t} else if (numeric.test(bundle[name])) {\n\t\t\tbundle[name] = parseFloat(bundle[name]);\n\t\t} else if (datetime.test(bundle[name])) {\n\t\t\tbundle[name] = iml.parseDate(bundle[name], 'YYYY-MM-DDZZ');\n\t\t} else if (name === 'content' && bundle['content@encoding'] === 'base64') {\n\t\t\tbundle[name] = Buffer.from(bundle[name], 'base64');\n\t\t}\n\t}\n\treturn bundle;\n}",
+      "name": "prepareBundle",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(bundle)",
+      "appVersion": 1
+    },
+    "resolveAddress": {
+      "rev": 3,
+      "code": "function resolveAddress(connection) {\n\tif (!connection.type || connection.type === 'cloud') {\n\t\treturn `https://${connection.domain}.flexibee.eu`;\n\t}\n\treturn `${connection.protocol || 'https'}://${connection.host}:${connection.port}`;\n}",
+      "name": "resolveAddress",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(connection)",
+      "appVersion": 1
+    },
+    "wrapAttachment": {
+      "rev": 3,
+      "code": "function wrapAttachment(parameters) {\n\treturn {\n\t\t[parameters._evidence]: {\n\t\t\tid: parameters.id,\n\t\t\tprilohy: [\n\t\t\t\t{\n\t\t\t\t\tnazSoub: parameters.name,\n\t\t\t\t\tlink: parameters.link,\n\t\t\t\t\ttypK: 'typPrilohy.odkaz',\n\t\t\t\t\tcontentType: parameters.type\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t}\n\n}",
+      "name": "wrapAttachment",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(parameters)",
+      "appVersion": 1
+    },
+    "polozkovaEvidence": {
+      "rev": 3,
+      "code": "function polozkovaEvidence(evidence) {\n\treturn [\n\t\t'pokladni-pohyb',\n\t\t'nabidka-prijata',\n\t\t'objednavka-prijata',\n\t\t'faktura-prijata',\n\t\t'poptavka-prijata',\n\t\t'smlouva',\n\t\t'nabidka-vydana',\n\t\t'objednavka-vydana',\n\t\t'poptavka-vydana',\n\t\t'faktura-vydana',\n\t\t'banka'\n\t].indexOf(evidence) !== -1;\n}",
+      "name": "polozkovaEvidence",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(evidence)",
+      "appVersion": 1
+    },
+    "transformProperty": {
+      "rev": 3,
+      "code": "function transformProperty(items, item, edit) {\n\tconst TYP_DOKL = edit ? false : items.some((i) => i.propertyName === 'typDokl');\n\tconst TYPE = {\n\t\tlogic: 'boolean',\n\t\tstring: 'text',\n\t\tnumeric: 'number',\n\t\tdatetime: 'date',\n\t\trelation: 'select',\n\t\tblob: 'buffer'\n\t}\n\tconst param = {\n\t\tname: item.propertyName,\n\t\tlabel: item.name,\n\t\ttype: TYPE[item.type] || item.type,\n\t\trequired: edit ? item.propertyName === 'id' : (TYP_DOKL ? item.propertyName === 'typDokl' : item.mandatory === 'true'),\n\t\tadvanced: item.showToUser === 'false'\n\t}\n\tif (param.required && param.advanced) param.advanced = false;\n\tif (param.name === 'nazSoub') param.semantic = 'file:name';\n\t\n\tswitch (item.type) {\n\t\tcase 'select':\n\t\t\tif (!item.values) {\n\t\t\t\tparam.type = 'text';\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tparam.editable = true;\n\t\t\tparam.options = item.values.value.map((value) => {\n\t\t\t\treturn {\n\t\t\t\t\tlabel: value.$,\n\t\t\t\t\tvalue: value['@key']\n\t\t\t\t}\n\t\t\t})\n\t\t\tbreak;\n\t\t\n\t\tcase 'relation':\n\t\t\tif (typeof item.url !== 'string') {\n\t\t\t\tparam.type = 'text';\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tconst match = item.url.match(/\\/([^\\/]+)$/);\n\t\t\tif (!match) {\n\t\t\t\tparam.type = 'text';\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\t\n\t\t\tparam.editable = {\n\t\t\t\tenabled: true,\n\t\t\t\thelp: 'Zadejte ID.'\n\t\t\t};\n\t\t\tparam.options = 'rpc://NacistPodevidenci?_evidence='+ match[1];\n\t\t\tbreak;\n\t\t\n\t\tcase 'string':\n\t\t\tif (item.maxLength) {\n\t\t\t\tparam.validate = param.validate || {};\n\t\t\t\tparam.validate.max = parseInt(item.maxLength, 10);\n\t\t\t}\n\t\t\tbreak;\n\t\t\n\t\tcase 'date':\n\t\t\tparam.time = false;\n\t\t\tbreak;\n\t\t\n\t\tcase 'blob':\n\t\t\tparam.semantic = 'file:data';\n\t\t\tbreak;\n\t}\n\treturn param;\n}",
+      "name": "transformProperty",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(items, item, edit)",
+      "appVersion": 1
+    },
+    "wrapAttachmentBase64": {
+      "rev": 3,
+      "code": "function wrapAttachmentBase64(parameters) {\n\treturn `<?xml version=\"1.0\" encoding=\"utf-8\"?><winstrom version=\"1.0\"><${parameters._evidence}><id>${parameters.id}</id><prilohy><priloha><nazSoub>${parameters.name}</nazSoub><contentType>${parameters.type}</contentType><content encoding=\"base64\">${iml.base64(parameters.data)}</content></priloha></prilohy></${parameters._evidence }></winstrom>`\n}",
+      "name": "wrapAttachmentBase64",
+      "test": null,
+      "appName": "flexibee",
+      "arguments": "(parameters)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-04-29T19:04:28.445272+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": null,
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "7d461132011325a47e5e2a481b8c68da",
+  "versionFull": "1.6.7",
+  "compiledName": "flexibee",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 1,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

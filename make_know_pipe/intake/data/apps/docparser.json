@@ -1,0 +1,1102 @@
+{
+  "rev": 6,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "https://api.docparser.com/",
+    "headers": {
+      "authorization": "Basic {{base64(connection.secret_api_key + ':')}}"
+    },
+    "response": {
+      "error": {
+        "message": "[{{statusCode}}] {{body.error}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "docparser",
+  "_rpcs": {
+    "listDocumentParsers": {
+      "api": {
+        "url": "/v1/parsers",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.label}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "name": "listDocumentParsers",
+      "label": "List Document Parsers",
+      "appName": "docparser",
+      "apiJsonc": "{\n\t\"url\": \"/v1/parsers\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"iterate\": \"{{body}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.label}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "docparser",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "ListDocumentParserDocuments": {
+      "api": {
+        "url": "/v1/results/{{parameters.parser_id}}",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.file_name}}",
+            "value": "{{item.document_id}}"
+          },
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "name": "ListDocumentParserDocuments",
+      "label": "List Document Parser Documents",
+      "appName": "docparser",
+      "apiJsonc": "{\n\t\"url\": \"/v1/results/{{parameters.parser_id}}\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"iterate\": \"{{body}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.file_name}}\",\n\t\t\t\"value\": \"{{item.document_id}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "docparser",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    }
+  },
+  "flags": {},
+  "label": "Docparser",
+  "theme": "#2a7be5",
+  "_hooks": {
+    "docparser": {
+      "api": {
+        "output": "{{transformResponseDates(body)}}",
+        "respond": {
+          "status": 200
+        }
+      },
+      "rev": 3,
+      "name": "docparser",
+      "type": "web",
+      "flags": {},
+      "label": "Parsed Document",
+      "scope": [],
+      "attach": null,
+      "detach": null,
+      "update": null,
+      "aliasTo": null,
+      "appName": "docparser",
+      "apiJsonc": "{\n\t\"respond\": {\n\t\t\"status\": 200\n\t},\n    \"output\": \"{{transformResponseDates(body)}}\"\n}",
+      "authorId": 71452,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "docparser",
+      "attachJsonc": null,
+      "detachJsonc": null,
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    }
+  },
+  "global": true,
+  "groups": [
+    {
+      "label": "Documents",
+      "modules": [
+        "watchParsedDocuments",
+        "ListParsedDocuments",
+        "GetParsedDocument",
+        "listDocumentParsers",
+        "uploadDocument",
+        "UploadDocumentFromUrl"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "MakeAPICall"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000001e34944415458c3edd7c18b4d6118c7f1cf996b26146994949ab2b250ca42167616cadeca5664433116b2b1504afe09516c2c2c59d9a1d46c244a18ccd4a084666298f158dcf7cc1cd7b9e79e7be7c462e6576f9de739cf7dcff77ddee77dee39ace93f2beb7444447e398a4d888e900ff89e7ebb133b7a3c23f00e6f20cbb21ed111f9b8121153113159182f23e270ba7f20229e47c45c44cc568cb988781211fb0a8b5bd2ba0a96d192d52da6acc041ecaa99e9ddd883c7fd0014f5059fd1c2cfe46b7549f724660b7159f2dd2f9bb82ec0555cc306bc2f3cac53191ee27c82ce377c5ebb6e060698c1745e401d7b19f8882d18c111bcc625ccf72abaa19a0055ca70033713cc08c6710ec36585d73400ed748fe376b2d7e3024ea15505d114c0103ee12cee26df465cc43164dd209a02c83585d37890eccdb88ca3fc553b8301f4da53bcc0093c4af656ed53b4bfe90ccc6837a61f78c51f6df629cee06db2b761ac6c92bac770495996e559b8856f09e24ec9fd890432a67d3a161a0128acf42bae578485e5669529ef9c8d176195866a3bffa5d600d6005615c0af3267dd46b4178722a255333e7f2fd85eb01757027012c70758753e7f86e17e018aef522d5d5ae94a5505f00cf774495d9f0a4cf75a653b72f9ffbea5d9225d40f4fc325a75fa0d29fac36947f6dc170000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000003484944415478daedda3f881c551cc0f1cfee663dbc6834579814410bad6c6227286865a162a59d60272a2208fe01ff1b4867a3088af8a714b4b1f23f36daa8450c6221012520911821a277518fb8fb2cde9c4ece9dbb99d959de9c795f986299dfbcf9fdbef366e6bdb7432693c96432e72d8326c1210458c2650d8efd05ab83c1a0dc06ecc5b5388050b3adad3886a358858df36dc7ae1627ba1eaf605c237684d7702884504eea2abc54b4b5dc41f18ac23fc4833851f7a036029671454d01c42b8c7faefe188fe3a68e0adfe062dc811ff0500821d4e905c316279a98afcbeec38d1d175fe63a5c5437b88d8079b9a0d816c509fcd127019b6fb369b12d8235bc8dbfda26370f539cc699e2f7102b4532c352d153cd6ea1e3f80e97166dafcd8819e037bc8f7758ec5ba08aaf700f4e15098db0bf28609e2b7e0c778bafd309ce56c44d30ad5b782b42084208378710d6c37f793784302ebde7ab8ebf3c84703cd4671a4278238470c9566db725c543b02903dc8567b1bb6b097d12700a5f9a7dbb8c703f9ec6529712fa24e0673c804f2bf68f8bfd0f63dc95843e0958124771f7e1f38a980bf1582162d485843e091815dbb7e2dbe48b8ab8dd7846bc2586f34ae8938061299faf712fbea988dd233e14efe49c19e68e16b099a3e2cceefb8afd7bf11c6e9f47422f059406339f885dfdc78ad07d781eb7b695d04b019b247c8047c561f62c0ee005dcd046426f056c92f0260ef9779eb1992bf1b2b8c2d44842af05942484a2c027c439c12cae1657aa0e3669bff7024a12cee2453c89df2b420f8ac3e6dabd208580aae9da1ad6b79130c5eb78559cfdcd624f9364520838898f9dbb2630c15bf869ab030b09ebe240e8bd2e92e9723d605b06838110c23a9ec29fe2436b888fc4ee5d7721e3571cc16d33f64dea3490444049c2497190b32cde126730a9537c713cd5ab4aa7b76d24a5808d22c42bb5ba80e6579a04ef88b7404346e7bb80466401a913484d16903a81d46401a913484d16903a81d46401a913484d16903a81d46401a91348cdff5140a325b12e050c35fcf4b60da5e5eeaa73255b12bb0687b1164258b488016ea9d8d76849ac4b01fbf1c8820baf435e12cb02b280c50a5891e8ff849a34fa2ab54d2147c4ef73fad87b76e1b3d4496432994c66a7f0378a401999a79c2d270000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-05-11T07:11:03.332702+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda7930000064d4944415478daeddd5fa865551dc0f1cf39f74e3a99633413166ad1549059283e45585003f6183df450d8ffd4c8c8870cb5104b49fb8315091146ff5e8a1ea4488a22d1a7e8452b0653b31c41472567283515efdcb9b37b58fb349be174e7de7df63a7b9fb37e5f3870e11ed6feed75befbb7f7feadb5d7260882200882200882200882200882200882200882e564d477007d5055d5e4cfd501f6c1068e8d46f3092bfb56eacede893d99b6f7220ea13a59a7d5b1ace295b80097e194dc7db00d46f8077e80c771782bfb35eb06b35277fae5f822aafad315631cc42538b05947d5718ceb583e87dd7879eefd6fc131e9873f88cfe32e985746e894aaaa269f6f56f958abaaea3d8db4be591c9754557528632c5df3405555ef9ac49f8371df9274c0c8d632d9b9b85e3a152d0a6fc2d77166ae0d6415a091b69ec9b99dcda88f9c155c8937f415c70c5c880f36f6a5539621036c8557615fdf41b4648c774a126769bc0456b0a3ef2066e025325db09722c056af1386cadf703447c3a5087086548b58448ee00fe4b9152c4580e7b0d677102d79107fccd5f832083072f26ade51a9c4ba683c8b6fe0895c1b58060156f1e6be83e8900aeb5225f01afc8c7c95c0d5bef776934e388a7f49b5fe135991eaf92bf8271eed31d6177027eec5d938a78e7f0df74be7f0ed70047f9552ffc3d8c859061eaa00f7e016ec97cedfcd1ea8a45bba0bf15afc1a8ff418eb93b8b18e79ecf8fdfa44e241d7f1872ac06ff07336edbc037d0759b3173fc687f127731ccaed82a15e03540cfbc86930c279d2c5da5ef2946c73315401169177e3bb388bc5912004e8968bf12da9f0b4108400dd32c2fb7013762f42160801a6b32e1561dab08a4f49d704bb862e4108309dfdb842aa2fb4f905c7d25dc175581db20421c0740ee1767c54aac8b561459a747a2d760e558210603ae7e074dc8d9bb53f1dec9204f804c64394200498cecb1c1f60ba4daac9b7956027be22cd465e199a0421c0749e74fc07df9024b816ff69d9de2e29937c8861d5084280e9ecc169fcaf1ab981ef4bf7f86d253843ba3dfc8801658210603a3b34c6496a09d6a5419f2f4823806d7835be830f308c4c10026c915a82a3d2e9e046ed25d8852f4ba5e3de250801b6412dc1117c5b1a016c3b51732fbe87b7d1af0421c036a92578513a8a7fa5fdb38e6f9424389ffe240801daf3143e2bcd5d683bdff07c29939c4b3f1284002d68cc53781c1fc71d333477016ec5eb99bf0421404b1a123c25dd19dc2b3ddadd867df8a134c56dae840033d090e0015c2a3dc1d3968bf055ecc9f938f889840033d290e0cff88c3493b70d63bc5f9a0c3bb709252140073424b80b57e1e9964dad488f82df84d3e7910542808e68487087744d30cb8492cbf1257318460e013aa4316e3019417cba65532bf8b494094ecd294108d031274870a9f6134a4e9526945c2da3042140061a12dc8e4fe2b1964dbd549a5ff8ba5cb1860099a825a8f03b69f0a8ed30f22bf09a5c719622c0aaedafb13373ce6d5c18fe485afcb1553332ae6e528a0063dbebc487a4279367a6318c7c0b7e6160eb149422c063f8fd16bfbb261db1cf771cc341e97c7e67df9dd164e905a88fc0357c0d7f39c9d72bfc543db8d3d5c3a9278c1bdc807ff7dd2f13965e80060f4af3f1eef93fff5f9786766fc0735d3f99dc68efa0f645a2ce19eafa009d321a8d26832bfbf131bc176f91168b9e2cc972377e62404767cd461d5f168a1080e347605555f7e13ee9ae60920187bc9ac761195740294680098d1f78c3c0aec8fba0a46b8045658fa804164dd6758e4380c209010a2704289c10a0704280c209010a2704289c10a0704280c209010a2704289c10a0704280c209010a2704289c10a0704280c209010a2704289c10a0704280c209010a2704289c10a0704280c209010a2704289c10a0704280c209010a2704289c10a0704280c20901864fd655c24280e1937595b0a10a9096da1ec0bb75979da12e13b70fbfc4e1aaaa862ae976a9eacf3b6cefa5509355c20ee4086aa802bc1dbf955ed1ba4c8cb05bfd6afa2d927595b0a10a30c6997d075102cb925e83968400851302144e0850382140e18400851302144e56011aa5dcb3faded1603af3c8003b7076df3bbac04c4ac859984725705d7a53d75b712ce7ce2c213b70087fcfb581ec6f48aa4f033ba5418dc1bd9169c0543845cad20f31c8175a05411004411004411004411004411004413070fe0b51af7520d33e75930000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000aee4944415478daeddd4d8c5e551d80f1e7766a22ceb4d4054eab6e4a892bd8946e212a2e2c4ab58924682471a1918ad546e2a22289469bba3084046345311a30bab0a4a49562342282269a405dc802d4d29820fd30c4d2990113da5e17e7bee4ed94c2bc9fe79efb7f7ec90456ed79dfdefbccfd3c072449922449922449922449922449922449922449922449922449922449922449922449922449922449922449d260aadc03d074d5750db01eb8159805eadc636ab10a58040e00c780f355d5ad5da6339fa6d9b0d7009753d6465d012f030b93d8b89aef6506b8a2f9ef65c01ee0663af4ef3f41e7807f0177027f207d8713fbf79ab6f23f01af6fe4b3c00f801b48ff68a598017e07dc062c8d73a36abe17483bfb1ed2cedf8bc1eadc1fbc3067483bfe0cf004f065e054e911287bf48d66437f0ff067e0bdb9c7338445e053c0a1716d507d3bff2780ef01f3b93f6487d4c07ee08b141e8155b9072000e680cde3fac39a9dbf02ae01f6e2ce3f6e1529acf700b37db12d4e9702b0057867ee41b4c856e0616063ee817454057c04f836707da911f03cb063faae877c1eb832f7783a6e2db00b780d78a2ae6b4a3b1de8d211c053c07f730f22a7bedf4237011fcc3d9e40b6039b720f62185d0a80924dc0b748d715341dbdefbcb8eb0106a023fa36bc4f0357e51e4f3015f07ed29da8a218806e590f7c32f72082da006ccb3d884119806e99215d00541ec57df706400acc0048811900693c168123b907312803208dc7690c80327b1fdeffcfe5082902453100ddb216785bee4104f524637e9d7b1a0c40b73c0b2ce41e4440c78183b907310c03d02d8bc0d9dc8308a6061e07fe9d7b20c33000d2688e027751e0e13f18803699850b9ee957fb9d04769322502403d01edb48cff2ab0c27495382ed078a9b07a0c700b4c72ce9597eb5db19e0efc04e0adff9c11981da6489b266339e84deccbb156f3e7bf159e03f4ceffb5a225de57f05781af80bf01294bdf383011845ffc6ba52cb37eade865c013f034ee4fe50992c90aea4df477aa06615e988681be9c1a6fe0b23bdc53a0e9276cc693847139cd277f8e50cc060164973f8ff95b4a13ec560a751b3c0474993476c21dd3ffe2ce97c7201caff8d32a49f037770f195f4efe61e58d71980955b04769096891afa964f5dd777033f22ad60f4faa16cd01dbfe763c0ef815fd5755de4edb452791170e54e9336d29136d0aaaaa8aa6aa1aaaa17aaaa3a515555f49d1fd2dd8ffb49617c97b742a7c700a82de648d399ed009f87981603a0b6d9415a75c7084c810150dbcc93d6323402536000d44646604a0c80da6a9eb4b0e93540650426c300a8cd36921638dd9a7b205d6500d46633a4054ebf80b70727c200a8043792ae0918813133002a4145ba20782fb0b1aeeb5586603c0c804ad18bc0c3a46b031a0303a0419c054e916fdec155a4bb027bf174602c0c8006f127e0c3c0435cf88aee34f58e04bc26300606408378017806f81a69569c57338da3026ec6f70646660034887f00af01c748f3187c85bceb10ec006e01668dc0700c80065655550dfc917441eec58c439927bd42bc0f23301403a0416ce6c21ded04f075d28c46b9cc01db819bc0d3814119000d6233b00e2e98ba6c3f697aecdc11b8075f1e1a9801d0d05a1601df201c8201d0488c40d90c8006f134696ec40b18817219000de2592e31177f0b23e05c022b600034888ff326eb172e8bc0becc63bd12781023f0a60c8006f196eb17f645e03ee01ba4c54f7258055c4d5ac7c1d3814b30001abb260227806f025f22dfe9406f42917b31026fc8006822969d0eec22adac944bef9ac0a6bcdf4afb18004d4c5f041e01be43dec54f37e16bc41731009aa826020bc01ed2edb957720d055f23be8801d0c4f51d09dcddfc641b0a46e002064053d144e055e0a7a4a5d5cfe41a0a692e819dc065d1236000346dc748bf859fcc3c8e5da45b95a15f2336009a9ae628e03c29020f00cf03e7320da7f71af1760247c00068aafaae07fc92f464e1b18cc399233db11876421103a0a96b2250037f23cd2fd886238190138a180065d17724f010f021e0d719871376421103a06caaaaa2aaaade3581ef93ff0dc270af111b00b5c561daf1c8f0bdc09dc09a08113000caaeef74e01069a6e113e45b7d683d703b7015015e2336006a8526024bc06dc05781ff651cce3cf01302cc256000d41a7d11f82df028f9961febad41f820e975e2ce32006a9526022749d38aed276f04ae265d13b8aeab4701ab730f405aaeaa2aeaba3e458a00a42bf3d5087fe4b056015b494f2f3e57d7f5a9beeb159de011805aa9d9d17a11389c793837d2d137080d805aab2f02b99f11e8ec6bc4064025384cfea9c63b190103a0566bd97a039d9b4bc000a8f55a1601484f2cfe980e1c097817404568ee0c408a00a443f1f94cc399036e69feff73755d2f957a77c023001563d91b849f213d2c743ed77048af10173da1880150519a37086bd2ebc33b8167c81781e2271431002ad931d2ac42399f189c033e00accbfd650cc300a848cbe612d849de8785d6019b737f27c330002a5a4b1e169ac3004859b5e161a1e21800156fd97302fb728fa72406a05bd610f4d98ebe08ec232d46aa153000ddf26ee0ed13fcf38f00a7737fc84b69c9f580a218806e798ec94eaaf92450c2536f8f92ff41a12218806e394dda4927714ffc11d2725eadf6060f0a3d9f7b4c6d66003aa26f3ebdbb80a313f82b1e074a9b11e728b01b4f072ec90074cf515204c6752a5093d6f16bfd6fff7ede19581903d021cbe6d73fc0e811384f5abf6f37e5fdf6efff3e7e011ccf3d9e3632001dd3772ab0a3f9192502274917d34a3f8f5e22dfe2a3ad16f29e71d735efce2f9156d9d904dc417a4660a5ce932ea2fd06f8275097f6db5f2b63003aaa89c0227037e9b7dfadc03b80b5cdcf1b390bbc043c469af5a6b8c37e0dc6007458138105602f703fe994ef5a600b17df1faf48a70b878017810577fe812ce51ec0300c40c7353bf139d2829b9076ee43b9c7d531c78183b907310c2f024aa33b47a1470006400acc0048a39b0166730f621806401add06605bee410cc30048e3e11180a4b2180029300320056600a4c00c8014980190023300526006400acc004881190029300320056600a4c00c8014980190023300526006400acc004881190029300320056600a4c00c8014980190023300526006400acc004881190029300320056600a4c00c8014980190023300526006400acc004881190029300320056600a4c00c8014980190023300526006400acc004881190029300320056600a4c00c8014980190023300526006400acc004881190029300320056600a4c00c8014980190023300526006400acc004881190029300320056600a4c00c8014980190023300526006400acc004881190029300320056600a4c00c8014980190c66329f700866100a4d11d070ee61ec4300c8034ba73780420a93406401add0c309b7b10c330002bb70eb80ea0aeebdc63d16066493be9a46c00b6e5fe90c3589d7b00059903ee016ae089baae8d67fb9d073603b703f313febb8a3c0230008399077e08bc0c54b907a3b7540397036b730fa4ad0cc0e0d6e206a58ef030560acc004881190029300320056600a4c00c8014980190023300526006400acc004881190029300320056600a4c00c801498019002330052605d0ac0a4e77d933aa74b01d8469a9c51d20a752900454eca28e5d4a500481a50970250e4d24cea8445e048ee410ca34bb3023f005c0b5c4f9a0f5e9ab419e00ae010f058eec10ca33373db37abf5ac21cd03efd23d9a8639e006e00070bcaa3ab33b499224499224499224499224499224499224499224499224499224499224499224499224491ac5ff013f796148f3399c580000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000c354944415478daedddd172d3380040d174a7ffffcbd907e8ba592834ad6d49bee7cc30f086088a742d37ceed0600e4bcdc6eb7dbfd7e1f3d0e00e0442f367f00e8f967f4000080f3090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000087a1d3d00e054f7d103e0925e460f80e73901800e9b3f47b9dfccafe5080068b0387306f36c216e01cccd9be95c5738c6346718eda3397885f7d7a53801989785fc7cabbfe6ab8f9f6b333f272300e01a2caeacc03c9d880080472b2e502b8e992ef375120200d666316545e6ed04040000238880c17c0a00d664f104be4500ccc9e2ce9f981f5cc5fbb9ec638227730b00008204c09c94301f71f50fec4200003003717b320100ebb04002bb1100b0069b3f05e6f989040000331101271100303f0b22b03b010000410200e6e6ea9f22f3fe04020000820400000409000008120000102400002048000040900000802001000041020080d9bc8c1e40810000802001000041020000820400cccb17a250e4feff490400cccb42081c4600c0bc9c0000871100302f2700d498f32712000010240000204800003003c7ff271300008c66f31f40000040900000602457ff8308000046b1f90f2400e0571ec003c7b3f90f260000389bcd7f0202008033d9fc27210000388bcd7f22afa30700c0a5d9f427250000d88bcd7e2102007e6511e376fbf33cf8ea2745cc2da62100001e7d6693b691b33c01c008672e9e7fbb52b390f3c65c2045007086910bebfbbfdb037e007e12001c69b62baad9c6c35cee37738410cf01e028165256e494880c0100f0e87e130204080080df13015c9a0000f89808e0b2040000040900803f730ac025090080bf13015c8e0000f81c11c0a5080080cf13015c860000788e08e0120400c0f34400cb1300005f2302589a000080200100f075be378065090080ef13012c47000040900000d887530096220000f6230258860000d8970860090200607f2280e9090080638800a62600008ee339014c4b000040900000389e5300a6230000ce2102988a00008ef4f2f3173f8800a6210080a3bc7cf0e73a11c01404007094ff6f7422602302184e000047b1e1c3c4040070a697fffd5ee61480a10400703611b011010c230000c6f2b440861000007310019c4a000023b90d00830800e0289fbda215011ba7009c4600003310011b11c0290400300b11b011011c4e00003311011b11c0a10400301b11b011011c4600003312011b11c0210400302b11b01101ec4e00003313011b11c0ae04007094bd366f11b01101ec4600002b10011b11c02e0400b00a11003b1200c0518eb85215013ff80641be4d00004090000056e31460e324802f1300c08a5e6e42e03d11c0d30400b03211b011013c450000ab13011b11c0a70900e00a44c04604f0290200b80a11004f100000d7e31480bf1200c095f874c04604f0470200b82211f08308e0430200e0da4400bf250080ab723b602302f88500006810013c1000c0d53905d88800fe23000020e875f400004ef0fe14a07e15fcf6ef773212e7040028a96ffeef792de2040050e2aa177e1200408d08d83805081300409167046cee372190240000b8dd44408e0000ca9c02902500803a11b0710a10220000fc4cc07b22204200006c44c00f2220400000f03b22e0e20400c023a7001b1170610200e057226023022e4a0000fc9e08d87858d005090000081200001f730ac065bd8e1e00c0e4de4740fd18fceddf2f8c2ec00900c0e7d4377f2e4600007c8eabde8d1f0abc000100f0792280cb100000cf11011ba7000b130000cf13011bb70316250000be4604b0340100f0752260e31460310200e07b44c046042c4400007c9f08d8888045080000f6260216200000f6e114e09108989c0000d88f0878240226260000f625021e898049090080fd8980472260420200e0182280a9090080e388808d47064f4600001c4b043c120193100000c713018f44c0040400c03944c0231130980000388f08601a0200e05c2f3721f0c629c0400200600c11f0834f070c2200009881083899000018c7ed0086110000e389004e270000e620023895000098473d02fc1cc08904000004090080b9d44f0138890000988f08e0700200604e2280430900807989000e23000020480000cccd290087100000f31301ec4e00c0bc3c1405388c008079ad7ed5b7faf867e3f564570200601d2280dd080080b5f80a617621008023d8a08ee735e65b0400cc6dc5457ec531438e0080f9d950f988b9c197090080b58900be4400c01a5659e45719e7d578dd799a008075ccbec8cf3e3ee01d0100ecc1e63f9eff039e2200602d16796017afa307003ced2d0266f8ae0041028b720200ebb2f9025f26000020c82d0058db88db014e1ee0029c0000cfb0f9c3450800b88633be21cee60f17e216005ccbef36e9efdc1eb0e9c3450900b83e9b38f00bb700009885583d9100008020010000410200008204000004090000081200001024000020480000308b33bfd42a4f0000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000098c5cbe801940800000812000010240000204800004090000080200100004102000082040000b3b88f1e408900e028dec8001313001c4904c079bcdf788a00e068162538d6fde67dc617bc8e1e0009162780c9380100802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120073ba8f1e0000d72600002048000040900000802001000041020000820400000409000066f1327a002502604ede04001c4a00cc4b040025d6bc93bd8e1e007fe40d015cd9db534fad750308000046b1f10fe41600000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008fa1772efa82353fa40460000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "MakeAPICall": {
+      "id": 29693,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://api.docparser.com/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "MakeAPICall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://api.docparser.com`. For example `/v1/results/rkpzxwqervgi`",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "docparser",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"https://api.docparser.com/{{parameters.url}}\",\n    \"method\": \"{{parameters.method}}\",\n    \"qs\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n\t},\n    \"headers\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n\t},\n\t\"body\": \"{{parameters.body}}\",\n\t\"type\": \"text\",\n    \"response\": {\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n\t\t\t\"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "docparser",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"help\": \"Enter a path relative to `https://api.docparser.com`. For example `/v1/results/rkpzxwqervgi`\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"required\": true,\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ]\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n    },\n    {\n        \"name\": \"qs\",\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"body\",\n\t\t\"label\": \"Body\",\n\t\t\"type\": \"any\"\n\t},\n\t{\n\t\t\"name\": \"headers\",\n\t\t\"label\": \"Headers\",\n\t\t\"type\": \"collection\"\n\t},\n\t{\n\t\t\"name\": \"statusCode\",\n\t\t\"label\": \"Status code\",\n\t\t\"type\": \"number\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "uploadDocument": {
+      "id": 29694,
+      "api": {
+        "url": "/v1/document/upload/{{parameters.parser_id}}",
+        "body": {
+          "file_name": "{{parameters.file_name}}",
+          "remote_id": "{{parameters.remote_id}}",
+          "file_content": "{{base64(parameters.file_content)}}"
+        },
+        "type": "multipart/form-data",
+        "method": "POST",
+        "response": {
+          "output": "{{transformResponseDates(body)}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "uploadDocument",
+      "epoch": null,
+      "flags": {},
+      "label": "Upload a Document",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "parser_id",
+          "type": "select",
+          "label": "Document Parser ID",
+          "options": "rpc://app%23docparser@1/listDocumentParsers",
+          "required": true
+        },
+        {
+          "name": "file_name",
+          "type": "filename",
+          "label": "Document name",
+          "required": true,
+          "semantic": "file:name"
+        },
+        {
+          "name": "file_content",
+          "type": "buffer",
+          "label": "Document Content",
+          "required": true,
+          "semantic": "file:data"
+        },
+        {
+          "help": "The submitted value will be kept throughout the processing of the document and will be available later once you obtain the parsed data with our API, as CSV/XLS/XML file or through webhooks. This optional parameter makes it easy to relate the parsed data returned by Docparser with document records in your own system.",
+          "name": "remote_id",
+          "type": "text",
+          "label": "Remote ID"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "docparser",
+      "samples": {
+        "id": "91e458372da57dc9d2ee1d7233f4d124",
+        "pages": 1,
+        "file_size": 4306339,
+        "quota_left": 35,
+        "quota_used": 15,
+        "quota_refill": "1970-01-01T00:00:00.000Z"
+      },
+      "apiJsonc": "{\n    \"url\": \"/v1/document/upload/{{parameters.parser_id}}\",\n    \"method\": \"POST\",\n    \"type\": \"multipart/form-data\",\n    \"body\": {\n        \"file_content\": \"{{base64(parameters.file_content)}}\",\n        \"file_name\": \"{{parameters.file_name}}\",\n\t\t\"remote_id\": \"{{parameters.remote_id}}\"\n    },\n    \"response\": {\n        \"output\": \"{{transformResponseDates(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Document ID"
+        },
+        {
+          "name": "file_size",
+          "type": "number",
+          "label": "Size"
+        },
+        {
+          "name": "pages",
+          "type": "number",
+          "label": "Pages"
+        },
+        {
+          "name": "quota_used",
+          "type": "number",
+          "label": "Quota Used"
+        },
+        {
+          "name": "quota_left",
+          "type": "number",
+          "label": "Quota Left"
+        },
+        {
+          "name": "quota_refill",
+          "type": "text",
+          "label": "Quota Refill"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "docparser",
+      "description": "Uploads a document to parse.",
+      "expectJsonc": "[\n    {\n        \"name\": \"parser_id\",\n        \"label\": \"Document Parser ID\",\n        \"type\": \"select\",\n\t\t\"mode\":\"edit\",\n        \"options\": \"rpc://listDocumentParsers\",\n        \"required\": true\n    },\n    {\n        \"name\": \"file_name\",\n        \"type\": \"filename\",\n        \"label\": \"Document name\",\n        \"semantic\": \"file:name\",\n        \"required\": true\n    },\n    {\n        \"name\": \"file_content\",\n        \"type\": \"buffer\",\n        \"label\": \"Document Content\",\n        \"semantic\": \"file:data\",\n        \"required\": true\n    },\n\t{\n\t\t\"name\": \"remote_id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Remote ID\",\n\t\t\"help\": \"The submitted value will be kept throughout the processing of the document and will be available later once you obtain the parsed data with our API, as CSV/XLS/XML file or through webhooks. This optional parameter makes it easy to relate the parsed data returned by Docparser with document records in your own system.\"\n\t}\n]",
+      "samplesJsonc": " {\n\t\"id\": \"91e458372da57dc9d2ee1d7233f4d124\",\n\t\"file_size\": 4306339,\n\t\"pages\": 1,\n\t\"quota_used\": 15,\n\t\"quota_left\": 35,\n\t\"quota_refill\": \"1970-01-01T00:00:00.000Z\"\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"label\": \"Document ID\",\n        \"name\": \"id\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Size\",\n        \"name\": \"file_size\",\n        \"type\": \"number\"\n    },\n    {\n        \"label\": \"Pages\",\n        \"name\": \"pages\",\n        \"type\": \"number\"\n    },\n    {\n        \"label\": \"Quota Used\",\n        \"name\": \"quota_used\",\n        \"type\": \"number\"\n    },\n    {\n        \"label\": \"Quota Left\",\n        \"name\": \"quota_left\",\n        \"type\": \"number\"\n    },\n    {\n        \"label\": \"Quota Refill\",\n        \"name\": \"quota_refill\",\n        \"type\": \"text\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "GetParsedDocument": {
+      "id": 29695,
+      "api": {
+        "qs": "{{omit(parameters,'parser_id','document_id')}}",
+        "url": "/v1/results/{{parameters.parser_id}}/{{parameters.document_id}}",
+        "method": "GET",
+        "response": {
+          "output": "{{transformResponseDates(item)}}",
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "GetParsedDocument",
+      "epoch": null,
+      "flags": {},
+      "label": "Get Parsed Document",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "parser_id",
+          "type": "select",
+          "label": "Document Parser ID",
+          "options": {
+            "store": "rpc://app%23docparser@1/listDocumentParsers",
+            "nested": [
+              {
+                "mode": "edit",
+                "name": "document_id",
+                "type": "select",
+                "label": "Document ID",
+                "options": "rpc://app%23docparser@1/ListDocumentParserDocuments",
+                "required": true
+              }
+            ]
+          },
+          "required": true
+        },
+        {
+          "help": "Flat returns key-value pairs, object returns nested objects.\nDefaults to Object.",
+          "name": "format",
+          "type": "select",
+          "label": "Format",
+          "options": [
+            {
+              "label": "Flat",
+              "value": "flat"
+            },
+            {
+              "label": "Object",
+              "value": "object",
+              "default": true
+            }
+          ]
+        },
+        {
+          "help": "If child documents were created during preprocessing (e.g. when splitting documents), setting this parameter to true ensures that the parsed data of all child documents is returned.",
+          "name": "include_children",
+          "type": "boolean",
+          "label": "Include Children"
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "docparser",
+      "samples": {
+        "id": "8f31c098afd91bddc3a91bf8ea270eb0",
+        "file_name": "Bazats_and_Tjool_Consult_OU_Integromat_LLC_INV2000003.pdf",
+        "remote_id": "sone other  remote id",
+        "media_link": "https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU",
+        "page_count": 1,
+        "document_id": "72ec3181dafb86d8b4cb052fbcf6bc8f",
+        "uploaded_at": "2020-04-08T17:28:02.000Z",
+        "processed_at": "2020-04-08T17:28:17.000Z",
+        "media_link_data": "https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU/data",
+        "media_link_original": "https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU/original"
+      },
+      "apiJsonc": "{\n\t\"url\": \"/v1/results/{{parameters.parser_id}}/{{parameters.document_id}}\",\n\t\"method\": \"GET\",\n\t\"qs\": \"{{omit(parameters,'parser_id','document_id')}}\",\n\t\"response\": {\n\t\t\"output\": \"{{transformResponseDates(item)}}\",\n\t\t\"iterate\": \"{{body}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "document_id",
+          "type": "text",
+          "label": "Document ID"
+        },
+        {
+          "name": "remote_id",
+          "type": "text",
+          "label": "Remote ID"
+        },
+        {
+          "name": "file_name",
+          "type": "text",
+          "label": "File Name"
+        },
+        {
+          "name": "media_link",
+          "type": "url",
+          "label": "Media Link"
+        },
+        {
+          "name": "media_link_original",
+          "type": "url",
+          "label": "Media Link Original"
+        },
+        {
+          "name": "media_link_data",
+          "type": "url",
+          "label": "Media Link Data"
+        },
+        {
+          "name": "page_count",
+          "type": "uinteger",
+          "label": "Page Count"
+        },
+        {
+          "name": "uploaded_at",
+          "type": "date",
+          "label": "Uploaded At"
+        },
+        {
+          "name": "processed_at",
+          "type": "date",
+          "label": "Processed At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "docparser",
+      "description": "Retrieves a parsed document.",
+      "expectJsonc": "[\n\t{\n        \"name\": \"parser_id\",\n        \"label\": \"Document Parser ID\",\n        \"type\": \"select\",\n\t\t\"mode\": \"edit\", \n        \"required\": true,\n\t\t\"options\": {\n\t\t\t\"store\": \"rpc://listDocumentParsers\",\n\t\t\t\"nested\": [\n\t\t\t\t{\n\t\t\t\t\t \"name\": \"document_id\",\n\t\t\t\t\t\"label\": \"Document ID\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"mode\": \"edit\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"options\": \"rpc://ListDocumentParserDocuments\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n    },\n\t{\n\t\t\"name\": \"format\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Format\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"value\": \"flat\",\n\t\t\t\t\"label\": \"Flat\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"object\",\n\t\t\t\t\"label\": \"Object\",\n\t\t\t\t\"default\": true\n\t\t\t}\n\t\t],\n\t\t\"help\": \"Flat returns key-value pairs, object returns nested objects.\\nDefaults to Object.\"\n\t},\n\t{\n\t\t\"name\": \"include_children\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Include Children\",\n\t\t\"help\": \"If child documents were created during preprocessing (e.g. when splitting documents), setting this parameter to true ensures that the parsed data of all child documents is returned.\"\n\t}\n]",
+      "samplesJsonc": "{\n\t\"id\": \"8f31c098afd91bddc3a91bf8ea270eb0\",\n\t\"document_id\": \"72ec3181dafb86d8b4cb052fbcf6bc8f\",\n\t\"remote_id\": \"sone other  remote id\",\n\t\"file_name\": \"Bazats_and_Tjool_Consult_OU_Integromat_LLC_INV2000003.pdf\",\n\t\"media_link\": \"https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU\",\n\t\"media_link_original\": \"https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU/original\",\n\t\"media_link_data\": \"https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU/data\",\n\t\"page_count\": 1,\n\t\"uploaded_at\": \"2020-04-08T17:28:02.000Z\",\n\t\"processed_at\": \"2020-04-08T17:28:17.000Z\"\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\t\t\n\t\t\"name\": \"id\",\t\t\n\t\t\"type\": \"text\",\t\t\n\t\t\"label\": \"ID\"\n\t},\n\t{\t\t\n\t\t\"name\": \"document_id\",\t\t\n\t\t\"type\": \"text\",\t\t\n\t\t\"label\": \"Document ID\"\n\t},\n\t{\t\t\n\t\t\"name\": \"remote_id\",\t\t\n\t\t\"type\": \"text\",\t\t\n\t\t\"label\": \"Remote ID\"\n\t},\n\t{\t\t\n\t\t\"name\": \"file_name\",\t\t\n\t\t\"type\": \"text\",\t\t\n\t\t\"label\": \"File Name\"\n\t},\n\t{\t\t\n\t\t\"name\": \"media_link\",\t\t\n\t\t\"type\": \"url\",\t\t\n\t\t\"label\": \"Media Link\"\n\t},\n\t{\t\t\n\t\t\"name\": \"media_link_original\",\t\t\n\t\t\"type\": \"url\",\t\t\n\t\t\"label\": \"Media Link Original\"\n\t},\n\t{\t\t\n\t\t\"name\": \"media_link_data\",\t\t\n\t\t\"type\": \"url\",\t\t\n\t\t\"label\": \"Media Link Data\"\n\t},\n\t{\t\t\n\t\t\"name\": \"page_count\",\t\t\n\t\t\"type\": \"uinteger\",\t\t\n\t\t\"label\": \"Page Count\"\n\t},\n\t{\t\t\n\t\t\"name\": \"uploaded_at\",\t\t\n\t\t\"type\": \"date\",\t\t\n\t\t\"label\": \"Uploaded At\"\n\t},\n\t{\t\t\n\t\t\"name\": \"processed_at\",\t\t\n\t\t\"type\": \"date\",\t\t\n\t\t\"label\": \"Processed At\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "ListParsedDocuments": {
+      "id": 29696,
+      "api": {
+        "qs": "{{omit(parameters,'parser_id')}}",
+        "url": "/v1/results/{{parameters.parser_id}}",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{transformResponseDates(item)}}",
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "ListParsedDocuments",
+      "epoch": null,
+      "flags": {},
+      "label": "List Parsed Documents",
+      "scope": [],
+      "expect": [
+        {
+          "name": "parser_id",
+          "type": "select",
+          "label": "Document Parser ID",
+          "options": "rpc://app%23docparser@1/listDocumentParsers",
+          "required": true
+        },
+        {
+          "help": "Flat returns key-value pairs, object returns nested objects.\nDefaults to Object.",
+          "name": "format",
+          "type": "select",
+          "label": "Format",
+          "options": [
+            {
+              "label": "Flat",
+              "value": "flat"
+            },
+            {
+              "label": "Object",
+              "value": "object",
+              "default": true
+            }
+          ]
+        },
+        {
+          "help": "By default, the data of the last uploaded documents in reverse chronological order is returned. If set to Uploaded After, documents imported after a certain date are returned. If set to Processed After, documents parsed after a certain date are returned.",
+          "name": "list",
+          "type": "select",
+          "label": "List",
+          "options": [
+            {
+              "label": "Last Uploaded",
+              "value": "last_uploaded",
+              "default": true
+            },
+            {
+              "label": "Uploaded After",
+              "value": "uploaded_after",
+              "nested": [
+                {
+                  "name": "date",
+                  "type": "date",
+                  "label": "Uploaded After Date",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "label": "Processed After",
+              "value": "processed_after",
+              "nested": [
+                {
+                  "name": "date",
+                  "type": "date",
+                  "label": "Processed After Date",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "help": "When this parameter is set, only documents having the provided Remote ID will be returned.",
+          "name": "remote_id",
+          "type": "text",
+          "label": "Remote ID"
+        },
+        {
+          "help": "By default, only documents which are fully processed (imported, preprocessed, parsed) are included in the results. By setting Include Processing Queue to true, files which are not yet entirely processed are included in the results.",
+          "name": "include_processing_queue",
+          "type": "boolean",
+          "label": "Include Processing Queue"
+        },
+        {
+          "help": "Number of Parsers to return",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "docparser",
+      "samples": {
+        "id": "8f31c098afd91bddc3a91bf8ea270eb0",
+        "file_name": "Bazats_and_Tjool_Consult_OU_Integromat_LLC_INV2000003.pdf",
+        "remote_id": "sone other  remote id",
+        "media_link": "https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU",
+        "page_count": 1,
+        "document_id": "72ec3181dafb86d8b4cb052fbcf6bc8f",
+        "uploaded_at": "2020-04-08T17:28:02.000Z",
+        "processed_at": "2020-04-08T17:28:17.000Z",
+        "media_link_data": "https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU/data",
+        "media_link_original": "https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU/original"
+      },
+      "apiJsonc": "{\n\t\"url\": \"/v1/results/{{parameters.parser_id}}\",\n\t\"method\": \"GET\",\n\t\"qs\": \"{{omit(parameters,'parser_id')}}\",\n\t\"response\": {\n\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\"output\": \"{{transformResponseDates(item)}}\",\n\t\t\"iterate\": \"{{body}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "document_id",
+          "type": "text",
+          "label": "Document ID"
+        },
+        {
+          "name": "remote_id",
+          "type": "text",
+          "label": "Remote ID"
+        },
+        {
+          "name": "file_name",
+          "type": "text",
+          "label": "File Name"
+        },
+        {
+          "name": "media_link",
+          "type": "url",
+          "label": "Media Link"
+        },
+        {
+          "name": "media_link_original",
+          "type": "url",
+          "label": "Media Link Original"
+        },
+        {
+          "name": "media_link_data",
+          "type": "url",
+          "label": "Media Link Data"
+        },
+        {
+          "name": "page_count",
+          "type": "uinteger",
+          "label": "Page Count"
+        },
+        {
+          "name": "uploaded_at",
+          "type": "date",
+          "label": "Uploaded At"
+        },
+        {
+          "name": "processed_at",
+          "type": "date",
+          "label": "Processed At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "docparser",
+      "description": "Retrieves parsed documents.",
+      "expectJsonc": "[\n\t{\n        \"name\": \"parser_id\",\n        \"label\": \"Document Parser ID\",\n        \"type\": \"select\",\n        \"options\": \"rpc://listDocumentParsers\",\n        \"required\": true\n    },\n\t{\n\t\t\"name\": \"format\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Format\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"value\": \"flat\",\n\t\t\t\t\"label\": \"Flat\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"object\",\n\t\t\t\t\"label\": \"Object\",\n\t\t\t\t\"default\": true\n\t\t\t}\n\t\t],\n\t\t\"help\": \"Flat returns key-value pairs, object returns nested objects.\\nDefaults to Object.\"\n\t},\n\t{\n\t\t\"name\": \"list\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"List\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"value\": \"last_uploaded\",\n\t\t\t\t\"label\": \"Last Uploaded\",\n\t\t\t\t\"default\": true\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"uploaded_after\",\n\t\t\t\t\"label\": \"Uploaded After\",\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"date\",\n\t\t\t\t\t\t\"type\": \"date\",\n\t\t\t\t\t\t\"label\": \"Uploaded After Date\",\n\t\t\t\t\t\t\"required\": true\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"processed_after\",\n\t\t\t\t\"label\": \"Processed After\",\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"date\",\n\t\t\t\t\t\t\"type\": \"date\",\n\t\t\t\t\t\t\"label\": \"Processed After Date\",\n\t\t\t\t\t\t\"required\": true\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"help\": \"By default, the data of the last uploaded documents in reverse chronological order is returned. If set to Uploaded After, documents imported after a certain date are returned. If set to Processed After, documents parsed after a certain date are returned.\"\n\t},\n\t{\n\t\t\"name\": \"remote_id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Remote ID\",\n\t\t\"help\": \"When this parameter is set, only documents having the provided Remote ID will be returned.\"\n\t},\n\t{\n\t\t\"name\": \"include_processing_queue\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Include Processing Queue\",\n\t\t\"help\": \"By default, only documents which are fully processed (imported, preprocessed, parsed) are included in the results. By setting Include Processing Queue to true, files which are not yet entirely processed are included in the results.\"\n\t},\n\t{\n        \"name\": \"limit\",\n        \"label\": \"Limit\",\n        \"help\": \"Number of Parsers to return\",\n        \"type\": \"uinteger\",\n        \"default\": 10\n    }\n]",
+      "samplesJsonc": "{\n\t\"id\": \"8f31c098afd91bddc3a91bf8ea270eb0\",\n\t\"document_id\": \"72ec3181dafb86d8b4cb052fbcf6bc8f\",\n\t\"remote_id\": \"sone other  remote id\",\n\t\"file_name\": \"Bazats_and_Tjool_Consult_OU_Integromat_LLC_INV2000003.pdf\",\n\t\"media_link\": \"https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU\",\n\t\"media_link_original\": \"https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU/original\",\n\t\"media_link_data\": \"https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU/data\",\n\t\"page_count\": 1,\n\t\"uploaded_at\": \"2020-04-08T17:28:02.000Z\",\n\t\"processed_at\": \"2020-04-08T17:28:17.000Z\"\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\t\t\n\t\t\"name\": \"id\",\t\t\n\t\t\"type\": \"text\",\t\t\n\t\t\"label\": \"ID\"\n\t},\n\t{\t\t\n\t\t\"name\": \"document_id\",\t\t\n\t\t\"type\": \"text\",\t\t\n\t\t\"label\": \"Document ID\"\n\t},\n\t{\t\t\n\t\t\"name\": \"remote_id\",\t\t\n\t\t\"type\": \"text\",\t\t\n\t\t\"label\": \"Remote ID\"\n\t},\n\t{\t\t\n\t\t\"name\": \"file_name\",\t\t\n\t\t\"type\": \"text\",\t\t\n\t\t\"label\": \"File Name\"\n\t},\n\t{\t\t\n\t\t\"name\": \"media_link\",\t\t\n\t\t\"type\": \"url\",\t\t\n\t\t\"label\": \"Media Link\"\n\t},\n\t{\t\t\n\t\t\"name\": \"media_link_original\",\t\t\n\t\t\"type\": \"url\",\t\t\n\t\t\"label\": \"Media Link Original\"\n\t},\n\t{\t\t\n\t\t\"name\": \"media_link_data\",\t\t\n\t\t\"type\": \"url\",\t\t\n\t\t\"label\": \"Media Link Data\"\n\t},\n\t{\t\t\n\t\t\"name\": \"page_count\",\t\t\n\t\t\"type\": \"uinteger\",\t\t\n\t\t\"label\": \"Page Count\"\n\t},\n\t{\t\t\n\t\t\"name\": \"uploaded_at\",\t\t\n\t\t\"type\": \"date\",\t\t\n\t\t\"label\": \"Uploaded At\"\n\t},\n\t{\t\t\n\t\t\"name\": \"processed_at\",\t\t\n\t\t\"type\": \"date\",\t\t\n\t\t\"label\": \"Processed At\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "listDocumentParsers": {
+      "id": 29697,
+      "api": {
+        "url": "/v1/parsers",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{item}}",
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "listDocumentParsers",
+      "epoch": null,
+      "flags": {},
+      "label": "List Document Parsers",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Number of Parsers to return",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "docparser",
+      "samples": {
+        "id": "rphzbjmtbvga",
+        "label": "My Invoice Parser"
+      },
+      "apiJsonc": "{\n    \"url\": \"/v1/parsers\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": \"{{item}}\",\n        \"iterate\": \"{{body}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Document Parser ID"
+        },
+        {
+          "name": "label",
+          "type": "text",
+          "label": "Document Parser Label"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "docparser",
+      "description": "Retrieves all Document Parsers linked to your account.",
+      "expectJsonc": "[\n    {\n        \"name\": \"limit\",\n        \"label\": \"Limit\",\n        \"help\": \"Number of Parsers to return\",\n        \"type\": \"uinteger\",\n        \"default\": 10\n    }\n]",
+      "samplesJsonc": "{\n\t \"id\":\"rphzbjmtbvga\",\n\t \"label\": \"My Invoice Parser\"\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"label\": \"Document Parser ID\",\n        \"name\": \"id\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Document Parser Label\",\n        \"name\": \"label\",\n        \"type\": \"text\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchParsedDocuments": {
+      "id": 29698,
+      "api": {},
+      "rev": 3,
+      "crud": null,
+      "name": "watchParsedDocuments",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch Parsed Documents",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "docparser",
+      "samples": {
+        "id": "8f31c098afd91bddc3a91bf8ea270eb0",
+        "file_name": "Bazats_and_Tjool_Consult_OU_Integromat_LLC_INV2000003.pdf",
+        "remote_id": "sone other  remote id",
+        "media_link": "https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU",
+        "page_count": 1,
+        "document_id": "72ec3181dafb86d8b4cb052fbcf6bc8f",
+        "uploaded_at": "2020-04-08T17:28:02.000Z",
+        "processed_at": "2020-04-08T17:28:17.000Z",
+        "media_link_data": "https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU/data",
+        "media_link_original": "https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU/original"
+      },
+      "apiJsonc": "{\n}",
+      "approved": false,
+      "hookName": "docparser",
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "document_id",
+          "type": "text",
+          "label": "Document ID"
+        },
+        {
+          "name": "remote_id",
+          "type": "text",
+          "label": "Remote ID"
+        },
+        {
+          "name": "file_name",
+          "type": "text",
+          "label": "File Name"
+        },
+        {
+          "name": "media_link",
+          "type": "text",
+          "label": "Media Link"
+        },
+        {
+          "name": "media_link_original",
+          "type": "text",
+          "label": "Media Link Original"
+        },
+        {
+          "name": "media_link_data",
+          "type": "text",
+          "label": "Media Link Data"
+        },
+        {
+          "name": "page_count",
+          "type": "number",
+          "label": "Page Count"
+        },
+        {
+          "name": "uploaded_at",
+          "type": "date",
+          "label": "Uploaded At"
+        },
+        {
+          "name": "processed_at",
+          "type": "date",
+          "label": "Processed At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "Triggers when a new document is parsed.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": "{\n\t\"id\": \"8f31c098afd91bddc3a91bf8ea270eb0\",\n\t\"document_id\": \"72ec3181dafb86d8b4cb052fbcf6bc8f\",\n\t\"remote_id\": \"sone other  remote id\",\n\t\"file_name\": \"Bazats_and_Tjool_Consult_OU_Integromat_LLC_INV2000003.pdf\",\n\t\"media_link\": \"https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU\",\n\t\"media_link_original\": \"https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU/original\",\n\t\"media_link_data\": \"https://api.docparser.com/v1/document/media/Dit7XH-AIeTy-Rn8UMyqyC8Px7p4Jlp18vWbBloYqTwX8Ut6SFkVhZkd-VfOwV-DxUBlN11GE96P-OG6laDhcZAyfTtWor4MCfqzbxE92iU/data\",\n\t\"page_count\": 1,\n\t\"uploaded_at\": \"2020-04-08T17:28:02.000Z\",\n\t\"processed_at\": \"2020-04-08T17:28:17.000Z\"\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"label\": \"ID\",\n        \"name\": \"id\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Document ID\",\n        \"name\": \"document_id\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Remote ID\",\n        \"name\": \"remote_id\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"File Name\",\n        \"name\": \"file_name\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Media Link\",\n        \"name\": \"media_link\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Media Link Original\",\n        \"name\": \"media_link_original\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Media Link Data\",\n        \"name\": \"media_link_data\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Page Count\",\n        \"name\": \"page_count\",\n        \"type\": \"number\"\n    },\n    {\n        \"label\": \"Uploaded At\",\n        \"name\": \"uploaded_at\",\n        \"type\": \"date\"\n    },\n    {\n        \"label\": \"Processed At\",\n        \"name\": \"processed_at\",\n        \"type\": \"date\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "UploadDocumentFromUrl": {
+      "id": 29699,
+      "api": {
+        "qs": {
+          "url": "{{parameters.url}}",
+          "remote_id": "{{parameters.remote_id}}"
+        },
+        "url": "/v1/document/fetch/{{parameters.parser_id}}",
+        "method": "GET",
+        "response": {
+          "output": "{{transformResponseDates(body)}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "UploadDocumentFromUrl",
+      "epoch": null,
+      "flags": {},
+      "label": "Upload a Document from a URL",
+      "scope": [],
+      "expect": [
+        {
+          "name": "parser_id",
+          "type": "select",
+          "label": "Document Parser ID",
+          "options": "rpc://app%23docparser@1/listDocumentParsers",
+          "required": true
+        },
+        {
+          "help": "Please provide a valid full URL of a publicly accessible document.",
+          "name": "url",
+          "type": "url",
+          "label": "Document URL",
+          "required": true
+        },
+        {
+          "help": "The submitted value will be kept throughout the processing of the document and will be available later once you obtain the parsed data with our API, as CSV/XLS/XML file or through webhooks. This optional parameter makes it easy to relate the parsed data returned by Docparser with document records in your own system.",
+          "name": "remote_id",
+          "type": "text",
+          "label": "Remote ID"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "docparser",
+      "samples": {
+        "id": "91e458372da57dc9d2ee1d7233f4d124",
+        "quota_left": 35,
+        "quota_used": 15,
+        "quota_refill": "1970-01-01T00:00:00.000Z"
+      },
+      "apiJsonc": "{\n    \"url\": \"/v1/document/fetch/{{parameters.parser_id}}\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"url\": \"{{parameters.url}}\",\n\t\t\"remote_id\": \"{{parameters.remote_id}}\"\n    },\n    \"response\": {\n        \"output\": \"{{transformResponseDates(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Document ID"
+        },
+        {
+          "name": "quota_used",
+          "type": "number",
+          "label": "Quota Used"
+        },
+        {
+          "name": "quota_left",
+          "type": "number",
+          "label": "Quota Left"
+        },
+        {
+          "name": "quota_refill",
+          "type": "date",
+          "label": "Quota Refill"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "docparser",
+      "description": "Uploads a document that is stored under a publicly accessible URL.",
+      "expectJsonc": "[\n    {\n        \"name\": \"parser_id\",\n        \"label\": \"Document Parser ID\",\n        \"type\": \"select\",\n        \"options\": \"rpc://listDocumentParsers\",\n        \"required\": true\n    },\n    {\n        \"name\": \"url\",\n        \"type\": \"url\",\n        \"label\": \"Document URL\",\n        \"required\": true,\n        \"help\": \"Please provide a valid full URL of a publicly accessible document.\"\n    },\n\t{\n\t\t\"name\": \"remote_id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Remote ID\",\n\t\t\"help\": \"The submitted value will be kept throughout the processing of the document and will be available later once you obtain the parsed data with our API, as CSV/XLS/XML file or through webhooks. This optional parameter makes it easy to relate the parsed data returned by Docparser with document records in your own system.\"\n\t}\n]",
+      "samplesJsonc": "{\n\t\"id\": \"91e458372da57dc9d2ee1d7233f4d124\",\n\t\"quota_used\": 15,\n\t\"quota_left\": 35,\n\t\"quota_refill\": \"1970-01-01T00:00:00.000Z\"\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"label\": \"Document ID\",\n        \"name\": \"id\",\n        \"type\": \"text\"\n    },\n    {\n        \"label\": \"Quota Used\",\n        \"name\": \"quota_used\",\n        \"type\": \"number\"\n    },\n    {\n        \"label\": \"Quota Left\",\n        \"name\": \"quota_left\",\n        \"type\": \"number\"\n    },\n    {\n        \"label\": \"Quota Refill\",\n        \"name\": \"quota_refill\",\n        \"type\": \"date\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 71452,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "docparser": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.authorization"
+          ]
+        },
+        "url": "https://api.docparser.com/v1/ping",
+        "headers": {
+          "authorization": "Basic {{base64(parameters.secret_api_key + ':')}}"
+        },
+        "response": {
+          "error": {
+            "message": "[{{statusCode}}] {{body.error}}"
+          }
+        }
+      },
+      "rev": 4,
+      "name": "docparser",
+      "type": "basic",
+      "label": "Docparser",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "docparser",
+      "install": {},
+      "apiJsonc": "{\n    \"url\": \"https://api.docparser.com/v1/ping\",\n    \"headers\": {\n        \"authorization\": \"Basic {{base64(parameters.secret_api_key + ':')}}\"\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error}}\"\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.authorization\"\n        ]\n    }\n}",
+      "authorId": 71452,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "secret_api_key",
+          "type": "password",
+          "label": "Secret API Key",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "installSpec": [],
+      "scopesJsonc": "{\n}",
+      "installJsonc": "{\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"secret_api_key\",\n\t\t\"type\": \"password\",\n\t\t\"label\": \"Secret API Key\",\n\t\t\"editable\": true,\n\t\t\"required\": true\n\t}\n]",
+      "installSpecJsonc": "[\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://api.docparser.com/\",\n    \"headers\": {\n        \"authorization\": \"Basic {{base64(connection.secret_api_key + ':')}}\"\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error}}\"\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.authorization\"\n        ]\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "omit": {
+      "rev": 3,
+      "code": "function omit(collection, ...parameters) {\n\tconst result = {};\n\t\n\tfor (let key in collection) {\n\t\tif (!parameters.includes(key)) {\n\t\t\tresult[key] = collection[key];\n\t\t}\n\t}\n\t\n\treturn result;\n}",
+      "name": "omit",
+      "test": null,
+      "appName": "docparser",
+      "arguments": "(collection, ...parameters)",
+      "appVersion": 1
+    },
+    "transformResponseDates": {
+      "rev": 3,
+      "code": "function transformResponseDates(obj) {\n\t// All datetimes are ISO but they are in a string....\n\t// On top of that those dates/times can be in nested collections.\n\tdate_keys = [\"quota_refill\",\"uploaded_at\",\"processed_at\",\"invoice_date_0_match\",\"invoice_date_0_iso8601\"];\n\texceptions = []; \n\ttime_keys = [];//\"total_duration\",\"engaged_duration\" \n\n\tif (!obj) return null;\n\t\n\tvar keys = iml.keys(obj);\n\tlet keysLength = keys.length;\n\t\n\tvar output = {}\n\tfor (var i = 0; i < keysLength; i++) {\n\t\tif (obj[keys[i]] && obj[keys[i]] instanceof Array &&  obj[keys[i]].length !== 0) {\n\t\t\tvar new_array = [];\n\t\t\tfor (var j = 0; j < obj[keys[i]].length ; j++) {\n\t\t\t\tif (obj[keys[i]][j] && typeof obj[keys[i]][j] === 'object') {\n\t\t\t\t\tnew_array.push(transformResponseDates(obj[keys[i]][j]));\n\t\t\t\t} else {\n\t\t\t\t\tnew_array.push(obj[keys[i]][j]);\n\t\t\t\t}\n\t\t\t}\n\t\t\tobj[keys[i]] = new_array;\n\t\t}\n\t\t\n\t\tif (obj[keys[i]] && typeof obj[keys[i]] === 'object' && !(obj[keys[i]] instanceof Array) ) {\n\t\t\t//some dates/times are hidden deeper\n\t\t\tobj[keys[i]] = transformResponseDates(obj[keys[i]]);\n\t\t}\n\t\tvar value = obj[keys[i]];\n\t\t\n\t\tif (date_keys.includes(keys[i])) {\n\t\t\tvalue = new Date(value);\n\t\t}\n\t\tif (exceptions.includes(keys[i])) {\n\t\t\tvalue = iml.parseDate(value,'ddd, DD MMM YYYY HH:mm:ss ZZZZZ');\n\t\t}\n\t\tif (time_keys.includes(keys[i])) {\n\t\t\tvalue = new Date(value).toISOString().slice(-13, -5);\n\t\t}\n\t\t\n\t\toutput[keys[i]] = value;\n\t}\n\t\n\treturn output;\n}",
+      "name": "transformResponseDates",
+      "test": null,
+      "appName": "docparser",
+      "arguments": "(obj)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-05-11T07:11:13.638726+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Docparser converts your PDF documents into structured and easy-to-handle data. With Docparser you can pull out specific data fields (e.g. Purchase Order Number, Date, Shipping Address, ...) and tabular data from your documents.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "d3ccc61565c09be1b29db13b333d0fd1",
+  "versionFull": "1.1.1",
+  "compiledName": "docparser",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

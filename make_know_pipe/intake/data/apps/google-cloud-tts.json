@@ -1,0 +1,831 @@
+{
+  "rev": 6,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "https://texttospeech.googleapis.com/v1",
+    "headers": {
+      "Authorization": "Bearer {{connection.accessToken}}"
+    },
+    "response": {
+      "error": {
+        "message": "[{{statusCode}}] {{ifempty(body.error.message, get(body, '1.error.message'))}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "google-cloud-tts",
+  "_rpcs": {
+    "listVoices": {
+      "api": {
+        "qs": {
+          "languageCode": "{{parameters.languageCode}}"
+        },
+        "url": "/voices",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.name}} [{{item.ssmlGender}}]",
+            "value": "{{item.name}}"
+          },
+          "iterate": "{{body.voices}}"
+        }
+      },
+      "rev": 3,
+      "name": "listVoices",
+      "label": "List Voices",
+      "appName": "google-cloud-tts",
+      "apiJsonc": "{\n\t\"url\": \"/voices\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"languageCode\": \"{{parameters.languageCode}}\"\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.voices}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}} [{{item.ssmlGender}}]\",\n\t\t\t\"value\": \"{{item.name}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "google-cloud-tts",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "listLanguageCodes": {
+      "api": {
+        "response": {
+          "output": [
+            {
+              "label": "Arabic",
+              "value": "ar-XA"
+            },
+            {
+              "label": "Bengali (India)",
+              "value": "bn-IN"
+            },
+            {
+              "label": "Chinese (Hong Kong)",
+              "value": "yue-HK"
+            },
+            {
+              "label": "Czech (Czech Republic)",
+              "value": "cs-CZ"
+            },
+            {
+              "label": "Danish (Denmark)",
+              "value": "da-DK"
+            },
+            {
+              "label": "Dutch (Netherlands)",
+              "value": "nl-NL"
+            },
+            {
+              "label": "English (Australia)",
+              "value": "en-AU"
+            },
+            {
+              "label": "English (India)",
+              "value": "en-IN"
+            },
+            {
+              "label": "English (UK)",
+              "value": "en-GB"
+            },
+            {
+              "label": "English (US)",
+              "value": "en-US"
+            },
+            {
+              "label": "Filipino (Philippines)",
+              "value": "fil-PH"
+            },
+            {
+              "label": "Finnish (Finland)",
+              "value": "fi-FI"
+            },
+            {
+              "label": "French (Canada)",
+              "value": "fr-CA"
+            },
+            {
+              "label": "French (France)",
+              "value": "fr-FR"
+            },
+            {
+              "label": "German (Germany)",
+              "value": "de-DE"
+            },
+            {
+              "label": "Greek (Greece)",
+              "value": "el-GR"
+            },
+            {
+              "label": "Gujarati (India)",
+              "value": "gu-IN"
+            },
+            {
+              "label": "Hindi (India)",
+              "value": "hi-IN"
+            },
+            {
+              "label": "Hungarian (Hungary)",
+              "value": "hu-HU"
+            },
+            {
+              "label": "Indonesian (Indonesia)",
+              "value": "id-ID"
+            },
+            {
+              "label": "Italian (Italy)",
+              "value": "it-IT"
+            },
+            {
+              "label": "Japanese (Japan)",
+              "value": "ja-JP"
+            },
+            {
+              "label": "Kannada (India)",
+              "value": "kn-IN"
+            },
+            {
+              "label": "Korean (South Korea)",
+              "value": "ko-KR"
+            },
+            {
+              "label": "Malayalam (India)",
+              "value": "ml-IN"
+            },
+            {
+              "label": "Mandarin Chinese",
+              "value": "cmn-CN"
+            },
+            {
+              "label": "Mandarin Chinese",
+              "value": "cmn-TW"
+            },
+            {
+              "label": "Norwegian (Norway)",
+              "value": "nb-NO"
+            },
+            {
+              "label": "Polish (Poland)",
+              "value": "pl-PL"
+            },
+            {
+              "label": "Portuguese (Brazil)",
+              "value": "pt-BR"
+            },
+            {
+              "label": "Portuguese (Portugal)",
+              "value": "pt-PT"
+            },
+            {
+              "label": "Russian (Russia)",
+              "value": "ru-RU"
+            },
+            {
+              "label": "Slovak (Slovakia)",
+              "value": "sk-SK"
+            },
+            {
+              "label": "Spanish (Spain)",
+              "value": "es-ES"
+            },
+            {
+              "label": "Swedish (Sweden)",
+              "value": "sv-SE"
+            },
+            {
+              "label": "Tamil (India)",
+              "value": "ta-IN"
+            },
+            {
+              "label": "Telugu (India)",
+              "value": "te-IN"
+            },
+            {
+              "label": "Thai (Thailand)",
+              "value": "th-TH"
+            },
+            {
+              "label": "Turkish (Turkey)",
+              "value": "tr-TR"
+            },
+            {
+              "label": "Ukrainian (Ukraine)",
+              "value": "uk-UA"
+            },
+            {
+              "label": "Vietnamese (Vietnam)",
+              "value": "vi-VN"
+            }
+          ]
+        }
+      },
+      "rev": 3,
+      "name": "listLanguageCodes",
+      "label": "List Language Codes",
+      "appName": "google-cloud-tts",
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"output\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Arabic\",\n\t\t\t\t\"value\": \"ar-XA\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Bengali (India)\",\n\t\t\t\t\"value\": \"bn-IN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Chinese (Hong Kong)\",\n\t\t\t\t\"value\": \"yue-HK\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Czech (Czech Republic)\",\n\t\t\t\t\"value\": \"cs-CZ\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Danish (Denmark)\",\n\t\t\t\t\"value\": \"da-DK\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Dutch (Netherlands)\",\n\t\t\t\t\"value\": \"nl-NL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"English (Australia)\",\n\t\t\t\t\"value\": \"en-AU\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"English (India)\",\n\t\t\t\t\"value\": \"en-IN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"English (UK)\",\n\t\t\t\t\"value\": \"en-GB\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"English (US)\",\n\t\t\t\t\"value\": \"en-US\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Filipino (Philippines)\",\n\t\t\t\t\"value\": \"fil-PH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Finnish (Finland)\",\n\t\t\t\t\"value\": \"fi-FI\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"French (Canada)\",\n\t\t\t\t\"value\": \"fr-CA\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"French (France)\",\n\t\t\t\t\"value\": \"fr-FR\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"German (Germany)\",\n\t\t\t\t\"value\": \"de-DE\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Greek (Greece)\",\n\t\t\t\t\"value\": \"el-GR\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Gujarati (India)\",\n\t\t\t\t\"value\": \"gu-IN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Hindi (India)\",\n\t\t\t\t\"value\": \"hi-IN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Hungarian (Hungary)\",\n\t\t\t\t\"value\": \"hu-HU\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Indonesian (Indonesia)\",\n\t\t\t\t\"value\": \"id-ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Italian (Italy)\",\n\t\t\t\t\"value\": \"it-IT\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Japanese (Japan)\",\n\t\t\t\t\"value\": \"ja-JP\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Kannada (India)\",\n\t\t\t\t\"value\": \"kn-IN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Korean (South Korea)\",\n\t\t\t\t\"value\": \"ko-KR\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Malayalam (India)\",\n\t\t\t\t\"value\": \"ml-IN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Mandarin Chinese\",\n\t\t\t\t\"value\": \"cmn-CN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Mandarin Chinese\",\n\t\t\t\t\"value\": \"cmn-TW\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Norwegian (Norway)\",\n\t\t\t\t\"value\": \"nb-NO\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Polish (Poland)\",\n\t\t\t\t\"value\": \"pl-PL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Portuguese (Brazil)\",\n\t\t\t\t\"value\": \"pt-BR\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Portuguese (Portugal)\",\n\t\t\t\t\"value\": \"pt-PT\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Russian (Russia)\",\n\t\t\t\t\"value\": \"ru-RU\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Slovak (Slovakia)\",\n\t\t\t\t\"value\": \"sk-SK\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Spanish (Spain)\",\n\t\t\t\t\"value\": \"es-ES\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Swedish (Sweden)\",\n\t\t\t\t\"value\": \"sv-SE\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Tamil (India)\",\n\t\t\t\t\"value\": \"ta-IN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Telugu (India)\",\n\t\t\t\t\"value\": \"te-IN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Thai (Thailand)\",\n\t\t\t\t\"value\": \"th-TH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Turkish (Turkey)\",\n\t\t\t\t\"value\": \"tr-TR\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Ukrainian (Ukraine)\",\n\t\t\t\t\"value\": \"uk-UA\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Vietnamese (Vietnam)\",\n\t\t\t\t\"value\": \"vi-VN\"\n\t\t\t}\n\t\t]\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    }
+  },
+  "flags": {},
+  "label": "Google Cloud Text-to-Speech",
+  "theme": "#4285f4",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Synthesis",
+      "modules": [
+        "synthesizeSpeech"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "universal"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000002424944415458c3edd6cf8b8e511407f0cf33337ea541a648094536a42c6c94941f59c882c564a558da59d8595ab26235164a92d8f8070821f9031492529afcc88805c6cc7b2c9ef3f018aff77dde31a3c4a9d3bdf779cebde77b7edd7bf84fff3a15337d604454d3a518c21b8c4151ccb8ba9f9527ef8f880711311a11f722625ff5ef4f00d81011cfa2a4f11c9f44c4fa7600fa6601c716acc1731cc328d662733be1be9adb1af314779be2de0539bec50d65fc0b2c6c0760a0361ec346b43a58771eb753d9100ea6654f7119cf7a75571dc01eecec227f07b7d3ca5338e47b187763183d655a056002d7f00893bf902df030e79b7100e3b88eadd88e5d1df6b70790b53981b34d36a4fb57605099682730a24cbe65f8d80b80e956417f7aa495e0a75de0036951a12c9dc106874d60d57415fe0420c7b9388d1dbac730306f9afa062362089ff012510f417f02eac67312e487e45643e52d1cc57d65becdaf7b601cc7b148f3781669c92bcd1eb5c0122c4f2ef85e0581c7bdfa33f3675143006d6936de824eba2aa09369f4b72a18c011acd72ca67dca6b77a4834c81cf789febc3589cf317f9ef87ab7858f7abb84e77956f43270063b8884dd896df4771a132b40230895b78a7d955daafbc96276a67fc0ac439bcc65e65d25ec64dca0ea9dafc0527f5964c91bca08bdc38aee06ab5afde9a0dd416d581cd1194f93329e389756965a5b85559daebd98d01249fced6eb53447cccf999882866b50fac015819111723e275f2a58858dda411fded3e794a2bb636e74fe5b33cebadf87ffaebe92bad2d366b01f71e960000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000003f04944415478daed9a4d685d4514c77ff7e5a58626d23612342d4549d250d0855ab12e74615b70e1424a916e04512c05e9a6b4c18d42175d46dcb809ddb8105baca08baa0b37a1a150c48fd612a215824428496c6c6b3fd29734f9bb987976723349def3defb3e6ee70703ef9d993733e7cccc99f36606028140201008041e50a27a77a01a24011480c7802edbff2bc05f80a2a8a9d4a94e719bfa250d4a1a933423e9aaa48b928e4b7abc5c2e5738ca3f2fe967f95994f4bda467726704ab50b7a4b35a9b6f256dca8d019cd17f47d242050628497abd9a5950a8b79215d002bc1cebeb3fc071e04360d691af035eac778753c38ee47a49c3b1913e27a9435297a44bb1bcaf2415f334037ccc01f780924d2e2d54b1bd37ab0152a358fee04c99a7806d4012571a0193c0793c018a6dab08f4d8b68ac004f03b700ba056414dd1237b13388a996249eafd1ad80bccc71407e80306805731115d01b8015c003e06ce484ad27e22031456c9ab8625cbcb51fe69e004f05cacfc23c06e2b7f0f18aa85016aed03d603ef7b9477d9007cb04699d4f08df21c666f5d48506f0b70d7237f097825269bc72cb736ee7bef2dc01bc00f24f345ffcb0043c099840d47c0df563177faef003a9c7225e018f02b26a8e971f29e05da81c59a18c0f1ba7fd8941a8e011e8d654d0227813f81b76206781868c53f9352a3d63ea03df67d81644bade90cd0700403d4bb03f5c6170af7025b497ffb11e62cafa1f06d830780c3240b8557625dbd15aec400adb6a30dd7d92a10d02aa91b139495b9095c85fbdb7ed278bf515904b603a7804dd620454ccc71c42d585ce1c7229b25e052c0c4005984bac2cce42d40a723ef8c17f419e0136024a38eb944c06d6086f42f682aaecf170a8fda54139cc391baf0c0c701c100f5ee404654ecbf9add005195f25b71812f14eec61c5466b50b44c035cc1940d27a1659be5d6f0376014fb2fceff7e48a06707817384476ffd38bc067b69da4dc042e023b1d593ff0a56de721473e0bfc528901da818d19295fa6237915fff139b00f73aa0c6666f8ea1fb169c99d83cf0734dbddf230f011706795323f628edaafc7339add098259aa83c041ab68f9ae50185f731a781b73e9b2ecc6c9b7044e03bf91dd696c01b89c5665511421a9047c0a7c873979de8c718e6398753feb537e89019cccf336d584345e73387d9f02bea9e6b779580289682403c4a74264fb1791e173be463910b9074cc7644f00fb319ebb3f96378373ebdcd4380fa10e781e429524cd7a1e430de4ea399c5566aba49f2a7809362aa92f37ca3b0640d21e49e3ab283f21e9b55c8dbec7082f48fa42d294a43949f392a6ad6ca7a4284de51bea75b1a3581be6194d2f662718c7046777a176ef870281402010080472cdbf97a27db355f542df0000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-03-21T08:22:48.507635+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000006e94944415478daeddd6b881de51dc7f1ef39bb318d9768c4186b1285928862a4d62b166a1544885a84d2a0252afaa292625e0a455b68152c2d5ef006058bb479e38d88a0825a252aa937281a2fb84143bdc6444cdc68734f767fbe789ea3d36c3cf39cdd7332b7dfe74db2eccc30b3ffdfcc3ccfcc33336066666666666666666666666666666666666635d12a7a05ea4e52e7bf338085c04ce090f8ef67c027c0466077ab75e0cbe1000c48a6f0b3814b815f00670187026d6008d84d08c11ae051e05fc057004584c1fa44129266485a26e93549bb956fbba455922e943494099055492cfe6c49374bda9650f87d7d2ee94f920e77082a26167fbaa4bb248d4da2f81d7b25dde4234185c4e22369793c9c4fd526494b3acbb5928b853a5bd2477d287ec79b928e1f6400da45ffe1ea2053a0a5c0717d5cf422420f6260470107a07fe600e7f779996de02242d771201c8029caec993f067e9430cb06e059e079603461fa538105835a7f07a07fce010ece996613701d703161cfbe11d89e33cf61c0d13098d38003d03f3f4c98e639e049600fb0135809accd99e760c2d165201c80fe49d93d4709c5efd842b80f90e7a041adb403500d03eb073a000de700349c03d0700e40c30d77fb65ec77ce079611ba2365b82b31043c053c0dbd0f9c88dbd42274db161106691c15b76d1c78077803788fd847aff3e08ce18469e600bf056615bdb2195b8801489529fc42e04ae097842b77d3f96e645427045f026f028f032b256d807a06212500a21c7bfea4c5e20f0197017f245c5adddfe9af15a79b0d5c009c075c0efc017851d278dd4250fb36402cfe4c42e1ef014ee861bb87819f020f02bf01da75bb375feb0064f6fceb81df01474e72517380df033fcf2cb7166a1b804c917e4668c34cf572ea7ce04ed2eef855466d03101d012c27b4f2fb6111f06ba8cf51a09601c814e75c60711f17dd06ae22f4246a21a51700dff504ca10fb76e27a0c03bf22ff1e7d76fb5ae43f2cb380705a79bf0e478194007c4018c430b05b923d6a11fae8798e02ce4c98eebfc0df818f098dbcab73b6b50d9c58f41fa15fba0620f679bf041e2e7a4527b96dd373a6d90bdc06fc2dfefc38e1b9bda539f39d4c08c9eea23772aa6ad9068866917ff85f0f3c03df867d2b69479769d4e4b9ca3a07603ef997af3b43b31aabce01809aeca58354f700580e07a0e11c808673001ace01683807a0e11c808673001a2e6554f06ce012f2afab97c918e1814a073c47caddc0e308374c263b9cca4acc7b48c339000d973a22c84a22b6cb66109e6ccabbd9b511d8d6ed590607a09ace00fe49f786f95ec2237d5d9fa07200aa693a702cf0832ed3eccdf93de03640e3a5042065a46c95d579db72a59c023600779136bcba4a5ac017c0ff8a5e9122a58c0a5e0fdc54f48ada60b80dd0700e40c339000de700349c03d0700e40c339000de700349c03505f492ff470002aa4c777148e125e7ed1950350bc94aace038633afa4399afcfb383b81aff3169c322af850c208dbaa8f1d1030027c51a2b77d8e133f169d6329e1a6d5d38441bad7935f8fed24bcc124a5a80b09af889945395e123559e3c03584af7497c538b09af00adb6ea99c4928fa7242cd52ded73442b8dbd9554a00da84316855bf1d3c96b8bd0744abd5ea1c6157136eb91f9b334b9bf41aec021e238c0aca5da8156b1df0ef3e2f7384f05dc2dc86a30350bc1dc05f4968b127da467890e7d394891d800265f6ced7817b99fa6be7b603b713db39298d5d07a0609922dd07fc85f0aabac9d801dc02fc19d899dad371004a20166b1ba178cb8177e9adc7354a388ddc01eceaa59b9bd22aaefba8e05288bd825dc00ae025e05a6009e17d8743fb9945c066c2f793ee075e06f6f47a8d2325005f01ab081f31aefa75800d45af44379de2495a07dc00fc83f0fee2330841e8bcd07a0bf01f4217720d3d1cf2f7951280758477e4d7e12890db2f2e8358cc316044d208e108903d0a8c77b665aa57355386858bffffe0b11d4099308c0d62f96e04369c03d0700e40c339000de7004c94d2acdedfb591d4f94ac50198e853f27b3d2711fae61df381d31296bda5e88ddb5769ee8f97c88784ebead3ba4c3397f011c907084f4f5f019c9eb3dc31e0ada237ceba9084a47992de569a31497b248d274cbb51d24fcaf6a9399f02265a0fbc90386d9b70144d39b7bf4218a8512a0ec044021e21dc68e997ad8471958dfe405525c4d3c0344977279e0652dc2f6946d90efff63d6208e64a5a99787eefe655490b5cfc0a8901e834089f986408c624ad96745a67795621fb84e01e499b7a28fe6649b7c6a3888b5f659936c145925648fa4413bb7ee3718fff58d2439216c7798a5efd5ca5bb345956b198d3089f8f5f049c021c137f3d4ab8c8f316b0967825b1448fa07daff2af610975dbb3ab50743333333333333333333333333333333333abab6f004cd3a7d40d964a090000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000d874944415478daeddd7b8c5e451d87f1e7dd5db69422606511bc0444ab8844890a5aa506014d542e6a546af01e35f11a4d54124d1035788d468d68881a35a0062412af31f18a4a8311306205046f20b58aadd2966d69cbeecf3fe62c3dc0762fdd79df73ce3bcf2779d3dda63defbc97f9cecc39736640922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449432c228888d1885819112311d174915aa1d77401a45caa4add039603ab80a7b0e73b1ec011c07380ef027702a3c07ae07a600ab81ba0d72ba75a94f34a35b4aa8a3f0a1c0b1c059c53fdfc38eefb1def55ff6e8a140823c05faac72dc0f7809b81dba0ac20903aa7ead68f44c4d111717e44dc10115b22622a166f57f57f7f1e11af88884323a237ec4305234e9d5355ca65c071c059c05ae06852eb9ec324f07be072e012e03ff606a416a85afd1511f1a188f8db3eb6f60bb53b22be1211cf8c88b161ef0d48ad5655fef188785744dcd5c78a5f37156968f1f288983004a401ab2a3e11b13a223e17119b0754f9674c47c4b688b834220e3704a401aa2affe111f1eb0157fcd982e09bc3d4131869ba00d25caa8ab61c781bf0e4868bd3035e003c17703291d44f55cbbf2c22de11115b1b6efdeb6e8c8833a280cb84522362cfb8ff9488d8d8748d9fc53511f1c8ae07804300b5d91381f7030f6dba20b37812701eb0a2cb216000a87562cfd4de9702cfa49d13d6c680170327d6cadc390680daea48e045e49bddd70f2b8197916625769201a0b63a03787cd3855880d34953923bc90050abc49ecb7e27d08defe74ad230a0939705bbf006ab3c13c09aa60bb1400790d618d8bfe982ec0b0340ad516b419f0d1cda747916e158e0f8a60bb12fc69a2e80743f3de0a9a4963587007e01fca63a76905aeb3349b710e77034e97cc5ba41be513918006a9b87018fce74ac69e067c09b803fd7febe57fdfd4749ad77aee7ea1c03406df3046075a663dd00bc87aaf2cf2cea1169acf103d2f7ff2bc0c14b7c9e1e29b8462262ba4b8b87780e406d33429eefe52ed28a3eebe1beebfb553f4f931603dd94e1b9c648f3012606fb562d9d01a0b6c9752d6d07694cbe7b8e16f9afc015999eef003a589f3a576069817acc3185b80a8500b6667abeee4d02c000908a660048053300a482190052c10c00a9600680543003402a98012015cc00900a660048053300a4822df976e06a159707038f21ade0dac939d17dd623dd9db61ed8d596db45abcfeee1c02399fd73eb01b7570fda526ee5936b3d80a70317012b30006633026c009e4755999a5055f803491b6d9c011c46da6fef44665fd06204b80ef82db03122be0fdc01dc65180c875c01304e5a1d7545d32fa8c5b6d3c01af755a5ef010f014e06d692027b82f4b9cde7d4eab10b7837290c7e191157017f00ee360cba2be78a40b6fc2d525b60f36052cfe3b5c0d3d8f7d56fc68147548fb380db80ef015f8b88eb81dde030a16b5c126c08d52aff1ae0ada4edac0f26df165b23c051c09b81d380cb800b81ff34fddab53806c090a955fe53814f9236b1ec9751d26ab8e792d6c4bb2022fe01746a5dbc9279197048cc6ca74d5a4fffedc0e7e96fe5afdb9f34c4f8116943cfd12eee9253227b0043a056d98e206da7fd3a60bf0117630c3806f81869a87159d756c82d913d80e13141aafcaf66f095bfee48e08dc0e14dbf219a9f01d071b5d67f2df01adab147dd33800b80098702ede6106038ac01de467bf6a95f06bc8a7469f89d11b1c5a1403bd903e8b0aa751d07ce0156355d9efb19015e48ea0d604fa09d0c808eaa55a8e380d39b2ecf5e3c18389b34fd582d640074dbe3818f93aec1b7d5f349db7ddb0b682103a0836a15e9785217bbcd03ec09e00da47b45d4320640771d48eafab7e1acff7cd690a623ab650c80ee5a4dea5ab7b9f59f7108702c380c689b9c01d0852f62e7d52ad089a4997f5df112da7daea248b9e601dc0e5c4a37baa34de8019b81c94cc73b94b4a0472e53c0ada47bfdefa9feee30e0246079a6e73808e79db44eae0fe477a45b43b577415a542387715205cd610af806f045e0daeaf760cfd4e2d791672193f1ea98b74584eb06b4c49203a0fa20a7819d4dbf988204f91660b90df8307013a4cfb31a666c00de4b5ae5e96c961e0213c099a490514b7812509752abfc337f563f6f02ce036ec9f45cb98613cac400e890da09c051f29c74bd15f826ccb994d756f20d5dd4320640379d4c5ad977a926817fcff36f1cac0f3103a09b8e010e68ba10ea3e03a09b9c4da32c0c00a9600680543003402a98012015cc00900a660048053300a482190052c10c00a9600680543003402a98012015cc00900a660048053300a482190052c10c00a960068054b025ef0b50ad543b864b3e0fca14b0ace9426838e4da19e804e05c5208b85e5d7f05b0aae9426838e40a80c380d348bbc848ea889ce7006cf9a58ef124a0543003402a98012015cc00900a66004805cb751950d21caa09732bc9b3ab33c066e00e98736bf7791900d2e0ac05ce63e997ccc7800b81f3975a2003401a9c15e4eb013c28c7413c07200d4eeb26cb190052c10c00a9600680543003402a58ce00d8f78b916a8a9f59e1725d06dc499a94b082169ee9d4ac46499349a69b2e889a932b00d60167e090a26b7602ff6bba106ace9203a09a86b815f863d32f46d2e2d8624b053300a482190052c10c00a9600680543003402a98012015cc00900a660048053300a482190052c10c00a9600680543003402a98012015cc00900a660048053300a482190052c10c00a97bee027e93e3400680d43d5ba802a05a94779f1900521e3df6529f22eedd2a63b4dfcfb558068094c7e1c09940af56e1eb0e024e6eba90f7976b6310a9ab72358207021f007601df8e88fa862b8f055e09ac6efac5dedf9203a04abba380e700fb35fd8204a42ff57ae04a20963a4e1c72eb816dc083321c6b02f814b016f80169e7a571e0c5c049e40b9bf5c09d390e94ab07f044e093b837605b8c021701bf02a69a2e4ccbad03fe459e0080d4d53f15388554177ab5472ebf26d3966eb90260e6a484e714dac3667f61fe4bea29adca78ccdc15be6e8a7415208b9c15d6965f9d520d8d76922ea9ed6cba3c0bf45be08a5c07b3c596e027746373dbbb81af02ff80a5cf0100034002d804fc89f6f762ef006e823c951f0c0009d2d4da6f009b9b2ec83c7e4c1a02646300a868b596f4a7c00781ed4d97692fae043e9ebb7c06808a5785c00e522fe0aaa6cb338b49d2d8ffe65a79b33000a43d3603e7031b9b2e48cd24f019e0b27e1cdc0090b84fabfa3be0dbb4e3b2e056d204bb8f01db7bbd5ed6d61fbc1740ba57afd723227600e7914e0cbe997c330417eb4ed2bd0517013bfa359ddb1e80545355b4ff0217009f20dd2730e8cb8393c047802fd0c7ca0f0680f4005585db067c9ad40b583fc0a79f043e075c08ececf78d5c0e01a45954c3816dc025c05f817380b38187f4e929a74937257d01f82c303988bb380d00692f662a6044ac03ae215d227c3df0346039796ef8b98774d5e10ad2a5be1b1840cb3fc30090e651f5067691e6095c09bc80d41b580d2c63f143e9a81eb702df215de2bb96b49848f633fd73c91900de7eda2e7e1e19d57a031b802f9316fc38057856f5e77ec011cc5da7b690eee3ff37f02d52afe26aaa4b8e4d2cdc922b006e264d535c46fb6fa828c108e916d7e9a60b326caa4a3a056c88888b4973060e020e015ec4de17c51901ae232d40b29b34e968bae9d59a961c00d50bb891348f5a2a46f5dd9fac1e1b49f5a053bc0c2815cc00900a660048053300a482190052c10c00a9600680543003402a98012015cc00900a660048053300a48219005a885cb7ac2de4ee44ef261d200340f39922dded96c39381470144dcb79e57bfef073c03d83fd3f3b926c23c0c00cd673369c59add198e751af01ed2725af7aa85c109c0cb81f10ccff567e0f681bd4b1de59260daab6a292c48cb64e7e89af748cb69dd005c1b11d791b6bc5e0eac21adc7bf2a53f1af25edf8ab3918005a889c3dc5479076baf91ff043d232598700a7038791b7dbeef9847918005a881b494b631f93e1583d528bbf9cb4c26e3fec206da33d359077a7c33c07a085b89ec16e8eb1549b48abf736b2d0669718005a881dc07749fbe575c12ff004e08218009a53d58206f007d2c9c0b6db025c0a6c6fba205d600068a1d6d3a73dea33db405a6fdfeeff0218005aa87b808b6977d77a036947df4d4d17a42b0c00cdabd692de047c9d74edbe6d02f83970393065eb2f65161144c411117155b4cfaf22e2d8aa8c4dbf559d610f408bb511783f699babb6b813f8126986a1637fa95f665ad888581d11d734ddec47c4b688383722c66dfda501a885c0c911f197062bff9688f84044acb0e24b03540b81e747c44d03aef85311717b44bccbca2f35a41602cf8e88ab2362679f2bfe7444ec88881f46c4f15175fb2535a40a805e443c2e22de1711375615b51ffe1e116f898823c3f1bed41e55851c8b889322e29711f1cf88d89da9e26f8d88cb23e279b6fa7979bd44d95415b307ac042680738097020f050e6271979db79316f558075c459ae4739797f8f2f2dd545f5461300a1c093c06380b5856fd7e020f0c8311e016d2fc8211e06ae03bc0bfc06bfbfde2bbaabeaa75d7c748d3751f061cc70303a007dc4a9a6e1ca41584a7adf89224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224a93ffe0f6246dbb437188b570000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000015fc4944415478daeddd7bb0ad675dd8f1ef4982811008461a2272732850b938b10584825881463080c87069d522a4320c16c1b1b5535aa9b52a226a6d454b2da8059529a88182dca2a2b5d3000682a0a2a0cc8010e47e4b48c8ed9cfef1ee4c4e4ecf7d5f9eb5d6f3f9ccacd96befacb3cf6fedc9d9ebbbdecbf31600309d7d55070e1c183d0700b087f679f10780f99c327a000060ef090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090000989000008009090080cdf48dd5fbb76e678c1e86d573dae8010038212facce3b8ec79d5ddd73ebfeffaa6e38c2e31e535d3ffa49b1f7f61d387060f40c001cd92dab1fabf66d7dfea4ea2e3bf8fd7faeda7fd0e7bf5bbd65f49366f7090080d5f3a06e7a91bf55f5abdd1400bbedb7ab571ff4f945d942b0910400c0eaf8eaead4ea17abc78d1e66cbbdaaabaa4f55d78c1e869d23000056c7c7ab3b8c1ee208beb9faa3d143b0739c050030d69dab2f6fddce193dcc51fcded68c2f193d083bc3160080317eb47a46cb26ff557ee13fd455d517aa03d55d737cc0da1200007beba29677fd776e7537f71faf77558fac3e3f7a104e9c0000d83b2fad9e52dd66f4203be8b7aa6b5b4e277ce7e861387e160202d87db7a89e537d77cb79fd9be4895b1fafabfe7b75c9e881383e02006077dda67a40f5a236fbc0ebef698980032dc7055c3a7a208ece2e0080dd71cb9637590fac7e7ff4307bec33d5d756578c1e8423130000bbe3d7aaefdcbabfc9effc8f647fcbd68fab460fc2e1cdf83f25c06efb839683fd4e69dedfb3a7547fdb72b6032b68d6ff310176d3992d07fecdeeb62dab07de7ff420fcff0400c0cefa9fdd74195eea6e6dde990f1b410000ec9c9fae1ed3f2ce979b3ca77af0e821b839a701026cdf19d5e3abe766d3ffe13ca965f960a707ae106701006ccf19d5fdaab78f1e640dfc46f5432d070732980000d89e2757af1a3dc41a795f759fd143e01800009892000038793fd2b2fe3dc7ef9ed547730cda700200e0e4bcb87a5675d6e841d6cc69d51dab77e467379400003839f7a8ee307a8835b5affafbd5a9a307999900003871cf68b9d80ddbf3dceaf6a3879895b300004edcfbb3dadf4eb96ff5e7a38798912d000027e636f9ddb993cecc018143d8020070623e5b7de5e82136c8819655145f377a90d9a8588013e3f7e6ceda377a8059f91f1900262400008ecfe9d5c5d5ad470fb2817eacfaaed143ccc6811700c7e7d4eae139777d377c7d4eabdc73b60000c0840400c0b19d5edd3507aceda6db55e78c1e62264e030438b607547f3c7a8809fc4ef5d8d143ccc2160000989083000136c37daa4f1fe33117550f193d28ab410000acbf07561fa8ae3fc6e39e56fd44f5e4d103339e5d0000477741f582d1431cc1a75a5eccdfd5b15ffcabfebafaa9ea25a307673c5b00008eee9ed523470f71187f5abda2facd13fc7397552f6b5983fffb463f09c6b10500603dfd49f53327f9672fab7e76f413388cdbe718853d230000d6cfd5d555a387d8050f6a3950d17a0b7b400000ac9f7f533d6bf410ac370100b07e0e6cddb6e343d56daaeb463f19c610000073da5f5d397a08c611000030210100001312000030210100001312000030210100001312000030210100001312000030210100001312000030210100001312000030210100001312000030210100001312000030210100001312000030210100001312000030210100001312000030210100001312000030a1d3460f70887b54771f3d041be1e26affe821d6c4f96defcdc05bab6b473f09e0c4ac5a003cb5fae1d143b011cea8ae1e3dc40a3aabbac5215ffb9dc37ced44dcabfaec419f5f5b7d71f413058e6ed50200d85dafa9fed1215fdbb7cdeff997877cfee6eadb463f51e0e804006cb6b3aa8f76d326fed3dbfe0bfea10efd7ee7575f3ae8f3bf577d64f40f02b8390701c2667a76f5e1eacfaa335b76899c519dba077ff7a907fd7d67546fdb9ae5c3d50b46ff6080852d00b0597ea5e560da3b5777193dcc96af39e8fed3ab6faa6ea81eb1f511184000c0667849cb3befc7555f357a98a33877ebb6bffaa5ad8fffa1fad8e8c160360200d6d73dab6fd9baff8cf666f3fe4e39a5fae75bf7ffb625002ead2e1b3d18cc4200c07a3ab77a42f593a307d901ff7eebe3cf579fca0183b0270400ac9f535bd6cbf817a307d961cfa9fe6ef5edd5f5a387814d270060fdbcb17ae4e82176c9a35bce16b8537560f430b0c99c0608ebe59d2dfbfd37f5dfeebe96dd1b9fae3ed3cdcf200076d0a6fe12814d7266f5de9673faefd7f696ed5d07a754676fddde5a9d377a20d844020056dbbdab5755f7adee537dc5e881f6d83dab17b7b9bb3c6018c700c0eafaa6ea7bb3aefe43abe756b7aa5e3f7a18d814b600c06afa86eac2962b64528fa91e357a08d824020056cfd92de7c63f6df4202be6562d3f1b60070800583d17578f1f3dc40a7a7af507a387804d210060f5ecf4e57a37c97dabcfb75ecb1ec34a1200b05a2e6b7991e3f04ea96e5b7da83a6bf430b0ce0400ac8e3f6c79f19fed54bf13b5af65a5c08babbb8d1e06d6950080d5f1e0367f919f9df4c09603038193200060bc33abefcbbfc793f14fb315004e8a5f3830ded9d52f6661ae93f1fc1c3301274500c058a764b3ff769d96b302e084090018ebc9d5fb470fb1e67ebbfa57a38780752300609c9fa85e9677afdb754a7e97c109f38f06c639a3baf5e82136c40fb45c3510384e0200d804e754771e3d04ac130100635c583d64f4101be6ded5bf1d3d04ac0b010063fc93ea01a387d830f7a8be7ff410b02e0400ecbddb67b95f60300b8fc0debba4e5dd2ac030b600c0de73b9dfdd7387eaaaea96a30781552700804db2afe50241220b8e4100c0defabd964bd9020cb56ac7005c547d70f4106c846b470f70040f68f5374fbfae7acd51fefbc3aaa78f1e12d89e550b80776fdd80bdf7caead3d55baa371ee571ef6ff9ddf1cf460f0c9cbc550b00608c3fad7eb4fac0713cf66dd5e52d97e13dafd5dcdf7e5ef5ceeabad183c0aa720c0050f5888eefc5ff467f53ddbffa527560f4f0877149cbf2c0c0110800e064edaf6e577d76f420c0891300c0392dfbfe4fc60dd5ddabf78d7e12c0891100c0e7dbde66fc2fb48400b0460400ccebe3d505d5f5a30701f69eb300605e5775f4d3fd800d2600606f9c563d2effe68015e19711ec8d5b56bf99dd6ec08af0cb0800262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042020000262400006042a78d1ee0101754df3a7a08d805b7a8f68d1e02e046ab16000faabe7ff41000b0e9ec020080090900009890000080090900009890000080090900009890000080090900009890000080090900009890000080090900009890000080090900009890000080099d367a0000d8057769355fe33e525d377a885acd1f0e006cd725d5d78c1ee230ee51fdf5e821ca2e000098920000800909000098900000800909000098900000800909000098900000800909000098900000800909000098900000800909000098900000800909000098900000800909000098d069a30738c42f54af1e3d044ce2dad10300e3ac5a007c62eb0600ec22bb0000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000606f7cb93a307a881b9d367a000098c41dabcf8d1ee246b60000c0deb861f4000713000030210100001312000030210100c02a39bd7a4275ea36bec7e3ab5b8d7e22ab4e0000b04aceaa7eabba6b271f01afacce1efd44569d000060157db0e5b439768900006055fd55f5e0e37cec63ababb76e36ff1f070100c0aa3abd7a5d7579f582a33cee79d5ffa86eb975e338acda4a80cfac2e1c3d04acb86757978e1e828df190eae2ea76a3073982db6f7dbcb07ac4111e73a7567b9fffd5d5c3ab2f8d1ee460ab160077aa1e387a085871b71d3d001be5d2eabad1431c873b6cddd6d10dd51f57fb470f7230bb000060420200807757578d1e82bd250000f8d69623eed979fb5b8e01583902000076cf3baa735bb1fdff25000060b7addc8b7f09000016df5ebd65f4101be697aba78c1ee248040000551faeae1c3dc486f95cf591d1431c89000080090900006e7449f567a387d8106fafde337a88a359b595000118e73f55b7aeee3b7a900df0e296cb12af2c5b0000604202008083fd6475c1e821d6dc43aa578d1ee25804000007bbbefafdeaded581d1c3aca1f35a2eb074c3e8418e45000070a86baa4f8c1e624d7db2f5b8baa20000e0b0aeacbebb2506383e4fab3e3f7a88e3250000389c6b5b8e62ffd9ea8ba387597157543f53fd462b7ae19fc31100001ccdbfab3e3b7a8815f699eaadd50fb51c3fb136040000c772556b7050db00d7546fa81e3f7a90932100003896fb55ff77f4102be8875bf6fbaf250100c0b1ecafbeadfa95d183ac9027543fdf1a9f2a290000381e5faa9ed7724cc0ecce6fb974f2b5a307d90e0100c0f1fa64f5f2eac2d1830cf41d2dbb43ae1a3dc8760900004ec4e5d56bab1f6cae0303afdd7ace6f6a035efccbd5000138719fabfe73f50dd5a92dc707dc6ef450bbe833d5ebabffd2723cc4461000009c8c03d553b7ee5f5c3db4bad5e8a176c115d525d5d3470fb2d3ec020060bbceafde3c7a885df2b2ea71a387d80d0200809df0e4eaf436ebc5f2c2ea5f8f1e62b7d80500c04eb87119dc8b5b2e25fce7d5bed1439da4f3aa8f575f68cd96f73d110200809d744df557d5fdb73e7f4375eee8a18ec3a7aa47b71cdbf0bed6e492bedb210000d869d757976ddd7f667546f58ceae1a3073b8c57b61ce17f75f5aed1c3ec250100c06e7addd6c76bab4babafaabe77f450d54b5bae72f8a6ea7f8f1e66040100c05eb868eb76b7ea5e077dfd1fb46c21d86d5756ef3ee8f31faffe66f40f65240100c05efa50f5b0833e7f7bf575077dbeafbacd0efc3d5776f3457bde73c8df3b3d0100c0480feee6670b9c537daced9f4170ef96658b6fb4b657eddb2dab16003f5ebd68f410b0e236621d72d872a09bbf387fa23a6b07beef9579d13faa550b806bb66e00cce940cbf2bbec322b0102c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c480000c0840400004c4800009bea03d503b7f93d5e5abd70f41381dd2000809df0a8ea2da38738c419d56bab276ee37b9c5e7dc5e82702bb4100003be163d555a387388cafaece3cc93ffbdfaaf3473f81c3f8c1eaa2d143b0fe0400b0e99e5a3df904ffcc0babefa8ee307af8c3786f75f9e821587fa78d1e0060977d4bb5bfbaed415f7b4575ed218f3ba3faceadfbcfac6e377a70d84d020098c123b66e37fa93ea8b873ce69c9683fe600a020098d1a5a30780d11c030000131200c04ef99eeaa7470fb1e11e50fdd1e821d80c0200d82957b49aa7026e92cf55d78d1e82cd20000060420200d8497f58fdfae82136d40baacf8e1e82cdb1efc08103a3670036cba3aa378d1e6203ddb665370bec08a70102acb603d567b63ec28e110000abed8aeadcea86d183b059ec020076daa9d51dab0f57fb460fb301be587d65cb72c6b0631c0408ecb41baaab470f011c9d000076c317aa87555f1e3dc89a7b6fcb4195defdb3e3ec020076d3975aaeb2c7897b73f55fabd78f1e84cd640b00b09b7eb9ba72f4106bea3d79f16717090060373da77a4796083e5197579f1c3d049bcd2e00602ffc9feaa1a38758133754df55bd6af4206c36eb0000ac967f585d3a7a08369f5d00c05eb8a07ac5e821d6c4f559f58f3d200080bdf0c5ea79d57f1c3dc88afbe6ea2f460fc11c0400b0573e56fd6af5ecd183aca827b61c30691125f6840000f6d2875a0e6efb912c6e73a32f54cfaf5e5b5d337a18e6e12c00608453ab8baa4757b7183dcc4097571757178e1e84f9080060a4bfaceede9c67245d59fd7af5acd1833027bb008091beae7affe82106797e5efc19480000231da8ee5fbd61f4207becb1d52f8c1e82b9d90500ac82dbb7bc237ecee84176d9bd5b36fd7f2a574a64300100ac8abb544fa95e347a905d7075757ef5b696a57e61380100ac923b57ff78ebfe4baaaf183dd036bda57a75cbea7ebf9615fe5821020058553fd712004fa8ce1d3dcc49f8dd968879cde841e0700400b0ea5e5e3da63a7bf420c7e92faaeb5a963e7ee3e861e0480400b00e7ea97ada419fafdaae81032d2ffa5577ad3e3e7a2038160100ac8353bae9b4e55b5457b4ac26b82a3e5a7dedd6fdeb470f03c7c33a00c03ad8dff2c27a7dcb11f57fa76597c0c845849eb435c3d9d57d0f9a0fd6822d00c03abb7b37ed0e7844f5e23df83bbfb1650bc4475acee987b534e3fadbc0e6f8e041f73fd772b5c143fd404b1c9ca87f597de0305fbf2ceff4d900b600009bee82eaeb4fe2cfbdbcfad8e8e161b70800009890830001604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026240000604202000026f4ff00334069bc058942c90000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "universal": {
+      "id": 13995,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://texttospeech.googleapis.com/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "universal",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [
+        "https://www.googleapis.com/auth/cloud-platform"
+      ],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://texttospeech.googleapis.com`. For example: `/v1/text:synthesize`",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "google-cloud-tts",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"https://texttospeech.googleapis.com/{{parameters.url}}\",\n    \"method\": \"{{parameters.method}}\",\n    \"qs\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n\t},\n    \"headers\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n\t},\n\t\"body\": \"{{parameters.body}}\",\n\t\"type\": \"text\",\n    \"response\": {\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n\t\t\t\"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"https://www.googleapis.com/auth/cloud-platform\"\n]",
+      "accountName": "google-cloud-tts",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"help\": \"Enter a path relative to `https://texttospeech.googleapis.com`. For example: `/v1/text:synthesize`\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"required\": true,\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ]\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n    },\n    {\n        \"name\": \"qs\",\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"body\",\n\t\t\"label\": \"Body\",\n\t\t\"type\": \"any\"\n\t},\n\t{\n\t\t\"name\": \"headers\",\n\t\t\"label\": \"Headers\",\n\t\t\"type\": \"collection\"\n\t},\n\t{\n\t\t\"name\": \"statusCode\",\n\t\t\"label\": \"Status code\",\n\t\t\"type\": \"number\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "synthesizeSpeech": {
+      "id": 13996,
+      "api": {
+        "url": "/text:synthesize",
+        "body": {
+          "input": "{{textOrSSML(parameters.input)}}",
+          "voice": "{{parameters.voice}}",
+          "audioConfig": "{{parameters.audioConfig}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": {
+            "data": "{{toBinary(body.audioContent, 'base64')}}",
+            "fileName": "{{ifempty(parameters.fileName, formatDate(now, 'YYYY-MM-DD HH:mm:ss')) + switch(parameters.audioConfig.audioEncoding, 'LINEAR16', '.wav', 'MP3', '.mp3', 'OGG_OPUS', '.opus')}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "synthesizeSpeech",
+      "epoch": null,
+      "flags": {},
+      "label": "Synthesize a Speech",
+      "scope": [
+        "https://www.googleapis.com/auth/cloud-platform"
+      ],
+      "expect": [
+        {
+          "help": "Text or SSML document to be synthesized. The input will be treated as SSML if it starts with `<speak>` and ends with `</speak>`. For more information, see [SSML](https://cloud.google.com/text-to-speech/docs/ssml).",
+          "name": "input",
+          "type": "text",
+          "label": "Text or SSML",
+          "required": true,
+          "multiline": true
+        },
+        {
+          "name": "voice",
+          "spec": [
+            {
+              "name": "languageCode",
+              "type": "select",
+              "label": "Language Code",
+              "options": {
+                "store": "rpc://app%23google-cloud-tts@1/listLanguageCodes",
+                "nested": [
+                  {
+                    "help": "Leave empty to let the service choose a voice based on the other parameters such as `Language Code` and `SSML Gender`.",
+                    "name": "name",
+                    "type": "select",
+                    "label": "Name of Voice",
+                    "options": "rpc://app%23google-cloud-tts@1/listVoices"
+                  },
+                  {
+                    "help": "Leave empty to let the service choose a voice based on the other parameters such as languageCode and name.",
+                    "name": "ssmlGender",
+                    "type": "select",
+                    "label": "SSML Gender",
+                    "options": [
+                      {
+                        "label": "Male",
+                        "value": "MALE"
+                      },
+                      {
+                        "label": "Female",
+                        "value": "FEMALE"
+                      },
+                      {
+                        "label": "Neutral",
+                        "value": "NEUTRAL"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "required": true
+            }
+          ],
+          "type": "collection",
+          "label": "Voice"
+        },
+        {
+          "name": "audioConfig",
+          "spec": [
+            {
+              "name": "audioEncoding",
+              "type": "select",
+              "label": "Audio Encoding",
+              "options": [
+                {
+                  "label": "Linear 16",
+                  "value": "LINEAR16"
+                },
+                {
+                  "label": "MP3",
+                  "value": "MP3"
+                },
+                {
+                  "label": "Ogg Opus",
+                  "value": "OGG_OPUS"
+                }
+              ],
+              "required": true
+            },
+            {
+              "help": "1.0 is the normal native speed supported by the specific voice. 2.0 is twice as fast, and 0.5 is half as fast.",
+              "name": "speakingRate",
+              "type": "number",
+              "label": "Speaking Rate",
+              "validate": {
+                "max": 4,
+                "min": 0.25
+              }
+            },
+            {
+              "help": "20 means increase 20 semitones from the original pitch. -20 means decrease 20 semitones from the original pitch.",
+              "name": "pitch",
+              "type": "number",
+              "label": "Speaking Pitch",
+              "validate": {
+                "max": 20,
+                "min": -20
+              }
+            },
+            {
+              "help": "If unset, or set to a value of 0.0 (dB), will play at normal native signal amplitude. A value of -6.0 (dB) will play at approximately half the amplitude of the normal native signal amplitude. A value of +6.0 (dB) will play at approximately twice the amplitude of the normal native signal amplitude. Strongly recommend not to exceed +10 (dB) as there's usually no effective increase in loudness for any value greater than that.",
+              "name": "volumeGainDb",
+              "type": "number",
+              "label": "Volume Gain dB",
+              "validate": {
+                "max": 16,
+                "min": -96
+              }
+            },
+            {
+              "help": "if this is different from the voice's natural sample rate, then the synthesizer will honor this request by converting to the desired sample rate (which might result in worse audio quality).",
+              "name": "sampleRateHertz",
+              "type": "uinteger",
+              "label": "Sample Rate Hertz"
+            },
+            {
+              "name": "effectsProfileId",
+              "spec": {
+                "type": "select",
+                "options": [
+                  {
+                    "label": "Smart watches and other wearables",
+                    "value": "wearable-class-device"
+                  },
+                  {
+                    "label": "Smartphones",
+                    "value": "handset-class-device"
+                  },
+                  {
+                    "label": "Earbuds or headphones",
+                    "value": "headphone-class-device"
+                  },
+                  {
+                    "label": "Small home speakers",
+                    "value": "small-bluetooth-speaker-class-device"
+                  },
+                  {
+                    "label": "Smart home speakers",
+                    "value": "medium-bluetooth-speaker-class-device"
+                  },
+                  {
+                    "label": "Home entertainment systems",
+                    "value": "large-home-entertainment-class-device"
+                  },
+                  {
+                    "label": "Car speakers",
+                    "value": "large-automotive-class-device"
+                  },
+                  {
+                    "label": "Interactive Voice Response (IVR) systems",
+                    "value": "telephony-class-application"
+                  }
+                ]
+              },
+              "type": "array",
+              "label": "Effects Profile ID"
+            }
+          ],
+          "type": "collection",
+          "label": "Audio Config"
+        },
+        {
+          "help": "File name without an extension.",
+          "name": "fileName",
+          "type": "text",
+          "label": "File Name"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "google-cloud-tts",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/text:synthesize\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"input\": \"{{textOrSSML(parameters.input)}}\",\n\t\t\"voice\": \"{{parameters.voice}}\",\n\t\t\"audioConfig\": \"{{parameters.audioConfig}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"fileName\": \"{{ifempty(parameters.fileName, formatDate(now, 'YYYY-MM-DD HH:mm:ss')) + switch(parameters.audioConfig.audioEncoding, 'LINEAR16', '.wav', 'MP3', '.mp3', 'OGG_OPUS', '.opus')}}\",\n\t\t\t\"data\": \"{{toBinary(body.audioContent, 'base64')}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "fileName",
+          "type": "filename",
+          "label": "File Name",
+          "semantic": "file:name"
+        },
+        {
+          "name": "data",
+          "type": "buffer",
+          "label": "Data",
+          "semantic": "file:data"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"https://www.googleapis.com/auth/cloud-platform\"\n]",
+      "accountName": "google-cloud-tts",
+      "description": "Synthesizes a speech by text or SSML.",
+      "expectJsonc": "[\n\t{\n\t\t\"label\": \"Text or SSML\",\n\t\t\"name\": \"input\",\n\t\t\"type\": \"text\",\n\t\t\"multiline\": true,\n\t\t\"required\": true,\n\t\t\"help\": \"Text or SSML document to be synthesized. The input will be treated as SSML if it starts with `<speak>` and ends with `</speak>`. For more information, see [SSML](https://cloud.google.com/text-to-speech/docs/ssml).\"\n\t},\n\t{\n\t\t\"label\": \"Voice\",\n\t\t\"name\": \"voice\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Language Code\",\n\t\t\t\t\"name\": \"languageCode\",\n\t\t\t\t\"type\": \"select\",\n\t\t\t\t\"required\": true,\n\t\t\t\t\"options\": {\n\t\t\t\t\t\"store\": \"rpc://listLanguageCodes\",\n\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Name of Voice\",\n\t\t\t\t\t\t\t\"name\": \"name\",\n\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\"options\": \"rpc://listVoices\",\n\t\t\t\t\t\t\t\"help\": \"Leave empty to let the service choose a voice based on the other parameters such as `Language Code` and `SSML Gender`.\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"SSML Gender\",\n\t\t\t\t\t\t\t\"name\": \"ssmlGender\",\n\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\"help\": \"Leave empty to let the service choose a voice based on the other parameters such as languageCode and name.\",\n\t\t\t\t\t\t\t\"options\": [\n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"label\": \"Male\",\n\t\t\t\t\t\t\t\t\t\"value\": \"MALE\"\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"label\": \"Female\",\n\t\t\t\t\t\t\t\t\t\"value\": \"FEMALE\"\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"label\": \"Neutral\",\n\t\t\t\t\t\t\t\t\t\"value\": \"NEUTRAL\"\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t]\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t}\n\t\t],\n\t\t\"type\": \"collection\"\n\t},\n\t{\n\t\t\"label\": \"Audio Config\",\n\t\t\"name\": \"audioConfig\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Audio Encoding\",\n\t\t\t\t\"name\": \"audioEncoding\",\n\t\t\t\t\"type\": \"select\",\n\t\t\t\t\"required\": true,\n\t\t\t\t\"options\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Linear 16\",\n\t\t\t\t\t\t\"value\": \"LINEAR16\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"MP3\",\n\t\t\t\t\t\t\"value\": \"MP3\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Ogg Opus\",\n\t\t\t\t\t\t\"value\": \"OGG_OPUS\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Speaking Rate\",\n\t\t\t\t\"name\": \"speakingRate\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"help\": \"1.0 is the normal native speed supported by the specific voice. 2.0 is twice as fast, and 0.5 is half as fast.\",\n\t\t\t\t\"validate\": {\n\t\t\t\t\t\"min\": 0.25,\n\t\t\t\t\t\"max\": 4\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Speaking Pitch\",\n\t\t\t\t\"name\": \"pitch\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"help\": \"20 means increase 20 semitones from the original pitch. -20 means decrease 20 semitones from the original pitch.\",\n\t\t\t\t\"validate\": {\n\t\t\t\t\t\"min\": -20,\n\t\t\t\t\t\"max\": 20\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Volume Gain dB\",\n\t\t\t\t\"name\": \"volumeGainDb\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"help\": \"If unset, or set to a value of 0.0 (dB), will play at normal native signal amplitude. A value of -6.0 (dB) will play at approximately half the amplitude of the normal native signal amplitude. A value of +6.0 (dB) will play at approximately twice the amplitude of the normal native signal amplitude. Strongly recommend not to exceed +10 (dB) as there's usually no effective increase in loudness for any value greater than that.\",\n\t\t\t\t\"validate\": {\n\t\t\t\t\t\"min\": -96,\n\t\t\t\t\t\"max\": 16\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Sample Rate Hertz\",\n\t\t\t\t\"name\": \"sampleRateHertz\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"help\": \"if this is different from the voice's natural sample rate, then the synthesizer will honor this request by converting to the desired sample rate (which might result in worse audio quality).\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Effects Profile ID\",\n\t\t\t\t\"name\": \"effectsProfileId\",\n\t\t\t\t\"type\": \"array\",\n\t\t\t\t\"spec\": {\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"options\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Smart watches and other wearables\",\n\t\t\t\t\t\t\t\"value\": \"wearable-class-device\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Smartphones\",\n\t\t\t\t\t\t\t\"value\": \"handset-class-device\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Earbuds or headphones\",\n\t\t\t\t\t\t\t\"value\": \"headphone-class-device\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Small home speakers\",\n\t\t\t\t\t\t\t\"value\": \"small-bluetooth-speaker-class-device\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Smart home speakers\",\n\t\t\t\t\t\t\t\"value\": \"medium-bluetooth-speaker-class-device\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Home entertainment systems\",\n\t\t\t\t\t\t\t\"value\": \"large-home-entertainment-class-device\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Car speakers\",\n\t\t\t\t\t\t\t\"value\": \"large-automotive-class-device\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Interactive Voice Response (IVR) systems\",\n\t\t\t\t\t\t\t\"value\": \"telephony-class-application\"\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t}\n\t\t],\n\t\t\"type\": \"collection\"\n\t},\n\t{\n\t\t\"label\": \"File Name\",\n\t\t\"name\": \"fileName\",\n\t\t\"type\": \"text\",\n\t\t\"help\": \"File name without an extension.\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"fileName\",\n\t\t\"type\": \"filename\",\n\t\t\"label\": \"File Name\",\n\t\t\"semantic\": \"file:name\"\n\t},\n\t{\n\t\t\"name\": \"data\",\n\t\t\"type\": \"buffer\",\n\t\t\"label\": \"Data\",\n\t\t\"semantic\": \"file:data\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "google-cloud-tts": {
+      "api": {
+        "token": {
+          "log": {
+            "sanitize": [
+              "request.body.code",
+              "request.body.client_secret",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://www.googleapis.com/oauth2/v4/token",
+          "body": {
+            "code": "{{temp.code}}",
+            "client_id": "{{ifempty(data.clientId, common.clientId)}}",
+            "grant_type": "authorization_code",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "client_secret": "{{ifempty(data.clientSecret, common.clientSecret)}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}"
+            }
+          }
+        },
+        "refresh": {
+          "log": {
+            "sanitize": [
+              "request.body.client_secret",
+              "request.body.refresh_token",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://www.googleapis.com/oauth2/v4/token",
+          "body": {
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "grant_type": "refresh_token",
+            "client_secret": "{{ifempty(parameters.clientSecret, common.clientSecret)}}",
+            "refresh_token": "{{data.refreshToken}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}"
+            }
+          },
+          "condition": "{{data.expires < addMinutes(now, 1)}}"
+        },
+        "authorize": {
+          "qs": {
+            "scope": "{{join(oauth.scope, ' ')}}",
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "access_type": "offline",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "response_type": "code"
+          },
+          "url": "https://accounts.google.com/o/oauth2/v2/auth",
+          "response": {
+            "temp": {
+              "code": "{{query.code}}"
+            }
+          }
+        },
+        "invalidate": {
+          "log": {
+            "sanitize": [
+              "request.headers.authorization"
+            ]
+          },
+          "url": "https://accounts.google.com/o/oauth2/revoke",
+          "headers": {
+            "authorization": "Bearer {{connection.accessToken}}"
+          }
+        }
+      },
+      "rev": 4,
+      "name": "google-cloud-tts",
+      "type": "oauth",
+      "label": "Google Cloud Text-to-Speech",
+      "scope": [
+        "https://www.googleapis.com/auth/cloud-platform"
+      ],
+      "scopes": {
+        "https://www.googleapis.com/auth/cloud-platform": "View and manage your data across Google Cloud Platform services."
+      },
+      "aliasTo": "google-custom",
+      "appName": "google-cloud-tts",
+      "install": {
+        "common": {
+          "clientId": "{{parameters.clientId}}",
+          "clientSecret": "{{parameters.clientSecret}}"
+        }
+      },
+      "apiJsonc": "{\n    \"authorize\": {\n        \"qs\": {\n            \"scope\": \"{{join(oauth.scope, ' ')}}\",\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"redirect_uri\": \"{{oauth.redirectUri}}\",\n            \"access_type\": \"offline\",\n            \"response_type\": \"code\"\n        },\n        \"url\": \"https://accounts.google.com/o/oauth2/v2/auth\",\n        \"response\": {\n            \"temp\": {\n                \"code\": \"{{query.code}}\"\n            }\n        }\n    },\n    \"token\": {\n        \"url\": \"https://www.googleapis.com/oauth2/v4/token\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"code\": \"{{temp.code}}\",\n            \"client_id\": \"{{ifempty(data.clientId, common.clientId)}}\",\n            \"grant_type\": \"authorization_code\",\n            \"redirect_uri\": \"{{oauth.redirectUri}}\",\n            \"client_secret\": \"{{ifempty(data.clientSecret, common.clientSecret)}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\",\n                \"refreshToken\": \"{{body.refresh_token}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.code\",\n                \"request.body.client_secret\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },\n    \"refresh\": {\n        \"condition\": \"{{data.expires < addMinutes(now, 1)}}\",\n        \"url\": \"https://www.googleapis.com/oauth2/v4/token\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"grant_type\": \"refresh_token\",\n            \"client_secret\": \"{{ifempty(parameters.clientSecret, common.clientSecret)}}\",\n            \"refresh_token\": \"{{data.refreshToken}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.client_secret\",\n                \"request.body.refresh_token\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },\n    \"invalidate\": {\n        \"url\": \"https://accounts.google.com/o/oauth2/revoke\",\n        \"headers\": {\n            \"authorization\": \"Bearer {{connection.accessToken}}\"\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.headers.authorization\"\n            ]\n        }\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "advanced": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "advanced": true
+        }
+      ],
+      "scopeJsonc": "[\n\t\"https://www.googleapis.com/auth/cloud-platform\"\n]",
+      "installSpec": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "required": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "required": true
+        }
+      ],
+      "scopesJsonc": "{\n\t\"https://www.googleapis.com/auth/cloud-platform\": \"View and manage your data across Google Cloud Platform services.\"\n}",
+      "installJsonc": "{\n    \"common\": {\n        \"clientId\": \"{{parameters.clientId}}\",\n        \"clientSecret\": \"{{parameters.clientSecret}}\"\n    }\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"advanced\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"text\",\n        \"label\": \"Client Secret\",\n        \"advanced\": true\n    }\n]",
+      "installSpecJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"required\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"text\",\n        \"label\": \"Client Secret\",\n        \"required\": true\n    }\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n\t\"baseUrl\": \"https://texttospeech.googleapis.com/v1\",\n    \"headers\": {\n        \"Authorization\": \"Bearer {{connection.accessToken}}\"\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.authorization\"\n        ]\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{ifempty(body.error.message, get(body, '1.error.message'))}}\"\n        }\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "textOrSSML": {
+      "rev": 3,
+      "code": "function textOrSSML(input) {\n\tinput = input.replace(/^\\s+|\\s+$/g, '');\n\treturn input.startsWith(\"<speak>\") && input.endsWith(\"</speak>\") ? {ssml: input} : {text: input};\n}",
+      "name": "textOrSSML",
+      "test": null,
+      "appName": "google-cloud-tts",
+      "arguments": "(input)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-03-21T08:22:52.120274+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Convert text into natural-sounding speech using an API powered by Google’s AI technologies.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "ba3efc31bb8e35cdf5bd0e10da4adc7a",
+  "versionFull": "1.1.0",
+  "compiledName": "google-cloud-tts",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

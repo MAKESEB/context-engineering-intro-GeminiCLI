@@ -1,0 +1,1598 @@
+{
+  "rev": 6,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "https://api.sendfox.com",
+    "headers": {
+      "authorization": "Bearer {{connection.accessToken}}"
+    },
+    "response": {
+      "error": {
+        "404": {
+          "message": "[{{statusCode}}] Your requested resources was not found."
+        },
+        "502": {
+          "message": "[{{statusCode}}] Bad Gateway."
+        },
+        "message": "[{{statusCode}}]\n{{parseError(body)}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "sendfox",
+  "_rpcs": {
+    "listLists": {
+      "api": {
+        "url": "/lists",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.next_page_url}}"
+        }
+      },
+      "rev": 3,
+      "name": "listLists",
+      "label": "List Lists",
+      "appName": "sendfox",
+      "apiJsonc": "{\n\t\"url\": \"/lists\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"iterate\": \"{{body.data}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t},\n\t\t\"condition\": \"{{body.next_page_url}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "sendfox",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "listContacts": {
+      "api": {
+        "url": "/contacts",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.email}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.next_page_url}}"
+        }
+      },
+      "rev": 3,
+      "name": "listContacts",
+      "label": "List Contacts",
+      "appName": "sendfox",
+      "apiJsonc": "{\n\t\"url\": \"/contacts\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"iterate\": \"{{body.data}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.email}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t},\n\t\t\"condition\": \"{{body.next_page_url}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "sendfox",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "interfaceList": {
+      "api": {
+        "response": {
+          "output": [
+            {
+              "name": "id",
+              "type": "number",
+              "label": "List ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            }
+          ]
+        }
+      },
+      "rev": 3,
+      "name": "interfaceList",
+      "label": "Interface: List",
+      "appName": "sendfox",
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"output\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"List ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Name\"\n\t\t\t}\n\t\t]\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "listCampaigns": {
+      "api": {
+        "url": "/campaigns",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.title}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.next_page_url}}"
+        }
+      },
+      "rev": 3,
+      "name": "listCampaigns",
+      "label": "List Campaigns",
+      "appName": "sendfox",
+      "apiJsonc": "{\n\t\"url\": \"/campaigns\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"iterate\": \"{{body.data}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.title}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t},\n\t\t\"condition\": \"{{body.next_page_url}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "sendfox",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "interfaceContact": {
+      "api": {
+        "response": {
+          "output": [
+            {
+              "name": "id",
+              "type": "uinteger",
+              "label": "Contact ID"
+            },
+            {
+              "name": "email",
+              "type": "text",
+              "label": "Email"
+            },
+            {
+              "name": "first_name",
+              "type": "text",
+              "label": "First Name"
+            },
+            {
+              "name": "last_name",
+              "type": "text",
+              "label": "Last Name"
+            },
+            {
+              "name": "ip_address",
+              "type": "text",
+              "label": "IP Address"
+            },
+            {
+              "name": "unsubscribed_at",
+              "type": "date",
+              "label": "Unsubscribed At"
+            },
+            {
+              "name": "bounced_at",
+              "type": "date",
+              "label": "Bounced At"
+            },
+            {
+              "name": "created_at",
+              "type": "date",
+              "label": "Created At"
+            },
+            {
+              "name": "updated_at",
+              "type": "date",
+              "label": "Updated At"
+            },
+            {
+              "name": "form_id",
+              "type": "text",
+              "label": "Form ID"
+            },
+            {
+              "name": "contact_import_id",
+              "type": "text",
+              "label": "Contact Import ID"
+            },
+            {
+              "name": "via_api",
+              "type": "uinteger",
+              "label": "Via Api"
+            },
+            {
+              "name": "last_opened_at",
+              "type": "date",
+              "label": "Last Opened At"
+            },
+            {
+              "name": "last_clicked_at",
+              "type": "date",
+              "label": "Last Clicked At"
+            },
+            {
+              "name": "first_sent_at",
+              "type": "date",
+              "label": "First Sent At"
+            },
+            {
+              "name": "last_sent_at",
+              "type": "date",
+              "label": "Last Sent At"
+            },
+            {
+              "name": "invalid_at",
+              "type": "date",
+              "label": "Invalid At"
+            },
+            {
+              "name": "inactive_at",
+              "type": "date",
+              "label": "Inactive At"
+            },
+            {
+              "name": "confirmed_at",
+              "type": "date",
+              "label": "Confirmed At"
+            }
+          ]
+        }
+      },
+      "rev": 3,
+      "name": "interfaceContact",
+      "label": "Interface: Contact",
+      "appName": "sendfox",
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"output\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"Contact ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"email\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Email\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"first_name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"First Name\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"last_name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Last Name\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"ip_address\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"IP Address\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"unsubscribed_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Unsubscribed At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"bounced_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Bounced At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"created_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Created At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"updated_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Updated At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"form_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Form ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"contact_import_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Contact Import ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"via_api\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"Via Api\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"last_opened_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Last Opened At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"last_clicked_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Last Clicked At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"first_sent_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"First Sent At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"last_sent_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Last Sent At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"invalid_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Invalid At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"inactive_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Inactive At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"confirmed_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Confirmed At\"\n\t\t\t}\n\t\t]\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "sendfox",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "interfaceCampaign": {
+      "api": {
+        "response": {
+          "output": [
+            {
+              "name": "id",
+              "type": "uinteger",
+              "label": "Campaign ID"
+            },
+            {
+              "name": "title",
+              "type": "text",
+              "label": "Title"
+            },
+            {
+              "name": "subject",
+              "type": "text",
+              "label": "Subject"
+            },
+            {
+              "name": "slugged_subject",
+              "type": "text",
+              "label": "Slugged Subject"
+            },
+            {
+              "name": "html",
+              "type": "text",
+              "label": "Html"
+            },
+            {
+              "name": "user_id",
+              "type": "uinteger",
+              "label": "User ID"
+            },
+            {
+              "name": "automation_item_id",
+              "type": "text",
+              "label": "Automation Item ID"
+            },
+            {
+              "name": "scheduled_at",
+              "type": "date",
+              "label": "Scheduled At"
+            },
+            {
+              "name": "sent_at",
+              "type": "date",
+              "label": "Sent At"
+            },
+            {
+              "name": "created_at",
+              "type": "date",
+              "label": "Created At"
+            },
+            {
+              "name": "updated_at",
+              "type": "date",
+              "label": "Updated At"
+            },
+            {
+              "name": "from_email",
+              "type": "text",
+              "label": "From Email"
+            },
+            {
+              "name": "from_name",
+              "type": "text",
+              "label": "From Name"
+            },
+            {
+              "name": "timezone",
+              "type": "text",
+              "label": "Timezone"
+            },
+            {
+              "name": "sent_count",
+              "type": "uinteger",
+              "label": "Sent Count"
+            },
+            {
+              "name": "unique_open_count",
+              "type": "uinteger",
+              "label": "Unique Open Count"
+            },
+            {
+              "name": "unique_click_count",
+              "type": "uinteger",
+              "label": "Unique Click Count"
+            },
+            {
+              "name": "unsubscribe_count",
+              "type": "uinteger",
+              "label": "Unsubscribe Count"
+            },
+            {
+              "name": "bounce_count",
+              "type": "uinteger",
+              "label": "Bounce Count"
+            },
+            {
+              "name": "spam_count",
+              "type": "uinteger",
+              "label": "Spam Count"
+            },
+            {
+              "name": "campaign_layout_id",
+              "type": "text",
+              "label": "Campaign Layout ID"
+            },
+            {
+              "name": "throttled_at",
+              "type": "date",
+              "label": "Throttled At"
+            },
+            {
+              "name": "cancelled_at",
+              "type": "date",
+              "label": "Cancelled At"
+            },
+            {
+              "name": "active_contacts_only",
+              "type": "uinteger",
+              "label": "Active Contacts Only"
+            },
+            {
+              "name": "spam_assassin_score",
+              "type": "text",
+              "label": "Spam Assassin Score"
+            }
+          ]
+        }
+      },
+      "rev": 3,
+      "name": "interfaceCampaign",
+      "label": "Interface: Campaign",
+      "appName": "sendfox",
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"output\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"Campaign ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"title\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Title\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"subject\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Subject\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"slugged_subject\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Slugged Subject\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"html\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Html\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"user_id\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"User ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"automation_item_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Automation Item ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"scheduled_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Scheduled At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"sent_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Sent At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"created_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Created At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"updated_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Updated At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"from_email\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"From Email\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"from_name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"From Name\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"timezone\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Timezone\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"sent_count\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"Sent Count\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"unique_open_count\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"Unique Open Count\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"unique_click_count\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"Unique Click Count\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"unsubscribe_count\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"Unsubscribe Count\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"bounce_count\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"Bounce Count\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"spam_count\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"Spam Count\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"campaign_layout_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Campaign Layout ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"throttled_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Throttled At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"cancelled_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Cancelled At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"active_contacts_only\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"Active Contacts Only\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"spam_assassin_score\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Spam Assassin Score\"\n\t\t\t}\n\t\t]\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    }
+  },
+  "flags": {},
+  "label": "SendFox",
+  "theme": "#ff644d",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Contacts",
+      "modules": [
+        "watchContacts",
+        "createContact",
+        "getContact",
+        "listContacts",
+        "getContactByEmail",
+        "unsubscribeEmail"
+      ]
+    },
+    {
+      "label": "Campaigns",
+      "modules": [
+        "watchCampaigns",
+        "listCampaigns",
+        "getCampaign"
+      ]
+    },
+    {
+      "label": "Lists",
+      "modules": [
+        "createList",
+        "listLists",
+        "removeContactFromList"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "universal"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000002c14944415458c3c5d73ba85c551805e035b9c9bdd1044cf04510c45791184c020aa2d8088a5a59a4501011b4b050b10862e503b5b011451462a5a88895a028360a01114488a41102361a4434be4573f526399fc5d933ee99cc9d3baf8b0b36ccecc7bfd6de679f7ffd279a269a6697a679004bc87a01c1664df390a6d9a9697a9dfb700c8fe3acf5105178cec653f80657a137b017bfe01f3c8f734affbc88836d78112bf86998809fb538895771c1ac222af20bf13a4e158e1f470980d37807174f2ba222bf04efa1a9e2af29a08b8fb173521115f96e1c1a12776c01f039ae195744457e2d0eaf12b377073694754d92bf932c273931d0f6247925c9755d8251e4053724399864f79078cba53549d2298bb626d99b64d32ab13724f92ec9d124e9743a6b09d89564479764084e263992e4af892fd7bcd1193cd2d576372f9cc1573a9692dc95645f92d3ebbce985245f24792bc94a7d6bafc667d61f9f6a53ff7fa75189b8021f0e248d79a1c1fbb86ce82b5d89b8086f6bb3e1bc700a6f62c719e4a56313162b11e7e2a0d63866c50a5ec6f62afe52e1ec09b8128f691dabdbb715cf627906f21378065baab8dbf1a492e2eb7ae0385e53b92036e351fc3105f9ef3850765bbbe21bf8c1082fe873416cc4fddafc3d2e8ee33e2ce877c577cbf8c87a003e52b9203ab803df8e417e0cfbcb9ad55c712c37ec73c1d26ec55723c88fe2e68135c35c716c3bfe12370e04bc1e4786cc3d5cc8eab93715518398a81ef81ab70f04de834faa3987ca31d78f6c7f791cc3309100f81ef7e8bf5497e3036db97569d5bf807bb51771354c2c007ec5c3fa13d679a575ff2f6a5fbddfd688359500f8134f68ebfbc16cba054f6b93cf5a985a00edb7c30baa6f076d767ba98c8d839e808d53f8f9629207936c4bf248da72edb9247716af9f08d308e81615772739bf08b825c954a5d4b40252886f2bbfa7aee36611301371bd8bff15ff02bb46836c641479ac0000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda7930000059f4944415478daed9b5b88166518c7ff7b705d370f5b9a1db6b483925ba4c2a681226e627908b4bad8f2c28c48d152ac2c298acc0b33880e4625429a5e685d742008bb480992a0039da014323a99641859a979da9d5f17ef3beddb3af3cd7c33f3cd7c2efbbffaf876def77dfebf79bf9967e67956b2c2f384e74dc4f3e601b5807a8b00017578de02babadaf0bcd0836e007e06ee02ea7b0304ebab1fb0d47a6b0ff4650f9c0e1c07fe021e04fa9fc910aca701c0a3c011e02830350ac0318cfe01d60003cf4408d6cf60e0697b52b1106203003809bc049c63ff5eb4afb8c6059c0b6c044e397eca0600d0096c052ea876088ef911c0eb40570f2f89000078c03bc0e5d50ac1313f06788f609d06a036e6fc35926e94f48aa4b1fe82d522279636499b254d8f3b362e005f53246d9134a95a203831b4dbd8ae2d677cb9002469bc0ce519454370d69e236993a4abca9d230900491a2de965491d926a8a8060d7ac9574bba40d922e4d324f5200927491a417252d94946bd668d7ea27e91e49cf493a3fe95c690048d230494f49ba5f52631e10ec1a03243d2c69ada4b3d3cc579f414c83253d6e0359031ca9a9a9a99471491a226995a4bb25f54f3b6fda1de06b80a41532bb6168d6b98233d770992dbf2c0bf34100d29cba7e9216c95c175a7a049e85f9913217bb05ca66e74a0113ed9174afa4ba84f3f9008749da9f5590ce9c3b25ed9094946ca7a4bd410167a69e673dedf520ebf9fad4a73ef5c9d57f57147bb16994d42a734b2bfe512f7baf2765ee7427fc8b69d0fd74b6a4e53289861777f62a57ada4633289daeed0a39cb7a88f0087e93dfa1358419cb7dc74bf475f02fc5e74e419e837e04ea02ed27c0f08b5c03c607fd10e52e827e016a0fc771674bf649c0d7c57b49304da8379c99bfc99c4813005f8aa684765e85360622af30110c6031f16ed2c86de07aeccc47c0084d1c0bb983a41b5c903de062e4964de0e1a0834050d7620b400af717ad5a54875025b80f3c2cc3bfecea24465682aa69818580b74200c0536606a8745eb04b00e688e887938f03c30b91480eb31e5a392b540fbfd20e049824b6979e928b09ae85d3b02780393dc4d2d05c0af0dfab5c0cb222034020f017f1760fe10701fd01061fe0aba6b856517473f00ae8e80500f2c26dfacf100700721d99d63be0df8c81997a83afc39302902422d701bf04b0ee67f046e2624bb73ccb7035ff7189bb83cfe2d302302828059c0de0a9adf0d4c8b11c71ce0fb80f1890100ec033a62909f0c7c5901f39f001388de89f3815f43e6480500e020b088900e3207c238605786e67702ad11e61b8065c01f25e6490d004c07d94a429ead1d08a380eda4cb1abb80b7809111e69b80c7acc152ca0400980eb22708e92073205c08bc8ac9d4cad529603321d99db3c610e019ba3bc1720100260b5c4fbcac713de5658dc781678997dd6de2ff9d60b901007366b761ce74540ebe16b373e204b98a78d9dd9b94f74c92390030bff1ed94e820a33b6b5c89b98684e910b09ce8ec6e0cb0a3cc382b06c0d72e606c04847acc5de460c0f803c002a2b3bb6b808f13c6585100005f609fb64a98a8c1e413fb9c713f007389ce31ae03be49115fc50180c9046745401030d31ebbdb1a8b8236d7824aa35c00807926b89590ff3b7020b4615eb595325f87f9691cc820aed30064d669d1432d329d22cd9236029d6e5ddff9fc59d80436c806494b647a909a2b1168563d42411a2a538a7a40657690d9639b643ac1d654cabc54b91de06b904c4757b34c07d9e1521d1e0ea42192564b5aac8c9aa1c254c91de0ab51a68fb0640799f3dd7049eb649a202b6a3e2f009229b72f54480799f3d9ef049bafcaefce5c01f86b75c8f4188ff28d3be65b651a9e6fca33ae3c0148a64961a64cb7f938e7fb0932adeed3728e279f6d16a0c9d6f052995bdd0b323b2077150540323b609bcc2e6c292a88220148d2c505af9ffb35a0ead407a0e8008a561f80a203285aff023c3b4f369bc797860000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-05-25T14:07:44.49952+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000c7b4944415478daed9d59905d4519c77f77b227868c6493ac5510422ccd66a48a40ccc494313b3c9815add2ec299584441215038911244036036a4212d41701971735b83d2804e405242e554240ab9480552458661f2799691fbe3edcce6566ee39a7fb2cf79efe554d5115e6ded3fdf57fce39fdefaffb8376502d2d28a550972fcf526d6d37aad6569452786a03a514aaf922aaadb549b5b4cc504aa1ce9f8bf805f2b35929f5a252eaa6e0df3cf9c618bb4f28a5feaa945adbd9d83554fb3e6012f03d604670014f3ed16353023e051c023e848c6187541340c018e020b00068f022c81f7a4cba02cb806f0323a932f8105e00e82f7c545fa0ab17417ed063d1035807ec020687fd6cd788d71a0cec04de0f3caa946a2e954a59f7bfd0e8c17f1fb019d808f489f2f9a802006804b6e9ffee504a9df322481fe30e7c35f075601572178844944780491f6013b003b8dacf10d2c588f535c05e602d31061fe20b00a03bb006f81630a4a2619e8430627c2db01ff834f1eee4809d00d017be5d37e4ba8a067a1c63c4762c7018b815cb31b41540f01df37583c65634d4e30823a637018f03d35c7caf0b0104342186d1e48a067b2c3162390389f1475d7db74b0180b8868f03332b1aee89898e6103b01031e3c6b8fc7ed7024037f0316011de35b4c270f7962326dc48d7d748420000238047801578d730163a663d813b81878141495c27f6f421048374c31b8147bc6b181ec3ddfb0a228048ee5e14921400403fae740dcf7a11744c85bbb71d71f7ba2779cda41e0126bd81bb10d7b0bf770ddbc788c910c45c5b43c2830fe90800dd91d5ba63432b3a5c788c585c87986ab793fcdd19484f00e80e2dd51d1c55d1f1c262c4601c62a6cd27c571495300c1f5e6e98e8eaf0840e130fa7e3362f034a5dd86b405103015318c6ea908446130fa3c53c7e22359b4232b01a03b7c1898551190bac770f71621a6d90d59b5254b01a03b7e00584c415c43c3dd5b81986523b26c4fd6024007601fb012e856cf2248cbdd8b422a538d100c021e420ca37df5e81aeac1ef8bb87beb49d0dd8b425e0400e21a6ea5ec1a9ea907111877b4fe88bbb792140c9eb0e4e11160d21bf812e21a0ea875d7d068fb50e431b79a1c0d3ee44f0070a56b380c6a738660b47914627e2d215f775c209f0200e842d935bc1e6a4b04465bc72353dd79e434d6b96c94a604cc45f6b84d80da1081d1c65b1083676ad66dea8c3c0b20602af003b44d9a6711189b33e702df272377af824edfa4ab3d93fe053c43884d8609d3055921fb07f046c66d69174398a31163ebdfc089acdb05bcd9d9ff6c571d4667ba1373c74902948066a0258fd34323663df44fd67f3401cdc025803cc6cde3f1783c1e8fc7e3f1783c1e8fc7e3f1783c89536d2de01ae0466431262fdeb6271c25640de005e01d687f2da0da6a600b92b7ff59fdbb5e04b54103b208f41d6435b7433a5c1e32ee028dc03dc0e79194664ffe3987a49def02ce77b60a58757d500b2148d6dc84a4367bf2cb7f9093430f00ffabb6041c6a81588b203818722b92e2ecc91f6f21fb0e7e08b48659ff0f9d21a0451064e6ec409f0eeac90d7f47eed23f0354d8e48f48292246cedb7c6037fa74504fe6fc05d96df43b8896f9133947c878399c86e4ee8fcbbaf705e705a44ec08b103ded2b569298218249c80ed7c95947a18028e0b7c846d3bf41bc9cbf5869e1c6855e420e31fc0dde23489356e0a7c80eaad8830f16fb028c0bbe821c67f613dd304fb25c42f61c7c11f827d865fb5ae7091b8f8341c0fd886bd82ddb18d52dcd4841a8fb80ffba48f3769628ae85d00fd8027c01e8954988ea97b3c8190abb810bae72fc9dee14305cc30d4811a3ab520d51fdf20e72e2ea6338de18e37cab88e11aae422c49ef1adaf116f065e00942ba7b514864af90e11a2e011e449f0eea89cceb88bbf77322b87b51486cb398e11ace439e5ba392ba569df267c4ddfb3d24b7af2fd1dd82c60ca1093922c5bb86e1f803e2eebd04c96eea6cd707302a508f564ac53eabc768f8338861f47cb271ab7914f06be40cc1d8836f8cdf10a5d4289beae173813d58d405ac700d5700bfc2bb86edd10afc1871f75e81f883afb916f10ca677f6fbd504d015f80c925a14bb2ea0d1915775077f84770d4d2e21c7c9dc811cca613bf81f460a4cdd4695c77c582bf836fd85b1eb021a1d7a0379be1d46720e8bce45a4fceb26e0ed52a9643bf8939193c7a787f95c94b5808f635917d0e8dcdb8851b45707a0a89c41ecf36dc0e9b82f7bc6587c12f9c30a5d5730ea629093ba80baa3a775c7efd381281aa780bb91e4cdd8d6ae71f2f802c429fc6094cfc7590d1c83241c2ec4e2846fdde18bc04ee0ab3a2045e14d641d7f3f16d6ae71f2f83262d6158cbb1c3c124904598e455d40ddf1164450ebc9c7a95a49f31a52ee3d74e2667be898f740e2b613181ce77b6cce091c8cdcbeee047a5a8aa015f1bad702c72dda9477fe841c16fd0b2cac5da3aee01664bda5316e836c0f8a6c449ee35b80be962250c0111da06396edca23cf2377cc678d3e47c23074fa030f203307ab63e75d9c14da07a90bf8001675018d801cd5817ace41dbf28042ccaf15c01f2bfa1afe4baeac2bb817b95b5a9fe1e8eaa8d81ec8a611abba8046605ed601fb25b5ed1ab622a6d76ac404b31d7ce775055d9e151cd405fc2e1675018d001d4744f514b5e91ab62073f275e8e36d2d077f2c7270b6d3ba82ae0f8b6ed00d3c845ef973e41a1ea2b65cc3c0dddb8c1b772fa82b38cd7543933a2dbc09318c6eaee848688ca09d4402b907b890507b5d721a290db30d37eede4ce44e322989c626795cfc241cd405d4013c834c77b62301ce2ba790cd99bb808b0edcbd8588473226a906275d2f20700d17e1c635dc8de4c79d4cb8dd7138813cae0e02972c07bf1be5ba8291ddbd28a451306284ee88555d401dd04bc8fbc07af25537e038322d7b127b772fa82bf81031ddbd28a4553124a80bb80137aee193e4c7353c8688fb08f6ee5e5fe43496a07c5ee2a4593226a80b782f6e5cc3a791dbe4cb29f6a192e710d3eaa8d1b64854b87b3b902ce0d48a4aa65d3328386ae641dcb886570c408abc478096d3bca18889b69a942bb46451342aa80bb80f37aee13164208e908e6b183c82d6a01f4196833f0a31cf9692415dc1acaa86059b46acea021a810f96589f002e27d8ee16e42d7f1d7ae9da72f0c79180bb17852ccbc635209b460e2105166d457002991d1c2419d7f002e569e82907ee5e5057b02981b686260f7503a72236e714b0760d4f2103b40bb7ae61e0ee6d076217b536fa368b04ddbd28e4410000139180cc066bd7f02cf00dc43974e11a9e4444b51b37eede62c41cbbc15df8e293170180145c3c80bc1bb8700df760ef1a068b51aedcbd95c8cbef8804e2178b3c0900603812a055b8710d0f229b2de2b886af222f964f016d0edcbd0d88193628c1f845266f02001888f8041b815e9622684306f0dd848c900409294f63efee5d85985f5b11332c57e451002081ba57ff5c652902a848c9aac2b3181b591dba7bbd538c5f68f22a0090806d44ee062e76280749991d1d9ffe9ea454cb69de30e471b61a31bf72499e0500e5a366f62101b515819996dd66fcca65ca69e9af557c263446dbae474cae2588e9955bf22e0028bb8607909982ad085ea7ec1ab65276f7dedd986239f8e39129ed5c6a20bea97bcf312901739017aa3b80634aa9e8e7e2964ac140055bb34e01e791c78c0b83670a72b79a9875c0c2522b02089882b886eb80a3714500a0940ad2b714210a2b748431f8b39144d0d15907290ab9bf45b5c30464fd600ed8b986a552a9b9542ad90e7e03158fa85aa216050012e8fdc8126a97b822b0c170f78297d4e15907250eb52a009080074914b15dc338e86bf5a23c4d1d987530e2526bef00950c448c964660af522af6624d580c77ef6ee4853497064f586a5d002083710f22826f2aa5626fc6e80ce30e330039d56419393678c252cb8f00935e9453a907c6750d3ba2c2dd0b52dc6b7ef0a17e04003220c1668ae1107f8660627c47b05cbd989cbb7b51a82701800ccc222c5dc300e3b31310776f0e091faf9b36f5260090019a8d0cd844882702e3331fc34859ab37ea5100015390a4cba9104d04c6efce45843421ebce24453d0b00caaee13ca014460446ad83a51869ebf54abd0b00ca4bb3555d43c3dd0b36ae0ccbbaf1495304014079ebd51a3a700d0d77ef2ec45c1a9075a3d3a01e8ca0b00c404e326b04f698aea1e1ee7d0d71f70a53f1ac48020019e42d8808ee574a05fb060622eedee7a81383272c451300945dc37ec85f7c4fe4a8d505d491c11396220a00e4456f39f0016431673ac5791fba82a20a20e8fbad5937226b0aa97a4f192f8082e3055070bc000a8e1740c1f10228385e0005c70ba0e07801141c2f8082e3055070bc000aceff0110f57c05a4a155510000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000019aa4944415478daed9d79941d559dc73fdde96c249d84103685b00a18306c2260222e2488b8100222822888c405212151f64520809004480846c151c711459de332e38c33e78ceb2cea287a701cc751191461744434a113a1b3ddf9e35b8fae7e74927efd967babeafb398723fc61bffbead5ef5b55f77eea77bb1801e14f4f0261323d630e67c2c4efb375cbd35d3da347f2a78c312320f43f03dda376a16fddb1f4adfb36ddddebbbf6deaf431f1e022184e78510fe2e84b03884b0530821f63131a6f464b54708615a08614508e13321849d3b5a7fb900783084b02e84707d08619243c098f6912bfee787103e1242d8985d84a7c40a80ef07d11742b82384b06b6d90c698d6912bfe0342089fcd8a3f8410be9242008410c2332184fb42087b3b048c691db9e29f1942f86a086173aeee92098090a5d2e7b294720818d324b9e27f6908e15b2184ad7535d7540074b778bca381d3810f0187d7be8031a671b2dae902e60277032764ffdd325a1d00b5bf3917b8077869ee8b1863864956333dc0a9a8f88f6ac7e7b423004029350b580dbc1ae8720818333cb25a19039c0dac040e6ed767b52b006a1c997d81f9408f43c098ed93d5c878e0ddc06dc0f4767e5e4f07bed3c1c09dc064e0fe10427f57574b1f638c290559f14f0216028b80a9edfecc4e0400c0dec0075108dc1b42d8e0103046e4ee8c7705ae042e042676e2b33b1500b52f771d3005581142780ac04160aa4caef8f706ae05de0a8cedd4e7b77b0ea09e29c062e04660b7ba03604ca5c89dfb07002b80f3e860f143e70300746bf32ee056b2090e8780a91ab9737e26f2664e471e4d47891100a0947b2b4abd83ea0e8831a52677aebf14f9327389548bb1020034ff301f490eb6064d25c8d97daf46e7fe6c5a6cf73542cc00a87dfe5c740b342b77808c291d39bb6f3ef263da62f73542ec0000a5dff1280d5f83ad415342b2737a2c700ef262da66f735420a01000a812381bb8033b035684a44762eef84ecbe6568c92f093ae9010c8783803b805e6c0d9a1290b3fb2e4586dfceb1c79427b50000d80b5b83a6e0c4b4fb1a21c50080c1d6e01d218475606bd014835cf14f07aea1c3765f23a4320730145390357803b6064d41c89da30702cb81f349b4f821ed00005b83a640e4cecd23502f8cd349f72e1b483f0060c01abc0338041c02263d72e7e42c64f79d4401ea2bf90166f400a701abd072a143c02443ceee7b0df2598e27a2ddd708450980da58e7006b903ee91030d1c9d97d67208fe5480a52fc50ac00001dd863d12dd629d81a3411c9cebd71c0b9e45e6c2b12450b801a3351da9e89ad411381ec9c9bc040efbe64ecbe46487a867207bc002db3f4029f0a213c634fc0b49bdcc566325aa6be042d591792220700c81abc1585c07d2184f50e01d32e72c5bf1b7015700109da7d8d50d447803cd380eb812b8029de92ccb4833abbef56e4a714baf8a11c0100ba1d5b847b0d9a36903b970e42937dc9aabd8d529600004dc82c401332fb8043c0344f9ddd7737d92637b1c7d52aca1400a054ae2dc9d81a344d3184dd17ad775fbb28d597c91885acc195d81a3423a4c8765f239431006adf6b2eb2065f060e01337c8a6ef73542590300f483bd04a5f72940b743c0ec889cdd771e05b5fb1aa1cc01000a81c3d1e3c09bb03568b643766e4c4476df2d14d4ee6b84d2cc66ee800381db516fb64f86109eb630646ae42e0a538025c0c56869b9f454250040d6e052640d7e2484d0e710307576df35a8834fe1059fe152f647807aa6a11ff97260675b83d526f7dbef83fc91241b77b693aa05000cb6067707af105491dc6f7e089aec7b0b9afcab14550c00903578219a17d8171c025522f75bd736a3398d6a3d0e3f4b550300640d9e8dd2ff5070085481dc6ffc32b42765217af7b58bca7ef18c1e601edaabed68700894999cdd770af2438ea5a482cf70a97a00c040afc1d5c009b8cd5829c9d97d6f42b7fd8753f1e20707408d2ee0381402b6064b46f65b8e4776df32d44dcae000a8e745e8ea606bb02464bf612f6ae0710bf2414c4625673e7780adc1125065bbaf111c0043b3177013b6060b499ddd7735f0762a26f80c173f026c9b5d19b006a7da1a2c0643d87d0b70f16f1307c0f6990c5c8aee06f6002f13a64ceeb73914ed255949bbaf111c003b6627d4fe7919b6069325f79b1c8dbc8e79f8117787380086c758e02c7455b135981839c1e704b4943b079fdbc3c20769f8f400a7a265c29780432005b2dfa01bf91babb1ddd7100e80c6e8064e441d865e81adc1a8d4d97d77228fc3c5df000e80c6c95b83af054639043a4fceeebb00cdf6dbee1b019e24193987a2c781c9c0e742089bec0a7486acf827a125becbd092ad19010e80e63800f8201286fed2d6607bc9dd694d45cbb3b6fb9ac401d03c7ba1ee4293800f87109e7208b49e5cf1efce40efbe09b1c755743c07d01a7645db455f06ec626bb0b5e48ee5bee83d8d77e0e26f090e80d63119588cee06f6042f13b6823abb6f05eae264bbaf4538005acb78f4e2c932603f70083443eed81d8324ac79f8b1b5a534733037005f007e08f82c1fa00bd8021c063c9afdbb1939138099c023c07db1079318ddc043c0c691fe8111cd56e5927934be8bd81efd009e141c1939cb6f74ecb124cc566013f83c33c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c3126519add17a0b6b188370631a6f374a1dadb0223db17a0999d81c602af038e658441628c19315dc066e01f806f31c28b703301d08fb66b7a27f02a60d44807618c69882e547f9f45dbcf8db8ee467ce5ce3d06cc006ec01b371ad32936009f009602bf83916f0bd6d4ad7bddbeedd7a1ad9bc7c63e3ac6949875c06a6039b0169adb13b0e967f75c08ec015c059c0f4c8c7b8c8c29257f405bcfaf01fa5ab119684b26ef72213005781ff01e60e71847c89892f21be066e0af803fb76a27e096cede674130114d0c5e06ecd6d143644c39f905f001e0f3c0a6566e03def2e5bb2c04c6036f01ae01a677e20819534202f063e06ab4dcb7a595c50f6d5abfcf42600c701a702370503b8f923125642bf03de072e09fa1b9c9be6dd13681270b816ee064e026e0a8767d963125630bf075e00ae087d09ee287361b7cb9c9c1d9c06dc07128148c3143b309f832703df053685ff1430714de5c081c09dc0acc41d6a0316630fdc0a7d163f3afa0bdc50f1d72f873217048f6e5e601a33bf1d9c61484f5c0c7d045b229bbaf113af6124f2e04f641ab03e7626bd018803f01f7002b6881ddd7081d7d8b2f1702bba3098e0b80de4e8ec198c4f83d703bf011607da70abf46c75fe3adb3061703efc5d6a0a9268fa2177a3e053cdde9e28788eff1e7acc105c81adc3dd6588c89c0cfd10b745f0436c6287e88dcc823670d9e9d1d0c5b83a6ec04e021340ff655606bace287043af96421301a3815bdec606bd09495adc077d1fc57dbecbe46881e00606bd054822dc0d7802b69b3ddd708f14790919b1c7c195a0b3d1e5b83a61c74d4ee6b8434469131843578226e33668a4d3f703f9aed7f04d2297e482c0060486bf054f466a13145633d701f5ae7ef98ddd708698d26a3ce1abc1a782bb6064db1f823b2fbeea0c3765f23a437a28c3a6bf0fda8cb907b0d9a22f07fe8aa7f2f11ecbe464877641959104c061601970053638fc998edf0287a74fd3491ecbe46487b741959084c40d6e0fb813d638fc99821f8397a64fd1b22da7d8d90fe0833b2101807bc192da7ec137b4cc6e4f821702deadd17d5ee6b84628c3223d76bf0f5c81a3c38f6984ce5d90a7c07093e49d87d8d509c9166e4acc1b928048e8e3d2653593603ff8436c4f91114abf8a18001008356086621616816b6064d67d9047c09bdc4f633285ef1434103009e630dde8cee086c0d9a4ed08f76e8590afc1a8a59fc50e00080412170107a89681eb6064d7be9033e4ac2765f231477e419b6064d072984ddd708c51e7dc610d6e002dc6bd0b496dfa19d7993b7fb1a6144df222bb81eb42ebf1ed248425b83a64dfc1a3d622663f765e77a1712e49e6684fb063633733e15b808bdb597bf0a47233b00eb507be59b80c7638fc9149eff0696a049bf948a1fb4faf56e9a7847a69900e8419b7fae0466d60d2c1ad90fb41e5883e6041e893d2653581e041612b971679e3a0f6615f00a9aa8e366d7ce470127a1899159b9014625fba16adb2c2d215ba73566986c4556df42e01f4944edcdf5cf9c07dc8596c043f6cf8868953c331bdd099c0c74271402b5564c17033f883d26530836239f7f21f0af90d4fcd658d4417b3930a3157fb795f6dcd1e8d97b3e303aa110d88a74cd85c037b3ff36662836025f002e2521b537d73eff5dc02dc07eadfadbadd66767a0743a17189b500800fc1bda89e8efd19d8131799e013e8136a9f939c42ffe10427e65eb72a41d3faf959fd10e7f7e1fa4e6be0798905808fc08a5fb5fa3b4370664f7ad46059684da5be7b65c872e5e2d5fd66e973bbf077a377a0a706708612dc43da85d5d5db583fa4b94a67dc81a1c176d5026059e04ee4673586b63173e3cc76ebd129da7e3dbf159ed7c79666774b59d04dc06fc2e84904a08fc0605d45ab48e6a6bb09afc2f7a64bd8f44ecbebaf75b96d2e6aed8ed7e7bae9781669e3703bf4a2104004208bf47af12f72173709768833231f8357003f019e099c48a7f26ba68cea1cd35da8977e8c7a35b9865a4670dae05ee44496b6bb03afc0c3d53df4f7ac53f0b793527d181d7db3bd544630cb206ef028ea8fbc2d1c87ef80dd81aac120fa23bbe2f919edd77329a8b984d876ab3935d7446217df19eec0ba61402b606cbcf56e0dba8f853b4fbe6238fa6a32dee3add46ab1b6dfab90a3885b4adc1f80333ad6213f23f1601ff02f197f96090dd772e2db4fb1a21461fbd2ee430af00ce204d6bf012e01bd81a2c031b91f791aaddf76e34411ea5cd7dcc469a87a089c1b701e3120a01509be7c5c057b03558646a76dfe5c8ff885efc43d87dd7226f260ab19b684e47e9d70bdc1b42d810fb07cab9020fa139813e74a7e23663c5a20f4deeae007e0f69147fc6ee4839be90c80e4aec0000d88d6258836fa34d369669394fa215a7d5a467f7ed8becbe7349e07c4a210060c01a9c0c7c90b4acc1c7918bbd0ebddf606b306d1e67c0ee8b7e4709838aff10d4a9ea0d24d2bd3a95000015d602640d2e252d6bf009144cebd0dcc0b4d807cb0cc923c8ee7b00e84facf88f40e7d01cb4249e04a9eda6331edd1a2d035e0849b9026bd1f2e58dc063b1c7649ec3cfd09ccda749aff86723ff652e09153fa4170030600dae048e82a44260036a0b7d15f070ec319967f901f237be0c6c4aa8f8bb91efb20af92fc9d55b7203ca18059c88267166035d0985403f7a816409f0d3d863aa385b5197a785c8df48cdee7b235a85389244f7e04835006a633b0ebdab7d0a302aa110d80cfc2d12866c0dc6a166f72d46dd9ea22ff3c1b3c53f0ead1add46f6025caaa41c00a0d43c02a5e899a4670d7e0d85c0d7b135d8496a76df62d2b3fb2620bb6f2991ecbe46483d006a1c8c6650cf274d6b7009ba23b035d87ef276df2f207ef1d7d97d9721af65f7a8831a26292d03ee88e9285527226b307a07973a6bf07d6843125b83eda366f72d079e80348a3f630fe00ae0ed14c81529520000ec8ad275676085adc14af107b42bef1ad2b3fbf643fd24cea660bf7bd10200a40c2f42bd066fc5d66015780cb81df818b6fb5a4a51e600ea99885ea4b8956c9384d8f3025d5d5db5107a221bd72dd9bf9be678185d5def25bde23f02bd73701a052c7e286e00806eb5ce41d6e00c881f02306887e2bb810fa00ec46664fc14db7d6da5c8010083374a4cd11afc0b640dfe32f6980a46407ec5256875657342c53f0a782d09db7d8d50e8c16714c51afc09168686c356e4555c8c3c8bd4ecbe3349dcee6b84320440ed7b1c8742e0b5a4650d6e419d856c0dee984de88abf04f82ec45fe6834176dff9c8473938f6985a4559020094c687a3747e33e95983df4057355b8343d30f7c0ef9140f4152c5df0b5c843c94e9b1c7d44aca1400350e426dc62e00c627140200df43faea97b13598e769e0e3a4d9bb6f0ab2fbae411e4aa928a207301ca6a3f7f67b810f8710fa629f503957e0c7c0fb91357826b606fb800fa13bb714edbeabd0adffc4a8836a13650d00505a5f8dfcec3b42087f8464acc187d1d56e3dda366d42ec831589d4edbeeb80375130bbaf11ca1c00a0e25f94fdef2dc06f13b2067fcb80357811d5b3061f43afcb7e9cf4049f19e80ef20d68e6bfb494710ea09e09683ee036607f88ef0ae4acc13fa059e59ba99635f830bab54eb171e751c82b9947c98b1faa1100a05bb8b390357828c40f0118640daea61ad660403ec412e447a464f775218f6435f24a0a6bf73542550200065b832f86a442a00ad66011ecbed5c827a94c5d54e68be6be6fcd1a3c8134adc1c5c07f502e61a866f7bd976ccfc5848a7f349ae85b8e3c92f803eb20550b00d00ffc12f4b24ecad6e0bf538e10d88cbc874bb3ef147d990f06d97d6f476f6f96c6ee6b842a060028046692a6351850a7db9a0bbf25f6b89aa01fbdc97719baab49a9f87b51cf869b2899ddd708550d801a796b30b55e83df4757cd2fa1ab68d1d8801a785c41ba76dfb594d0ee6b84b27b00c321656bf0270c084367511c6bb00fbd2bbf022d752651fc197ba2cd394b6bf735820340d4acc129c81a7c1292b206af4421701ee95b834fa0c25f033c15bbf06150f1ef8f965bcfa0c4765f23380006988c7698998c1e0b52b4069f42cfad93631fac6df018322e3f497a82cfa1e84eeff55440f0192e559f03a8a7660d2e030e80f8ae40ae88fe88acc1547b0dfe12dda9a4d8b8f3c554c8ee6b0407c07319c740d79724acc19c3afc147218ae251d6b3075bbef0406ec3e9fef75f8800ccd6874abb8123806e287003c7b37f067b433ce95643be344246ff77d05d89250f1d7ecbebb91f7117f6009e200d836ddc0abd0d5e39540774221d00f3c80aebab1acc1d4edbe37a3578d67e2e2df260e80ed53b30657a1ab494f422110d31a4cddeebb004de4be20f69852c701303c0e435793b381310985400c6bb01fb81f75354ad1eebb18cdf657d6ee6b0407c0f039105d55de419ad6e022640db6b3d7e006e0a368fee1e1ba31442167f74d45d2d4d554dcee6b047b008db1177003bad2ac092144175d72aec07fa2abf253e84ea5d5d6e03ad4bb6f395a924ca2f833f664a0775feaa2545238001a671a3ad92601778610a2abaeb91078045d01d7a3b7dc5a550c4fa0c25f034457a56148bbef8de8f9df34801f0146c62474cb7d03bafa445f26cc15e56f81eb91f8b2b6057ffa37c83b584d7ac57f2892b6cec2c53f221c0023672774955d4e7ad6e09f688d35f80bf4bcff09e0cf8915bfedbe16e000688e71e8d633456b703d7a23ef2ae0d106ff4c4033fc4b906f9092ddd78dbc0cdb7d2dc007af796ad6e02ae058881f0230c81afc249a1d1fae3518d0da7eca765fed58c71f58c17100b486da556915d95529a110d8087c1ef51a7c6807ff972d0cd87ddf044242c53f063807f91887c51e53597000b48ebc35f87ad2b4061702df61686bb066f72d447e7ff4653e1864f7bd03791807c61e53997000b49e19e82a750e69598300df62686bb066f75d867c82948abf1785d20dc8c3302dc401d01ef64757ab05a4670d3e889eefbf88aefa29db7dbba09e825721ffc2b4188b40ede3f9683dbe17b827316bf0bfd0c4e013c093c09da469f75d8decbe9da20eaac43800dacb3474059b847a0d46dffe3a1702ff8342602be975f03900bdd0331f0b3e6dc501d07e26a15bee5aafc1c753e83598d117fbe0d4a8b3fb6e064ec1824fdbf11c4067a85983c9f41a4c89dcb13806756172e3ce0ee100e81c63513beabbc8d6b11d02837af7bd12b5ef7a153e2f3b860f7467198d6e6d57929035188b9cddf73a6cf745c101d07992b4063b4dae77df396815c2765f041c007148d21aec1439bbef4234e17740ec315515af02c4a5660d4e013e1342d898c2725c3bc98a7f1270117a3fc1824f441c00f1d91fed4f3f19b83784f04c1943207787b32bea267c110a02131107401aec89baee4c0256a5600db6925cf13f1fd97de7e1cd3993c001900ed3d0cb38bdc0f214acc1565067f7dd84ecbea26c735e7a3c099816b5bef63791bdf956e4c9c1dcd80f43fec319b8f893c201901ee3d10b30cbc8de7d2f6208e4c67c2cf21eacf6268803204dc6a0abe54a0a680de67af79d88963a5f89cfb524f18f922e3dc0c9488f3d1e8a1102d9187b18e893e89d7913c6019036ddc0cbd19dc01c12b70673bdfbce467ec38cd86332dbc701903e5d0cbc25772a895a8339bb6f01f21af68f3d26b363bc0c581c66a0fd077a810752b2066df715170740b1d80fedf8338504ac41db7dc5c701503c92b0066df79503074031a959831381159db6066df795074f0216975ed46bb0a3d6609dddb70aed8de8e22f280e806293b7065f00ed0d81dcdf3e1ef90927e3bbc842e300283e796bf045d09e10c8d97d73b2cf7a393e7f0a8f7fc072d003bc1a6d07de726b3067f79d8a8aff186cf79502074079e80666a3e7f29380ae5684409dddb702db7da5c201502eba8017a3576fe7d3a43598b3fbde89fc83fd627f41d35a3c81534e5e082c47cb840f8410fa1b5d22ccd97d97a0dd796df79510074079d997c1d6e0d3c309813abb6f09f01eb4e4684a8803a0dcec015c871a8edeb5236b3057fc7b21bbef6dd8ee2b350e80f23315781fba8adfbe2d6b7008bbef7434f9674a8c2701ab412f7a516729b0370c5e26dc86dde7e2af000e80ea50b3066f27670de68aff386cf7550e0740b5184d9d3588960ee7a02bbfedbe8ae1a4af1e356b7002700d9aed5f8a960e4dc5700054939a35f83124faec157b40260e0e80ead24db6ef80a92e7ede33a6c238008ca9300e00632a8c03c0980ae30030a6c238008ca9300e00632a8c03c0980ae30030a6c238008ca9300e00632a8c03c0980ae30030a6c238008ca9300e00632a8c03c0980ae30030a6c238008ca9300e00632a8c03c0980ae30030a6c238008ca9300e00632a8c03c0980ae30030a6c2fc3f3cf6a52c293714a80000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000035234944415478daeddd79985e757df7f1f73d9930999065124056d9225b6cade2022a56ac8aac6e6cee80ec8bc8be434258c3bec8be898a0ba86dc5a5566b6b0b5a7dd4f6a9fab4ea531f8356a4820492b009c9f3c7774e670249e6dc33f77dffce39bff7ebbabcc85c5eca6f2633f3fb9cdff2392d7a6cc5217b01f401eb010f03cfb56ebdb7d7c390242999e1b9702ab001b0880473610b60c58a15bdfedc67020b818f033f029ee9f50024494a681a702ef0087035b0acd703e84b30f943ac006c0d7c01782f3025c5202449eab1163003b8003808989e6a20fd89bf081b00970cfff973c09309c723495237f5011b015701bb02030cafc4a71a4c6aeb019701c7114b229224354d1fb031701bb007b0761506945a0b58073895581249b61c22495217f403db1193ff1ba9c8b677ca2d80e79b49ec87009c033c0e2439a020495287f403af2226ffada9d0bc5b851580d1a6038712e7013621e1de882449133400bc1ab81dd8860a4dfe50bd00003008ec0cdc4a848049a9072449529ba600ef013e413cf9576e2eab620080484d6f04ee20d253a5529324496b3008ec4fdc729b4305277fa86e00809110703bb17f6208902455dd34e060e052e04554782bbbca010062d2df9a0801af214281244955349db8cd763e71c5bdd2aa1e0020964eb6255a03df4345ae4f489234ac45dc643b1f3870f8cf95579765f5e7b706de0d3c917a5092a4ecb58803eb5700bb5181829fb2eab00230da8b88d6c08f626ba02429ad3e62f2bf05d8931a4dfec5e0ebc6d64049526afdc05ca2e067676ab83d5d972d80e79b49ecb300cc031ec3d64049526f54b6ddaf1d755c0128cc205a033f8bad8192a4de28dafd6ea382ed7eeda873008091d6c05b881050dbbf084952e58d6ef7db868a16fc9455f7000091c676265a032d0c92247543d1eeb7900ab7fbb5a3090100465a036f23966626a71e9024a93146b7fbad4f43b69c9b1200209efcb7215a03df84ad8192a4899b4e14fcd4a2ddaf1d4d0a00104b32db0077626ba02469fc5ac01031f11f444ddafddad1c4fdf2a23570e1f09fef0196a51e9424a9368a76bf9b89ede5c1d403ea86a6ad008cb63e7039703a16064992cae9075e4c4cfe6fa2a1933f343b0000cc063e029c478480461cdc902475c5e8829fc69f256be216c0f3cd20f66ffa88139cbfc1d64049d2cafa895b64b7d2803bfe65347d05a050b406de8cad8192a4950d00af2126ff6dc960f2877c0200c48d803711216053f258fd9024ad59d1eef705603b329a17b3f944870d006f063e472cf5180224295f531969f7db80cc5687730b00102d81af22de1f606ba024e5693a702c715b6cfdd4834921c70000b1bfb31d71d2f32fb030489272321d58009c06ac937a30a9e41a008acf7d3be0e3c412902140929aad05cc22ae867f9806b6fbb5c33df0955b033f0f2c4d3d204952c7b588829f1b8903e1d93ff4e5bc02305ad11a782ab6064a52d314ed7e37e1b6efff30008c984d1c085940f40664751a54921aaa28f8c9a2ddaf1d6e01ac6c06b12f3409b80cf835b6064a525d1593ff2d6454f053962b002f54b406de482c19b9122049f53305d88198fcb7c3c9ff050c00ab3685d827ba09d80c574a24a94ea610b7bbee015e8a73dd2af94559bda235f033d81a284975b13651ed7b31b061eac154990160cd26132f88b8195b0325a9ea6610af80bf94b8e2ad3530008cad0f988bad819254653380738976bf75530fa60e0c00e514ad8177606ba02455498bb8c6bd00dbfddae2be767b3624f6956c0d94a4f48a76bf1b7085b66dae00b46f03465a0367a41e8c2465aa1fd894b8b2fd669cfcdb6600189fd9c4419373b13550927aad28f8b99578f2b7dd6f1cdc0218bf99c04144b9c4e5c003d81a2849dd564cfe371307b47d901d27bf70133393680dbc1e5b0325a9dba6003be2e4df117ef1266e0ab1ff7423b039aeaa48523714ed7e77037f82f3d784f905ec8c01e02dc05d4471902140923a673ad1ee7711b6fb758c01a07326132f9eb89108011e4a91a4899b019c429cb572f2ef20034067f5112f9eb80dd80bafa548d278b588c97f3e71eb6a76ea01358d4bd59dd747bc77fa1ae2a5149f039e4a3d2849aa911671c7ff44e043d8eed7150680eed990d8afea03be083c967a40925403c5e47f3d71c0daedd42e710ba0bb3604ae04e6616ba0248da59fb84de5e4df030680ee9b49bca0623e30845d0192b42afdc401eabb805d70f2ef3a03406f14854197134b5b8600491a319998fc6f206e53b93ddd030680de9906bc1fb80e438024150689e5fe9bb1e0a7a7fc42f7565118743db025a65c49799b02ec475c9d7e29ce493de517bbf706805d899b01b6064acad50ca2ddef4260a3d483c99101208d3ee04f19d9eff2b08ba49ccc044e22ce4539f927620048a745ec77dd4ab4060ea61e902475598b98fccf018ec576bfa45c7e4eab680dbc1a5b0325355b0bd80c381e3800dbfd92330054c346c43e581ff097c0e2d40392a40edb14b816782b6e7b56825b00d5b111d11a7836266349cdd14fdc7aba0e27ff4a310054cb4ce060a23a7816760548aab77ee2a0f32781b7e1e45f290680ea295a032f23f6cb24a98e261393ff75c06b71cbb9720c00d554b4065e4bbc184392ea6490283dbb117819ae66569201a0ba0688fdb28f015b617a96540f8344bbdf2dc4556727ff8a320054db00b03b700fbe204352f515ed7e17001ba71e8cd6cc00507d2d6209ed3a60473c4423a99a868876bfcb70f2af0503403d1421e0666c0d94542d2d62f23f1bdbfd6ac525e5fa6801db015711ad8177034fa61e94a4ec6d0e1c077c083b4c6ac500503f1b13fb6b7dc05f018fa61e90a46c6d4e5499ef82db93b5e316403d6d4cb4069e452cbd49522ff5037388abca4efe356500a8afa235f06c62cfcdab36927aa168f7bb13d81527ffda3200d45bd11a7809160649eabe29c46da48f01afc36de45a3300d4df74e003c43edc16f8772aa93b06895b4837037f86ab8eb5e764d10c03c43edc75c40fa6a95c522715ed7e5710b7919cfc1bc000d01c03c47edcedc4fedca4d40392d408b380f702e7039ba41e8c3ac700d02c2d6205e05a627f6e6aea0149aab521e04ce0729cfc1bc700d03c2de0e5c0adc4929dad8192c6631de296d1c178ddb891dc2b6ea616b035b060f8e37b8065a90725a936b604ce201e22a6a71e8cbac300d06c2f265a03a7039fc2d6404963db82281a7b1bdef16f34b7009a6f236225e04ce2308f24ad4a3fb00d71a5d8c93f03ae00e46188d8c76b011703bf4f3d204995328928f8b9067845eac1a8375c01c8c710700491eeb74c3d1849953185b8357435718058993000e4652af06ea2cc634bfcfb977257b4fbdd483cf95bf093112780fc148541d71269df6d20294f45bbdf65c05c9cfcb36300c8d300b03b700bb1ef676ba09497d944bbdf0260d3d483511a0680bc6d4fecfbbd1e5b03a55ccc024e279efc9dfc336600d02b88b77bd91a2835dfbac495e083f15a70f6dcff558bb8fb7beef0c79f0796a61e94a48edb9278f2df0f98917a304acf00a0c2a6c4dbbea60377017f483d20491db32571fb67572cf8d130b70034dac6c44ac0e9b83c2835413fb02d51edebe4af95b802a0e79b45ec0ff60197000fa51e90a47129dafdae260efc4a2b710540ab328b680dbc0298937a3092da3685b8dd73154efe5a0d038056672ab0377155680e7eaf48753115783b703d4efe5a037fa96b4d0680dd8825c457e09691547583c0bec4f6dd4bb1dd4f6b6000d05806803d809b80d7626ba05455eb00ef03e6039ba51e8caacf00a0b25e499c24de09583bf56024ad6436702a7029b079eac1a81e0c006ac7f6c45bc3f6c5d640a92ad623aeee1e82d777d506f774d58e1671a778def09fefc1d64029a539c069d8eea7713000683c3627de22360df834f048ea0149199a432cf9ef8e053f1a07b700345e9b10ad81a712fb8f927aa31f980b5c8e93bf26c015004d44d11a3889f865f4dbd403921a6e12711be70ae055a907a37a73054013351b381af818b6064addb436f0069cfcd521060075c200b1147929b015ae2c499d3695b87d73037125579a3003803aa50801d702afc3c220a953a601fb03e710b7706cf75347f8a4a64e1a00de466c0b9c087c07782ef5a0a41a5b17782f7032f0e2d48351b3b802a06e7835b14fb933b6064ae3b50e700a51edebe4af8e3300a85b5e05dc42ec5b4e4d3d18a9663620dafd0ec66bb6ea12b700d44d5b10fb967dc01780c7520f48aa8197104ffdefc4153475912b00eab62d80f3802388fd4c49abd6226ed12c04f6c1c95f5d6600502f6c44ec659e4cec6b4a5a593fb16d7605f1fa6ddbfdd4756e01a85766136f2beb275e2bfc9bd403922aa268f7bb9c38402bf5842b00eaa5a235f06a629f53cadddac09f0397e1e4af1e730540bd36402c71429c72fe25f06cea41490914ed7ea712053f524fb902a0148a107035f07a6c0d547ea613ed7e67e3e4af445c01502a03c0aec4b6c0c9c0fdd81aa83cac47b4fb9d006c967a30ca972b004aed35c4fee79bf0da939a6f1de024601e4efe4acc00a02a78357023b606aad936024ec3763f55845b00aa8a39c0594428fd22b038f580a40eda8a68c57c17ae74a9225c015095cc0116008713fba452ddb580ad818b88152e277f5586014055b3317128f024ac0e56bd4d22b6b72e07f6c4763f558c5b00aaa275887dd27ee02ae0d7a90724b5691271c5f5126087d4839156c5150055d53ac031446df056a90723b5611af0469cfc5571ae00a8cad622964e57108529ff175b03556d538937f99d026c977a30d29ab802a0aa1b00f62256026c0d549515ed7e67e2e4af1a48b902d04afdc9ab368ad6c0758827abfb702540d5b23ed1ee771c16fca83dc9e6c254016039f01071b8cb550895b521f136c1df033f4d3d1869583fb1ec7fd0f09f3db4aab29e051e25b6397baeb56245927fef5ac0cec08b702540ede9071601df4a3d1069d8fa44a5f56ce2e1462a6b05f130f36312ac6aa60a009224292197df2549ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca90014092a40c19002449ca507fc27fef9f00b38115a9bf08922425d007fc18781858deeb7f79ca00f02ae0fdc0a61802244979e903be0f9c0f3c926200a902c053c03dc0dac049c0c6402bd1582449eaa5e5c4e47f3bf033e0b9148368ad5891f4e17b103818f8283007438024a9d99e03be0c5c0cfc007836d5405207008029c07b80a381576208902435d372e05ee064e03f49b0ef3f5a150200c064e08dc085c4d900438024a94996005f02e603bf24f1e40fd509001021e0cf81b386ffe915454952133c0edc01cc031e4b3d9842950200c024e27ae0b9c09ec31f4b9254472b808780cf12f3dae2d4031aad6a0100e2c9ff25c04260376020f58024496ad30ae0d7c075c08dc42a40a55431004084802d8053890382d3530f4892a4928ac9ff52e2aadf13a907b42a550d008521e2c0c48731044892aa6f05f04362e2bf938a4efe50fd0000300b381bd81b7831de10902455d30ae26eff99c03f007f4c3da035a943008078fa3f80680ddc14438024a95a9603df2556adbf4dc5277fa84f0000980a1c041c87ad8192a4ea584edcf15f48e276bf76d42900405407ef0f1c85854192a4f49e06be0a9c06fc5f2a50f05356dd0200c05a446be0f9c0ab31044892d258027c8638ed5f8976bf76d431004084803710072dde88ad8192a4de5a02dc062c001e4d3d98f1a86b008091d6c0f9c0db310448927ae301e0f3c44a742d277fa877008098f4b7225e22f456ec0a902475d722e032e28eff92d4839988ba070018690d3c063818438024a9f35610aff0bd8a78b14f650b7eca6a420028cc260a830c0192a44e2a0a7eae03ee069e4c3da04e68520080680d3c19783f51182449d244ac00fe17f1aafa6f03cfa41e50a7342d0000ac0d1c480481cd520f4692545bcb894adf0b817fa241933f407fea0174c132e0e3446a3b1a989b7a4092a4da590efc35702ef013e0b9d403eab426ae0014a600ef004ec0c2204952794f035f01ce007e41cd0a7eca6a7200005b032549ed5902dc055c4e0ddbfddad1f4000011027622ce04bc0d43802469d59600b7120f8d7f483d986ecb2100c0ca8541efc21020495ad903c03dc43cd1f8c91f9a790870559613fb386710870377c1ae0049525844bcd0e793c0e3a907d32bb9ac00148ad6c0a3814330044852ee7e41b4fbdd49dc22cb466e01a0b00ef126c1438169a90723494ae2fbc0f5c4d27fedab7ddb956b0080a80e3e91680db4304892f2f23da23ebe51ed7eedc83900403cfd1f80ad8192948b15c0b7808b6860bb5f3b720f001021e083c4b98097a61e8c24a96b56007f099c47b4fb3d9b7a40291900c220b017d11ab843eac148923aee19e05ee2a53e3fa7c1053f6519004614ad81e7610890a42659027c0ab88286b7fbb5c300b0b2a235f04460372c0c92a4ba5b02dc4214fc3c927a3055924b115059cf10af7efc2df014b6064a529d2d02ee0616e2e4ff020680175a4eec0f9d49bcfe7137ec0a90a4bac9b2ddaf1d6e01ac5ed11a78147018860049aa8ba2ddef13c0d2d483a92a03c0d8d6054ec710204975f03da2ddef0b6456eddb2e034039eb00c7117d0116064952357d0f388738cb956dc14f590680f26c0d94a46a5a01fc1d7031701ff074ea01d58101a03dd3800f00c7606ba02455c10ae08bc0f9d8eed7160340fba6027b02c7033ba61e8c24656c29f035601ef0332cf8698b01607c0688d6c07389d640bb0224a9b79602371307fefe1f4efe6d33008cdf00f05a623b60efd48391a48c1493ff45c0c3a907535716018ddfd3c03f020f0d7f6c0890a4ee5b44dcefbf1adbfd26c4158089eb03b6269a03df895d0192d42d8b804b8876bf25a90753770680ce68011b1107030fc71020499df653e063c05d38f9778401a0b3d6034e013e0ccc4e3d18496a887f06ae04be0c3c917a304d6100e8bcd9c0114475b08541923431ff4c5cf3fb3616fc749401a03ba613b5c1a7600890a4f1fa32f1e47f3f4efe1d6700e89ee9c07b893301dba71e8c24d5cce7895e7f0b7ebac400d05d53805d80d388ce0049d29a2d05be4a14adfd074efe5d6300e8bea235703e8600495a93a5c04dc00dd8eed7750680de285a038f06f6493d1849aaa065c08dc042e0f7a90793039b007ba3680dfcefe18f0d01923462117027702d56fbf68c2b00bd55b4069e0ebc1b0b8324c976bf440c00bdd70236068ec3d6404979fb09d1eef719e0f1d483c98d01209d1701270107636ba0a4fc7c97b8e3ff156cf74bc20090d66c6215e0702c0c92948fef1237a36cf74bc80090de0ce003d81a28290ff7025761bb5f7206806a9801ec4fac04bc32f56024a94b3e4ff4fa5bf053010680ea1804de8aad81929a6729d1eb7f3ef0ef38f9578201a05a06809d89846c0890d4044b89829f9b8876bfe7520f48c100503d456be051c0bea907234913b08ca8f5bd9491223455844d80d553b40616559886004975b408b803b81eab7d2bc91580eaea03b6014e05f6c6c22049f551b4fb7d0a0b7e2acb00506d456be0478123300448aabe9f109dfe9fc5c9bfd20c00f5f022e044e0106c0d94545ddf21eef87f95d8ff5785a50a0093804d800700134839eb0087122b01160649aa9aef000b807fc0829fb2fa800d808748703ba22fd1273d081c04ec92700c75f3087198e612627f4d92aae21ee00cacf66dc76ce2b6d7db80b5520c20d52d80c9c01b815d8930702fde0d2de371e02ee029e22542af4b3d2049d9bb0738170b7edab10e232f83bb83440fc2a99fbeb7279aa10ec12b89653d46848005c4929b24a5b014f838515ce6e45f4e0bd88878f7cb47805924dc064f3de94e02e602670e7f616ec19580329e26f6d99603a7036f4a3d2049595946b4fb5d03fc06cf7295d102b6236e757d00980a3c9b7240a90340f145d904388b48433713fbdd5ab3a789fdb625c0f1c07ea90724290b7f006e05ae200eaf696cc5e47f0ef04ea2f135b92a040018b9ef7e163093a88d34048ced19e0fbc476400b5b032575d722a2daf756fc1d5d561f71e6ed28602f2a32f943750240612a7034f105bb917871844b4b6bb69cd87f3b9b48e6efc7c220499d57b4fbdd459c45d2d8fa8853fea7033b1207e02ba36a010062f23a06581f58484c6e8680355b0efc8c585e5a021c09ac9d7a50921ae307c4dbfceec1c9bfac49c455f7f9c481f7cacdb7951bd0b041607f600a23d74b0c0163fb6fe032e08fc081c086a90724a9f6be433c8c7d037832f5606aa29fb8dd7628f0322a3ad7567250c30680771029ea36e0eb78cda48c878810f0dfc071d81a2869fc6cf76bdf2462f23f8338e0de4a3da0d5a97200809110f0e2e18f0d01e5fc812897789a789ba0214052bbee26da47bf87937f59b389baf6a388fbfe959dfca1fa01a018e3f6c456c014e04bd81550c663c0a719690d7c7dea0149aa8dbb81f380ff830f5d65ad4314fc1c4d4dce60a56e022cab0801e7117b2a93520fa8268a10701eb6064a1adb5262f5f05c9cfccb6a015b02a7114ffeb598fca13e0100465a03cf000e27ae0c6a6c4561d07ce05ba90723a9b2961177fcadf62daf28f8994f3cf9d7ea0a761db600462b0a83ce245ea17815b1dfad357b0a5b0325adde1f882af6ab80dfa51e4c4d1493ff3ce0edc41675add42d0040ac5a6c444c64034431858d54632b5a03cf1bfed8102009e057c493ffedc0c3a90753132de26db68700bb53c3c91fea19000ad388fd9649c437ae5d01635b4eecebcd2342d307a9d99295a48e2adafd3e8d053f65b580dd88dfa3952cf829ab4e670056a50801f388a5984a5fb9a888e5c07f10877c6e20f6fd24e5e707c48aa0937f7993807751e176bf76d47af0c30689fd97167031f02fb81250c643c4dbbc9ec5d6402937f7134ffedf049e483d989a98041c461cf6db9606dc466b420080d87f793b71fde23ae06b1802caf81db6064ab9b91f381ff87b2cf829ab8f98fc4f238ae91ab1dadc9400007120701760dde18f0d01e5d81a28e5e37344bbdff771f22f6b36f182b523a841bb5f3b9a14008acfa7680d1c22bed96d0d1cdb63c06788177d1c82ad815213dd4d3cf95bf053de6ce2c1e8281a7860ba6901a0f89c8a103013b8194340198b81cf12db02676108909a622931f95f4e1c0076f22f674b62e23f8c064efed0cc0000b15f3387d8afe92396b83de832b6a788b77e3d477cedfe22f580244d48d1eef731e081d483a991b9c0e9c0bb6970eb6c530300c43ecd26c45fe206c095d81a58c6e8d6c0e380fd530f48d2b814ed7e57030fa61e4c8dcca5c6ed7eed6872008078fadf18f8287148f0620c016514ad81171041cad640a95e7e451cf6bb03dbfdca2a0a7e0e19fe67a3277f687e00284c274e70f603b7128760b466cb819f1249f861e0006af4962b2963b6fbb5af31ed7eedc8e2931c5684804d88162743c0d88ad6c0f388bdc45abdea52cad07dc443ce5fe3e45f561fd1ee772af00a329a17b3f944870d027b1169ef22e047a9075413bf23ce503c45bc3f60f3d40392f402f713db76ff40fcac6a6c7dc483e15134a4ddaf1db90500887d9dbd88939dd7015f4d3da09a7890a80e7e100b83a4aaf93b6021f04f38f997d52226ff536950bb5f3b720c00b0726b600bf84aea01d5c462625f7139f13ae66d520f48129f03ae2256349f493d989a984d74fa1f46c3dafdda916b00283ef7ed89f3004344139e0519632b5a031f2796cd764a3d2029637713cbfe3fc5df5f65cd267a4e8e20ce86652be700507cfe45089809dc883f44653c0efc25f028b6064a292c03ee04ae057e8ebfb7cada9278f23f84cc277f3000c0486be029c37fbe8de8c4d79a15ad81cf002702bba71e90948965c41dff2b8803ba2a278b76bf761800428b3804721ad11a7805160695f114f08fc4d98025d81a2875db83c0edc4016627fff2e6122bbd7b12b7c1840160b4a235f058602d6c0d2ceb59e05f897dc8e5c03ec0e4d483921a6811711df793f8bba91d7b00871207bf9dfc473100bcd074e0706212bb050b83ca18dd1af810f1c3666190d4398b886b7eb6fbb5670fe06ce09538dfbd805f90559b4184808db135b0ace5c02f880ad23f626ba0d429f7110f235fc2c9bfac3ee07dc47b60fe0ce7ba55f28bb27a83c47e511fd11af8c3d403aa8907893bc94f021fc2d64069226cf76b5f1f702431f9cf19fe58ab600058b3416209a9680db430a89cdf127b95bfc3d64069bc6cf76bdf2070307012b0299916fc94650018db14e02d4479041802ca5a4c14063d079c80ad81523b6cf76bdf6ce24af201c08638f98fc90050ce64a2306801511b791b166f94b118f82c511c7434b6064a65d8eed7bed9c41dffc388335c2ac10050de64e255916712d7046fc01fce321e07fe8a0803b6064aabb70cf838f0316cf76bc75c62e23f1027ffb61800dad322f6954e265e1bf929bc8f5bc6e8d6c013887315924614ed7e57120769554e51f0539cd5521b0c00ed2b5a038b57485e4874e26bcd46b7062ec5d640a9f020b1ad78034efeed7825b1ecbf3b16fc8c8b01607cfa88b300870e7f6c0828a7680dbc90381cb81f7e0f2a6fb6fb8dcf1ec031c0cec4416d8d83bf7c27662651183403b81a0b83ca580efc8458b67b88d8bbb33048392adafd3e43ac8ca99ca2dd6f7bac1d9f1003c0c44d073e08ccc2d6c0b28ad6c04b8955015b03959bfb809b817b71f22fab0f783f51f0f3329cfc27cc00d019456b603f7039d1dea5b115ad814f107777374f3d20a907ee27b6c1fe1e0b7eca6a31d2eeb72571085b136400e89c41e230ca4c624fefcba9075413bf2542c043d81aa8e6fb26f1be0cdbfdca1b040e216e106d86053f1d6300e8ac01e00d8c2c671b02ca598cad816abecf110f07ff82ed7e65cd22ae5d7f08dbfd3ace00d079cf6f0dbc0558917a5035b098680d7c8c38dd6b6ba09ae46e62d9ff2758f053d62ce00ce2b6d5ccd48369220340774c065e4e7cf34e260a3e0c01637b1cf8ebe17f9e89ad81aabf65c01d44bbdf2f70f22f6b2e71c3ea009cfcbbc600d03d456be049c4d7f913d81550c653c4e1a8a7b13550f566bbdff8d8eed7230680ee2a42c029446be0051802cab0355075f72ba2d7ff569cfcdb61bb5f0f1900baaf680d3c84d806b035b01c5b0355578b888e8b4fe31dff76ec499cff7923b6fbf584bf507b6726d17a3793b8f66661d0d86c0d54ddfc0cb88238f4b738f5606a644fe26da1b6fbf59001a0b766001f204eb7cec3105046d11a7819b12a7034ee0baa9aee230efb7d8d38c8aab1b58826d563b1ddafe70c00bd37481c6ee92726355b03cbf92dd1b2f8087004b606aa5a6cf76b5f8b08f4c762bb5f120680340681dd8815015b03cb7b08b80958421cacb4355055f01562d9ff3b38f9973548dcef3f1edbfd923100a4636be0f82c260e573dc5c84b41a4543e4754fbfe1bb145a5b1d9ee57110680b446b7066e4cbc1dccc2a0b12d66e490d5f1d81aa8de7b96f81e5c88ed7eed9845947c1d82053fc91900d22b5a034f1bfef3751802ca584a2cbd3e89ad81eaad654458bf01f84f9cfccb9a4b9cdff9204efe956000a88616b10f7622f1777227760594f13471e86a19719068efd40352e315ed7e5711075355ce5ce05ca2e0c75b3c156100a88ed1ad819b606b60594f11d7af1613cbb2b606aa5b7e45f4fadf86937f3b76221e6e76c1c9bf520c00d5d2471c8a3978f8e3f3b14ca48ca230e8226255e0ddc0b4d48352a3d8ee373e7b12eff4781d71f05915d2977a005aa521e28acca5c4d299c6b61cf831b1cc783db1542b75c2cf883bfe4efeed29dafd76c2c9bf925c01a8ae19c0fb8930606b6039cb815f0257335232e292a326e23ee05ae06fb0ddafac1651db7d38f027d8ee575906806a1b240ecdac45fc12fa66ea01d584ad81ea84a2ddef5bc4d692c65604ef13b1e0a7f20c00d53715d815984dbc21cbc2a0721e026ec4d6408dcf578810f95d9cfccb9a051c40dcc871f2af0103403dac05ec40eca7b588106057c0d81e63a435f038e04f530f48b560bb5ffb8a829ff701ebe3e45f0b1e02ac8fa235f03c6289cd1fb07216138d6df388fd5c69759e2502e345c0bfe2e45fd61031f91f4cdc62725ea9095700ea6532d17d7fc2f0c71f4b3da09a580a7c955809b03550ab52b4fb5d4f1c24b5ddaf9cb9c4efa37d8983cbaa110340fdb488436d27133f703760615019456be052e22542b606aaf004b6fb8d87ed7e356700a8a7a235f078e270a0ad81e514ad818f01cf01fba51e9092fb15b6fb8dc74ec049c05b71f2af2d0340bdad4becbbf511a5410fa61e500dac205a032f245e24b437b606e6ca76bff1d98b78f8b0ddafe63cac517f43c4ab352fc6d6c0b28ad6c005c416ca13a907a49efb39b6fb8dc79ec019d8eed708ae0034c374601f6229ced6c0728ad6c0ab863fb635301ff701d7005fc776bfb25a44b3dfe1c04bb1ddaf110c00cd3195388c3340fc72b335b09ca235f061e0486c0d6c3adbfdc6e768e2b4ffe67805b9310c00cd3215781b51ca3108dc9b7a4035f11070137143c0d6c0e6b2ddaf7db38003818fe0e4df380680e6295a03cf18fed8d6c0728ad6c02789034eb60636cbddc0426cf76b87ed7e0de721c0669a0cbc12381f3826f5606a6431700fb60636c952e04e62d9ff5f71f22f6b8898fc3f8ced7e8de50a40734d269e628f2756006c0d2cc7d6c0e67882b8e5710371e5cf76bf72e6126ff3db07dbfd1acd00d06c456be049c04ca2edccc2a0b115ad814b889708d91a583fb6fb8d8fed7e193100345f8b38d4f651624fef7cbcf75cc653c489f1c7b135b06e7e454cfe9f200e78aa1cdbfd326300c8c77ac47ede24e255a7b6068ead680d3c97084def07d64e3d28ad51d1ee771771b053e5ec455cf37b2d16fc64c3831d79994554072fc4d6c0b29613c54ae7134f95b60656d78f89b0f6699cfcdb51b4fbbd1e27ffacb802909fe9c49ef620b606b6e3d7c0d5c429f2238830a5eab89fb8e3ff0de220a7ca3962f83f73b1dd2f3b06803c15ad81538849cdd6c072fe0bb882680d3c160b83aaa268f7fb3b2cf869c731d8ee97350340bea602bb10f77d6d0d2cef61e2d5b14f0327630848ed0bc095c00f71f22f6b16701051efbb394efed93200e46d746b608b0801b6068eed31460e997d147855ea0165ea6ee00262efdfefdb7286b0dd4fc33c04a8a235f03c6c0d6cc762e2e97301b104adde19ddeee7e45fde107016b6fb69982b00025b03c7eb49e06f899e80d38037a41e50069e006e246e642cc2c9bfacb9c41dffbdb1dd4fc30c002ad81a383e4f13af96fd0311a02c0cea9ea2ddef4a6cf76bc75c603eb00716fc6814038046b335707c9e02be472c49b7807d530fa8811601d7114bffff9d7a3035f216a2cefa4d38f9eb790c005a95a235702da24bfd97a90754032b88fde8f9c4ca89ad819d53b4fb7d0a0b7edab117700af01ae267595a898740b43ac555a1f3b135b0acd1ad8137606b602714ed7e4efee5b580b713b77b76c0c95fabe10a80d6641af04ee2fb643eb60696f56b62e5e48fd81a3811f70397114555b6fb95770c7028b02db6fb690d0c001acb207178683a7100cbc2a0728ad6c0df13672a2c0c6acf77b0dd6f3c8e210ea36e8e77fc35060380ca980abc99b847bc02f872ea01d5c4c3c0edc033d81ad88e2f12bdfe3fc2c9bfac59c051c493ffa638f9ab040380ca2a0a83ce210eb7dd8d77b0cb285a031713a7b16d0d5cb37b88331416fc943744b4fb7d8838c02b956200503b2603af20de22b81e160695b59878aa7d9c280c7a5dea0155d052467afd9dfccbdb9038e97f009e35519b0c006a573f71b8e8f8e18f0d01e5d81ab87a45bbdf75c00338f9973517381d78077146476a8bd700351e2d600b6222bb805882d4d88ad6c09389a56ec5e47f03f1e4ff2be22aa5c656b4fbed8d93bfc6c915008d570bd818381218c0d6c0b29e02be4f0427c8bb357011b182f4096cf76bc7e876bfc1d483517d190034514561d000f114676be0d86c0d1c69f7fb24713642e5ec099c8aed7eea00b700d409b389107001b6069635ba35f046f26a0dfc0923ed7e4efee5d8eea78e7305409db23671186912b606b6e3d74461d033e4d11af81de2c9ff1bc0b2d483a991a381c3816db0dd4f1d6200502715ad81338813ddb60696f35ba2f8a6e9ad81ff045c8ced7eed2adafdb6c0821f759001409d56b406cec4d6c0763c02dc46bc3fe0249a1702ee2142ceffc6c9bfac59c493ff21d8eea72e3000a81bfab135703c1e270ec53d4a3cf1bd32f5803ae4f3c4f9907fc3ef83b2868876bf038075530f46cd640050b714ad81f3b135b01d8fd19cd6c065440df255c0cf70f22fab68f7fb1071c056ea0a0380baa99f38b4646b607b8ad6c027892b5f6f493da07128dafdae027e937a303562bb9f7ac600a06e1bdd1ab82171027c71ea41d5c0d3c03f125fabc5c03ea907d48647819b806b89038e2aa768f7db130b7ed4030600f582ad81e3f30cf043e0bce18feb100216015713ed7e8fa41e4c8dbc855829db19277ff5880140bd646b60fb5610c539a7010f021fa6baad810f00971193bf053fe5d9eea7240c00eab5a235705de2c9d6c2a0b12d07fe13b888b8267838d50b013f240a8dbe82937f592d602f22dcbd1a7f1fabc7fc86530ab6068ecf83c424bb14380cd820f580867d970827df240e2eaa9cd1ed7efe2e56cff92e00a552b4065e452c81aa9cff22b64f2e2696dc53bb8f38d351dc5a503947137bfe2fc56a5f2562ea544a5389579a4e1bfed8d6c07216037700cf0127132d71297c9eb8d5f16fd8ee5756d1ee7728f0626cf753420600a5d60fbc0a5b03db55b406fe8e7892ec7561d01788331c3fc6bfafb28688b7f91d88ed7eaa000380aac0d6c0f1790cf81251ba7316f0da1efc3b6df71b9f2d801380f761bb9f2ac200a0aa18dd1a38892892792af5a06ae019e2ed7acf10a7c9dfdcc57fd732e2efe54a6cf76bc75ce06ce2c47fd56e6f28631e025495b480cd893bd1f38925538dad680d3c95589aef86478966bfcb71f26fc776c4f7f23b70f257c5b802a0aae9232a830f2356022ec0d6c0329e017e042c18fe78ef0efe7f3f402cf9df09fc21f5275a237b02c702afc7763f5590014055358b68bd9b0e5c835d016514ad81a7101dfc9d680d2cdafd3e0e2c49fd09d6c89ec4813f0b7e54597e63aaca6633f24ad479c0bfa71e500d2c272a962f029e255652c61b027e442cf97f1927ffb25ac07ec089c4c1567fc7aab2fce654d50d124f53fd44e1cc8f520fa8261e249edc9730bed6c07f062e04be818731db7114700cf012fcfdaa8af310a0ea6010d88d98d06c0d2cefb78caf35f03ee28effd771f26fc7d1c4553fab7d550b7e93aa2ea6006f18fee70ae2a5331adb62e076626be024c66e0dfc02b09028f87926f5e06b628868643c9038c06abb9f6ac11500d549d11a783ef1cbd65fb4e52c215ed17b02f1e29ed5f922718be007f8e45fd61070267024b0117e4faa465c0150dd4c065e46fcd25d1bb82ef5806ae231e05ee2853d67033b8efaef8a76bf2b819f63bb5f59a3dbfd66a51e8cd42e0380eaa80f9843fcf2edc7d6c0b256d51af804703371daffbf520fb046b62382d4dbb1e047356500505d15ad81a711fbae17636150194f03df26be568712c53ed7120706554ed1eeb71716fca8c60c00aab33ee27a9bad81edf923f02fc0b9c37ffe7dea01d5c89ec04789b72f3af9abd60c006a025b03dbf71c3ef5b76b0f6cf75383780b404d51b406ce239668a54e6901fb13df5b4efe6a0cbf91d52483c4beec646c0d54e71c057c843878eaef4c35862b006a9ad1ad817ba41e8c6aef28e2b6c9d638f9ab61fc8656138d6e0d045b03d5be21a2ddef20e2a0a9053f6a1c5700d454a35b030fc05fe02a6f8838ec772456fbaac15c01509315ad816711652dd7a71e902a6f0be255beefc5763f359c01404d57b4069e4804829b893a5ce9f98a76bf770053530f46ea36b7009483a235f074e22ad750ea01a9728a76bf77e1e4af4cb802a05cf401eb13ad817dc085d81aa8b007703cd1ee376582ff5f526d1800949b59c0c1c04ce06a6c0dccddeec49b252df85176dc02508e66031fc4d6c09cb580fd88f72138f92b4b7ed32b5783c4ab5c2703e7112fc7513e8e245eea3387789194941d570094b329446be015c452b09a6f103896b815b2154efeca982b00cadd1460276060f8e3afa61e90ba6608389568f77b1116fc2873ae004823ad81970247e0c4d04443c435d0c389db20fe1d2b7bae004861327120f0146272b821f580d431db01c701fb60bb9ff43f0c00d288a230e824a23af836e0d1d483d2846c47dcf67807def19756e21680b4b222049c029c86ad8175f60ae265504efed22ab80220bd501fb01e70e8f0c717616b60ddec4ebcce77479cfca5557205405abd59c0514463a08541f5b11bf106c89d70f29756cb150069cda601fb13d704e703ff917a405aad16f021a2d7ffa5f8fb4d5a237f40a4b10d10fbc86b132f11fa6eea01e9055ac415ce13802d7175531a933f24523953805d8085c412b3aa6310f808717b630efe5e934a7105402a6f2de295b1670f7ffcb5d4031243c48d8d8389839b16fc48259994a5f64c22de1e7739d12ae78493ce107155f348acf695dae60a80d4be7e605ba257be05dc04ac483da8cc8c6ef71b4a3d18a98e0c00d2f8148541271337056c0dec9d6d81738077e2353f69dcdc0290c6af0801a70eff6728f58032f072e002e05d38f94b13e20a8034317dc0bac47900808bb135b05b762382d68e8cbcbe59d238b9022075c6107034700db144adceda95b87db1134efe5247b8022075ce34603fe2d5c2e7626b6027b4800f02270273895b18923ac0002075d60071386d1ab6064e548bd85a3909d802572ca58ef2074aeabcd1ad81bba61e4c4d0d02c710b72cacf695bac01500a93b8ad6c073863ffe9bd403aa9121a2ddef10e280a5053f521798aaa5ee295a03af040ec389ac8c21e2a4ff9158ed2b75952b00527715ad81a71193d9cdd81ab83a45bbdfbed8a920759d0140ea8dcd8965ed69c0edd81af87c45bbdfbbf09a9fd4136e0148bd51b4069e4e0481a1d403aa909733d2eee7e42ff5882b0052eff401eb00470c7fbc105b03772542d10e38f94b3de50a80d47b43c04780abc9bb35f06d44bbdfeb71f2977ace1500298db581f710ad810bc8ab35b0455cf13b119883ed7e5212ae0048e9ac05bc1bb89478c14d0e5ac0a1c4b2ff36f8102225e30f9f94d600b1143e933808f7f5d403eaa259c08781a3886a5f49091900a4f42633d21ab816f055e0b9d483eab021a2d6f7302208484acc2d00a91a2601af012e070ea6590d7843c4d5c7a3885b10fede912ac01500a93afa81ad88d640805ba87f6be0b6c47eff3ec0d4d4839134c2002055cfe6c476c07ac0f5d4b735709be1cf636f626b435285b81427554f0bd898b8267732f56c0ddc01b88cb8e5e0e42f55902b005275cd22de8ab7163199fe2ef5804ada8528f8d98138e028a9825c0190aa6d88383c7729b1a45e75bb00f380d7e2e42f559a2b0052f50d02fb133705ce057e967a40abd047dcf13f19d812dbfda4ca730540aa87c9c47efa35c09fa71eccf3f4115717cf00b6c6070ba916fc4195ea6300f80be23d020b80bf4d3d206cf7936acb0020d54b3fb1bf3e8f381cf835d2b5060e012711af37b6dd4faa19b700a4fae9235a03af249ebe53fc1c0f11fbfd4703b3695673a194055700a47aea075e42ecbb03dc062cefd1bf7b9be17fefbec401454935640090ea6d33603ed11a7803dd6f0d2cdafdf6c56b7e52adb90520d55b0bd888588e3f91eeb606be862824da07277fa9f65c01909a61083886b82970399d6f0d7c2bf1e4bf23fede901ac11500a939661221e0123adb1af856629be17538f94b8de10fb3d42c5380f7104d7c0b98586b601f7010702a71c7df0706a941fc81969a6732b14f7f0df08671fe7f14d5be67015be1c382d438fe504bcdb416f066a235f05ce01b6dfc6f67030712db099ba7fe4424758701406aae49446be07ce270e0df00cf8ef1bf19024e20aa7d87527f0292bac72d00a9d98ad6c0ab88a7fa35fdcccf22ae127e64f8cfb6fb490de60a80d47cfdc01ce04c6005f0715ef8fe80a2dd6f3fe220a1a486730540cac766c4cd805359f9e53ddb006703efc3c95fca862b00523e8ad6c053880eff4b809711053f3be3ef03292bfec04bf999491cf2db7ef8cf3b1207062565c40020e56936d1f0074efe52960c0052be7ca18f94310f014a92942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294210380244919320048929421038024491932004892942103802449193200489294a1ff0f9d7f1fa152f0cf9a0000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "listLists": {
+      "id": 35730,
+      "api": {
+        "url": "/lists",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{item}}",
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.next_page_url}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "listLists",
+      "epoch": null,
+      "flags": {},
+      "label": "List Lists",
+      "scope": [],
+      "expect": [
+        {
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit"
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/lists\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\"iterate\": \"{{body.data}}\",\n\t\t\"output\": \"{{item}}\"\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t},\n\t\t\"condition\": \"{{body.next_page_url}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23sendfox@1/interfaceList"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Lists all lists.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Limit\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://interfaceList\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "universal": {
+      "id": 35731,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://api.sendfox.com/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "universal",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://api.sendfox.com`. e.g. `/lists`",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"https://api.sendfox.com/{{parameters.url}}\",\n    \"method\": \"{{parameters.method}}\",\n    \"qs\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n\t},\n    \"headers\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n\t},\n\t\"body\": \"{{parameters.body}}\",\n\t\"type\": \"text\",\n    \"response\": {\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n\t\t\t\"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"help\": \"Enter a path relative to `https://api.sendfox.com`. e.g. `/lists`\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"required\": true,\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ]\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n    },\n    {\n        \"name\": \"qs\",\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"body\",\n\t\t\"label\": \"Body\",\n\t\t\"type\": \"any\"\n\t},\n\t{\n\t\t\"name\": \"headers\",\n\t\t\"label\": \"Headers\",\n\t\t\"type\": \"collection\"\n\t},\n\t{\n\t\t\"name\": \"statusCode\",\n\t\t\"label\": \"Status code\",\n\t\t\"type\": \"number\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createList": {
+      "id": 35732,
+      "api": {
+        "url": "/lists",
+        "body": {
+          "name": "{{parameters.name}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "createList",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a List",
+      "scope": [],
+      "expect": [
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/lists\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"name\": \"{{parameters.name}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{body}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23sendfox@1/interfaceList"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Creates a new list.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Name\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://interfaceList\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getContact": {
+      "id": 35733,
+      "api": {
+        "url": "/contacts/{{parameters.contact_id}}",
+        "method": "GET",
+        "response": {
+          "output": "{{polishDate(body)}}"
+        }
+      },
+      "rev": 5,
+      "crud": "read",
+      "name": "getContact",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Contact",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "contact_id",
+          "type": "select",
+          "label": "Contact ID",
+          "options": "rpc://app%23sendfox@1/listContacts",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/contacts/{{parameters.contact_id}}\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": \"{{polishDate(body)}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23sendfox@1/interfaceContact"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Gets a contact by ID.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"contact_id\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Contact ID\",\n\t\t\"mode\": \"edit\",\n\t\t\"required\": true,\n\t\t\"options\": \"rpc://listContacts\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://interfaceContact\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getCampaign": {
+      "id": 35734,
+      "api": {
+        "url": "/campaigns/{{parameters.campaign_id}}",
+        "method": "GET",
+        "response": {
+          "output": "{{polishDate(body)}}"
+        }
+      },
+      "rev": 5,
+      "crud": "read",
+      "name": "getCampaign",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Campaign",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "campaign_id",
+          "type": "select",
+          "label": "Campaign ID",
+          "options": "rpc://app%23sendfox@1/listCampaigns",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/campaigns/{{parameters.campaign_id}}\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": \"{{polishDate(body)}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23sendfox@1/interfaceCampaign"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Gets a campaign by ID.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"campaign_id\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Campaign ID\",\n\t\t\"mode\": \"edit\",\n\t\t\"required\": true,\n\t\t\"options\": \"rpc://listCampaigns\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://interfaceCampaign\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "listContacts": {
+      "id": 35735,
+      "api": {
+        "url": "/contacts",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{polishDate(item)}}",
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.next_page_url}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "listContacts",
+      "epoch": null,
+      "flags": {},
+      "label": "List Contacts",
+      "scope": [],
+      "expect": [
+        {
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit"
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/contacts\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\"iterate\": \"{{body.data}}\",\n\t\t\"output\": \"{{polishDate(item)}}\"\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t},\n\t\t\"condition\": \"{{body.next_page_url}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "lists",
+          "spec": [
+            {
+              "name": "id",
+              "type": "number",
+              "label": "List ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            }
+          ],
+          "type": "array",
+          "label": "Lists"
+        },
+        "rpc://app%23sendfox@1/interfaceContact"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Lists all contacts.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Limit\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"lists\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Lists\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"List ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Name\"\n\t\t\t}\n\t\t]\n\t},\n\t\"rpc://interfaceContact\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createContact": {
+      "id": 35736,
+      "api": {
+        "url": "/contacts",
+        "body": {
+          "email": "{{lower(parameters.email)}}",
+          "lists": "{{parameters.lists}}",
+          "last_name": "{{parameters.last_name}}",
+          "first_name": "{{parameters.first_name}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{polishDate(body)}}"
+        }
+      },
+      "rev": 5,
+      "crud": "create",
+      "name": "createContact",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Contact",
+      "scope": [],
+      "expect": [
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email address",
+          "required": true
+        },
+        {
+          "name": "first_name",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "last_name",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "lists",
+          "spec": {
+            "type": "select",
+            "label": "List ID",
+            "options": "rpc://app%23sendfox@1/listLists"
+          },
+          "type": "array",
+          "label": "Lists"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/contacts\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"email\": \"{{lower(parameters.email)}}\",\n\t\t\"first_name\": \"{{parameters.first_name}}\",\n\t\t\"last_name\": \"{{parameters.last_name}}\",\n\t\t\"lists\": \"{{parameters.lists}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{polishDate(body)}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23sendfox@1/interfaceContact"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Creates or updates a contact.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Email address\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"first_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"First Name\"\n\t},\n\t{\n\t\t\"name\": \"last_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Last Name\"\n\t},\n\t{\n\t\t\"name\": \"lists\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Lists\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"select\",\n\t\t\t\"label\": \"List ID\",\n\t\t\t\"options\": \"rpc://listLists\"\n\t\t}\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://interfaceContact\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "listCampaigns": {
+      "id": 35737,
+      "api": {
+        "url": "/campaigns",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{polishDate(item)}}",
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.next_page_url}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "listCampaigns",
+      "epoch": null,
+      "flags": {},
+      "label": "List Campaigns",
+      "scope": [],
+      "expect": [
+        {
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit"
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/campaigns\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\"iterate\": \"{{body.data}}\",\n\t\t\"output\": \"{{polishDate(item)}}\"\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t},\n\t\t\"condition\": \"{{body.next_page_url}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23sendfox@1/interfaceCampaign"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Lists all Campaigns.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Limit\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://interfaceCampaign\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchContacts": {
+      "id": 35738,
+      "api": {
+        "url": "/contacts",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{polishDate(item)}}",
+          "iterate": "{{filterItems(body.data, parameters.event)}}",
+          "trigger": {
+            "id": "{{item.id}}",
+            "date": "{{get(item, parameters.event)}}",
+            "type": "date",
+            "order": "unordered"
+          }
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.next_page_url}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "watchContacts",
+      "epoch": {
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{get(item, parameters.event)}}",
+            "label": "{{item.email}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Contacts",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/contacts\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\"iterate\": \"{{filterItems(body.data, parameters.event)}}\",\n\t\t\"trigger\": {\n\t\t\t\"id\": \"{{item.id}}\",\n\t\t\t\"date\": \"{{get(item, parameters.event)}}\",\n\t\t\t\"type\": \"date\",\n\t\t\t\"order\": \"unordered\"\n\t\t},\n\t\t\"output\": \"{{polishDate(item)}}\"\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t},\n\t\t\"condition\": \"{{body.next_page_url}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "lists",
+          "spec": [
+            {
+              "name": "id",
+              "type": "number",
+              "label": "List ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            }
+          ],
+          "type": "array",
+          "label": "Lists"
+        },
+        "rpc://app%23sendfox@1/interfaceContact"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"date\": \"{{get(item, parameters.event)}}\",\n\t\t\t\"label\": \"{{item.email}}\"\n\t\t}\n\t}\n}",
+      "parameters": [
+        {
+          "help": "Select the event that you watch for.",
+          "name": "event",
+          "type": "select",
+          "label": "Event",
+          "options": [
+            {
+              "label": "Create",
+              "value": "created_at"
+            },
+            {
+              "label": "Create or Update",
+              "value": "updated_at"
+            },
+            {
+              "label": "Unsubscribed",
+              "value": "unsubscribed_at"
+            },
+            {
+              "label": "Bounced",
+              "value": "bounced_at"
+            },
+            {
+              "label": "Invalid",
+              "value": "invalid_at"
+            },
+            {
+              "label": "Inactive",
+              "value": "inactive_at"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 2,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Triggers when a new contact is created or updated.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"lists\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Lists\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"List ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Name\"\n\t\t\t}\n\t\t]\n\t},\n\t\"rpc://interfaceContact\"\n]",
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"event\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Event\",\n\t\t\"help\": \"Select the event that you watch for.\",\n\t\t\"required\": true,\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Create\",\n\t\t\t\t\"value\": \"created_at\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Create or Update\",\n\t\t\t\t\"value\": \"updated_at\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Unsubscribed\",\n\t\t\t\t\"value\": \"unsubscribed_at\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Bounced\",\n\t\t\t\t\"value\": \"bounced_at\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Invalid\",\n\t\t\t\t\"value\": \"invalid_at\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Inactive\",\n\t\t\t\t\"value\": \"inactive_at\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Limit\",\n\t\t\"default\": 2,\n\t\t\"required\": true\n\t}\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchCampaigns": {
+      "id": 35739,
+      "api": {
+        "url": "/campaigns",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{polishDate(item)}}",
+          "iterate": "{{filterItems(body.data, parameters.event)}}",
+          "trigger": {
+            "id": "{{item.id}}",
+            "date": "{{get(item, parameters.event)}}",
+            "type": "date",
+            "order": "unordered"
+          }
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.next_page_url}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "watchCampaigns",
+      "epoch": {
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{get(item, parameters.event)}}",
+            "label": "{{item.title}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Campaigns",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/campaigns\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\"iterate\": \"{{filterItems(body.data, parameters.event)}}\",\n\t\t\"trigger\": {\n\t\t\t\"id\": \"{{item.id}}\",\n\t\t\t\"date\": \"{{get(item, parameters.event)}}\",\n\t\t\t\"type\": \"date\",\n\t\t\t\"order\": \"unordered\"\n\t\t},\n\t\t\"output\": \"{{polishDate(item)}}\"\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t},\n\t\t\"condition\": \"{{body.next_page_url}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23sendfox@1/interfaceCampaign"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"date\": \"{{get(item, parameters.event)}}\",\n\t\t\t\"label\": \"{{item.title}}\"\n\t\t}\n\t}\n}",
+      "parameters": [
+        {
+          "help": "Select the event that you watch for.",
+          "name": "event",
+          "type": "select",
+          "label": "Event",
+          "options": [
+            {
+              "label": "Create",
+              "value": "created_at"
+            },
+            {
+              "label": "Create or Update",
+              "value": "updated_at"
+            },
+            {
+              "label": "Throttled",
+              "value": "throttled_at"
+            },
+            {
+              "label": "Cancelled",
+              "value": "cancelled_at"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 2,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Triggers when a campaign is created or updated.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://interfaceCampaign\"\n]",
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"event\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Event\",\n\t\t\"help\": \"Select the event that you watch for.\",\n\t\t\"required\": true,\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Create\",\n\t\t\t\t\"value\": \"created_at\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Create or Update\",\n\t\t\t\t\"value\": \"updated_at\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Throttled\",\n\t\t\t\t\"value\": \"throttled_at\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Cancelled\",\n\t\t\t\t\"value\": \"cancelled_at\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Limit\",\n\t\t\"default\": 2,\n\t\t\"required\": true\n\t}\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "unsubscribeEmail": {
+      "id": 35740,
+      "api": {
+        "url": "/unsubscribe",
+        "body": {
+          "email": "{{lower(parameters.email)}}"
+        },
+        "method": "PATCH",
+        "response": {
+          "output": "{{polishDate(body)}}"
+        }
+      },
+      "rev": 4,
+      "crud": "update",
+      "name": "unsubscribeEmail",
+      "epoch": null,
+      "flags": {},
+      "label": "Unsubscribe an Email",
+      "scope": [],
+      "expect": [
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email address",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/unsubscribe\",\n\t\"method\": \"PATCH\",\n\t\"body\": {\n\t\t\"email\": \"{{lower(parameters.email)}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{polishDate(body)}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23sendfox@1/interfaceContact"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Unsubscribes an email.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Email address\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://interfaceContact\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getContactByEmail": {
+      "id": 35741,
+      "api": {
+        "qs": {
+          "email": "{{lower(parameters.email)}}"
+        },
+        "url": "/contacts",
+        "method": "GET",
+        "response": {
+          "output": "{{polishDate(item)}}",
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.next_page_url}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "getContactByEmail",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Contact by Email",
+      "scope": [],
+      "expect": [
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email address",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/contacts\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"email\": \"{{lower(parameters.email)}}\"\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.data}}\",\n\t\t\"output\": \"{{polishDate(item)}}\"\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t},\n\t\t\"condition\": \"{{body.next_page_url}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "lists",
+          "spec": [
+            {
+              "name": "id",
+              "type": "number",
+              "label": "List ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            }
+          ],
+          "type": "array",
+          "label": "Lists"
+        },
+        "rpc://app%23sendfox@1/interfaceContact"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Gets a contact by email.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Email address\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"lists\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Lists\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"List ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Name\"\n\t\t\t}\n\t\t]\n\t},\n\t\"rpc://interfaceContact\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "removeContactFromList": {
+      "id": 35742,
+      "api": {
+        "url": "/lists/{{parameters.list_id}}/contacts/{{parameters.contact_id}}",
+        "method": "DELETE",
+        "response": {
+          "error": {
+            "403": {
+              "message": "[{{statusCode}}] The contact is not in the list."
+            }
+          },
+          "output": "{{polishDate(body)}}"
+        }
+      },
+      "rev": 5,
+      "crud": "delete",
+      "name": "removeContactFromList",
+      "epoch": null,
+      "flags": {},
+      "label": "Remove a Contact from a List",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "list_id",
+          "type": "select",
+          "label": "List ID",
+          "options": "rpc://app%23sendfox@1/listLists",
+          "required": true
+        },
+        {
+          "mode": "edit",
+          "name": "contact_id",
+          "type": "select",
+          "label": "Contact ID",
+          "options": "rpc://app%23sendfox@1/listContacts",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "sendfox",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/lists/{{parameters.list_id}}/contacts/{{parameters.contact_id}}\",\n\t\"method\": \"DELETE\",\n\t\"response\": {\n\t\t\"output\": \"{{polishDate(body)}}\",\n\t\t\"error\": {\n\t\t\t\"403\": {\n                \"message\": \"[{{statusCode}}] The contact is not in the list.\"\n            }\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "pivot",
+          "spec": [
+            {
+              "name": "list_id",
+              "type": "uinteger",
+              "label": "List ID"
+            },
+            {
+              "name": "contact_id",
+              "type": "uinteger",
+              "label": "Contact ID"
+            },
+            {
+              "name": "created_at",
+              "type": "date",
+              "label": "Created At"
+            },
+            {
+              "name": "updated_at",
+              "type": "date",
+              "label": "Updated At"
+            }
+          ],
+          "type": "collection",
+          "label": "Pivot"
+        },
+        "rpc://app%23sendfox@1/interfaceContact"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "sendfox",
+      "description": "Removes a contact from a specific list.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"list_id\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"List ID\",\n\t\t\"mode\": \"edit\",\n\t\t\"required\": true,\n\t\t\"options\": \"rpc://listLists\"\n\t},\n\t{\n\t\t\"name\": \"contact_id\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Contact ID\",\n\t\t\"mode\": \"edit\",\n\t\t\"required\": true,\n\t\t\"options\": \"rpc://listContacts\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"pivot\",\n\t\t\"type\": \"collection\",\n\t\t\"label\": \"Pivot\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"list_id\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"List ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"contact_id\",\n\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\"label\": \"Contact ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"created_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Created At\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"updated_at\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Updated At\"\n\t\t\t}\n\t\t]\n\t},\n\t\"rpc://interfaceContact\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 71452,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "sendfox": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.authorization"
+          ]
+        },
+        "url": "https://api.sendfox.com/campaigns",
+        "headers": {
+          "authorization": "Bearer {{parameters.accessToken}}"
+        },
+        "response": {
+          "error": {
+            "message": "The Personal Access Token is not correct."
+          },
+          "valid": "{{body.data}}"
+        }
+      },
+      "rev": 4,
+      "name": "sendfox",
+      "type": "basic",
+      "label": "SendFox",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "sendfox",
+      "install": {},
+      "apiJsonc": "{\n\t\"url\": \"https://api.sendfox.com/campaigns\",\n\t\"headers\": {\n\t\t\"authorization\": \"Bearer {{parameters.accessToken}}\"\n\t},\n\t\"response\": {\n\t\t\"valid\": \"{{body.data}}\",\n\t\t\"error\": {\n\t\t\t\"message\": \"The Personal Access Token is not correct.\"\n\t\t}\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.authorization\"]\n\t}\n}",
+      "authorId": 71452,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "help": "Please visit the [SendFox Account Setting](https://sendfox.com/account/oauth) page to create a Personal Access Token.",
+          "name": "accessToken",
+          "type": "password",
+          "label": "Personal Access Token",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "installSpec": [],
+      "scopesJsonc": "{\n}",
+      "installJsonc": "{\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"accessToken\",\n\t\t\"type\": \"password\",\n\t\t\"label\": \"Personal Access Token\",\n\t\t\"help\": \"Please visit the [SendFox Account Setting](https://sendfox.com/account/oauth) page to create a Personal Access Token.\",\n\t\t\"editable\": true,\n\t\t\"required\": true\n\t}\n]",
+      "installSpecJsonc": "[\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n\t\"baseUrl\": \"https://api.sendfox.com\",\n\t\"headers\": {\n\t\t\"authorization\": \"Bearer {{connection.accessToken}}\"\n\t},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"message\": \"[{{statusCode}}]\\n{{parseError(body)}}\",\n\t\t\t\"404\": {\n\t\t\t\t\"message\": \"[{{statusCode}}] Your requested resources was not found.\"\n\t\t\t},\n\t\t\t\"502\": {\n\t\t\t\t\"message\": \"[{{statusCode}}] Bad Gateway.\"\n\t\t\t}\n\t\t}\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.authorization\"]\n\t}\n}",
+  "countries": null,
+  "_functions": {
+    "parseError": {
+      "rev": 3,
+      "code": "function parseError(errors) {\n\treturn Object.keys(errors).map(error => `${iml.startcase(error)} Error: ${errors[error][0]}`).join('\\n');\n}",
+      "name": "parseError",
+      "test": null,
+      "appName": "sendfox",
+      "arguments": "(errors)",
+      "appVersion": 1
+    },
+    "polishDate": {
+      "rev": 3,
+      "code": "function polishDate(parameters) {\n\tif (typeof parameters !== 'object' || parameters === null) return undefined;\n\t\n\tObject.entries(parameters).forEach(([key, value]) => {\n\t\tif (key.endsWith(\"_at\")) parameters[key] = iml.parseDate(value, 'YYYY-MM-DD HH:mm:ss');\n\t\t\n\t\tif(Array.isArray(value)) {\n\t\t\tparameters[key] = value.map(p => iml.polishDate(p));\n\t\t}\n\t\t\n\t\tif (typeof value === 'object' && value !== null) {\n\t\t\tparameters[key] = iml.polishDate(value);\n\t\t}\n\t});\n\t\n\treturn parameters;\n}",
+      "name": "polishDate",
+      "test": null,
+      "appName": "sendfox",
+      "arguments": "(parameters)",
+      "appVersion": 1
+    },
+    "filterItems": {
+      "rev": 3,
+      "code": "function filterItems(items, event) {\n\treturn items.filter(item => !!item[event]);\n}",
+      "name": "filterItems",
+      "test": null,
+      "appName": "sendfox",
+      "arguments": "(items, event)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-05-25T14:08:16.616589+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "The best and most affordable email marketing.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "fac49ad88160fb82e218289649c004c9",
+  "versionFull": "1.2.1",
+  "compiledName": "sendfox",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

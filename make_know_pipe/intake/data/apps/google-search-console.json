@@ -1,0 +1,1916 @@
+{
+  "rev": 33,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "https://www.googleapis.com/webmasters/v3",
+    "headers": {
+      "Authorization": "Bearer {{connection.accessToken}}"
+    },
+    "response": {
+      "error": {
+        "404": {
+          "message": "[{{statusCode}}] Resource not found."
+        },
+        "message": "[{{statusCode}}] {{map(body.error.errors, 'message')}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "google-search-console",
+  "_rpcs": {
+    "listSites": {
+      "api": {
+        "url": "/sites",
+        "method": "GET",
+        "response": {
+          "limit": 500,
+          "output": {
+            "label": "{{item.siteUrl}} ({{item.permissionLevel}})",
+            "value": "{{item.siteUrl}}"
+          },
+          "iterate": "{{ifempty(body.siteEntry, [])}}"
+        }
+      },
+      "rev": 2,
+      "name": "listSites",
+      "label": "List Sites",
+      "appName": "google-search-console",
+      "apiJsonc": "{\n\t\"url\": \"/sites\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": 500,\n\t\t\"iterate\": \"{{ifempty(body.siteEntry, [])}}\",\n\t\t\"output\": {\n\t\t\t\"value\": \"{{item.siteUrl}}\",\n\t\t\t\"label\": \"{{item.siteUrl}} ({{item.permissionLevel}})\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "google-search-console",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listSitemaps": {
+      "api": {
+        "url": "/sites/{{encodeURL(parameters.siteUrl)}}/sitemaps",
+        "method": "GET",
+        "response": {
+          "limit": 500,
+          "output": {
+            "value": "{{item.path}}"
+          },
+          "iterate": "{{ifempty(body.sitemap, [])}}"
+        },
+        "encodeUrl": false
+      },
+      "rev": 2,
+      "name": "listSitemaps",
+      "label": "List Sitemaps",
+      "appName": "google-search-console",
+      "apiJsonc": "{\n\t\"url\": \"/sites/{{encodeURL(parameters.siteUrl)}}/sitemaps\",\n\t\"method\": \"GET\",\n\t\"encodeUrl\": false,\n\t\"response\": {\n\t\t\"limit\": 500,\n\t\t\"iterate\": \"{{ifempty(body.sitemap, [])}}\",\n\t\t\"output\": {\n\t\t\t\"value\": \"{{item.path}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "google-search-console",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "interfaceRunAReport": {
+      "api": {
+        "response": {
+          "output": "{{makeDimensionsInterface(parameters.dimensions)}}"
+        }
+      },
+      "rev": 2,
+      "name": "interfaceRunAReport",
+      "label": "Interface: Run a Report",
+      "appName": "google-search-console",
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"output\": \"{{makeDimensionsInterface(parameters.dimensions)}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "google-search-console",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "ietfBcp47LanguageCodes": {
+      "api": {
+        "response": {
+          "output": [
+            {
+              "value": "ar-SA"
+            },
+            {
+              "value": "bn-BD"
+            },
+            {
+              "value": "bn-IN"
+            },
+            {
+              "value": "cs-CZ"
+            },
+            {
+              "value": "da-DK"
+            },
+            {
+              "value": "de-AT"
+            },
+            {
+              "value": "de-CH"
+            },
+            {
+              "value": "de-DE"
+            },
+            {
+              "value": "el-GR"
+            },
+            {
+              "value": "en-AU"
+            },
+            {
+              "value": "en-CA"
+            },
+            {
+              "value": "en-GB"
+            },
+            {
+              "value": "en-IE"
+            },
+            {
+              "value": "en-IN"
+            },
+            {
+              "value": "en-NZ"
+            },
+            {
+              "value": "en-US"
+            },
+            {
+              "value": "en-ZA"
+            },
+            {
+              "value": "es-AR"
+            },
+            {
+              "value": "es-CL"
+            },
+            {
+              "value": "es-CO"
+            },
+            {
+              "value": "es-ES"
+            },
+            {
+              "value": "es-MX"
+            },
+            {
+              "value": "es-US"
+            },
+            {
+              "value": "fi-FI"
+            },
+            {
+              "value": "fr-BE"
+            },
+            {
+              "value": "fr-CA"
+            },
+            {
+              "value": "fr-CH"
+            },
+            {
+              "value": "fr-FR"
+            },
+            {
+              "value": "he-IL"
+            },
+            {
+              "value": "hi-IN"
+            },
+            {
+              "value": "hu-HU"
+            },
+            {
+              "value": "id-ID"
+            },
+            {
+              "value": "it-CH"
+            },
+            {
+              "value": "it-IT"
+            },
+            {
+              "value": "ja-JP"
+            },
+            {
+              "value": "ko-KR"
+            },
+            {
+              "value": "nl-BE"
+            },
+            {
+              "value": "nl-NL"
+            },
+            {
+              "value": "no-NO"
+            },
+            {
+              "value": "pl-PL"
+            },
+            {
+              "value": "pt-BR"
+            },
+            {
+              "value": "pt-PT"
+            },
+            {
+              "value": "ro-RO"
+            },
+            {
+              "value": "ru-RU"
+            },
+            {
+              "value": "sk-SK"
+            },
+            {
+              "value": "sv-SE"
+            },
+            {
+              "value": "ta-IN"
+            },
+            {
+              "value": "ta-LK"
+            },
+            {
+              "value": "th-TH"
+            },
+            {
+              "value": "tr-TR"
+            },
+            {
+              "value": "zh-CN"
+            },
+            {
+              "value": "zh-HK"
+            },
+            {
+              "value": "zh-TW"
+            }
+          ]
+        }
+      },
+      "rev": 2,
+      "name": "ietfBcp47LanguageCodes",
+      "label": "IETF BCP-47 Language Codes",
+      "appName": "google-search-console",
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"output\": [\n\t\t\t{\n\t\t\t\t\"value\": \"ar-SA\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"bn-BD\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"bn-IN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"cs-CZ\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"da-DK\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"de-AT\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"de-CH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"de-DE\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"el-GR\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"en-AU\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"en-CA\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"en-GB\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"en-IE\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"en-IN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"en-NZ\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"en-US\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"en-ZA\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"es-AR\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"es-CL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"es-CO\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"es-ES\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"es-MX\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"es-US\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"fi-FI\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"fr-BE\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"fr-CA\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"fr-CH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"fr-FR\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"he-IL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"hi-IN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"hu-HU\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"id-ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"it-CH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"it-IT\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"ja-JP\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"ko-KR\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"nl-BE\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"nl-NL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"no-NO\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"pl-PL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"pt-BR\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"pt-PT\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"ro-RO\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"ru-RU\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"sk-SK\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"sv-SE\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"ta-IN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"ta-LK\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"th-TH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"tr-TR\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"zh-CN\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"zh-HK\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"value\": \"zh-TW\"\n\t\t\t}\n\t\t]\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": null,
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "parametersGetFilterGroup": {
+      "api": {
+        "response": {
+          "output": {
+            "name": "filters",
+            "type": "filter",
+            "label": "Filter Group",
+            "options": {
+              "logic": "{{parameters.logic}}",
+              "store": [
+                {
+                  "label": "Query",
+                  "value": "QUERY"
+                },
+                {
+                  "label": "Page",
+                  "value": "PAGE"
+                },
+                {
+                  "label": "Country",
+                  "value": "COUNTRY"
+                },
+                {
+                  "label": "Device",
+                  "value": "DEVICE"
+                },
+                {
+                  "label": "Search Appearance",
+                  "value": "SEARCH_APPEARANCE"
+                }
+              ],
+              "operators": [
+                {
+                  "label": "Text",
+                  "options": [
+                    {
+                      "label": "Equals",
+                      "value": "EQUALS"
+                    },
+                    {
+                      "label": "Not Equals",
+                      "value": "NOT_EQUALS"
+                    },
+                    {
+                      "label": "Contains",
+                      "value": "CONTAINS"
+                    },
+                    {
+                      "label": "Not Contains",
+                      "value": "NOT_CONTAINS"
+                    },
+                    {
+                      "label": "Including Regex",
+                      "value": "INCLUDING_REGEX"
+                    },
+                    {
+                      "label": "Excluding Regex",
+                      "value": "EXCLUDING_REGEX"
+                    }
+                  ]
+                }
+              ]
+            },
+            "required": true
+          }
+        }
+      },
+      "rev": 2,
+      "name": "parametersGetFilterGroup",
+      "label": "Parameters: Get Filter Group",
+      "appName": "google-search-console",
+      "apiJsonc": "{\n    \"response\": {\n        \"output\": {\n            \"name\": \"filters\",\n            \"label\": \"Filter Group\",\n            \"type\": \"filter\",\n\t\t\t\"required\": true,\n            \"options\": {\n                \"logic\": \"{{parameters.logic}}\",\n                \"store\": [\n                    {\n                        \"label\": \"Query\",\n                        \"value\": \"QUERY\"\n                    },\n                    {\n                        \"label\": \"Page\",\n                        \"value\": \"PAGE\"\n                    },\n                    {\n                        \"label\": \"Country\",\n                        \"value\": \"COUNTRY\"\n                    },\n                    {\n                        \"label\": \"Device\",\n                        \"value\": \"DEVICE\"\n                    },\n                    {\n                        \"label\": \"Search Appearance\",\n                        \"value\": \"SEARCH_APPEARANCE\"\n                    }\n                ],\n                \"operators\": [\n                    {\n                        \"label\": \"Text\",\n                        \"options\": [\n                            {\n                                \"label\": \"Equals\",\n                                \"value\": \"EQUALS\"\n                            },\n                            {\n                                \"label\": \"Not Equals\",\n                                \"value\": \"NOT_EQUALS\"\n                            },\n                            {\n                                \"label\": \"Contains\",\n                                \"value\": \"CONTAINS\"\n                            },\n                            {\n                                \"label\": \"Not Contains\",\n                                \"value\": \"NOT_CONTAINS\"\n                            },\n                            {\n                                \"label\": \"Including Regex\",\n                                \"value\": \"INCLUDING_REGEX\"\n                            },\n                            {\n                                \"label\": \"Excluding Regex\",\n                                \"value\": \"EXCLUDING_REGEX\"\n                            }\n                        ]\n                    }\n                ]\n            }\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": null,
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {
+    "sandboxes": [
+      {
+        "allowed": false,
+        "version": 1
+      },
+      {
+        "allowed": true,
+        "version": 2
+      }
+    ],
+    "imlIsUserEditable": true
+  },
+  "label": "Google Search Console",
+  "theme": "#1a73e8",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Report",
+      "modules": [
+        "searchAnalytics"
+      ]
+    },
+    {
+      "label": "Sitemap",
+      "modules": [
+        "listSitemaps",
+        "getASitemap",
+        "submitASitemap",
+        "deleteASitemap"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "inspectAUrl",
+        "runAMobileFriendlyTest",
+        "makeAnApiCall"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda7930000026f4944415458c3edd43b685f751407f0cfcdab0dd4a6af4463da4aa5358ae06330d549a890a588ada0b39d52280e85eae0da2e75ae82380882bb83828b8362906e0e120c3e30497da43198874d62937f6e87fbfd874bfaaf48970efd1fb8dcfb8373cf39dfc7f9d18e76b4a31df7388afaa12ccbe6e73e3c875e7c875fa1288aff5534753a7008b358bbd3bf1d2d9a3f862b780d27f00e1eba0b70bdb88847ff2ba9abc5f93cbec57bd80c1b8b19f220faf00b56b11787f11bfec24e1cc10d9478203507cab2ecc7cfdbd9d83ec081147c179d18cbf93aa6f13afec5eff8186f45c62e5cc6691cc31e4ca18167f0127a30894b65596e3487e8d836c02ad633482348e7f02acea4e9188622cd0cdec0f7781b4fe21c3ec4aed43c95e67f6223dfb77b20b188cf70012f04c55e8ce3c7a01b8ebe53f1c6311cc4b530311cddbb22c3021ec457b88a9bf586adb6a04765c0517407dd07d1fe4decc717f81c67f1147e88674643773fe63191c62733d437f8085b12dcb61bb56de8890fd682a4e999ee48d5647067ce3b62e0b9e83e81f793d7997a6b28eb262c6a4d8b146cd07ae76bc3d5a333ef0646f032fec027582c8aa2e57f5b0cd49a9fc8945f47a78da05d4f9322cfd32a73ce47dbe7836c3cef8de46f86b146cedd783c9236b680d66ead57542bb692c4493c82e5d0bc12aa8f26ef4b3c11fd67f0aceae66ba8366019bb63d67d01de97f70a3ec5cde61614aadd1ec08b997658e5f2112c859d59d5a6fc94dc253cacba7c86f1b76a15a763d6dd381e36fa30a8da981d61678b0141dd9741865497cf6050cf04d580eac65b4ad17f2289e40f65c885343f90dc5d9167296cacc7a42d4dd58e76b4a31df757dc0293dcb682da3326060000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000006d84944415478daed986b6c97e519c67f7f68310a55a1422d62990a569c788813c8300c7591047453714ea68e2e3b64a2d1899bcb66f6c9f841a399673fcc45e5e0794e3c45962853ab9d66231b1ec602968a82508a9252105ada6b1feeeb2d6fffb6f6004d3c3c57d2bcffbecff3dccffddc87ebbe9f17121212121212121212121212121212121212be5628f46592a4ece711c04ce054e020e07de015e09fc0ee42a14fe2f609395daa81d1c07f80ed83b6b724240d957491a45592da25ed94b44d529ba46649f74b1a97536e500de0bf3f496a9234655ff62de96d33e332e036601b703df032b003180ffc18980c8c18f4d377c530220a870cda0eb6f44992de97b446d2f4cc03b9f11192aaf2ef0713b90878d091386d50222027f447c091c0e5c06b0059bef9d9e2bfe27507021381514013b016d855b4cde1c004c28beb800f01150a854cce308f8f0236015b80832dafcba9259502c7006381cdc01aa075c0dc90f36eada48d9226e4ac8fa4b19226493a2ef77794a482a46a498f49fad85e6a92b444d2315e3b44d2a592de96b4c373d648ba4ad2019e3346d2dd92b6486a91d42069b9a4ff493a43d29fbd6eaaa43249b74ada64798d926e973472c0d16125464bfaafa477251d963bfc1013df361faec98ad6da28cf4bda6e256a24dd6b659f92345cd26c495b4daabf92b440d2eb56bec6f2ef90b45bd262493f91f447136eaba43939034c9374bde72e953457d26d923e9574831dd2ff14303e053e26c82e0bbd0cab80e140bb43f80ca09c289367017701d7797ca9e7ccf7bc4b8912bc00a8b5bcbf032f00350edf8b81bf11a9d7020cf59a2b72e1df015402f32ce73ae058608ce74e050e053ee9e980bd31680b50e74d66e6de771055e187de7ca137d9e8b925c0ab40bb73b00d58019402271335bc01782b27732df00e50059c46e47d1d7bf9a5dd32dbd8dbbf88e84d2a814380c5c043447fb000f82951b97a448f06c891c7230401fdc68a65e3b2022544993c1a580ed47b4a257421c52a3f37035bed9943735b8eb0e2db818f80568224f3a8242221135a009a6da46f12443a0ff89e8dd149aa03422ee77f69225a2b69a14be34449339cdf2d925e9554e9f7f526b8332555489ae5b5ab258d9774ad9ba87b4c8ce325dde877b7481a25e915491f49bad08438c39cd1660ec9386086a445fefd0bf3d664490f58d7927d2acf3640a9a4f926c43d26bf4693d62e49cb241d9f33d825923698b4ea4d88eb4d50f8808bbc76a3a40f4d62cf4a3ad27366da603b24bd67926df29a3c094ef1deff30f135786eb3a4dfbb8bedf17cfdbd0b541104770a418a1b88bc7ccda19b977b32f07d8240d701cb08e2cc849501b381ef10dc50073c4d57a2ad06e612bdc04aa2c65f039c0bec2608ef19a01118075c009c44e4fdf3c43da56dbfde138a7a811ebbbfbecceb6e3c177197b9bc0dcfbd5bec5a5f5d2cafaf7a15a3b732f819f4d59a7d99f739733a881be7e5c43da39688bab94449adef87ac2f1fecc17213e20693ec6649f7493aa23f1eee0d5f58b3f9802504878c26fa8c0622f7f79bc7bb48f1a6a504318d238867d54037b4bc32e038e05f40472627e7c16ae05b447d5f49344303aedd39b9936cb44d9f276b48370be710ecdd46343815fb68e4b1c0cf6cd8e2bd6602bff65801b8643fec97e11ce0c4de267547826388feff19a274ed0426489a437467cbfc3c9fe8de56102df0b789bbc09b44d84e22bcb99ee8f8e603c3243d41749665c455fb5ec2f3101f38760127489a45dc459e040e23a2689ce53d67e34d06de25ee0c5380e9c495f9c9ccd6c05192ceb5ce4f5bd7ce88ee8c805c983c41f4dd7712757514f05b22f7ca88beff702bdb025c4930f63544fd9d0a9c49d4f5131d01153e7439d1aae27725c0eadcfe3bfd7e21713768b5fc594454aef4733671695a0b8c2452e8e71eaff06f3cf63bcb3918b89a48b54e7497021dc0cdc01f6cd579c0372cacd4873e96f8f830c6072c07fe0dfc85f878b29c285d37011f00ef118d491d716981e8e1875a6e3127343ad21eb5e223819788c6663d912eb54453360238de877f117898689c0eb231aa1c8125deb33315a1fb14f80171cd7dcae1d84cd4dd5a8754b9bdbc8ee800a75ba13d5edf405c9a561369b1d563c575abd1ebaf021679ce77890b4c39d1d155d821cd7e6628b3dcc7bc7e859d32c1ba6d71c46eb3c1eabcff21147d95ea8cfb9c07b2101aed433c40b4b5e75989bf5aa11a47c32ee07522ef1fb672358e9a7a223f4f071eb4a7265a06c001963bd5ffbf033c0e4c03ce264277099172ad76c25c47d50904cfd413cdd12cafdb0edc47f0c3078e900b72babf01b9cf7ac5eeb7210a8e8eb6a26811c10fb03797daf92cb2f5dd79be3b6491b8a7e85d7ebfbeec51eaf91dddc8ef94f595ea1a13121212121212121212121212121212121212fa85ff031ec220d3a9490b580000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2023-08-27T17:05:15.108038+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda7930000118a4944415478daed9c799455d59587bf57550c3208882583202a2a221264456d31513ba625d8262e1287604cdac4a4dba8498c6db435693bc6c4ccad26dd6a6739a51d566212a31da32d06e70143342a228a8aa0624141a15822435155bffe63efcb3df578f5de932aa0a4f7b7d65b55ef0ee79e61df7df6de679f074110044110044110044110044110044110044110044110044110044110044110044110044110044110044110044110044110044110044110f42c0a5bb27049d9bf0380d1c070a016680596014b80d50085c216ad4ad0095ba4d77de07b030700d38143817d8041400dd00eac0216028f02b7034f03ebb76741f07ed903382ae98759c02bdb45bb25659f3d25fda7a41592da559e76494d92ae96b46f56c6f688b7ed53923678db5b257d7abb686f32f8474b7aaac4c0b74b5a236995ff2d2518cf493a767b15026fd7713d4900eabaab61ce71c0cf8191d9296039f010a6ea17006f018381b1c0c1983a1c814d477b01fb0377f8bd414f2779f3a7485a9cbccd1b24fd41d2c1927aa56f75724f9da449927e2d69b5a44b25edb03dbefd49bb7b9406e8ae46ed22e99e64f05b245d2669a772ea3c11841d251d935dbfbdb2dd09403280e7496a4b04e0064903dfb70ddb42f44401a8e9863286013392b25e00be07bcb35db836db399b6d0426527b28303e39f51be0c52d51d9e4997d817d81bdb1e0522bd08819992f021ba074702929a397dfbf1f66b4f6c102532f03cf016b3a2b2329a7163366276086adb000d75f811540bdd7152ceed14c05e3d6cb2d6081b3c9c06e5ec62bc05cffdbb6cd5fae44fd5f9aa8fe556e0c6ea9e715241d26e95649cb5d85b6fb6783a40649bf9474a05fdb599d27fb756f1495d12a69a5a4bbdc9dad2d53c66e927e2ae9557f7656c65a497f91f439afe762bfe6ec727180e4334cd277242d705b2a6ddfab927e2269e4367795bd027d24dd9108c03c49c32b187d43257db08acf8192f6ca06d23d862ffb2057e2354927a7429074f074492f5751c64a49e74bea5da28cc9921e53f920d74a7f21322eae42007677e16b2b536e9bcce0deb33b84a0ab71801d805d92ef6fe1b1fd324c077e42653fbf1678128b2dac023e09fc0053b5006b3155fd3aa632c760aab837a63e7f8aa9e17bd471baba0cd8ddbf6fc0a68d45d83432129808f4037602be05ac04ae4ecad815b81c98e2dfdb31b5bc00588fc5343ee0f7a7546aef40e012e0e8e4fa97bc0f1ab1f8c814a03f163bb904380d9b56b63e2e7d8325fd3991ce87240da8a001be52c5db97315f52bd4cdd3e931c6f90749acc6dac75ed50ef6fec9bc9758ff871240d514757b5d9dfca917e7fadb7e78b32559bf18aa489caa7a04b92377fbda45f481a2b8b75d44a1a24e94b929616b5e53b1534c00cd9f491bde537c934608d9fef2be94cafb724ad93744a776881ae08401f59b027e3e9acc3cbdc73a677605b994fc6f35eded7924e5f2be9d4e286fbf71a491778c7660334c3cf1def9d262feb621ff8e2329074a2a477927a5ce8c7f77681c8b84516c32855c669c9f32a0940ada4df25d7de2bb305d280d90192be2fe9ede4ba075d68377b1cbb3a05acc7d467c6684c15af2873cf2ce0f39d9c6bc75cca63fc7b8bd7710af9cae513d8ea61070bbd502820a91df815f00f9897d01b53a9b7000761963e98a5ffdf406b893200ee046663aa16e0486cdafa90b70fcc4bb89e22159c94711bf08fc0072bf4613bb64278887f6ff5721b811dfd99c7037f8fb9dc056c7a78d3fbbe775706b03bd6021e03beec1519027c147842d2262e947f5fe09f0e78a7d561737dc6eb7e6cdfe4d893def8ce780d9893dc331a9b8f2725d72cf0b23be35d4cd0320118e5654c208f772cc16c90ce5cc5e55e8f6a04602cb0b37f6f06d601ff84bd0c0761f9146036cb7ce06ee056cc2d5cff1ec66a13365b0012497fd83b7422269d27636fdce2cd28762fccf7cd781868c30ca48cb55574686a88d661c6eae0e4d83a2fb75cbb1a8bcae84d3e486042b2a6425d2a19c4197d31a3176feb15c0d0e4d89bc09f31ed762fd090d5b5ab744724b001f87df27d22702ed0b7dab94979f0e3644c1d82bd0973fc6f3aa50ca9505c2f2c0093b1decb68488e0df2eb3aab0bc09e4565aca3a3500ca1a3501553a8a2aed975cdd87497d57f173ffe2af00b4c2b1e0fdc0834140a856ecba0ea92002495b816783c39752af04da07f25214806ff24e0f4e4d4bd98d4af06e625c7a7602ab933f6c3dcbd8cf9dec14f26c726f8a733ea81bf49bebf8009e193789491dcddebcc0a1f8dcddf95a8c1a2976f24c79602df003e069c812da767daa620a95f7759ffdda101c0e6d38bbce2602aed3ce04a6072b1b59d759aa402e657ff2be69f0ff5d30dc0a549a3ef239feb2660f3639f62eb1b539f5ff332c106fe0ffeffa3589c02ccdf3f1b189a76a4f254b6338003fdda76e01e6cca984d1ee6eee3cf1a93dc9bfded057c114b83ab44011bfc5969f760e1e405407bd1db7e1066244e077a6d1317b098c45d39551dfdf07699cf7e9d2c0237d97dea03241d29e922497313b748ee7e7d55790430f3e1ef4eae7957d2e5b25c82a19276f6b2af91854f337e2ba97fe2b2fe3239d7ea6edcc1ee720df5ba5d2acb4dc8982369545297b393fab64b9a29e970d992f88eb2b4b64b94fbebd5b88148fab02cbc9d31cfaf1d238b2d8c91b9b2593ce46d992bdba384a056d267252dd2a6ac95e5fe35ca7205576bd3506a93cce7dfd8a8a4e30f55c7106e9b77d853b2f8c30ae5febffcd8fec9fdc8022b738aca58e99dfd57af5b5ac61249d38aca1822e93749dddb6521dfb9b2f070439180542b00b5b218c6dae49ed5b2b8c36c490b65829fb14ed2b75562bd625b0b41c1dfa4ebd431165e8e75b2e0c734955f80394cd2e3aa1c2b7f50b696502a0b69a2ecad6d55799e93f471955e4f1829e946750cf414335fd2eb2504a0381f604652ee0eb268665385ba2d97f4cfb2e8e0b61ef6924290a9dc23642b66d9dbb5d61bbdde1bb9d03bf25332155c4df6d06849ffe26536c9547e8bff3f47a6a247942a2b29a35e16927edcef5bef83b2ca07eefb92c6552863804cdb3d20d33e2d2e104b25dd2cd3580f2783765122c43325cdf2bf47140958ad1fbb49b6a8b5dafb6cb57fbfd1cba8e98ec1df1a1b430a9871370cb38c076206dd12ccb25e066ca8d6ad491a5d8f7903bbf9f7573163742594f791933276f2fbc760c6dfeb58206929a02acb18842d2eed8e45f1166211ba7ec09fc803416700576186771abd6b2131f49272b345ad31de7f4ddec6257e4f6ca6d9da289fe27695f41949e34bbd857edd24d77a92a5c14feb71ea3aa81ee52b72e7ba7dd022e97ab99751745d8da4ef29370217cad6fab7753336a15bf605fc3fa20553c7fbf9f719d8747685a44558cc60b81f3f837c8afd2336b504ef67fcedde55e6b164b4c95cbf8725dd2f73dbd2b8c6b3f22d6fc1fb9cc403d857965c52ce1d952cbef09172de4df03e23118261eeb3cf4d5cb55677751749ba52d2849e3ef8e1476c26898b3b0c4b8b1feedfdfc462f84b780fee6d106c13aa12cf4485d5629e433b65365f6c4d92ba65a952bc977a25f7d778db0a5840a7ad27b4af525bbb5abf8a6ea0f21d304701a7605931ebb1e5cb1b25558cbc6d054602e703f763b97855e16d1b80e50d7e0253e3006f033381db7a48fb5286021760f912ffdbd5c2cae603241277029644391678064bcbba104b5d1abcad7b040bc7cea0633a59d97679db466319375761e9680bb104927ae0c7c00de449a03d85fe5876d0fedd51583581a041c0995802e467b0d87d1db629e1782c96be6a1b778a8afe56c320e0df810f03e760696deff8b97e984638917c6f5f4f41c9a7cb54230003b0f4a799d8e083cd91d7023763ea32b58a076319392d58664f7162645f4cd50ec1165d9abcbcac3efdb04ca03ed820ad23cf02de91dcda5e4ae95d3175c0ee92eafcf9cd90abf044ab9d884d6b5fc7b45b7acd1a6c93eb1d5e97ecbe1aaff7286fd7322c3934edab766c8a1c86e5f6bde16d4c076ca0f751960db4b18eca338a76c13451a3dfbf811214f5fb08f2dcc577d3366d16ae2a7bf912e412d98e97fa62df36b9eef3be24bbd8236233d340882c13e816492ff935f3649b1db3320ff328db29927eeffef4255ef6891e6d7bd963eb0fcad6ebb3c0cc32d90f4dfd97a4177ce97496a443d2fafafffdfddc43aae2770cfc9e8192be214b3479cdeb705752fe0efefcff90256a3c25db7cfa8ca4939467384d93745fd28efb254d4dceef2ddb6df4826c87d2f35ee66eca97c317795db24d2359bf2ff272eff6beec5a0c2219b8715ee975de013ff44eaf49ae3941965d73b337f2381fb097946fadfaae7fffaaa40fc9d6f59b7ce104499ff040ca421794f3241d24e9935ef6ed3ee8c7baa02c95adbbefedff37cbd2be8e92747a22041b77eff873c6fae05c59a993942fee5cec019febbc7da7f820cf93651ef5f3f6b648faa3d7f1d33e30afca560e47c9f20d66faa01fe3f57b40795ada3db255c4f3257d54d2b75cb86ff7768c2a1280938bfa7d86a447fd39e3d5d5205451e4eb4b926e9325402cf681ac93a5493de24232cc3bac20cbca69509e0d33d085a95e96b43148f67372cfc9f2fa8e9145d36e509ef99a95fda754fb48dac3b5c34449fbc8b264ee53925822e907de991b3bc28f8ff7ebffad4a019820cbeeb9c2dff4ecf807fc8dbbc207e75117def1c9355365f97b277b5d97cbb69a652fcf08e5c927a7ca92523e9bdc8fa42fc8722da7cbb29116493a47b62d6c8e0b51daef937d7c2ea8d4be8a3640322f3602d760b9e993b0acdfef62ab5c8bb09d38cd58c66a0d36e7d561f3f6c1d8dc3f06380bdb06d59b7cfbd310ff2bcc76b88b3c237834300ef8211df7072cc276ef42be0b68369e10e22cc7e6c75a3ad2ec9f7dc97fb0b11cd9ee9c5f016b93b97a2e96b17c1036af17302fe2a5e4de46ccc61905fccedbf675e070bfff2ef294fa2998277267d6f7cab7aa9d0bfc1d797a7b3b36e7ef51a2df0b98fd34a952fbca0a8072c36777efccd5854261bda4393e903381a99811558bfddae72c72f752d816a6462cfbe60a2feb321fc001c017308389e49e74c74d2f6fd0db59a794a863462b1de9cc3b58063ce21d3e868efb1b4b91ed4c5a57e2dc1a6f7bd6e6564a5be805cc383c0bf3e1a7617b204f057e8bbd507dfd192d45f76ef07b07d3d175cfc66f36b6452f3df73f9830959d03aaf102260237013f03ae493a7c35b9b5de8859ea4bb0bd0019bd30097d0d7b4b0ec406fff2e49a43fc19c59d95d1840dfe646c534456813ed8bafc2b65eade9909dc8609ed34eff8f324bd53e429f4c65cc167b08d296d98effd44d207d95bd64869e14811799ad76d9807b50bf0156c8fc21dd81ac211de67f392e7ec85bded37900b79b6eef08ef751daef75987bde4085d4b66a36862cc3d4eab7b1dd3bc3b1b7f81c4c35cfc672d57e8db9569fc3a2553b63d23dd33b72850fe478ef84a1d82ede1328af825fc35cb2e3b15dc53b63eed169de6947d2c93ebf848d3d9074c603c08fbc4dd701537d3e1e86e5f1fd18b81a0b303d81bd6117021fc7b4d9284c2d4fc2a6c5d5940fadb763027b2b16c9abc75ea0cc45acc162116d5eaf89d8d43809b8188bb5dc5934766f78df9c84ed44aec7b4e9e998269e5ac5f8764e62844c764bb559f6db358bddf2fc911b76b81177ad1f7fd63fcbdcd21eeac6c9d96e04bde4e71f97fdbec0eb6ed41dedcf38b6c8681b2a73ef9afcbee7dc10bdd28daf71feac8bd4d1783acbbd8309c586909fef2d73a19e76e3eb4599fbd5e86dbc28313c27ca5cb626d912f0cb5ef6376519d0fddd58bd559edaae3c377085cca3a991793e2bdc4a7fcacbb8ca0de22c6d7c81f7c9536e44bf20e963caddc0856e0466c6f9f56e24cef3729bdc30edf4b71a367933ca098133023342866373d25c6c1e6d498c951db1ede1635daa9fc5f6b565eab10e380c53e7f2b7700db685ea3e6cae3d14338a1a8a54723f2f3bdb6e351f78d0ef1f886982ec17be32b25f01bb1f682e633fec8aa9de11fe66bd8569b6f9749c4387f97346791ffc05dbbfd8ea6d3b1c9bab1f4bee1b0cfc2df03ca6e27b791f1c80d90ecf7bdb53bb671cf011efcf66efc3f97eae9f9f7b997c9bfd403fb60fa669b2be59db83d6308220088220088220088220088220088220088220088220088220088220088220088220088220088220088220088220088220088220088220088220088220e894ff0358d855aaa00d27e90000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda79300002add4944415478daed9d77b8655579ff3f677a650666a8c3d006b0d03b088260500922169068880d8d1a638b9ad852fc59624c8c251aa3069358c102888228a828062480f426201d8636304cbf73effdfefef8ae3d7bdd337b9f72efb973efccbc9fe739cfdc3967efb5d75ee55d6bbdefbbde05411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004411004c1664363ac33d00b24157fce01b600f6077602a600930101fdc06ae05ee0066019b014a0d1d8248a2108ba66a36df9a9d34f00b6070e019e01fc11b01bb00d3023bd5ff18e02068195c063c0ddc02f815b812b8187008530d874c80686a9e9a3a64b1a7850e883cd7320d8e8de3855ea14604fe044e065c0dec0742c10ba4a0e0b845b80ef033fc30261cde6d81836353201f066e0543c0bcc99049c0b7c09188c3a1fc7482a3e0b257d52d2fd92fad43bfa243d24e9b392762f9e176cbca43a6c48fa7c8b7aff4f499336d7baee76c41c13b251ff54e0dbc07b811df1fabe574cc6cb89b7033f00fe0298b5b9368ccd88cdba82278d75065a9175be9df134eecdc056a3fcd809c0bec0a7b05ee1df24dd099be71a31d8b419b73380acf3ef83d7687f43779d5f58b9b33a7dd6d09db49f8967035fc34ac65812049b1ce372069075b403802f02477478eb32e02e6031701b703d160283580bbc1fb008d8169b09b7a3b522b4011c061c035c35d6e51204bd66dc0980acf3ef8747fec3dadcd2876dfbe7039702ff07ac4a9ffe62da9ed29d084cc3fa8445c08b8197037ba4ef9b590dfc1bf0d5b12e9720d82c489adb05927ede81e6fe01497f2d690f4913ba99a2671ae20592de28e98e0aabc03f499a1d53ff8d930ead005fdd9cad00e38a5461d325fd8ba4b52d2a6d50d295925e2869e2482a2f332f3e47d28f24ad4ccffe9ea41da2616cbc8400d888c83ae229929e6c51616b247d53d29ebdb2d567cf9e2be94392be2d69bbf005d8b80901b0919075c0fd25ddd8a2b2fa257d41d29cd1a8b094876945fad128366e4200b4673c2901a7037f85dd7aab1076d0f938b074346cf229cdc26c18049b3ce3c90fe039c0092d7ebf09f87fc0c3e1901304bd61cc05804a37df5702f36b2e5b8247fe9bc73abf41b02931e60220b1106fe5ade302e03c0877dc20e82563aa03c8142fc7010b6a2e7b1aaffdd78c655e47e1bd1b7803d264602ed63bacc45b56d7c2e80b3b0ddd2f3f31e5631a9e71ad499f51df269be563522a8fe28183244fcef124f82bf23b07c79f5882eb70a3892f301e9480b3b047ded49adf2fc7813b368a02ad23359aa9c02ec0b1d8fb701b1cc16811f024f00816788f00374bba14781818e8d5bb6b68209563f15e8b0578efc36ec096c0ef71635e0cdc27e997d8b57a05f4a61e3221b8357014f6fc5c90caa3d8e5b91a7814b85dd225c01f28f7f46f89db4e4e030bcf47b0f0e81959a79f89378b1d8fddc9e7e2fa9b9fcaed015c67974aba06789c711c68663c0880dd489b6d2ae8077e843bc546496a3833f012e7a5c00b70c76fb795790d700f7671fe7e6a4cc316042a5da10f035e8283a9ec4eb50bf4c2ecef41dc88afc0c1332e94f4180c4f10641d69271ccce5d5d8f233a3c56dfdc083c0f78033f17e8f0f6337ee3cc8c704dc014f07ee1f5641d5e7772e7012f00ae048601eebef23d9b1b80d6f27bf1df80ef05d490f0cb7cc3659929df6859296d6d86897a6dfc73aabc37db786a46726df85ba77ec84bb25fd83a49d87e39f90eed941d2fbe4402ac365b5a41f4a3a525dba5e67f99822e978493f536b6fcf2a0625fd56d2d172208f2aee955dc347ec07a0a1fe29674b5a358c325b2be902d9d3b4d16d996db264857b86ecdd57c54d9276dbd80a2dbdd72449cf93748da481e1f7b975f44bfa95a4c3d5a110c8caf81992ce55ef2228dd25ef9f98d169dda47ccc94f457921e953bf370b94ed2b535bfdda32ca293862900b27b5f2ae99611e657b2107fb58621384793b15e024c020ec666c02a7e8fd7a1c342e53a735f60577ab72e6ce069de75c07d504eedb2679e81fd16b6a637b117270247035f07de065c2ca9764a9935b26257e5e13dca0778d9f6191ca8e563925ac6504c799906bc0f47739a39c2e7ef87cb5f3d7ca7aab27b39de0dba7d0f92dd05f857dc06cf6a55771b92f12000b66cf1fb72d60fe4d82db3818fe135f848d32a68e0f5e6b781bf24790e660de705c0fbf15abf1d45432ed26dd72af648efb318b8b14d43da0e4736ea249e82b27f3bc9c72cbccebd0938bb2e1f99407c03f6f4eca4f3e79dbb2e1fa3d27bb23a3c08f810ed3bbf703b5d93f2349bfa016d5be06f813b81abc78310186b013081fac2826486eac1336651adec1a2985122d771d5e04fc0396f875ac02aec1e713dc47d2ae6373d2423c2bda8ffafa3914f808f046acad1f426ac4b3f0887b5c8b7c0ce2c678250e93be041848efb423b0577ad61635f76f05fc233e5fe1a2e6069d75a6a3f1c83fbb261da567ff1ab8036bd1d7e2b6b13d9ec11dc9fa5affd1623ef0511c90a68e47b175ea463c135c4ca9647d1eb6b0540d6ecf4e65f65a1c8a7ef324adb166c86bd33abeac116cf755b9c3ef97235cbfd57185a4adb2f5e6f494e756ebc53b24bd55d2f6c57ab0e93341d22ef296e8c75ba4b346deb938a47cb274de2c6f6dae63a9a4af48da47d264657a0595ebdfb992fe5cd26d6ddee92249f354bd8e9eabd675dc27e9124927ca3a82e67c20694b49af93d7e2ed18b60e20fbbc55f57aa94159aff332b9beabf23b43d25b54af70ed97f46e75a8cbd92451d961bedba272feab689c2378c6680a80ab25cdcf2afe58b5eeb497497a6ebb8a57a92dff93d4a0ebb84da9b137ddbb637a561d4b24bdbd68c06df2d19074a01ca0a5bf26bd5592dea5eacef066492b6aeeeb93f42db5d97a9da5f59c54e6ad18a900d85a16ec755ca8cccad0a6dcfe48b64a54718dc681827bac5d81fbb08db98e598c7c99329a259c2fe066e235f1bc9a6b6f48bf5f06adedc1e9b73ee02ce03d2dca68776cd3276b900d6c073fbce69ec78177025f065675900f01bf035e4f72c8aa601a7032b695e7cc03fe8c7a1bffb9292f8b5b9549f6fde558e7723ba3c721789a5ec58dd8ffe08ebafc661d7a8b541e757aa7fd80d39aeed9e08cb5001800ae26b94e56b033eb37aa6e291476a395ffa2f61652dfe9d6e0e0a6374267ce20d9353f04be5173d944ec4599474b9e817756d609ce4bf029487d5de6e3bef40e4fd55cba17eb6fe53e02afdfabb8175b121eefa44cb2df7f0b7c9ed1710d9f8c9db5aa741ecb814f6061b85e7e3301bc08eb5ebe839d9676ab79d644ac9fa91b30360863a6046c341a45812dc69559a50cdc1d6bbd1f1ec1a3d60017a7e70c7479aff0e8763cd50aacb59402601156e255712df093e2bdbb2ca3c21bf2746c526ce6003c9a14a3f31cec6557c513c037b112b2db7c00fc347d4eabb8ac70e9fd8d4aafc33fa65ef1f74352a4e54ecb24cbc7255879b95737efd1013b6185651557a4e7369b7cc1b12c8ad9d8a9d8bdba9341670f2c347fd5e3f7e898b1b602803bf76aaa1bca0c3c0b1809ab807fc20db29bb956030b8c03b006ba2a7fc5e61d5a5c33009cc3c85c53afc21af25754fc36176b9e0b0170041646555c9a3ec3353fadc28df594549ecd1c07fc3b76dd9e834f69ae620d8ededcad402eb82bbd47af05c09ed49bfdae26cd56b2a5d69658609c8a35ffdbd1bee3f7e1c3697f8a677657f6f81dba623c0880fbb02df9d88adfa662fbfd77d5c6d9a48aecfab5e9d315a9a2f7a1fe4092c558784dc7a70855b19c9a6963172cc75ba2eb364de5711416a4fc547127a5c9b12bb2d1f72e7cfec2dc8acb76c033a6a7f134bace0fe241ac13196e990ce0835c5f4b6f4d8307513ffdbf3cfd3d119b784fc67b030ea07ee657202c3c6fc5be233fc166d7d59bbb1f00785a7a3ef0dc9afc9c80a7963fdf9099caa6778ba8deb8b3162bf4faf03a6ebb9aa4d6d05ad1d992ace33d929e55250066e191a7f0acac1a9dc5c896520537e05d790756fc36252bab7db1e34b15f7903c2847501ec5ccb11702a0a8ecad6b7eefc723fe89b83d1e8ba7fc533a48773170369eb15c87751f63ee005430a602a0696df96eaad7ae5b6397cc5f49eadfc0053797ea860e6e80c56941f3a877fce9a75ec9d90dad9ca2a6520a80ba3577b1b77ea48d6f0d5efa5431995240cda4be7df5c2c1abaf0769e434a8169cc5bbfc331668733b2ca3621bfb2578f9b076bc74fa9cf13003004bc5cba9575ebd1cafa37fae0de03e998dfe2fc01af52a6ec7d361f0b4fa713c056e6602bdb142b44aa3c8f020f566a775d6901196612babca2065a7549b34464a27eecadd5297e7c9d42ff1f2777f10b7e35fe120368fc2f819edab182f026025d64e9f40f57a6a3be0efb1fd755853c761300bdbb0eb46d4dbf1da10ec0a7b1fd526afc92dd2e8865623ea4abc2eeec71ba8aa9840bd4b6f376c47bda26c35a58561291ea5ab5cb0e7a4ef978d201f33a81fb18743b14eef967eace03d17fb6ddc98ca615c77fc82b1f603c80be937d8c65bc7e1f8b4de59a3e9389169785f4afde8bf142ba18ad1ae9543d334d2cc6038f9cef2b33ff5cabd6594a3d75dd42b3c1732f24eb317f5fa8e7c5a7e13f53a873da90fffde497980edeb33869346054523bc83ce95c5abf148ff2e6c05783f7055a3d158dd6834368ace0fe34000642c053e8db5a3554cc6db60df0b74bc0fbd1bb2348fc6bbb6eab4ff1703bfc8fedf870558d55a7f26f022da2b8c5ab10bb60054d5571fc9332d713df51def20ea97599d96cd33a9df58750da5a3d05292c2ab823958080cd70b6e462a8f5e6ff0ba967a4727b090bd1b6f117e13eef85f04ae69341ae3728ddf8e712100b282fb392ed03a2fafe958007c1098a71e6ea6c8d23914f82ca98156f0245eae34c7c7bb99fa29ed8bb0767eb8793a96fa11f33e927b71e22eea85e88138fc7a57e5965dbb070ee355d5d25761c1588ca04f63cd77d5832661ab4fdd8ca61d07d17a97e370b90b0bd03a2ec03e10ef02bed968341eeb64b44fed74967cead428647bf88c0b0100eb3ad220f02dac3dad2ba999d8d5f233d84437a2304b9910998dedba5fa6de8145c0ff001766792eb81bdbd9ab58889d7886d30076c6db7eeb82a65eccd00ebf02b8a5e6da497869b3a878f72e98826760755b64efc6b3a0bc5c2ec28ab12a5e8c3b53c7f950195ff154eacf9018094fa63cd7295267e1a55ec7518a539eb7c033caf700f37b39706d52643bb29ed1c1aeafb5926e95b755eea02eb70d67cf9a26e9d9f2aec47671fbae9663fcd5a5f50ed587dd5a26e96f244d6d97cfa69d695f57fd56dc2569c759f396e2a3243d5873cf80bcfdf6599d34c474cd54496f53eb435bbf918f702a43809dd3e29e3f483aa18b7c4c94b7ea2e6f91e6487703ee29e9ce9a6b07259da90ecfa654b9e3f563f28ec9d5927e2de9188d6097eb264d561147cadb5ddbb1468e11f7514907a8698f764dfa135325be50de8efa07b58fdbf7b8a417d7a59dbe5f206ff3ac6389a44f29ed9d6f910ef256d1b3d53a70e68592b6c8d349f74e96f4a516f70dca5ba40fe9201ff3e580a44fb648ef0ff256ddaaedc0c7aa7520d23b249dac16025ce514fafd9216b7a9a7910a8009722c863a56a5f4b6eea0ecb696f4690d1d5806253d2ce923cab692071959459c2e07a0ec847e39f0e25972108b97c81dfc18790ffef3e5a013a7a6c2bf580e4ed9090fc8a37bede89d55fae9929e68d3807e2ceff5df47d2b6f2deff29729090fdd36fadf6df4bee74c75635a0f4dd61926e6ef35e37a4b23a54d24249b35367d85ad25e72c73c4f1eb95a95fb275531a2a98c6bf019b516b00f49fa3b5988ec22cf241a72608d3de459ce97d47ae42f185150d074cf21b260aaa34f8e8efc5249fbc933d0a9a90cb695e327bc52d28f543f23ec93a3458fa95e60dcaa2db3423911c7b57b76a7b762455461922a369c140e3993f07ab65373d8e3d807e13f68b3f64b799e8ead196fa1be7c0b9bf3d294feb5e9fb83b157e1ec944eddfd2b529e3e5395a7acec5e097c857a5f75a5725a86b5df77e03055076053df1658e752978f41e0c7c05b81875ae46337ac386d159b706d968fabb013cd42acf09b93f2d1499ddd8bf78f14fa9806f0396c42aee23f53fefb33cfd406f0e7781359abb25b913e8f6117e9357867e6c294df5675b812b7eb8f17cf0e9ac8a4f8c1f288d86a24ea3583f28ce23475787e7c96df1d93f41f6928e92ad648faacda84e456b976ffa83a1b3987c3ef647d4d27d17c9eabf633925e30e2b0e059d97d5cadc3aa0d9795b25e6054ccd99b141aba16fd0b59f1371a1d2b6795a4f3e5a95c5771dcb3fc2e4c8dab97426bb9dca1e776922795f1e9de23eb1f7ac580bc84da4f1dac61b3323952161a236585ac54ade26e498b34020190e57996bc5c5ca6def1845c1fb3db955b909155e601f29ab2d3f57b370c48ba4ad26bd442c9d3457ee7aa33c55527dc2b079aecca1352a552f0144937f6201f2be5c0a73b75533e2a3be441b20e64b8827195a44fc8ba9e2aee560f044096e719925eafce7551adb859d60d4ce9b4dc8226544ecf9e2f6b586fd0c8a66903b230394756f475641eeb22af936565e437644b4237b397015963fc25f944a0619d2a937586fd5267b85fad158c55ac902d07af5393e56118f9982f9b15af52e7c7830da67c7f4016ceff5d73ddddea4e00fca75a2cf1b2340e9305df435dd6e160bae7dfd5c2ea32566cb49a87548813f016cde763cfb263b0fbee14ac806976bf1dc4cab73eacb07908fbf4ff106fe2e8d9e9b715799d86bd0c5f853d03b7c0ce3d3328eb415839b41ac749f831768cba890e63f875908fc9d8cbf1d5d839697ecadb74863a86f5a5b25a85a3f77c1b3b1d2d196919651d60215654fe0976779e96caa3c8473fae93e5d8effeb3d8dd7812f055e03515c9df8ddb43ee1cf532ecdedd1c8168228eb4741e6d4ef04d799e82377cbd066f5cdb32955baeec2b14bc451d5e8815a037d0833aec35e32b37c3246bd8dba4cf56d86ab08852080c624fafdf61cdfb13e9dfae3cbb7a90cf297873d076387acf2194bb059fc20dbc3862fa614641439cf231090bcf1df02120fba73c4dc4c2f1266c157810ef765b0ebd158e2a35eef3f11e8585a93cb6c41de99e541e0f6297e762b7de141c70f3f48a64afc302f6910e3af43abaf4ec9b9cca6a07eca97920e54ecba7b23c3fc828d561d0866c0a38217d1ae36dfa5591c731c95f968f89693a3c2679692a8fcafa52a95bb9a466cafd4d75e06d394a791eb33a1c2ee3251e40cfc9246e2fa3c66c9279ccf231dc209d1d918df8bbe0a9fda3f9c8d84579ec427d40d025f4260253478c973a1c2ee3663350b069928d9033b1a3d33b70b49c5715bf7793566277aa839bf4e3402d1bcf101c049b2299f67cbea4e3257d47d2232a5d63ff4f6d9c886ad2dc22a555c523b2efc658bf7e106cdea874a4f996ec4853653afbba3a7488c9661267a8deecfb7f49e08cf5eb07c1e64da6187b778b0ebb42d2bf49dab9d54c40a5efc72b25dd5e93569fa4f715cac32008c6986ccafe7dd53320ef913f4df6e19fda6495d846d2d192fe55ad77595e25efca1bebd7dea808e364306a649df1b93892d2ae7597621bff621c18f671ac559f0e3c0b3bdf6c41bdd27a390ed375266c1cd1788360b3a069edde6a041f2e83b23befa8468b0e82609824013049de54f3780f3b7fbfa46f1753ff100041304e51191de855eacd96ee6592fe438ec033d6af1704413bb2e5c001f276de6e77474ad6f6df2ce95d31ed0f828d8c4c08cc90a3049d25c75c7cba8530582d6fd9be41d287e55804c3da1a1d0c25d4a5c198a132ceff027cf8e631f8f4dd628f4ab17dfb06ca1d768f0103a1e9ef0d518ac1b840e546a1890cdd5bbfeec4e1e8f4411004411004411004411004c3a3a75a95cc2cb3153ed27a777ca26a032b749ec0a7be5c0dac09a54e492abbf9c09138e6dc2a1cb072d9689753566ff3704cbedd70bcc089b8de1ad8dffe5e1c53f14e4213df11a96c67e1a0a433f16950bf62536bff2a776f1d219fb45b751acd80a4fbe4b8fecf0cf7cd129567d2dd9fecdeb7ca07848ef6338b30ddaf97f433f90091aa90e183724cfeeb257d28d55f6cbd6d432adf9d24dd249fea74b9d2e1b09b0c59437a897c3453e1d0b156d26392ae95f454d6b006e4137d8f0c2130a40c0f49e525f9f0cf5113002a23f6ec2f1f009aefd95f9b3afbbdf26122cb92075e5eafd7c9477b8710684126007e9fcaee2a8da3a025bd0c0afa4c7cd0e1ce38b8e475c077f194f1361c76fa301cca79677c88e2078137020f4b0a3bef06226b7cc7025fc44e38e06db8b7e258f67fc0b1f597007b63679d137008eced71fd7d19782ff03d498afadb0c5119f9e5efb311fed7cd53c46c89709c7c7a8bd2f57f1db3800d3703c8666bc7a66969c14df231dc5b36bbd966b38599928e927459bae749f934a58e0e4fdd1c19ef33805ebde05c493f4d2fb8423edfbe2ea67b430e13f52b39cacbe1210036b800d821adf78be5d8c5b2eea6653d64c2e31992be26e96f34c6e7db8f77361701b057525e498eccba4fdd0b66026307c5868e756c08019009e0bfcb666b37c8bbf33a12c2991098a90d7800c7c6ca781700bdd2013c824d433b6213d6fce2e59bd785e9ff4fa54fcb824b4cc16694f9c041f878afebf0c1122b6871ac57964671e6dc8e78edfa00700b3ebf6d394d26adecbe495919f5a70f293f33b2472d231d5bd56834f2a3b766e3f3fff64be5724dba6e195d98d1244dc521b1f6c5a6a4abf119825da593d81deb6126a6b2fc04706d56372dc9ae59d161fd4d4f65b52b3eaeedf7c05da91c56d074265f76dfe4548602d662bd522395fd56f89cc5a7f046a165a93c2adf21a53931d5c70c7c3ec1046c925ed1493936d5e9acf4fc55a9ecbaaed316e555b4f72d533eefc4e6d7bef48c9eea5a7a25009ec21dea79c01ce00338bedbadc351ee65857130f0167c0acc7cac885a8577853d8495555f93b4deb9752a0f0f3d0e781d3e10731bacc05a8a85d663c04f80af4b7aa4390d7c70e5cb70233c0b383ffdff35f8749ac246fe8ff8f0cce2b98b803f03fe2895c7f6b8013e887d217e0efc97a4fb2b9eb9ee15f026986702efc40ad485b8633c88957317005f94d4d657202bd31353dec1877dfea8451e8685ca3310ff181f42ba88f2dcc6c753b93f007c0f2b109b3bef44ac1c7e3eeefc5f012ec782eb347c8ee08ea92d3c840f03f92c7079dedeb2775e00fc29f062ecebb020b58dfb53395e0c7c41d27a079f6669ec99eaf438dc3917e24ef970aad34b715bbcb7dbf254b911eae0f4defba7672c48693f999ef35de01c494f8d1b856b36253c4a3e06b93013fd46d207e5a39a3b3615a93c52fb0d4d4a2ac966a87ccff893f2b1db43961cd932e3fdb25932bf7f6d5af716ac9274a1d281124d9f4f66d77d40d29bb47e5cbb25925ea052c9f94a49576ae8b1d7034dcfec6b5e77572c016e92f44639d67d9e4efefecb649f8ab653ca94fe340d3d54e3fd9d4efdbb6c0fdb4afa67498b2bea2ecfffd3f2d1ddebf29fd5ff99e99ad5a91d7d3ebd6f5d5ad74b7a5e451dee2de927b20dbeb8b75f437d1d564afa9ebc94a5292f53533d5cdf54a7cdcfef9395df2fd6facaefda2540d66e5e2fe9b636e5b55cd27fa5f47a526f239e016453de2b810fe129e576d8a3ed303c025c005c2fe937f894d75653358017021fc323a7f0d1dd3fc4a3c7246c967a19de3b7e3a9e66ff85a4c7b3e45e0b7c048f4483782af5033cfd9c884d5fa760497e029edebf1178344ba338ef4d58f2ef80a79f0fe1116c123e41f7ca74dd71c03fe3116a109bd12ec0b3a309e9997f026c8d67073381b791a6e04dec9ad29a834da967e399cb8ec0497856340bf8cb54a69f51fbd9d6423cca40397af56cf44ff5b7556a03af4de5bc169f347c617ade9c54bf87e2e9f49b531d7d40d2935979174cc233a0b9e9feff49e94dc53384a3f068b92ff0c954a70fa47b6703ff804f0b26b5816fa6df27e2e5d0abf1487b4aaa8f37010f666df1e5a91ee6a67c3d8c678237a7340ec76d7d071cfd78d7f44e17762294531aa7e1b6ba3095d72df868f8c578f97a74faccc9caf59d7866303e5019f8f1ad92ee6a1af10a2fb2cb249d2a9b9ad69b1564d2f2aa74dfda24f1d6790d6623d9ab548eee7d92dedb74cda1922e48a3cc7992f64b923697ba2764927985a45737a5f1090d6585a4afc823f7564992cf4dd72e94f4dbec7d7f2ee9e0349ae531f14e92744b96e699e9fbe61940fefe7b66694c906755676765fc53b5f12e4bf71e2447d691ec91b96f2f46912cfd86a4bf54e954b452d2e7529d36b277982f7b13160142d7c821bef27674a68672876c42cecb73b6a4376765b6461ead8bdf8fc97e2bee6f3e0df985b2c275853c6bcd6782fbca0e4f459dfe6f4a33cfc33449cf49755f8cd6bf5176d8896a6600e9b3bbca91bf5fd20f24edd2545eb39adafb0a39caf2f8b29e650d746f79fa7c933c6dcba75b4b24fd429e2aafb31f670de87d2acf8fbbb428c88ae720e94fe50e2ef9b8e8794d15bc956c92dca5b9b0b26b5e2e69694ae32c3954559500582be9536a3aca2acbf77bb37c5fa60a57e72cdd3f96bdec96a40e324dd502e08ad440aad2382cebcc8f299953dbd4cd73542e616e96b45daf1a504a7f6749bf4be9f749fab42ae2f6659dfc0d59fddd9ada4d950058a24c3837a53359d2c7b336f6d9ac8c4e97971092f40535f92b64d7bd38b5936d540e128d54df05572a2d356bd2d847f69a2cdefdcf3b100093247d2ccbfb059216b478c6e959795d241fba324abd79e48d6142ea7827cac73fddd62408164b7a5b51292a47d16bd2ef4fa78e5229e5d2f7f354ae919f94f422d50b8b599276cc3ef3b2671612f83e49cfaa1100f72aad112bd2df29cbf753f2cca255be27c93a93c394044a850058214bfd3a7f8a6d65139e52a73eaa030190a77f5bca772febfc752ad7da1749daba2efd74fd16f2dabbe8346faf1100df548dbf41d6819765cfdd42e50ce091f4fd5da93d553939adfb64dfed280b60c902e8e43675da3c20fd28b5b9560260d7ecfb4edafb2c49e7676d75c407a1f6d215781d694d3928e91ee01eac657d06d6c2be16d803ef36fb0836c3fd4fba7547ec260c5ee79c84d75875fe0213f09a134a5353b329e930bc4e3c026bd495ee7b14b80cafb326a6eba7e2f568159761fd41150bb27c2fc66bd4cab575faae1ff84dfe7dc5fb2d01aeaf4b07af155b9ae22a5899ee2bf27c3049273312549ac80e4ce5d78fd7c98fb5b9f5696c3d3901afbf9f8335fe034dd7dd844db675acc9eed9119b1e9fc666d7df022fc13b1cbf0a9c0bdc26e921ac5bba17e8ab28e345942ed25700bfacab8b4c0f7631d6091d884dbfbba667d4b10d65fb9d80fb47abf63e40792cfa76c001583f346c464500e40593e8937423a532e85fb002671e56c29c8f151adb63a507b843bfa58bc74dc19dfc4cace09a039c01bc1b2b689a8f95da032b6ffae96c5bf403d437c2ad2805c7c3d85e3b52fa48be052de856fc3f80ede6dbe30eb71354fb6b0c83d9b84192cae901a85730669de6fef49e33b1009ec0500130589467877954562ecb814fa7bc1d83dbc1db52faabb192f697c02f245dce5005f05c3c8014e5d689b05d91ae3d1077ee03682d00e651b69b99c05bbb28ef09a9bc46c4a80a809c54e1c2a3da5f61c9bf371e850ec4b6f11db2977a0a4bb7fe0e1f31096b790bde0afc3d1628fd58d37e03b624f4e346310f6b8f9fd941fa135afc368d72165138a68cb8c8e87dd0d6a538c6c0f1e97df6c18d7ced4812ad29a3c10eef59c3506b4b5d590c975f03afc783c911b8be67e30eb737764e3a03b7bff7e0111c3c7a1783d1da0edf6730bd0fb83d4c6b737dfe5ef7607f864edfb54169ed1836231600d954656bbcbbec52e0d13653a59bf114786fdce18b69cd8db8f36c89a5f319b8c3b6ea7c396bf1c8b9082f35a6e14a39173b27dd4b29501ae9fd0f00be8f4d30c36525e5a875607a9ff163a26148d95f02bc032fc14ec033b18b7a300b1065d976333acda2149e7934e09ebc3380ec9cf3613caa1f84a7e7476153eace78b679121e8ddf48e929ba12d7e5f494c77683d1c4742de9da76b38681ec5dafc7e6c395742e045677785d2d9d76ac4ab2ce7f141ed1bf86edf2ed1c7f843b6afeffe2858a8e342b7dbfbcd1683cddc98772ca7c00697a8ba7e4ff88d7effd8d4683f4295c4c8b19c148789cb232b6c5cb8f96e5a6ccccb381b909f859fa7b7bec47b06d3709a87490d9575231855d46b91e9d4ed289b45202269e8deb1adc610a97df9e91ea7ba0d1683c91defdd378e9790af0b7d8db0e3c809d92fe5e49d92e76a64d9d26b6c5be05604fd376ebf3c729fb41e1e6bdacd3f6de6834fa46ba741b9100c8d807bb01cf04de40529eb468dcb3293ba8283bfd9dd8cf1fdc388fa84b47a509e845b27d775e537e0a5ffd25d875b6cec5735fd2de85117037496147e910529b6f3cf37825f00a6017491bc4af33bdff4ae07394ce4785d3d5fc4e0452fa7d32769039133bd94cc675f8533cf3690027532a46ebd83695c3543c75be94a103c3884816964365f3d94ec52ca7d1680c361a8d15b8ad7d1a3b0781670087a57f7f4fb97e3f14cf965ad529c04bf1ec13bccfe0de3659bc1fc7ca00b7c1fd5a3d2359309e2b6fe59ede8b0164440220eb5057506ac8f702fe156b5dd7b367a6c27d03f68403779edbd3df4f60fff0d57854782ff68bae4a075c595f02ce4bff6e9fbeff3de5883c176b4c879879120762efc5d9232a454bf21fe0463c13eb380e6a91ef1381cf00dfc23eec7347f8fc6eb9062b629fc0c2e8753830c8dec0d4160d10dc69df8485c8c1586b7f72baecb794a3de51d8ca33afb9a1a6bfa763dffaa3d3d737e3e549af68e0d9cd05298faf03aa4c896bf10091aff10b2bd139e9f7d9c05fe301a95153a747603dc364dcf6ce276d506ac123c03770bb998d97298737a59bff7d3cb698fd2095ed0cc69a6c3afbdacc063a283bf1bc22d9abb792edee07c9310096a4eb06247db4b0cdaa74def9a14aafaaab927d749eeca43323d9515fada1a7cc9e9dd97f7752e9903298d2db2bd95167c9de7b27aab4dd17693c227b0c56f9017caa8d8d766b493fced2ba3ae571eb94e759e9ef33920db7e08baaf604acdd0e9c95d3e5e9dab67e0015f74f91bdef9ecceae23ed9fe7e92ec24342fabbb3d653bfde52ae33d0ec8de71876665f6720ddd13728eec11b9452a8339b273d3e7543a602d937de1ab3c010764efc256ef72bcec7f21d919679bf4fd892af7233c9ddadec2347a1675f2220df5c4fb60968fed6407b3a28ddc25cf26e6656d69db54a777a46b066487b26db2745a7902ce97f72a14dc24fb536c9bf23853760e7abba43bb3ebd639ad8d39e94566c81b409665997c4a76a5bc22bdf87d2add57d7a4975877bc7356287bca02a4b8f631d9e1e7bcd4a0aecc2a7c5076fec8dd65919d8c8abcf4a70ab84876d0f875ea347da9820b17cb910880c2adf31759be9f4ef93e57160ed766f956cacb4ed9fd1b4400340981d7cb119a7227ad275347ba32d5ddd5a9f1179e8e83a96ccf2bf2a8a19df7c359d90fc8b1227e99cae0d2f46e455acbe54160ba7a2f00264b7a4ff65b5f6a8fe7a4cf4f3474c3d245b20350fe3e8768e886ac27535bbe40de44769d860ac41fcb0e3e791aad0400b280bc3a6b37cbd275e7c98e3fd7a9f4685c2bbb998fafa0ba2a85c09f4aba5df50cca2eac1f52852b6a56287bc87ed17d2dd25a2cbb782eca0b23fd3d5d96a477d6dcdb2f9f2fbf97cad942b300c87703fe4bab02cfee5924e94baa8e8a5cbcffd2d4c077d1d08670a84a01704ff15e2d0440eea9f6dc6e1b83ca75e53ee95dffa0f6c775af9477329e9cf250e5b63a43d29f697defcfe672b84516d4eb4632951df7ccecba77b429f717a89c4ddcac34a8a85456be45d2832ddee92949ffade476dd9497c2cdf72c9533dc2a56c9fb3676ac48636795edf01aadbf1b90d40ebfa3b2a357b15476afeed96ec0d13817a04119fc730fec24539c0bb0142bfacec1f6d9d56d76056e8795448513c7a494d61aac3bf836b6dfae814a255f23dd7b3a564c4e4ff9580efc2ff005acbd7e27de23ff245edb3e949239097b67015c84cd89b5e6b22cdfb3b196f9f9d8e3ae3089f5a57c7f1ff805b0b469effacec0dbd3fd8f613dc113cdcf53b9867e1bdea7be1cafe1ef1a41ec85c9784d7f6a2aab2d299d5406f17af68194ef9fd06227614a7302d6299c86752df3d2778329bf3762abd18d64415db27b5f95ea6e00ef84bcb4c5b39e854d68d3b167e3e7b0f5a8f87d22dea9791a6e9333d3edfda9aebf8fd7ec757125c0e6c093b157e182ac6c56a7b2b814eb749eaab87f4bec90b65daaffcf032b2ae2166c9b9e715c6a0b8523d20aec27f063dc0e7b765644cfb5cfd9cb4c4a1532257b4e1f9979a5c320160d6ccf9f4ea9b41cc026bfd5add2696adcb9bdb970a3cdedd68590ca95418dec9983e9f76ef23d152b6af2345656e53bcb6b91c77579a91100cdf91be8246f6df25c3cbfa8b722edc252b38a0a61db417a3328db41e12fb0ce2db9a61cd62bfb3683456db935b5839994fe2f4aef541b4da8e239d359bf2dae4e1fb5a8abf5da588b6b8b0856c5338af2eaeba4ec83200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882200882cd83ff0f4879dd5e2c094d130000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda79300004b364944415478daeddd77982455d9b0f17b965dc22eb00b9273121049ca0b288a04492a06400573421130be66cc181033865714151503a8189060c00088481244322220392e6961970de7fbe3e9f97698adea5055ddd53375ffaeabaf859eaeaa53d5d5554f9df39c7340922435ce08404aa9ee724892a4011af1e62f4952f34ca9bb00922469f00c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a4069a5a7701d4d132c03ce040e04dc477360b581a58aef5f729c0226021301f78b4f5ba0758007c1d38bdb5ec82ba77489254bf919452dd65d092a6021f005e00ac05ac4cdcf08bd6d8241607048f00c703ffd7faef4575efac2469f00c0086c3bac02b806d804d8027023307b0dd4b81eb80ab816381dbea3e1092a4c13000a8d7ce44d5fe5ec44dbf4ed7017f279a0bceafb92c927ab332f07ee2c1615e97cb2c0ffc173806985df70e68f00c00066f3ab027b01ff0626046dd051a6736f02be077c059c01d75174852474f01fe5170d9e703a7d6bd031a3c7b010cd65b807b891bec6b18be9b3fc04ac0eb8013815b818f024fa8bb5092fac63ca0863200188cad803f035f0596adbb303d98027c0c380dd8a1eec248ca55a62a7761dd85573d0c00faef45c065c0ae7517a4841d89bc809f60d751499a140c00fa6777e021e0977517a4420711e30c1c5777412449e51800f4c78b8824bae5eb2e489f1c0cbcbbee4248928a3300a8d63ec0b9c0c94cfeaaf2cf0157103d19244913cc64bf490dd2d3801f1359f44db105f03d6045e0bb75174692d43d6b00ca9b06bc95186bbf4937ff5133806f024711631c489226006b00ca3b1cf8d280b7791d31e8c734628cff79445fde11a29be114602760fd0195672a310ad9e9c039033e1692a4020c00ca7907fdbdf927e2667f0370333130cf9dc0afe93c6eff06c0b388eaf90d808d8035804de9cfc03e170397f7f15848922a640050dc27800ff569dd7701d7031f01ce2cb88e1b5baf2cef020e05d6a49a6afb63886048923441980350cc1b8123fab0de6b88aafbd55bff16bdf977f20562d6c16d892afb322381fd1c6ffe9234e11800f4ee7022e9adaa63f7287034b00bf064e0bc01eecb754433c11ac01b8826865e7c0578c900cb2b49aa8801406fd6073e4d24db55e146600f2281ee6cea1b93fb1ea21bdfd6c43806ddf82af0f69aca2b492ac900a07bd389c16f56ac687d671037ffbfd5bd6363dc47d4087cb3c3e716025fafbbb092a4e20c00baf749aaabeefe10f05c22d16fd82c02de0cec075c90f1f7bf037b13f90a92a409ca00a03bfb01efac603d97022f003e55f70e75e157c42c801f00ee6dbd771531c9d11feb2e9c24a91cbb0176e7b515ace33a6292a09beade991e7d065840d480bc8b485a94244d70d600747606f1d45ec6b789017826dacd7fd49788618ecfa8bb2092a46a1800b4772831c35f191712e3064c640bf1c95f92261503807c4f23aabdcbb81a784ddd3b2249d278e600e43b0458b9c4f2d71099fe37d4bd2392248d670d40b6558117965cc767f0e62f491a520600d97e4a24bd15f5bdd64b92a4a16400906d9d12cb5e077cb0ee1d9024a91d0380251d47cc9457c442e020e0b6ba774292a4760c0096b4738965df0efca3ee1d9024a9130380c77b2ab05989e52fac7b072449ea8601c0e3ed5862d97f903d798e244943c7710016db08f86cc1651f05de56f70ea8946580e5814770d4438069c02ce221612130bbf5afd40f5388f36d1a719e3d00ccafbb50939d01c0621b12378022ae03cead7b07d4d114a27be786c0da446f8f9581878103891aa07f023f06966ebd7f3f700bf11ddf073c54f74e546819e21ab02af03fc0bac0ccd67eeed43a268f02cb01bf017e07acd23a26970357b48ed11c20d5bd331599469c139b001b10d7841589f3210123adcfcd2182a23b89dabf7b3140eac608710e6d46fcfed6258edb96c4a8a98f01cb12338efe9a9888ec766260b5eb5b7f574546529a2cbfdbd24e06f62fb8ec41c04975ef80726d027c117826b002c503dfb9c0adc00f81a3807975ef580153899bd941c4244f2b1017e0a2c7e451e046a2f6ecfb2cae3198685e09bc95b8e9afcae21b7d3716103547e7113581d7b6f9ec088b03afb101459e29c479d7e9c6b72d7049c17ddf8708eefa6519e29c782ff0e1d6be173ddffe001c4c045e13f1f737540c00c266c4134d9193f2bfc413e5a2ba77428fb314700c70789fd6bf00f80ff0bfc06975ef6c97b605be42b99e2e9dfc0d782791103bec179715806381bd812754b4ce85add7eb811f65fc7d6fe261632e7103eb9487b532712c9f4fd438e4d996e10c00b6047e003ca5e2f526e027443060935d4126018675281e91fe056ffec3e4054432e643f4efe60f71be6c0a9c4a340f1c034caf7be733ac007c8db8795c427f6ffe104d07e7b78ec9d1c06a751f800ccf226ece37002fa7ba9b3f44e0b93471d3bb0c386cdcdfd70266b4b6b916b04687d7d2c4cd7d56dd07ad07d3804f104d67ffa2fa9b3f44cdc9cb813b803f01dbd5bdd31391014058a3c4b2d7d75d7801d1767d2cd16eb83dd16e3d289b1055bf7f025e5cf78118e3b944dbe9e10cfe06b23151e5fb77e2fb1816cf014ea1fa1bff785380ad88c0f00363de2f526d3d9f89d3f6fd24e0afc087883c9b7e5b11d80d389108ecd403038050a6efffad7517bee156009e4724a91d5273597624e691f825f08c1acbf10ce209ec3860cd9a8fc986c0ef89a6870d6b3e265f037e41048b833215f83451230070578dc7a0dfde41dcfc77a861db9b10b571c7104181ba602f80b05189652fafbbf00d772cf134372c468017b55eaf61f1857f5036067e4bf11e2dfd308b48b0db92e85970f780b7bf0f7046cdc7e055c4b5e2b29acbd10fab01c713354e755a81a889dbb355961b6b2ecfd0b30620cc28b8dc89447ba7066f0522a378986efee37d1ff8c200b7b72f91893e4c37ffb176239e805f36c06dbe89fa6ffea38e266aaa7acd199ac2f05eab6701e750ffcd7fac27117940656a761b61584faa41da9d785a2be2da82cba99c37000f0247d65d902efc2fd10edeef9bf291c4cd65d5ba77b80b3f06be3e80ed7c1bf866dd3b3bce547abfee2e6238138d9f4cf484d9b4ee82645895e8916272601b360194bb60ce2eb16cd55624328e9fc0f0768b1969bd56209e8e8b4c9cb419f0adba77a4473b027f269294faf1ddbc99a80d99480e2332e6dfdca7f5bf830814d51feb10c9942bd55d90365626f27176217a7c681c0380e2d5ff305c01c0578157d75d881e1c4a0cbc746a0fcb4c2706e199883557ff430c36735cc5eb7d05f08dba77aea057110308fda7e2f5be8918e448fdf372cae54e0dcabac04781d7d65d906134112fa4552b9331fa40dd851f63d9ba0bd0a3694464dead9580d3891be944f52d96ec175ec64c6284c3896a3af02b60fd0ad7b92dc357ed3fd97c84c86798285ec3e3bb62aac51a80b81115354c7d73e7d65d80027a697e7937bd050cdd58408ce13e9b387e8b58dc4c3183c86eaebacbd8d789ece4d34bae6719a219a5ea81761e25e602789038bf4787ab9d468cadb03631384d55b6224674db9f18d4a58cd5899ab0aa3d400c3d3b9738671271ed9c418c6b3fab0fdb1c5687021faf707df713e7dc5f89aea2a3d7e3a588f3f06dc40dbcac4f13dfe1770775a026020380724fcec314002c5577010ae8f6e6fa0c6268d52a5c4824cb5d4174cbba9bb8088d1fb67674929c958924a75d88f1f357afa00c6fa77c00f039e085151d935389befa5712035b8d0600e32d03ac478c2db02331aae0de940f089e4ecca5b15f6bdb454c033e45ccf750d6a3442dc2ef89a0e42ee036963c479622ce87758873e420624c8ac9ec7515ace346a2dbe005c045c03d6d3efb0622f87f0a71bebf9ac8212ae248e2775736d09c3c524a4d7f7d3415b7cb10947ff4f5a312fb5197df74b15f2ba794aeac605b57a5943e95525abf8b6de6bd9e9c523abba27d3fa14439be525119ce4e291d92529a5aa22c2f4b29dd5951790e2d518e032ad8fefc94d20f524a7b142cc33229a5c3534a1756743c46cd4e29addd61dbdb9658ffde5deedfb72bd897f3534a4f2b787c697d37b34b6cff0f25b63de95ee60094ab3a2fd37c50b561ec26d44937c3f57e8be8d75bc6d9c41c011f046e2ab19e2b88a1648f24aa13cb782591c0d7ab5528ff14b68878ea7f09f1a4bba0c4ba7e4274a33d9df2e7e0fe14cf4b7a49c96d5f4d0c5ffb6ae0cc82eb984734f1bc88187170325986a8a129e358a226edef25d6712691d0774dc1e59f4afda3630e0d038072d5f8132df16ed82cd3e1ef9b51be9afbd7c40034d75554e6394456f1ee940b2600de526099032937a6c07d4475eaf3291fc48c3a8fa8fa2e3bf9d21e44d346af8e6a1d97a2ce2682ccaa12db6e050e20861e9e2cbe433487157127313cf0a15493abf46be2fb2ad28cb6322604fe7f0600e5e694360028a7530dca2b2997a77220f134d68fda912b89dc843243bb3e0dd8a687cf6f49041f657ca66499db3996f8ceca780b11b0756b038ad5a48c9a4dff6e086f053edfa7750f5ad189761612c1e6851597271141e7b905967d2bc33541556d0c00da27a074b24add859fe046dafc6d27a24ab688794475f24ffb5cfe5b890bc9bf4aace3fd3d7cf65d141fb8ea722251adc813762f7e44fc2efe5a70f9a589da956e7d80e8eb5dc4f1c4c0597febe3f1780f1363c4ca76f6a7f831fe08d5dffcc72a3a1beb8719ec8ca143c900a0dc6c7e1361d8d56196dafced1325d67b2a3102d8203c46d434dc5b70f9838821553bd98fe28399dc410cba5355334827f7128140517b75f9b929f4565b30ded7697f0e56e5a314cf2b18063b155ceec744f7bbaaad48cc7bf17b8a0f7ef67c1c26d80080a8422a7ab328338a60d5266212e0fc9cf757a3f8803fd730d8c96600aea2dc856eab2e3e5366eefa13814b077940809f037f2cb8ec138941823ad9aef5d9223e095c3cc0e3f13acad514d5e59944cd53af7e4fb9a6992c6b11c1e1294457de3d4bae6fdb8acb37e1180084070b2ef76ae2a41c0613710eecbc04ccd54aeccf6fc80f2cfae98b449fe6228ea17382d58e25caf6db1a8ec73dc0fb0a2ebb12ddcda25834c9ee1a065f2d7f0b70da80b75985a255ff275658866d8900f656e077543720d8b32b2ce3846400108ace4fbe26c31345cea9bb0005e42560ee50707d37107305d4e5ac82cbad46e77c92a233aefd82781aabc3c5149ffba0d3c57906c59ffe3f4a3d41629184b53a2d47b1a7ff73e96d8e8f2c335aafe3814be82d59b65b2fa2b71c9c49c7910043d14412804dea2e7ccb51c4ec7a456b337a319abcb788083c661193baf43a4257de4578eb82e53a11f8e700f63fcfe9c458ff45928b0e05ded9e6ef45bafe2d04fe8fc1b473e73916786381e5a613098179b54487536c26ba5b899919eb703a718e1e54d3f67bb535c5dac9bf41f187aaa5899121bf497403eeb74627721b00842b4a2cbb61dd851fb30f65f6a38c9944f7b25edd9ff1de0ac0ae05d6f51070724dfb3fea4fc42c74471458765f22633c6b509ecf100398f4ea5d146f87afca3f88a0acd727b8b589a036ef09b46802d739c4d0be7558440c793c510280a2f34c5c5a60992d89c4df5de8ff14c38948507c0bd9d7a0c6b009209499a3bd1f555313cd6e149b3427abb662378a1dd393186c52579ea2379755c8cf7b285a23322cb355161d30a95dd0b376c175de5fefa19850f3d2ef5c6099c7e86d9af457114d06671055f2fdbef97f9ea8657825f59f0bb53300085713135414b11d0daf4622e6062fe2f68cf7d629b8ae32cd38553a8618a9ac57b3c8afe62f5a53372c59e745876dcd4bb01da17872dae5351f8b7f52ae8beba02c4fb1e1953f4d4c9cd4ceb644edceef89ae983b51fc77df8d6f10d7e995c8af656b249b00c2c3c4a0334512c85624a6201d74d7b361523441edc68cf78a3ed9fda7ee833046d127debc91258bf488b89b086c87c15515af6f26c5a6e0fd0b71c3a95bd921a40761658a0dfd7b4bcefb538891339fcb6012ef16104d673fa7debca0a16600b058992783dd813568e63493cb50ac2be439443bdc7845cfc95b0a2ed70fbd54818eb52a70edb8f75e4db12e800f53ae69ab4ac713498ebd0ebf9a3754f43b2916145535f74159b7975f45dfad40b16977c79f73ab126309bc969890ab5f1e231e022e24261bba94fe8ef0382918002cf64f2281eb9d05965d0df83e31377ad36c49b11111b39e82a610b3edf56a11c56fbafd50b42c5937b5a2cd4bf7315c83431519297145e229f4be71ef179dcdade8688d55bbaffc2afa6e39da0fd59d67b46bef76448dea86749ef4abac8788c4dbc934f9d2409803f07865064cd98c482e699a6e46b1cb92d53ebd36b04581752d64b86e76459fbcb346bf2b1aa49799e5b21f8a4eba9575132a3a0d779989bfaa54c71804bd2a7a6ff80051bb770eb039fdbbf93f4634211e03ac8e37ff42ac0178bc33817f53ac6ffffa44dfe42fd5bd1303348562b90f1713e3068cb714c59e3a161141c0b0a8b22c4583ca3afbfe6729724c9622fb1a55f4f80e4b90384ce76ad5fa3dbefe1dc475f66226462ec550b306e0f11651ae1dff08221a6d8afde97ee296b1f2062b5a48b11bd708c502877e295a96ace58ade2c86e978142d4fdef75af4c16558028061fb6e268a23892eb1bfc09b7f250c0096f4468a4f11bc0a31c948139a029e400ca45144ded0b437939d18d8c9d2f4bf9db1174527899a9bf15ed17c82619aa8aa6879e6028f64bc5fb4896558a67f5db6fc2afa6e189a906e24e693d897681efc28c5471854069b009674357025f0ac82cb1f4c8c5dfd7f75ef489f1d48f14939ae6cf3b74e7d88f30cd3d4cc45ba4f41f6c03d4513d756227edfc3d2e7b9c8317998ecdaa2a2031c15fd5eaa36abee0274612e71eed4718f389f984efa970c57ef9e49c71a806cefa75cc2d0d7293674eb4452742ace85b49f97bee89347bf4710eb45d1990cb39ef67f065c50605dcb503c59ae6a2fa3d8f4ce79cd1f4583a259751f88212b473b8f32f86ea4e702871023027e156ffe7d670090ed3ca23f6919afaf7b27fa68538a27fbfc9af603c314ade21b963919a0f814d179b911459e78570336aefb40b4543da9cbd729769e3c17d8afee8341b1fef583763f83192af746e004e2a1eb40e05b34733c955a1800e4fb59c9e50f07be53f74ef4c196c4042f458762fd6e87bfffbbe07a87e566f75ae0a505967b94fc5aa7a2b5514faefb60b46c5970b9bcfef28f507c309da7d47c2ca6536c76c4417b80a882ef87447c7fef2702f75703471333356a800c00f27d07b8a8e43a5e0f7caaee1da9d847289e60f62be0b40e9ff9131160f4ea008acf0f5fa5f50b2e773bf9097f97145c67d1d9dcaa36abe07297b6f95bd15c91a2b53355d99662cd217538b3e2f5dd433cf11f4d7c0f47d7bd834d6700906f0e31746991895dc63a82c85e9de896057e40b1094220a2fef776f1b979149bc27635e249a24e3b933f7d6d27bf253fffe12314cb03f82cc59359abb20dc5a677be8df6a37216091221c6a3afb3374091daa1ba54d5067f39f042a2e9704362b0200d010380ce4eac601d1f2366bf9ac8be4c4cdd59d48db44ffe1babe8ec71cfa7bfb38a75b237c5db773b4d525364f4b86529f79d55e1a5c4803ebd4ab46ffaf83cd14ba0579b50bc96a6ac1d81b7d7b4ed22aea278a0358fa8d1fa10315ae8290cd770ddc200a01b2752bcbffb58ef27aabc66d5bd43057c98c8ce2d6a3ebd8d1858e46917e269f3ad833a28198af68cb89eceb319166d8e3a18d8ada6e3f14c8a3fed7d8cf68342cda6581ec054eaab29dabda6ed163517f842c165af26ba5dd6d104ba0acd188ba5340380ee9c4a350363bc97780adebcee1dead2083197f69125d7f36ea26f6fb7eea4785fef03a8a7fbdb57801d0a2efb3eb207011aebe21265dba386e3b1067012c546bd9b4df403efa46870f101e0d9351c937ece86d72f37175c6e1be07f6b28efaa4473da9b6bd8f6846300d09d9b8037514dbfd855802f125591c33c24e8c644c25ed91fd275f43e07fb5dc0f70a6e6f6d063f2be37a14bfb82f227b62a4f18a5e8821babead37e063b21bc513eeaea7bbdfdaef8973a588e3293ed3621147014f1be0f6aa720ec507357b27837fd8791dd145f918aaa9b99dd40c00baf77d2229b08a99bc9e43dc182f61b846b083785abc96e88e57646adef1de4bb1f1ecbf5a70b96581df10351783b016319574d176e56388e3ddc95f888b5b114f2282d841e503ec4bf4ed2eaa534f91510f013f2fb88d7589f36410a3037e9868029ca87e5870b975883155069197b30cf03b1edfb3e0ab4433d21103d8fe846400d09b2b886496aa6c433cc17c93e168b37a32f013aaeb4ef74da2eb5f11d7133fe0a2de4cb441f7d37422309c55621dbdcc7d703971d32beadbc4044efdb41b710e1549fc1b75690f9fbdbec4769e469c9ffd1c9b7f75e0d03eae7f10cea3780dd42c06d30bead5e44f4cf62906f74030a11800f4eec544157e95de44b4799f00bc82c14e6cb3476b7fae022ea3ba6ad11f50bef9e093141ff005e2e9f0cbf46786c65d891a9c32edeb7fa3b7e4be8b2897e4b834701cfd4b823b82a8965fbec43a3e4b6f41e3172937e0d6cec0e954ff9b9b02bc8d18de76cd8ad75d8737507c40aa838907a7a24364b7338b3807bedce1736f26468fb43660ac9492af62af1fa7fef9754ae9b094d2ea7d2cffd629a593fbb80fbb5454ced32a28cb4f2b3e763ba594aea8a05c8714d8f66a29a5874b6e777e4ae9c894d252151d8fb5524a5faca05c7f4e294d2db0fd5929a58b4a6efba294d246151d0f524aef2b599eb166a794d6eeb0bd6d4bac7fef2ef667e994d25d25f7e3a729a5152b3cc64ba7947e5fa01cc7565c8e09fbb206a0b86ff571dd2f2012e7ce20ba43bd9ea86e2eeb454432d209c4935abfaa83df029c55d1ba0ea35c352fc4e0457f040ea27c53cb9b899a852d4aaee734a289a4577711bd52ca984ab44b7f8bf293286d4f1cdb77527e0ae2d328367be1fde44f31ddaded803f13f30594b13c91c0fa9992eb19368f11b57a65bc84a835aba23be4ee44936c91aeb7871035333b56798026a2919452f9b534d716c40dbae8e878bd388b18206736d10e3c9f18adf021a26a6e1191f0b22c71515f8e081a6610894eeb11d59dfd6c5e38af753cce6c95a72a7b116de54fa8605dbf2602ab9b88e4bdbbc9bfe9ac4024696e46b417af4f0451334b96e10fadf53c5270f9a5889b7715134e9d4f9c5b9710e7d7adad639277615887e869b175ebf53acadff82186803e90182eb688b589313bcae67dcc21e601f907d1447367eb78e4557f2f0f6c40f49a790a910351f5e88bf713f329b41b2b7f5b8a0f19bd0f9140d78dbf507c1af051b713c7f83aa2d9f1aed67b595d7fa710e7d77ac431de98f88ef7a4fca44ac733b9276debc800a01a5753fd8c6713d1964454de0f9f21facb57e921e2023f9568433c93e89ab93bd187792a1100549da0b93fe5275a599ab88056ddbdef1ee242fc20d11eff2f22f0f920914bb13ae5daf8b33c4424a096e9ea0811a49d5771d9e610c1ec7144aec1ccd6ff8f10e7e3eef4a76d7bacfb199e00e069447b7e95bd971610133fdd4d8ca77103718ecd26264e3a80087aa756b84d8809db8a76719c140c00aab10171837a29c3ddb7bf5f66039f268667ed97cd8864ad8deaded9923e418ced5f85ffa1fcb4d575bb831825f22f15adef03c4b93899dccff004001049a4dfaffba094f4632239b18ab15d262c7300aa7123d1befce1ba0b52837f117de1fb79f387a89ede8b893d65e8fba8eee60fd12b60a2cf31f15caabbf9431c8f93eadea949ee074cecaaf35711bdad1a7df3070380aa7d8ae82ed314f71255749d86b1adcaf5141f0ca76eb752aebb5a9e23fab4de41389be24faded1c44e4594c1689f6f322d4e167c4f737d1fc95e2031b4d3a0600d5fb2e9168f7b6ba0bd267af25c60ce8658cff2afc81483ebbb4ee03d0a505c468881b1301533f1c4c8c253151dc4d54fbefdac76dec458cb2a8fe789848069c28b31b2e247af0ec5c7741868901407f3c468c62b73ed54c273c4c6e227e4475b601fe8be87e36119e40be0f7c8ee283a874eb3822b9b0cade17fdf27ee277d1efa7da7710a31f0e934729d6d571587d8578e819668f10f36114e9763ba91900f4d77f893ef11f23fa9d56318f401d16124ffa471233defdb5ee021117d1dd891bdf305e50af279a8306393df12f89e0eceaba773ec76f81a732d81bc65b80f7301c55e8af2182b4aab3d9eb763091a97f5ddd05c97019d1deff9bba0b328c0c00faef5ee0e344dfd54f12ddab269aa389ee3f1fa5f8ec6bfdb090a8fade17b8a5eec28c7123f072e24637e844a3bf1193ff0c5bcdd3f944db7c3fdafcdb994724a8ee4fffbaa876e30422796e18e6fca85a027e4124740efafb6de72462be955fd55d90616500305847125db77e41b4a10db3db8991d90e27fa800fb3df114f20e7516eb29cb26e23da9d9f0a5c50f3317919f06ea21f7b9d1e249ec09f46f6402f83f22ba2f6ea1806df4cf26d16e768543d86c230f93791d7f1158a0fe854853b80636956427621060083771d71b35a13d88918856d989a06ce009e0e6c4a3c594f9481322e208ee7ba0cbe1bd802624292b58976e7d9751f8c962f10379c3730f873ec2122517455fadf45b45b8f10dfcfea0c66ac80bb889a87b13d658a4c71bd88ce414b99f147a655b8cf0f1289816b10c1d62003f247885aca35891918eb0e7e879e01407d1e269e587725aa050fa3bee6813944af855580e7017f67f86b28f23c405435cf2086faeca78789f6cf69c0bbeadef136be4b0c0ffd0c62f8e37eba8b18e678652201f2b1ba773ec33d44add67a445e423ff203de43041ae3477c2c72a31e29b85c371612030df563bdef2046497c37fd4f827d17f19b3fb2cfdb99541c0970b88cce4bfe62a2dd7d45fa5365389f689bfe2b3172da15147b321976234490fb46e269a48af6d7f94455ffdb88215127a2fd889e091b52dd43c085c4242bc3d406dcade9c4dc0a07105d788bde6c1f2106357a0b319c6d9603e93d3fe32e6224c0bbdb7c666922a0e965cc8069c4cdffae1e9629e3f52cbeae55f15bbc8338e726eaefb0760600c36b84f8a16c403c4dad4fcc7dbd2e9159de4db5dd7d4496fc6ce2e2712f3120cd0dc453ffa006f01906cb114fc1eb10e3ce2f4f24cb1d42fe4d701ed17e7b1d71b1b98968e7bc8f89d1ddae9359c453ea76ad63f228516dbf719b656e2766bb7b94e8e57239713ecd663832edcb98066c026c4edc4cd7226a7856cef9fcc9c039444078031148774afa7c39f0a31ecb750331f1d864f8bd8e10bfc3cd8961bdd72012f55ed966990789dfe17dc4dc1dff20927eef65723eb80c8c01c0c43385f8d1cc209e5c96637130b088688f9e4754bdde4bfc60946f6de2023f9dc581c002a2edf21eea4d66aac36aadd74a449034429c5773899bdbf50d3b26abb3f8f70671c359443c39ff87de6f40af2102a85e5c4224964e56232c3eef5664710d4c229ad9ee240270556cb2f5476d8245c41387aa712b137b7e81aaddc57075f5acdb9d541b4417993970b28f6898a8fe38ab0b26014ad2e0bcb8c03277175846eac8004092066323a2ab6aafeeabbbe09a9c0c002435c57389312eeab21dbd37bb26ea1ddc4a93980180a4c96e6d22f3fe346222a2baac526099b938a08dfac424404993cd54a2bbec33803d5aff6ed2fadb4e44567f1d59e5bb1758e66bc4dc1252e50c00244d265b0047012fc8f9fb2a4422ded7065cae4d815d0a2c77e180cba906711c004993c1f6c404486fa1bb41b2f62126911a94df027bf7b8cc0262b0aa7f0fb09c6a1003004913d96780f7155c762b6224c37efb30c5c6a8bf89180954ea0b9300254d641b9658f6b001946f3af0ba82cb4ec4791534811800489ac87e48f1a98e0fa5ff5315ff80e241ca17fb5c36359c0180a489ec37c474b345bd8b6863dfa6e272ed4e4ce27340c1e5bf494c3424f58d39009226839381fd4b2cff00f049aaa91138027827c5fafd43ccacb81e31118ed43706009226837d80334aae6321f04be0cfc0b9c09574d7bcb04eebb5137010d123a18c138057f7f3604960002069f2f82cf09e0ad77707f029e052622ae4b944d7bca9c02c6005604de0d3c4e04255b80e780e31edb2d457060092268b0d889c802dfbb88d45f43777eaedc057fab87ee9ff3300903499ac45f4ed5fa9ee8214700cf08eba0ba1e6b01780a4c9e436aa6d0618943944e6bf3430d600489a8cd6054e05b6aebb205db8814820ac638222359835009226a39b8904be617703f02cbcf9ab0606009226ab9f02bb32bc33ea5d0eec08dc527741d44c06009226b3b38097127dfb87c5a3c049c09ec0dd751746cd65002069b2bb91189af7edc023751706f818316090d5feaa954980929a647b62b8df9d88017d06e954e01bc0e9751f04090c002435d308702cf0a6016ceb6462e641abfb35540c002435d90644fffbdda9b646e05ee02a6298e0b27314487d61002049b02cb029b021b007f0961e977f98e876780591d57f3591ec270d2d0300495ad23ac494bcd381655aafb1161213033d0adcd97add5377a1a55e18004892d44076039424a9810c0024496a20030049921ac8004092a40632009024a9810c0024496a20030049921ac8004092a40632009024a981063d1d6695468059c0f2c0a271ef27e07e604edd8594269129c02ac4b8f90b73fefe28f1db5b50776125b537d102801589e93bf70236262e447901c05ce04ae032e0bbc0bfea2ebc269c6d80b71213bd8cdef09626ceadcf0177d55dc03e9b464c63bb1e3151ce96c4efad53003017381fb81db808f861dd3ba2465809781f718ece6bbdb702f01fe03375176e184da4b900f6003e02ec5c60d9f3803f03c730f92fdaaace3e644fe5fa207133bcb9ee02f6c91ac0ff1237fe17b1e44438bdb81d3893f8fd1d5ff78e69525b95988d71d571ef5f046c5f77e186d144a8017822f03ce0edc4dcdd453cbdf5da19f812f0cbba774a13c2bc9cf71f6bbd269b358157020702db55b8ce5701cf017604fe00fc91682690aa94f7bb9c5b77c186d5b00700ab03671117912aecdc7a9d08bcacee9d9386c8d388a6b227f569fdab0087b45e3f015e03ccaf7ba7a5261be65e00d380dfd3ddcdff1ee054e06cba4b3e3a08f875dd3b280d895711cd64bddefc2f014e06fedde3722f034e03d6a97bc7a5261bd61a80e5890bcbd66d3e732571017a8c6863fc3111d0bc17d816588a78da5f3d67f91710cd02e7d5bdb3524d36a1f3ef6cd475c03f88ead4fb88e691af02b711cd05a34ff4ab021b01cfe8b0be3d8980fd99ad75481ab0610d00762632fdb35c435c88be02fc7ddcdf16f1f86ccfd701ef273298b37c9308046eac7b87a51abc99ec9b7f6abda6007f221267bf0efc35673d17b75ea36600ef21028c9d800d7396db90a8b93b98f84d4b1aa0616c02588e789ac83297e806f87296bcf967391ed80cf860cedfb702be47b44f4a4db119f073a28b639611e0d3c0ca444f8897917ff3cf3207f8189150b811f0f9369f7d0a11a84b1ab0610c005e466421677925516dd8abef134d065976212e5252537c02388018d320cbe9c051c06caa49d47b0f319ec078b711dd7bffb7ee032235d1300600797d8e2f27ba0f15712b4b661d27e021a20af28aba775a1a9017022f69f3f71f12dd6e1fa978bbc712cd7a63bb699d48fca6ed0d20d5601873009e95f3febb29d777f82262f4b69710c94b3713c9830fd7bdc3d280ac0d7c2de76fff02de42b11ab66efd811890e59dc48dffc4ba0f88d464c316006c4f74d1cb727b05ebff21f03bfa7b919386d154e014f2bbde8d76a3edb7cb88c4dc0771be00a956c31600b41b977851d76bc97755eb2535cdd381f573fef64de0880196e5ceba0f86a4e1cb01b891fc6c63070d918a5916f80ef0848cbffd0df864dd05943478c31600dc430ce893657add85ebc153886e56df2332aa9f5753395e0bfc96e805f1536280a4c96a576274c7d38991edeaf664e21c380d38bce6b26c43cca991e5d3c02d3597af6a4702bf004e22c62f58beee02b5cc04be41fc164f216a6506e5cdc4b9f82be00335edff34e00b2cfe5d1c505339cada80684e3e1df870dd852963d89a00207b9a5188bec4b388f1ca87c9b3898bfdf6c478ea73886929d71bf399ff21721846886153ff045cdffa775e2f1bcb319d18d0685d607762009639ad32ac34e673db136dafcb1183bbfc8ee801715a8172cc24668a5b89c8ec4ec493e61dc48d786c16f9a64477cb5d8981611e25bee729ad6332bd752c0ea67353cf4c603f6087d6fe8c4efdf90416d712ed40742d5ba6751cfe085cd0dadf39151cef2cdbb5be83dd5b659cd5fa3e68edf3c1c40039735be5b880488abbbf4fe5196bbf9cf7df4d7cf713d5da44cf82f580bd89f13ce611e7ffb2adcf2c24be9385c439fa2fe05ce02f14ebfdb30111d04f257a2f8c10dd29af66c999239f4e8c74b80731e8d1c256d946afbbdb110f3d0b5be5fa15f1db29d3dc398d380f7722ae4dd389737e7d165f0bf620c6521921cec773899ad7b3a86eb6d45580fd81a7b6ca32fa5b7f62ab8ca3fbff21e2bb7a98f83d5c4d0c017f4745e528eb59c483d3eec450d9f389ebca2663fefe12e21c984f4c3d7c0911e00dffe05629a5617bed94525a90f2ed37046524a5b44c4ae97da99c8f56508e75524a3f2b5186f929a5cfa69436ee71bb1ba594e666acefae94d26a633ef73f29a54bba28c7b529a5a91db6f9c294d2374becebaf534a4feb611f77cb59cfbd29a535c77ceed5adf2f7eadb3d1ef322afeddb6cff80016cbf5faf2d524aff28712edc98527a7181ed1e90b3be3f8efbdccb534a771428d7d7534a330b1e939d52fc9667173c26a755f4ddec9f52fa6189efe6a729a51d0a6c77664ae9968cf59d53605d4f48297d30c5f5ac88bfa7940e4d29ad51d131edcbabf602e4bc0e6b73602f4c29bd35a5b4634a697a4de55b2fa5f47f054f8cb16e4b291d99e2875ba41cbba494ceaea01c29a5745eeaed82b84e4ae9e18cf5dc3ae67b79694a695e97db3fa5cdb6a6a5f6e7442fae4f29ed95529ad1c53ee60500d7a494964e11047ea044591e49297d28f5f722f1d29c6ddfd1e7edf6ebb5424ae9ed29a5ab2b3a1fbe91527a620fdbdf37673da7b6febe5c4ae92b25cbf4e594d2b23d946924a5b46b2a7eb31ab520a5f4bd94d20b7ad8f6d8d74629a5af55f2adc4eff4ed29beef6eb73f335513006c9eca0530639d92525abde0f1ecfbabf602e4bc9e98529ad3c5c13d3bc5936b2f3f96b2af432a3a31c6fb488fe538a94fe5f87e97dbcf0b00fedbfafbfe3d6c73768a27babc0beefc3eece76fbad8c7bc00e04f29a50d527537a10b534a2b75519e22afd7e56cf3e23e6daf9faf35524a575674ccc73a33a5b4629765c80b008e4b29ad9acadf84479d96529ad26599aa0a8ec77a7597db1e7dbda60f654829a5ab52f781eacc543e007869aade7f534a4feff1780ee43592522adf8ed01faf03de478c5b9e67118b272c3994e85ef4401fcbb4127021b071cedf17106dba23adb2cc21dadb4767245c81c56d93e3cd25dac7ba49c83a05787e87cfdc0f5c4bb4b7cf2166475ca5b5fd358971deb3dc41b4abfeabc3fad721daeb668c7bff46600b22b9ec1d5d1ed78b893c892c17b6f91b449befcd446ec323adfd5c9968ef5d93688fcfb31fd1ee9a6737e2dc1aef61a2ed767de2bb1eb500f86feb783f4c9c9fcb10edbf4fa0bd5f126da6559a45b443664dc6730ef9836e0da39588710ab6ecf0b90789efe64122376595d6719841fe28a310b91007d17960b07d81df64bc7f0f71fead37eefd4789f3734eeb358db8266c00acd8615bdf2492f7da791171eee4b999b826ce2666715c1a58a3f5ef6ac4ec8d79f622dae53b3990ce833acd27ae49f7b7ca3395b81eae42fbdf28c04d447e55a7bc8099445ec7dae3deff2b31c15c273388c4bebcdf456a95fde1d6f19c4be458acd25ab65db2e9cd441ed40d5d946370ea8e403abcd649d156d7c9a2d6bff7a5944e4e297d27a5b465c565999e3ab739fe30c593dc8cb4b83d7b24a5b47c8a68feb80ecb9fdddae776e578768775dc93e289f2456dd671584ae9a694d2fd39eb7830a5b45517df4d560dc0dc94d2dd29aab7c75a90229a3f3ba574464ae9b72922f37b534aefcf58ff52299a25f2dc9da2ddfde339cbd25aef831d8ed797daece36ea97b8fa5948e1db3edb1afdd5bfb7d559be51f4d293d25557bceb66bff3fb1e26df5f3b56e877321a5b84e9c9652da76dcb2cba4f8ed7db875ceb46b92fa67eadc34b46feace9d29a5ffa4948ece59cf2b524a17a4f6d7b73929a5f53b94e75739cb2e6c1db3cddb2cfbb214351679395757a7c8e169b7fde5534a97b6d987f929ae499f49f1db18fffbd83a45fec40da9fd6ff56fa9732dd9cc54bc0660ef5639b33c96e2dcf96b5a9c2b35d2fa77b496668f14bfeffbd2e2fbd1787f499dafef037dd55e802e5eaf4f293d947a776b8af6f5911eb797f7fa6ace76e6a6946e4eddb79f6f9dda57639e98da37692c9552fa428a1ff8780fb58e57b7fb747c9b721cd461d9bc0060bcfb53044e27a4ce497e635f5f68b3cef92982986ed6b37e4ae9cf29ff4799527ef3433701c003297ef8dd24a76e91da7ff707f6707cba793da3c4f73b4caf7775f80ece4929addde5ba3edee15cf846ca0ee2465fdd06001febb23ccf4e29ddde663d9f6eb3ec0e293b1137a568cbef66fbcba4947ed166fbefedb0fc57537b3fe8b21ca494dedd615defefb0fccc543c00b8b8cd762f4911e874b30f5ba6f64d836fe8e178f4fd557b01ba7ced9122f1aa578fa494ae48913d5e66fb5ba5fc28b948e6ec1aa97d6d42a7a76f524aaf4af1a43f9a2b715d4ae9a93d96638bd6f1c9726e8a36cdbc65bb0d007e59e0f83c39e55fd81e4b29bda4c7f52d9b22b3384fde85a59b00e04f3d96a5dd05e2ac546d2ec04e39dbb92275dfbe5cf7eb5929fba23eea3b05d67970ca0f021e4c91e49bb7ec0bba3827ce4f9d9fdcc7bef64c516390e58e94df2be08b39cb5c92e2c6decb31f9d7b8755c93a2a6ae5ddb75bbc06c414ae98d05be9b76c9d5b7a694766eb3eccc542c00d8bccd361f4eed6b53b35e6ba5fcebfbd5291e02ebfe5d91d2c40900465fcf49c56a03fe9ba2fae6b3a9bb9bebf8d767dbacbb68b5edcc941fd4bcbb87f5bc2d45a0b35189e3fae59c72ecdb66996e0280cf152ccf516dd6f99c12fb7966ce3a7f9af3f96e028022e579619bf53dafc4fe8d7f3d3f671bff4ebddf20ea7afdb8cdb1fa4689f5ae95e29a90e5ec14cd0e59cb75aa01f86f2ad68def0d39eb5b942220ce5ae6848ccfdf92baaf0d19fb9a96a226f3ee145d6597ebf0f99553f462ca53a686698736eb3db6cd723353ef01c0cc140f71597e9f529a55701f9e90a299354b2fd7f7bebe866d24c04ece2012afb6a1b7a981d7059e41cc4b7e22bd8d88f7dcd672595e4f0cfa50c403c01b73feb6570febf90ab039e5c657cf9b04669b12eb3c8efce3d6ce7389c962b21cca9283adf4e2352c799c2e033e52707def29589e7fb7f95b95a3d6b55bd748d76ba9cf86c09e397f3b95381f8aba8d3847b3ec4cf104c997532c11f93bc00919ef8f903f62ebb48cf796a773525d9685c4756763e0ef44f2623b7b1249b6593e4cb9991e2f207f80aabda9f637b21771cdc97202c507eaba9738171ecaf85ba704ee81996801004426eb65c4bce69b026f023e4b9cb4ddd8023899c800ef66fff32e044703c797dc97bfb5f665bc3d892953bb359a795ed49f815b33de3f92ec0cf26efcb4e07279d9ba1f21e6942fe3566294b4e389f3661d62a4b2ab0baceb54e05b05cb716deb95a5ca19f2eec9793fd17ee2ad61f10522c37abccba96618d993809fe4fc6d839cf7db054e6f207f2e936ee4cd78ba79cefb593d1666023fa0f7515e171113a53dd8e5e7d7ce79ff67c4b5b1ac57927d6d5c8d1895af0a2b005fcaf9dbd7c80ec87af137e2da3cde8c5e57d42f133100183507b88e88e2df473c4d7f86ee860ade88182bfc391d3eb76d6bdd59cead601f16903f1ce94625d63bc2e26e2933c6bc5620bb2bd43ca24bcb7853e8dc7d2dcb8d741f908db523f94fff1797381e635d40d4dc1c4704040b0baee717747fb11c6f3e707745fbd34e5e97b6455433bb66bfe575b7fd00d1c5afacb9c0b773fef61eb26bc0da054e65bb78e505009f203bf0f812d9357fdb11ddd9fa3507c2b6e4cf1e791c717e97753f519330feba341d388ae8ee5bd63a2ceea23ddeaf2a587f020ecb787f3bea9b8fe17186712e80a22e270eea0ca25a7e67a27a67569b657e44f4ebcd8bdad76ab36c228edf1ac48db2d70bea42e22690f763e9756cfe6589feef6b12d1ebc644bfe4b117ac29adcf1c0b7c8ea842bcb5f5b93bc8bee016b951fc99cefda9b3ac92f3febdc04505d6d74fd7955cfe9192cb7723ef66b5293106fb47075086aacb7f3d31567c55fe44d4e4bc69dcfb3381ad817f76b99e87806b4a96252fa8c9abb1b9827810c91a3f624fa2a9e96062cc87b95433ef08448d44d683c177e86edc806e9d428cadbfc5b8f7a7120140d1e07d54bbda9c692cbebe17f520717dbd8ba8b9186ba70a8f5361932900183587b8017e8d1834e4074475de4a199f9d499cb0bb02e767fcbddd401d3f269ee0a7502c00a0b54cdec0403b13116aa78181b620a2cc6d893c8705c48fa3ddc9fd0ea289613e7065eb18b40b767af110f0f182cbe605433751dd242555b89da82e2da38a27d84eee6bf3b7ed06b0fd323e4ef613f845547fecce63c90000f2dbb8b35c41e4159451242fe3e7e40f20b51a3148d063445ec23f88dab9c788dc95a237ebbc5ac12a6a45c7cb0a00d6232664fa65efab7b9ca7927d0f5c44e43024cae5ca8ce66f645de357ee715d7d31190380b12e27bee457118140966589d9b1b2028076edea2bf4b9ec3b1037f493da7c661fe018e2896e5437dfe9e867966a1d9fa75658eea964272775a397b6ce3a8d3e1d943188e6b76b8927dcac36d3557a5cd7a06d9df37ea7112a8bc86b8ee9e53b5ababf8723d76f896bd78e197f1b21ced3a944d5f9d869c95f4ed4a4dc438cda790fddcbab49b8bf0ffb777dc67bcbb6ca5f3600c8cb639842b144ca096722e700f4e204227b342fb375d39cf75f5673b9f3828c194473c74fdb947d22ca4b38ece5e234510c2a092f2f717226c3dd13606a8fef97716fcefb59b57ac376cc6613c3e4eed3faef6ead4e3c18bd93b891fe147817ddd57accca79ffd62e96ed555e535ba76194bb51e703f05024e13625008088765f95f3b757b36415e0fac04b6b2e735e35d12f89a8bddb5a8879446dc620aa9dcbc8bae0de45e7f1d095efa19cf73727e6ab1f5665db777b51454266dd81c1ef88879c227908cf24e6b4ff3c9179bf4b9bcf6e45e40f65e9c77796579bb85c05ebae33117699f2ab286fb237018c770a91f57b70c6dfd619f7ffb711ed6b07667cf656a2bbcb54aa0da2462f2253882ac5ace4c4adc8ef1b0dd1367d2ed1ae7905f154f03071f35f9ac88558adb5ad1d895c834dc9cfb8aedbd456990791353f19fd9e38ef5f90f1b775eb2e5c1b837c38e9e56972289edc725c4804757b03db133d899e4f6f19f3ab10b9017b903d3ec8681266d658255564e68f9777bcab7898c90ada1611b521b7919f9f55d6e8a445b51bf6006039e204985b76452df3896e825901c0b2199ffd11d901c095f4d64fbf2a3368dfcdf13aa236a35dc6fc6d2c3ef9fe4474a9d9877203ec54252b225f19f83aed831ee55b44e49164050047116dea57d65dc89c7267a9a28bd978ab975fc5d0984d24b08d0ec4733091e3b314f11bea665c8f69c4b5e1e52c399ec7234402745600d08f6e8779e7c1433dad255b5670314274bb1cc6df44e5863900f81e310dec2e541700d0665d5903b0e455d3d49520b203f953e35e41fc602feb7e75ffdf1f89c170362fb06c95f232ebaba8ee6bb2cb88fc97f1c7714322476077aa1d80a80a79dd248b0e4cd54edeefb91f4fb48336769c83a713898089c81bd8a3cd724b11d311df099c35ee6f794fc6fd08a4f2a67faea24b63564ed80831e8d8417dd897a1336c3900d38827955b89615b9f4cfe403c45f5d2ff3a2f405a817a2e0eed328ddf4fb19b3fc48d617a0dfb335e5e37aa7ef7b898ecae269ee8b2ec4c760679ddf26ab1fa91f49a37325b55fde687c579c4f80f1f266e70ef25c640b829e7f3b3c8ef5d906535aa9715f03d4c0c815ed6cd39ef3f8b865c73862900580df80bf06b1edf27fd70225aadcaaa39ef679dd479d9c1abb364ce40bf2d430ccd9be556caf5c15d95defa3cf74b5eedcc860c6f8ec244b000781df901d697e8cfc5bb9dd7002f6ef3f72f029766bcbf11d506abeb031fcbf95bd991fd86d9bd4432df2144ce405e97e78fb364f35bde79b40fd5d68e6e4924288e773bd50c0c7639d94d4a2b33b99a85720d53003087ec0126a6537cb2965e643dd15f44f648602b935f15df2f2b004fcaf9db4394eb2bbf15c5fbee57e96ab2fb79af40754fa92b33dcd9effd723731426396ed89a1638b0cfb5cc46ac47c0c1fa17df67c5640b80e91e752956dc94e86bc89ecb14186d5548a8f317f0d319f4a96655932f8be8418a067bc7d8860a22a1f24bbf96f36d524012e24bbe7c232d4df1c3a10c31600e44d90b233d58c5cb62cf1e491256b06afd9c0a7723e7f08d53c351d485c983f4eb4f1f7524331ea11ca25473db7c4b255ba83fc5a8e43c89fa0a5175b124971bf242694d996860cfa414cb0f256b2939fb6237ab6f47ba2921d8921634788c0f35b440d5fd6f97d18d963401c417edb702f36227f4cf62f507e64bf7e5b8a388607003f24b2f38bce347724f9b588e3ef1337135d06b3bc836a7ea75b11d7c3f11e247bd4c622fe4df658fd1093c555e189446fb2af014fa9689d9519a60000f233d197272671d9a1877565d98fec1e00901f7ce45503ee49f9fee9d3891fd2aec4d3d0f9c4a437cf63c96ace39e43fe5af4af19bd851e44f4b5c87bce3fd2ce06d25d7bd36911dbd2ef022e2877949eb180cdb6fa15f7e42feb0cabb11d5ee9bf469db07129344ed3be6bd8381df8c7b6fd42564cfa6b62e311953d9d10cdf4476cdd27c62fcfc61b6253161cd652ceeaebc13715e179597d794159c9d457626fed38927f7b2395227903d21da2d44d57d55ce273b207e3df0e592eb5e8e384f0f209ab2ff413c50ae5761f94b19b68bde2fc89f9b7e0a71f17872c1753f07f87ecedf8e259e7eb25c447e95e3c78913a5a857b1642ec1ba44f7c3f1790f8f907f035c8b88347b7538f9b3efd5e562f2039277124fb045fd8aec5c87cda96664b189e05ee2292d2f08d884f80dee5ae1365727aa87df9df3f755885a81ac0be3c939cb3c91c8172a7a0d7b3af9037d7d9f6253440fd20ec4311def456477d1eb6465f2bbf165d52e5ecfe2ae86e31d4cb96ed287903d0f04c46fb8ca0187ae24ff1afe76f26b80bb710a4bd6541d41fe14d403376c01c09dc4979f97cd3e424451afe871bd6f22da38f3dab9cfecb0fc8fc9efa2f61d6254be5ecc22121ef386693d91ecacedbc6cdda588da93ed7b28c327896aa961f40bf287fffd0abd1fefad891a9ebcbc8d33e8cf38e6c3ea44a2ea336fe8d8358966a9ffb63e5ba659e01862029a33689f37f313a20968bc1f909ff0b5137101dfacc0feff8dec0cf33b8966812abb1ef7c377c99eb276656254c06ff5b8be13c86f56b931e3bd79442f82bc4cfaa389dc825e72a536209eeef3ae8bff6cf3b7327e9db38f1037ec93bb5f1510dfc1b9e477b31c9ea6a594d230be5e98dabb27a57475eb73edd6f38194d2cd29a5bbdaaceb5f29a5595d94e9d094d28339eb989f52fa4b4a69ed2ed6b3474ae9da94d2c236657a699be5bfdbe1b8ecd261fbaba5942e4cdd7b6ace7ad649293d9cf1f947524a9b74711c3abdde9452ba3fa74cf7b7bed7d774b19ebd524a777638669be52cbb5bce3277a794562fb97fa7e5acfb800a8e5db7afb776790e5c9352ba20a5b46f87f58db4fe7d524ae99c94d20d29a5473bac7b4e4ae9631dd6fbb414bff72c8b5aafc3bbd8df4d524a677528cfa11dd6b16fce72ffa8e0fb383c67dd57e57c7ec794d26d6df6e58f29a5553b6c73c594d2a96dd6f19b31df6bd6eb1da9fdb5ec9ad4ddf5e0c529a53bdaace7ea94d2ce1dd63133a5744bc6b2e774b1fd43529c8b591e4e29dd9e527a5f87754c4d29fda8c37ea494d29e5d946720af9194867664cb93e83c16ff3d44979007892af285c453fe4a4475d63ab4ef32742d9160d8ed54b35b13b36f655523cf279e6016103518e71299b92344fbfd76c4a046d3c96fbb7c80c853c8cbd6a6b54fff267f90a2d94486eec5adfd5aa655a6a9c4ec829bf3f839061611ed6a795580db11b52e59e5b89a259f0e1f6d1da77f77794cdbd994189634afcdec8156d9af2272449622b283d76f957b95d67ee52556de4be416e48dfab51bd93531f7104f4b7796d8b7d3c84ebe7c31bd3f7194b11d510336ab8bcfce6eedf3bcd67fcf236a111371ec5721cea1e5e9ae1bd58dc431beb18bcfbe94f63363ce25a63fbe8c78529ccae2aae2a71253cace68bdf2c6f7388a78e26b675f226761bc4b283fabe6e164d7ca5d4d7e0fa083685fa53c9ba8113897e84d335aebfb70abbc7bb37868f0f1e6104d919ddadc3f49b4fb6759405c9be710bfe5ffb238b3ff3122316e07e27bc9bba63d4034e19ed7a11ca343ec8e9fe5efafc475be930fb6f625cf23c475edbf44eec07ce21c5b95f81dad4be7712af6257efbc3a1ee08a4c3ebe4d43f0fa794362c50a6cff7b14c7b755986632bdce6ed29a56d524aa7e7fcbdae1a80d1d7a7fb78bcb7efb0edc95e0330fada3c454dc8a03c96e23c79598fe53ca58f65fabf2ecb304c35009d962beb053d94fdb37d2ac34329a5e774598699a9780dc0e8eb5b7dda8f94527a790fe518c86bd87200c63b804868b9b4c275de44447abb506ca08f0f120944175458a6ab816713dd78baf16622722fdb96f45da21bdc3f195c1ff05e8d768f3cbbec8ac6b896683fbeb0ee9d1b125713c97fcf216ab8fae9874457b599f49e0cf5022239b1ea8954de407e77b0896074ae8c072b5adf23c435ee941e96792fd58ecf00519bb32d839da7e45d4477d93f56b4beb92cfe7e7e3cc0fde8cab0070010d546cfa77db5782f8e2192c82e2eb8fc3ca237c23b2a28cb2d4416fe0bc91faa35cfef8924935e971b752df1a31dadc6ce1bdf7ba936ef67551b4ea5da6192e71137ead7d37b62539693899b48a7eac4d17dc9dbf7b2fb9837ae435df373dc4fdcfc0f27460dec3618edd6f5c485f530a24abae8b8156701fb13497c657d876882f86e0fcbe47def557c6f53dabcdfe95a7d26d17c7407c52d20babeed425ce37a7502f120f3bd0a8ec5054475f9f53d2c9377ede9e5bb7988e885f556ca35f18d3a05780b9d13cd6b31110200881be52b8831ac8b3a866803ff5245653a8f68972bda8dee24a2efeed1e48f41d0c955c404403fe871b9f389b106c60e759c7741ce1b716bb4fd2bebf3558cd235def544d7a2c328d60de8274417a9b7117923ddc8cb049f57c13ee6ed43ddd9e7ff212ee06f2302c4074aad2df22b5e4bb455ff886a6671bb9608029e4fb121b06f2402ca7713bd717a91373f4015dfdbfc36ef773377fd1f8876fd9f75f1d9f12e266a5c8fa0dc30bb7f22ce9d0388d9498bf818919b73738fcbe55d7b8a7c375711c1ccdb291654fd8ee8a65976ac98be1ae624c03c4f21aa2b9f4c24f6ac4a3cbd2e209eaaa6b4fefb7ea26af3122280e8d7c01e5388c062356250912d8944bf69c4457eb44cf388e158af279252cea19a8b2144f2cc33892494dd8801344693b3a6101790d944f2da9f815359f2c2fe2422b971f422348d4814fa27d917bda944b2dfac31cb2cd53af617933dd35655b627127db626aa085722ce818563f619a289e4dfc4d3cc59f4ded56f1671415dc8e20bf054e2827231e582807588ee6bf35b651e218ef965c479322c9e449c4f5b10a3b32d4b3417cde0f133082e459c2f0fb68ecf79c41c15d751edc02de36dd22ad77ac44d630631a6c3e8f7b554ab3c77b5ca762971a32c1a742f4f9c77a3c9b5b4fefb3eb293657bb1466b5fc6deb0962582b25e9e8497279acdd624ae071b12d7a4d1f378b446e13ee2267b21714d2a7a4cf23c89f87d6e43241fcf1c73dca6b0f89cb99f384f2e229a688bd6ce4e2592f1a6f3f8efe61eca35236fd1da97cd88736c7aabeca337cf11a2d9e456e2fafa0851837153cf5b1ab08918004892a492264a13802449aa90018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d440060092243590018024490d64002049520319004892d4400600922435d0ff037ddc9f01252edb5e0000000049454e44ae426082",
+  "install": {
+    "common": {
+      "timeout": "{{parameters.timeout}}",
+      "maxPastRecords": "{{parameters.maxPastRecords}}"
+    }
+  },
+  "ipmRepo": null,
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "getASitemap": {
+      "id": 111777,
+      "api": {
+        "url": "/sites/{{encodeURL(parameters.siteUrl)}}/sitemaps/{{encodeURL(parameters.feedpath)}}",
+        "method": "GET",
+        "response": {
+          "output": "{{body}}"
+        },
+        "encodeUrl": false
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "getASitemap",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Sitemap",
+      "scope": [
+        "https://www.googleapis.com/auth/webmasters.readonly"
+      ],
+      "expect": [
+        {
+          "help": "The URL of the property as defined in Search Console. For example: `http://www.example.com/` ([URL-prefix property](https://support.google.com/webmasters/answer/34592#url_prefix_prop_tips)), or `sc-domain:example.com` ([Domain](https://support.google.com/webmasters/answer/34592#domain_property) property).",
+          "name": "siteUrl",
+          "type": "select",
+          "label": "Site URL",
+          "options": {
+            "store": "rpc://app%23google-search-console@1/listSites",
+            "nested": [
+              {
+                "help": "The URL of the sitemap to add. For example: `http://www.example.com/sitemap.xml`.",
+                "name": "feedpath",
+                "type": "select",
+                "label": "Sitemap URL",
+                "options": "rpc://app%23google-search-console@1/listSitemaps",
+                "required": true
+              }
+            ]
+          },
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "google-search-console",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/sites/{{encodeURL(parameters.siteUrl)}}/sitemaps/{{encodeURL(parameters.feedpath)}}\",\n\t\"method\": \"GET\",\n\t\"encodeUrl\": false,\n\t\"response\": {\n\t\t\"output\": \"{{body}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "path",
+          "type": "url",
+          "label": "Sitemap URL"
+        },
+        {
+          "name": "lastSubmitted",
+          "type": "date",
+          "label": "Last Submitted"
+        },
+        {
+          "name": "isPending",
+          "type": "boolean",
+          "label": "Is Pending"
+        },
+        {
+          "name": "isSitemapsIndex",
+          "type": "boolean",
+          "label": "Is Sitemaps Index"
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "label": "Type"
+        },
+        {
+          "name": "lastDownloaded",
+          "type": "date",
+          "label": "Last Downloaded"
+        },
+        {
+          "name": "warnings",
+          "type": "text",
+          "label": "Warnings"
+        },
+        {
+          "name": "errors",
+          "type": "text",
+          "label": "Errors"
+        },
+        {
+          "name": "contents",
+          "spec": {
+            "spec": [
+              {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+              },
+              {
+                "name": "submitted",
+                "type": "text",
+                "label": "Submitted"
+              },
+              {
+                "name": "indexed",
+                "type": "text",
+                "label": "Indexed"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Contents"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"https://www.googleapis.com/auth/webmasters.readonly\"\n]",
+      "accountName": "google-search-console",
+      "description": "Retrieves information about a specific sitemap.",
+      "expectJsonc": "[\n    {\n        \"name\": \"siteUrl\",\n        \"label\": \"Site URL\",\n        \"type\": \"select\",\n        \"options\": {\n            \"store\": \"rpc://listSites\",\n            \"nested\": [\n                {\n                    \"name\": \"feedpath\",\n                    \"label\": \"Sitemap URL\",\n                    \"type\": \"select\",\n\t\t\t\t\t\"options\": \"rpc://listSitemaps\",\n                    \"required\": true,\n                    \"help\": \"The URL of the sitemap to add. For example: `http://www.example.com/sitemap.xml`.\"\n                }\n            ]\n        },\n        \"required\": true,\n        \"help\": \"The URL of the property as defined in Search Console. For example: `http://www.example.com/` ([URL-prefix property](https://support.google.com/webmasters/answer/34592#url_prefix_prop_tips)), or `sc-domain:example.com` ([Domain](https://support.google.com/webmasters/answer/34592#domain_property) property).\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"path\",\n        \"type\": \"url\",\n        \"label\": \"Sitemap URL\"\n    },\n    {\n        \"name\": \"lastSubmitted\",\n        \"type\": \"date\",\n        \"label\": \"Last Submitted\"\n    },\n    {\n        \"name\": \"isPending\",\n        \"type\": \"boolean\",\n        \"label\": \"Is Pending\"\n    },\n    {\n        \"name\": \"isSitemapsIndex\",\n        \"type\": \"boolean\",\n        \"label\": \"Is Sitemaps Index\"\n    },\n    {\n        \"name\": \"type\",\n        \"type\": \"text\",\n        \"label\": \"Type\"\n    },\n    {\n        \"name\": \"lastDownloaded\",\n        \"type\": \"date\",\n        \"label\": \"Last Downloaded\"\n    },\n    {\n        \"name\": \"warnings\",\n        \"type\": \"text\",\n        \"label\": \"Warnings\"\n    },\n    {\n        \"name\": \"errors\",\n        \"type\": \"text\",\n        \"label\": \"Errors\"\n    },\n    {\n        \"name\": \"contents\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"type\",\n                    \"type\": \"text\",\n                    \"label\": \"Type\"\n                },\n                {\n                    \"name\": \"submitted\",\n                    \"type\": \"text\",\n                    \"label\": \"Submitted\"\n                },\n                {\n                    \"name\": \"indexed\",\n                    \"type\": \"text\",\n                    \"label\": \"Indexed\"\n                }\n            ]\n        },\n        \"label\": \"Contents\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "inspectAUrl": {
+      "id": 111778,
+      "api": {
+        "url": "https://searchconsole.googleapis.com/v1/urlInspection/index:inspect",
+        "body": "{{parameters}}",
+        "method": "POST",
+        "response": {
+          "error": {
+            "message": "[{{statusCode}}] {{body.error.message}}"
+          },
+          "output": "{{body.inspectionResult}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "inspectAUrl",
+      "epoch": null,
+      "flags": {},
+      "label": "Inspect a URL",
+      "scope": [
+        "https://www.googleapis.com/auth/webmasters.readonly"
+      ],
+      "expect": [
+        {
+          "help": "The URL of the property as defined in Search Console. For example: `http://www.example.com/` ([URL-prefix property](https://support.google.com/webmasters/answer/34592#url_prefix_prop_tips)), or `sc-domain:example.com` ([Domain](https://support.google.com/webmasters/answer/34592#domain_property) property).",
+          "name": "siteUrl",
+          "type": "select",
+          "label": "Site URL",
+          "options": "rpc://app%23google-search-console@1/listSites",
+          "required": true
+        },
+        {
+          "help": "Fully-qualified URL to inspect. Must be under the property specified in `Site URL`.",
+          "name": "inspectionUrl",
+          "type": "url",
+          "label": "Inspection URL",
+          "required": true
+        },
+        {
+          "help": "An [IETF BCP-47](https://en.wikipedia.org/wiki/IETF_language_tag) language code representing the requested language for translated issue messages, e.g. `en-US`, or `de-CH`. Default value is `en-US`.",
+          "name": "languageCode",
+          "type": "select",
+          "label": "Language Code",
+          "options": "rpc://app%23google-search-console@1/ietfBcp47LanguageCodes"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "google-search-console",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"https://searchconsole.googleapis.com/v1/urlInspection/index:inspect\",\n\t\"method\": \"POST\",\n\t\"body\": \"{{parameters}}\",\n\t\"response\": {\n\t\t\"output\": \"{{body.inspectionResult}}\",\n\t\t\"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error.message}}\"\n        }\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "inspectionResultLink",
+          "type": "text",
+          "label": "Inspection Result Link"
+        },
+        {
+          "name": "indexStatusResult",
+          "spec": [
+            {
+              "name": "sitemap",
+              "spec": {
+                "type": "url"
+              },
+              "type": "array",
+              "label": "Sitemaps"
+            },
+            {
+              "name": "referringUrls",
+              "spec": {
+                "type": "url"
+              },
+              "type": "array",
+              "label": "Referring URLs"
+            },
+            {
+              "name": "verdict",
+              "type": "text",
+              "label": "Verdict"
+            },
+            {
+              "name": "coverageState",
+              "type": "text",
+              "label": "Coverage State"
+            },
+            {
+              "name": "robotsTxtState",
+              "type": "text",
+              "label": "Robots Text State"
+            },
+            {
+              "name": "indexingState",
+              "type": "text",
+              "label": "Indexing State"
+            },
+            {
+              "name": "lastCrawlTime",
+              "type": "text",
+              "label": "Last Crawl Time"
+            },
+            {
+              "name": "pageFetchState",
+              "type": "text",
+              "label": "Page Fetch State"
+            },
+            {
+              "name": "googleCanonical",
+              "type": "text",
+              "label": "Google Canonical"
+            },
+            {
+              "name": "userCanonical",
+              "type": "text",
+              "label": "User Canonical"
+            },
+            {
+              "name": "crawledAs",
+              "type": "text",
+              "label": "Crawled as"
+            }
+          ],
+          "type": "collection",
+          "label": "Index Status Result"
+        },
+        {
+          "name": "ampResult",
+          "spec": [
+            {
+              "name": "issues",
+              "spec": [
+                {
+                  "name": "issueMessage",
+                  "type": "text",
+                  "label": "Issue Message"
+                },
+                {
+                  "name": "severity",
+                  "type": "text",
+                  "label": "Severity"
+                }
+              ],
+              "type": "array",
+              "label": "Issues"
+            },
+            {
+              "name": "verdict",
+              "type": "text",
+              "label": "Verdict"
+            },
+            {
+              "name": "ampUrl",
+              "type": "url",
+              "label": "AMP URL"
+            },
+            {
+              "name": "robotsTxtState",
+              "type": "text",
+              "label": "Robots Text State"
+            },
+            {
+              "name": "indexingState",
+              "type": "text",
+              "label": "Indexing State"
+            },
+            {
+              "name": "ampIndexStatusVerdict",
+              "type": "text",
+              "label": "AMP Index Status Verdict"
+            },
+            {
+              "name": "lastCrawlTime",
+              "type": "text",
+              "label": "Last Crawl Time"
+            },
+            {
+              "name": "pageFetchState",
+              "type": "text",
+              "label": "Page Fetch State"
+            }
+          ],
+          "type": "collection",
+          "label": "AMP Result"
+        },
+        {
+          "name": "mobileUsabilityResult",
+          "spec": [
+            {
+              "name": "issues",
+              "spec": [
+                {
+                  "name": "issueType",
+                  "type": "text",
+                  "label": "Issue Type"
+                },
+                {
+                  "name": "severity",
+                  "type": "text",
+                  "label": "Severity"
+                },
+                {
+                  "name": "message",
+                  "type": "text",
+                  "label": "Message"
+                }
+              ],
+              "type": "array",
+              "label": "Issues"
+            },
+            {
+              "name": "verdict",
+              "type": "text",
+              "label": "Verdict"
+            }
+          ],
+          "type": "collection",
+          "label": "Mobile Usability Result"
+        },
+        {
+          "name": "richResultsResult",
+          "spec": [
+            {
+              "name": "detectedItems",
+              "spec": [
+                {
+                  "name": "items",
+                  "spec": [
+                    {
+                      "name": "issues",
+                      "spec": [
+                        {
+                          "name": "issueMessage",
+                          "type": "text",
+                          "label": "Issue Message"
+                        },
+                        {
+                          "name": "severity",
+                          "type": "text",
+                          "label": "Severity"
+                        }
+                      ],
+                      "type": "array",
+                      "label": "Issues"
+                    },
+                    {
+                      "name": "name",
+                      "type": "text",
+                      "label": "Name"
+                    }
+                  ],
+                  "type": "array",
+                  "label": "Items"
+                },
+                {
+                  "name": "richResultType",
+                  "type": "text",
+                  "label": "Rich Result Type"
+                }
+              ],
+              "type": "array",
+              "label": "Detected Items"
+            },
+            {
+              "name": "verdict",
+              "type": "text",
+              "label": "Verdict"
+            }
+          ],
+          "type": "collection",
+          "label": "Rich Resulsts Result"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"https://www.googleapis.com/auth/webmasters.readonly\"\n]",
+      "accountName": "google-search-console",
+      "description": "Views the indexed or indexable status of the provided URL. Presently only the status of the version in the Google index is available; you cannot test the indexability of a live URL.",
+      "expectJsonc": "[\n    {\n        \"name\": \"siteUrl\",\n        \"label\": \"Site URL\",\n        \"type\": \"select\",\n        \"options\": \"rpc://listSites\",\n        \"required\": true,\n        \"help\": \"The URL of the property as defined in Search Console. For example: `http://www.example.com/` ([URL-prefix property](https://support.google.com/webmasters/answer/34592#url_prefix_prop_tips)), or `sc-domain:example.com` ([Domain](https://support.google.com/webmasters/answer/34592#domain_property) property).\"\n    },\n\t{\n\t\t\"name\": \"inspectionUrl\",\n\t\t\"label\": \"Inspection URL\",\n\t\t\"type\": \"url\",\n\t\t\"required\": true,\n\t\t\"help\": \"Fully-qualified URL to inspect. Must be under the property specified in `Site URL`.\"\n\t},\n\t{\n\t\t\"name\": \"languageCode\",\n\t\t\"label\": \"Language Code\",\n\t\t\"type\": \"select\",\n\t\t\"options\": \"rpc://ietfBcp47LanguageCodes\",\n\t\t\"help\": \"An [IETF BCP-47](https://en.wikipedia.org/wiki/IETF_language_tag) language code representing the requested language for translated issue messages, e.g. `en-US`, or `de-CH`. Default value is `en-US`.\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"inspectionResultLink\",\n        \"label\": \"Inspection Result Link\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"indexStatusResult\",\n        \"label\": \"Index Status Result\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"sitemap\",\n                \"label\": \"Sitemaps\",\n                \"type\": \"array\",\n                \"spec\": {\n                    \"type\": \"url\"\n                }\n            },\n            {\n                \"name\": \"referringUrls\",\n                \"label\": \"Referring URLs\",\n                \"type\": \"array\",\n                \"spec\": {\n                    \"type\": \"url\"\n                }\n            },\n            {\n                \"name\": \"verdict\",\n                \"label\": \"Verdict\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"coverageState\",\n                \"label\": \"Coverage State\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"robotsTxtState\",\n                \"label\": \"Robots Text State\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"indexingState\",\n                \"label\": \"Indexing State\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"lastCrawlTime\",\n                \"label\": \"Last Crawl Time\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"pageFetchState\",\n                \"label\": \"Page Fetch State\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"googleCanonical\",\n                \"label\": \"Google Canonical\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"userCanonical\",\n                \"label\": \"User Canonical\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"crawledAs\",\n                \"label\": \"Crawled as\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"ampResult\",\n        \"label\": \"AMP Result\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"issues\",\n                \"label\": \"Issues\",\n                \"type\": \"array\",\n                \"spec\": [\n                    {\n                        \"name\": \"issueMessage\",\n                        \"label\": \"Issue Message\",\n                        \"type\": \"text\"\n                    },\n                    {\n                        \"name\": \"severity\",\n                        \"label\": \"Severity\",\n                        \"type\": \"text\"\n                    }\n                ]\n            },\n            {\n                \"name\": \"verdict\",\n                \"label\": \"Verdict\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"ampUrl\",\n                \"label\": \"AMP URL\",\n                \"type\": \"url\"\n            },\n            {\n                \"name\": \"robotsTxtState\",\n                \"label\": \"Robots Text State\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"indexingState\",\n                \"label\": \"Indexing State\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"ampIndexStatusVerdict\",\n                \"label\": \"AMP Index Status Verdict\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"lastCrawlTime\",\n                \"label\": \"Last Crawl Time\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"pageFetchState\",\n                \"label\": \"Page Fetch State\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"mobileUsabilityResult\",\n        \"label\": \"Mobile Usability Result\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"issues\",\n                \"label\": \"Issues\",\n                \"type\": \"array\",\n                \"spec\": [\n                    {\n                        \"name\": \"issueType\",\n                        \"label\": \"Issue Type\",\n                        \"type\": \"text\"\n                    },\n                    {\n                        \"name\": \"severity\",\n                        \"label\": \"Severity\",\n                        \"type\": \"text\"\n                    },\n                    {\n                        \"name\": \"message\",\n                        \"label\": \"Message\",\n                        \"type\": \"text\"\n                    }\n                ]\n            },\n            {\n                \"name\": \"verdict\",\n                \"label\": \"Verdict\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"richResultsResult\",\n        \"label\": \"Rich Resulsts Result\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"detectedItems\",\n                \"label\": \"Detected Items\",\n                \"type\": \"array\",\n                \"spec\": [\n                    {\n                        \"name\": \"items\",\n                        \"label\": \"Items\",\n                        \"type\": \"array\",\n                        \"spec\": [\n                            {\n                                \"name\": \"issues\",\n                                \"label\": \"Issues\",\n                                \"type\": \"array\",\n                                \"spec\": [\n                                    {\n                                        \"name\": \"issueMessage\",\n                                        \"label\": \"Issue Message\",\n                                        \"type\": \"text\"\n                                    },\n                                    {\n                                        \"name\": \"severity\",\n                                        \"label\": \"Severity\",\n                                        \"type\": \"text\"\n                                    }\n                                ]\n                            },\n                            {\n                                \"name\": \"name\",\n                                \"label\": \"Name\",\n                                \"type\": \"text\"\n                            }\n                        ]\n                    },\n                    {\n                        \"name\": \"richResultType\",\n                        \"label\": \"Rich Result Type\",\n                        \"type\": \"text\"\n                    }\n                ]\n            },\n            {\n                \"name\": \"verdict\",\n                \"label\": \"Verdict\",\n                \"type\": \"text\"\n            }\n        ]\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "listSitemaps": {
+      "id": 111775,
+      "api": {
+        "qs": {
+          "sitemapIndex": "{{parameters.sitemapIndex}}"
+        },
+        "url": "/sites/{{encodeURL(parameters.siteUrl)}}/sitemaps",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{item}}",
+          "iterate": "{{ifempty(body.sitemap, [])}}"
+        },
+        "encodeUrl": false
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "listSitemaps",
+      "epoch": null,
+      "flags": {},
+      "label": "List Sitemaps",
+      "scope": [
+        "https://www.googleapis.com/auth/webmasters.readonly"
+      ],
+      "expect": [
+        {
+          "help": "The URL of the property as defined in Search Console. For example: `http://www.example.com/` ([URL-prefix property](https://support.google.com/webmasters/answer/34592#url_prefix_prop_tips)), or `sc-domain:example.com` ([Domain](https://support.google.com/webmasters/answer/34592#domain_property) property).",
+          "name": "siteUrl",
+          "type": "select",
+          "label": "Site URL",
+          "options": "rpc://app%23google-search-console@1/listSites",
+          "required": true
+        },
+        {
+          "help": "A URL of a site's sitemap index. For example: `http://www.example.com/sitemapindex.xml`.",
+          "name": "sitemapIndex",
+          "type": "url",
+          "label": "Sitemap Index",
+          "advanced": true
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "google-search-console",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/sites/{{encodeURL(parameters.siteUrl)}}/sitemaps\",\n\t\"method\": \"GET\",\n\t\"encodeUrl\": false,\n\t\"qs\": {                                \n\t\t\"sitemapIndex\": \"{{parameters.sitemapIndex}}\"\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{ifempty(body.sitemap, [])}}\",\n\t\t\"output\": \"{{item}}\",\n\t\t\"limit\": \"{{parameters.limit}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "path",
+          "type": "url",
+          "label": "Sitemap URL"
+        },
+        {
+          "name": "lastSubmitted",
+          "type": "date",
+          "label": "Last Submitted"
+        },
+        {
+          "name": "isPending",
+          "type": "boolean",
+          "label": "Is Pending"
+        },
+        {
+          "name": "isSitemapsIndex",
+          "type": "boolean",
+          "label": "Is Sitemaps Index"
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "label": "Type"
+        },
+        {
+          "name": "lastDownloaded",
+          "type": "date",
+          "label": "Last Downloaded"
+        },
+        {
+          "name": "warnings",
+          "type": "text",
+          "label": "Warnings"
+        },
+        {
+          "name": "errors",
+          "type": "text",
+          "label": "Errors"
+        },
+        {
+          "name": "contents",
+          "spec": {
+            "spec": [
+              {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+              },
+              {
+                "name": "submitted",
+                "type": "text",
+                "label": "Submitted"
+              },
+              {
+                "name": "indexed",
+                "type": "text",
+                "label": "Indexed"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Contents"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"https://www.googleapis.com/auth/webmasters.readonly\"\n]",
+      "accountName": "google-search-console",
+      "description": "Lists the sitemaps-entries submitted for this site, or included in the sitemap index file (if sitemap index is specified in the request).",
+      "expectJsonc": "[\n\t{\n        \"name\": \"siteUrl\",\n        \"label\": \"Site URL\",\n        \"type\": \"select\",\n        \"options\": \"rpc://listSites\",\n        \"required\": true,\n        \"help\": \"The URL of the property as defined in Search Console. For example: `http://www.example.com/` ([URL-prefix property](https://support.google.com/webmasters/answer/34592#url_prefix_prop_tips)), or `sc-domain:example.com` ([Domain](https://support.google.com/webmasters/answer/34592#domain_property) property).\"\n    },\n\t{\n\t\t\"name\": \"sitemapIndex\",\n\t\t\"label\": \"Sitemap Index\",\n\t\t\"type\": \"url\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"A URL of a site's sitemap index. For example: `http://www.example.com/sitemapindex.xml`.\"\n\t},\n    {\n        \"name\": \"limit\",\n        \"label\": \"Limit\",\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n        \"type\": \"uinteger\",\n        \"default\": 10\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"path\",\n        \"type\": \"url\",\n        \"label\": \"Sitemap URL\"\n    },\n    {\n        \"name\": \"lastSubmitted\",\n        \"type\": \"date\",\n        \"label\": \"Last Submitted\"\n    },\n    {\n        \"name\": \"isPending\",\n        \"type\": \"boolean\",\n        \"label\": \"Is Pending\"\n    },\n    {\n        \"name\": \"isSitemapsIndex\",\n        \"type\": \"boolean\",\n        \"label\": \"Is Sitemaps Index\"\n    },\n    {\n        \"name\": \"type\",\n        \"type\": \"text\",\n        \"label\": \"Type\"\n    },\n    {\n        \"name\": \"lastDownloaded\",\n        \"type\": \"date\",\n        \"label\": \"Last Downloaded\"\n    },\n    {\n        \"name\": \"warnings\",\n        \"type\": \"text\",\n        \"label\": \"Warnings\"\n    },\n    {\n        \"name\": \"errors\",\n        \"type\": \"text\",\n        \"label\": \"Errors\"\n    },\n    {\n        \"name\": \"contents\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"type\",\n                    \"type\": \"text\",\n                    \"label\": \"Type\"\n                },\n                {\n                    \"name\": \"submitted\",\n                    \"type\": \"text\",\n                    \"label\": \"Submitted\"\n                },\n                {\n                    \"name\": \"indexed\",\n                    \"type\": \"text\",\n                    \"label\": \"Indexed\"\n                }\n            ]\n        },\n        \"label\": \"Contents\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "makeAnApiCall": {
+      "id": 111307,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://www.googleapis.com/webmasters/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        },
+        "encodeUrl": "{{parameters.encodeUrl}}"
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "makeAnApiCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://www.googleapis.com/webmasters`, e.g. `/v3/sites` ",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "Specifies if module should encode the `URL` and the `Query String` automatically before the request.\nIt may come in handy to toggle this off when you provide a site URL or a sitemap path in the `URL`. You should process these values through the `encodeURL()` function then.",
+          "name": "encodeUrl",
+          "type": "boolean",
+          "label": "Encode URL",
+          "default": true,
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "google-search-console",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"url\": \"https://www.googleapis.com/webmasters/{{parameters.url}}\",\n    \"encodeUrl\": \"{{parameters.encodeUrl}}\",\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"method\": \"{{parameters.method}}\",\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"body\": \"{{body}}\",\n            \"headers\": \"{{headers}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "google-search-console",
+      "description": "Makes an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"help\": \"Enter a path relative to `https://www.googleapis.com/webmasters`, e.g. `/v3/sites` \",\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ],\n        \"required\": true\n    },\n    {\n        \"name\": \"encodeUrl\",\n        \"label\": \"Encode URL\",\n        \"type\": \"boolean\",\n        \"default\": true,\n        \"help\": \"Specifies if module should encode the `URL` and the `Query String` automatically before the request.\\nIt may come in handy to toggle this off when you provide a site URL or a sitemap path in the `URL`. You should process these values through the `encodeURL()` function then.\",\n        \"required\": true\n    },\n    {\n        \"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"name\": \"headers\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"type\": \"text\",\n                \"label\": \"Key\"\n            },\n            {\n                \"name\": \"value\",\n                \"type\": \"text\",\n                \"label\": \"Value\"\n            }\n        ],\n        \"type\": \"array\",\n        \"label\": \"Headers\",\n        \"default\": [\n            {\n                \"key\": \"Content-Type\",\n                \"value\": \"application/json\"\n            }\n        ]\n    },\n    {\n        \"name\": \"qs\", // Allows the user to set Query String by themselves.\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"type\": \"text\",\n                \"label\": \"Key\"\n            },\n            {\n                \"name\": \"value\",\n                \"type\": \"text\",\n                \"label\": \"Value\"\n            }\n        ],\n        \"type\": \"array\",\n        \"label\": \"Query String\"\n    },\n    {\n        \"name\": \"body\", // Allows the user to set Body by themselves.\n        \"type\": \"any\",\n        \"label\": \"Body\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deleteASitemap": {
+      "id": 111309,
+      "api": {
+        "url": "/sites/{{encodeURL(parameters.siteUrl)}}/sitemaps/{{encodeURL(parameters.feedpath)}}",
+        "method": "DELETE",
+        "response": {
+          "output": null
+        },
+        "encodeUrl": false
+      },
+      "rev": 3,
+      "crud": "delete",
+      "name": "deleteASitemap",
+      "epoch": null,
+      "flags": {},
+      "label": "Delete a Sitemap",
+      "scope": [
+        "https://www.googleapis.com/auth/webmasters"
+      ],
+      "expect": [
+        {
+          "help": "The URL of the property as defined in Search Console. For example: `http://www.example.com/` ([URL-prefix property](https://support.google.com/webmasters/answer/34592#url_prefix_prop_tips)), or `sc-domain:example.com` ([Domain](https://support.google.com/webmasters/answer/34592#domain_property) property).",
+          "name": "siteUrl",
+          "type": "select",
+          "label": "Site URL",
+          "options": {
+            "store": "rpc://app%23google-search-console@1/listSites",
+            "nested": [
+              {
+                "help": "The URL of the sitemap to add. For example: `http://www.example.com/sitemap.xml`.",
+                "name": "feedpath",
+                "type": "select",
+                "label": "Sitemap URL",
+                "options": "rpc://app%23google-search-console@1/listSitemaps",
+                "required": true
+              }
+            ]
+          },
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "google-search-console",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/sites/{{encodeURL(parameters.siteUrl)}}/sitemaps/{{encodeURL(parameters.feedpath)}}\",      // Relative to base URL\n\t\"method\": \"DELETE\",\n\t\"encodeUrl\": false,\n\t\"response\": {\n\t\t\"output\": null\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"https://www.googleapis.com/auth/webmasters\"\n]",
+      "accountName": "google-search-console",
+      "description": "Deletes a sitemap from the specified site.",
+      "expectJsonc": "[\n    {\n        \"name\": \"siteUrl\",\n        \"label\": \"Site URL\",\n        \"type\": \"select\",\n        \"options\": {\n            \"store\": \"rpc://listSites\",\n            \"nested\": [\n                {\n                    \"name\": \"feedpath\",\n                    \"label\": \"Sitemap URL\",\n                    \"type\": \"select\",\n\t\t\t\t\t\"options\": \"rpc://listSitemaps\",\n                    \"required\": true,\n                    \"help\": \"The URL of the sitemap to add. For example: `http://www.example.com/sitemap.xml`.\"\n                }\n            ]\n        },\n        \"required\": true,\n        \"help\": \"The URL of the property as defined in Search Console. For example: `http://www.example.com/` ([URL-prefix property](https://support.google.com/webmasters/answer/34592#url_prefix_prop_tips)), or `sc-domain:example.com` ([Domain](https://support.google.com/webmasters/answer/34592#domain_property) property).\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "submitASitemap": {
+      "id": 111773,
+      "api": {
+        "url": "/sites/{{encodeURL(parameters.siteUrl)}}/sitemaps/{{encodeURL(parameters.feedpath)}}",
+        "method": "PUT",
+        "response": {
+          "output": {
+            "sitemapUrl": "{{parameters.feedpath}}"
+          }
+        },
+        "encodeUrl": false
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "submitASitemap",
+      "epoch": null,
+      "flags": {},
+      "label": "Submit a Sitemap",
+      "scope": [
+        "https://www.googleapis.com/auth/webmasters"
+      ],
+      "expect": [
+        {
+          "help": "The URL of the property as defined in Search Console. For example: `http://www.example.com/` ([URL-prefix property](https://support.google.com/webmasters/answer/34592#url_prefix_prop_tips)), or `sc-domain:example.com` ([Domain](https://support.google.com/webmasters/answer/34592#domain_property) property).",
+          "name": "siteUrl",
+          "type": "select",
+          "label": "Site URL",
+          "options": "rpc://app%23google-search-console@1/listSites",
+          "required": true
+        },
+        {
+          "help": "The URL of the sitemap to add. For example: `http://www.example.com/sitemap.xml`.",
+          "name": "feedpath",
+          "type": "url",
+          "label": "Sitemap URL",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "google-search-console",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/sites/{{encodeURL(parameters.siteUrl)}}/sitemaps/{{encodeURL(parameters.feedpath)}}\",\n\t\"method\": \"PUT\",\n\t\"encodeUrl\": false,\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"sitemapUrl\": \"{{parameters.feedpath}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "sitemapUrl",
+          "type": "url",
+          "label": "Sitemap URL"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"https://www.googleapis.com/auth/webmasters\"\n]",
+      "accountName": "google-search-console",
+      "description": "Submits a sitemap for a site.",
+      "expectJsonc": "[\n    {\n        \"name\": \"siteUrl\",\n        \"label\": \"Site URL\",\n        \"type\": \"select\",\n        \"options\": \"rpc://listSites\",\n        \"required\": true,\n        \"help\": \"The URL of the property as defined in Search Console. For example: `http://www.example.com/` ([URL-prefix property](https://support.google.com/webmasters/answer/34592#url_prefix_prop_tips)), or `sc-domain:example.com` ([Domain](https://support.google.com/webmasters/answer/34592#domain_property) property).\"\n    },\n    {\n        \"name\": \"feedpath\",\n        \"label\": \"Sitemap URL\",\n        \"type\": \"url\",\n        \"required\": true,\n        \"help\": \"The URL of the sitemap to add. For example: `http://www.example.com/sitemap.xml`.\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"sitemapUrl\",\n\t\t\"label\": \"Sitemap URL\",\n\t\t\"type\": \"url\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "searchAnalytics": {
+      "id": 111640,
+      "api": {
+        "url": "/sites/{{encodeURL(parameters.siteUrl)}}/searchAnalytics/query",
+        "body": {
+          "type": "{{ifempty(parameters.type, 'WEB')}}",
+          "endDate": "{{formatDate(parameters.endDate, 'YYYY-MM-DD')}}",
+          "rowLimit": 25000,
+          "dataState": "{{parameters.dataState}}",
+          "startDate": "{{formatDate(parameters.startDate, 'YYYY-MM-DD')}}",
+          "dimensions": "{{parameters.dimensions}}",
+          "aggregationType": "{{parameters.aggregationType}}",
+          "dimensionFilterGroups": "{{formatFilterForAnalytics(parameters.dimensionFilterGroups)}}"
+        },
+        "method": "POST",
+        "timeout": 300000,
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{adjustReportRowOutput(item, parameters.dimensions)}}",
+          "iterate": "{{body.rows}}"
+        },
+        "encodeUrl": false,
+        "pagination": {
+          "body": {
+            "type": "{{parameters.type}}",
+            "endDate": "{{formatDate(parameters.endDate, 'YYYY-MM-DD')}}",
+            "rowLimit": 25000,
+            "startRow": "{{(pagination.page - 1) * 25000}}",
+            "dataState": "{{parameters.dataState}}",
+            "startDate": "{{formatDate(parameters.startDate, 'YYYY-MM-DD')}}",
+            "dimensions": "{{parameters.dimensions}}",
+            "aggregationType": "{{parameters.aggregationType}}",
+            "dimensionFilterGroups": "{{formatFilterForAnalytics(parameters.dimensionFilterGroups)}}"
+          }
+        }
+      },
+      "rev": 7,
+      "crud": "read",
+      "name": "searchAnalytics",
+      "epoch": null,
+      "flags": {},
+      "label": "Run a Report",
+      "scope": [
+        "https://www.googleapis.com/auth/webmasters.readonly"
+      ],
+      "expect": [
+        {
+          "help": "The URL of the property as defined in Search Console.",
+          "name": "siteUrl",
+          "type": "select",
+          "label": "Site URL",
+          "options": "rpc://app%23google-search-console@1/listSites",
+          "required": true
+        },
+        {
+          "help": "Start date of the requested date range, in PT time (UTC - 7:00/8:00). **Must be less than or equal to the end date.**",
+          "name": "startDate",
+          "type": "date",
+          "label": "Start Date",
+          "required": true
+        },
+        {
+          "help": "End date of the requested date range, in PT time (UTC - 7:00/8:00). **Must be greater than or equal to the start date.**",
+          "name": "endDate",
+          "type": "date",
+          "label": "End Date",
+          "required": true
+        },
+        {
+          "name": "dimensionFilterGroups",
+          "spec": [
+            {
+              "help": "Whether all filters in this group must return `true` (`And`), or one or more must return `true` (`Or`; not yet supported by Google Search Console API).",
+              "name": "groupType",
+              "type": "select",
+              "label": "Group Type",
+              "options": [
+                {
+                  "label": "And",
+                  "value": "AND",
+                  "nested": [
+                    "rpc://app%23google-search-console@1/parametersGetFilterGroup?logic=and"
+                  ],
+                  "default": true
+                }
+              ],
+              "required": true
+            }
+          ],
+          "type": "array",
+          "label": "Dimension Filter Groups"
+        },
+        {
+          "help": "The grouping dimension values are combined to create a unique key for each result row. If no dimensions are specified, all values will be combined into a single row.",
+          "name": "dimensions",
+          "type": "select",
+          "label": "Dimensions",
+          "options": [
+            {
+              "label": "Date",
+              "value": "DATE"
+            },
+            {
+              "label": "Query",
+              "value": "QUERY"
+            },
+            {
+              "label": "Page",
+              "value": "PAGE"
+            },
+            {
+              "label": "Country",
+              "value": "COUNTRY"
+            },
+            {
+              "label": "Device",
+              "value": "DEVICE"
+            },
+            {
+              "label": "Search Appearance",
+              "value": "SEARCH_APPEARANCE"
+            }
+          ],
+          "multiple": true
+        },
+        {
+          "help": "Filters results to the selected type.\n - `Web`: Filter results to the combined (\"All\") tab in Google Search. Does not include Discover or Google News results.\n - `Image`: Search results from the \"Image\" tab in Google Search.\n - `Video`: Video search results.\n - `News`: Search results from the \"News\" tab in Google Search.\n - `Google News`: Results from `news.google.com` and the Google News app on Android and iOS. Doesn't include results from the \"News\" tab in Google Search.",
+          "name": "type",
+          "type": "select",
+          "label": "Type",
+          "options": [
+            {
+              "label": "Web",
+              "value": "WEB",
+              "default": true
+            },
+            {
+              "label": "Image",
+              "value": "IMAGE"
+            },
+            {
+              "label": "Video",
+              "value": "VIDEO"
+            },
+            {
+              "label": "News",
+              "value": "NEWS"
+            },
+            {
+              "label": "Discover",
+              "value": "DISCOVER"
+            },
+            {
+              "label": "Google News",
+              "value": "GOOGLE_NEWS"
+            }
+          ]
+        },
+        {
+          "help": "How data is aggregated. If aggregated `By Property`, all data for the same property is aggregated; if aggregated `By Page`, all data is aggregated by canonical URI. If you filter or group by page, choose `Auto`; otherwise you can aggregate either `By Property` or `By Page`, depending on how you want your data calculated.\n**Note:** if you group or filter by page, you cannot aggregate by property.",
+          "name": "aggregationType",
+          "type": "select",
+          "label": "Aggregation Type",
+          "options": [
+            {
+              "label": "Auto",
+              "value": "AUTO"
+            },
+            {
+              "label": "By Property",
+              "value": "BY_PROPERTY"
+            },
+            {
+              "label": "By Page",
+              "value": "BY_PAGE"
+            }
+          ]
+        },
+        {
+          "help": "If `All`, data will include fresh data. If `Final` or if this parameter is omitted, the returned data will include only finalized data.",
+          "name": "dataState",
+          "type": "select",
+          "label": "Data State",
+          "options": [
+            {
+              "label": "Data State Unspecified",
+              "value": "DATA_STATE_UNSPECIFIED"
+            },
+            {
+              "label": "Final",
+              "value": "FINAL"
+            },
+            {
+              "label": "All",
+              "value": "ALL"
+            }
+          ]
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "google-search-console",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/sites/{{encodeURL(parameters.siteUrl)}}/searchAnalytics/query\",\n\t\"encodeUrl\": false,\n\t\"method\": \"POST\",\n\t\"timeout\": 300000,\n\t\"body\": {\n\t\t\"startDate\": \"{{formatDate(parameters.startDate, 'YYYY-MM-DD')}}\",\n\t\t\"endDate\": \"{{formatDate(parameters.endDate, 'YYYY-MM-DD')}}\",\n\t\t\"dimensions\": \"{{parameters.dimensions}}\",\n\t\t\"type\": \"{{ifempty(parameters.type, 'WEB')}}\",\n\t\t\"dimensionFilterGroups\": \"{{formatFilterForAnalytics(parameters.dimensionFilterGroups)}}\",\n\t\t\"aggregationType\": \"{{parameters.aggregationType}}\",\n\t\t\"rowLimit\": 25000,\n\t\t\"dataState\": \"{{parameters.dataState}}\"\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.rows}}\",\n\t\t\"output\": \"{{adjustReportRowOutput(item, parameters.dimensions)}}\",\n\t\t\"limit\": \"{{parameters.limit}}\"\n\t},\n\t\"pagination\": {\n\t\t\"body\": {\n\t\t\t\"startDate\": \"{{formatDate(parameters.startDate, 'YYYY-MM-DD')}}\",\n\t\t\t\"endDate\": \"{{formatDate(parameters.endDate, 'YYYY-MM-DD')}}\",\n\t\t\t\"dimensions\": \"{{parameters.dimensions}}\",\n\t\t\t\"type\": \"{{parameters.type}}\",\n\t\t\t\"dimensionFilterGroups\": \"{{formatFilterForAnalytics(parameters.dimensionFilterGroups)}}\",\n\t\t\t\"aggregationType\": \"{{parameters.aggregationType}}\",\n\t\t\t\"rowLimit\": 25000,\n\t\t\t\"startRow\": \"{{(pagination.page - 1) * 25000}}\",\n\t\t\t\"dataState\": \"{{parameters.dataState}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "clicks",
+          "type": "uinteger",
+          "label": "Clicks"
+        },
+        {
+          "name": "impressions",
+          "type": "number",
+          "label": "Impressions"
+        },
+        {
+          "name": "ctr",
+          "type": "number",
+          "label": "Click Through Rate"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "label": "Position"
+        },
+        "rpc://app%23google-search-console@1/interfaceRunAReport"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"https://www.googleapis.com/auth/webmasters.readonly\"\n]",
+      "accountName": "google-search-console",
+      "description": "Searches traffic data for the specified URL.",
+      "expectJsonc": "[\n    {\n        \"name\": \"siteUrl\",\n        \"type\": \"select\",\n        \"required\": true,\n        \"options\": \"rpc://listSites\",\n        \"label\": \"Site URL\",\n        \"help\": \"The URL of the property as defined in Search Console.\"\n    },\n    {\n        \"name\": \"startDate\",\n        \"type\": \"date\",\n        \"required\": true,\n        \"label\": \"Start Date\",\n        \"help\": \"Start date of the requested date range, in PT time (UTC - 7:00/8:00). **Must be less than or equal to the end date.**\"\n    },\n    {\n        \"name\": \"endDate\",\n        \"type\": \"date\",\n        \"required\": true,\n        \"label\": \"End Date\",\n        \"help\": \"End date of the requested date range, in PT time (UTC - 7:00/8:00). **Must be greater than or equal to the start date.**\"\n    },\n    {\n        \"name\": \"dimensionFilterGroups\",\n        \"spec\": [\n            {\n                \"name\": \"groupType\",\n                \"label\": \"Group Type\",\n                \"type\": \"select\",\n                \"required\": true,\n                \"options\": [\n                    {\n                        \"label\": \"And\",\n                        \"value\": \"AND\",\n                        \"default\": true,\n                        \"nested\": [\n                            \"rpc://parametersGetFilterGroup?logic=and\"\n                        ]\n                    }\n                    // this option is hidden due to that G Search Console API doesn't support it yet\n                    // ,\n                    // {\n                    // \t\"label\": \"Or\",\n                    // \t\"value\": \"OR\",\n                    // \t\"nested\": [\n                    // \t\t\"rpc://parametersGetFilterGroup?logic=or\"\t\n                    // \t]\n                    // }\n                ],\n                \"help\": \"Whether all filters in this group must return `true` (`And`), or one or more must return `true` (`Or`; not yet supported by Google Search Console API).\"\n            }\n        ],\n        \"type\": \"array\",\n        \"label\": \"Dimension Filter Groups\"\n    },\n    {\n        \"name\": \"dimensions\",\n        \"type\": \"select\",\n        \"multiple\": true,\n        \"options\": [\n            {\n                \"label\": \"Date\",\n                \"value\": \"DATE\"\n            },\n            {\n                \"label\": \"Query\",\n                \"value\": \"QUERY\"\n            },\n            {\n                \"label\": \"Page\",\n                \"value\": \"PAGE\"\n            },\n            {\n                \"label\": \"Country\",\n                \"value\": \"COUNTRY\"\n            },\n            {\n                \"label\": \"Device\",\n                \"value\": \"DEVICE\"\n            },\n            {\n                \"label\": \"Search Appearance\",\n                \"value\": \"SEARCH_APPEARANCE\"\n            }\n        ],\n        \"label\": \"Dimensions\",\n        \"help\": \"The grouping dimension values are combined to create a unique key for each result row. If no dimensions are specified, all values will be combined into a single row.\"\n    },\n    {\n        \"name\": \"type\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"label\": \"Web\",\n                \"value\": \"WEB\",\n                \"default\": true\n            },\n            {\n                \"label\": \"Image\",\n                \"value\": \"IMAGE\"\n            },\n            {\n                \"label\": \"Video\",\n                \"value\": \"VIDEO\"\n            },\n            {\n                \"label\": \"News\",\n                \"value\": \"NEWS\"\n            },\n            {\n                \"label\": \"Discover\",\n                \"value\": \"DISCOVER\"\n            },\n            {\n                \"label\": \"Google News\",\n                \"value\": \"GOOGLE_NEWS\"\n            }\n        ],\n        \"label\": \"Type\",\n        \"help\": \"Filters results to the selected type.\\n - `Web`: Filter results to the combined (\\\"All\\\") tab in Google Search. Does not include Discover or Google News results.\\n - `Image`: Search results from the \\\"Image\\\" tab in Google Search.\\n - `Video`: Video search results.\\n - `News`: Search results from the \\\"News\\\" tab in Google Search.\\n - `Google News`: Results from `news.google.com` and the Google News app on Android and iOS. Doesn't include results from the \\\"News\\\" tab in Google Search.\"\n    },\n    {\n        \"name\": \"aggregationType\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"label\": \"Auto\",\n                \"value\": \"AUTO\"\n            },\n            {\n                \"label\": \"By Property\",\n                \"value\": \"BY_PROPERTY\"\n            },\n            {\n                \"label\": \"By Page\",\n                \"value\": \"BY_PAGE\"\n            }\n        ],\n        \"help\": \"How data is aggregated. If aggregated `By Property`, all data for the same property is aggregated; if aggregated `By Page`, all data is aggregated by canonical URI. If you filter or group by page, choose `Auto`; otherwise you can aggregate either `By Property` or `By Page`, depending on how you want your data calculated.\\n**Note:** if you group or filter by page, you cannot aggregate by property.\",\n        \"label\": \"Aggregation Type\"\n    },\n    {\n        \"name\": \"dataState\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"label\": \"Data State Unspecified\",\n                \"value\": \"DATA_STATE_UNSPECIFIED\"\n            },\n            {\n                \"label\": \"Final\",\n                \"value\": \"FINAL\"\n            },\n            {\n                \"label\": \"All\",\n                \"value\": \"ALL\"\n            }\n        ],\n        \"help\": \"If `All`, data will include fresh data. If `Final` or if this parameter is omitted, the returned data will include only finalized data.\",\n        \"label\": \"Data State\"\n    },\n    {\n        \"name\": \"limit\",\n        \"label\": \"Limit\",\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n        \"type\": \"uinteger\",\n        \"default\": 10\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"clicks\",\n        \"label\": \"Clicks\",\n        \"type\": \"uinteger\"\n    },\n\t// {\n    //     \"name\": \"keys\",\n    //     \"label\": \"Keys\",\n    //     \"type\": \"array\",\n    //     \"spec\": {\n    //         \"type\": \"text\"\n    //     }\n    // },\n    {\n        \"name\": \"impressions\",\n        \"label\": \"Impressions\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"ctr\",\n        \"label\": \"Click Through Rate\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"position\",\n        \"label\": \"Position\",\n        \"type\": \"number\"\n    },\n    \"rpc://interfaceRunAReport\"\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "runAMobileFriendlyTest": {
+      "id": 111780,
+      "api": {
+        "qs": {
+          "key": "{{parameters.apiKey}}"
+        },
+        "log": {
+          "sanitize": [
+            "request.qs.key"
+          ]
+        },
+        "url": "https://searchconsole.googleapis.com/v1/urlTestingTools/mobileFriendlyTest:run",
+        "body": "{{omit(parameters, 'apiKey')}}",
+        "method": "POST",
+        "timeout": 300000,
+        "response": {
+          "error": {
+            "message": "[{{statusCode}}] {{body.error.message}}"
+          },
+          "output": "{{convertScreenshotDataToBuffer(body)}}"
+        }
+      },
+      "rev": 7,
+      "crud": "create",
+      "name": "runAMobileFriendlyTest",
+      "epoch": null,
+      "flags": {},
+      "label": "Run a Mobile Friendly Test",
+      "scope": [],
+      "expect": [
+        {
+          "help": "API key for your Google Cloud Platform. For more information on how to create an API key, please, check this [video guide](https://youtu.be/2_HZObVbe-g?si=raCrCmGRt6FuOxQD&t=47).",
+          "name": "apiKey",
+          "type": "text",
+          "label": "API Key",
+          "required": true
+        },
+        {
+          "help": "URL for inspection.",
+          "name": "url",
+          "type": "url",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "help": "Whether or not screenshot is requested.",
+          "name": "requestScreenshot",
+          "type": "boolean",
+          "label": "Request Screenshot"
+        }
+      ],
+      "public": false,
+      "typeId": 4,
+      "appName": "google-search-console",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"https://searchconsole.googleapis.com/v1/urlTestingTools/mobileFriendlyTest:run\",\n    \"method\": \"POST\",\n    \"qs\": {\n        \"key\": \"{{parameters.apiKey}}\"\n    },\n    \"body\": \"{{omit(parameters, 'apiKey')}}\",\n    \"timeout\": 300000,\n    \"response\": {\n        \"output\": \"{{convertScreenshotDataToBuffer(body)}}\",\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error.message}}\"\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.qs.key\"\n        ]\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "testStatus",
+          "spec": [
+            {
+              "name": "status",
+              "type": "text",
+              "label": "Status"
+            }
+          ],
+          "type": "collection",
+          "label": "Test Status"
+        },
+        {
+          "name": "mobileFriendliness",
+          "type": "text",
+          "label": "Mobile Friendliness"
+        },
+        {
+          "name": "mobileFriendlyIssues",
+          "spec": [
+            {
+              "name": "rule",
+              "type": "text",
+              "label": "Mobile Friendly Rule"
+            }
+          ],
+          "type": "collection",
+          "label": "Mobile Friendly Issues"
+        },
+        {
+          "name": "resourceIssues",
+          "spec": {
+            "spec": [
+              {
+                "name": "blockedResource",
+                "spec": [
+                  {
+                    "name": "url",
+                    "type": "url",
+                    "label": "URL"
+                  }
+                ],
+                "type": "collection",
+                "label": "Blocked Resource"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Resource Issues"
+        },
+        {
+          "name": "screenshot",
+          "spec": [
+            {
+              "name": "data",
+              "type": "buffer",
+              "label": "Data"
+            },
+            {
+              "name": "mimeType",
+              "type": "text",
+              "label": "MIME Type"
+            }
+          ],
+          "type": "collection",
+          "label": "Screenshot"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "Runs Mobile-Friendly Test for a given URL.",
+      "expectJsonc": "[\n    {\n        \"name\": \"apiKey\",\n        \"label\": \"API Key\",\n        \"type\": \"text\",\n        \"required\": true,\n        \"help\": \"API key for your Google Cloud Platform. For more information on how to create an API key, please, check this [video guide](https://youtu.be/2_HZObVbe-g?si=raCrCmGRt6FuOxQD&t=47).\"\n    },\n    {\n        \"name\": \"url\",\n        \"label\": \"URL\",\n        \"type\": \"url\",\n        \"required\": true,\n\t\t\"help\": \"URL for inspection.\"\n    },\n    {\n        \"name\": \"requestScreenshot\",\n        \"label\": \"Request Screenshot\",\n        \"type\": \"boolean\",\n\t\t\"help\": \"Whether or not screenshot is requested.\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"testStatus\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"status\",\n                \"type\": \"text\",\n                \"label\": \"Status\"\n            }\n        ],\n        \"label\": \"Test Status\"\n    },\n    {\n        \"name\": \"mobileFriendliness\",\n        \"type\": \"text\",\n        \"label\": \"Mobile Friendliness\"\n    },\n    {\n        \"name\": \"mobileFriendlyIssues\",\n        \"label\": \"Mobile Friendly Issues\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"rule\",\n                \"label\": \"Mobile Friendly Rule\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"resourceIssues\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"blockedResource\",\n                    \"type\": \"collection\",\n                    \"spec\": [\n                        {\n                            \"name\": \"url\",\n                            \"type\": \"url\",\n                            \"label\": \"URL\"\n                        }\n                    ],\n                    \"label\": \"Blocked Resource\"\n                }\n            ]\n        },\n        \"label\": \"Resource Issues\"\n    },\n    {\n        \"name\": \"screenshot\",\n        \"label\": \"Screenshot\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"data\",\n                \"type\": \"buffer\",\n                \"label\": \"Data\"\n            },\n            {\n                \"name\": \"mimeType\",\n                \"label\": \"MIME Type\",\n                \"type\": \"text\"\n            }\n        ]\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "google-search-console": {
+      "api": {
+        "info": {
+          "log": {
+            "sanitize": [
+              "request.headers.authorization",
+              "request.headers.developer-token"
+            ]
+          },
+          "url": "https://www.googleapis.com/webmasters/v3/sites",
+          "method": "GET",
+          "headers": {
+            "Authorization": "Bearer {{connection.accessToken}}"
+          },
+          "response": {
+            "error": {
+              "message": "[{{statusCode}}] {{map(body.error.errors, 'message')}}"
+            }
+          }
+        },
+        "token": {
+          "log": {
+            "sanitize": [
+              "request.body.code",
+              "request.body.client_secret",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://oauth2.googleapis.com/token",
+          "body": {
+            "code": "{{temp.code}}",
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "grant_type": "authorization_code",
+            "redirect_uri": "{{oauth.localRedirectUri}}",
+            "client_secret": "{{ifempty(parameters.clientSecret, common.clientSecret)}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] {{body.error_description}}"
+            }
+          }
+        },
+        "refresh": {
+          "log": {
+            "sanitize": [
+              "request.body.client_secret",
+              "request.body.refresh_token",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://oauth2.googleapis.com/token",
+          "body": {
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "grant_type": "refresh_token",
+            "client_secret": "{{ifempty(parameters.clientSecret, common.clientSecret)}}",
+            "refresh_token": "{{data.refreshToken}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] {{body.error_description}}"
+            }
+          },
+          "condition": "{{data.expires < addMinutes(now, 2)}}"
+        },
+        "authorize": {
+          "qs": {
+            "scope": "{{join(distinct(merge(oauth.scope, ifempty(parameters.scopes, emptyarray))), ' ')}}",
+            "prompt": "consent",
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "access_type": "offline",
+            "redirect_uri": "{{oauth.localRedirectUri}}",
+            "response_type": "code",
+            "include_granted_scopes": true
+          },
+          "url": "https://accounts.google.com/o/oauth2/v2/auth",
+          "response": {
+            "temp": {
+              "code": "{{query.code}}"
+            }
+          }
+        },
+        "invalidate": {
+          "qs": {
+            "token": "{{connection.accessToken}}"
+          },
+          "log": {
+            "sanitize": [
+              "request.headers.authorization",
+              "request.qs.token"
+            ]
+          },
+          "url": "https://oauth2.googleapis.com/revoke",
+          "method": "POST"
+        }
+      },
+      "rev": 11,
+      "name": "google-search-console",
+      "type": "oauth",
+      "label": "Google Search Console",
+      "scope": [
+        "https://www.googleapis.com/auth/webmasters.readonly"
+      ],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "google-search-console",
+      "install": {
+        "common": {
+          "clientId": "{{parameters.clientId}}",
+          "clientSecret": "{{parameters.clientSecret}}"
+        }
+      },
+      "apiJsonc": "{\n    \"authorize\": {\n        \"qs\": {\n            \"scope\": \"{{join(distinct(merge(oauth.scope, ifempty(parameters.scopes, emptyarray))), ' ')}}\",\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"redirect_uri\": \"{{oauth.localRedirectUri}}\",\n            \"access_type\": \"offline\",\n            \"response_type\": \"code\",\n            \"include_granted_scopes\": true,\n            \"prompt\": \"consent\"\n        },\n        \"url\": \"https://accounts.google.com/o/oauth2/v2/auth\",\n        \"response\": {\n            \"temp\": {\n                \"code\": \"{{query.code}}\"\n            }\n        }\n    },\n    \"token\": {\n        \"url\": \"https://oauth2.googleapis.com/token\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"code\": \"{{temp.code}}\",\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"grant_type\": \"authorization_code\",\n            \"redirect_uri\": \"{{oauth.localRedirectUri}}\",\n            \"client_secret\": \"{{ifempty(parameters.clientSecret, common.clientSecret)}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\",\n                \"refreshToken\": \"{{body.refresh_token}}\"\n            },\n            \"error\": {\n                \"message\": \"[{{statusCode}}] {{body.error_description}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.code\",\n                \"request.body.client_secret\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },\n    \"refresh\": {\n        \"condition\": \"{{data.expires < addMinutes(now, 2)}}\",\n        \"url\": \"https://oauth2.googleapis.com/token\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"grant_type\": \"refresh_token\",\n            \"client_secret\": \"{{ifempty(parameters.clientSecret, common.clientSecret)}}\",\n            \"refresh_token\": \"{{data.refreshToken}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\"\n            },\n            \"error\": {\n                \"message\": \"[{{statusCode}}] {{body.error_description}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.client_secret\",\n                \"request.body.refresh_token\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },\n    \"info\": {\n        \"url\": \"https://www.googleapis.com/webmasters/v3/sites\",\n        \"method\": \"GET\",\n        \"headers\": {\n            \"Authorization\": \"Bearer {{connection.accessToken}}\"\n        },\n        \"response\": {\n            \"error\": {\n                \"message\": \"[{{statusCode}}] {{map(body.error.errors, 'message')}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.headers.authorization\",\n                \"request.headers.developer-token\"\n            ]\n        }\n    },\n    \"invalidate\": {\n        \"url\": \"https://oauth2.googleapis.com/revoke\",\n        \"method\": \"POST\",\n        \"qs\": {\n            \"token\": \"{{connection.accessToken}}\"\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.headers.authorization\",\n                \"request.qs.token\"\n            ]\n        }\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "type": "html",
+          "label": "<div class=\"form-text\">Make's use and transfer of information received from Google APIs to any other app will adhere to <a href = https://developers.google.com/terms/api-services-user-data-policy> Google API Services User Data Policy</a>.</div>"
+        },
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "advanced": true,
+          "editable": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "password",
+          "label": "Client Secret",
+          "advanced": true,
+          "editable": true
+        }
+      ],
+      "scopeJsonc": "[\n\t\"https://www.googleapis.com/auth/webmasters.readonly\"\n]",
+      "installSpec": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "required": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "required": true
+        }
+      ],
+      "scopesJsonc": null,
+      "installJsonc": "{\n    \"common\": {\n        \"clientId\": \"{{parameters.clientId}}\",\n        \"clientSecret\": \"{{parameters.clientSecret}}\"\n    }\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"type\": \"html\",\n\t\t\"label\": \"<div class=\\\"form-text\\\">Make's use and transfer of information received from Google APIs to any other app will adhere to <a href = https://developers.google.com/terms/api-services-user-data-policy> Google API Services User Data Policy</a>.</div>\"\n\t},\n\t{\n\t\t\"name\": \"clientId\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Client ID\",\n\t\t\"advanced\": true,\n\t\t\"editable\": true\n\t},\n\t{\n\t\t\"name\": \"clientSecret\",\n\t\t\"type\": \"password\",\n\t\t\"label\": \"Client Secret\",\n\t\t\"advanced\": true,\n\t\t\"editable\": true\n\t}\n]",
+      "installSpecJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"required\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"text\",\n        \"label\": \"Client Secret\",\n        \"required\": true\n    }\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://www.googleapis.com/webmasters/v3\",\n    \"headers\": {\n        \"Authorization\": \"Bearer {{connection.accessToken}}\"\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.authorization\"\n        ]\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{map(body.error.errors, 'message')}}\",\n            \"404\": {\n                \"message\": \"[{{statusCode}}] Resource not found.\"\n            }\n        }\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "adjustReportRowOutput": {
+      "rev": 6,
+      "code": "function adjustReportRowOutput(row, selectedDimensions) {\n    if (!row) return row;\n    if (typeof row !== 'object') return row;\n\tif (!Array.isArray(row.keys)) return row;\n    if (!Array.isArray(selectedDimensions)) return row;\n\n    const dimensionsObj = row.keys.reduce(\n        (acc, k, idx) => ({\n            ...acc,\n            [selectedDimensions[idx]]: k,\n        }),\n        {}\n    );\n\n    return {\n        ...dimensionsObj,\n        ...row,\n        keys: undefined,\n    };\n}\n",
+      "name": "adjustReportRowOutput",
+      "test": "it('returns \"row\" if data validation is not passed', () => {\n    const case1 = null; // \"row\" is a falsy value\n    const case2 = '\"row\" is not an object';\n    const case3 = { keys: '\"row.keys\" is not an array' };\n    const case4 = '\"dimentions\" is not an array';\n    const rowCase4 = {\n        keys: ['key1', 'key2', 'key3'],\n    };\n\n    assert.strictEqual(adjustReportRowOutput(case1, []), case1, 'case1');\n    assert.strictEqual(adjustReportRowOutput(case2, []), case2, 'case2');\n    assert.strictEqual(adjustReportRowOutput(case3, []), case3, 'case3');\n    assert.strictEqual(adjustReportRowOutput(rowCase4, case4), rowCase4,'');\n});\n\nit('adjusts \"row\" by adding each of the \"selectedDimensions\" as keys that contain a value taken from \"keys\" by the respective index', () => {\n    const row = {\n        keys: [\n            '2023-09-12',\n            '\"react\" \"app\"',\n            'https://create-react-app-site-production-2b93.up.railway.app/',\n            'usa',\n            'DESKTOP',\n        ],\n    };\n\n    const selectedDimensions = ['DATE', 'QUERY', 'PAGE', 'COUNTRY', 'DEVICE'];\n\n    const expectedOutput = {\n        DATE: '2023-09-12',\n        QUERY: '\"react\" \"app\"',\n        PAGE: 'https://create-react-app-site-production-2b93.up.railway.app/',\n        COUNTRY: 'usa',\n        DEVICE: 'DESKTOP',\n        keys: undefined,\n    };\n\n    assert.deepEqual(\n        adjustReportRowOutput(row, selectedDimensions),\n        expectedOutput\n    );\n});\n",
+      "appName": "google-search-console",
+      "arguments": "(row, selectedDimensions)",
+      "appVersion": 1
+    },
+    "makeDimensionsInterface": {
+      "rev": 3,
+      "code": "function makeDimensionsInterface(selectedDimensions) {\n    if (!Array.isArray(selectedDimensions)) return [];\n\n    const makeLabel = (text) =>\n        text\n            .split('_')\n            .map((t) => iml.startcase(t.toLowerCase())) // t[0] right away 'cuz the whole \"text\" is in upper case\n            .join(' ');\n\n    return selectedDimensions.map((sd) => ({\n        name: sd,\n        type: 'text',\n        label: makeLabel(sd),\n    }));\n}\n",
+      "name": "makeDimensionsInterface",
+      "test": "it('returns an empty array if the \"selectedDimensions\" if it is not an array', () => {\n    assert.deepEqual(makeDimensionsInterface('not an array'), []);\n});\n\nit('returns an array of Make interface objects with type \"text\"; \"name\" is taken from the \"selectedDimensions\" values; \"label\" is an adjusted \"selectedDimensions\" value, e.g. \"SEARCH_APPEARANCE\" should become \"Search Appearance\".', () => {\n    const selectedDimensions = ['PAGE', 'SEARCH_APPEARANCE'];\n\n    const expectedOutput = [\n        {\n            name: 'PAGE',\n            type: 'text',\n            label: 'Page',\n        },\n        {\n            name: 'SEARCH_APPEARANCE',\n            type: 'text',\n            label: 'Search Appearance',\n        },\n    ];\n\n    assert.deepEqual(\n        makeDimensionsInterface(selectedDimensions),\n        expectedOutput\n    );\n});\n",
+      "appName": "google-search-console",
+      "arguments": "(selectedDimensions)",
+      "appVersion": 1
+    },
+    "formatFilterForAnalytics": {
+      "rev": 2,
+      "code": "function formatFilterForAnalytics(filterGroups) {\n    if (!filterGroups) return undefined;\n    if (!Array.isArray(filterGroups))\n        throw new TypeError('\"filterGroups\" must be an instance of Array.');\n\n    return filterGroups.map((item, idx) => {\n        if (!item.filters)\n            throw new Error(\n                `\"filters\" in \"filterGroups\" at index ${idx} must exist.`\n            );\n        if (!Array.isArray(item.filters))\n            throw new TypeError(\n                `\"filters\" in \"filterGroups\" at index ${idx} must be an instance of Array.`\n            );\n        if (!item.groupType)\n            throw new Error(\n                `\"groupType\" in \"filterGroups\" at index ${idx} must exist.`\n            );\n\n        // applying flat() before due to that it doesn't matter which logic is being used in the filter group\n        // \"OR\" logic will result an array of arrays containing 1 object\n        // \"AND\" logic will result an array of 1 array containing multiple objects\n        // flatMap() doesn't work well here 'cuz it flattens the array after the \"map\" function\n        // while we need the array to be flattened before\n        const filters = item.filters.flat().map((filter) => ({\n            dimension: filter.a,\n            operator: filter.o,\n            expression: filter.b,\n        }));\n\n        return {\n            ...item,\n            filters,\n        };\n    });\n}\n",
+      "name": "formatFilterForAnalytics",
+      "test": "it('should return \"undefined\" if no argument is passed or an argument is a falsy value', () => {\n\tassert.strictEqual(formatFilterForAnalytics(), undefined)\n\tassert.strictEqual(formatFilterForAnalytics(null), undefined)\n})\n\nit('should throw appropriate errors on invalid input', () => {\n    // no \"filters\" key at the 2nd item\n    const dimensionFilterGroupsInvalidInput1 = [\n        {\n            filters: [\n                [\n                    {\n                        a: 'QUERY',\n                        b: 'Make',\n                        o: 'CONTAINS',\n                    },\n                ],\n                [\n                    {\n                        a: 'COUNTRY',\n                        b: 'Czechia',\n                        o: 'CONTAINS',\n                    },\n                ],\n            ],\n            groupType: 'OR',\n        },\n        {\n            search: [\n                [\n                    {\n                        a: 'DEVICE',\n                        b: 'Mobile',\n                        o: 'CONTAINS',\n                    },\n                    {\n                        a: 'PAGE',\n                        b: 'make',\n                        o: 'CONTAINS',\n                    },\n                ],\n            ],\n            groupType: 'AND',\n        },\n    ];\n\n    // no \"groupType\" key at the 1st item\n    const dimensionFilterGroupsInvalidInput2 = [\n        {\n            filters: [\n                [\n                    {\n                        a: 'QUERY',\n                        b: 'Make',\n                        o: 'CONTAINS',\n                    },\n                ],\n                [\n                    {\n                        a: 'COUNTRY',\n                        b: 'Czechia',\n                        o: 'CONTAINS',\n                    },\n                ],\n            ],\n            // \"groupType\": \"OR\"\n        },\n        {\n            search: [\n                [\n                    {\n                        a: 'DEVICE',\n                        b: 'Mobile',\n                        o: 'CONTAINS',\n                    },\n                    {\n                        a: 'PAGE',\n                        b: 'make',\n                        o: 'CONTAINS',\n                    },\n                ],\n            ],\n            groupType: 'AND',\n        },\n    ];\n\n    // \"filters\" at 1st item is not an array\n    const dimensionFilterGroupsInvalidInput3 = [\n        {\n            filters: '\"filters\" is not an array',\n        },\n        {\n            search: [\n                [\n                    {\n                        a: 'DEVICE',\n                        b: 'Mobile',\n                        o: 'CONTAINS',\n                    },\n                    {\n                        a: 'PAGE',\n                        b: 'make',\n                        o: 'CONTAINS',\n                    },\n                ],\n            ],\n            groupType: 'AND',\n        },\n    ];\n\n    assert.throws(\n        () => {\n            formatFilterForAnalytics('arg is not an array');\n        },\n        TypeError,\n        '\"filterGroups\" must be an instance of Array.'\n    );\n    assert.throws(\n        () => {\n            formatFilterForAnalytics(dimensionFilterGroupsInvalidInput1);\n        },\n        Error,\n        '\"filters\" in \"filterGroups\" at index 1 must exist.'\n    );\n    assert.throws(\n        () => {\n            formatFilterForAnalytics(dimensionFilterGroupsInvalidInput2);\n        },\n        Error,\n        '\"groupType\" in \"filterGroups\" at index 0 must exist.'\n    );\n    assert.throws(\n        () => {\n            formatFilterForAnalytics(dimensionFilterGroupsInvalidInput3);\n        },\n        TypeError,\n        '\"filters\" in \"filterGroups\" at index 0 must be an instance of Array.'\n    );\n});\n\nconst dimensionFilterGroupsValidInput = [\n    {\n        filters: [\n            [\n                {\n                    a: 'QUERY',\n                    b: 'Make',\n                    o: 'CONTAINS',\n                },\n            ],\n            [\n                {\n                    a: 'COUNTRY',\n                    b: 'Czechia',\n                    o: 'CONTAINS',\n                },\n            ],\n        ],\n        groupType: 'OR',\n    },\n    {\n        filters: [\n            [\n                {\n                    a: 'DEVICE',\n                    b: 'Mobile',\n                    o: 'CONTAINS',\n                },\n                {\n                    a: 'PAGE',\n                    b: 'make',\n                    o: 'CONTAINS',\n                },\n            ],\n        ],\n        groupType: 'AND',\n    },\n];\n\nit('should not throw any kind of error on valid input', () => {\n    assert.doesNotThrow(() => {\n        formatFilterForAnalytics(dimensionFilterGroupsValidInput);\n    }, Error);\n});\n\nconst dimensionFilterGroupsValidOutput = [\n    {\n        filters: [\n            {\n                dimension: 'QUERY',\n                operator: 'CONTAINS',\n                expression: 'Make',\n            },\n            {\n                dimension: 'COUNTRY',\n                operator: 'CONTAINS',\n                expression: 'Czechia',\n            },\n        ],\n        groupType: 'OR',\n    },\n    {\n        filters: [\n            {\n                dimension: 'DEVICE',\n                operator: 'CONTAINS',\n                expression: 'Mobile',\n            },\n            {\n                dimension: 'PAGE',\n                operator: 'CONTAINS',\n                expression: 'make',\n            },\n        ],\n        groupType: 'AND',\n    },\n];\n\nit('should return a valid output on a valid input', () => {\n    const funcRes = formatFilterForAnalytics(dimensionFilterGroupsValidInput);\n    assert.strictEqual(\n        JSON.stringify(funcRes),\n        JSON.stringify(dimensionFilterGroupsValidOutput)\n    );\n});\n",
+      "appName": "google-search-console",
+      "arguments": "(filterGroups)",
+      "appVersion": 1
+    },
+    "convertScreenshotDataToBuffer": {
+      "rev": 5,
+      "code": "function convertScreenshotDataToBuffer(mobileFriendlyTestResponse) {\n\tif (typeof mobileFriendlyTestResponse !== 'object') \n\t\tthrow new TypeError('Input is expected to be an object.')\n\n\tconst screenshot = mobileFriendlyTestResponse.screenshot;\n\n    if (!screenshot) return mobileFriendlyTestResponse;\n    if (!screenshot.data) return mobileFriendlyTestResponse;\n\n    return {\n        ...mobileFriendlyTestResponse,\n        screenshot: {\n            ...screenshot,\n            data: iml.toBinary(screenshot.data, 'base64'),\n        },\n    };\n}\n",
+      "name": "convertScreenshotDataToBuffer",
+      "test": "it ('should throw an error if the argument is not an object', () => {\n\tassert.throws(() => { convertScreenshotDataToBuffer('not an object') }, TypeError, 'Input is expected to be an object.')\n})\n\nconst inputWithoutScreenshot = {\n    testStatus: {\n        status: 'COMPLETE',\n    },\n    mobileFriendliness: 'MOBILE_FRIENDLY',\n    resourceIssues: [\n        {\n            blockedResource: {\n                url: 'https://googleads.g.doubleclick.net/pagead/id',\n            },\n        },\n        {\n            blockedResource: {\n                url: 'https://static.doubleclick.net/instream/ad_status.js',\n            },\n        },\n    ],\n};\n\nconst inputWithoutScreenshotData = {\n    testStatus: {\n        status: 'COMPLETE',\n    },\n    mobileFriendliness: 'MOBILE_FRIENDLY',\n    resourceIssues: [\n        {\n            blockedResource: {\n                url: 'https://googleads.g.doubleclick.net/pagead/id',\n            },\n        },\n        {\n            blockedResource: {\n                url: 'https://static.doubleclick.net/instream/ad_status.js',\n            },\n        },\n    ],\n    screenshot: {\n        mimeType: 'image/png',\n    },\n};\n\nit ('should return the argument if the \"screenshot\" or \"screenshot.data\" is missing', () => {\n\tconst res1 = convertScreenshotDataToBuffer(inputWithoutScreenshot);\n\tconst res2 = convertScreenshotDataToBuffer(inputWithoutScreenshotData);\n\tassert.deepEqual(inputWithoutScreenshot, res1);\n\tassert.deepEqual(inputWithoutScreenshotData, res2)\n})\n\n// cannot write a test for the binary data validation due to that the input string is too long\n// for the test file to be saved :( ",
+      "appName": "google-search-console",
+      "arguments": "(mobileFriendlyTestResponse)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2023-09-04T15:42:15.504776+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Google Search Console is a free service offered by Google that helps you monitor, maintain, and troubleshoot your site's presence in Google Search results. You don't have to sign up for Search Console to be included in Google Search results, but Search Console helps you understand and improve how Google sees your site.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [
+    {
+      "name": "timeout",
+      "type": "uinteger",
+      "label": "timeout"
+    },
+    {
+      "name": "maxPastRecords",
+      "type": "uinteger",
+      "label": "maxPastRecords"
+    }
+  ],
+  "inviteToken": "87bb0ea4aa7779517de1954fd41be615",
+  "versionFull": "1.1.8",
+  "compiledName": "google-search-console",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n    \"common\": {\n        \"maxPastRecords\": \"{{parameters.maxPastRecords}}\",\n        \"timeout\": \"{{parameters.timeout}}\"\n    }\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n    {\n        \"name\": \"timeout\",\n        \"type\": \"uinteger\",\n        \"label\": \"timeout\"\n    },\n    {\n        \"name\": \"maxPastRecords\",\n        \"type\": \"uinteger\",\n        \"label\": \"maxPastRecords\"\n    }\n]"
+}

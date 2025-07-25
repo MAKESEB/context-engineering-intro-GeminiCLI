@@ -1,0 +1,2862 @@
+{
+  "rev": 11,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "https://cloud.feedly.com/v3",
+    "headers": {
+      "authorization": "{{connection.accessToken}}"
+    },
+    "response": {
+      "error": "[{{statusCode}}] {{body.errorMessage || body}}"
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "feedly",
+  "_rpcs": {
+    "RpcTag": {
+      "api": {
+        "url": "/tags",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{if(item.label === '' || item.label === null, get(split(item.id, '/'), 4), item.label}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "name": "RpcTag",
+      "label": "Get tags (boards)",
+      "appName": "feedly",
+      "apiJsonc": "{\n\t\"url\": \"/tags\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"label\": \"{{if(item.label === '' || item.label === null, get(split(item.id, '/'), 4), item.label}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t},\n\t\t\"iterate\": \"{{body}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "feedly",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "RpcFeed": {
+      "api": {
+        "qs": {
+          "query": "{{parameters.query}}"
+        },
+        "url": "/search/feeds",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.title}}",
+            "value": "{{item.feedId}}"
+          },
+          "iterate": "{{body.results}}"
+        }
+      },
+      "rev": 3,
+      "name": "RpcFeed",
+      "label": "Search feeds",
+      "appName": "feedly",
+      "apiJsonc": "{\n\t\"qs\": {\n\t\t\"query\": \"{{parameters.query}}\"\n\t},\n\t\"url\": \"/search/feeds\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.title}}\",\n\t\t\t\"value\": \"{{item.feedId}}\"\n\t\t},\n\t\t\"iterate\": \"{{body.results}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "query",
+          "type": "text",
+          "required": true
+        }
+      ],
+      "accountName": "feedly",
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"query\",\n        \"type\": \"text\",\n        \"required\": true\n    }\n]"
+    },
+    "FeedList": {
+      "api": {
+        "url": "/collections?withEnterprise=true",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.label}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "name": "FeedList",
+      "label": "Retrieve list of feeds",
+      "appName": "feedly",
+      "apiJsonc": "{\n\t\"url\": \"/collections?withEnterprise=true\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.label}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t},\n\t\t\"iterate\": \"{{body}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "feedly",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "BoardList": {
+      "api": {
+        "url": "/boards?withEnterprise=true",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{if(indexOf(item.id; 'global.saved') > 0, 'Saved For Later' , item.label)}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "name": "BoardList",
+      "label": "Retrieve list of boards",
+      "appName": "feedly",
+      "apiJsonc": "{\n\t\"url\": \"/boards?withEnterprise=true\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"label\": \"{{if(indexOf(item.id; 'global.saved') > 0, 'Saved For Later' , item.label)}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t},\n\t\t\"iterate\": \"{{body}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "feedly",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "Priorities": {
+      "api": {
+        "url": "/priorities/labels?withGlobalAll=true",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.label}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "name": "Priorities",
+      "label": "Retrive list of priorities",
+      "appName": "feedly",
+      "apiJsonc": "{\n\t\"url\": \"/priorities/labels?withGlobalAll=true\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.label}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t},\n\t\t\"iterate\": \"{{body}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "feedly",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "RpcCategory": {
+      "api": {
+        "qs": {
+          "withEnterprise": true
+        },
+        "url": "/collections",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.label}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 4,
+      "name": "RpcCategory",
+      "label": "Get categories of feeds",
+      "appName": "feedly",
+      "apiJsonc": "{\n\t\"url\": \"/collections\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"withEnterprise\": true\n\t},\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.label}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t},\n\t\t\"iterate\": \"{{body}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "feedly",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    }
+  },
+  "flags": {},
+  "label": "Feedly",
+  "theme": "#2bb24c",
+  "_hooks": {
+    "feedly": {
+      "api": {
+        "output": "{{body}}",
+        "respond": {
+          "status": 200
+        }
+      },
+      "rev": 5,
+      "name": "feedly",
+      "type": "web",
+      "flags": {},
+      "label": "New Article In Board",
+      "scope": [],
+      "attach": {
+        "url": "/integromat/triggers",
+        "body": {
+          "event": "NewArticleInBoard",
+          "targetUrl": "{{webhook.url}}",
+          "resourceId": "{{parameters.resourceId}}"
+        },
+        "method": "POST",
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "/integromat/triggers/{{webhook.externalHookId}}",
+        "method": "DELETE"
+      },
+      "update": null,
+      "aliasTo": null,
+      "appName": "feedly",
+      "apiJsonc": "{\n\t\"respond\": {\n\t\t\"status\": 200\n\t},\n\t\"output\": \"{{body}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "resourceId",
+          "type": "select",
+          "label": "Board",
+          "options": "rpc://app%23feedly@1/BoardList",
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "attachJsonc": "{\n\t\"url\": \"/integromat/triggers\",\n\t\"body\": {\n\t\t\"event\": \"NewArticleInBoard\",\n\t\t\"targetUrl\": \"{{webhook.url}}\",\n\t\t\"resourceId\": \"{{parameters.resourceId}}\"\n\t},\n\t\"method\": \"POST\",\n\t\"response\": {\n\t\t\"data\": {\n\t\t\t\"externalHookId\": \"{{body.id}}\"\n\t\t}\n\t}\n}",
+      "detachJsonc": "{\n\t\"url\": \"/integromat/triggers/{{webhook.externalHookId}}\",\n\t\"method\": \"DELETE\"\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"resourceId\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Board\",\n\t\t\"options\": \"rpc://BoardList\",\n\t\t\"required\": true\n\t}\n]"
+    },
+    "feedly2": {
+      "api": {
+        "output": "{{body}}",
+        "respond": {
+          "status": 200
+        }
+      },
+      "rev": 4,
+      "name": "feedly2",
+      "type": "web",
+      "flags": {},
+      "label": "New Highlight",
+      "scope": [],
+      "attach": {
+        "url": "/integromat/triggers",
+        "body": {
+          "event": "NewHighlight",
+          "targetUrl": "{{webhook.url}}"
+        },
+        "method": "POST",
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "/integromat/triggers/{{webhook.externalHookId}}",
+        "method": "DELETE"
+      },
+      "update": null,
+      "aliasTo": null,
+      "appName": "feedly",
+      "apiJsonc": "{\n\t\"respond\": {\n\t\t\"status\": 200\n\t},\n\t\"output\": \"{{body}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "attachJsonc": "{\n\t\"url\": \"/integromat/triggers\",\n\t\"body\": {\n\t\t\"event\": \"NewHighlight\",\n\t\t\"targetUrl\": \"{{webhook.url}}\"\n\t},\n\t\"method\": \"POST\",\n\t\"response\": {\n\t\t\"data\": {\n\t\t\t\"externalHookId\": \"{{body.id}}\"\n\t\t}\n\t}\n}",
+      "detachJsonc": "{\n\t\"url\": \"/integromat/triggers/{{webhook.externalHookId}}\",\n\t\"method\": \"DELETE\"\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "feedly3": {
+      "api": {
+        "output": "{{body}}",
+        "respond": {
+          "status": 200
+        }
+      },
+      "rev": 4,
+      "name": "feedly3",
+      "type": "web",
+      "flags": {},
+      "label": "New Note",
+      "scope": [],
+      "attach": {
+        "url": "/integromat/triggers",
+        "body": {
+          "event": "NewNote",
+          "targetUrl": "{{webhook.url}}"
+        },
+        "method": "POST",
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "/integromat/triggers/{{webhook.externalHookId}}",
+        "method": "DELETE"
+      },
+      "update": null,
+      "aliasTo": null,
+      "appName": "feedly",
+      "apiJsonc": "{\n\t\"respond\": {\n\t\t\"status\": 200\n\t},\n\t\"output\": \"{{body}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "attachJsonc": "{\n\t\"url\": \"/integromat/triggers\",\n\t\"body\": {\n\t\t\"event\": \"NewNote\",\n\t\t\"targetUrl\": \"{{webhook.url}}\"\n\t},\n\t\"method\": \"POST\",\n\t\"response\": {\n\t\t\"data\": {\n\t\t\t\"externalHookId\": \"{{body.id}}\"\n\t\t}\n\t}\n}",
+      "detachJsonc": "{\n\t\"url\": \"/integromat/triggers/{{webhook.externalHookId}}\",\n\t\"method\": \"DELETE\"\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "feedly4": {
+      "api": {
+        "output": "{{getWebhookBody(body)}}",
+        "respond": {
+          "status": 200
+        }
+      },
+      "rev": 5,
+      "name": "feedly4",
+      "type": "web",
+      "flags": {},
+      "label": "New Prioritized Article",
+      "scope": [],
+      "attach": {
+        "url": "/integromat/triggers",
+        "body": {
+          "event": "NewPrioritizedArticle",
+          "targetUrl": "{{webhook.url}}",
+          "resourceId": "{{parameters.resourceId}}"
+        },
+        "method": "POST",
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "/integromat/triggers/{{webhook.externalHookId}}",
+        "method": "DELETE"
+      },
+      "update": null,
+      "aliasTo": null,
+      "appName": "feedly",
+      "apiJsonc": "{\n\t\"respond\": {\n\t\t\"status\": 200\n\t},\n\t\"output\": \"{{getWebhookBody(body)}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "resourceId",
+          "type": "select",
+          "label": "Priority",
+          "options": "rpc://app%23feedly@1/Priorities",
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "attachJsonc": "{\n\t\"url\": \"/integromat/triggers\",\n\t\"body\": {\n\t\t\"event\": \"NewPrioritizedArticle\",\n\t\t\"targetUrl\": \"{{webhook.url}}\",\n\t\t\"resourceId\": \"{{parameters.resourceId}}\"\n\t},\n\t\"method\": \"POST\",\n\t\"response\": {\n\t\t\"data\": {\n\t\t\t\"externalHookId\": \"{{body.id}}\"\n\t\t}\n\t}\n}",
+      "detachJsonc": "{\n\t\"url\": \"/integromat/triggers/{{webhook.externalHookId}}\",\n\t\"method\": \"DELETE\"\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"resourceId\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Priority\",\n\t\t\"options\": \"rpc://Priorities\",\n\t\t\"required\": true\n\t}\n]"
+    }
+  },
+  "global": true,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "AddEntryToPersonalBoard",
+        "AddSourceToPersonalFeed",
+        "CreatePersonalArticle",
+        "FetchFeed",
+        "getCategories",
+        "getSubscriptions",
+        "ListFeeds",
+        "NewArticleInPersonalBoard",
+        "NewPriorizedArticle",
+        "newEntries",
+        "NewPersonalHighlight",
+        "NewPersonalNote",
+        "searchEntries",
+        "subcribeToFeed",
+        "tagEntry",
+        "MakeAPICall"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda793000001d04944415458c3d5d6bd6bd4701807f0e7da137c19449da42a8254902e2208ee8283ff80080add2ae21b2a8e627db70ece1d04274745145c15bab9f92f880a62a5a8ad9e70f771b8848be15e9a9023f8c02db9249f6f9e3cf925111516029bdaedf6a356abb5d2e97466d14095cc507c23ae634db73ee3c4d84364f01bf8e5dffa825398184b880c3edf074feb030e541e2087ff36b89e6147a501d281c3cd11f8734c25fb578edfaa13bf5d277e07ad3af0cdb85b277eaf4efcfe7f83631f4e625be930c989b6e041417c1a6fd0c662a910197c017f4ae069b5f118dbd77d6b32f8c382f8fe1c9e0df1045b8b0438826f15e0697dc24cd10e2c0cb8f745f1ef3887e6ba67416fc59bd7fbb8e894c42f14c2fb84388ed3ba5f363b0be03f70b1143e22548abf1d815faa0bff89cb95e2990093ba8fd430fc0a36548ae73a308b9501f8d5b1e07dba703699f0b45671ad0cde281322229a11311711c722e26b442c45c4d3886825bb4d47c4d1887819111f23221a8dc2d4c84e4ca48396fbcd6029e9cc0bec52e52b7a48a0c021bccbcdc62bec196b88e4e407f17ec0d3f13a5dc4f23551618ea988d83be0bfc311b17b3c97dfeb401367b09cbbfa65cc55be300d0831a9fbe65b4df0359c4fb6f73dee2f7d3b2da504e504190000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000003a14944415478daed9bc76b146118c69fdd188c5d34370b8ae0453c5882a028114411452122622f1841b1802078b0f71293d810154ffe031e040f8278d1830741ec055191a86996d812233f0f33c37eac9b75673633bb33e3030bcbb2b3dffb7bbe6fdff72b335208040828ebe8e8a8696d6da5adaded0950617f5ee8f00281ef09ec00be93d21d605ca44d707a1ed805fce06fdd052646d204037e7717f08eee019322658201bfe71ff08e1e009323618201bf374778478f81a9a136210dfea70b78474f80b1a134c086ef05ecf3080fd0092c089d0106fcfe3ce0011e0263426580017f204ff847c09450e50003fe605ce17b038780f6b8c21f8e33fc91fff03184ef031c8d33fc31a023aef0c7e30c5f1357f8be71873f1167f8dab8c2f703eae20c5f0ffc8a2bfc49bfe0edcf9258abc7d2a2312860f825c04de02230a4e026d801f4074ef90c9f0096014dc6355780a10533c1803f5d0078475781e1819b60c09f09007e7917f08eae01230333c16e680070b608e01d5d0746f96e421a7c6791c03bba018cf6cd0403fe5c11c23bba098cf0d3806a9fe19379c063c756e5c680a44b1f4a24253c7af85852b5a45b929448a47ec60e38296999a43a49e51edb6894d4e0f1daecb27b681070c1c328c8a5e75700cd798cae466031d65fc8170fcc3c504fee8b9da0e097fa0a9f16741fac3dfd7f9de60401df843551f21f3e2df8326027f0adc0f0cbf381f79ad01ca89e92d648aa946446d02ee9bca4db52d684572b69b0c7105a246d95745912661b818954dd4e667865ebf99579f67c0bb0ca692714ea66f8d571856f05d6c4197e6d5ce13f624dc343072f605e37c0af034afc8077bb16f0a2f1f25eea3e4bda2ee992a4df0529755e658c8069c02b0f3dff0958ef57cf076dc25ce0ad0bf8cfc08650c36730a10a789f23fcc648c0a79990c0dad7cfb6d9f105d804f4880c7c06135661d574479d580f42bc033677054faaa4960303e9a6d55fa069d50eb844d2024963247d90b58bd36cbf7f21e9577ab627b5805a2c699ba42fb2aac35f8badc8c9eef912ac89508b31721e11f6dbe373842f05b6d8c9315d4f81e9913481d4c352db81af5912e70b6046a44c207543e53e727b6ae425302b1226903a6eafc1dd0d95af8039a136c1287587f07600f306a8746340108b21b72a95344156b974ab61922adc5c508c06b4cbdae86cf6706da3a4fb8506c84bc68c7111d0e062f837000b09f27cc0671304cc075ee700ff1a6be325bc09308b0933816759e09fdbdf890e7c06136691793fa101989d0ffc1f0b841f8b3eb00af30000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-05-09T14:52:53.800483+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda7930000076b4944415478daed9d5b8c55d51d877f83228243b90e141b6235a26978101f34626d0bb5696d9a6a34deaab189e9435f481fdad43b855683e9059baab485565bf17e8dc64b0835de1e4c1b43d214a70c4c011104c5568a03548661be3eecb53b8bd301e670cede6befb5fe5f721e2639d997f5fdf6ac7dd65532da0e20e0c4ddbb77dfd9d3d333d0ddddcdfaf5ebfbfbfafa16032700a12fd1280a277f0c7033b08743e9037e682188144ffeadc05e86672f708bfb5ee84b36da4583fc7d1c997dc08f80132d0411e0c95f3802f939ff017e028cb510d49863949ff309b00438c9425043f2b77df7efbc59f939fb819f019d16821ae1c95fd482fc9c7ee02e60bc85a00678f217bbbabc1df4037703132c0415a620f93907805f03132d0415c4c91f0bfcb800f93903c00a60b285a04278f26f277b7b2f9201e07e608a85a002942c3fe720f000d0e5ce1fba18d2c415fe38e08e12e5fb2c2c3200c7872ee02ae30a7d9ca45b25fd40d298009731bdc8835b000e8327ff3649df5718f985332af40554910ac91f94b43574792485ab6f4f02ee0c54e7e70c00cbb13681f2f0e4ff94ac8ddee4a782c94f1827bf93ac57cee4a78427ffe7263f311ae4f79bfc84f0e4ffc2e42786933f1e586af213c3937f97c94f0c4ffe2f4d7e6298fc8471f23f05fc8a6cd895c94f05939f309efcbb4d7e6238f913807b4c7e6278f2ef35f98961f213c6c99f082c33f989e1c9ff8d1360f253c1e4278cc94f18277f922b78939f129efc15263f314c7ec238f99381df99fcc4f0e4ffdee4278627ff3eb2a9d3263f159cfc29263f413cf97f30f98961f213c6c99f0afcd1e4278627ff01939f189efc9526bf783a425f808f2be82e494b255dab702b981c94749fa41b25fdbba3a3b962f20273bebb8fd192f64b5a29e92d496af698d1e39efc2ee0c13a3ff9ee3e047c0158d770ecb5c0f9f9770c872b9069c043c06004f2bf388cfc9c6e170e0b815768d3808713909fd303cc4f3e0489cacfe905be926c08dc8d4f071e4d507ece46e06bc985c0e41fc266e01b4984c02bb0e9c06326ff7f6c012e8e3a045e817d1a78dce4ff1fdb80cb808ee842d020ff09937f58b6035746150293df34ef03df8a22045e81cd009e34f9236627701d30aab621f00aec64e0a980e2eb263fe743e07ae0b8da85c0e4b78d7f015751b75f070cedb1b3b202f27fdb26f93d81eee1de22035064776ba7a439051eff68e45dba37a9b52edd799256483a33e0bd1446ac5bc6b4ab3f7f9ea4e592ce08782ffd451ebcc8ff00fb24f51679f1872126f96b253d12f0fcc78657779e06bc54729ddf8e17be79c0fa40757ece5ae0bc22ebffb24230137886e2db004c7ed5e0d056c087296ea8574cf2df26b661630c4df02862466f4cf2bba393df50d013c956ed6cd762cd31c9ff3b704194f21b0abc936c67ae56f7e48b49fe3a521928ca502be122609fc9a787aca5317ef90d02c60037007d89cbff5252f21b448c061600bb5c810c1ee5732022f91bdc7504951f747e92bbf1d192e64b9a29e94825d121698fa4d59276d5bc85af57d27725bd2ad934b1c2f19efcf91578f27b810b433ff9c9d0207f4360f9ff20e5c92065e3c9ff7205e46f34f9255231f99b80af9afc926890df5b01f9e94dff0a45c5e46f062e32f9255131f9ef005f37f9255131f95b4865c2671530f9095331f9ef02df34f925e1c9bfb002f2b712fb14efaac1d05a036b02cbdf065c5247f9a1d6e16b27e3244d0b78fef7242d90f49c54bf8e9d18021092ed92be27e959a97ef2a53802f04f496f0638ef0e65f29f91ea29bff630f412381378b1c43a7f0770791debfce8f042702af07249f2af2086153c62c10bc119c01b05ca7f9fd8d6f089052f04b3813f1724ff6a935f61bc10cca1bd6d031f10cbc24db1e385e05cb24996adb213b8c6e4d7082f049fa7b5a55d7602d79afc1ae285603ed960cc66f990ba2fd5963a5e082e22eba63d1a0781fd646dfbdf6e45be77ee4eb28dae270127542d4cd1375f79057eb1b2bd883a257d2c6997a48f94b5247e2069a7f7d926699da4816369e1f3ce3957d2224953dcdfaf485a2269b7b51c96887b124701b38033c9562e9de09ec851b4b145cf7bf2e7914df9f639002c23f29dc892a5a1ca39dc7b473eb975928520229cf80ee052b291414762806c23ec29168208f0aa986bc8fa0a46c241b29d51bb2c0435c6c93f0ef88efbe9d80c83648b674d6fe77b8851120cbfc641b30c92eda032c3425023686d9593e142f034f0190b410d7092c6018b81bd2dcaf779966c708b85a0aa3839e369cf4a67c3f102708a85a08230b4d6e13db46fadc3e15845b6ceb285a02a381953c97ebfb77bb5d3e1f81370ba8520300cb5ee15bddef170bc42d6746d21088517805b4a14eff31c598f6221f717c3bc80b29818e8bca74a1a5bd4c12d00236730f40514810560e4ac92b429c0793f52c1fb0619478123f7f117c9dfc8c635da4b6068bc10cc05fe5a82fc35c03926bf427821381bf84b81f2df04ce32f915c40bc16ce0f502e4bf067ccee457182f04b380d56d94bf1a6bfdab075e084e216bac69755bbce781cf9afc1ae185e064e0318ead99781078121b0b505f9cb82ee07e9aeb281a001ec48684d51f867a0b1f6d22004f03d3428aff2fd2db0856fc343c9d0000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda7930000132e4944415478daeddd79b064657dc6f1ef0566018665605604040222a8411808085114919448b034440435986005640b42d000228b0489c81210081008128d2c85801221ca12965111240c9b124a8440586a1098810166ee9dfbe48ff774fa74dfcbccbd7dbbfb7ddf739e4fd5947f6859ef794f7f7fbddcee730630cb8c2480a90b1e78e0cb0f3df4d0f183838393cbfffd94c953966c3b6fbbe3b7da6aab0b80c1818181d84b36b36e9084a4a9928e92f4b2deda424907499a540c0c33cb5929fe63242dd2cafd5ed2a192267b089865ac83f81b5e967484a4291e0266199a40fc0daf483ada43c02c33a5f8bfdc61fc0d8b8aff8fd53d04cc32508aff2b92164f20fe86c5928e93b486878059c27a107fc36b924e94b4a6878059828af85797746c97e36f5822e9eb92a679089825a414fff1925eed41fc0daf4b3a4dd25a1e026609e863fc0d6f483a43d23a1e0266114588bfe14d4967495ad743c02c8222fe35247db5cff1372c95749ea4e91e02667d9440fce5217081a4f53d04ccfaa014ff0991e36f189474b1a4191e02663d54c4bfa6a49314fe369f8a414997499ae52160d6036df12f895dfc2886247d47d21c0f01b32eca20fe86e592be2b69ae8780591794e23f39f1f8cb43e04a496ff310309b8052fca764127fc3b0a46b246d541c43ecad34cb4bc6f19787c0759236f110301b87229869924ecd34fef210f891a4cd3c04ccc6a014ff690a3fbea9821f4bdabc2a43c0d74bb69e28e298061c071c09ac1e7b4d5df413e008e031809c2f3b9eefca2d5945fc6b01c752bdf81b6e050e077e0df90e813c576dc92ac57f1cf0375433fe863b80c3808721cf2190df8a2d59a5f88f27bc44ae72fc0db7037f093c95e3005825f602ac1adae2affa337fd9b6c0a6b117d1a9d5622fc0f257c4bf367002e125f1d4d86beab3fc9efa0b1e0036216df11f0e4c89bd261b3b0f00eb5829feaf119ef91d7f66fc198075c4f157835f01d8b815f1af4388ff501cff70ec0574ca03c0c6a514ff89c021d43b7e01b701bf89bd904ef92d808d59db33bfe3871b802f012fc45e4ca7b2fdf385f55711ffbac049c0c138fe1b08df77f81fc8f35b80e0016063508aff6442fc9363af29e6765091f8c103c056c2f1b76e07158a1f3c006c051c7feb7650b1f8c103c0de4229fe53808370fc958b1ffc57001b4511ff741c3f54387ef02b006bd316ff5fe3f82b1b3f7800584911ff7ac0a9c0178049b1d714733ba878fce0016005c7dfba1dd4207ef000305ae2ff7be0401c7f2de2070f80da73fcaddb418de2070f805a2be25f9f10ff5fe1f86b153f7800d4565bfc0752ef5f86d6327ef000a8a522fe19c069842bda3afe1ac60f1e00b5538aff1bc0e771fcb58d1f3c006aa5887f26cdf8578dbda698db41cde3070f80da70fcaddb81e3073c006aa114ffe9c001387ec75fa8ef91d784e36fdd0e1c7f8b7a1f7dc539fed6edc0f18fe01da8a822fe5984f8ff02c7eff847e15da8a052fc67009fc1f13bfeb7e00b82544c11ff6c1c3f38fe95f26e544829fe6fe2f81dff1878472aa2ed997f7f1cbfe31f03ef4a058cf2b2bfce6fed1cff3878673257c43f87e633bfe377fc63e6ddc95811ff5ce05bc0a771fc8e7f9cbc43992ac57f26b02f8edff177c0bb9421c7dfba1d38fe8e79a732538aff2ce053387ec73f01757ef064a7887f031c3f38feaef08e65a214ff99387ec7df25deb50cb43df3ff398edff17789772e7145fc1b12e2df877a9f33c7df65debd8439fed6edc0f1779d773051a5f8cf06fe8c7a9f2bc7df23dec50495e23f07f824f53e4f8ebf87bc930929c207d888f0cceff81d7f4f793713e1f84770fc7de01d4d405bfce7009fa0dee7c6f1f7897735b252fc6f27c4ff71ea7d5e1c7f1f79672372fc2338fe3ef3ee46d216ff3f027b53eff3e1f823f00e47508a7f1342fc7f4abdcf85e38fc4bbdc678e7f04c71f9177ba8fdae23f17d88b7a9f03c71f599d7f55d657a5f837c3f183e34f8277bc0f46897f4feabdf78e3f11def51e6b8bff3c42fc75e6f813e2b7003d548aff0f70fce0f893e3ddef91b6f81b2ffbebccf127c867a0074679e6ff68ec3545e6f813e5b3d0658e7f04c79f307f06d045a5f8b700be8de377fc89f3d9e89251e2df23f69a2273fc19f02b802e28c5ff0e1c3f38fe6cf8ac4cd028f17f24f69a2273fc19f1999900c73f82e3cf8cdf0274a814ff96387e70fc59f219eac028f1ef1e7b4d9139fe4cf92c8d5329fead08f1ef167b4d9139fe8cf94c8d83e31fc1f167ce676b8c4af16f4d88ff43b1d71499e3af009fb13170fc2338fe8af0595b89b6f8cf073e187b4d9125117f715ed603e601934affd500f03a701ff0aa0793754c52e3dfd6926e970d4bba4ed2c62af626e2799921e962498b242d6efbf792a43324ad136b8d963935e37f971cbf945efc97481a5cc17adf9474b6a47563add532a566fcef917467ecf212905bfc0d4b257d5bd2f4586bb6ccc8f1b7cb35fe8665922e94b47eacb55b26e4f8dba514ff4c49ffacf1c5df30a8303866c63a064b9c9af1ffa1a4bb6297978014e31f9ac0f10c49ba4cd2ac58c7628992e36f57b5f81b86245d21694eac63b2c4a835febb63979780aac6dfb05cd2bf49da20d6b15922d48c7f1b397ea9faf1372c977495a40d631ea745a466fcdb4afa59ecf2125097f8cbc77b6dece3b508d41affcf63979780bac55f3eeeeb256d12f3b8ad8fd48c7f3b397ea9bef1978fff4792368b79fcd60772fcedea1e7fd94d92b688b90fd64372fced528bff52c58bbfe12792de19733fac07d41aff2f223fc852e0f8dfdaad0a3f00f310a80235e3df418e5f72fc637187c2d7c12b3f042a7db584d2c9db01b800d83ef69a224be9621e3381d381038055636fcc28e60387010f4075af7854d9fb0294e2ff231c3f38fef1da85f0b899575a77e55472acb5c57f3e8edff177ee5ee070e01ea8de2b816a1d0d8e7f148e7fe2ee070e057e01d51a02d53912467dd93f2ff69a2273fcddb380f099c0dd509d215099cf004af1ef88e307c7df6ddb101e57bb968e2b7b951863a593f13ec2cbfe6d63af2932c7df3b8f125e09dc0ef9bf12c8fe154029fe9d0913daf13bfe5eda1ab810d8a3749cd9ca7a00b4c57f3ef0ded86b8accf1f747e3aed01f2d1d6f96b27dfd52daf45d08f16f137b4d9139fefe7b023812b811508e6f07f25b318e7f148e3f9ec7807d8087731c00d9bd0570fc2338feb8e600b3622fa253d90d80c234e0181cbf80eb4923fe59c03f50aff8219c836c3f04582df60226b0ee75632f22b2c633ff91c48f7f3621fecf52aff8b397eb00a8bb945ef6cf02be097c06c79f9d5cdf02d4596af19f41bde3cfef93bf120f80bc38fef42c0396c65e44a7721d000206632f22c2313bfeb42c052e27fc50284bb90e80c5c0a5c0b3b117d2278e3f3dcb087f863e155892e3770020c301506cb480ab08413c157b4d3de6f8d3b39410ff29c0e25ce3878c3fc0281e9003c09ec0d9c016b1d7d48bc3c4f1a76619e1476727018b728e1f321e00d0f2adc00f03e7127ea9551529c53f1bffa90f42fc1712e27f25f7f821f301002d43e0fdc039c076b1d7d48dc3c2f1a766197011f0352a123f54600040cb10d81e380fd829f69a26723838fed40c02170327002f57257ec8f043c0d1944ec87dc0c1c01db1d7d421c79f9ecac60f151900d012ca02c210b899bc7ea4e1f8d333085c4278d95fb9f8a1226f01ca4a6f073625fc7560ef0c8ed3f1a7678810ff578197aa187f65a9793fc08d245d296979ec9bcdad404af7ea9b2de93b4aef5e7dfd3628e92249eb2be3cb7dd59ec2837a8ea47f294e6a6a1c7f7a06255d2cc75f0d0a0fee19922e94b434f6a3abc4f1a7a711ff0c39feea5078904f977496a437623fca945efc57c8f10f4aba448ebf9a141eec6b493a55d26b111f688e3f3d43922e9334538ebfba141ef46b4a3a4ed2a2080fb414e34ff903d27e70fc75a2f0e09f2ae928492ff7f181e6f8d333a4f001f12c39fefa508860b2a42f4a5ad887079ae34fcf90a4cbe5f8eb492186d5241d20e9b91e3ed01c7f7a9617fb305b8ebfbe14a25845d2be929eeec103cdf1a767b9a4ef2a7c3f24f64330bada7fbf51cd0b8bec057c8eee5d2a7d00781a3893e2aa4591bfdedbb89847657effd18161e0fbc0df02cffbebbd1e0040cb10984a77f764b0f81733fe3984f8f7c7f15f091c8de3ff7fde858a72fcaddb41b886e451c0738ebfc93b51418ebf753b80ab09f13febf85b79372ac6f1b76e07700d21feff75fc2379472aa4887f2e21fefd70fc8e7f25bc2b15518aff5bc0a771fcd712ee9cecf857c03b53018ebf753b80eb0857577ac6f1af589d1f2895e0f85bb78310ff91c033b11793038fc78c39fed6ed00ae27c41fedba8ab9f10e65aa14ff99c0be38fee81755cd917729438ebf753b801b81c389f895eb5cd5f9819325c7dfba1d84f88fc0f177c4bb9511c7dfba1dc0bf13e2ff1d38fe4ed4f9019415c73f82e3ef02ef5a061cff083f26bce77f021cff4478e712e7f847b819380cf82d38fe89ead6c52fac074af19f057c0ac77f33e199dff177897730518e7f84ff20c4ff3838fe6ef12e26c8f18ff053e0501c7fd7d5fd81951cc73fc22df899bf67bc9b0971fc23dc4af8c0ef37e0f87bc13b9a08c73f82e3ef03ef6a021cff08b711def33bfe1ef3ce4656c4bf36703ee1bafd753f27ff4988ff5170fcbd56f7679a54cc0076c3f1df4178d9eff8fbc403200d0338fe3b09f13f028ebf5f3c002c0577115ef63f0c8ebf9f3c002cb6f984677ec71f810780c5349ff0ccff2038fe183c00d2f01ac5156d6ae46784f81780e38fc503200d2f007f07fc3af642fae4e738fe2478e713507c17006077e04260f3d86beaa17b804380fbc1f1c7e65700092845700be1d2d64fc65e538ffc92f0cceff813e1019088520c37116e68f974ec3575d92f09cffcbf6a3b5e336b9084a40149fb4a7a56d5708fa4ed8b638bbdc566692b425945d2e724bd10bbde09bad7f19b8d5311ccaa92be20e9c5d81577e857927674fc661d28c2594dd2a1925e8e5d7307f1efe4f8cd26a00868b2a4a3242d8a5df518ddeff8cdbaa40869aaa46325bd16bbee95f82f49ef73fc665d5404b586a49325bd1ebbf2b7b040d22e8edfac078ab0a6493a5dd29bb16b1f25fe3f76fc663d5404b6b6a473242d8d5d7de14149ef77fc667d5084365dd20592061dbf59cd14c1cd9074a9a4a148f13f22e9038edf2c8222bcd992be27697984f83fe8f8cd222a02dc40d2d59286fb18ff871cbf59028a10379674431f86c0a3927673fc668968c42869334937f720fa61850f1b1f96f4e154e257f3abd26b8cf26f520a6b4c9d7f945d11a507fb96c005841b8d8cc510b0145856fce76bc08ba57f0b09972c7b11788070014fc5fe3d7f71bceb102e30b20350ae7d15e0bf09b75a7b3ef65a53e69da990d2107837e15663f3803709712fa135ecf67fbf27c4be98d681304402c18f729cd3811381838129a3fccf8681ef03c700cfa5b47eb39e29bd1d7887a48f29fc286773497325ada7f04dc2490a171d89bddc4e8f6fa6a48b242d5bc95b97e592ae94f4b61c8fd5cc4a8af8e74aba4263ffeec3b0a46b246d94ca671766360ea557351b17318ff72f1dc3927e20e9ed1e02661929c5bfb9a41f76107f7908fc50d2a61e02661928c5ff2e493fed30fcf6217063314c3c04cc52558affbd92eeea42fc65372b7c48ea2160969a52fc3b295c52bc176e91b495878059424af1efaa7091915eba4de1ed858780596c6ade14e54f147e73d00f774adac643c02ca252fc1f97f4db3ec5df305fd2761e026611a87927a47d253ddde7f81bee91b4838780591fa9f98bbe03243d1729fe86fbe43b1999f5879a373df9a2a48591e36fb85fd2ce1e02663da4e6cd4e8e527ab73d5b205fe8d4ac378ab0d694749cd2bdddd9c3f265cfccba4bcdfb1a9ca6f46f73f6a8a4dd3d04ccba40cdfb199c25e98dd8758fd16392f6f010309b00352fe4f14f4ae78e4663f5b8a43d95e94554cca22ae29f23e972c5bf9351a79e90b4b78780d918a9f9bdfe8d245da5fedfbca4db9e94f4090f01b39550f72ee4919aa725ed539521e04ba55ad795c27827702ef091d86beab26781a381ab81e19caf38bc4aec0558b594e2df06b888eac50fb001e19e03fb01abe6fc4ac003c0baa614c28e84f83f107b4d3d34173813f82c190f817c5fbb58728a083604ae01768abd9e3e5948b8f9c8bf92e1db01bf02b06e5b1fd82cf622fa6826e155c05ab117d2090f00b3899b44a6afa63d00cc6acc03c0acc63c00acdbf2fc38bca63c00acdb9e05e6e34190050f00ebb617812f013f0086632fa60f9603f7036fc45e48273c00ac6b06060628fe0efe147038f03d422055b50cb818380d589adb7700cc7a46cddfff5f246959ec5ff0f4c01b92ce56b8c049eced364b8f9a57003a47d29bb18beda2250a97345bdbf19bad403104d691f40da57f0dc0b17855d28992a6397eb33150f32ac0271401e5ea15495f91b4bae3371b876208ac2ee99822a4dcbc24e90849531cbf59078a213045d221925e8c5df4382c947490a4498edf6c028a213049d281925e885df6183c2fe9f30af72f8cbd7d66f92b86c0aa92f697f44cecc257e01949fb29dcb938f6b699554731040614aeb2fbbbd8a58fe249499f54452efe69969cd210f898c21d7852f1b8a4bd1cbf598fa979f9f0dd243d18bb7c498fc8f70334eb9fd210d859d27d11e37f40d2ae8edfaccf4a43609ea4bb23c47fafa49d1cbf5924a521f06e49b7f531fef9c5e071fc66319586c096926e52ef6f29769ba4f7387eb3449486c02692ae556f6e2a3a5c0c982d1dbf5962da86c04d3d1800773a7ef83f3a5909da333d60220000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda793000026a04944415478daeddd67a025559daef1e7d04d43130f224194240a02a60b9825671a24884856328201548239606a044141455490010cd02019a4498233c3a8e378d551b9a8205e03a2040589cd990fcb9ad3bbaa4ff709bbf67f55d5f3fbc207857e77d39cf7ddabf6ae1a42923470ebacb5d6de8c8c9c0f43d3c7f9b73cf0f462433bdc75d75ddf8fceae76180218191989ce21495db237703e30def22f3c08ec08dc1efd02d47c8b59fe923450fb001730f1f2071806e6025b44bf0835df62d10124a9430e2295ffb429fc339601ae02b68a7e316a360780240dc641c057e8cfcfdda5812b816da25f949acb012049f53b98fe957f6129d249c02ed12f4ecde40090a47a1d0c7c997a7ede2e01cc01768d7e916a1e078024d5e710ea2bffc20ce022608fe817ab66710048523d0e01ce66303f678b11b05ff48b5673380024a9ff0e6570e55f98069c071c18fde2d50c0e0049eaafc3802f11f3f3751a700ef0e6e8df04e5cf012049fd73187016b13f5b8b117054f46f86f2e60090a4fe887ce75f36049c09bc2d3a88f295c31f54496abac349e53f141d643e43c0678163a283284f0e00499a9a2348c7fe39957f6108380d787f7410e5c7012049937704f045f22cfff99d047c283a84f232e4d3002569528e04be40fee53fbfd9c089d12194074f002469e28ea179e50f700270727408e5c101204913732ce9ba7ad3cabf701c706a83f3ab4fbc042049e3772cf099e8107d7216e95e0196404779022049e3f34eda53fe903ec390cb7d0b14c01300495ab47701a74487a8c985c09b8079d14134582e3f495ab836973fa427085e004c8f0ea2c1720048d2d8de4dbbcbbfb037e92460f1e8201a1c2f0148d2821d47f7be327715b027f0787410d5cf130049aaea62f903ec0c5c0a2c191d44f573004852afe3e966f9177602be0dcc8c0ea27a79094092461d4fba5daee0bba4138187a383a81e9e004852720296fffc3607ae01968d0ea27a3800242995ffa7a243646853e05a60b9e820ea3f0780a4aefb3096ffc2bc06b81178467410f597034052977d18f850748806d804980bac181d44fde30090d4551fc1f29f888d801b80674607517ff82d00495df451e003d1211aea17c0d6c01fa383686a3c0190d43596ffd4ac0fdc0cac161d4453e30090d4252761f9f7c37aa411f09ce8209a3c0780a4ae3809787f7488165917b80d583b3a8826c70120a90b3e86e55f87b5805b8075a28368e21c0092daeee3c0fba243b4d81aa4cb01cf8f0ea2897100486ab38f03ef8d0ed101ab03b7021b4607d1f8390024b5d527b0fc076955e026e045d141343e0e00496df449e03dd1213a6865d2530437890ea2457300486a9b4f02274687e8b01548b70d7e7974102d9c770294d41643c069c03ba283088087801d80dba38368c13c0190d406967f7e96279d046c111d440be60090d47443c0e958fe395a06b80ad82a3a88aa1c00929a6c08f82cf0f6e8201ad3d2c095c036d141d4cb0120a9a98af27f5b74102dd252a493805da2836894034052130d019fc3f26f92258039c06ed1419438002435cd107006f0d6e8209ab019c0b7803da283c80120a9598af23f3a3a88266d067011b07f7490ae7300486a8a21e04c2cff3698067c0d38303a4897390024354151fe47450751df4c03ce010e8a0ed255de095052ee1603be041c1a1d44b5781ad896f420210d902700927256bcf3b7fcdb6b31d2e3843560d3a30348d21886802f0047460791dac8012029478b015f05de1c1d446a2b0780a4dc2c46fa70d89ba283486de6670024e5c4f29706c401202917c5d7c22c7f6900bc0420290745f97b631869401c0092a24d03ce050e880e22758997002445b2fca5209e00488a52dc0fde87c248013c019014c1f2978279022069d0a601e701fb450791bacc01206990a60317027b45075136ee036e8f0ed1455e02903428c53b7fcb5f85fb80ad813ba283749127009206611a703eb04f741065a328ff9f4607e92a4f0024d5cdf25799e59f014f0024d56971e09bc01ed141940dcb3f130e004975591cf816b07b741065c3f2cf880340521d16072e02768b0ea26c58fe99f1330092fa6d0696bf7a59fe19720048eaa719a463ffdda283281b967fa6bc0420a95f8a77febb460751362cff8c390024f5c30ce062e075d141940dcb3f735e0290345596bfca2cff067000489a0acb5f65967f43780940d264cd00e600bb440751362cff067100489a8c19c025c0ced141940dcbbf61bc042069a296c0f2572fcbbf811c0092266209d2b1bfe5af82e5df505e0290345ec53bff59d141940dcbbfc11c0092c663267005b04d741065c3f26f382f01485a14cb5f65967f0b3800242dcc5258feea65f9b7849700248da528ffada383281b967f8b3800242dc852c095c056d141940dcbbf65bc0420a9ccf25799e5df420e0049f3b3fc5566f9b794970024159602ae02b68c0ea26c58fe2de609802480a5b1fcd5cbf26f394f002415e5bf45741065c3f2ef004f00a46eb3fc5566f97784270052772d0d5c0d6c1e1d44d9b0fc3bc41300a99b2c7f9559fe1de30980d43dcb01d701af8a0ea26c58fe1de40980d42dcb03dfc1f2d728cbbfa31c0052772c4f7ae7ffcae820ca86e5df615e0290baa178e7ff8ae820ca86e5df719e0048ed67f9abccf297270052cb2d0f5c0fbc3c3a88b261f90bf004406ab3612c7ff5b2fcf5bf1c00523b0d938efd2d7f152c7ff5f01280d43ec3a477fe2f8b0ea26c58feaaf004406a97612c7ff5b2fcb5409e0048ed310ccc0536890ea26c58fe1a932700523bac80e5af5e96bf16ca012035df0aa4637fcb5f05cb5f8be42500a9d98a77fe1b470751362c7f8d8b03406aae95801b8017470751362c7f8d9b03406aa695801b8117450751362c7f4d889f01909ac7f25799e5af09730048cdb23296bf7a59fe9a142f0148cd5194ff0ba383281b96bf26cd1300a9192c7f9559fe9a124f00a4fcad0cdc046c181d44d9b0fc35659e0048795b05cb5fbd2c7ff5850340cad72aa4637fcb5f05cb5f7de32500294fc53bff0da283281b96bffaca1300293f96bfca2c7ff59d0340cacbaa58feea65f9ab165e0290f25194fffad141940dcb5fb571004879780e7033f0bce820ca86e5af5a7909408a67f9abccf257ed1c0052acd5b1fcd5cbf2d7407809408a5394ff3ad141940dcb5f03e3098014c3f25799e5af8172004883b70696bf7a59fe1a382f0148835594ff73a383281b96bf427802200d8ee5af32cb5f611c00d26058fe2ab3fc15ca0120d56f4de0162c7f8db2fc15ce0120d56b4dd23bffb5a383281b96bfb2e00090ea63f9abccf257361c00523dd6221dfb5bfe2a58feca8a0340eabfb548effcd78a0ea26c58feca8e0340eaafe703b761f96b94e5af2c792320a97f9e4f7ae7ffece820ca86e5af6c790220f587e5af32cb5f5973004853b72e96bf7a59feca9e9700a4a929ca7fb5e820ca86e5af46f004409abcf5b0fcd5cbf257633800a4c9590fb809cb5fa32c7f358a03409a38cb5f6596bf1ac7cf004813531cfb3f2b3a88b261f9ab913c0190c6ef0558feea65f9abb11c00d2f8bc8074ec6ff9ab60f9abd1bc04202d5af1ce7fd5e820ca86e5afc6f304405ab8f5b1fcd5cbf2572b3800a4b1ad4f3af6b7fc55b0fcd51a0e0069c15e02dc8ae5af5196bf5ac5012055bd04b8017866741065c3f257eb3800a45e96bfca2c7fb59203401af5522c7ff5b2fcd55a7e0d504a5e4a2aff15a383281b96bf5acd1300c9f25795e5afd67300a8ebfe0f96bf7a59feea042f01a8cb8af27f46741065c3f257677802a0aeda08cb5fbd2c7f758a03405db4113017cb5fa32c7f758e03405db33196bf7a59feea243f03a02e29ca7f85e820ca86e5afcef204405d61f9abccf257a73900d405af223dd5cff257c1f257e73900d476af06ae03968b0ea26c58fe120e00b5dbab816bb1fc35caf297fec90f01aaad8a77fecb460751362c7f693e9e00a88d5e83e5af5e96bf54e20050dbbc8674ec6ff9ab60f94b0be000509bbc16cb5fbd2c7f690c0e00b5c56b816bb0fc35caf29716c20f01aa0d8a77fecb440751362c7f69113c0150d36d8ae5af5e96bf340e0e0035d9a6a4637fcb5f05cb5f1a2707809a6a332c7ff5b2fca5097000a8893603aec6f2d728cb5f9a2007809a66737ce7af5e96bf34090e0035c9b6a40ffc2d1d1d44d9b0fca5497200a829b6032e0766460751362c7f690a1c006a82ed80cbb0fc35caf297a6c801a0dc6d8feffcd5cbf297fac001a09c6d4f7ae7bf64741065c3f297fac401a05ced80e5af5e96bfd4470e00e56807e0db58fe1a65f94b7de600506e76c4f2572fcb5faa81034039d911b814cb5fa32c7fa9263e0e58b928def92f111d44d9b0fca51a7902a01cec84e5af5e96bf54330780a2cd221dfb5bfe2a58fed2003800146916700996bf4659fed280380014650f3cf6572fcb5f1a20078022bc1ef826b078741065c3f29706cc01a0417b3df00d2c7f8db2fca5000e000dd29e58feea65f94b411c001a943d81af63f96b94e52f0572006810de80effcd5cbf29782390054b73790def97bd749152c7f29030e00d5692f2c7ff5b2fca54c38005497bd800bb1fc35caf29732e20f67d5e18dc005f8e74ba32cffaae5802318ff1bb1fb81af0023d1c1d50efe8056bf59fe2ab3fcab9603be03bc72827fdf2b80c381a7a35f809a6f6864c431a9bed91b381fcb5fa32cffaac9967fe11bc081c053d12f44cde66700d42f96bfca2cffaaa9963fc03e78caa63e7000a81ffc81a432cbbfaa1fe55f7823de5b4353e400d0541d442aff69d141940dcbbf6a79fa57fe853d494fd45c32fac5a9991c009a8a83489f4af6cf910a967fd5f2c075f4b7fc0bb3804b71046812fcc1adc93a18cb5fbd2cffaa3acbbfb02370393033fac5aa59fc168026e360e0cb58fe1a65f9570da2fce7772be944e0e1e817ae66f007b826ea102c7ff5b2fcab065dfe009b01d702cb46bf78358327009a884380b3b1fc35caf2af2a3ef0f78aa05fff87c076c003d1bf11ca9b3fc8355e8762f9ab97e55f155dfe009b00738115a37f3394377f986b3c0e03be847f5e34caf2afcaa1fc0b1b9346c033a383285f5e02d0a21c069c85e5af51967f554ee53fbf9f93fe5dfd293a88f2e30f752d8ceffc5566f957e55afe001b003703ab4507517efcc1aeb11c4e2affa1e820ca86e55f9573f9175e401a01cf8e0ea2bc3800b42047908efd2d7f152cffaa26947f615de07bc0dad141940f0780ca8e00be88e5af51967f5593cabfb016e924609de820ca830340f33b12cb5fbd2cffaa26967f614dd208785e7410c57300a8700cf0052c7f8db2fcab9a5cfe85d581db481f105487390004702c701a96bf4659fe55cb03d7d3ecf22fac0adc04bc303a88e23800742cf099e810ca8ae55f5594ffcba383f4d12ac08dc08ba383288603a0dbde89e5af5e967f551bcbbfb032700bf0b2e8201a3c074077bd0b38353a84b262f957b5b9fc0b2bd09e4b1b9a00074037bd0b38253a84b262f95775a1fc0bc3a40f37be2a3a8806c701d03defc6f2572fcbbfaa4be53fff6b9e0b6c191d4483e100e896e3804f478750562cffaa61ba57fe85a581ab806da283a87e0e80ee380e38393a84b262f9570d938ec2bb58fe85a5802b80eda283a85e0e806e381ecb5fbd2cffaa612cffc24ce04ae075d141541f0740fb1d0fcc8e0ea1ac58fe55c358fe6533808b81dda383a81e0e80763b01cb5fbd2cffaa61ba7bcd7f5166001701fb460751ff3900daeb04e053d1219415cbbf6a9854fede08676cd3817f010e880ea2fe7200b4d387b1fcd5cbf2af1ac6f21faf69c0b9c09ba383a87f1c00edf361e043d1219415cbbf6a18cb7fa2a601e700474507517f3800dae52358feea65f9570d63f94fd6107026f0b6e8209a3a07407b7c14f860740865c5f2af1ac6f29faa21e0b3c031d14134350e8076f828f081e810ca8ae55f358ce5df2f43c069c0fba28368f21c00cd771296bf7a59fe55c358fe75f8189e3c36d6d0c8c84874064dde49c0fba343282b967fd530967fdd6603274687d0c47802d05c1fc3f2572fcbbf6a18cb7f10bce958037902d04c1f07de1b1d4259b1fcab86b1fc07ed54d223c7d5000e80e6b1fc5566f9570d939e6dbf4974900e3a8b74af00cb25730e8066f904f09ee810ca8ae55f358ce51fedcbc091c0d3d14134360740737c123f64a35e967fd530967f2ebe0a1c8e23205b0e8066b0fc5566f9570d63f9e7e61bc081c053d14154e500c85b71b38d77440751562cffaa612cff5c5d04ec8723203b7e0d305f96bf16c4f2af1ac6f2cfd95ea49380c5a383a8972700791a024e07de1e1d4459b1fcab56207dd5cff2cfdfd5c09ec063d141943800f2533c68c3a76d697e967f95e5df3cd7027be008c88203202f96bf16c4f2afb2fc9beb166017e0e1e8205de76700f231047c0ecb5fbd2cff2acbbfd9b6205d0e58363a48d77902908721e00ce0e8e820ca8ae55fb502e9037f1b4707d1947d0f9805fc2d3a48573900e259fe5a10cbbfcaf26f9f1f02db03f74707e9222f01c41a02cec4f2572fcbbfcaf26fa74d48ff5e578c0ed2450e803845f91f151d4459b1fcab2cff76db08d8393a44174d8f0ed05143c0e781b7440751562cff2acb5faa8927008367f96b412cff2acb5faa910360f03e82e5af5e7f06b6c2f29f9fe52fd5cc013078cf8d0ea0acdc076c03fc2c3a48462c7f6900fc0c8014c763ffaa95801b8017470791dace13002986e55f65f94b03e4009006cff2afb2fca501f312803458967fd54ac08dc08ba283485de209803438967f95e52f057100488361f95759fe52200780543fcbbfcaf297823900a47a59fe5596bfca1e8d0ed0450e00a93e967f95e5afb2738139d121bac80120d5c3f2afb2fc55f635e050e0e9e8205d34343232129da16b3620dde674b5e820aa8de55f65f9abec3ce0602cff300e8018cf25ddf464ede820ea3bcbbfcaf257d9b780fd8079d141bacc4b00317e036c01dc191d447d65f95759fe2abb08d81fcb3f9c0320ce3dc0a6c04fa283a82f2cff2acb5f651791def93f151d440e8068f7924e026e8f0ea229b1fcab2c7f955d8ce59f150740bc0748cf83bf213a8826c5f2afb2fc553607d817cb3f2b0e803c3c02ec0c5c1e1d441362f957ad8ce5af5e9700fb60f967c701908fc781bd48c764ca9fe55f65f9abec522cff6c3900f2f204e93f96af4607d14259fe5545f9bf303a88b27129b037f06474102d9803203ff380c380d3a28368812cff2acb5f65d790aef95bfe197300e46904782770627410f5b0fcab2c7f955d0bec41baaca98c3900f2361b3881340814cbf2afb2fc55762db03b967f23782be0663802f8020eb628967f95e5afb2eb48e5ff5874108d8f03a039f6253d396bf1e8201d63f95759fe2afb0eb01b967fa338009a6517d2ad34978c0ed211967f95e5afb2eb815db1fc1bc701d03c5b025700cb44076939cbbfcaf25799e5df600e80667a39e9c336cf880ed252967f95e5afb2b9a4f27f343a8826c701d05c1b913e74b352749096b1fcab56066e02368c0ea26cdc00bc0ecbbfd11c00cdf602d20a7f4e749096b0fcab2c7f95dd06ec487a86891accaf9535db2f814d815f45076901cbbfcaf257d96dc04e58feade00068bebb4923e067d1411accf2afb2fc55f63d52f93f1c1d44fde10068873f019b03df8f0ed240967f95e5afb27f251dfb5bfe2de200688ffb81ed48ffa16a7c2cff2acb5f65967f4b3900dae521d208b83e3a480358fe55ab60f9abd7bf91caffefd141d47f0e80f6f907e98e81974607c998e55fb50ae97bfe96bf0aff0eec80e5df5a0e80767a02d80b382f3a48862cff2acb5f65967f073800da6b1e7010f0b9e82019b1fcab2c7f95fd27300bf85b7410d5cb01d06e23c031c0a7a38364c0f2aff29abfca7e046c0b3c101d44f57300b4df08703c7062749040967f5551fe1b44075136fe0bcbbf53bc1570b71c4dba24d0a5e167f95759fe2afb2f601bd2d789d5110e80eed91f3817981e1d64002cff2acb5f653f2695ff5fa38368b01c00ddb4177001b07874901a59fe5596bfca7e8ce5df590e80eeda099803cc8c0e5203cbbfcaf257d9ff25fd7762f9779403a0db3603ae04968b0ed247967f95e5afb29f90fe3bf94b7410c571006813e03a60c5e8207d60f95759fe2ab3fc053800946c00cc05568b0e3205967f95e5afb25f025b929e20aa8eebd2d7c134b69f03af057e131d64922cff2acb5f6596bf7a380054b88bf4c3e1cee8201364f95759fe2abb03d80acb5ff37100687ef7009b923e1ddc04967f95e5afb23b48e3fe8fd14194173f03a0057906702830141d6411ae245dbe5062f9abecff91caff0fd141941f0780d40eab929eea67f9ab7027b00596bfc6d085dbc14a6db72ae99dfffad141948d3bf19dbf16c1cf0048cd66f9abec57a4f2ff7d7410e5cd01203597e5afb2df921ee96bf96b911c00523359fe2afb2de99affddd141d40c0e00a9792c7f95dd433af6bf3b3a889ac30120358be5afb27b48effcef8a0ea266710048cd61f9abac78e76ff96bc21c00523358fe2afb1da9fc9bfa0c0f05f33e0052fe9e03dc0c3c2f3a88b261f96bca3c0190f266f9abecff93caffd7d141d46c0e00295f96bfca2c7ff58d0340ca93e5afb27b81ed4877fa93a6cc0120e5c7f257d9bdc056c02fa283a83d1c00525e2c7f9515e5efa3afd5570e00291f96bfcafe0c6c8de5af1a3800a43c58fe2afb33e99dff7f4707513b3900a47896bfcaee23bdf3b7fc551b0780146b752c7ff52acaff67d141d46ede09508a5394ff3ad141948da2fc7f1a1d44ede7098014c3f257d903c08e58fe1a100780347896bfca1e04b605fe333a88bac301200d96e5afb207b1fc15c001200d8ee5afb20749b7f7fd617410758f03401a0ccb5f650f91caff07d141d44d0e00a97e96bfca2c7f85730048f5b2fc55f610b03df0fde820ea360780541fcb5f657f2395ff7f4407911c00523d2c7f9559feca8a0340ea3fcb5f658f00bb00b74707910a0e00a9bf2c7f953d02cc026e8d0e22cdcf0120f5cf1a58feeaf50f6067e0bbd141a4321f0624f54751fecf8d0ea26c14e57f4b741069413c0190a6cef2575951fe37470791c6e20090a6c6f257d93f481ff8b3fc95350780347996bfca1e055e07dc141d445a140780343996bfca8af2bf313a88341e0e0069e22c7f953d0ebc01b8213a88345e0e0069622c7f953d01bc1eb83a3a8834110e0069fc2c7f9559fe6a2c0780343e96bfca9e00f604ae8a0e224d8603405a34cb5f654f90aef95f191d449a2c0780b47096bfca8af2bf223a883415de0a581adb1aa4dbb8ae1d1d44d97812d80bcb5f2de00980b46096bfca8af2bf3c3a88d40f0e00a9caf257d993c01b81cba28348fde200907a59fe2a9b071c087c3b3a88d44f43232323d119a45ccc047e01ac191d44d9780ad80798131d44ea374f00a45133b1fc356a1ef0262c7fb594034092aa8af2ff7a7410a92e0e0049ea350f783370617410a94e0e00491a350f3808b8203a885437078024254f030703e747079106c1012049a3e5ff2fd141a441710048eaba11e028e0bce820d220390024755951fe5f8a0e220d9a034052578d004703674507912238002475d108f056e08bd141a4280e00495d5394ff17a28348911c00d2a80780b3a343a85623c0dbb0fc251f0624952c46fa1ef8bed141d47723c0db8133a383483970004855d3806f006f880ea2be1901de019c111d44ca859700a4aa79c0fec0d5d141d4372762f94b3d3c0190c636933402b68c0ea2293911981d1d42ca8d2700d2d81e0576066e8b0ea2497b0f96bfb4409e00488bb63c7023b07174104dc87b814f46879072e50980b4680f013b00ff1d1d44e3f63e2c7f69a11c00d2f8fc05d80af86574102dd2fb814f44879072e70090c6efcfc076c0ddd14134a60f001f8f0e21358103409a98df01db027f880ea28a0f021f8b0e21358503409ab85f912e07dc1b1d44ffeb43c049d121a426710048937307e972c0fdd141c447808f4687909ac6af014a53f30a602eb06c74908e3a1938213a84d4449e004853f31fc08ec023d1413ae8d358fed2a43900a4a9fb576077e0b1e8201d720a707c7408a9c91c00527fcc05f6069e8c0ed201a702c74587909ace0120f5cfe5c0bea4a709aa1e9f01de1d1d426a030780d45f73804380a7a383b4d069c0bba243486de10090faef3ce0edd1215ae674e09dd121a436710048f5f83c706c748896f82cfe5e4a7de70090ea733ade9d6eaacec6f2976ae18d80a4facdc6afac4dc6978123007f484935700048f51b225d12784b749006b1fca59a3900a4c118221d671f1a1da401be422a7fbf4921d5c801200dce34e002d20d83b4605f050ec7f2976ae70090066b71e0126097e820193a07380ccb5f1a08078034783380cb480f1152722ee9f288e52f0d8803408ab114700db07974900c7c0def9e280d9c03408ab31c7003f0b2e82081ce030ec6f29706ce0120c51a066e04368a0e12e05bc07ef8f024298403408ab712700bb041749001ba8854fe4f450791baca5b014bf1ee03b6037e131d64402c7f29030e00290fbf07b6047e1b1da4661763f94b59700048f9b807d816f86374909acc01f6c5f297b2e00090f27227b03df0d7e8207d7609b00f96bf940d0780949f9f02db000f4407e9934bb1fca5ec3800a43cfd1898053c1c1d648a2e253dfbe0c9e820927a3900a47cfd3bb02bf058749049ba9a74cddff29732e47d00a4fccd22bd939e111d6421fe02fc89f46d863f01bf024e069e880e96b921d233109e31ceffff08e989896dfb8c88023800a466d89df4fdf9e903fe751f03fe40fa66c2587fbd07f87bf46f50034d03ce26dd0a79227e0e6c4d1a5ad2a43900a4e6d89f74effc7e5cbab3d863cd002e00de30c9bfff97a411f087e817a2e6720048cd7210e90878688cffdd62cfdf12a4e720ec3ac57fce1da411f0fbe817a466720048cd7310b02e0b2ef7a67e60b02b96012e2315773fdc0d6c05dc15fdc2d43c0e00491a8c15806b8057f6f99ffb5bd2a0f875f40b54b3380024a97eab00d7032faee99fff3bd249c0afa25fa89ac3fb004852bdd6046ea3bef20758fd9fbf46971e29ad29720048527dd62315f3f307f06bad0adc04bc30fa45ab191c0092548f0d819b49efce076515e046ea3d6d504b380024a9ff5e067c177856c0afbd3270cb3f334863720048527f6d417a17be62608615481f3a7c45f46f86f2e50090a4fe99055c0b2c1b1d041806be03bc2a3a88f2e40090a4fed81bf836b0647490f92c0fcc05b68c0ea2fc38002469ea0e072e04168f0eb2004b035701db4407515e1c009234356f05ce22ef9fa74b015700db4507513e72fe032b49b93b013883b11fce949399c095c0eba283280f0e00499ab821e054e053d1412668067031b07b7410c5f35900923431d34847fe874607998227817d804ba283288e270092347ed381736976f943fab0e2b78003a28328cef4e80092d4104b00df04768b0ed227d348636631e0bce8301a3c4f002469d18aafd2ed161da4cf8a11705474100d9e270092b470c3c035b4f78e7a43c099a431704674180d8e27009234b655480fd6696bf9178680cf02c74407d1e038002469c1d6006e055e121d64408680d380f74507d160380024a96a6de06660dde820013e067c303a84eae77d0024a9d706a407e8ac161d24d86ce0c4e810aa8f270092346a13d2b17fd7cb1fd26d8e674787507d1c0092946c0edc08ac181d2423c703a74487503dbc042049b0133087f4c01c559d45ba578085d1229e0048eaba37029761f92fcc91e4ffc8634d90ff322575d901c005a47be36be10e07cec6de680dff454aeaaaa381afe11d5127e210d260f2f7ac051c0092bae804d2ed6ffd193871fb0017e208683c3f0428a94b86809381774707698139c0bec093d14134390e00495db118e9836c8745076991ab813d81c7a28368e21c0092ba601af055e04dd1415ae85a600f1c018de30090d4764b00df00768f0ed262d703bb018f4607d1f8390024b5d9d2c0b7816da38374c0adc02ce0e1e8201a1f0780a4b61a265da37e7574900ef91ee9ae8a7f8f0ea2457300486aa39581ef002f8d0ed2413f04b607ee8f0ea2857300486a9b67911ee7bb6174900efb11b01df0d7e8201a9b37c190d4266b03b761f947db08b801786674108dcd0120a92dd62795ff3ad14104a4cb2fb7924e6494210780a436d8985436cf8e0ea21eeb033701ab45075195034052d36d462a198f9bf3f402e0661c67d97100486ab21d81eb80e5a28368a1d6257d4570ede8201ae50090d454bb926ef233333a88c6652dd249809fd1c88403405213ed4f7a1add12d14134216b9246c0f3a283c80120a9798e02cec3e7d137d5eaf855cd2c38002435c909c0e7f16757d3ad0adc08bc283a4897792740494d3004cc068e8b0ea2beba0fd806f84974902e720048cadd10703af0f6e820aac503a46707fc203a48d7380024e5ee25c08fa343a8568e80005e479394bba1e800aadd0ac03ba243748d034092a40e72004892d4410e0049923ac8012049520739002449ea20078024491de4009024a9831c0092247590034092a40e720048cadd5f8187a343486de3009094bbdf015b928680a43e7100486a821f025b03f74607516dfe111da06b7c1aa0a426590f980bac1e1d447df5036007e0fee8205de20980a426b903782d70677410f5cd7749a73b96ff8039002435cd3dc0a6c04fa28368caae017604fe1e1da48b1c00929ae85e600be0f6e8209ab42b803d8047a3837495034052533d006c0bdc181d4413f675e0f5c0e3d141bacc0120a9c91e066601974707d1b87d093800782a3a48d739002435dde3c05ec0c5d141b4489f06de023c1d1d440e0049edf004b00f704e74108d6936703ce077cf33e10090d416f3804381d3a383a8c708701c70627410f57200486a9311e0582c9b5c8c00c700a7440751d5f4e800925483d9fffceb2781a1e8301d350f380c38373a8816cc5b014b6ab32381cfe369e7a03d01ec07cc890ea2b1390024b5ddbec07978e239288f037b03974507d1c239002475c12ec045c092d1415aee116037e086e8205a340780a4aed89274fbd965a283b4d443c04ec0bf4507d1f838002475c96b81ab80e5a383b4ccfda487fa7c3f3a88c6cf0120a96b3602ae03568a0ed2127f02b6037e1a1d4413e30090d445eb03738167470769b87b806d803ba38368e2fc6a8ca42efa05e972c0afa38334d85da447325bfe0de50090d45577039b023f8b0ed240c580ba2b3a8826cf0120a9cbfe086c0dfc383a4883fc08d80cf84374104d8d034052d7fd99f41541bfbeb6683f00b605fe121d4453e70090247890f449f6eba38364ecbba4d392fba383a83f1c0092943c42ba63e0a5d141327435e97bfe7f8f0ea2fe710048d2a82780bd48cf0e507211b03bf0687410f5970340927acd030e02ce880e92810b494ff57b323a88facf0120495523c03b8053a283043a0b3810782a3a88eae10090a4051b018e034e8c0e12e064e028e0e9e820aa8fb70296a4453b1af81cdd78d3349b6e8e9ece710048d2f81c009c034c8f0e5293e2c4e3d4e8201a0c0780248ddf1b81f381c5a383f459f199073ff8d8210e00499a9859c0c5c0cce8207d320f3814f85a74100d96034092266e73e04a60d9e82053f404e96b7e73a28368f01c009234399b00d7012b460799a4c74997342e8f0ea2180e00499abc0d49cf0f582d3ac8043d02ec06dc101d44711c00923435eb017381d5a3838cd383a4cf31f8f4c38e730048d2d4ad417a37fdfce8208b703fb003e9b1beeab8ff01105bf52b732f4c930000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "tagEntry": {
+      "id": 29168,
+      "api": {
+        "url": "/tags/{{encodeURL(join(parameters.tagIds, ','))}}",
+        "body": {
+          "entryIds": [
+            "{{parameters.entryId}}"
+          ]
+        },
+        "method": "PUT"
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "tagEntry",
+      "epoch": null,
+      "flags": {},
+      "label": "Add an article to a board (deprecated)",
+      "scope": [],
+      "expect": [
+        {
+          "name": "entryId",
+          "type": "text",
+          "label": "Article ID",
+          "required": true
+        },
+        {
+          "name": "tagIds",
+          "type": "select",
+          "label": "Board",
+          "options": "rpc://app%23feedly@1/RpcTag",
+          "multiple": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/tags/{{encodeURL(join(parameters.tagIds, ','))}}\",\n\t\"body\": {\n\t\t\"entryIds\": [\n\t\t\t\"{{parameters.entryId}}\"\n\t\t]\n\t},\n\t\"method\": \"PUT\"\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": true,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "description": "Adds an article to one or more boards.",
+      "expectJsonc": "[\n    {\n        \"name\": \"entryId\",\n        \"type\": \"text\",\n        \"label\": \"Article ID\",\n        \"required\": true\n    },\n    {\n        \"name\": \"tagIds\",\n        \"type\": \"select\",\n        \"label\": \"Board\",\n        \"options\": \"rpc://app%23feedly@1/RpcTag\",\n        \"multiple\": true,\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "FetchFeed": {
+      "id": 29169,
+      "api": {
+        "qs": {},
+        "url": "/feeds/.mget",
+        "body": [
+          "{{parameters.id}}"
+        ],
+        "method": "POST",
+        "headers": {},
+        "response": {
+          "output": "{{body[1]}}"
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "FetchFeed",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Feed",
+      "scope": [],
+      "expect": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Feed ID",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"qs\": {},\n\t\"url\": \"/feeds/.mget\",\n\t\"body\": [\n\t\t\"{{parameters.id}}\"\n\t],\n\t\"method\": \"POST\",\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"output\": \"{{body[1]}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "feedId",
+          "type": "text",
+          "label": "Feed ID"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "name": "topics",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Topics"
+        },
+        {
+          "name": "language",
+          "type": "text",
+          "label": "Language"
+        },
+        {
+          "name": "website",
+          "type": "text",
+          "label": "Website"
+        },
+        {
+          "name": "velocity",
+          "type": "number",
+          "label": "Velocity"
+        },
+        {
+          "name": "featured",
+          "type": "boolean",
+          "label": "Featured"
+        },
+        {
+          "name": "sponsored",
+          "type": "boolean",
+          "label": "Sponsored"
+        },
+        {
+          "name": "curated",
+          "type": "boolean",
+          "label": "Curated"
+        },
+        {
+          "name": "subscribers",
+          "type": "number",
+          "label": "Subscribers"
+        },
+        {
+          "name": "state",
+          "type": "text",
+          "label": "State"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "description": "Gets the metadata about a specific feed.",
+      "expectJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"Feed ID\",\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"ID\"\n    },\n    {\n        \"name\": \"feedId\",\n        \"type\": \"text\",\n        \"label\": \"Feed ID\"\n    },\n    {\n        \"name\": \"title\",\n        \"type\": \"text\",\n        \"label\": \"Title\"\n    },\n    {\n        \"name\": \"topics\",\n        \"spec\": {\n            \"type\": \"text\"\n        },\n        \"type\": \"array\",\n        \"label\": \"Topics\"\n    },\n    {\n        \"name\": \"language\",\n        \"type\": \"text\",\n        \"label\": \"Language\"\n    },\n    {\n        \"name\": \"website\",\n        \"type\": \"text\",\n        \"label\": \"Website\"\n    },\n    {\n        \"name\": \"velocity\",\n        \"type\": \"number\",\n        \"label\": \"Velocity\"\n    },\n    {\n        \"name\": \"featured\",\n        \"type\": \"boolean\",\n        \"label\": \"Featured\"\n    },\n    {\n        \"name\": \"sponsored\",\n        \"type\": \"boolean\",\n        \"label\": \"Sponsored\"\n    },\n    {\n        \"name\": \"curated\",\n        \"type\": \"boolean\",\n        \"label\": \"Curated\"\n    },\n    {\n        \"name\": \"subscribers\",\n        \"type\": \"number\",\n        \"label\": \"Subscribers\"\n    },\n    {\n        \"name\": \"state\",\n        \"type\": \"text\",\n        \"label\": \"State\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "ListFeeds": {
+      "id": 29170,
+      "api": {
+        "qs": {
+          "count": "{{parameters.limit}}",
+          "query": "{{parameters.query}}"
+        },
+        "url": "/search/feeds",
+        "body": {},
+        "method": "GET",
+        "headers": {},
+        "response": {
+          "output": "{{item}}",
+          "iterate": "{{body.results}}"
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "ListFeeds",
+      "epoch": null,
+      "flags": {},
+      "label": "Find Feeds",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter the search query. Can be a feed url, a site title, a site url or a #topic.",
+          "name": "query",
+          "type": "text",
+          "label": "Query",
+          "required": true
+        },
+        {
+          "help": "Enter a maximum limit of items in the result.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"qs\": {\n\t\t\"count\": \"{{parameters.limit}}\",\n\t\t\"query\": \"{{parameters.query}}\"\n\t},\n\t\"url\": \"/search/feeds\",\n\t\"body\": {},\n\t\"method\": \"GET\",\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"output\": \"{{item}}\",\n\t\t\"iterate\": \"{{body.results}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "name": "website",
+          "type": "text",
+          "label": "Website"
+        },
+        {
+          "name": "feedId",
+          "type": "text",
+          "label": "Feed ID"
+        },
+        {
+          "name": "velocity",
+          "type": "number",
+          "label": "Velocity"
+        },
+        {
+          "name": "subscribers",
+          "type": "number",
+          "label": "Subscribers"
+        },
+        {
+          "name": "curated",
+          "type": "boolean",
+          "label": "Curated"
+        },
+        {
+          "name": "featured",
+          "type": "boolean",
+          "label": "Featured"
+        },
+        {
+          "name": "score",
+          "type": "number",
+          "label": "Score"
+        },
+        {
+          "name": "coverage",
+          "type": "number",
+          "label": "Coverage"
+        },
+        {
+          "name": "hint",
+          "type": "text",
+          "label": "Hint"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "label": "Description"
+        },
+        {
+          "name": "language",
+          "type": "text",
+          "label": "Language"
+        },
+        {
+          "name": "coverUrl",
+          "type": "url",
+          "label": "Cover URL"
+        },
+        {
+          "name": "visualUrl",
+          "type": "url",
+          "label": "Visual URL"
+        },
+        {
+          "name": "iconUrl",
+          "type": "url",
+          "label": "Icon URL"
+        },
+        {
+          "name": "coverageScore",
+          "type": "number",
+          "label": "Coverage score"
+        },
+        {
+          "name": "estimatedEngagement",
+          "type": "number",
+          "label": "Estimated engagement"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "description": "Searches feeds based on title, url or #topic.",
+      "expectJsonc": "[\n    {\n        \"help\": \"Enter the search query. Can be a feed url, a site title, a site url or a #topic.\",\n        \"name\": \"query\",\n        \"type\": \"text\",\n        \"label\": \"Query\",\n        \"required\": true\n    },\n    {\n        \"help\": \"Enter a maximum limit of items in the result.\",\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 10,\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"title\",\n        \"type\": \"text\",\n        \"label\": \"Title\"\n    },\n    {\n        \"name\": \"website\",\n        \"type\": \"text\",\n        \"label\": \"Website\"\n    },\n    {\n        \"name\": \"feedId\",\n        \"type\": \"text\",\n        \"label\": \"Feed ID\"\n    },\n    {\n        \"name\": \"velocity\",\n        \"type\": \"number\",\n        \"label\": \"Velocity\"\n    },\n    {\n        \"name\": \"subscribers\",\n        \"type\": \"number\",\n        \"label\": \"Subscribers\"\n    },\n    {\n        \"name\": \"curated\",\n        \"type\": \"boolean\",\n        \"label\": \"Curated\"\n    },\n    {\n        \"name\": \"featured\",\n        \"type\": \"boolean\",\n        \"label\": \"Featured\"\n    },\n    {\n        \"name\": \"score\",\n        \"type\": \"number\",\n        \"label\": \"Score\"\n    },\n    {\n        \"name\": \"coverage\",\n        \"type\": \"number\",\n        \"label\": \"Coverage\"\n    },\n    {\n        \"name\": \"hint\",\n        \"type\": \"text\",\n        \"label\": \"Hint\"\n    },\n    {\n        \"name\": \"description\",\n        \"type\": \"text\",\n        \"label\": \"Description\"\n    },\n    {\n        \"name\": \"language\",\n        \"type\": \"text\",\n        \"label\": \"Language\"\n    },\n    {\n        \"name\": \"coverUrl\",\n        \"type\": \"url\",\n        \"label\": \"Cover URL\"\n    },\n    {\n        \"name\": \"visualUrl\",\n        \"type\": \"url\",\n        \"label\": \"Visual URL\"\n    },\n    {\n        \"name\": \"iconUrl\",\n        \"type\": \"url\",\n        \"label\": \"Icon URL\"\n    },\n    {\n        \"name\": \"coverageScore\",\n        \"type\": \"number\",\n        \"label\": \"Coverage score\"\n    },\n    {\n        \"name\": \"estimatedEngagement\",\n        \"type\": \"number\",\n        \"label\": \"Estimated engagement\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "newEntries": {
+      "id": 29171,
+      "api": {
+        "qs": {
+          "count": 1000,
+          "ranked": "oldest",
+          "streamId": "{{parameters.streamId}}",
+          "newerThan": "{{dateToUnix(data.lastDate)}}"
+        },
+        "url": "/streams/contents",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": {
+            "id": "{{item.id}}",
+            "image": "{{item.thumbnail}}",
+            "title": "{{item.title}}",
+            "author": "{{item.author}}",
+            "source": {
+              "id": "{{item.originId}}",
+              "url": "{{item.origin.htmlUrl}}",
+              "title": "{{item.origin.title}}",
+              "streamId": "{{item.origin.streamId}}"
+            },
+            "visual": "{{item.visual}}",
+            "content": "{{item.content.content}}",
+            "created": "{{parseDate(item.crawled/1000, X)}}",
+            "summary": "{{item.summary.content}}",
+            "updated": "{{parseDate(item.recrawled/1000, X)}}",
+            "keywords": "{{item.keywords}}",
+            "alternate": "{{item.alternate}}",
+            "canonical": "{{item.canonical}}",
+            "enclosure": "{{item.enclosure}}",
+            "thumbnail": "{{item.thumbnail}}",
+            "categories": "{{item.categories}}",
+            "engagement": "{{item.engagement}}",
+            "engagementRate": "{{item.engagementRate}}"
+          },
+          "iterate": "{{body.items}}",
+          "trigger": {
+            "id": "{{item.id}}",
+            "date": "{{parseDate(item.crawled/1000, X)}}",
+            "type": "date",
+            "order": "unordered"
+          }
+        }
+      },
+      "rev": 5,
+      "crud": "read",
+      "name": "newEntries",
+      "epoch": {
+        "qs": {
+          "count": 200,
+          "ranked": "newest",
+          "newerThan": null
+        },
+        "response": {
+          "limit": 200,
+          "output": {
+            "date": "{{parseDate(decrementAndUnder1000(item.crawled), X)}}",
+            "label": "{{item.title}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Articles",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"qs\": {\n\t\t\"count\": 1000,\n\t\t\"ranked\": \"oldest\",\n\t\t\"streamId\": \"{{parameters.streamId}}\",\n\t\t\"newerThan\": \"{{dateToUnix(data.lastDate)}}\"\n\t},\n\t\"url\": \"/streams/contents\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\"output\": {\n\t\t\t\"id\": \"{{item.id}}\",\n\t\t\t\"image\": \"{{item.thumbnail}}\",\n\t\t\t\"title\": \"{{item.title}}\",\n\t\t\t\"author\": \"{{item.author}}\",\n\t\t\t\"source\": {\n\t\t\t\t\"id\": \"{{item.originId}}\",\n\t\t\t\t\"url\": \"{{item.origin.htmlUrl}}\",\n\t\t\t\t\"title\": \"{{item.origin.title}}\",\n\t\t\t\t\"streamId\": \"{{item.origin.streamId}}\"\n\t\t\t},\n\t\t\t\"visual\": \"{{item.visual}}\",\n\t\t\t\"content\": \"{{item.content.content}}\",\n\t\t\t\"created\": \"{{parseDate(item.crawled/1000, X)}}\",\n\t\t\t\"summary\": \"{{item.summary.content}}\",\n\t\t\t\"updated\": \"{{parseDate(item.recrawled/1000, X)}}\",\n\t\t\t\"keywords\": \"{{item.keywords}}\",\n\t\t\t\"canonical\": \"{{item.canonical}}\",\n\t\t\t\"enclosure\": \"{{item.enclosure}}\",\n\t\t\t\"thumbnail\": \"{{item.thumbnail}}\",\n\t\t\t\"categories\": \"{{item.categories}}\",\n\t\t\t\"engagement\": \"{{item.engagement}}\",\n\t\t\t\"engagementRate\": \"{{item.engagementRate}}\",\n\t\t\t\"alternate\": \"{{item.alternate}}\"\n\t\t},\n\t\t\"iterate\": \"{{body.items}}\",\n\t\t\"trigger\": {\n\t\t\t\"id\": \"{{item.id}}\",\n\t\t\t\"date\": \"{{parseDate(item.crawled/1000, X)}}\",\n\t\t\t\"type\": \"date\",\n\t\t\t\"order\": \"unordered\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "name": "author",
+          "type": "text",
+          "label": "Author"
+        },
+        {
+          "name": "source",
+          "spec": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Source ID"
+            },
+            {
+              "name": "url",
+              "type": "url",
+              "label": "Source url"
+            },
+            {
+              "name": "title",
+              "type": "text",
+              "label": "Source title"
+            },
+            {
+              "name": "streamId",
+              "type": "text",
+              "label": "Source stream ID"
+            }
+          ],
+          "type": "collection",
+          "label": "Source"
+        },
+        {
+          "name": "created",
+          "type": "date",
+          "label": "Date created"
+        },
+        {
+          "name": "updated",
+          "type": "date",
+          "label": "Date updated"
+        },
+        {
+          "name": "keywords",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Keywords"
+        },
+        {
+          "name": "summary",
+          "type": "text",
+          "label": "Summary"
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "label": "Content (HTML)"
+        },
+        {
+          "name": "categories",
+          "spec": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "ID"
+            },
+            {
+              "name": "label",
+              "type": "text",
+              "label": "Title"
+            }
+          ],
+          "type": "array",
+          "label": "Feeds"
+        },
+        {
+          "name": "engagement",
+          "type": "integer",
+          "label": "Engagement"
+        },
+        {
+          "name": "engagementRate",
+          "type": "number",
+          "label": "Engagement Rate"
+        },
+        {
+          "name": "thumbnail",
+          "spec": [
+            {
+              "name": "url",
+              "type": "url",
+              "label": "URL"
+            },
+            {
+              "name": "width",
+              "type": "number",
+              "label": "Width"
+            },
+            {
+              "name": "height",
+              "type": "number",
+              "label": "Height"
+            }
+          ],
+          "type": "array",
+          "label": "Thumbnail"
+        },
+        {
+          "name": "canonical",
+          "spec": [
+            {
+              "name": "href",
+              "type": "url",
+              "label": "Href"
+            },
+            {
+              "name": "type",
+              "type": "text",
+              "label": "Type"
+            }
+          ],
+          "type": "array",
+          "label": "Canonical"
+        },
+        {
+          "name": "enclosure",
+          "spec": [
+            {
+              "name": "href",
+              "type": "url",
+              "label": "Href"
+            },
+            {
+              "name": "width",
+              "type": "number",
+              "label": "Width"
+            },
+            {
+              "name": "height",
+              "type": "number",
+              "label": "Height"
+            }
+          ],
+          "type": "array",
+          "label": "Enclosure"
+        },
+        {
+          "name": "visual",
+          "spec": [
+            {
+              "name": "url",
+              "type": "url",
+              "label": "URL"
+            },
+            {
+              "name": "width",
+              "type": "number",
+              "label": "Width"
+            },
+            {
+              "name": "height",
+              "type": "number",
+              "label": "Height"
+            },
+            {
+              "name": "processor",
+              "type": "text",
+              "label": "Processor"
+            },
+            {
+              "name": "contentType",
+              "type": "text",
+              "label": "Content type"
+            }
+          ],
+          "type": "collection",
+          "label": "Visual"
+        },
+        {
+          "name": "alternate",
+          "spec": [
+            {
+              "name": "href",
+              "type": "url",
+              "label": "URL"
+            },
+            {
+              "name": "type",
+              "type": "text",
+              "label": "Type"
+            }
+          ],
+          "type": "array",
+          "label": "Alternate"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n    \"qs\": {\n        \"count\": 200,\n        \"ranked\": \"newest\",\n        \"newerThan\": null\n    },\n    \"response\": {\n        \"limit\": 200,\n        \"output\": {\n            \"date\": \"{{parseDate(decrementAndUnder1000(item.crawled), X)}}\",\n            \"label\": \"{{item.title}}\"\n        }\n    }\n}",
+      "parameters": [
+        {
+          "help": "Select the source to search in. Can be a feed, a category of feeds or a board.",
+          "name": "streamType",
+          "type": "select",
+          "label": "Select what you want to watch",
+          "default": "category",
+          "options": [
+            {
+              "label": "Category of feeds",
+              "value": "category",
+              "nested": [
+                {
+                  "on": {
+                    "change": "reset_epoch"
+                  },
+                  "name": "streamId",
+                  "type": "select",
+                  "label": "Category",
+                  "options": "rpc://app%23feedly@1/RpcCategory",
+                  "editable": {
+                    "help": "Enter the category ID",
+                    "enabled": true
+                  },
+                  "required": true
+                }
+              ]
+            },
+            {
+              "label": "Feed",
+              "value": "feed",
+              "nested": [
+                {
+                  "on": {
+                    "change": "reset_epoch"
+                  },
+                  "rpc": {
+                    "url": "rpc://app%23feedly@1/RpcFeed",
+                    "label": "Choose feed",
+                    "parameters": [
+                      {
+                        "name": "query",
+                        "type": "text",
+                        "label": "Query"
+                      }
+                    ]
+                  },
+                  "name": "streamId",
+                  "type": "text",
+                  "label": "Feed",
+                  "editable": {
+                    "help": "Enter the feed ID",
+                    "enabled": true
+                  },
+                  "required": true
+                }
+              ]
+            },
+            {
+              "label": "Board",
+              "value": "board",
+              "nested": [
+                {
+                  "on": {
+                    "change": "reset_epoch"
+                  },
+                  "name": "streamId",
+                  "type": "select",
+                  "label": "Board",
+                  "options": "rpc://app%23feedly@1/BoardList",
+                  "editable": {
+                    "help": "Enter the board ID",
+                    "enabled": true
+                  },
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "Enter a maximum limit of items in the result.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 1,
+          "required": true,
+          "validate": {
+            "max": 200,
+            "min": 1
+          }
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "description": "Triggers when a new article is published in a feed or in a category of feeds, or added to a selected board.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"ID\"\n\t},\n\t{\n\t\t\"name\": \"title\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Title\"\n\t},\n\t{\n\t\t\"name\": \"author\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Author\"\n\t},\n\t{\n\t\t\"name\": \"source\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Source ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"url\",\n\t\t\t\t\"type\": \"url\",\n\t\t\t\t\"label\": \"Source url\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"title\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Source title\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"streamId\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Source stream ID\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"collection\",\n\t\t\"label\": \"Source\"\n\t},\n\t{\n\t\t\"name\": \"created\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Date created\"\n\t},\n\t{\n\t\t\"name\": \"updated\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Date updated\"\n\t},\n\t{\n\t\t\"name\": \"keywords\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"text\"\n\t\t},\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Keywords\"\n\t},\n\t{\n\t\t\"name\": \"summary\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Summary\"\n\t},\n\t{\n\t\t\"name\": \"content\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Content (HTML)\"\n\t},\n\t{\n\t\t\"name\": \"categories\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"label\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Title\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Feeds\"\n\t},\n\t{\n\t\t\"name\": \"engagement\",\n\t\t\"type\": \"integer\",\n\t\t\"label\": \"Engagement\"\n\t},\n\t{\n\t\t\"name\": \"engagementRate\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Engagement Rate\"\n\t},\n\t{\n\t\t\"name\": \"thumbnail\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"url\",\n\t\t\t\t\"type\": \"url\",\n\t\t\t\t\"label\": \"URL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"width\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Width\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"height\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Height\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Thumbnail\"\n\t},\n\t{\n\t\t\"name\": \"canonical\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"href\",\n\t\t\t\t\"type\": \"url\",\n\t\t\t\t\"label\": \"Href\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"type\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Type\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Canonical\"\n\t},\n\t{\n\t\t\"name\": \"enclosure\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"href\",\n\t\t\t\t\"type\": \"url\",\n\t\t\t\t\"label\": \"Href\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"width\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Width\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"height\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Height\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Enclosure\"\n\t},\n\t{\n\t\t\"name\": \"visual\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"url\",\n\t\t\t\t\"type\": \"url\",\n\t\t\t\t\"label\": \"URL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"width\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Width\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"height\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Height\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"processor\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Processor\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"contentType\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Content type\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"collection\",\n\t\t\"label\": \"Visual\"\n\t},\n\t{\n\t\t\"name\": \"alternate\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Alternate\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"href\",\n\t\t\t\t\"type\": \"url\",\n\t\t\t\t\"label\": \"URL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"type\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Type\"\n\t\t\t}\n\t\t]\n\t}\n]",
+      "parametersJsonc": "[\n    {\n        \"help\": \"Select the source to search in. Can be a feed, a category of feeds or a board.\",\n        \"name\": \"streamType\",\n        \"type\": \"select\",\n        \"label\": \"Select what you want to watch\",\n        \"default\": \"category\",\n        \"options\": [\n            {\n                \"label\": \"Category of feeds\",\n                \"value\": \"category\",\n                \"nested\": [\n                    {\n                        \"on\": {\n                            \"change\": \"reset_epoch\"\n                        },\n                        \"name\": \"streamId\",\n                        \"type\": \"select\",\n                        \"label\": \"Category\",\n                        \"options\": \"rpc://app%23feedly@1/RpcCategory\",\n                        \"editable\": {\n                            \"help\": \"Enter the category ID\",\n                            \"enabled\": true\n                        },\n                        \"required\": true\n                    }\n                ]\n            },\n            {\n                \"label\": \"Feed\",\n                \"value\": \"feed\",\n                \"nested\": [\n                    {\n                        \"on\": {\n                            \"change\": \"reset_epoch\"\n                        },\n                        \"rpc\": {\n                            \"url\": \"rpc://app%23feedly@1/RpcFeed\",\n                            \"label\": \"Choose feed\",\n                            \"parameters\": [\n                                {\n                                    \"name\": \"query\",\n                                    \"type\": \"text\",\n                                    \"label\": \"Query\"\n                                }\n                            ]\n                        },\n                        \"name\": \"streamId\",\n                        \"type\": \"text\",\n                        \"label\": \"Feed\",\n                        \"editable\": {\n                            \"help\": \"Enter the feed ID\",\n                            \"enabled\": true\n                        },\n                        \"required\": true\n                    }\n                ]\n            },\n            {\n                \"label\": \"Board\",\n                \"value\": \"board\",\n                \"nested\": [\n                    {\n                        \"on\": {\n                            \"change\": \"reset_epoch\"\n                        },\n                        \"name\": \"streamId\",\n                        \"type\": \"select\",\n                        \"label\": \"Board\",\n                        \"options\": \"rpc://BoardList\",\n                        \"editable\": {\n                            \"help\": \"Enter the board ID\",\n                            \"enabled\": true\n                        },\n                        \"required\": true\n                    }\n                ]\n            }\n        ],\n        \"required\": true\n    },\n    {\n        \"help\": \"Enter a maximum limit of items in the result.\",\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 1,\n        \"required\": true,\n        \"validate\": {\n            \"max\": 200,\n            \"min\": 1\n        }\n    }\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "MakeAPICall": {
+      "id": 29172,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://cloud.feedly.com/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "MakeAPICall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://cloud.feedly.com/`. For example: `/v3/subscriptions`.",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"https://cloud.feedly.com/{{parameters.url}}\",\n    \"method\": \"{{parameters.method}}\",\n    \"qs\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n\t},\n    \"headers\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n\t},\n\t\"body\": \"{{parameters.body}}\",\n\t\"type\": \"text\",\n    \"response\": {\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n\t\t\t\"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"help\": \"Enter a path relative to `https://cloud.feedly.com/`. For example: `/v3/subscriptions`.\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"required\": true,\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ]\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n    },\n    {\n        \"name\": \"qs\",\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"body\",\n\t\t\"label\": \"Body\",\n\t\t\"type\": \"any\"\n\t},\n\t{\n\t\t\"name\": \"headers\",\n\t\t\"label\": \"Headers\",\n\t\t\"type\": \"collection\"\n\t},\n\t{\n\t\t\"name\": \"statusCode\",\n\t\t\"label\": \"Status code\",\n\t\t\"type\": \"number\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getCategories": {
+      "id": 29173,
+      "api": {
+        "url": "/categories",
+        "method": "GET",
+        "response": {
+          "output": "{{item}}",
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "getCategories",
+      "epoch": null,
+      "flags": {},
+      "label": "List Categories",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 9,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/categories\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": \"{{item}}\",\n\t\t\"iterate\": \"{{body}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "label",
+          "type": "text",
+          "label": "Label"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "label": "Description"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "description": "Gets categories of feeds.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"ID\"\n    },\n    {\n        \"name\": \"label\",\n        \"type\": \"text\",\n        \"label\": \"Label\"\n    },\n    {\n        \"name\": \"description\",\n        \"type\": \"text\",\n        \"label\": \"Description\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "searchEntries": {
+      "id": 29174,
+      "api": {
+        "qs": {
+          "count": "{{parameters.limit}}",
+          "query": "{{constructQuery(parameters.advancedSearch, parameters.advancedSearch.andOrAll, parameters.query, parameters.not)}}",
+          "fields": "{{if(parameters.fields.length == 3, 'all', join(parameters.fields, ' '))}}",
+          "embedded": "{{parameters.media}}",
+          "streamId": "{{parameters.streamId}}",
+          "newerThan": "{{parameters.newerThan}}"
+        },
+        "url": "/search/contents",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": {
+            "id": "{{item.id}}",
+            "href": "{{item.alternate[1].href}}",
+            "feeds": "{{item.categories}}",
+            "title": "{{item.title}}",
+            "author": "{{item.author}}",
+            "source": {
+              "url": "{{item.origin.htmlUrl}}",
+              "title": "{{item.origin.title}}",
+              "streamId": "{{item.origin.streamId}}"
+            },
+            "visual": "{{item.visual}}",
+            "content": "{{item.content}}",
+            "created": "{{parseDate(item.crawled/1000, X)}}",
+            "summary": "{{item.summary}}",
+            "updated": "{{parseDate(item.recrawled/1000, X)}}",
+            "keywords": "{{item.keywords}}",
+            "canonical": "{{item.canonical}}",
+            "enclosure": "{{item.enclosure}}",
+            "thumbnail": "{{item.thumbnail}}",
+            "engagement": "{{item.engagement}}",
+            "engagementRate": "{{item.engagementRate}}"
+          },
+          "iterate": "{{body.items}}"
+        }
+      },
+      "rev": 5,
+      "crud": "read",
+      "name": "searchEntries",
+      "epoch": null,
+      "flags": {},
+      "label": "Search for Articles",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Select the source to search in. Can be a category, a feed or a board.",
+          "name": "streamType",
+          "type": "select",
+          "label": "Choose where you want to search",
+          "default": "category",
+          "options": [
+            {
+              "label": "In categories",
+              "value": "category",
+              "nested": [
+                {
+                  "name": "streamId",
+                  "type": "select",
+                  "label": "Category of feeds",
+                  "options": "rpc://app%23feedly@1/RpcCategory",
+                  "editable": {
+                    "help": "Enter the category ID",
+                    "enabled": true
+                  },
+                  "required": true
+                }
+              ]
+            },
+            {
+              "label": "In feeds",
+              "value": "feed",
+              "nested": [
+                {
+                  "rpc": {
+                    "url": "rpc://app%23feedly@1/RpcFeed",
+                    "label": "Choose a feed",
+                    "parameters": [
+                      {
+                        "name": "query",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "name": "streamId",
+                  "type": "text",
+                  "label": "Feed",
+                  "editable": {
+                    "help": "Enter the feed ID",
+                    "enabled": true
+                  },
+                  "required": true
+                }
+              ]
+            },
+            {
+              "label": "In boards",
+              "value": "board",
+              "nested": [
+                {
+                  "name": "streamId",
+                  "type": "select",
+                  "label": "Board",
+                  "options": "rpc://app%23feedly@1/BoardList",
+                  "editable": {
+                    "help": "Enter the board ID",
+                    "enabled": true
+                  },
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "required": true
+        },
+        {
+          "name": "advancedSearch",
+          "type": "select",
+          "label": "Advanced search",
+          "default": false,
+          "options": [
+            {
+              "label": "Yes",
+              "value": true,
+              "nested": [
+                {
+                  "name": "andOrAll",
+                  "type": "select",
+                  "label": "Limit search for",
+                  "default": "or",
+                  "options": [
+                    {
+                      "label": "All of the followng words",
+                      "value": "and"
+                    },
+                    {
+                      "label": "Any of the followng words",
+                      "value": "or"
+                    },
+                    {
+                      "label": "The exact following phrase",
+                      "value": "exact"
+                    }
+                  ]
+                },
+                {
+                  "help": "Keywords or a phrase to be searched for. Must be words with letters, numbers, dashes(-) or underscores(_) separated by spaces.",
+                  "name": "query",
+                  "type": "text",
+                  "label": "Search for",
+                  "required": true,
+                  "validate": {
+                    "pattern": "^[\\w\\pL-]+(?: [\\w\\pL-]+)*$"
+                  }
+                },
+                {
+                  "help": "Keywords not to be searched for. Must be words with letters, numbers, dashes(-) or underscores(_) separated by spaces.",
+                  "name": "not",
+                  "type": "text",
+                  "label": "And none of these words",
+                  "required": true,
+                  "validate": {
+                    "pattern": "^[\\w\\pL-]+(?: [\\w\\pL-]+)*$"
+                  }
+                }
+              ]
+            },
+            {
+              "label": "No",
+              "value": false,
+              "nested": [
+                {
+                  "name": "query",
+                  "type": "text",
+                  "label": "Search for"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "fields",
+          "type": "select",
+          "label": "In fields",
+          "options": [
+            {
+              "label": "Title",
+              "value": "title"
+            },
+            {
+              "label": "Author",
+              "value": "author"
+            },
+            {
+              "label": "Keywords",
+              "value": "keywords"
+            }
+          ],
+          "multiple": true
+        },
+        {
+          "name": "media",
+          "type": "select",
+          "label": "Contains media",
+          "options": [
+            {
+              "label": "Audio",
+              "value": "audio"
+            },
+            {
+              "label": "Video",
+              "value": "video"
+            },
+            {
+              "label": "Document",
+              "value": "doc"
+            },
+            {
+              "label": "At least one of above",
+              "value": "any"
+            }
+          ]
+        },
+        {
+          "help": "A unix timestamp.",
+          "name": "newerThan",
+          "type": "text",
+          "label": "Newer than"
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 20,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"qs\": {\n\t\t\"count\": \"{{parameters.limit}}\",\n\t\t\"query\": \"{{constructQuery(parameters.advancedSearch, parameters.advancedSearch.andOrAll, parameters.query, parameters.not)}}\",\n\t\t\"fields\": \"{{if(parameters.fields.length == 3, 'all', join(parameters.fields, ' '))}}\",\n\t\t\"embedded\": \"{{parameters.media}}\",\n\t\t\"streamId\": \"{{parameters.streamId}}\",\n\t\t//\"newerThan\": \"{{if(parameters.newerThan, dateToUnix(parameters.newerThan)*1000, null)}}\",\n\t\t\"newerThan\": \"{{parameters.newerThan}}\"\n\t},\n\t\"url\": \"/search/contents\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\"output\": {\n\t\t\t\"id\": \"{{item.id}}\",\n\t\t\t\"href\": \"{{item.alternate[1].href}}\",\n\t\t\t\"feeds\": \"{{item.categories}}\",\n\t\t\t\"title\": \"{{item.title}}\",\n\t\t\t\"author\": \"{{item.author}}\",\n\t\t\t\"source\": {\n\t\t\t\t\"url\": \"{{item.origin.htmlUrl}}\",\n\t\t\t\t\"title\": \"{{item.origin.title}}\",\n\t\t\t\t\"streamId\": \"{{item.origin.streamId}}\"\n\t\t\t},\n\t\t\t\"visual\": \"{{item.visual}}\",\n\t\t\t\"content\": \"{{item.content}}\",\n\t\t\t\"created\": \"{{parseDate(item.crawled/1000, X)}}\",\n\t\t\t\"summary\": \"{{item.summary}}\",\n\t\t\t\"updated\": \"{{parseDate(item.recrawled/1000, X)}}\",\n\t\t\t\"keywords\": \"{{item.keywords}}\",\n\t\t\t\"canonical\": \"{{item.canonical}}\",\n\t\t\t\"enclosure\": \"{{item.enclosure}}\",\n\t\t\t\"thumbnail\": \"{{item.thumbnail}}\",\n\t\t\t\"engagement\": \"{{item.engagement}}\",\n\t\t\t\"engagementRate\": \"{{item.engagementRate}}\"\n\t\t},\n\t\t\"iterate\": \"{{body.items}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "name": "author",
+          "type": "text",
+          "label": "Author"
+        },
+        {
+          "name": "href",
+          "type": "url",
+          "label": "Article address"
+        },
+        {
+          "name": "source",
+          "spec": [
+            {
+              "name": "title",
+              "type": "text",
+              "label": "RSS source title"
+            },
+            {
+              "name": "url",
+              "type": "url",
+              "label": "RSS source url"
+            },
+            {
+              "name": "streamId",
+              "type": "text",
+              "label": "RSS source stream ID"
+            }
+          ],
+          "type": "collection",
+          "label": "RSS source"
+        },
+        {
+          "name": "created",
+          "type": "date",
+          "label": "Date created"
+        },
+        {
+          "name": "updated",
+          "type": "date",
+          "label": "Date updated"
+        },
+        {
+          "name": "keywords",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Keywords"
+        },
+        {
+          "name": "summary",
+          "type": "text",
+          "label": "Summary"
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "label": "Content (HTML)"
+        },
+        {
+          "name": "feeds",
+          "spec": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "ID"
+            },
+            {
+              "name": "label",
+              "type": "text",
+              "label": "Title"
+            }
+          ],
+          "type": "array",
+          "label": "Feeds"
+        },
+        {
+          "name": "engagement",
+          "type": "integer",
+          "label": "Engagement"
+        },
+        {
+          "name": "engagementRate",
+          "type": "number",
+          "label": "Engagement Rate"
+        },
+        {
+          "name": "thumbnail",
+          "spec": [
+            {
+              "name": "url",
+              "type": "url",
+              "label": "URL"
+            },
+            {
+              "name": "width",
+              "type": "number",
+              "label": "Width"
+            },
+            {
+              "name": "height",
+              "type": "number",
+              "label": "Height"
+            }
+          ],
+          "type": "array",
+          "label": "Thumbnail"
+        },
+        {
+          "name": "canonical",
+          "spec": [
+            {
+              "name": "href",
+              "type": "url",
+              "label": "Href"
+            },
+            {
+              "name": "type",
+              "type": "text",
+              "label": "Type"
+            }
+          ],
+          "type": "array",
+          "label": "Canonical"
+        },
+        {
+          "name": "enclosure",
+          "spec": [
+            {
+              "name": "href",
+              "type": "url",
+              "label": "Href"
+            },
+            {
+              "name": "width",
+              "type": "number",
+              "label": "Width"
+            },
+            {
+              "name": "height",
+              "type": "number",
+              "label": "Height"
+            }
+          ],
+          "type": "array",
+          "label": "Enclosure"
+        },
+        {
+          "name": "visual",
+          "spec": [
+            {
+              "name": "url",
+              "type": "url",
+              "label": "URL"
+            },
+            {
+              "name": "width",
+              "type": "number",
+              "label": "Width"
+            },
+            {
+              "name": "height",
+              "type": "number",
+              "label": "Height"
+            },
+            {
+              "name": "processor",
+              "type": "text",
+              "label": "Processor"
+            },
+            {
+              "name": "contentType",
+              "type": "text",
+              "label": "Content type"
+            }
+          ],
+          "type": "collection",
+          "label": "Visual"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "description": "Searches articles using criteria.",
+      "expectJsonc": "[\n\t{\n\t\t\"help\": \"Select the source to search in. Can be a category, a feed or a board.\",\n\t\t\"name\": \"streamType\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Choose where you want to search\",\n\t\t\"default\": \"category\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"In categories\",\n\t\t\t\t\"value\": \"category\",\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"streamId\",\n\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\"label\": \"Category of feeds\",\n\t\t\t\t\t\t\"options\": \"rpc://RpcCategory\",\n\t\t\t\t\t\t\"editable\": {\n\t\t\t\t\t\t\t\"help\": \"Enter the category ID\",\n\t\t\t\t\t\t\t\"enabled\": true\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"required\": true\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"In feeds\",\n\t\t\t\t\"value\": \"feed\",\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"rpc\": {\n\t\t\t\t\t\t\t\"url\": \"rpc://RpcFeed\",\n\t\t\t\t\t\t\t\"label\": \"Choose a feed\",\n\t\t\t\t\t\t\t\"parameters\": [\n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"name\": \"query\",\n\t\t\t\t\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t]\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"name\": \"streamId\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Feed\",\n\t\t\t\t\t\t\"editable\": {\n\t\t\t\t\t\t\t\"help\": \"Enter the feed ID\",\n\t\t\t\t\t\t\t\"enabled\": true\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"required\": true\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"In boards\",\n\t\t\t\t\"value\": \"board\",\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"streamId\",\n\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\"label\": \"Board\",\n\t\t\t\t\t\t\"options\": \"rpc://BoardList\",\n\t\t\t\t\t\t\"editable\": {\n\t\t\t\t\t\t\t\"help\": \"Enter the board ID\",\n\t\t\t\t\t\t\t\"enabled\": true\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"required\": true\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"advancedSearch\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Advanced search\",\n\t\t\"default\": false,\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Yes\",\n\t\t\t\t\"value\": true,\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"andOrAll\",\n\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\"label\": \"Limit search for\",\n\t\t\t\t\t\t\"default\": \"or\",\n\t\t\t\t\t\t\"options\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"label\": \"All of the followng words\",\n\t\t\t\t\t\t\t\t\"value\": \"and\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"label\": \"Any of the followng words\",\n\t\t\t\t\t\t\t\t\"value\": \"or\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"label\": \"The exact following phrase\",\n\t\t\t\t\t\t\t\t\"value\": \"exact\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"help\": \"Keywords or a phrase to be searched for. Must be words with letters, numbers, dashes(-) or underscores(_) separated by spaces.\",\n\t\t\t\t\t\t\"name\": \"query\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Search for\",\n\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\"validate\": {\n\t\t\t\t\t\t\t\"pattern\": \"^[\\\\w\\\\pL-]+(?: [\\\\w\\\\pL-]+)*$\"\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"help\": \"Keywords not to be searched for. Must be words with letters, numbers, dashes(-) or underscores(_) separated by spaces.\",\n\t\t\t\t\t\t\"name\": \"not\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"And none of these words\",\n\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\"validate\": {\n\t\t\t\t\t\t\t\"pattern\": \"^[\\\\w\\\\pL-]+(?: [\\\\w\\\\pL-]+)*$\"\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"No\",\n\t\t\t\t\"value\": false,\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"query\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Search for\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"fields\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"In fields\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Title\",\n\t\t\t\t\"value\": \"title\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Author\",\n\t\t\t\t\"value\": \"author\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Keywords\",\n\t\t\t\t\"value\": \"keywords\"\n\t\t\t}\n\t\t],\n\t\t\"multiple\": true\n\t},\n\t{\n\t\t\"name\": \"media\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Contains media\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Audio\",\n\t\t\t\t\"value\": \"audio\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Video\",\n\t\t\t\t\"value\": \"video\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Document\",\n\t\t\t\t\"value\": \"doc\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"At least one of above\",\n\t\t\t\t\"value\": \"any\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"newerThan\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Newer than\",\n\t\t\"help\": \"A unix timestamp.\"\n\t},\n\t{\n\t\t\"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Limit\",\n\t\t\"default\": 20,\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"ID\"\n\t},\n\t{\n\t\t\"name\": \"title\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Title\"\n\t},\n\t{\n\t\t\"name\": \"author\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Author\"\n\t},\n\t{\n\t\t\"name\": \"href\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Article address\"\n\t},\n\t{\n\t\t\"name\": \"source\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"title\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"RSS source title\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"url\",\n\t\t\t\t\"type\": \"url\",\n\t\t\t\t\"label\": \"RSS source url\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"streamId\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"RSS source stream ID\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"collection\",\n\t\t\"label\": \"RSS source\"\n\t},\n\t{\n\t\t\"name\": \"created\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Date created\"\n\t},\n\t{\n\t\t\"name\": \"updated\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Date updated\"\n\t},\n\t{\n\t\t\"name\": \"keywords\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"text\"\n\t\t},\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Keywords\"\n\t},\n\t{\n\t\t\"name\": \"summary\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Summary\"\n\t},\n\t{\n\t\t\"name\": \"content\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Content (HTML)\"\n\t},\n\t{\n\t\t\"name\": \"feeds\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"label\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Title\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Feeds\"\n\t},\n\t{\n\t\t\"name\": \"engagement\",\n\t\t\"type\": \"integer\",\n\t\t\"label\": \"Engagement\"\n\t},\n\t{\n\t\t\"name\": \"engagementRate\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Engagement Rate\"\n\t},\n\t{\n\t\t\"name\": \"thumbnail\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"url\",\n\t\t\t\t\"type\": \"url\",\n\t\t\t\t\"label\": \"URL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"width\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Width\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"height\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Height\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Thumbnail\"\n\t},\n\t{\n\t\t\"name\": \"canonical\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"href\",\n\t\t\t\t\"type\": \"url\",\n\t\t\t\t\"label\": \"Href\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"type\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Type\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Canonical\"\n\t},\n\t{\n\t\t\"name\": \"enclosure\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"href\",\n\t\t\t\t\"type\": \"url\",\n\t\t\t\t\"label\": \"Href\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"width\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Width\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"height\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Height\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Enclosure\"\n\t},\n\t{\n\t\t\"name\": \"visual\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"url\",\n\t\t\t\t\"type\": \"url\",\n\t\t\t\t\"label\": \"URL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"width\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Width\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"height\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Height\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"processor\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Processor\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"contentType\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Content type\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"collection\",\n\t\t\"label\": \"Visual\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "subcribeToFeed": {
+      "id": 29175,
+      "api": {
+        "url": "/subscriptions",
+        "body": {
+          "id": "{{ifempty(parameters.feedId, 'feed/' + parameters.feedUrl)}}",
+          "title": "{{parameters.title}}",
+          "categories": "{{categoryArrayToObjectArray(parameters.categoryIds)}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{body[1]}}"
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "subcribeToFeed",
+      "epoch": null,
+      "flags": {},
+      "label": "Subscribe a Feed",
+      "scope": [],
+      "expect": [
+        {
+          "name": "type",
+          "type": "select",
+          "label": "Indentify a source by its ID, or URL",
+          "default": "feedId",
+          "options": [
+            {
+              "label": "ID",
+              "value": "feedId",
+              "nested": [
+                {
+                  "name": "feedId",
+                  "type": "text",
+                  "label": "ID",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "label": "URL",
+              "value": "url",
+              "nested": [
+                {
+                  "name": "feedUrl",
+                  "type": "url",
+                  "label": "URL",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "Enter the title. If omitted, the source title in Feedly will be used.",
+          "name": "title",
+          "type": "text",
+          "label": "Title",
+          "required": false
+        },
+        {
+          "name": "categoryIds",
+          "type": "select",
+          "label": "Categories of feeds",
+          "options": "rpc://app%23feedly@1/RpcCategory",
+          "multiple": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/subscriptions\",\n\t\"body\": {\n\t\t\"id\": \"{{ifempty(parameters.feedId, 'feed/' + parameters.feedUrl)}}\",\n\t\t\"title\": \"{{parameters.title}}\",\n\t\t\"categories\": \"{{categoryArrayToObjectArray(parameters.categoryIds)}}\"\n\t},\n\t\"method\": \"POST\",\n\t\"response\": {\n\t\t\"output\": \"{{body[1]}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "name": "website",
+          "type": "url",
+          "label": "Website"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "description": "Subscribes a feed to categories. If title is not present, the feed title will be used. If categories is missing, the feed will automatically be added to the uncategorized category.",
+      "expectJsonc": "[\n    {\n        \"name\": \"type\",\n        \"type\": \"select\",\n        \"label\": \"Indentify a source by its ID, or URL\",\n        \"default\": \"feedId\",\n        \"options\": [\n            {\n                \"label\": \"ID\",\n                \"value\": \"feedId\",\n                \"nested\": [\n                    {\n                        \"name\": \"feedId\",\n                        \"type\": \"text\",\n                        \"label\": \"ID\",\n                        \"required\": true\n                    }\n                ]\n            },\n            {\n                \"label\": \"URL\",\n                \"value\": \"url\",\n                \"nested\": [\n                    {\n                        \"name\": \"feedUrl\",\n                        \"type\": \"url\",\n                        \"label\": \"URL\",\n                        \"required\": true\n                    }\n                ]\n            }\n        ],\n        \"required\": true\n    },\n    {\n        \"help\": \"Enter the title. If omitted, the source title in Feedly will be used.\",\n        \"name\": \"title\",\n        \"type\": \"text\",\n        \"label\": \"Title\",\n        \"required\": false\n    },\n    {\n        \"name\": \"categoryIds\",\n        \"type\": \"select\",\n        \"label\": \"Categories of feeds\",\n        \"options\": \"rpc://app%23feedly@1/RpcCategory\",\n        \"multiple\": true,\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"ID\"\n    },\n    {\n        \"name\": \"title\",\n        \"type\": \"text\",\n        \"label\": \"Title\"\n    },\n    {\n        \"name\": \"website\",\n        \"type\": \"url\",\n        \"label\": \"Website\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "NewPersonalNote": {
+      "id": 29176,
+      "api": {},
+      "rev": 3,
+      "crud": null,
+      "name": "NewPersonalNote",
+      "epoch": null,
+      "flags": {},
+      "label": "New Note",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n}",
+      "approved": false,
+      "hookName": "feedly3",
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Note ID"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Article Title"
+        },
+        {
+          "name": "author",
+          "type": "text",
+          "label": "Article Author"
+        },
+        {
+          "name": "url",
+          "type": "url",
+          "label": "Article URL"
+        },
+        {
+          "name": "feedlyUrl",
+          "type": "url",
+          "label": "Article URL in Feedly"
+        },
+        {
+          "name": "publishedTimestamp",
+          "type": "timestamp",
+          "label": "Article Publication Timestamp"
+        },
+        {
+          "name": "annotationTimestamp",
+          "type": "timestamp",
+          "label": "Note Timestamp"
+        },
+        {
+          "name": "visualUrl",
+          "type": "url",
+          "label": "Article Cover Image URL"
+        },
+        {
+          "name": "comment",
+          "type": "text",
+          "label": "Note"
+        },
+        {
+          "name": "addedBy",
+          "type": "text",
+          "label": "Note Author"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "This trigger fires when you add a note to a Feedly article.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Note ID\"\n\t},\n\t{\n\t\t\"name\": \"title\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article Title\"\n\t},\n\t{\n\t\t\"name\": \"author\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article Author\"\n\t},\n\t{\n\t\t\"name\": \"url\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Article URL\"\n\t},\n\t{\n\t\t\"name\": \"feedlyUrl\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Article URL in Feedly\"\n\t},\n\t{\n\t\t\"name\": \"publishedTimestamp\",\n\t\t\"type\": \"timestamp\",\n\t\t\"label\": \"Article Publication Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"annotationTimestamp\",\n\t\t\"type\": \"timestamp\",\n\t\t\"label\": \"Note Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"visualUrl\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Article Cover Image URL\"\n\t},\n\t{\n\t\t\"name\": \"comment\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Note\"\n\t},\n\t{\n\t\t\"name\": \"addedBy\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Note Author\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getSubscriptions": {
+      "id": 29177,
+      "api": {
+        "url": "/subscriptions",
+        "method": "GET",
+        "response": {
+          "output": "{{item}}",
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "getSubscriptions",
+      "epoch": null,
+      "flags": {},
+      "label": "List Subscriptions",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 9,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/subscriptions\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": \"{{item}}\",\n\t\t\"iterate\": \"{{body}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Source ID"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Source title"
+        },
+        {
+          "name": "website",
+          "type": "url",
+          "label": "Source website"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "description": "Gets all sources to which a user is currently subscribed.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"Source ID\"\n    },\n    {\n        \"name\": \"title\",\n        \"type\": \"text\",\n        \"label\": \"Source title\"\n    },\n    {\n        \"name\": \"website\",\n        \"type\": \"url\",\n        \"label\": \"Source website\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "NewPriorizedArticle": {
+      "id": 29178,
+      "api": {},
+      "rev": 3,
+      "crud": null,
+      "name": "NewPriorizedArticle",
+      "epoch": null,
+      "flags": {},
+      "label": "New Prioritized Article",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n}",
+      "approved": false,
+      "hookName": "feedly4",
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Article ID"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "name": "author",
+          "type": "text",
+          "label": "Author"
+        },
+        {
+          "name": "url",
+          "type": "url",
+          "label": "URL"
+        },
+        {
+          "name": "feedlyUrl",
+          "type": "url",
+          "label": "URL in Feedly"
+        },
+        {
+          "name": "contentHtml",
+          "type": "text",
+          "label": "Content (may contain HTML)"
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "label": "Content (no HTML)"
+        },
+        {
+          "name": "publishedTimestamp",
+          "type": "timestamp",
+          "label": "Publication Timestamp"
+        },
+        {
+          "name": "publishedDate",
+          "type": "date",
+          "label": "Publication Date"
+        },
+        {
+          "name": "visualUrl",
+          "type": "url",
+          "label": "Cover Image URL"
+        },
+        {
+          "name": "keywords",
+          "spec": {
+            "type": "text",
+            "label": "Keyword"
+          },
+          "type": "array",
+          "label": "Keywords"
+        },
+        {
+          "name": "engagement",
+          "type": "number",
+          "label": "Engagement (Popularity)"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "This trigger fires when an article is prioritized.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article ID\"\n\t},\n\t{\n\t\t\"name\": \"title\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Title\"\n\t},\n\t{\n\t\t\"name\": \"author\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Author\"\n\t},\n\t{\n\t\t\"name\": \"url\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"URL\"\n\t},\n\t{\n\t\t\"name\": \"feedlyUrl\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"URL in Feedly\"\n\t},\n\t{\n\t\t\"name\": \"contentHtml\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Content (may contain HTML)\"\n\t},\n\t{\n\t\t\"name\": \"content\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Content (no HTML)\"\n\t},\n\t{\n\t\t\"name\": \"publishedTimestamp\",\n\t\t\"type\": \"timestamp\",\n\t\t\"label\": \"Publication Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"publishedDate\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Publication Date\"\n\t},\n\t{\n\t\t\"name\": \"visualUrl\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Cover Image URL\"\n\t},\n\t{\n\t\t\"name\": \"keywords\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"text\",\n\t\t\t\"label\": \"Keyword\"\n\t\t},\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Keywords\"\n\t},\n\t{\n\t\t\"name\": \"engagement\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Engagement (Popularity)\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "NewPersonalHighlight": {
+      "id": 29179,
+      "api": {},
+      "rev": 3,
+      "crud": null,
+      "name": "NewPersonalHighlight",
+      "epoch": null,
+      "flags": {},
+      "label": "New Highlight",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n}",
+      "approved": false,
+      "hookName": "feedly2",
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Highlight ID"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Article Title"
+        },
+        {
+          "name": "author",
+          "type": "text",
+          "label": "Article Author"
+        },
+        {
+          "name": "url",
+          "type": "url",
+          "label": "Article URL"
+        },
+        {
+          "name": "feedlyUrl",
+          "type": "url",
+          "label": "Article URL in Feedly"
+        },
+        {
+          "name": "publishedTimestamp",
+          "type": "timestamp",
+          "label": "Article Publication Timestamp"
+        },
+        {
+          "name": "annotationTimestamp",
+          "type": "timestamp",
+          "label": "Highlight Timestamp"
+        },
+        {
+          "name": "visualUrl",
+          "type": "url",
+          "label": "Article Cover Image URL"
+        },
+        {
+          "name": "highlight",
+          "type": "text",
+          "label": "Highlighted Text"
+        },
+        {
+          "name": "addedBy",
+          "type": "text",
+          "label": "Highlight Author"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "This trigger fires when you highlight text in a Feedly article.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Highlight ID\"\n\t},\n\t{\n\t\t\"name\": \"title\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article Title\"\n\t},\n\t{\n\t\t\"name\": \"author\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article Author\"\n\t},\n\t{\n\t\t\"name\": \"url\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Article URL\"\n\t},\n\t{\n\t\t\"name\": \"feedlyUrl\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Article URL in Feedly\"\n\t},\n\t{\n\t\t\"name\": \"publishedTimestamp\",\n\t\t\"type\": \"timestamp\",\n\t\t\"label\": \"Article Publication Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"annotationTimestamp\",\n\t\t\"type\": \"timestamp\",\n\t\t\"label\": \"Highlight Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"visualUrl\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Article Cover Image URL\"\n\t},\n\t{\n\t\t\"name\": \"highlight\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Highlighted Text\"\n\t},\n\t{\n\t\t\"name\": \"addedBy\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Highlight Author\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "CreatePersonalArticle": {
+      "id": 29180,
+      "api": {
+        "url": "/integromat/actions",
+        "body": {
+          "url": "{{parameters.url}}",
+          "title": "{{parameters.title}}",
+          "action": "CreateArticle",
+          "author": "{{parameters.author}}",
+          "content": "{{parameters.content}}",
+          "resourceId": "{{parameters.resourceId}}"
+        },
+        "method": "POST",
+        "headers": {},
+        "response": {
+          "output": {
+            "id": "{{body.id}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "CreatePersonalArticle",
+      "epoch": null,
+      "flags": {},
+      "label": "Create an Article in a Board",
+      "scope": [],
+      "expect": [
+        {
+          "name": "url",
+          "type": "url",
+          "label": "Article URL",
+          "required": true
+        },
+        {
+          "name": "resourceId",
+          "type": "select",
+          "label": "Board",
+          "options": "rpc://app%23feedly@1/BoardList",
+          "required": true
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "label": "Article Content",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Article Title",
+          "required": true
+        },
+        {
+          "name": "author",
+          "type": "text",
+          "label": "Article Author",
+          "required": false
+        },
+        {
+          "name": "comment",
+          "type": "text",
+          "label": "Note",
+          "required": false
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/integromat/actions\",\n\t\"body\": {\n\t\t\"url\": \"{{parameters.url}}\",\n\t\t\"title\": \"{{parameters.title}}\",\n\t\t\"action\": \"CreateArticle\",\n\t\t\"author\": \"{{parameters.author}}\",\n\t\t\"content\": \"{{parameters.content}}\",\n\t\t\"resourceId\": \"{{parameters.resourceId}}\"\n\t},\n\t\"method\": \"POST\",\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"id\": \"{{body.id}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Article ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "description": "This action will create a new article in a Feedly board. It requires content, a URL, and a title.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"url\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Article URL\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"resourceId\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Board\",\n\t\t\"options\": \"rpc://BoardList\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"content\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article Content\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"title\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article Title\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"author\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article Author\",\n\t\t\"required\": false\n\t},\n\t{\n\t\t\"name\": \"comment\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Note\",\n\t\t\"required\": false\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article ID\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "AddEntryToPersonalBoard": {
+      "id": 29181,
+      "api": {
+        "url": "/integromat/actions",
+        "body": {
+          "url": "{{parameters.url}}",
+          "action": "AddArticleToBoard",
+          "resourceId": "{{parameters.resourceId}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": {
+            "id": "{{body.id}}"
+          }
+        }
+      },
+      "rev": 5,
+      "crud": null,
+      "name": "AddEntryToPersonalBoard",
+      "epoch": null,
+      "flags": {},
+      "label": "Add an Article to a Board",
+      "scope": [],
+      "expect": [
+        {
+          "name": "url",
+          "type": "url",
+          "label": "Article URL",
+          "required": true
+        },
+        {
+          "name": "resourceId",
+          "type": "select",
+          "label": "Board",
+          "options": "rpc://app%23feedly@1/BoardList",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/integromat/actions\",\n\t\"body\": {\n\t\t\"url\": \"{{parameters.url}}\",\n\t\t\"action\": \"AddArticleToBoard\",\n\t\t\"resourceId\": \"{{parameters.resourceId}}\"\n\t},\n\t\"method\": \"POST\",\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"id\": \"{{body.id}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Article ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "description": "This action will read content from a URL, and create a new article in a board.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"url\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Article URL\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"resourceId\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Board\",\n\t\t\"options\": \"rpc://BoardList\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article ID\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "AddSourceToPersonalFeed": {
+      "id": 29182,
+      "api": {
+        "url": "/integromat/actions",
+        "body": {
+          "url": "{{parameters.url}}",
+          "action": "AddSourceToFeed",
+          "resourceId": "{{parameters.resourceId}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": {
+            "id": "{{body.id}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "AddSourceToPersonalFeed",
+      "epoch": null,
+      "flags": {},
+      "label": "Add a Source to a Feed",
+      "scope": [],
+      "expect": [
+        {
+          "name": "url",
+          "type": "url",
+          "label": "Source URL",
+          "required": true
+        },
+        {
+          "name": "resourceId",
+          "type": "select",
+          "label": "Feed",
+          "options": "rpc://app%23feedly@1/FeedList",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/integromat/actions\",\n\t\"body\": {\n\t\t\"url\": \"{{parameters.url}}\",\n\t\t\"action\": \"AddSourceToFeed\",\n\t\t\"resourceId\": \"{{parameters.resourceId}}\"\n\t},\n\t\"method\": \"POST\",\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"id\": \"{{body.id}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Source ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "feedly",
+      "description": "This action will try to find a source from a URL, and add it to a personal feed.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"url\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Source URL\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"resourceId\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Feed\",\n\t\t\"options\": \"rpc://FeedList\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Source ID\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "NewArticleInPersonalBoard": {
+      "id": 29183,
+      "api": {},
+      "rev": 4,
+      "crud": null,
+      "name": "NewArticleInPersonalBoard",
+      "epoch": null,
+      "flags": {},
+      "label": "New Article In Board",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "feedly",
+      "samples": null,
+      "apiJsonc": "{\n}",
+      "approved": false,
+      "hookName": "feedly",
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Article ID"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Article Title"
+        },
+        {
+          "name": "author",
+          "type": "text",
+          "label": "Article Author"
+        },
+        {
+          "name": "url",
+          "type": "url",
+          "label": "Article URL"
+        },
+        {
+          "name": "feedlyUrl",
+          "type": "url",
+          "label": "Article URL in Feedly"
+        },
+        {
+          "name": "contentHtml",
+          "type": "text",
+          "label": "Article Content (may contain HTML)"
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "label": "Article Content (no HTML)"
+        },
+        {
+          "name": "publishedTimestamp",
+          "type": "timestamp",
+          "label": "Article Publication Timestamp"
+        },
+        {
+          "name": "visualUrl",
+          "type": "url",
+          "label": "Article Cover Image URL"
+        },
+        {
+          "name": "keywords",
+          "spec": {
+            "type": "text",
+            "label": "Keyword"
+          },
+          "type": "array",
+          "label": "Article Keywords"
+        },
+        {
+          "name": "engagement",
+          "type": "number",
+          "label": "Article Engagement (Popularity)"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "Activated when you add an article in a Feedly board.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article ID\"\n\t},\n\t{\n\t\t\"name\": \"title\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article Title\"\n\t},\n\t{\n\t\t\"name\": \"author\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article Author\"\n\t},\n\t{\n\t\t\"name\": \"url\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Article URL\"\n\t},\n\t{\n\t\t\"name\": \"feedlyUrl\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Article URL in Feedly\"\n\t},\n\t{\n\t\t\"name\": \"contentHtml\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article Content (may contain HTML)\"\n\t},\n\t{\n\t\t\"name\": \"content\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Article Content (no HTML)\"\n\t},\n\t{\n\t\t\"name\": \"publishedTimestamp\",\n\t\t\"type\": \"timestamp\",\n\t\t\"label\": \"Article Publication Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"visualUrl\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Article Cover Image URL\"\n\t},\n\t{\n\t\t\"name\": \"keywords\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"text\",\n\t\t\t\"label\": \"Keyword\"\n\t\t},\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Article Keywords\"\n\t},\n\t{\n\t\t\"name\": \"engagement\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Article Engagement (Popularity)\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "feedly": {
+      "api": {
+        "info": {
+          "log": {
+            "sanitize": [
+              "request.headers.authorization"
+            ]
+          },
+          "url": "https://cloud.feedly.com/v3/profile",
+          "headers": {
+            "authorization": "Bearer {{connection.accessToken}}"
+          },
+          "response": {
+            "uid": "{{body.id}}",
+            "error": "[{{statusCode}}] {{body.errorMessage || body}}",
+            "metadata": {
+              "type": "text",
+              "value": "{{body.email}}"
+            }
+          }
+        },
+        "token": {
+          "log": {
+            "sanitize": [
+              "request.body.code",
+              "request.body.client_secret",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://cloud.feedly.com/v3/auth/token",
+          "body": {
+            "code": "{{temp.code}}",
+            "client_id": "{{ifempty(data.clientId, common.clientId)}}",
+            "grant_type": "authorization_code",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "client_secret": "{{ifempty(data.clientSecret, common.clientSecret)}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}"
+            }
+          }
+        },
+        "refresh": {
+          "log": {
+            "sanitize": [
+              "request.body.client_secret",
+              "request.body.refresh_token",
+              "response.body.access_token"
+            ]
+          },
+          "url": "https://cloud.feedly.com/v3/auth/token",
+          "body": {
+            "client_id": "{{common.clientId}}",
+            "grant_type": "refresh_token",
+            "client_secret": "{{common.clientSecret}}",
+            "refresh_token": "{{data.refreshToken}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}"
+            }
+          },
+          "condition": "{{data.expires < addMinutes(now, 1)}}"
+        },
+        "authorize": {
+          "qs": {
+            "scope": "{{join(oauth.scope, ',')}}",
+            "client_id": "{{common.clientId}}",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "response_type": "code"
+          },
+          "url": "https://cloud.feedly.com/v3/auth/auth",
+          "response": {
+            "temp": {
+              "code": "{{query.code}}"
+            }
+          }
+        },
+        "invalidate": {
+          "log": {
+            "sanitize": [
+              "request.headers.authorization"
+            ]
+          },
+          "url": "https://cloud.feedly.com/v3/auth/logout",
+          "method": "POST",
+          "headers": {
+            "authorization": "Bearer {{connection.accessToken}}"
+          }
+        }
+      },
+      "rev": 11,
+      "name": "feedly",
+      "type": "oauth",
+      "label": "Feedly",
+      "scope": [
+        "https://cloud.feedly.com/subscriptions"
+      ],
+      "scopes": {
+        "https://cloud.feedly.com/subscriptions": "Default scope"
+      },
+      "aliasTo": null,
+      "appName": "feedly",
+      "install": {
+        "common": {
+          "clientId": "{{parameters.clientId}}",
+          "clientSecret": "{{parameters.clientSecret}}"
+        }
+      },
+      "apiJsonc": "{\n\t\"info\": {\n\t\t\"url\": \"https://cloud.feedly.com/v3/profile\",\n\t\t\"headers\": {\n\t\t\t\"authorization\": \"Bearer {{connection.accessToken}}\"\n\t\t},\n\t\t\"response\": {\n\t\t\t\"uid\": \"{{body.id}}\",\n\t\t\t\"error\": \"[{{statusCode}}] {{body.errorMessage || body}}\",\n\t\t\t\"metadata\": {\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"value\": \"{{body.email}}\"\n\t\t\t}\n\t\t},\n\t\t\"log\": {\n\t\t\t\"sanitize\": [\"request.headers.authorization\"]\n\t\t}\n\t},\n\t\"token\": {\n\t\t\"url\": \"https://cloud.feedly.com/v3/auth/token\",\n\t\t\"body\": {\n\t\t\t\"code\": \"{{temp.code}}\",\n\t\t\t\"client_id\": \"{{ifempty(data.clientId, common.clientId)}}\",\n\t\t\t\"grant_type\": \"authorization_code\",\n\t\t\t\"redirect_uri\": \"{{oauth.redirectUri}}\",\n\t\t\t\"client_secret\": \"{{ifempty(data.clientSecret, common.clientSecret)}}\"\n\t\t},\n\t\t\"type\": \"urlencoded\",\n\t\t\"method\": \"POST\",\n\t\t\"response\": {\n\t\t\t\"data\": {\n\t\t\t\t\"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n\t\t\t\t\"accessToken\": \"{{body.access_token}}\",\n\t\t\t\t\"refreshToken\": \"{{body.refresh_token}}\"\n\t\t\t}\n\t\t},\n\t\t\"log\": {\n\t\t\t\"sanitize\": [\"request.body.code\", \"request.body.client_secret\", \"response.body.access_token\", \"response.body.refresh_token\"]\n\t\t}\n\t},\n\t\"refresh\": {\n\t\t\"url\": \"https://cloud.feedly.com/v3/auth/token\",\n\t\t\"body\": {\n\t\t\t\"client_id\": \"{{common.clientId}}\",\n\t\t\t\"grant_type\": \"refresh_token\",\n\t\t\t\"client_secret\": \"{{common.clientSecret}}\",\n\t\t\t\"refresh_token\": \"{{data.refreshToken}}\"\n\t\t},\n\t\t\"type\": \"urlencoded\",\n\t\t\"method\": \"POST\",\n\t\t\"response\": {\n\t\t\t\"data\": {\n\t\t\t\t\"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n\t\t\t\t\"accessToken\": \"{{body.access_token}}\"\n\t\t\t}\n\t\t},\n\t\t\"condition\": \"{{data.expires < addMinutes(now, 1)}}\",\n\t\t\"log\": {\n\t\t\t\"sanitize\": [\"request.body.client_secret\", \"request.body.refresh_token\", \"response.body.access_token\"]\n\t\t}\n\t},\n\t\"authorize\": {\n\t\t\"qs\": {\n\t\t\t\"scope\": \"{{join(oauth.scope, ',')}}\",\n\t\t\t\"client_id\": \"{{common.clientId}}\",\n\t\t\t\"redirect_uri\": \"{{oauth.redirectUri}}\",\n\t\t\t\"response_type\": \"code\"\n\t\t},\n\t\t\"url\": \"https://cloud.feedly.com/v3/auth/auth\",\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"code\": \"{{query.code}}\"\n\t\t\t}\n\t\t}\n\t},\n\t\"invalidate\": {\n\t\t\"url\": \"https://cloud.feedly.com/v3/auth/logout\",\n\t\t\"method\": \"POST\",\n\t\t\"headers\": {\n\t\t\t\"authorization\": \"Bearer {{connection.accessToken}}\"\n\t\t},\n\t\t\"log\": {\n\t\t\t\"sanitize\": [\"request.headers.authorization\"]\n\t\t}\n\t}\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "advanced": true,
+          "editable": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "password",
+          "label": "Client Secret",
+          "advanced": true,
+          "editable": true
+        }
+      ],
+      "scopeJsonc": "[\n    \"https://cloud.feedly.com/subscriptions\"\n]",
+      "installSpec": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "required": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "required": true
+        }
+      ],
+      "scopesJsonc": "{\n    \"https://cloud.feedly.com/subscriptions\": \"Default scope\"\n}",
+      "installJsonc": "{\n    \"common\": {\n        \"clientId\": \"{{parameters.clientId}}\",\n        \"clientSecret\": \"{{parameters.clientSecret}}\"\n    }\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"editable\": true,\n        \"advanced\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"password\",\n        \"label\": \"Client Secret\",\n        \"editable\": true,\n        \"advanced\": true\n    }\n]",
+      "installSpecJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"required\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"text\",\n        \"label\": \"Client Secret\",\n        \"required\": true\n    }\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    },
+    "feedly2": {
+      "api": {},
+      "rev": 4,
+      "name": "feedly2",
+      "type": "basic",
+      "label": "Feedly DOESN'T USED",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "feedly",
+      "install": {},
+      "apiJsonc": "{}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "accessToken",
+          "type": "text",
+          "label": "Access Token",
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "installSpec": [],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"accessToken\",\n        \"type\": \"text\",\n        \"label\": \"Access Token\",\n        \"required\": true\n    }\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n\t\"baseUrl\": \"https://cloud.feedly.com/v3\",\n\t\"headers\": {\n\t\t\"authorization\": \"{{connection.accessToken}}\"\n\t},\n\t\"response\": {\n\t\t\"error\": \"[{{statusCode}}] {{body.errorMessage || body}}\"\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.authorization\"]\n\t}\n}",
+  "countries": null,
+  "_functions": {
+    "dateToUnix": {
+      "rev": 3,
+      "code": "function dateToUnix(date) {\n\treturn date.getTime(date);\n}",
+      "name": "dateToUnix",
+      "test": null,
+      "appName": "feedly",
+      "arguments": "(date)",
+      "appVersion": 1
+    },
+    "constructQuery": {
+      "rev": 3,
+      "code": "function constructQuery(advancedSearch, andOrAll, query, not) {\n\tif (advancedSearch) {\n\t\tswitch (andOrAll) {\n\t\t\tcase \"and\":\n\t\t\t\tquery = query.replace(\"/ +/\", \" AND \");\n\t\t\t\tbreak;\n\t\t\tcase \"or\":\n\t\t\t\tquery = query.replace(\"/ +/\", \" OR \");\n\t\t\t\tbreak;\n\t\t\tcase \"all\":\n\t\t\t\tquery = \"\\\"\" + query + \"\\\"\";\n\t\t\t\tbreak;\n\t\t}\n\t\tif (!(typeof not === \"undefined\" || not === \"\" || not === null)) {\n\t\t\tvar words = not.split(\"/ +/\");\n\t\t\twords.forEach(function(val, index, arr){\n\t\t\t\tquery += \" NOT \" + val;\n\t\t\t});\n\t\t}\n\t}\n\treturn query;\n}",
+      "name": "constructQuery",
+      "test": null,
+      "appName": "feedly",
+      "arguments": "(advancedSearch, andOrAll, query, not)",
+      "appVersion": 1
+    },
+    "getWebhookBody": {
+      "rev": 3,
+      "code": "function getWebhookBody(body) {\n\tif (!body) {\n\t\treturn body\n\t}\n\tif (body.publishedDate) {\n\t\tdelete body.publishedDate\n\t\tif (body.publishedTimestamp) {\n\t\t\tbody.publishedDate = new Date(parseInt(body.publishedTimestamp, 10))\n\t\t}\n\t}\n\treturn body\n}",
+      "name": "getWebhookBody",
+      "test": null,
+      "appName": "feedly",
+      "arguments": "(body)",
+      "appVersion": 1
+    },
+    "tagContructURL": {
+      "rev": 3,
+      "code": "function tagContructURL(tags) {\n\tvar ret = \"\";\n\tif (Array.isArray(tags)) {\n\t\ttags.forEach(function(tag) {\n\t\t\tret += tag + \",\";\n\t\t});\n\t\tret = ret.slice(0, -1);\n\t} else ret = tags;\n\treturn encodeURI(ret);\n}",
+      "name": "tagContructURL",
+      "test": null,
+      "appName": "feedly",
+      "arguments": "(tags)",
+      "appVersion": 1
+    },
+    "decrementAndUnder1000": {
+      "rev": 3,
+      "code": "function decrementAndUnder1000(num) {\n\treturn (num - 1) / 1000;\n}",
+      "name": "decrementAndUnder1000",
+      "test": null,
+      "appName": "feedly",
+      "arguments": "(num)",
+      "appVersion": 1
+    },
+    "categoryArrayToObjectArray": {
+      "rev": 3,
+      "code": "function categoryArrayToObjectArray(catogiryIds) {\n\tvar ret = [];\n\tcatogiryIds.forEach(function(id){\n\t\tret.push({\n\t\t\tid: id\n\t\t});\n\t});\n\treturn ret;\n}",
+      "name": "categoryArrayToObjectArray",
+      "test": null,
+      "appName": "feedly",
+      "arguments": "(catogiryIds)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-05-09T14:53:08.760341+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": null,
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "45c9672d7803550d30d86a0bdb6e02e8",
+  "versionFull": "1.3.5",
+  "compiledName": "feedly",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 1,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

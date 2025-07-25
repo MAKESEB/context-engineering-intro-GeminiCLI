@@ -1,0 +1,775 @@
+{
+  "rev": 15,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.access-token",
+        "request.qs.access_token"
+      ]
+    },
+    "baseUrl": "https://business-api.tiktok.com/open_api/v1.3",
+    "headers": {
+      "access-token": "{{connection.accessToken}}"
+    },
+    "response": {
+      "error": {
+        "429": {
+          "type": "RateLimitError",
+          "message": "{{body.code || statusCode}} {{body.message || 'Too many requests.'}}"
+        },
+        "message": "[Code: {{body.code}}] {{body.message}}"
+      },
+      "valid": "{{body.code === 0}}"
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "tiktok-lead-forms",
+  "_rpcs": {
+    "getAdAccounts": {
+      "api": {
+        "qs": {
+          "app_id": "{{connection.appId}}",
+          "secret": "{{connection.secret}}"
+        },
+        "log": {
+          "sanitize": [
+            "request.qs.secret"
+          ]
+        },
+        "url": "/oauth2/advertiser/get/",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.advertiser_name}}",
+            "value": "{{item.advertiser_id}}"
+          },
+          "iterate": "{{body.data.list}}"
+        }
+      },
+      "rev": 2,
+      "name": "getAdAccounts",
+      "label": "Get Ad Accounts",
+      "appName": "tiktok-lead-forms",
+      "apiJsonc": "{\n\t\"url\": \"/oauth2/advertiser/get/\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"app_id\": \"{{connection.appId}}\",\n\t\t\"secret\": \"{{connection.secret}}\"\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.data.list}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.advertiser_name}}\",\n\t\t\t\"value\": \"{{item.advertiser_id}}\"\n\t\t}\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\n\t\t\t\"request.qs.secret\"\n\t\t]\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "tiktok-lead-forms",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listLeadForms": {
+      "api": {
+        "qs": {
+          "page_size": 100,
+          "library_id": "{{parameters.libraryId}}",
+          "advertiser_id": "{{parameters.advertiserId}}"
+        },
+        "url": "/page/get/",
+        "method": "GET",
+        "response": {
+          "limit": 500,
+          "output": {
+            "label": "{{item.title}} ({{item.status}})",
+            "value": "{{item.page_id}}"
+          },
+          "iterate": "{{body.data.list}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          }
+        }
+      },
+      "rev": 3,
+      "name": "listLeadForms",
+      "label": "List Lead Forms",
+      "appName": "tiktok-lead-forms",
+      "apiJsonc": "{\n\t\"url\": \"/page/get/\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"advertiser_id\": \"{{parameters.advertiserId}}\",\n\t\t\"library_id\": \"{{parameters.libraryId}}\",\n\t\t\"page_size\": 100\n\t},\n\t\"response\": {\n\t\t\"limit\": 500,\n\t\t\"iterate\": \"{{body.data.list}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.title}} ({{item.status}})\",\n\t\t\t\"value\": \"{{item.page_id}}\"\n\t\t}\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "libraryId",
+          "type": "text",
+          "label": "Form Library ID"
+        },
+        {
+          "name": "advertiserId",
+          "type": "text",
+          "label": "Ad Account ID"
+        }
+      ],
+      "accountName": "tiktok-lead-forms",
+      "altAccountName": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"libraryId\",\n\t\t\"label\": \"Form Library ID\",\n\t\t\"type\": \"text\"\n\t},\n\t{\n\t\t\"name\": \"advertiserId\",\n\t\t\"label\": \"Ad Account ID\",\n\t\t\"type\": \"text\"\n\t}\n]"
+    },
+    "interfaceWatchLeads": {
+      "api": {
+        "response": {
+          "valid": true,
+          "output": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Lead ID"
+            },
+            {
+              "name": "page_id",
+              "type": "text",
+              "label": "Form Page ID"
+            },
+            {
+              "name": "page_name",
+              "type": "text",
+              "label": "Form Name"
+            },
+            {
+              "name": "campaign_id",
+              "type": "text",
+              "label": "Campaign ID"
+            },
+            {
+              "name": "campaign_name",
+              "type": "text",
+              "label": "Campaign Name"
+            },
+            {
+              "name": "adgroup_id",
+              "type": "text",
+              "label": "Adgroup ID"
+            },
+            {
+              "name": "adgroup_name",
+              "type": "text",
+              "label": "Adgroup Name"
+            },
+            {
+              "name": "ad_id",
+              "type": "text",
+              "label": "Ad ID"
+            },
+            {
+              "name": "ad_name",
+              "type": "text",
+              "label": "Ad Name"
+            },
+            {
+              "name": "create_time",
+              "type": "number",
+              "label": "Create Time"
+            },
+            {
+              "name": "changes",
+              "spec": [
+                {
+                  "name": "field",
+                  "type": "text",
+                  "label": "Field"
+                },
+                {
+                  "name": "value",
+                  "type": "text",
+                  "label": "Value"
+                }
+              ],
+              "type": "array",
+              "label": "Answers"
+            }
+          ]
+        },
+        "condition": "{{!webhook.page_id}}"
+      },
+      "rev": 4,
+      "name": "interfaceWatchLeads",
+      "label": "Interface: Watch Leads",
+      "appName": "tiktok-lead-forms",
+      "apiJsonc": "{\n\t\"condition\": \"{{!webhook.page_id}}\",\n\t\"response\": {\n\t\t\"valid\": true,\n\t\t\"output\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Lead ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"page_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Form Page ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"page_name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Form Name\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"campaign_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Campaign ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"campaign_name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Campaign Name\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"adgroup_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Adgroup ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"adgroup_name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Adgroup Name\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"ad_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Ad ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"ad_name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Ad Name\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"create_time\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Create Time\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"changes\",\n\t\t\t\t\"label\": \"Answers\",\n\t\t\t\t\"type\": \"array\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"field\",\n\t\t\t\t\t\t\"label\": \"Field\",\n\t\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"value\",\n\t\t\t\t\t\t\"label\": \"Value\",\n\t\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": null,
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "interfaceWatchLeadsMappableAnswers": {
+      "api": {
+        "qs": {
+          "page_id": "{{webhook.page_id}}",
+          "advertiser_id": "{{webhook.advertiser_id}}"
+        },
+        "url": "/page/field/get/",
+        "method": "GET",
+        "response": {
+          "output": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Lead ID"
+            },
+            {
+              "name": "page_id",
+              "type": "text",
+              "label": "Form Page ID"
+            },
+            {
+              "name": "page_name",
+              "type": "text",
+              "label": "Form Name"
+            },
+            {
+              "name": "campaign_id",
+              "type": "text",
+              "label": "Campaign ID"
+            },
+            {
+              "name": "campaign_name",
+              "type": "text",
+              "label": "Campaign Name"
+            },
+            {
+              "name": "adgroup_id",
+              "type": "text",
+              "label": "Adgroup ID"
+            },
+            {
+              "name": "adgroup_name",
+              "type": "text",
+              "label": "Adgroup Name"
+            },
+            {
+              "name": "ad_id",
+              "type": "text",
+              "label": "Ad ID"
+            },
+            {
+              "name": "ad_name",
+              "type": "text",
+              "label": "Ad Name"
+            },
+            {
+              "name": "create_time",
+              "type": "number",
+              "label": "Create Time"
+            },
+            {
+              "name": "mappableAnswers",
+              "spec": "{{buildMappableAnswersInterface(body.data.fields)}}",
+              "type": "collection",
+              "label": "Mappable Answers"
+            }
+          ]
+        },
+        "condition": "{{webhook.page_id}}"
+      },
+      "rev": 2,
+      "name": "interfaceWatchLeadsMappableAnswers",
+      "label": "Interface: Watch Leads (mappable answers)",
+      "appName": "tiktok-lead-forms",
+      "apiJsonc": "{\n\t\"condition\": \"{{webhook.page_id}}\",\n\t\"url\": \"/page/field/get/\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"advertiser_id\": \"{{webhook.advertiser_id}}\",\n\t\t\"page_id\": \"{{webhook.page_id}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Lead ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"page_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Form Page ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"page_name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Form Name\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"campaign_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Campaign ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"campaign_name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Campaign Name\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"adgroup_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Adgroup ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"adgroup_name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Adgroup Name\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"ad_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Ad ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"ad_name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Ad Name\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"create_time\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Create Time\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"mappableAnswers\",\n\t\t\t\t\"label\": \"Mappable Answers\",\n\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\"spec\": \"{{buildMappableAnswersInterface(body.data.fields)}}\"\n\t\t\t}\n\t\t]\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "tiktok-lead-forms",
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {},
+  "label": "TikTok Lead Forms",
+  "theme": "#000000",
+  "_hooks": {
+    "tiktok-lead-forms": {
+      "api": {
+        "output": "{{parseNumericIDsToStr(toString(rawBody))}}"
+      },
+      "rev": 7,
+      "name": "tiktok-lead-forms",
+      "type": "web",
+      "flags": {},
+      "label": "New Lead",
+      "scope": [],
+      "attach": {
+        "log": {
+          "sanitize": [
+            "request.body.secret",
+            "request.headers.access-token",
+            "request.body.subscription_detail.access_token"
+          ]
+        },
+        "url": "/subscription/subscribe/",
+        "body": {
+          "app_id": "{{connection.appId}}",
+          "secret": "{{connection.secret}}",
+          "callback_url": "{{webhook.url}}",
+          "subscribe_entity": "LEAD",
+          "subscription_detail": {
+            "page_id": "{{ifempty(parameters.pageId, undefined)}}",
+            "library_id": "{{ifempty(parameters.libraryId, undefined)}}",
+            "access_token": "{{connection.accessToken}}",
+            "advertiser_id": "{{ifempty(parameters.advertiserId, undefined)}}"
+          }
+        },
+        "method": "POST",
+        "response": {
+          "data": {
+            "page_id": "{{ifempty(parameters.pageId, undefined)}}",
+            "advertiser_id": "{{ifempty(parameters.advertiserId, undefined)}}",
+            "externalHookId": "{{body.data.subscription_id}}"
+          }
+        }
+      },
+      "detach": {
+        "log": {
+          "sanitize": [
+            "request.body.secret",
+            "request.headers.access-token"
+          ]
+        },
+        "url": "/subscription/unsubscribe/",
+        "body": {
+          "app_id": "{{connection.appId}}",
+          "secret": "{{connection.secret}}",
+          "subscription_id": "{{webhook.externalHookId}}"
+        },
+        "method": "POST",
+        "response": {
+          "valid": "{{body.data.subscription_id === webhook.externalHookId}}"
+        }
+      },
+      "update": null,
+      "aliasTo": null,
+      "appName": "tiktok-lead-forms",
+      "apiJsonc": "{\n\t\"output\": \"{{parseNumericIDsToStr(toString(rawBody))}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "help": "When only __Advertiser ID__ is specified, the webhook will subscribe to all lead forms under the advertiser's account.",
+          "name": "advertiserId",
+          "type": "select",
+          "label": "Advertiser ID",
+          "nested": [
+            {
+              "help": "ID of the instant form that generates the leads you want to subscribe to. If specified, the module's output will contain **Mappable Answers** field for easier mapping. If left empty, the module will provide answers in an array of collections with **Field** and **Value** fields.",
+              "name": "pageId",
+              "type": "select",
+              "label": "Page ID",
+              "options": "rpc://app%23tiktok-lead-forms@1/listLeadForms"
+            }
+          ],
+          "options": "rpc://app%23tiktok-lead-forms@1/getAdAccounts",
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "accountName": "tiktok-lead-forms",
+      "attachJsonc": "{\n\t\"url\": \"/subscription/subscribe/\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"app_id\": \"{{connection.appId}}\",\n\t\t\"secret\": \"{{connection.secret}}\",\n\t\t\"callback_url\": \"{{webhook.url}}\",\n\t\t\"subscribe_entity\": \"LEAD\",\n\t\t\"subscription_detail\": {\n\t\t\t\"access_token\": \"{{connection.accessToken}}\",\n\t\t\t\"advertiser_id\": \"{{ifempty(parameters.advertiserId, undefined)}}\",\n\t\t\t\"library_id\": \"{{ifempty(parameters.libraryId, undefined)}}\",\n\t\t\t\"page_id\": \"{{ifempty(parameters.pageId, undefined)}}\"\n\t\t}\n\t},\t\n\t\"response\": {\n\t\t\"data\": {\n\t\t\t\"externalHookId\": \"{{body.data.subscription_id}}\",\n\t\t\t// the following are for rpc interface\n\t\t\t\"advertiser_id\": \"{{ifempty(parameters.advertiserId, undefined)}}\",\n\t\t\t\"page_id\": \"{{ifempty(parameters.pageId, undefined)}}\"\n\t\t}\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\n\t\t\t\"request.body.secret\",\n\t\t\t\"request.headers.access-token\",\n\t\t\t\"request.body.subscription_detail.access_token\"\n\t\t]\n\t}\n}",
+      "detachJsonc": "{\n\t\"url\": \"/subscription/unsubscribe/\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"app_id\": \"{{connection.appId}}\",\n\t\t\"secret\": \"{{connection.secret}}\",\n\t\t\"subscription_id\": \"{{webhook.externalHookId}}\"\n\t},\n\t\"response\": {\n\t\t\"valid\": \"{{body.data.subscription_id === webhook.externalHookId}}\"\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\n\t\t\t\"request.body.secret\",\n\t\t\t\"request.headers.access-token\"\n\t\t]\n\t}\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"advertiserId\",\n\t\t\"label\": \"Advertiser ID\",\n\t\t\"type\": \"select\",\n\t\t\"options\": \"rpc://getAdAccounts\",\n\t\t\"nested\": [\n\t\t\t{\n\t\t\t\t\"name\": \"pageId\",\n\t\t\t\t\"label\": \"Page ID\",\n\t\t\t\t\"type\": \"select\",\n\t\t\t\t\"options\": \"rpc://listLeadForms\",\n\t\t\t\t\"help\": \"ID of the instant form that generates the leads you want to subscribe to. If specified, the module's output will contain **Mappable Answers** field for easier mapping. If left empty, the module will provide answers in an array of collections with **Field** and **Value** fields.\"\n\t\t\t}\n\t\t],\n\t\t\"help\": \"When only __Advertiser ID__ is specified, the webhook will subscribe to all lead forms under the advertiser's account.\",\n\t\t\"required\": true\n\t}\n]"
+    }
+  },
+  "global": true,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "makeAnApiCall",
+        "watchLeads"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda7930000029b4944415458c3c5973b6814511486bfcdc38d21188ca08931410b45d28808a25858880f30417b412bb15209b65a0a36163e88959582441b6dac0541b0b551d16091429128269a8731ee673177e33899d99ddd6ce2dfcceedc3bf77cf79c73cf9c29b00ca900ed4077ec760198033e02a542a150718d96e50004ed07eec4d66a065e01a780a96a0f3702a01dd80ab4c6ee9580ae3c004d0d0048d366600f2c8669d501d60067808effe50180a3c039a0a992171a910395bc70256c72449d06a8762a6a928a3aa4ce9bad39f57198d7a3b685e7560da0ac59f5ad3aaa6e2c03ac6408926a037600c5f01b58b924fc0d2ce4995815a01c2fb555ed52bbd5755562f80eb80abc072a4ecc0c4130d0040c00c78103403fd1d97e0a0c879da66906b801dc034e02c7809dc086a4675a320c036c022e1215941ea2974c59fd89ffa97b00c680ebc0085175ec25ca8189548098f1edc06de0708621abb9b6ac70ee6703cc589e107407e347f21858ae160162311fce302e301faeb932bc2680a0ddc0e994795f810744c93749d470941a06108bfd20ff76371025cc79e021890ea711e534ee8122517793d45d6014b0a12f92a07821ea04fa12e353c09395329e0428026b13e3d3c4ce6c8535eaa68b03cc033f13e3ed44d56b8962f1ef6569327f0febd50430098c27c63b89ca7056c27594c713fa40548e6b0298035ea6cc390b9c000a6588702d0217804389f925e0451ee34b5caaee553fa734139fd46bea4175973aa8de576752e6be51b7d57c440340b37a33a3a329a93fd42fa1cd4ad32ff552dd2d5778b04f7d96a3c54ad3a8da5977818a351f0335422ca88fd42d75ef3e05a24fbda54e54305c52c7d5cbeafa7a8c671690b0502bd10b6a08d8c7df866296e8c83e27aa94afc9f1255c13400204a2a2b43e06f02d5c97f5b1f10789286e621b25a3680000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000004ec4944415478daed9b5d681c5514c77fb3494cd34a929ad41aab512b36968862b152146b4b5b44fcc20fb4141414f103a98fea8b154510541445f441c4275f14a422e8435504c15a6ab51f285504add2f6419b689ba43169f6efc3b981c99acdded9b999d949fa8785249d3973ceef9eb9f7dc73b730cf15e5f97049933f7602ed1eb79c04fe0488a230ae37e70920a64780c780891abe7eeaae9df0315a24009dc0791ed7f53a9f830128e51d79429d0d2c0a69b0680096e1972973164037b006a64ca0f30a4004dc0ab4853258340000d7016b214c161411403bf038d011c2581101006c021e06a2b4595054002dc013c0dd90ee55282a00802ee055600b50aa1742910100f4006f004f021d92126743d101002c069e05de03d603ad494034ca5e20ad5a809b806b812f800f819d928e00a3507df73857004caa13b803b805380afc0c1c02fe90f43a30580962ae0198540bb673ec75bf1f02de05062b2f9c0b73402a9d0690b70379ab68002680f27c06b007abfe8e352c80c92244528ba476495d92ce723f37d553adc534006c03ee013e0146d2fa9b7a198c05d3065c02ac02ae0496034b815640c018f012f041ca479e023e0776011bb0bdc0f558bf3071afbc6e00b1c07b809b813b5df05d54cfacdeda96bd35047c84b5ca2f05d6b9cf6518f84540537000b1c03b80cdc0a340bfa7ad308d3ca694b66392f603fb81b7b04ce805cec79aa8e700e30e583a00b1e057611b901bb0aaab5ee743c318070ebbcf4e9f7bbd01b8e023acd67e117bc70b2f2f00b1e0ef055e0696e4ed7828d55c0663697f7b80e083cd01990088057f1596f67366e4bd00382d069e032ecedbd94c01c446ff3eac0d5d8fc42cd4ef21556b125c8eadf34996cb535827e62b602fd68468c632e8c7bc03f602101bfdbb80be04f67e035e03dec75a528aa228d8416666009c3a81db12d8da0d6cc56af429c54ee8c2272b00fd585deda383d851d5f78d1e70a5fe3709c6d275357e5f5c1a055e2862f0d30288e90a4f1b5f03db8b18fc4c0016021779daf818389e7720b301a0cbe3fe21e03b28e6e8cf04608183504b23c05f01fcc88d5e6986bffb94c95120e7cff0bcae4ce00d55b520ffc51d2ad6501b7eaf4a2d1f7a3caf3d41c02f49ce046018ebc0d6d299b8d52245b5d70dacf4bcf630199d0b8c00bf7adab811bff9628a62c0ae015678def64bc8e067025006f679da588bf506ebc9820ee0216cd2ada521e007c860c5718717eb249d909ff6485ae17be8e1ae6b92f494a431cf671c90b434938d9573b04bd26e4fe724e933497db520b87f6f95b455d2df09ecbf99f254293100243d9dc04149da27698b3b069be2acfbbd24a95fd2db928613d83d2e69e36c00a8fa32b907f561272fbe6531d8ffeaf816d881bdb3c7b0e3b10bb0096f23766091e445de8e1d819dccace28c65c13649e584992077cfb81be951491375d890a481d91a7d5f08e74ada59a7f321f48aa4e6cc83afc8824d928ee410fc976e00b20f7e1a08f72bd9ac9d560725ad561ea95f0542936ce9fa2783e07f92b4be21829f06c203928ece62f0df485ad350c1574088246d90b44bf5cfecd36958d23b922e6cc8e02b20206999a4e725fdaefa96c9498dcb5699cd9216346ce055409424ad94f48c6c3fe05bdd95250d4ada21e941494bf21af5d46555cce96eac3770357039563d76623bbd32b6c51ec0b6d97bb16f701cc07a0fb9f514833e3506a384354b1662edae32d6651a711fe519f469c5f41f769da704a9354cb50000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2024-03-11T10:41:36.543897+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda79300000a8a4944415478daed9d6b8c9d4519c77f67b7bbdd76e98d5e6ca9402b2d4545a9142a95a6d056eb0588b426824425d14ae2b51152132f1f4c8c8a7c305211c118518c54f182064810c55b0c11818295882db64da5b51554b6976dbbdbeefefdf0bccb4eda6e77cf3933efccd933bfe4a4b7edfbceccf39f67e6cc3cf30c6432994ca649a9c42e400a480268036600ad1e1fdd05ec07a854d26cea31b10b901073818dc074a0bfce67558016e04bc0376357ec5464010cd20ebc12f302be181fbb52c3d112bb008921cfcfeb885da1e1c80208cbf4d805188e2c80b09c49e2c36c1640586603a7c52ec4a9c80208cbd9980892250b202c5381d7c62ec4a9c802084b1b7019bcbcd8941c5900e15906cc8a5d88a1c80208cf7c6029a4e905b200c23316b886441785b200ca6105b004d2f3025900e53005f810097a812c80f2b80258056979812c80f29808dc04cc8c5d10972c8072590a7c1c684dc50b6401944b0bf0616035a43114640194cf142c52e812882f822c8038cc076e0316425c116401c46311f02de0428827822c80b85c0c7c97881b465900f1791df03de07d405bd922c8024883b3b139c1178199924af3065900e93011b811f811f036a0bd0c116401a4452b163fb011f30817490a3a2c6401a4c964602df0007027f0164993420c0d691e582b99a251cf077e0dbc2276794ec241e069e061e037c0dfb173877d50dfb9c32c001a42002f17153b6cba0d7816d80c6c07fe037463671a9f017a462a8a2c001a4a0027141df3023dc031603736817c7ea40248fad44a66582a980d07ecd845959d3a4f029b9c2c8026270ba0c9c9026872b2009a9c2c8026270ba0c9c9026872b200c2d287ffc4535ec92b8161b91f13c195d821d1e4c81e202c7f05ae07d6033b6317e664640184a505dba5fb3ab006f861f1e7646838010c0445486a953456d238499dc5679ca476492d65c6d58d904dc007b1e0cf5f0187631708129f031406ac60f172b3815761397dcf2c3e93b13c3c03f5380af462bb629b80db251d4e215173a55241d221e03ee011e0edd8f0706951bf28242500a7c78e05e6008b8bcf22ccf053b09cbe23b1e8abb198fb247a1a0c46ee48da8f057f3e50d46f0db68f3f87926d9284009c9e7e16f066ec2cfdc55872a55ad3b78b44bf82391ea95bd26f81df63a1e1cbb11c028bb1c4d56da1cb12550085e15b81d703d70257636e3e0961964121867e493b801dc0f731e35f841d275f58b4c9542cc388d7f12c4a433b3dfe7ce006e05d58e284f88375241caf7014d85108e22740277006363c9c0bccc33ce374accd2662c2e828fe6f555eaf54013863fc4c2cec792de6fa32c75108425844f05660aba4878b7f6ec5e649138109c5a713eb402f56f39ed204e0b8fb55c067b1f3f13eaf6719f5385ea20f38547cf6d6f3cce002707afde9c03ae063c5ef33091054008ef117005f06ae0afd4ef7f525bda7a109660cc7f89760e7dc16c5ae6ce6448208c031fe72e076e0bcd815cd9c1cef0238cef87762f9703289e27533c831fe62ccedc7367e9e070c83370138c69f0f6c005e13bb7299e1f1bd1d7c3a7033f0c6d815cb8c0c2f027016796e04de19bb5203c58a5d8046a06e0138aeff0ae023e4d5bd86c2d7107016f0396cbf3ed340d42580a2f7b7001fc5b62f330d46cd02705cff9bb0d0a6d4b672f31c6004d4bb10341ef804e5a6553906fc170bb3de051cc0e2005b81495830c53958be9ccc30d42400a7f75f8ec5b28546c01ee00fc02f812730e31f64f0f44d051341271663308b84e20153a51e0f301673fd130297712f700f964ff7592ceae564a9d18479877d58f6accd81cb352aa847001760ebfda13886c5cf7f01780ce84f21bc7bb451b5001cf77f251697168243c03780af60e37d5dc910334353ab07980abc3550990e60bd7e0355243cccd446ad02b8003b78e19b1e6c2fe16bc0d16cfcf054b50ee0b8ff4b0933f9bb07b8956cfcd2a86521a883e2c62bcf6cc62e4ce8cec62f8f5a0430033ba0e0931eace76f8bdd20cd462d02183899e2933f61a766f36cbf64462c0067fc3f075b02f6451f36f6bf14bb319a915a3d80cf6eba134bd39e7b7f04aa15402b7648d1274f02cfc76e8866a55a01b4638b403e7992627d3f533ed50aa003db72f5452f76ff4d76ff91a8560063b1ed565ff450acf52742d3a9b05a018cc1bc802f8e0147623782d316590023f8799f51bfbe9f570fad35b4c770241f96566d85fb29eeaaf3846f8f520f1df84fca948a771b926a057014bf6156eda4134a3e1318e7f999fb62576a38aa15c0612c09a32fda28f6156265f574de3b0fbf1ea00fbbd03169aa15c011fc2fd92e24fe3ca0b528874f7a801720edafb8d50aa017ffab768bb034b03199055ce8f9995dd84d9e4953cbac778be732ccc51222963e0c38ef5b862563f4c9bf194d4380e3c6b6e27776db06bc1bbf3b8cd5301eb8069b90fa643ba37012082680173c976379f129cd0b38ef5905ac08f08acdd84257d2d422803dc03f3c976322f049605ac9f59f811d6d3bcdf3737b80a721ed0920d426806eeca0866f2ec79248b686f6024e428b75c065015ef12fe099a095f044550270d4fc28fe57b9060c721d841b0a9ce75e8725b408716bca261a24c6a1d6ca3f854d727c33193b17b006fc8bc079de1ae096e27dbee9c7229c46678c4371174f45d26d0ac76e49ef9734c697088a72b74b5a2b694fc0b2ef94745e62f715f9a568cc1592ba0236e43e49b7489aad3a2e80d2e0255373246d907420609925e9dbb20bad629b291c4583764a7a307063f649fab3a4eb254dad46088ee1a749fa80a4a724f5072e6f97a495d5943336357d47712a772d7017e1b7747bb079c74fb11bb7b6618748edea11bb916be0675bb0af95f38095c06ae00df85fe839193f03de0b247153d948a8b99445834fc6ae3559595279fbb110b22d98087661eb128731a34fc532962dc032964ea6bcbb11f7632b8a0f41fadfff07a857006033eabbf11b2b5855517cd4c7033fc0aec039d228c6873a7a8753c987800723d6a1e27c62b11bcb67907c04d0f1f8708f8780afd2005b9f81e807ee001e87c671fd03d42500a7b28f61295d92dffc08c023d8bd086a34e383070fe054fa0ee0fed8152a997f029fa7caabda52c2e70cf925e0d3580ebf66a01bcb65f428349eeb1fc08b009cca6fc1b67543ec13a4c431ec4694bb8fab7fc3e1cd03388df047603d1612351a1196cfe066a0b7918d0f9e17499cc6b80fbb3ca261c7c621e807ee053e057435baf121c02a9973e7ed46e026fc878fc5a20f5bec59c7e8f56efed0e0b6f16a49db036fc284e688a45b254d69944d9e24d0e08edc32499b625bb1465e94b45ed2f86cfc1a7044b040d2bd927a635bb40afe22e92a8df6fdfdd038229824e93392f6c6b6ec301c94f41d49f3d5407bfbc95334668ba4a5927e211b5b53a24fd21392de23a9a3190c5ffaf718a75127605bc93760174e9511b03164b1b0c5abbbb08b297641632ff08c9468357484300d78071649b304ff87344e451f1658f2636c55ef391a7453a756a2d7f4388fb004b81a3b2636174b4ae5fd95d8bec5e3c0cfb178869d3499e10748aac61abc87f00cec06f2cbb0e1610ee629da6a28b3b090b1bdc0dfb0a5eadf612777baa1395cfd50245bf3420c15cc33ccc632899c8b5d54311b4b2dd3899dee6dc10c7d0433ea7ee07f58cf1e881f7c0e13410f34b7d15d1aa6159ca1a2820d0d1dc5afedc5df093b8dd38b19b9872240251b3b93c964329913f83f341cefe65283ba8d0000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda793000015f24944415478daeddd79d467755d07f0d7331bc32c0ec30cfb220a2a2aca621208b82b6627c225d4cc25534c532b4d8f5ba5a9d9e2c1b2cd72cb935b8a66965b2e4149299a1560a8a082eccbc830cc0cb33eb73f3e77863bc330f33cf33cbfdff72e9fd739bf33237af07b97effb7eeff77e17524a29a594524a29a594524a29a594524a3d3351ba00a95daaaa8205588139a5cbb31b5b710bb64e4ce46dbcb7e6952e406aa513f05eec8faa746176610e7e805fc04da50bd36519006957f6c1612200daea66ed0ca74e6973132f95d5f6cab51993a50bd1751900a9abe6c83eac19cb00485db510734b17a2eb320052572d967d5833960190ba6a5f2c2b5d88aecb00485db5aff852916620032075d5be3892ed8397d25ec800485d351f87972e44d76500a42e3b487e0998910c80d465c788af01692f6500a42ebbbf6805a4bd940190ba6c058e233b02f7560640eab2c57850e94274590640eaba876151e94274550640eaba87e33ea50bd1551900a9eb0ec429643fc0dec800485db7008f118b98a469ca00487d703a8e2e5d882eca00487d70281e45be064c570640ea83f9381bfb952e48d76400a4be38b9fea569c800487db11f9e857df23560ea3200529f3c51ec6990a6280320f5c9a1781ee6672b606a320052df9c258607e7178129c800487d73185e2407064d490640eaa3b3e4b88029c900487db412afd0eebd0d5b210320f5d5e3c467c16c05ec460640eaab857899fab36086c0ae6500a43e3b16afc6bd4a17a4ad320052df3d15cfc744b602ee2e0320f5dd42bc4aac1990af023bc90048437024de8afb952e48db6400a4a138056fc201d90ab84b06401a8a099c83d763498640c8004843320fe7e295d837432003200dcf22f169f03764086400a4415a82d7e1e55838e410c8004843b5146fc46bb074a821900190866c295e8bb760c510432003200dddbe7829de81c3abaa1ad460a10c80946259f1e7e23d3889e18c18cc004829ccc199f85bb1c7c0bc21844006404a7799c043f06e317f60ffbebf126400a4747707e1cde295a0d70b8c6600a4b46bfb88a9c41fc68bb1ac8fad810c809476ef01380fef17bb10f76acf810c8094f66c119e828fe16db85f5555bd5860240320a5a999107b0ebc0a9f1223088fa9aa6a6e978360a2740152bbd437f319f807ac285d9e16db8c1fe0fcfaf75d6c9c98e85695ea5669d3c865004cdb565c872f8a73f64ddc0a5d0883f697308d5506c05eab70072ec1e7f135fc2f6ea7bd6130af740152ea8909b1fcf8e9385554fcffc205f846555597e236f1ead09a40c8004869f6cd15db923d41ec507487e82ff876fde76555555d2642621d365126143200521aad39582626199d245e15d6897e82ab7115aec7aaaaaa568b56c226b168c902f1c561eda8c2210320a5f19a10957b098e52ef622c82618b7845981433146fc257b0765485c90048a91d2644a59fdff867231fa7930381521ab00c8094062c0320a501cb004869c03200521ab00c8094062c0320a501cb004869c03200521ab00c8094062c0320a501cb004869c03200521ab00c8094062c0320a501cb004869c03200521ab00c8094062c0320a501cb00485d5589c533d30c6400a4ae5a8d0fe3c6d205e9b20c80d45577e2ed7836fe45bdb9469a9e0c80d45513620dfdafe23978abd860a3bb7b7517900190fae066d11af8257c49b606a62c0320755ebd6dd616fc2b9e8bb7e0c7b235b0471900a917262626b605c14df8033c037f2f36e64cf7200320f54aa335f075bc082f10af051b4a97ad8d726fc002aa6a8796e9c44ebf6dff65d5f8b5663ff92ed876aeaaaa5a8bf371017e4e74169e8a85a5cbd816190023d0a8e073b12f1661290ec1913818fb611f710de637fe9c14bddb9bc5936c13d6d55b47df2cbe7b5f8d6b516530dcb34610dc8a0fe09f71169e879f12d766d0320066415de1e78a4a7e008ec5034565bf378ec04a1104fb8a8a3f9d9abb6dd4db46110c9fc3b946b86d749f3482e016bc4f04c113700e4ec372d3bb1ebd9101b0171a15fe5e380827e1641c8763b0028bcdde4d3551ffff2daafff3606fd8996804c14df8103e83878bd78327e12811ce839101304575a59f2f2afc43f13851f1ef8b038df7bd323f6fcd40e3b5694d55555fc185f873714d9f86134588f73e64330076a3aef473709878523c1ea78b66fd5203b841fa6edb5783aaaaaec495e2d3e14345abe0b1385ab4f47a79ad330076d2e8c05b8a13f03378b268da2fd2d31b61e81aad82d55555fd1bfe43f4db1c2f82ff14d1afb3bf1edd031900b546c53f483405cf114ffbe572bcc4a034c612dc5855d58df8b2f86a732c1e8d878987c321a6dfa1db2a830f80bae24f8866fdd9f805f10e38f84f44697b186cc5aaaaaa2ec245a2257898f894f860d1327888e80b5a2c3a6c3b110a830d8046c53f423ced9f2d7af1077b4ed2ee355e13d6e38aaaaaae10f7d042f1ba70fffa7704ee278261a5bb3efdced7b2d6e4e06ef64653ff00315efc0522bdbb742e26e59780e2ea40a8c4da04d7e09afaab0251e9b77d263e4cdc6f2b44201c82fbe0507785c3b6416173eb3fc7723f76e9a69fb1baf22fc699f8353c420e0b4db3a8d14ab8b3fedd844bd8e1e1335fbc462c169dcdcbeadf92fa9f2d117d0e5b8c7832d32002a0d1dc3f01bf2986832e2b5dae19e8c4fb65da51231c36e3f6fa5754af03a091b82bc462112f13df75b302a5a4c701d078ea9f82d78b6fb9d9dc4fa9a197015057fe25e2a9ff1a31c6bb4f4ffdec004cb3a25701d068f21f83d7895efec5a5cb95525bf526001a4dfe33f03631cdb34f4ffd94665d2f02a0aefc0bf18b78a3f8c69a52da83ce07405df9ef253eeffd86f87e9a529a824e07405df95788a7fe8be5f8fd94a6a5b3015057fe83f1fb621cff82d2651ae7e1972e40ea874e06405df90fc51fe19962fc744a699a3a170075e53f0c7f2c66f165e54f692f752a00eaca7f20fe507ce36fd5d4ca94baa63315a8aefccbf17bb2f2a7342b3a51891a437b5f8fe7eb58cb25a5b66a7d00d4957f1e5e52ff06b56efb3dd8be65584a33d1ea00688ced7f8698d493e3fa539a45ad0d8046e57fb478ef5f59ba4c29f54d6b03a07634de2276df4977c9e67f9a15ad0c80fae9bf4c0cf13dad747952eaabd60540635aef2f8b517e39a537a51169550034defbcf10b3fb7209af9446a85501503b0cbf8d234b17a4c5b20f20cd8ad60440fdf49f8b73f198d2e54969085a11008da6ff23f14239c127a5b1684500d456e2d5629a6f4a690c8a0740e3e9ff2c3cb67479521a92e201503b56bcfbe738ffa9c94ec0342b8a064063a2cfb9629ff594d218159b56bb53c7dfb30c6fc04f25767f9dc4d6faa73e0fcd2da287765ed218959e57bf583cfd0f2e7d2246acc27adc86ab70a9d84f7e55fdcf37d4bf49b175f43e62a9f395a253f478311f62797dce3214d2ac2812003bcdf43bb3f44918d5616235be8f0b7031be8b1bb0065b1bdb45effa5f10e7698e088343f0403c4a84c664e9034cdd57b205b008cfd1bf8d3c36888afe257c513ced6fc5e49e2afcceeafffda40892d555555d8ecf8821d21b4a1f68eabeb10740e3e9ff083ca1f40998451bf02d7c5054fceb4de1293f1df5bf6b0bd6963ed8d40fa55a00f3f134ec5ffa04cc82adb804efc7f9b891ed9535a5562b15000fc2934b1ffc2cb8151fc05f8acebdacf8a953c61a008de6ff137178e9839fc9a188e6fedbf0796cca8a9fbaa8440be0009ca53da310a76b233e2e962abb827ceaa7ee2a110027e2b8d207be97d6e04f711e5667c54f5d37b600687cd37e926e7efa5b259afcefc69d59f9531f8cbb0570886e2ef6718b58a0f403d89c953ff5c5b80360db90d62e598d3789cf7c5bb2f2a73e194b475c63a5dfc78b61ad5db111efc4fb64e54f3d34ce9ef81538b9f4014f43854fe05dd898953ff5d13803e0de62a79faef896f8d4b7ba7441521a9591074063f0cf4f8b31005db00abf2f66f2e577fed45be36a01ccc749bab1da6f858fe07364e54ffd36ae00b89798cbde05df1163fb73786feabd7105c04138aaf4c14ec126bc47cce74fa9f7461a008df7ff137463eaef7fe39364d33f0dc3b85a000fd2fe8d3e37e343b8ae7441521a977104c03ebab1d1e7f764c75f1a987104c022dd78ffff2c7e54ba10298dd3380260198e287da07b709b58c7afcaa77f1a927104c0112204daec32b1ae5f4a8332b200687c01b88fd8cca2cd2e14a3ff521a9471b4000ec182d207ba1bebf13fa50b915209e30880fd4a1fe41eac12a3ffb2f73f0dcea80360aef6bfff5f29b6eb4a6970461d00f3b57f04e0e572a79d3450a30e80056247db36bbc15d5b73a73428a30e80795852fa2077632b7e52ba102995328e3e803607c066f58a3fd901b88389fa977a6e1c2d8045a50f723772a7dd5dcbca3f10a30e8039da3d06209f74bb364f77b76e4bd3308e5780362f03d6f6802a659ef6076335f37f451a47cab7f94265003434866f77a505905f6f6668d41779abf607c0beec70f3a758c3a1ed01b059f4e1a41918f5459ec486d207b987e36ffb44a51256687fcb68bd0c80191b75006cc1bad207b91b73b57fae42098788519c6db646b402d20c8c3a00b67f676fb103c7701eba649e6e2ce1b65aace29c6660d437fe26ed1f69f7002c2d5d881659a21b5bb8ad129bb7a619184700b47da18dfbe9ce9665e3b03f0e2f5d882958255f01666c1c7d006d6f01ecafdeb528bf04a03b81b84a7432a71918c7bbefaddafd2970098e2b5d88d21ae1f770ed5fc3618bdcbf61568c2c001a936baed3fe77b5d3653f00710e1e51ba10537007ae202771cdd4385a005768ff849b934467e0d0dd1b0f2e5d8829b81d3f2e5d883e1847005c8f5b4a1fe81e1c804731cc7e80c6313f0987952ecf14dc205a016986c611007768ff8e3b73f1f35859ba2005adc459da3d796b9b6bb47b8059678c2300d6e187a50f740a4e50bfff0ea915d038d653eb73d0053fc49da50bd107e3088049b1f26edb3fd92cc52f6af70226a3b208cfd68d8ed08d6227a7ec009c05230d80c605fab6f60f0986c7e33486d10a681ce3137066e9f24cd12a5c5aba107d31ae31f03fd08defb62bf012edff0e3e9bf6c7afeacea4a81b7053e942f4c5b802e0367cb7f4c14ed1137136fd6e05348eed29ea2f201d71b9b89fd22c185700dc89ff2d7db053b418afc031a50b322a8dcaff60bc4cbd284a074ce29b7216e0ac19790034fa01fe5337fa01e044fc1616f5b815b00cafc3f1a50b320dab7031d901385bc6390ffe7bba337a6b42f48a3f17137d0a81fa5826f0cb789af62ffed974b5f68f29e9947106c02dbab50df712bc014fa61ffd018d633813afc4c2d2659aa6af69ffa8d24e1967006cc285baf5fe7638de8e93e9760834ca7e1afe1847942ed334adc50598cce6ffec194b00342ed8377063e9839ea687e04fd4efca5d0c8146994fac8fa58bd39fafd19d8ee4ce18f75a78578941415d732afe5c0743a051d6878acaff53a5cbb4972ec4b5a50bd137e30e8075f8826e2ee5743afe0a3f4d3742a051c647e33d38a37499f6d23afc8b5c067cd68d2d001aaf0117eaced7809d9d8af78a998373db1c0275d9e68bf90def15fd185d7d79fe3ff1fa989fff665989e5b0af14ad80ae3a0eefc6abb0bcaaaa56b5061ae53914bf8377e9c62abff764129f16eb4aa45936d600a8d37b0b3ea5fdab05efcec17833de2f7ad5e7b52104ea322cc0cfe04378ad98dfd065d7e173e4d37f144a6d8871b1f8a6db650bc59c818fe2b77164a9d640fdff3b21862fbf157f8bc7884d3ebaee73f84ee942f4d5d823b551419e2dde4dbb36186557368b29aa1fc63f88116b23ff5e5d9fcbb962279fa7e37938563756f5998a5bf10c7c956c018c4291335adfb807e113badb33bd2b9bc490e7f3f14ff5dfd7337b376f2340178bfd0ccec253c57afe6ddfd073ba3e8a5fc19d59f947a36400c0b9a2936a9fd22762966d15039e2ec217f15f620cfb1aa61f06f5f99a23e6ec1f8d878969cba788bd0dfbf2c46fba0dcfc167c9a7ffa8143babf54d7db0785a9e56fa448cd046d1e1f91dd1f771950887ebc4b8f6f5eedaeb7e427cba5b50fff6134b751f85fb8b4d3b8e168b78b47df7de99fa9878faafcfca3f3aa503005e843fd3bf56c02e0f5b54f40d628d84b522047e2206bbccc17251c197d5e7648998af3f5777bfe34fd7ad62fcc297c8a7ff28153db37508ac1469ffb8d22723b5c607f0526cc8ca3f5aa53e0336dd2a86d8ae295d90d40a5789fb6143e9820c41d10068a4fb17d4833dd2a04d8a014cdf269bfee3d0861600f1fefb17bab172701a9d6f89d1955bb3f28f47f100685ce8afe3efb47f0391341a6b709e5cf26bac8a07003bcc11f86bf5a28f6970b60d9ecaa6ff18b522001aaec23be4baef43738978fae737ff316b4d00342efc67c598fa7c151886dbf18772c24f11ad0900b687c006f134b8a87479d2c84de283627a7836fd0b68550034fc482c667155e982a491faaa78e5cb013f85b42e00765a3aecf7647f405ffd00bf2b56fb4d85b42e00d81e0295e80bf813392aac6f56e36d62bbb86cfa17d4ca0060fb4db1097f2a56b8d95aba4c69566c1493bf3e822a2b7f59ad0d00b687c0ede255e0b3a5cb93666c5254fc77626356fef25a7f051ad3868f15c3444f2d5da6b4d73e8f5fc58fb3f2b743ab5b00ecf07ef85db1a1e57f972e53da2bff81d7e8ee9e10bdd4fa00e06ef3055e2ef788eb9a8bf1ebb88cecf46b934e04003bdc34178910b8ac7499d2947c032f1333fdb2f2b74c6702801d6e9e7f17217079e932a5ddba08bf866f9295bf8d3a1500ec70135d2042e0d2d2654a7753e1cb78895811392b7f4b752e00d8e166fa0a5e285a04e5f7e64ac4b4ee4fe2c5ea70cecadf5e9d0c0076b8a92e1621f0193958a8b40d789f6899fd90acfc6dd7f9abd3182770a81830f44b86b1c478dbfc448cda7c175667c5ef86de5ca53a0896e3d56249e965a5cb3420df17bb259f8f4d59f9bba35757aa0e81857826de2076cb4da3b3554ce9fd1d3146239bfc1dd3bbabd5782538553c951eab9f7be79576bb189a7d1eae252b7f17f5f28a3542e07031fcf4f9585aba5c3d5189defdb7e3d372318f4eebf595ab836011ce167d030fd5e12f1f2db0061f174ffdcbc9a77ed7f5feea355a030f10e3d19f8e034a97ab63b68a4958e789cfadebb2e2f7c360ae62a383f0916256e1a3e5e7c23da970bdd8b0e5afd56b3466e5ef8f415dc9466be000b1fdf40bf060d949b82bb7894558fe46f4f06fce8adf3f83bca275104ce0bee293e133f040cc2b5db616588b7fc57bc450ebf5e453bfaf067d55770a82a7e059380e0b4a97ad80f5f89a18cafb45f1992f2b7ecfe5d5b5c3abc1117822cec129e2d3619fcf51259afa178adefd2f611559f18722af7243230896e334d12a78ac9867d0a756c146d1a1f705d1ab7fb168fa67c51f98bcdaf7a00e837d7034cec0cfe2241c88f9a5cbb717b6e266b132cf3f8aa7fe55d892957eb8f2caef41a355b0d45d61f0181c2f5a060b4b97713736894aff1db180ca97f13ddc413eed5306c0b434c260b1a8fc0fc7c962c9f2a371109628775e378b77f81f8935132f166bf25d2d46f165a54f3bc8bb6106ea4098232afdfe78104ec47d7054fde70a111873cddef9de227aedd78a65b67f58ff79a568e25f2b2afc66b2d2a77b9677c62c6ab410e68b3908fb8929c9f7c5c16200d20a11168bc46bc572771f7f30292af79afacf3b446ffd6af184bf4554f8abebbfaf15cdfddc6a2b4d4bde2d63d0088639221c168816c1bcfaefbbba0e5bc4137ccb4e7f8fc10b59d1534a29a594524a29a594524a29a594524a29ddddff0316680e773f2e18d80000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda7930000275a4944415478daeddd79b85d657986f17b672681843122048c4c32831414a405a1822d224e28545410506ba9224eb5b68a03b68a75a8562b8a036a4b111ca9c58af350296005b58a6821a04c8221049290849cd33fde1d39840ce7640fef5adf77ffae6b5d271c223e907df67af6b7be01244952753a00a3a3a3d9392449d21075bcf94b92549f49d9012449d2f059002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a5900248dd709c003c0a8574fd7fdc0d4ec3f4cc90220692246b20314e0374411905259002469b816670790c0022049c3b60c4700d4001600491aae15d90124b00048d2b0f9e95f8d600190a4e1f27d578de00b5192866b7a7600092c0092346c33814e7608c9022049c3b5697600092c0092346c737004400d600190a4e1da323b80041600491ab60eb0757608c9022049c3b7437600c9022049c3b76b7600c9022049c3b75b7600c9022049c3b7477600c9022049c3b7737600c9022049c3b7392e0754320b80240ddf1ce011d92154370b80240ddf0c60767608d5cd022049c3370bd8263b84ea660190a41cfb650750dd2c009294e3e0ec00aa9b054092721c961d4075b30048528ed9c0ded921542f0b8024e539223b80ea650190a43c3e06501a0b8024e5d919f70350120b8024e5d911d82a3b84ea640190a43c5be1c9804a620190a45c276607509d2c009294eba9c0b4ec10aa8f054092726d061c951d42f5b1004852aec9c031f87eac21f3052749f90e214e089486c6022049f9f62396044a43630190a47c938053b343a82e1600496a863f0336c90ea17a580024a919b6040ecf0ea17a580024a919a6137b02f8beaca1f0852649cdf17460667608d5c1022049cdb11df08cec10aa830540929ae5b5c4e30069a02c0092d42c3b0107678750f92c0092d42c33f184400d810540929ae754e091d92154360b802435cf34e0ecec102a9b0540929ae929c00ed921542e0b802435d33c62632069202c0092d45c67039b678750992c0092d45c738157029dec202a8f0540929aedf9c056d921541e0b802435db7ce0b4ec102a8f0540929aefaf891d02a5beb1004852f3cd065e81efd9ea235f4c92d47c1de0146269a0d4171600496a87cd80f7e3fbb6fac4179224b5c7938163b243a80c1600496a8fe9c05bba5fa59e580024a95d1e0bbc2e3b84dacf022049edf372608fec106a370b8024b5cf96c0b9c094ec206a2f0b8024b5d3b1c44880b4512c0092d45eaf0276c90ea176b20048527b6d077c04dfcbb5117cd14852bb1d4e9c15e0fbb926c4178c24b55b8728007b670751bb580024a9fd6601970073b383a83d2c009254865d80b703d3b283a81d2c009254860ef042e035d941d40e1600492acbeb80a3b243a8f92c009254964d818f01f3b283a8d92c0092549e79c01781adb383a8b92c009254a6c7029fc2f302b40e1600492a5307f813e09f716580d6c2022049653b0d380b989c1d44cd620190a4b27580bf075e8beff91ac317832495af03fc1d70068e04a8cb022049f57817f032a210a872160049aac754e03dc04b7024a07a160049aacf7b81537124a06a160049aacf74e03ce015b84f40b52c009254a70ef04ee0ad5802aa640190a47a4d260e0ffa08312aa08a58002449a7005f00e66407d1f05800244910db065f8a070855c30220495aed8f80ef02bb6507d1e05900244963ed0e7c0338363b8806cb0220495ad3f6c067884384a66687d160580024496bb309702ef04960767618f59f054092b42e53801381cb807db2c3a8bf2c0092a40d7902f04de0483c43a018160049d2786c458c04bc8b783ca096b3004892c66b1af072e02ae080ec30ea8d05409234111d602fe072e00d4429500b590024491b634be02dc025c0aed9613471160049522f9e0a7c0f38134f156c150b8024a9577381f7025f25b613560b58002449fd7204f01fc0fb89cd833ad981b46e160049523f6d0afc25700df0529c24d858160049d2203c1a781f7025f0382c028d630190240dca64603fe288e17fc5bd031ac50220491ab469c0b3802b800b810381e9d9a16a670190240dcb54e270a16f035f078ec5b305d258002449c336133814b814f80ef01ce2ac010d9105409294e909c0a7811f113b0b6e81a3024361019024659b0aec409c2d7013701eb1c3e08cec6025b30048929a6433e034e28c811b81b3897230333b58692c0092a4269a066c0bbc09b81ef80a700eb1ac507d6001902435dd0ce28c81d7033f24e60b9c06ec04ccca0ed7569edc24496a8b0e3141707fe07ce06ee097c07f03ff46ec3330921db22d3aa3a3a3d91924b5c309c0a788095b5213fd0eb81cb80cf805705bf75a991dac892c0092c6cb02a036590a2c0216128f0d2eef5e0b81d1ee55f568818f002449259ad9bdb603f6064eee7eff56e067c0cfbb5f6f027e03dc09fc968a4a810540925493edbad79388518015c072e231c14ae01ea20cdc4114823b8055ddffed16c4ca84ed8079c0aed9ff32bdb00048926ad5210e251a7b30d1b6c063b2830d83cb002549aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa90054092a40a59002449aa9005409286efbbc0aaec10aa9b05409286ef24e025c07dd941542f0b80240ddf72e0a3c07ec085c003d981541f0b8024e5b9013805380eb80318cd0ea47a58002429d70ae032605fe0bcec30aa870540929ae1b7c019c089c0add961543e0b802435c70870117028f0015c29a001b2004852f32c005e063c17b8393b8cca640190a4661a053e031c0c9c9f1d46e5b1004852b3dd06bc08381eb82e3b8cca610190a476f82c7018f00660597618b59f054092dae34ee01ce071c0a5d961d46e1600496a9f9f128f048e067e06accc0ea4f6b10048523bad002e070e004e057e951d48ed620190a4765b0e7c9ad849f06f892584ee1fa00db20048521996016f031e0f9c0efc3a3b909a6d4a760069886603738019c46b7f0a30791d5f575fab8893dad6bcc67e7f25b0145802dc8b07ba28d76f814f001703af260e1b9a9f1d4acd6301500926019d31d7b6c0aec06e63ae1d8099c026c054e2463fa97b8dfdf5d8ef75bafffc55c416ad6b7e5dfdeb55c4f3d8e5c0fdc05dc04dc40e6e378df9f5cdddbf2f0dc312e0cdc401432700af07b6e1c1d7b52a6701501b6d01ecd8bd7602f6206ef23b028fa2ffafebc9dd6b6a8fff9cf701afc011020dd7edc03f029f045e4c9481c76687523e0b809aaa43dc70a703db1187a33c01380498dbfdfe74605a76d00918c90ea0aadd0d9c4b1c327410f07662e2e0741c15a89205404d339798c47410b1bce9b1440128819ffc956d14b80ff826f1737628b19fc0f1c0bcec701a2e0b8032cd2026e63d02380e783ab0370f4ec6f353893458df077e402c1f3c9e7844b533b05976300d9e0540c336037812f044e213fecec4b3fb1a3802a0261a21260c5e005c48fc5c3e8d584ab87576380d8e0540833699185adc1d781ef04c62267e8d9fee6bfc7756bbac00aee85ee7104b084f011e83a302c5b10068103ac44cfd138167134bf2b6c31ba023006a9325c484c18f01bb00cf00ce20e6e9a8001600f5d3aec01f119ff28fa25d33f425addd32e027ddeb1ca2d49f40ac20d8393b9c369e0540bde81037f92700af2166ee6f895b4c4ba51a012e022e2146f97625e60a3c139845ef7b6568882c00da580700c7123387f7c90ed3123e02502956113b5ede45ac227819700431c1f750e00ff08340e359003411b380fd80771005a0d6c97c921e6a29f065e0326263a1470027012713730666e1fda671fc03d178cc21ce1b3f81d83c4492d666849833b0803899f06dc40aa0c702870347038fce0ea96001d0ba4c21d6e79f049c056c8e9ff67be52300d5e8baee7511b12c784fe0a9c031c4eaa02d880dc134641600adcd9ec09b88cd7ab6c90e53100b946ab6fa04cd6bbbd739c4fbcb3c6235c161c43c82bdb383d6c202a0d52611cb7afe1c78114ee019044700a487bab37bfd88585900b192e8506255d1eab340e6762f9716f79105401de299dc3b812389a17e49cab210b8b47b41ec4038bbfb751f621ed221c4079619c47bd8d84be36401a8db5ec4ce5ea7e3fadd6118c5510069a2eeed5e1073092e1ef3f71e453c3ed8a5fbeb4712e7176cd5fdba3531a2a0b5b000d4a7432cdf7b2331dc3f273b5045566507900a7353f7fa46f7af3bc48799a9c4fd6d2ab12c713e31b7698feed7dd89f7bec9c4e3ce35bf5631926001a8cb0ce085c0ab700b4f49e519250e345ab1c6f76f218e3e1e6b1a3152b005314ab055f7da9278e4b069f79addbde68cf97d454c8eb600d4611a3199e643c433b4c9d9812ae57f77a9395600b775af3575d6734da29049d21680f2ed029c4b6cdbeb737e49dab02ae6eb5800cab519f01ce05df89c5f92b4060b4099f62186fb0fa192c92c92a48929e239867e6f0b6276ff0f89237abdf9374bf1438a92dac31180324c22b6d1fc3031bbdf6227495a2f6f14ed371b782bf0356057fc3395248d832300edd52166f87f96383cc3e17e49d2b8f969b1bd5e06fc8098f0e7cdbf1d9c0320a9311c01689f79c0bb8167618193246d240b40bb1c0dfc13f1ac5f92a48d6601688769c029c0fb88832d2449ea8905a0f96610cbfbfe0cffbc24497de20da5d9f6002e000eca0ea2be7012a0a4c6b00034d324e04f804f12474f4a92d457ce226fa6bf022ec19bbf2469401c01689619c0db8033f1ec7849d20059009a63167182dff3b2834892ca670168862d81f388cd7d24491a380b40beed818b8043b38368e05c0520a9312c00b976220ef3d93f3b8824a92e16803c3b025f02f6ca0e2249aa8fcb0073ec0e7c196ffe92a4248e000cdf8ec0e78912a0ba38074052633802305c7b0197e3cd5f9294cc02303c3b029f0376cb0e224992056038e60197e2cd5f92d4101680c1db0af838b06f7610a5730e80a4c6b0000cd66ce042e049d94124491acb0230383380f7034765079124694d1680c19846dcfc9f9f1d4492a4b5b1000cc699c00b814e7610358a73002435861b01f557073811782b30393b8c2449ebe208407fed4f0cfd4fcf0e2249d2fa5800fae7d1c4fefe5b6507912469432c00fdb109b1dcef91d941d468ce0190d4181680de4d073e013c3e3b882449e36501e8ddc9c033b343a8151c0190d4181680de1c494cfa73358524a9552c001b6f07e09f894d7f24496a150bc0c699027c184ff7d3f839fc2fa9512c001337097813f0e4ec2092246d2c0bc0c4ed0fbc02b7f9d5c4390a20a9312c0013b3357009302b3b882449bdb0008cdf64e06c607e761049927a650118bf670167e0d0bf24a9001680f1d90d782fdefcd51be700486a0c0bc0f8bc0df7f9972415c402b0612f008ecf0e2149523f5900d66f07e09cec109224f59b0560fdfe962801523f38074052635800d6ed78e0b4ec1092240d820560edb620b6fb9d9c1d4492a441b000acdd99c05ed92124491a140bc0c3ed03fc55760815c93900921ac302f0505381d70333b283489234481680873a1c78767608499206cd02f0a04d810fe1c43f0d8e8f0024358605207488257ff3b3834892340c1680b02df037f8e95f92548929d9011ae29f806db243a811d6354cef4990928a6201808380276587d0d0dc05dcd1bdee019603f777afa5c092eeb50a983ee69ad1bdb604b602e676bf6ec3f8478e9c0320a9312c00f06a60767608f5d52871635f0edc007c0ff836701571935f01ac041ee8fede91ee351e5388e5a2abaf69c01ec0d1dd6be7eef7a6e12336490d567b01381897fd95e416e2467f25f063e05a60619fff3f1ee85ecbc67cef36e01bc0eb80cd895d24f7018e048eea7ecf4708921aa5e6023015381bdf98db6c19f05be0abc0c7889bfe0ae2069d6511f0fdee753e311270147032b0383197243d44cd05604fe0b0ec10da28b700ff027c05f81fe2597e13ad1e2df862f7729589a4c6a8b900bc0198991d42e3761b31b47f3ef09fc433fcb659951d409256abb5001c081c971d42e3b21078077031b00067d24b525fd4580026032f22e600a8b916009f04de09dc971d46924a536301d81278467608add312e0ddc00788b5fa92a401a8b1009c8cbbfe35d152e053c4cdfffaec309254bada0ac02ce0afb243e821561193fb4e057e8913e52469286adba9ec3862531635c312e095c48639d7e1cd5f9286a6a6118029c00995fd3b37d5287035f002e01738b35f9286aea61180ad813fcd0e2156026f260e60ba0e6ffe9294a2a64fc36711dbb22acf026209e6d7b2834852ed6a29009b03cfc90e51b9ef01cf057e9d1d449254cf238083806db34354ec43c490bf377f496a881a0a4007782a30233b48855602af015e0e2ccf0e23497a500d8f00a61143cf1aaefb813389c37b46b2c348921eaa8602f04c60abec109559446cecf3059ce52f498d547a0198049c921da232770227019767079124ad5be97300b607f6c80e51918578f397a456287d046037605e76884adc033c0bf856761049d286953e02f07c621580066b39f062bcf94b526b945c0036c1cd7f866115f097c0c5d9412449e3577201381ad7fe0fc307810b70b6bf24b54ac905e0181cfe1fb46f03af2236fc9124b548a905603360ffec1085bb9558ebefcd5f925aa8d402b039f098ec10055b019c0edc901d4492b4714a2d00070373b243146a043817b82c3b882469e3955a008ecf0e50b06b817766879024f5a6c402d001fe383b44a1ee034e041667079124f5a6c4027000b0697688028d02ef067e951d4492d4bb120bc041c0d4ec1005ba8978f6efd1be925480d20ac064e0c002ffbdb2ad204e555c921d4492d41fa5dd28a7017b678728d097811f64879024f58f05401bb202785df7ab24a910a515803d8159d9210af30ee0faec1092a4fe2aad003c393b40616e033e9e1d4292d47fa515803fc90e50982f003766879024f55f4905600eb0537688822c05de901d42923418251580f9c08cec1005f900f0bbec1092a4c128a900ec084ccf0e51887b800bb343489206a7a402301f7700ec97ff01aec90e21491a9c520ac024600fe22020f5ee5c62ef7f4952a14a29001d620f00f5eee7c0b7b243489206ab940230090b403f8c029f0596670791240d5629056073609bec1005580e5c8ec3ff9254bc520ac05ed9010a713b1efa234955b00068ac4f002bb343489206af9402e00980fd7151760049d2709452001c01e8dd75c4e13f92a40a945000a6e304c07eb80658921d4292341c251480cd814db243b4dc287015f040761049d27094500036c543807a3582b3ff25a92a25148059780850af960257678790240d4f0905c01180de5d89cbff24a92aa5140047007a7345760049d270955000e6e22980bdb2004852654a2800f3b203b4dc0ae057d9212449c3554201989b1da0e51612930025491529a100ccc90ed072f7600190a4ea5800740fb02c3b845aa183f36da4625800b4180b80c6c79bbf5490120ac0ecec002d772fb113a0b4211600a92025140047007a737b7600b58605402a880540776607506b5800a48294500066660768394f00d47895f07e21a9ab841f68cf01e8cdb4ec006a8da9380a2015a38402e00dac3753b303a8352c005241da5e00bc79f5ce8394345efebc4905b100c847281aaf293802d02fa3d901a4b61700d7aff7ce02a0f19a8605a05f9c7cab746d2f00fe10f5ce39141aaf29d9010ab2223b806401d0e6d901d40a1d1c2dea971160657608a9ed05007c0cd0abe9c0e4ec106abc0e6ebbdd2f4b700e801aa08402705f768096db041f0368c326018fc80e51887bb30348504601b8273b40cb6d82ab29b46193801db3431462118e00a8014a28008bb303b4dc6ca20448eb6301e89f455800d40025140047007a33070b80366c32b07d768842dc951d4082320a80a7d9f5c602a0f1d8233b4041eec4110035400905e08eec002d37158776b561fb640728c81d5800d400251480dbb30314e090ec006a3c0b40ffdc8e05400d6001105800b4611680fe58857300d4102514805bb30314e071d901d46853819db243146225f0bbec1012945100eec67db57bb5297ec2d3baed825b46f7cb4a1c0150439450001603cbb243b4dc24e0e0ec106aacc710ab45d4bb07b000a8214a2900f7678768b949c08178d4abd6ee0ff1bc887e5909fc363b84046514807b80a5d9210ab02f30333b841aa7033c393b4441eec00f2c6a88120ac0222c00fdb02f3117401a6b7b60efec1005f949760069b5120ac02ae0e6ec100598091c991d428df3b4ec0085b9363b80b45a0905006cd5fd726a760035ce53b20314e6eaec00d26aa514806bb20314e2f1c0a3b243a831b60176cd0e51981f670790562ba500d8aafbc3c7001a6b4f607e768882dc0a2ccf0e21ad564a0158002cc90e5180c9c031c094ec206a8497e36ba19f1610fb00488d504a011805aecb0e51886371d737c1cec053b34314e606621f00a9114a2900233811b05f66109ffc54b717136700a83f468902e008801ac302a0b5791eb0597608a5d91cf8d3ec10851901aecf0e218d554a0100f8151e0ad42fdb03876787509afd71f39f7e7b00f879760869ac920ac08db8c566bf4c034ec7b3016af5d7f867df6f2b819f658790c62aa900fc1f16807e3a0e3f05d6e800e089d9210af4137c7f52c394540096023fcd0e51900ef0663c05ae265380d7102340eaaf6f660790d654520100f86a7680c21c09ec9e1d4243b337f0acec1085facfec00d29a4a2b0097650728cc1ce0d5d9213414d3818fe0d2bf41584c2c01941aa5b4027023707b7688c29c842b026af07460bfec1085ba09b82f3b84b4a6d20ac00adc0fa0dfa6026f22ce095099a61333fffdf43f180bb000a8814a2c009eb6d57f4f048ece0ea18139033ffd0fd295b803a01aa8b402300a5c853f6c83f04160bbec10eabbed81b3b243146c14f8567608696d4a2b0000ff8d056010b6055e8fcb024b328938f7615e7690822d03aec80e21ad4d8905600131e946fdd5014e030ecc0ea2be793ef0aaec1085fb1a7e205143955800003e9f1da05033800b816db283a8673b03e7e088cea07d213b80b42ea51680cf650728d87cdc21b0ed26039fc0a1ff41bb0ff8617608695d4a2d003703b764872854077829706276106d94c9c01b8043b38354e036e0d6ec10d2ba945a00eec1a33707ed7dc0e3b24368c2f6035e8ba7fd0dc3ff0277658790d6a5d402703ff0bdec1085db12b8009706b6c923818b814db28354e25fb30348eb536a0100f877620dae066777e0d3c0ecec20daa059c0fb819db2835462294e4656c3955c007e08fc3a3b44058e00fe313b84d66b06f0613ce96f98fe1d58951d425a9f920b00c067b20354e205c47901a5bf9eda682af0569cb4394c23c0a53802a9862bfd0dfb526ce1c33089384ce675d941f4109381b703afa4fc9ff52659045c9d1d42da90d2df147e05fc263b4425a611fb039c911d44bff797c456bfa5ff9c37cd4dc0f5d921a40d29fd8de1563c1e7898a600ef226e3ccad3218ad83b883f130dd7c789c70052a37546478b7f4cf5a7c07f6487a8cc0ae015c03f6707a9d40b8919ffb3b283546809b023b0303b88b421a58f00005c8e3f8cc3368dd828e895b865f0304d07de48142f6ffe39be022cce0e218d470d056015b1565dc335859880f676dc756e18e600e713f330a66787a9d42a62b4d1d3ffd40a3514805162438e65d9412a3495386ef602608bec3005db815877febcec2095bb17f86a760869bc6a280000ff8d870365e910e7ce7f19d8353b4c810e01be05fc6176107131ae3a528bd4520096011fc80e51b9d537aaa3a8e77537485389cd7dbe81dbfb36c172e0dcec10d244d4f446fc09e0f6ec1095db0ef802b154705a7698167b24b1c9d505c436bfcaf76dfcf4af96a9a9002c264ee72a7edd63c3cd2496087e1fcfa49fa8e9c0a9c08f802763896a8a1162dbf1fbb383481351c33e00633d9e18329d991d4440ac99fe1870367077769806eb00f38851acc370739fa659488c6e2dcf0e224d444d2300109301afca0ea1df9b05bc8c183e7d2e2e175c9bc9c488c935c09178f36fa2bfc79bbf5aa8b6110088d9d2dfcd0ea18759452ca17a3970036ea53a1dd89338c6f700ea2beb6d712b31c1f5e6ec20d244d5f8a6720df0c3ec107a98c9c4b6cd5700e701bb64074a7420f06fc00fbabfaef1e7b42d2ec3c97f6aa91adf58ee2326ec5437f4d1125b01a703bf24966eee4b1dc3de53817d88ddfcae009e8e3bfa35dd0ae2c0a5da47abd452353e0280d836f50660cbec20daa045c427e1371373384a3309f863e035c0e388d7a6dae1a34459955aa9d602007016f0eeec109a906f011f01be09dc961da6478f269641be14784276184dd87dc011c0d5d941a48d557301d81ef81e303f3b882664157017f075e03dc04f88a1d8a6bf9027138f320e21ce47783c3102e56989edf42de049c4eb516aa59a0b00c03b81576787504ffe973881edbf8867e74ddbed7137e213fe61c432be47650752cf56119333afc90e22f5a2f602308758be333b3b887ab68238f3e11ae073c4ececbb88ddd95632f8235aa71193f666007f001c43ecd6b77df77b7ed22fc705c48e8c4efe53abd55e0020265f7988479916003711a302b710133f6f1cf37563376f990a6c4d1cc3bb37b01ff1c97e3e71e2a13b4d966b09319273657610a9571600d891d8977e5e76100ddc08315760f5b5902809b7101bba2cee5ef7767fff23806d806d81b9ddbf9e0b6cd2fdfb1d62167f8dcb696bf579e099d921a47eb000843711fbd14bd2badc4b8cf6dc981d44ea073fb984b703ff971d4252638d12a789fe3a3b88d42f1680703ff036063f514c523b2d253e28f81ea16258001ef419e0e7d9212435d2df12f345a4623807e0a10e2126047a2cada4d5ae2566fe2fcc0e22f59323000f753570497608498df20f78f357811c0178b883886d3e5dcb2de91bc4614d52711c0178b8ab800f668790946e116e15ae825900d6ee9dc40e7292eaf549e047d921a441b100acdd9dc07b69fe09739206e3a7c0ebb3434883e41c80759b443cff3b3c3b88a4a1ba1f7806f095ec20d2203902b06e23c09938fb57aacd9781af66879006cd02b07ed7021fce0e2169686e065e8247fdaa023e02d8b069c00f8003b283481aa895c0e9c4e43fa9788e006cd80ae02ce21c7049e5ba08f874760869582c00e3f31d7c63904a763d31e7c7a17f55c34700e3379b9818f4f8ec2092fa6a15f054e0b2ec20d2303902307e8b895dc1eecb0e22a9afde8d377f55c81180897b11ae0c904a71157014704f761069d81c0198b80b807fc90e21a967bf034ec39bbf2ae508c0c6d90cf82f60efec209236ca72e0cf80cf670791b23802b071ee059e05dc961d44d246391ff852760829932300bd398e583b3c233b88a471bb027822310a2055cb1180de7c097825b18398a4e6bb1b7821defc250b401f9c077c343b84a40d5a069c005c971d446a020b40ef4688ad823f951d44d23aad02de047c3d3b88d414ce01e89fad89cd440ecc0e22e9613e462cf993d46501e8af79c07781f9d94124fddee5c4aa9d7bb383484de22380fefa0d700abed1484d711d31e9cf9f49690d1680fefb36b1c1c88aec2052e5ee004e046ec90e223591056030be424c38929463397032706d7610a9a92c0083b10af87be05ddd5f4b1a9ee5c04b89e3bb25ad830560b0fe06f8407608a932af270eed7286b3b41e1680c15a0e9c4994004702a4c15a05bc11782fb13f87a4f5b0000cc7ab808f6787900af766e2d19b377f691ca66407a8c472e0cf810e706af7aba4fe790bf07738d2268d9b1b010dd734e093c073b00448fdb08a78e6ef845b69827c04305c2b80e703ff9a1d442ac41b8077e3cd5f9a304700724c052e018ec512266d8ce5c451dc1fc267fed246f1e69363257012f0a5ec20520b3d009c81377fa92716803cf7117301fe05872fa5f1ba9bd86afb6378f3977a6201c8b512381d786b7610a9056e271e9b5d829bfc483d730e4073fc05f00fc026d941a406fa19f03ce047d941a45258009a63127004f059604e7618a941ae201e97fd3a3b8854121f0134c708f0756288f3a6ec3052437c81f899f0e62ff5992300cdb4237029b06f761029c94a62d3ac338125d961a4123902d04c3703c7102540aacd52e065c404596ffed2803802d06c9b021f058ec7b2a63adc043c1bb82a3b88543a6f2acd761ff00262bbd315d961a401fb2a7038defca5a17004a03d9e01fc23b0437610a9cf9603ef07fe068bae3434168076990f5c081c9c1d44ea93bb805380afe08e98d250f908a05d161043a41e7daa127c073812f832be9ea5a17304a09da60047031f07e66687912668055162df86b3fca534168076db17780ff1294a6a835f104bfc2ecf0e22d5ce02d07eb3880954cf05a6678791d66139f039e0cf81c5d961243907a0044b80538193805f658791d662017022f07cbcf94b8de10840596601ef23460366648751f5ee07be08bc04b8273b8ca487b20094670af044e07ce051d96154ad05c069c44cff07b2c3487a381f0194e701e06bc0fec468c0c2ec40aaca22e2757700f00dbcf94b8de50840d92611270bbe07780a30353b908a35025c491ce0f3f3ee5f4b6a304700ca36420cc53e133819f8dfec402ad28dc05f008712af316ffe520b38025097d9c09b8117111306a58d354a1c56f529e06ce077ddef496a090b409dfe80d88ce52462d2a034110f009f20f69ff8717618491bc70250af494411381738084704b461cb81ab819703d7e050bfd46a16004d010e04ce049e0d4cce0ea446fa1e700ef04d3cb2572a820540633d0e780df0c7c016d961946e84f8a47f2e70099ed82715c502a0354d0176065e416ce43205e86487d2508d00370167116bf9efcd0e24a9ff2c005a9f9d88c35b9e06ec961d4643f17de0df88a3a63daa572a9805401bd20136038e05de083c1a98961d4a7d334aecd97f25f05ae0a7c0d2ec509206cf02a08998063c99583ef80c2c026d770b703170117045761849c36501d0c698026c45cc133809980b4ccf0ea571b917f83f62bffe4b88617e97f34915b200a8579b13ab079e421c43bc757620add52dc4e63d5f027e04accc0e2429970540fdd22146069e06bc18d813d83e3b54e56e239ee97f10f80f5cbf2f690c0b8006a103ec00ec079c48cc179881cb09076d94f86ffc1de03ce007c4723e87f8253d8c0540c330133806388e38277e77dc71b09f6e21f6e4bf9c78aeffebec40929acf02a0619a04cc011e492c2b3c11d88328036e38343e23c4f3fbbb802f029f057e062cc4217e4913600150b6ed817d898389f602f62646083ca5f0412b892d797f025c05fc179ec227a947160035c9146239e14ce0306265c111c4a8c18ceedf9b941d7280561227ee2d077e077c9798b5ff6de2d3fd0adc8f5f529f5800d4741d603eb063f7da831825d8a7fbfd365b410cdfff98f8747f0370333171efceec7092ca660150db748851800e7162e1c13cf8f8601762dbe299c0acee9531d97084f814bf8cd85677f5d7eb815f02bf206efc3f234ac008ced4973464160095660e510c565f5b038f1873cd244ac136c0b6c0a388a2301e2b894fe67701f70077038b80c5ddaf77139fe017113bec2deefebe45c07dd9ff6124692c0b802449152a79429524495a070b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254a1ff07bd563083f7fe174e0000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": null,
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "watchLeads": {
+      "id": 127999,
+      "api": {
+        "response": {
+          "valid": true,
+          "output": "{{get(get(addMappableAnswersToResponse(payload, webhook.page_id), 'entry'), '1')}}"
+        }
+      },
+      "rev": 7,
+      "crud": null,
+      "name": "watchLeads",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch Leads",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "tiktok-lead-forms",
+      "samples": null,
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"output\": \"{{get(get(addMappableAnswersToResponse(payload, webhook.page_id), 'entry'), '1')}}\",\n\t\t\"valid\": true\t\n\t}\n}",
+      "approved": false,
+      "hookName": "tiktok-lead-forms",
+      "learning": false,
+      "interface": [
+        "rpc://app%23tiktok-lead-forms@1/interfaceWatchLeads",
+        "rpc://app%23tiktok-lead-forms@1/interfaceWatchLeadsMappableAnswers"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": null,
+      "description": "Triggers when a new lead is submitted.",
+      "expectJsonc": null,
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    \"rpc://interfaceWatchLeads\",\n    \"rpc://interfaceWatchLeadsMappableAnswers\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "makeAnApiCall": {
+      "id": 127990,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://business-api.tiktok.com/open_api{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "makeAnApiCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://business-api.tiktok.com/open_api`, e.g. `/v1.3/user/info` ",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "tiktok-lead-forms",
+      "samples": null,
+      "apiJsonc": "{\n\t\"qs\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n\t},\n\t\"url\": \"https://business-api.tiktok.com/open_api{{parameters.url}}\",\n\t\"body\": \"{{parameters.body}}\",\n\t\"type\": \"text\",\n\t\"method\": \"{{parameters.method}}\",\n\t\"headers\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"body\": \"{{body}}\",\n\t\t\t\"headers\": \"{{headers}}\",\n\t\t\t\"statusCode\": \"{{statusCode}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "tiktok-lead-forms",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n\t{\n\t\t\"help\": \"Enter a path relative to `https://business-api.tiktok.com/open_api`, e.g. `/v1.3/user/info` \",\n\t\t\"name\": \"url\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"URL\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"method\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Method\",\n\t\t\"default\": \"GET\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"GET\",\n\t\t\t\t\"value\": \"GET\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"POST\",\n\t\t\t\t\"value\": \"POST\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PUT\",\n\t\t\t\t\"value\": \"PUT\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PATCH\",\n\t\t\t\t\"value\": \"PATCH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"DELETE\",\n\t\t\t\t\"value\": \"DELETE\"\n\t\t\t}\n\t\t],\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n\t\t\"name\": \"headers\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"key\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Key\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"value\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Value\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Headers\",\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"qs\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"key\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Key\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"value\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Value\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Query String\"\n\t},\n\t{\n\t\t\"name\": \"body\",\n\t\t\"type\": \"any\",\n\t\t\"label\": \"Body\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "tiktok-lead-forms": {
+      "api": {
+        "info": {
+          "log": {
+            "sanitize": [
+              "request.headers.access-token"
+            ]
+          },
+          "url": "https://business-api.tiktok.com/open_api/v1.3/user/info/",
+          "headers": {
+            "access-token": "{{connection.accessToken}}"
+          },
+          "response": {
+            "uid": "{{toString(body.data.id)}}",
+            "error": {
+              "message": "[Code: {{body.code}}] {{body.message}}"
+            },
+            "valid": "{{body.code === 0}}",
+            "metadata": {
+              "type": "email",
+              "value": "{{body.data.email}}"
+            }
+          }
+        },
+        "token": {
+          "log": {
+            "sanitize": [
+              "request.body.code",
+              "request.body.secret",
+              "response.body.data.access_token"
+            ]
+          },
+          "url": "https://business-api.tiktok.com/open_api/v1.3/oauth2/access_token/",
+          "body": {
+            "app_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "secret": "{{ifempty(parameters.clientSecret, common.clientSecret)}}",
+            "auth_code": "{{temp.code}}"
+          },
+          "method": "POST",
+          "response": {
+            "data": {
+              "appId": "{{ifempty(parameters.clientId, common.clientId)}}",
+              "secret": "{{ifempty(parameters.clientSecret, common.clientSecret)}}",
+              "accessToken": "{{body.data.access_token}}"
+            },
+            "error": {
+              "message": "[Code: {{body.code}}] {{body.message}}"
+            },
+            "valid": "{{body.code === 0}}"
+          }
+        },
+        "authorize": {
+          "qs": {
+            "app_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "redirect_uri": "{{oauth.localRedirectUri}}"
+          },
+          "url": "https://business-api.tiktok.com/portal/auth",
+          "response": {
+            "temp": {
+              "code": "{{query.code}}"
+            }
+          }
+        }
+      },
+      "rev": 4,
+      "name": "tiktok-lead-forms",
+      "type": "oauth",
+      "label": "TikTok Lead Forms",
+      "scope": [
+        "user.info.basic"
+      ],
+      "scopes": {
+        "user.info.basic": "Allows to read a basic user's info such as username."
+      },
+      "aliasTo": null,
+      "appName": "tiktok-lead-forms",
+      "install": {
+        "common": {
+          "clientId": "{{parameters.clientId}}",
+          "clientSecret": "{{parameters.clientSecret}}"
+        }
+      },
+      "apiJsonc": "{\n    \"authorize\": {\n        \"qs\": {\n            \"app_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"redirect_uri\": \"{{oauth.localRedirectUri}}\"\n        },\n\t\t// From Minsu\n\t\t// Authorization URLs and API doc article links (in the format of https://ads.tiktok.com/marketing_api/... ) are NOT changed. For these URLs and article links, you do not need to do anything.\n        \"url\": \"https://business-api.tiktok.com/portal/auth\",\n        \"response\": {\n            \"temp\": {\n                \"code\": \"{{query.code}}\"\n            }\n        }\n    },\n    \"token\": {\n        \"url\": \"https://business-api.tiktok.com/open_api/v1.3/oauth2/access_token/\",\n        \"body\": {\n            \"auth_code\": \"{{temp.code}}\",\n            \"app_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"secret\": \"{{ifempty(parameters.clientSecret, common.clientSecret)}}\"\n        },\n        \"method\": \"POST\",\n        \"response\": {\n            \"data\": {\n                \"accessToken\": \"{{body.data.access_token}}\",\n                \"appId\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n                \"secret\": \"{{ifempty(parameters.clientSecret, common.clientSecret)}}\"\n            },\n            \"valid\": \"{{body.code === 0}}\",\n            \"error\": {\n                \"message\": \"[Code: {{body.code}}] {{body.message}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.code\",\n                \"request.body.secret\",\n                \"response.body.data.access_token\"\n            ]\n        }\n    },\n    \"info\": {\n        \"url\": \"https://business-api.tiktok.com/open_api/v1.3/user/info/\",\n        \"headers\": {\n            \"access-token\": \"{{connection.accessToken}}\"\n        },\n        \"response\": {\n            \"uid\": \"{{toString(body.data.id)}}\",\n            \"metadata\": {\n                \"type\": \"email\",\n                \"value\": \"{{body.data.email}}\"\n            },\n            \"valid\": \"{{body.code === 0}}\",\n            \"error\": {\n                \"message\": \"[Code: {{body.code}}] {{body.message}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.headers.access-token\"\n            ]\n        }\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "advanced": true,
+          "editable": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "password",
+          "label": "Client Secret",
+          "advanced": true,
+          "editable": true
+        }
+      ],
+      "scopeJsonc": "[\"user.info.basic\"]",
+      "installSpec": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "required": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "required": true
+        }
+      ],
+      "scopesJsonc": "{\n\t\"user.info.basic\": \"Allows to read a basic user's info such as username.\"\n}",
+      "installJsonc": "{\n    \"common\": {\n        \"clientId\": \"{{parameters.clientId}}\",\n        \"clientSecret\": \"{{parameters.clientSecret}}\"\n    }\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"advanced\": true,\n        \"editable\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"password\",\n        \"label\": \"Client Secret\",\n        \"advanced\": true,\n        \"editable\": true\n    }\n]",
+      "installSpecJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"required\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"text\",\n        \"label\": \"Client Secret\",\n        \"required\": true\n    }\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://business-api.tiktok.com/open_api/v1.3\",\n    \"headers\": {\n        \"access-token\": \"{{connection.accessToken}}\"\n    },\n    \"response\": {\n        \"valid\": \"{{body.code === 0}}\",\n        \"error\": {\n            \"message\": \"[Code: {{body.code}}] {{body.message}}\",\n            \"429\": {\n                \"type\": \"RateLimitError\",\n                \"message\": \"{{body.code || statusCode}} {{body.message || 'Too many requests.'}}\"\n            }\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.access-token\",\n            \"request.qs.access_token\"\n        ]\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "parseNumericIDsToStr": {
+      "rev": 5,
+      "code": "function parseNumericIDsToStr(bodyJSONstr) {\n\tif (!bodyJSONstr) return;\n\tif (typeof bodyJSONstr !== 'string') throw TypeError('\"body\" is expected to be a string.');\n\n    let jsonBody = bodyJSONstr;\n\n    const keysStr = jsonBody.split(',');\n    const pattern = /\".*id\":\\d+/;\n    keysStr.forEach((i) => {\n        const match = i.match(pattern);\n\n        if (!match) return;\n\n        const matchedStr = match[0];\n        const patternForId = /\\d+/;\n\n        const matchedId = matchedStr.match(patternForId);\n\n        if (!matchedId) return;\n\n        const strForReplace = matchedId.input.replace(\n            matchedId[0],\n            `\"${matchedId[0]}\"`\n        );\n\n        jsonBody = jsonBody.replace(matchedId.input, strForReplace);\n    });\n\n    return JSON.parse(jsonBody);\n}\n",
+      "name": "parseNumericIDsToStr",
+      "test": "it('returns \"undefined\" if \"body\" is a falsy value', () => {\n    assert.deepEqual(parseNumericIDsToStr(false), undefined);\n});\n\nit('throws TypeError if \"body\" is not a string', () => {\n    assert.throws(() => {\n        parseNumericIDsToStr(123213);\n    }, TypeError);\n});\n\nit('transforms all the numbers next to the keys that have \"id\" in the name to strings', () => {\n    const input = `{\"request_id\":1793321132227617,\"object\":1,\"entry\":[{\"id\":7345449721550405889,\"page_id\":7081644712976744706,\"page_name\":\"Untitled Form4/1/22, 4:41 PM\",\"campaign_id\":0,\"campaign_name\":\"test lead: dummy data for campaign name\",\"adgroup_id\":0,\"adgroup_name\":\"test lead: dummy data for ad group name\",\"ad_id\":0,\"ad_name\":\"test lead: dummy data for ad name\",\"create_time\":1710246906,\"changes\":[{\"field\":\"name\",\"value\":\"Jane Doe\"},{\"field\":\"email\",\"value\":\"test_email_address@mail.com\"}]}],\"time\":1710246906}`;\n    const expectedStr = `{\"request_id\":\"1793321132227617\",\"object\":1,\"entry\":[{\"id\":\"7345449721550405889\",\"page_id\":\"7081644712976744706\",\"page_name\":\"Untitled Form4/1/22, 4:41 PM\",\"campaign_id\":\"0\",\"campaign_name\":\"test lead: dummy data for campaign name\",\"adgroup_id\":\"0\",\"adgroup_name\":\"test lead: dummy data for ad group name\",\"ad_id\":\"0\",\"ad_name\":\"test lead: dummy data for ad name\",\"create_time\":1710246906,\"changes\":[{\"field\":\"name\",\"value\":\"Jane Doe\"},{\"field\":\"email\",\"value\":\"test_email_address@mail.com\"}]}],\"time\":1710246906}`;\n\tconst expectedJSON = JSON.parse(expectedStr);\n\n    assert.deepStrictEqual(parseNumericIDsToStr(input), expectedJSON);\n});\n",
+      "appName": "tiktok-lead-forms",
+      "arguments": "(bodyJSONstr)",
+      "appVersion": 1
+    },
+    "addMappableAnswersToResponse": {
+      "rev": 10,
+      "code": "function addMappableAnswersToResponse(payload, pageId) {\n    if (!pageId) return payload;\n\n    if (!payload) return payload;\n    if (typeof payload !== 'object') return payload;\n    if (!payload.hasOwnProperty('entry')) return payload;\n    if (!Array.isArray(payload.entry)) return payload;\n\n    function buildMappableAnswers(changes) {\n        return changes.reduce(\n            (acc, c) => ({\n                ...acc,\n                [c.field]: c.value,\n            }),\n            {}\n        );\n    }\n\n    return {\n        ...payload,\n        entry: payload.entry.map((e) => ({\n            ...e,\n            mappableAnswers: buildMappableAnswers(e.changes),\n            changes: undefined,\n        })),\n    };\n}\n",
+      "name": "addMappableAnswersToResponse",
+      "test": "it('returns payload if it is a falsy value or the payload is not an object', () => {\n    assert.strictEqual(addMappableAnswersToResponse(null), null);\n    assert.strictEqual(addMappableAnswersToResponse(undefined), undefined);\n    assert.strictEqual(\n        addMappableAnswersToResponse('not an object'),\n        'not an object'\n    );\n});\n\nit('adds \"mappableAnswers\" object to each \"entry\" item where the key is taken from \"entry[n].field\" and the value is taken from \"entry[n].value\", and remove \"changes\" array from the \"entry[n]\".', () => {\n    const changes = [\n        {\n            field: 'foo',\n            value: 'bar',\n        },\n        {\n            field: 'first_name',\n            value: 'John',\n        },\n        {\n            field: 'last_name',\n            value: 'Doe',\n        },\n    ];\n\n    const payload = {\n        request_id: '13213213',\n        entry: [\n            {\n                lead_id: '53213331',\n                page_id: '51321133',\n                changes,\n            },\n        ],\n    };\n\n    const mappableAnswers = {\n        foo: 'bar',\n        first_name: 'John',\n        last_name: 'Doe',\n    };\n\n    const expectedOutput = {\n        ...payload,\n        entry: [\n            {\n                ...payload.entry[0],\n                mappableAnswers,\n                changes: undefined,\n            },\n        ],\n    };\n\n    assert.deepStrictEqual(\n        JSON.stringify(addMappableAnswersToResponse(payload)),\n        JSON.stringify(expectedOutput)\n    );\n});\n",
+      "appName": "tiktok-lead-forms",
+      "arguments": "(payload, pageId)",
+      "appVersion": 1
+    },
+    "buildMappableAnswersInterface": {
+      "rev": 3,
+      "code": "function buildMappableAnswersInterface(fields) {\n\tif (!Array.isArray(fields)) return fields;\n\n    const interface = fields.map((f) => ({\n        label: iml.startcase(f),\n        name: f,\n        type: 'text',\n    }));\n\n    return interface;\n}\n",
+      "name": "buildMappableAnswersInterface",
+      "test": "it('returns \"fields\" if it is not an array', () => {\n    assert.strictEqual(buildMappableAnswersInterface(1), 1);\n});\n\nit('returns interface object based on the field names received. all interfaces have \"text\" type', () => {\n    const fields = ['foo', 'bar'];\n    const interface = [\n        {\n            name: 'foo',\n            label: 'Foo',\n            type: 'text',\n        },\n        {\n            name: 'bar',\n            label: 'Bar',\n            type: 'text',\n        },\n    ];\n\n    assert.deepStrictEqual(buildMappableAnswersInterface(fields), interface);\n});\n",
+      "appName": "tiktok-lead-forms",
+      "arguments": "(fields)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2024-03-12T19:43:28.584583+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Advertise on TikTok. Make ads that entertain and campaigns that connect. Where large and small businesses, agencies & creators can achieve big results. TikTok Lead Forms integration can help you collect meaningful signals from people interested in your business.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "ad99981bdfe7d1572ea378b21ec34892",
+  "versionFull": "1.0.10",
+  "compiledName": "tiktok-lead-forms",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": null,
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": null
+}

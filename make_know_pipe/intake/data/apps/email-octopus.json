@@ -1,0 +1,2620 @@
+{
+  "rev": 6,
+  "base": {
+    "qs": {
+      "api_key": "{{connection.apiKey}}"
+    },
+    "log": {
+      "sanitize": [
+        "request.qs.api_key"
+      ]
+    },
+    "baseUrl": "https://emailoctopus.com/api/1.5",
+    "response": {
+      "error": {
+        "message": "[{{statusCode}}] {{body.error.message}} (error code: {{body.error.code}})"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "email-octopus",
+  "_rpcs": {
+    "getLists": {
+      "api": {
+        "qs": {
+          "limit": 100
+        },
+        "url": "/lists",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.paging.next}}"
+        }
+      },
+      "rev": 3,
+      "name": "getLists",
+      "label": "Get Lists",
+      "appName": "email-octopus",
+      "apiJsonc": "{\n    \"url\": \"/lists\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"limit\": 100 // The number of records to return per page, up to a maximum of 100. Defaults to 100.\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"page\": \"{{pagination.page}}\"\n        },\n        \"condition\": \"{{body.paging.next}}\"\n    },\n    \"response\": {\n        \"limit\": 300,\n        \"iterate\": \"{{body.data}}\",\n        \"output\": {\n            \"label\": \"{{item.name}}\",\n            \"value\": \"{{item.id}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "email-octopus",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "getCampaigns": {
+      "api": {
+        "qs": {
+          "limit": 100
+        },
+        "url": "/campaigns",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.paging.next}}"
+        }
+      },
+      "rev": 3,
+      "name": "getCampaigns",
+      "label": "Get Campaigns",
+      "appName": "email-octopus",
+      "apiJsonc": "{\n    \"url\": \"/campaigns\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"limit\": 100 // The number of records to return per page, up to a maximum of 100. Defaults to 100.\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"page\": \"{{pagination.page}}\"\n        },\n        \"condition\": \"{{body.paging.next}}\"\n    },\n    \"response\": {\n        \"limit\": 300,\n        \"iterate\": \"{{body.data}}\",\n        \"output\": {\n            \"label\": \"{{item.name}}\",\n            \"value\": \"{{item.id}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "email-octopus",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "getListFields": {
+      "api": {
+        "url": "/lists/{{parameters.listId}}",
+        "method": "GET",
+        "response": {
+          "output": "{{parseListFields(body)}}"
+        }
+      },
+      "rev": 3,
+      "name": "getListFields",
+      "label": "Get List Fields",
+      "appName": "email-octopus",
+      "apiJsonc": "{\n    \"url\": \"/lists/{{parameters.listId}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": \"{{parseListFields(body)}}\"\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "email-octopus",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "getAllContactsOfList": {
+      "api": {
+        "qs": {
+          "limit": 100
+        },
+        "url": "/lists/{{parameters.listId}}/contacts",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.email_address}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.paging.next}}"
+        }
+      },
+      "rev": 3,
+      "name": "getAllContactsOfList",
+      "label": "Get All Contacts of List",
+      "appName": "email-octopus",
+      "apiJsonc": "{\n    \"url\": \"/lists/{{parameters.listId}}/contacts\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"limit\": 100 // The number of records to return per page, up to a maximum of 100. Defaults to 100.\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"page\": \"{{pagination.page}}\"\n        },\n        \"condition\": \"{{body.paging.next}}\"\n    },\n    \"response\": {\n        \"limit\": 300,\n        \"iterate\": \"{{body.data}}\",\n        \"output\": {\n            \"label\": \"{{item.email_address}}\",\n            \"value\": \"{{item.id}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "email-octopus",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    }
+  },
+  "flags": {},
+  "label": "EmailOctopus",
+  "theme": "#795de7",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Campaigns",
+      "modules": [
+        "watchCampaigns",
+        "getCampaign",
+        "getCampaigns",
+        "getCampaignReportSummary"
+      ]
+    },
+    {
+      "label": "Lists",
+      "modules": [
+        "watchLists",
+        "watchContacts",
+        "getList",
+        "getLists",
+        "createList",
+        "updateList",
+        "deleteList",
+        "getContactOfList",
+        "getContactsList",
+        "createContactOfAList",
+        "updateContactOfList",
+        "deleteContactOfList",
+        "createListField"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "makeApiCall"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000001534944415458c3edd3bd4e155114c5f1df5caea05cb4206a21f123a0361416745626163e840f60e91bf80cbe83858d89b5b1333656122a12c1420a400b8db99118bc2e0b36c915128314d09c7f32997df69c597bcdec7d68341a8d46e394e9f6832430811b98c447fcecbaee58c2ff4512497a491e27d948f239c9d32483327622066e25594f324cb293642dc9837a763dc9b524ddbea1ca5f48b29864aef6cc56be4bd2aff89fb5fb63f1247af886cb388f290cf0042bd8c274924dccd4358f5f633aef710e0b58c56e92097bedddb2d7f62b78874fe306d6f00a8f6abd890d9c2973bf71afd653b88961bd3783b7b88387788345dc2eadb375dfc12eae56fc97811eb6f1a50aac94f00fbcc408cb2530c05c898cf01d97f0bcbe7e34663eb88fd7959fae5a1f0ece802477933c4bf222c9d2517a7884d9ea2799af213fb4e7e031ece162fdeeaf189dc8316c341a8dc669f2070ca4c7530a603ae50000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda7930000037f4944415478daedd75b88575514c7f1cf1967c6691cf352a9e8182411dd8bb487e8620911448605515081540449bd18f5940fe54317a29b213d4517a27cb048e925e8a10b480fc6044d97b122ca46024b4d9be6e6ac1ecefae71f9dbf155899ed2f1ccef9efb3f7da6bfdf6da6b9f3f8542a15028140a8542a15028140a8542a15028140a85c2ff82aad58b88683ccec599988aeff005c6abaafa43e3ff592242447444c46d11d1171143113112113b22625d442cc83effb6ab7f5bf022e2f688d81793b33122661ecb02f44644ff24814f44c4fe88188d885b8e4416a48db6bcfef178db5ab49f8e4518c75718cdf6dd781243b8fca0201646c4e288581211f30f274e53969d878b70535e22626edae96db6d134a6ed486ebff6c3b44fc13ebc863b7112bab134efd352c089ecff4806f3335ec6b3e88888368ca1137b726c377ec255697724c5be004fa127ed3e88cd11312d7fb76135de407f441caf2ee47bd0913e77e5ef4eec77a0d04f6066fa370a5555b5146010bb3007f7aa4f00795f92cf9fa45139c92cbc8337b10debb130c5d99def1fc3722cc6460ca7c86d69fbbe1cfb00eece603b720186f13156e1b21c7f43be5f8f3352c013f1a23a83dfcf18e6a59fcbf1029e6b04da6a0b7c86cdf9dce5d0e3f24bbc3ec9b84b716baee059d892816d4fe5af4c87a7e3669c8ff939f6b8146c2b76e0439c82b5f82883ecc34ebc821bf101dec25d381bdfe702accc6c9c830538179764e6fdd0ecf02102e4f93e8635d8344990bfe209f43629dbe0ed547722af3efc98d9328873d45b683085e9c00929588ffa1be31a5c8cebd09fe3c7335376aad3b7271766347d1d6fba47fab817a7e2b4ecb729dbef48b12717208bcb545c98938ea5d16832be0a0fabf7af0c7640bd3dd6e06a7caadee703b9a2dfe0bd5c59f83c33ad5b5d54e7614306f94cb6afc6e3b8020fa55f5bd2fe866cbf16eb32e015ea347f1a2f6199fa436e7b8a1fea6d31f2fb82b71060061ec5c9eabdd4287a155e5517a16fd5fbb5518ebbd585a752efd72a27ea4c11db1d28985dd9673cdf8f66dbdecc8ad9eaba319cb667e73cbbb25f3b7e5117b52a857e3edfaf5517c12ab36ba869fee98d8c6af9257bd071734f447c1d119b23622022b645c4fd47d3075093bf2b2262d95ff5ad6a6534b93e555ca92e388bd4c7dbbbc7f47f81662122a233229646c4ac88981111538ea60c28140a8542a15028140a8542a15028140a8542a1f0a7f90dfbfdcddbcdc4c6560000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-05-06T15:06:00.105355+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000009474944415478daed9a798c9d6515c67fdf748101ac50a481d2229b0134228b5229d8000a1654c2624025115041418846a8101088220609414245138c1b124354228b1036a96c1a4b29508a6c058102da52da69e99476eedcfbf8c7391ff7ebeddce9dc0ea4ad3cbfe466eef7bdfb76cef39e3b608c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31e61da4184e61490023819d814f001301e5e769e021e0df808a62584d990d0949e5676f49d7487a5952bf9a3424d5243d2be9224913cb32662327177284a4af497a496ba7216996a483bc0936722a27ff14494b87b0f855e6493ad89b6023a5b2f8fb4a7ab1c3c52f79a8740766232317bf5bd29fd671f14b2eb415d870e8ea30ff07818386d9e6e780b1eb7be026e874031c086cdd41fe7ee056e08ff91d60376223ad57d20a75a5a02daddb37f2d3fd6eb150233bccbf65cbb380b9c032603f60544bfa22e06c60153019d81ed80c983050e539e963808f01a3b37e8878450f300ba80d37a65069e75c6027e0626029705e66b915985f8973ec92f90a6001f014b002e05d13dfc85372518b3f7f2d45e14e8a58402b3549d74bba5a526fe5fd39039db06ce374492b25f565f99a22c6b048d2e4b7e364663b5324bd91fdf9b6a4f18a6bed4b9276c83c63245d26e995ec435dd26249372862206db54c45341f90631ab3215a954e2d402b63802f10a773ab36f51fdff2ae9f3841edd806d8047813782ddf15c042c2d220690450cf7c9b00cb8146b6b7793ed75bfaf11ea006f41296e55fc00d84559ac1ea51511116e887c0e9f9fc6c96dd033886887a1e4bd35214c088ca18cb76a7014700f3803b2b9ba08bb086a308ebd3a8b45f8eaf0bd882b0a0ab5ac6d3a89429db2dc75ce43cbc55773b4bd5e90678391b2db5c368e03b3941238658c7b2ac676dfc03383917ad00fa72012e06c6030f039f2534c95dc083c097815d8199c0e5c00bc09780e3b2cc4ae036e06ae00dc29c8f253670953af049e02b39b68b816bb2fc54e02ac24d9d0cfc8070695f0526657f1f2074cf81996f147009702a7001e13ece06f62636f023c06f80bf03070067007f21dcea246009701df07b607fc2753d08fc18782f7059d6737eceef19c4a6ebce3a2f95f4eab0dc559ab3dd24cd1fe635f041495b0ee2024a373353d211920e530490b690b499a47b337da522cad84877b1b4f22c49d72a620e732bf9fbf373aea409925e481773a8a4ed2a2e6082a4cbb3dc6c49e32a267d84a45f67da0c49bb4bba339fabeddf9c63a8beef957492a4dbf37d3d3f92f48ca40f4b9a96cf2b5ad297643fcfcfe7dbb22f131571999aa4a992be9f657a252dcf7a0e69e77e3abd05cc2304d2bad29f3bbd6708793f9aa7e0f66c7312e1167a33fd09e068e026e284ad244ee1a599be7ffebd1c980efc94384122acc2b6ac2e32ab8c0676cfefff254e6029f8ea846501d801f8267028f00a7026f045e046e01ee01cc28d35800b09ebb10bf069603e61618e0166031fc8fe3f43d3855c98639c4d08f0a3585368571905ec45aceb1cc2ca9c4988e70119b20b288a024975e04ae297bf75b9cadd0dfcb9329983b12807dec8495fda927e3bb1f87be5c4cc01aecdc5989693d14db884a3807184d9ef22f4c0a683b4dda0b949476599aae01b9d7f6bc44685a66b81d80035425fbc496cb459c0fdc05995feff36bfef07ec43fcaafa5762433e01fc8cd87c93327d623eb7a38f703f9fc93ac702bfa4b9d1d7a0530b0021e0ce049eebb0dcddc46959049477efc1f2cf22824647e4df59acae33fa5af2d7585df8d5814f01df2274c203c4a276e524ae58cb44ceccef7b129bac642be24a0bb1e916b529df68537739e8de41d20a62e3d4f2b9bb92de6ab546b5cccbd5c0f78027811d811f11eb35e07c77b4012aa7f61ec25c3d3ec4a2cb08a1f20a21d4ae27c4ce60bc0f388c309b538143885b472777a99d0915bd901061a5fb1a9b1fe51c1c5079eecef6ee274ee138c28d1c4f88ceab0871d7439cae1959e7e1c0e7818373114eac4e1d4d71b720df1d4b98ffc959166243f5119b775fe034600a61d500fe99732ec2654cc9f91c5719cbd184753b8fb02623082b355491de9e3cb585a49129c8ae1ba2f06b487a2c05dcf27cb7462ca04504365a3e2b241d9ee24a99af9affd67c9e9a42ef394947aa199f783dc5623d05e189921ec9b49aa44b243d99cfab241d27e978490b2b82adfc9f8725924ecbb9d859d2e315e1b622bf5f2769aca4fb2be3a9a7b82c4560afa49efc3e57d2ae0ad1db97effad48c55cc95b4a3a43d14e25592965584624dd2a992eecbb4c539d775459c63400b30640d908537254cea14e234ee430896064dbfd84a0f61caf6cce71a7007f08736f91f25fc63b5b70561b2e703f7653f1eade4bf8be6e97e09b885f84fa419c43dfeeb84ff9c0dfc870847cf02ae004e0016679979c04984c87b18789e1081271027b21b780cf81d7067f6f179e2149e429cfe3789abd7cfb3de0b72cebab3fee9399eb308abd04d88d35f64faae398e65841b9a48445bafa4293ea711d6615be20a3913f878e62b4dfe6e39d6db805fc1c0ba6bc817c3dc00e381bf11e6072238f15036b64d4efe7699b680b81f3f9d1dfe1071579d0bdc4bface6aa7b47a40a5b56f22365b577eeaf9aecc5f0d8c8cccb452136c4208bf1e9a718cfe4ad9326f910bd247538993f9b724fcedeb655ad9f7ec7757ce41add20e95fe14d94663803a5fabbc9f4a6cc6578958c4b2acaf55f36c9e9fc5d99f3278548e77eb2cdbcb20ff92d769206801b1bb0ecb01cd21acc181844abf97f0957dc46e9d409cd6c7805bd6a6fc33bd5ce8765417ba5dfed6e7d6485aa34d5931b0386ce4440fd6ef064dffde4aff50ea1cc044f7010bdbcc5b2fab0bc9aa005e456ca0b5d2d13510a84bba83307f5d84103c36b3dc456c8ad18425788ed818e5c49aa1d14398eef9446c63c32305c5e41456923447d25119cd92a41b25dd94dfef5344f1d677b73778725e472aa28bef1fc25579d8ac4b1ce0adfe12a6e661e0bbc09184365802dc4c5cc120eea3cbdfe9c9fb7fa0280a8aa2e82f8ae2a9a2285ecce7f5ddad35513326fe1145dc7c7ce5f4ff44d2a6922e95f4a8e2e7d0f5dd65f34ea1e67fd69c2269baa4edf3dd6692b6c9bbf2faeea669c3db625f2ad7b782417e7b36c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c61853f23fb453c65dc3b8cec50000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000011524944415478daeddd7b905e657dc0f1ef1bd2a1b209a4557211da2aa6d09b7f80509d762831d4a9d0048a8323d44b5b47eba805a9a34e5bc1d07a2dc3f44a11a676a623376dbd41a8daa984d04e3b6824fdcb3156c0529b9060db8164136c4df2eb1fbfe7e43d7bdef3de76f7ddddc4ef676627d977f7dc9e739ee73ccfeffc9eb3204992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244982ce62ef405d44009c049c5efe6ddbdf6780039dce92da75e9b8b4e8b5a856e99f0bbc14b808d8044cb5fcfa32e0abc04ee05f810780833606d2712622888865117156446c89885d11f14c8cee4044dc17119b2262aa34249296ba52f9d7968aff68441c1ea3e2f76b085e19111d1b0269892a15bf532aebe723e2c81c2a7ed39ed2a0acb51190969852f989882b2362ef3c56fcbaa311f13711b1da46405a2216a8f2db08484b51a9fc972e40e5b71190c6b06cd21b28157035f03660cd021d57077835f0d6da3e485a48b5aeff9605baf337ed2d3d8fc52e0a69499a780f00b89472275e046b80b700e609482d26d600940a374556c085eafab7d958be24354cba07700670c1221fe30ae042301620354dba01b80c58b7d80759f663ed62ef84b4d44ca401a875ff2f5ca0e37806d8031ceef3f3a5d013396e94c0edca8838b37cadb4f774629a640f601570de84f7ff28f005e057c9c6e63340db95ba6201f6e584506bbc6f05be52be6ec540ea0969f962efc01ced03de017cb37c7f03d9102c8561c792552af25ae0f5c04a728af503c0c1f22bab800d74cb7143f9ece0c81bd171612934004f027700078097019730fb9ec941e0489f9f9d47dec5c67a7f40a3b24cd1dec3a85b067c99ec99c4527b57412d31ebcf802bc9a4a943c087800fce727df5f7399c4ff6cc28eb9e06b69243345fe4f2fda08c21cf88886f0f49d4d91f11afa9250c9d1d39ab6f9c94df4f46c4fac85980af8d9c1edce6db659fc63d8ea988b8bb6cebb84f402ac7f4ee967dfe4629c3b673d75a76d19dd67d63f47f9fc3f74a796c8d094cd96ec42b8c558c69b17b00d3c023b5ef07ddc1db74805791ddfec3c069e478bfcdb8ebaeac2aeb1fe7d6b5860c3a7e7e1285b614f4e949b4595eca6313f012e076e0f688d83bd7de406d1ffe147839f020f08e8878ca9ec668162213709075c0af01cf29df5f4856b8712c2febf911e0d401bf771fb077018f6d298f973f033cdaf8ec6e462c9f5ac5bb85c195bf691d7023991c365f79196f00ae221b99abcaf71ad162f70000ae035e0c7c9d6c0c56cc696dfd1d0498a73bc37ef2d163dbca9601ff087c7cd00a6a63e71f06fe0738d2dcb7f23b55a3b67fd8bed7d6b9ba1c6fbf651e07ae21ef9aebc85ed8274739f0da53823fa1b7f21f06fe1b7818d8055c0e3c9fde86f9adc00ee6a7873435e4fb41c7716af9fda76829ff11d731f01cceb7f9d8efba4936004718ed2eb882bc502e9fe0be30e2be8cea63c04db497dfb137170344443ddafe30f0f7c00b802bc8bbd646601bb02f22ee24efc253c0c5c0b96450ad036c8b887b816f01473b9d4e75312c035e58d63755be7e85ac808f44c48c97a796e5827cb1eacf947d1ef55c5536029b9959f99f046e033e4106fc0e017f440e85de0efc12dd1e673547e3a17a50b6d6b85c4c0e178ed212482ceb5806fc18bdf91d1b80a311715239a63be8f66cea65754a29db9f00ee05f646c4fd3482958d2030657dfb80b3fa9cc3cfb69ca37a10f9d83ed57ede2183df2f2ddb9811446e94cbb9a56caafdeed9e6a2ab05f56e1a237036497b22038cb3398eb660e69661eb2acbae88884f443780b82b22ae89886f46ef7b108f96df7d7144dc15bdc1ccc311f15844bcba56be94ef1f8bfeef553c1019c45c5d5ba619d83c10119b6b3fef1b042ccbdedbb29d2dd5f22de5f0a272cccdfdaa6fb37a55dc7d2dc7de16481c76dc95778d5856d536fa9555758eee8e88df88f67759b69da3b620f2bbaa728a6e207557ede7c782c8e56b7559475b80bbdae6d20a3a971ddf1cfda3f20b6957cce25d81313f0dc0d6c645363d603fbf1711fbcabffdd42f8eb591d1fb61aa0b776ad831c5f006a06dd96f4656f27ee5d06f4a787d9ba3be2d6a4f44bc3122be3ec2efd6b731eafa67bc4ca6e578879dc38899e768e0f533c2f9585df667d853a863eb1cc7a463003b80ddc03913dece30f730bf01c00d6437b31e44edd0dbbd9b26936c3695df59cee0325f4e8edf075953b63fcef8b94376d937925de9b9388fde40ed6781c75a37dcedc2de4376fbd735d6f583642ce216469b35ba0ef849f2da3a87e101c8fdc02bc6587ff53299af01bf4feff068d83984ee10e74186e78d0cf386b23f75cf947f4fab7d36ab21eea41b80bde489bf71c2db19e451e04e98b700206405dcd0e76701dc3c64f961c94f558af3c364ece0f5ccac389791e3ebbdc0f56440ee10f0b774c7c82bc9a0eaf3cbf72b8037015f626e17e579f4066a4709b0b63d863d971cc7ff26332be711724cfb59b2029f4f8e7f5790f180874ad93c015ccbcc20e376723c7e12ddd8c1cd8df557e5fb65b2c24fb594f1ebca397a9c7c82f4ee3ee7f0609fe52f20e7a0cc35f6d40c6a3e0bfc3679637d0519eff92a4382cefd4cac01a8b5fc7796c25c3fa96d0d71277dee4e13324a14fa76f2ee02703659a9ea17cfe3648a73b5df1d665e805374ff74daa7c868f061f2ce7c6ef9fc9fc806e223741fb35677efa532580cda276a7d917c4af1045959a7c8decbebc83bf3436443771bf0ebf43600efaf5d7f67033fdb58ff1780379672ab1c62e68d6a3d99637233bd95781a782719f0ecb7fc3ab2a1be6b9ecbece4b25f7f51b67713f05d669965b9108f011f2373f4ff92c93de2eb671277ffb97a92ec1555daee8ccd2ef5a0bbc86ae01780abc9ca545586ea49c40f2cf6010f7084ac24cf6f7cbe1df856ed9c1d8c88ade4d38cff65bc84aeb629e9db81a71a91feb6214abfc67c7759c7b021ce28a9e3c3ec241b9caaee2c2387941bc821c66d6483382b136d006a85b3b57c5dc5c2fd3dc27dc0ef3299bbff76b29bd94ca45a567e36c8288fdc8e75a907047682bcb3ff31ede57a1a33c788f3a5794142a9281131a8a1adf75aeaebfa3f7a1f27dedb5cb8acf7d0b1831f3de0d5acc44f925dfaa6713245db92ca669b693acc36daebce0a32aef3f2f2f3eb6216199013ef01948bf82099f0b39cf132c7666b1ff05b64f7781277ffed946ee6223a4afbf3f841a6c98b742ee77d27f034331b802bc861cda0c6b6ed4ebc73e18aeb9871731edacc6752d928dbbaaefc7f33bdbde81564e300f0e61873b2db82a402971d7a8a6ea59ce41874d2957f2908f2eefe26665e10fbc9e0e00de45df44063b96de479984ba13c4d6fc55d4f8ecf5bf300c861ca86c632d3e45f787eb6f1f93ae63729ac59d957d1fe6e88b61e4a3fd5ccd2e667ab66b98f7db75dab3b6f262bfafde4355e7ff94dfd29cf58166c2ec002350207c8e0d1a7aa0f22ff02f18b2267c0bd3b4e8cbf1d18b45fc83b803f003e00bc96ccefafdb4856c6b60258cee078c172f291dd41321372baf1f3b7921768956b40794cfa42e0cfc9b743d76d237b52f793ddf2ba0d403d19a73a87ef89885f8e88a10d586406e6ea96f5af20c7eac7d65f5ccdcc1eca34fd7b2855cfabbefc85cc6c8cab066e7fcb7a9a0d4873dbf5e3e89063fe5f24c7fcaf017e9e3cc7fb1bc735f64b6f16742e40190e3c4556d25d64a4fbd4b9ad75a029f2447d907cdc741219251fbbabd4b081de3c806387496f0aea7cebd0bd13ff68edf39f22536e1f21df92745963b933c988fb232debbc84ac30d7d3db40ac04de5bb6fb5e3218d71c97ae2103bd0f94f577c88bf20ab211a817f63e72c8f02c997abba3b1af97007f4d361c1db2c25d4ea6df7e878ce0f7cb83b808f8301929ef90ef39e8b7fe5b807f2b65f596c67a7697e5daac207b5a6793f180cb283da09a6d6485fd6e394ff5ed6f2cdf3f438ee15f3be05c5f02fc15792d3f40369a9f23e7ce342fe0a53c01adabb4bceb63bcb9ffa3da13117f1811d747c4e7a2371371e4f7020cc8d21a459582baa5dff663f44cb1b675ac898877b66cf7e988d81dfdb3096f88cc2e6b3ba6a3117167449c1311ffd167f91bcb3e9d15bde9bda3d81b999557cf12ec9731fa74f96ada12ed29b46dbe169939d876adf52bab031171550cce628ce89fb9d94c737ed718c756795f449c1c333349ab6dee6e597656e9ee0b3e1db8ece073c8249549bcba6b1df01ee0fde45da32d696512d1daa69166a5cdc132f27161735aef69e463b57ebdbb7aefa1ed67179277fce93ecb6f069e47e62afc5ef977d4f2ec179fa922ddcdabb7ed4946bd6b5e259a0d7212d95bb8a66c7f585905dda756c354999b6dcb6fab7df671e0ef4638b6baf3811f6a2993e5659febcb06d933d83dc23ef7ac6c62a27d76d7d1f2ff8b27b9ed3ef6915ddc71bae6b38d1a1f6cfc5bffbc5e619aeb6f1b7b36d7b1931cff3d495ed8d73273b65d650fd945bd9aee0573887cf4763b39fbac9e215765d9ed02de476ffaec3e32b1e8bfcaf79f26b3d03e48766b9f4bfb35354d76876f2567431eabfcb5a744ef04be4166d4bd80dea0d811e0dfc9aefbf6dae71f057e9adea74b47c844a21bc8f3fde9523e1fa13b1c6c5bff1da56c0e0e780c7b98cc476836f255e6e175d5f24035ecbd954c616edbf634f00fa5ecaab4f143e410a19a75da767efb6e7354130b91d72aff47c971e0a024a0ef9163a595b3dcdc97c9a0d87adaa3a9d5c5f03b64baec484f07a277aae6d1a10bf5c600ea53413bd4a67ad67ebf5a7f9027fd6394ccaee89d4eda21ef2e0f357efe3ab2b25e4e990a4cbed1f75fc831f32af262a9f6ab795ccbca32d5cb413bc02bc974d3b5e458f92b34de7558b6bf92bc2b6d2abfbb99eecb467792c1b06353920794751534bc9c8cb3bc840cec6e251b9f9e69af2de51374a7101ffbfdb299fa74e035b5fd7c846c54eeedb3fe2dccccf2db4d6672fe38dd27165bc9c6735bf338fb1cdb05a53cabf2f912190fab4f3bae6e54f5f33b76d90ebb5827a21cf41964cef699437efd417258f0b2da67fd5ad983643a64fd4e731f7967bf820ca89c523eaf2eeaedb49cdc13498cfe3290d9acf364e0d0182f24399d3c3fcf308b14d55aa3721a791d7c87797cd9c638fbd9a701f84ff25add43b78734d23e368e6de4f299afb25d302306698e44cefffe704b50e389e8cec3aebbbbfcacae0aac75ca36cf285fbe285273124302b9c7bb493f06dc478e4dde4e3e7eabbaf8fbc931ce5de4d8ec43f4064476902d6dd3a0205e743a9d857cef9f745c9be86c402022e28bc03f9395bf9af5b5831c97ed238334cde7d507c886e1cac6e7c1f1f2ac533a0e2cc85c00b2421fa04cf2a8759dae04ded6b2d8036444f8658dcfaba8f6158b525ad20966c1df0adca8fc6d6f69d9473e32b988de69a2fb9999fe282d841d6400f97964cf753b994ba17195a0caa5d1fe7eb603917f29a8df8b273f14119ba2376becdeb2cc621f9e4e30d19d8bb03e222e8f888d91ef7a5cec5d9b178bf577012ea0f7ce5f6550dd4f3e4f6ece6c9a269f69ff1cbd39053b99e573506990724d1d25332e1f9ddbda969ec5fecb409520d343af259f637f80de4afe257202c4ab5a963730281d0f6a4380c74a1ec093e539eb9a883825daff10e7dec8f7c19f1ebdafc19ed52408498b20faccef8ec133efb644fbccac19efbb97749c1a9039787fccfc4b2dab23e29ed22bb8a7fa99a4e358ad82577fc1e548b4fcc9a3f0efc14bf3664985cda33bfbee52728ae7a7398127f04892244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992244992a4ef47ff0ffe417471932346330000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000fb34944415478daeddde96edbd6028551f2a2efffcaba3f02b78ead81c399f75a4081d489c5438ac3274a22f7c7e3b1010059fed77b0000407b0200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040fff41ec0441e377e77ef3d7800f84e00bc77e7a0ffee710401005d0980df4a1df48f4c430800d08500f84f8b03ffab690a01009a12007d0efcafc6200400682239004638f0bf1a931000a0aad4af018e78f09f697c004c2eed0cc04c0756670300a826e90cc04c07ff15c60dc0c0520260f683e8ece30760300901b0cac17395f9006000ab07c06a07cdd5e607804e560e80550f96abce17000dad1a00ab1f24579f3f002a5b3500128800002e5b31001c1801e083d50220ede09f36bf0014b25a00241201009cb65200381002c041ab0440fac13f7dfe013869950000004e582100bcfafdc37200e0b0150200003849000040a0d903c069efbf591e001c327b000000170800000834730038ddfd9ce502c047fff41e007fd9bffdd9819c51bd5a37f7538f027435f3198095ecdbef9da79d29237a5cfc3b603002a0bffde2df01c065de02804ccf5ead0b4e08e20c00e479bcf9b9d3f810c21980ff3c7bf533ebcef0b1f57b3557739979857adf4cebf499b15a37e0246700fed84ffebca49976c8bde765a565d5c3d1e5d773393fb66b6722aefe1ec4120063bc72789cfcf9885a8d75a665c271250fde42000ef016c038ecb048556bddeff9565889e530d3d899903300404f2dde369a21ae1f077f06c50880353732af1c78e6e87ad16afd69b9ed8dbc9dbbb8125d0880f76c7c50876d0b3a13007f3c3b4d680735266737eef9b4fc56fee68b6d1abef121c0bfd9418ccdc1bf8c9f379d6ab95cef6c63256e9635db0703a11a01404b23ee78bf0e2477c656e2318e4ea3f474467c4e8e8ccf9d33efabb54edd194bef71b498c761e6737f3ca6dd76a61d78033d56ae23cf47ab03e4bbe91d5d6fde8db5e6bc5e59afaf4cebea2d7d3f8defee72ab314f2d1fffece3dedd8f1d9dded9e9945a7ff783ffaed4384adcaabad4edae87bf92e5cc01b06d22e099912f015c6b6cefa6bd1ff83747c75bf3e05c625d2e31ad1102a0c4d99892d3b8fadc948aa1ded3b9bb5e95385b73640c77d6cd968f71f7f18bf1214066776463bbf37e71c9c7283dbe1ad3aa79519e911c5d5677c6fdeaf767bb6ae6ddf5ea71e271ae8e6194657a771c4db71301c0ea4a6c903537ead21bfc6807dab3eebe022af50aaae4722c11923dc75fe2f14a8c67f4757bf4f1fd327b000cf1410aba9a651d70d19b79d4587e2b3cff23ac57238c61a671bd357b00f0b7590e86f04ca9f5b7c5670846e58e9ced4dbb4c7c0d90965a7dc29db1beef3eea0ef2e7326a31cebde274465dce35e67394757b6a2b9c01b022fcb1ea725869a776f4ab8aac6df6eb38588fafd9b731aec4f92f67004873e7da00251fe3e7e39dbd15ecd14f66db311f537b1dd85ffc7fa9afcf96face79abe0be7b7d80d9ec2ffedcf5e2402b9c01d8363bb9f4f93feac855e55a3cc6bbdf3ff22aa1c4f4b8e6ddf373f4b9eb3dfe3b7fffa5d677dd5b5e37a3a577d748e8b6de380300e3387ae1a1efb130db8e7066676fa73cda199811c632c2187a19ee72c72b0540eace70989569702596d32877ca4b5ccf6baab53c5b6d9ba5c7df7b5fda7bfab50d1302abbc05f0a5fb02858b4a5c700868efce7d13ba6ef3ab05401ac1b30607fef1cdbead8d30fe11c630a26e21b0d25b005f563f7df47d3e6733e3986b4b5957479c4feb23a59458c79b7f6664d53300ab6fd8abcf1f995adebc064a2bb15f7633a042563d48ae3a5f891ca8602d5345c0ca01b06deb1d2c579b1fea9a717d19358a461d17e399e17a10dbb6ad1f00db36c91311341ffc71f480b23ff96f46a37d256ed6e578d5080173740c238cb5843bdb6b9365901000db36ffc63efbf829ebe88e65d61de9d5715ffdbdd9b7afd2e39f75bd1975be878df79400d8b601177ea5713f7efcc7bc665d674bcccfd975b7d4b5f04b4d63c46db0e4587abfb2dd3ffc7fedf97ff5f89fa63154082405c0b60db4e02b78b5f28db403e29cc7c5bfab3ded16bffff5189f1ea7f541f6ca784a8eef6ee01f197f6d3dd7eb5ad37dfcf8f314fbddfdf198629c35cc34e325ee0c573b7e7ade45acc4fcf7788c2bef575f59ce777effe8fd098efefed57928a5e49df0cedcd1afe6b2383b8e67e3e9f5bc5e19fbdd3b095e5d5eafa6df62bbaf62c50b01ade8d50522668a985246bbc14aab79ee39ed3bcbfbd9eff7ba30d0aaef955f7d8e46f8cc448f6538c3349bece304c03c46d9d9906785e83a7a8be599b7b316e3efbd1ef49efe4f33af2f719f01f832f593c63246db99d5f26c7b6b39ef232fe7d2631b795e6b4b9ef74b520300528db4936c3196b3d3a835a61582a7f7ba73f42c4e6ddf83b6c6f49a2de7b40098e6d39985f5de70796db6e7e6ca78f70f7f37da01abf57372777afbc19ff51ce3ecd35f723e57fb0c40e2c1fd93940da7b612cb71fff0f3969fa2bef3a9eb33bf7f74b9957cffbae47375774cb5e7ff535cb51a7f4d57cee2dc99ef4fcffd7ef2dfd79acfdb56f91ae012335141eb15aac5f370e52b404797c3088f71f5c07c746775665a77bff678f7db0367d55cdf5b7d8abbd657c45a8cffe8d7e15a7e0deeeed70b1f07fecdd5e9959ccf4b560880e967e09bd15e05d15fedf71b4b8eb3f501b8d7f218692c23cdc3956b699c3dc0961c5febcf0bb49cee2102e0b79e5f05ba7bc1979f8f01d0ca081724e384d53e037057efef017f7f1575e67d251b1500a70880ebcebe97e5153d00c310007f94fa1427004c6185eb00d4f80e2d002c6d95330025ee28d5e27ee20030845502e0cbab837a8def6e02c0b4560b809f6a5ea759340030ad153e0370d7eab7cf04805fd203a0d5e53d016028c90170e795bfd3ff004c2d3500a6ba6103c0043eed23ed43079318002d0ffe567820c9befdbe9cf9f79f3190b4002871f0bff2182d6f7f09d0dbcf086040690100006c02e013570b04604902e0b512a7feeffc1e005423009e738321009626007e7b76f06ef12a5e3400d04c5a00ec1ffeaec4c1df811c80e1a505c0b63d3fd0973a68ef077f06005dad7e37c077463a308f34160002249e01a8e5d3db0b57fe0e00aa1000651c39887b7b00806124bf0570d4be95fb1680033e00437006e018a7f001588a0038eed937071cfc019892b700ce71c0076009ce000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010e8ffd2dabd1a988bc4050000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "getList": {
+      "id": 28636,
+      "api": {
+        "url": "/lists/{{parameters.listId}}",
+        "method": "GET",
+        "response": {
+          "output": "{{parseDateFromISOFormat(body)}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "getList",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a List",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listId",
+          "type": "select",
+          "label": "List ID",
+          "options": "rpc://app%23email-octopus@1/getLists",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "email-octopus",
+      "samples": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "name": "Foo",
+        "counts": {
+          "pending": 0,
+          "subscribed": 5,
+          "unsubscribed": 0
+        },
+        "fields": [
+          {
+            "tag": "EmailAddress",
+            "type": "TEXT",
+            "label": "Email address",
+            "fallback": null
+          },
+          {
+            "tag": "FirstName",
+            "type": "TEXT",
+            "label": "First name",
+            "fallback": null
+          },
+          {
+            "tag": "LastName",
+            "type": "TEXT",
+            "label": "Last name",
+            "fallback": null
+          }
+        ],
+        "created_at": "2020-04-22T00:00:00+00:00",
+        "double_opt_in": false
+      },
+      "apiJsonc": "{\n    \"url\": \"/lists/{{parameters.listId}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": \"{{parseDateFromISOFormat(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "List ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "List Name"
+        },
+        {
+          "name": "double_opt_in",
+          "type": "boolean",
+          "label": "Double Opt-in"
+        },
+        {
+          "name": "fields",
+          "spec": {
+            "spec": [
+              {
+                "name": "tag",
+                "type": "text",
+                "label": "Tag"
+              },
+              {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+              },
+              {
+                "name": "label",
+                "type": "text",
+                "label": "Label"
+              },
+              {
+                "name": "fallback",
+                "type": "text",
+                "label": "Fallback"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Fields"
+        },
+        {
+          "name": "counts",
+          "spec": [
+            {
+              "name": "pending",
+              "type": "number",
+              "label": "Pending"
+            },
+            {
+              "name": "subscribed",
+              "type": "number",
+              "label": "Subscribed"
+            },
+            {
+              "name": "unsubscribed",
+              "type": "number",
+              "label": "Unsubscribed"
+            }
+          ],
+          "type": "collection",
+          "label": "Counts"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Gets details of a list.​",
+      "expectJsonc": "[\n    {\n        \"name\": \"listId\",\n        \"type\": \"select\",\n        \"label\": \"List ID\",\n        \"options\": \"rpc://getLists\",\n        \"mode\": \"edit\",\n        \"required\": true\n    }\n]",
+      "samplesJsonc": "{\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"name\": \"Foo\",\r\n    \"double_opt_in\": false,\r\n    \"fields\": [\r\n        {\r\n            \"tag\": \"EmailAddress\",\r\n            \"type\": \"TEXT\",\r\n            \"label\": \"Email address\",\r\n            \"fallback\": null\r\n        },\r\n        {\r\n            \"tag\": \"FirstName\",\r\n            \"type\": \"TEXT\",\r\n            \"label\": \"First name\",\r\n            \"fallback\": null\r\n        },\r\n        {\r\n            \"tag\": \"LastName\",\r\n            \"type\": \"TEXT\",\r\n            \"label\": \"Last name\",\r\n            \"fallback\": null\r\n        }\r\n    ],\r\n    \"counts\": {\r\n        \"pending\": 0,\r\n        \"subscribed\": 5,\r\n        \"unsubscribed\": 0\r\n    },\r\n    \"created_at\": \"2020-04-22T00:00:00+00:00\"\r\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"List ID\"\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n        \"label\": \"List Name\"\n    },\n    {\n        \"name\": \"double_opt_in\",\n        \"type\": \"boolean\",\n        \"label\": \"Double Opt-in\"\n    },\n    {\n        \"name\": \"fields\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"tag\",\n                    \"type\": \"text\",\n                    \"label\": \"Tag\"\n                },\n                {\n                    \"name\": \"type\",\n                    \"type\": \"text\",\n                    \"label\": \"Type\"\n                },\n                {\n                    \"name\": \"label\",\n                    \"type\": \"text\",\n                    \"label\": \"Label\"\n                },\n                {\n                    \"name\": \"fallback\",\n                    \"type\": \"text\",\n                    \"label\": \"Fallback\"\n                }\n            ]\n        },\n        \"label\": \"Fields\"\n    },\n    {\n        \"name\": \"counts\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"pending\",\n                \"type\": \"number\",\n                \"label\": \"Pending\"\n            },\n            {\n                \"name\": \"subscribed\",\n                \"type\": \"number\",\n                \"label\": \"Subscribed\"\n            },\n            {\n                \"name\": \"unsubscribed\",\n                \"type\": \"number\",\n                \"label\": \"Unsubscribed\"\n            }\n        ],\n        \"label\": \"Counts\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created At\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getLists": {
+      "id": 28637,
+      "api": {
+        "qs": {
+          "limit": 100
+        },
+        "url": "/lists",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{parseDateFromISOFormat(item)}}",
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.paging.next}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "getLists",
+      "epoch": null,
+      "flags": {},
+      "label": "List All Lists",
+      "scope": [],
+      "expect": [
+        {
+          "help": "The maximum total number of records that will be returned",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "email-octopus",
+      "samples": {
+        "data": [
+          {
+            "id": "00000000-0000-0000-0000-000000000000",
+            "name": "Foo",
+            "counts": {
+              "pending": 0,
+              "subscribed": 24,
+              "unsubscribed": 1
+            },
+            "fields": [
+              {
+                "tag": "EmailAddress",
+                "type": "TEXT",
+                "label": "Email address",
+                "fallback": null
+              },
+              {
+                "tag": "FirstName",
+                "type": "TEXT",
+                "label": "First name",
+                "fallback": null
+              },
+              {
+                "tag": "LastName",
+                "type": "TEXT",
+                "label": "Last name",
+                "fallback": null
+              }
+            ],
+            "created_at": "2020-04-21T17:41:51+00:00",
+            "double_opt_in": false
+          },
+          {
+            "id": "00000000-0000-0000-0000-000000000001",
+            "name": "Bar",
+            "counts": {
+              "pending": 2,
+              "subscribed": 14,
+              "unsubscribed": 0
+            },
+            "fields": [
+              {
+                "tag": "EmailAddress",
+                "type": "TEXT",
+                "label": "Email address",
+                "fallback": null
+              },
+              {
+                "tag": "FirstName",
+                "type": "TEXT",
+                "label": "First name",
+                "fallback": null
+              },
+              {
+                "tag": "LastName",
+                "type": "TEXT",
+                "label": "Last name",
+                "fallback": null
+              }
+            ],
+            "created_at": "2020-04-22T17:41:51+00:00",
+            "double_opt_in": true
+          }
+        ],
+        "paging": {
+          "next": null,
+          "previous": null
+        }
+      },
+      "apiJsonc": "{\n    \"url\": \"/lists\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"limit\": 100 // The number of records to return per page, up to a maximum of 100. Defaults to 100.\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"page\": \"{{pagination.page}}\"\n        },\n        \"condition\": \"{{body.paging.next}}\"\n    },\n    \"response\": {\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": \"{{parseDateFromISOFormat(item)}}\",\n        \"iterate\": \"{{body.data}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "List ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "List Name"
+        },
+        {
+          "name": "double_opt_in",
+          "type": "boolean",
+          "label": "Double Opt-in"
+        },
+        {
+          "name": "fields",
+          "spec": {
+            "spec": [
+              {
+                "name": "tag",
+                "type": "text",
+                "label": "Tag"
+              },
+              {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+              },
+              {
+                "name": "label",
+                "type": "text",
+                "label": "Label"
+              },
+              {
+                "name": "fallback",
+                "type": "text",
+                "label": "Fallback"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Fields"
+        },
+        {
+          "name": "counts",
+          "spec": [
+            {
+              "name": "pending",
+              "type": "number",
+              "label": "Pending"
+            },
+            {
+              "name": "subscribed",
+              "type": "number",
+              "label": "Subscribed"
+            },
+            {
+              "name": "unsubscribed",
+              "type": "number",
+              "label": "Unsubscribed"
+            }
+          ],
+          "type": "collection",
+          "label": "Counts"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Get details of all the lists.",
+      "expectJsonc": "[\r\n    {\r\n        \"name\": \"limit\",\r\n        \"label\": \"Limit\",\r\n        \"help\": \"The maximum total number of records that will be returned\",\r\n        \"type\": \"uinteger\",\r\n        \"default\": 10\r\n    }\r\n]",
+      "samplesJsonc": "{\r\n    \"data\": [\r\n        {\r\n            \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n            \"name\": \"Foo\",\r\n            \"double_opt_in\": false,\r\n            \"fields\": [\r\n                {\r\n                    \"tag\": \"EmailAddress\",\r\n                    \"type\": \"TEXT\",\r\n                    \"label\": \"Email address\",\r\n                    \"fallback\": null\r\n                },\r\n                {\r\n                    \"tag\": \"FirstName\",\r\n                    \"type\": \"TEXT\",\r\n                    \"label\": \"First name\",\r\n                    \"fallback\": null\r\n                },\r\n                {\r\n                    \"tag\": \"LastName\",\r\n                    \"type\": \"TEXT\",\r\n                    \"label\": \"Last name\",\r\n                    \"fallback\": null\r\n                }\r\n            ],\r\n            \"counts\": {\r\n                \"pending\": 0,\r\n                \"subscribed\": 24,\r\n                \"unsubscribed\": 1\r\n            },\r\n            \"created_at\": \"2020-04-21T17:41:51+00:00\"\r\n        },\r\n        {\r\n            \"id\": \"00000000-0000-0000-0000-000000000001\",\r\n            \"name\": \"Bar\",\r\n            \"double_opt_in\": true,\r\n            \"fields\": [\r\n                {\r\n                    \"tag\": \"EmailAddress\",\r\n                    \"type\": \"TEXT\",\r\n                    \"label\": \"Email address\",\r\n                    \"fallback\": null\r\n                },\r\n                {\r\n                    \"tag\": \"FirstName\",\r\n                    \"type\": \"TEXT\",\r\n                    \"label\": \"First name\",\r\n                    \"fallback\": null\r\n                },\r\n                {\r\n                    \"tag\": \"LastName\",\r\n                    \"type\": \"TEXT\",\r\n                    \"label\": \"Last name\",\r\n                    \"fallback\": null\r\n                }\r\n            ],\r\n            \"counts\": {\r\n                \"pending\": 2,\r\n                \"subscribed\": 14,\r\n                \"unsubscribed\": 0\r\n            },\r\n            \"created_at\": \"2020-04-22T17:41:51+00:00\"\r\n        }\r\n    ],\r\n    \"paging\": {\r\n        \"next\": null,\r\n        \"previous\": null\r\n    }\r\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\r\n    {\r\n        \"name\": \"id\",\r\n        \"type\": \"uuid\",\r\n        \"label\": \"List ID\"\r\n    },\r\n    {\r\n        \"name\": \"name\",\r\n        \"type\": \"text\",\r\n        \"label\": \"List Name\"\r\n    },\r\n    {\r\n        \"name\": \"double_opt_in\",\r\n        \"type\": \"boolean\",\r\n        \"label\": \"Double Opt-in\"\r\n    },\r\n    {\r\n        \"name\": \"fields\",\r\n        \"type\": \"array\",\r\n        \"spec\": {\r\n            \"type\": \"collection\",\r\n            \"spec\": [\r\n                {\r\n                    \"name\": \"tag\",\r\n                    \"type\": \"text\",\r\n                    \"label\": \"Tag\"\r\n                },\r\n                {\r\n                    \"name\": \"type\",\r\n                    \"type\": \"text\",\r\n                    \"label\": \"Type\"\r\n                },\r\n                {\r\n                    \"name\": \"label\",\r\n                    \"type\": \"text\",\r\n                    \"label\": \"Label\"\r\n                },\r\n                {\r\n                    \"name\": \"fallback\",\r\n                    \"type\": \"text\",\r\n                    \"label\": \"Fallback\"\r\n                }\r\n            ]\r\n        },\r\n        \"label\": \"Fields\"\r\n    },\r\n    {\r\n        \"name\": \"counts\",\r\n        \"type\": \"collection\",\r\n        \"spec\": [\r\n            {\r\n                \"name\": \"pending\",\r\n                \"type\": \"number\",\r\n                \"label\": \"Pending\"\r\n            },\r\n            {\r\n                \"name\": \"subscribed\",\r\n                \"type\": \"number\",\r\n                \"label\": \"Subscribed\"\r\n            },\r\n            {\r\n                \"name\": \"unsubscribed\",\r\n                \"type\": \"number\",\r\n                \"label\": \"Unsubscribed\"\r\n            }\r\n        ],\r\n        \"label\": \"Counts\"\r\n    },\r\n    {\r\n        \"name\": \"created_at\",\r\n        \"type\": \"date\",\r\n        \"label\": \"Created At\"\r\n    }\r\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createList": {
+      "id": 28638,
+      "api": {
+        "url": "/lists",
+        "body": {
+          "name": "{{parameters.name}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{parseDateFromISOFormat(body)}}"
+        }
+      },
+      "rev": 3,
+      "crud": "create",
+      "name": "createList",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a List",
+      "scope": [],
+      "expect": [
+        {
+          "name": "name",
+          "type": "text",
+          "label": "List Name",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "email-octopus",
+      "samples": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "name": "Foo",
+        "created_at": "2020-04-25T00:00:00+00:00"
+      },
+      "apiJsonc": "{\n    \"url\": \"/lists\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"name\": \"{{parameters.name}}\"\n    },\n    \"response\": {\n        \"output\": \"{{parseDateFromISOFormat(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "List ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "List Name"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Creates a new list.",
+      "expectJsonc": "[\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n        \"label\": \"List Name\",\n        \"required\": true\n    }\n]",
+      "samplesJsonc": "{\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"name\": \"Foo\",\r\n    \"created_at\": \"2020-04-25T00:00:00+00:00\"\r\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"List ID\"\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n        \"label\": \"List Name\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created At\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deleteList": {
+      "id": 28639,
+      "api": {
+        "url": "/lists/{{parameters.listId}}",
+        "method": "DELETE",
+        "response": {
+          "output": null
+        }
+      },
+      "rev": 4,
+      "crud": "delete",
+      "name": "deleteList",
+      "epoch": null,
+      "flags": {},
+      "label": "Delete a List",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listId",
+          "type": "select",
+          "label": "List ID",
+          "options": "rpc://app%23email-octopus@1/getLists",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "email-octopus",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/lists/{{parameters.listId}}\",\n    \"method\": \"DELETE\",\n    \"response\": {\n        \"output\": null\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Deletes a list.",
+      "expectJsonc": "[\n    {\n        \"name\": \"listId\",\n        \"type\": \"select\",\n        \"label\": \"List ID\",\n        \"options\": \"rpc://getLists\",\n        \"mode\": \"edit\",\n        \"required\": true\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "updateList": {
+      "id": 28640,
+      "api": {
+        "qs": {
+          "name": "{{parameters.name}}"
+        },
+        "url": "/lists/{{parameters.listId}}",
+        "method": "PUT",
+        "response": {
+          "output": "{{parseDateFromISOFormat(body)}}"
+        }
+      },
+      "rev": 4,
+      "crud": "update",
+      "name": "updateList",
+      "epoch": null,
+      "flags": {},
+      "label": "Update a List",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listId",
+          "type": "select",
+          "label": "List ID",
+          "options": "rpc://app%23email-octopus@1/getLists",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "List Name",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "email-octopus",
+      "samples": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "name": "Foo",
+        "created_at": "2020-04-24T00:00:00+00:00"
+      },
+      "apiJsonc": "{\n    \"url\": \"/lists/{{parameters.listId}}\",\n    \"method\": \"PUT\",\n    \"qs\": {\n        \"name\": \"{{parameters.name}}\"\n    },\n    \"response\": {\n        \"output\": \"{{parseDateFromISOFormat(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "List ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "List Name"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Updates a list.",
+      "expectJsonc": "[\n    {\n        \"name\": \"listId\",\n        \"type\": \"select\",\n        \"label\": \"List ID\",\n        \"options\": \"rpc://getLists\",\n        \"mode\": \"edit\",\n        \"required\": true\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n        \"label\": \"List Name\",\n        \"required\": true\n    }\n]",
+      "samplesJsonc": "{\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"name\": \"Foo\",\r\n    \"created_at\": \"2020-04-24T00:00:00+00:00\"\r\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"List ID\"\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n        \"label\": \"List Name\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created At\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchLists": {
+      "id": 28641,
+      "api": {
+        "qs": {
+          "limit": 100
+        },
+        "url": "/lists",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{parseDateFromISOFormat(item)}}",
+          "iterate": "{{body.data}}",
+          "trigger": {
+            "id": "{{item.id}}",
+            "date": "{{item.created_at}}",
+            "type": "date",
+            "order": "desc"
+          }
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.paging.next}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "watchLists",
+      "epoch": {
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{item.created_at}}",
+            "label": "{{item.name}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Lists",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "email-octopus",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/lists\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"limit\": 100 // The number of records to return per page, up to a maximum of 100. Defaults to 100.\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"page\": \"{{pagination.page}}\"\n        },\n        \"condition\": \"{{body.paging.next}}\"\n    },\n    \"response\": {\n        \"iterate\": \"{{body.data}}\",\n        \"trigger\": {\n            \"id\": \"{{item.id}}\",\n            \"date\": \"{{item.created_at}}\",\n            \"type\": \"date\",\n            \"order\": \"desc\"\n        },\n        \"output\": \"{{parseDateFromISOFormat(item)}}\",\n        \"limit\": \"{{parameters.limit}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "List ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "List Name"
+        },
+        {
+          "name": "double_opt_in",
+          "type": "boolean",
+          "label": "Double Opt-in"
+        },
+        {
+          "name": "fields",
+          "spec": {
+            "spec": [
+              {
+                "name": "tag",
+                "type": "text",
+                "label": "Tag"
+              },
+              {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+              },
+              {
+                "name": "label",
+                "type": "text",
+                "label": "Label"
+              },
+              {
+                "name": "fallback",
+                "type": "text",
+                "label": "Fallback"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Fields"
+        },
+        {
+          "name": "counts",
+          "spec": [
+            {
+              "name": "pending",
+              "type": "number",
+              "label": "Pending"
+            },
+            {
+              "name": "subscribed",
+              "type": "number",
+              "label": "Subscribed"
+            },
+            {
+              "name": "unsubscribed",
+              "type": "number",
+              "label": "Unsubscribed"
+            }
+          ],
+          "type": "collection",
+          "label": "Counts"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n    \"response\": {\n        \"limit\": 300,\n        \"output\": {\n            \"date\": \"{{item.created_at}}\",\n            \"label\": \"{{item.name}}\"\n        }\n    }\n}",
+      "parameters": [
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Triggers when a new list is created.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"List ID\"\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n        \"label\": \"List Name\"\n    },\n    {\n        \"name\": \"double_opt_in\",\n        \"type\": \"boolean\",\n        \"label\": \"Double Opt-in\"\n    },\n    {\n        \"name\": \"fields\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"tag\",\n                    \"type\": \"text\",\n                    \"label\": \"Tag\"\n                },\n                {\n                    \"name\": \"type\",\n                    \"type\": \"text\",\n                    \"label\": \"Type\"\n                },\n                {\n                    \"name\": \"label\",\n                    \"type\": \"text\",\n                    \"label\": \"Label\"\n                },\n                {\n                    \"name\": \"fallback\",\n                    \"type\": \"text\",\n                    \"label\": \"Fallback\"\n                }\n            ]\n        },\n        \"label\": \"Fields\"\n    },\n    {\n        \"name\": \"counts\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"pending\",\n                \"type\": \"number\",\n                \"label\": \"Pending\"\n            },\n            {\n                \"name\": \"subscribed\",\n                \"type\": \"number\",\n                \"label\": \"Subscribed\"\n            },\n            {\n                \"name\": \"unsubscribed\",\n                \"type\": \"number\",\n                \"label\": \"Unsubscribed\"\n            }\n        ],\n        \"label\": \"Counts\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created At\"\n    }\n]",
+      "parametersJsonc": "[\n    {\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 10,\n        \"required\": true\n    }\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getCampaign": {
+      "id": 28642,
+      "api": {
+        "url": "/campaigns/{{parameters.campaignId}}",
+        "method": "GET",
+        "response": {
+          "output": "{{parseDateFromISOFormat(body)}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "getCampaign",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Campaign",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "campaignId",
+          "type": "select",
+          "label": "Campaign ID",
+          "options": "rpc://app%23email-octopus@1/getCampaigns",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "email-octopus",
+      "samples": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "to": [
+          "00000000-0000-0000-0000-000000000001",
+          "00000000-0000-0000-0000-000000000002"
+        ],
+        "from": {
+          "name": "John Doe",
+          "email_address": "john.doe@gmail.com"
+        },
+        "name": "Foo",
+        "status": "SENT",
+        "content": {
+          "html": "<html>Foo Bar<html>",
+          "plain_text": "Foo Bar"
+        },
+        "sent_at": "2020-04-22T22:32:25+00:00",
+        "subject": "Bar",
+        "created_at": "2020-04-21T22:32:25+00:00"
+      },
+      "apiJsonc": "{\n    \"url\": \"/campaigns/{{parameters.campaignId}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": \"{{parseDateFromISOFormat(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "Campaign ID"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "subject",
+          "type": "text",
+          "label": "Subject"
+        },
+        {
+          "name": "to",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "To"
+        },
+        {
+          "name": "from",
+          "spec": [
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            },
+            {
+              "name": "email_address",
+              "type": "email",
+              "label": "Email Address"
+            }
+          ],
+          "type": "collection",
+          "label": "From"
+        },
+        {
+          "name": "content",
+          "spec": [
+            {
+              "name": "html",
+              "type": "text",
+              "label": "Html"
+            },
+            {
+              "name": "plain_text",
+              "type": "text",
+              "label": "Plain Text"
+            }
+          ],
+          "type": "collection",
+          "label": "Content"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created At"
+        },
+        {
+          "name": "sent_at",
+          "type": "date",
+          "label": "Sent At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Gets details of a campaign.",
+      "expectJsonc": "[\n    {\n        \"name\": \"campaignId\",\n        \"type\": \"select\",\n        \"label\": \"Campaign ID\",\n        \"options\": \"rpc://getCampaigns\",\n        \"mode\": \"edit\",\n        \"required\": true\n    }\n]",
+      "samplesJsonc": "{\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"status\": \"SENT\",\r\n    \"name\": \"Foo\",\r\n    \"subject\": \"Bar\",\r\n    \"to\": [\r\n        \"00000000-0000-0000-0000-000000000001\",\r\n        \"00000000-0000-0000-0000-000000000002\"\r\n    ],\r\n    \"from\": {\r\n        \"name\": \"John Doe\",\r\n        \"email_address\": \"john.doe@gmail.com\"\r\n    },\r\n    \"content\": {\r\n        \"html\": \"<html>Foo Bar<html>\",\r\n        \"plain_text\": \"Foo Bar\"\r\n    },\r\n    \"created_at\": \"2020-04-21T22:32:25+00:00\",\r\n    \"sent_at\": \"2020-04-22T22:32:25+00:00\"\r\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"Campaign ID\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n        \"label\": \"Status\"\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n        \"label\": \"Name\"\n    },\n    {\n        \"name\": \"subject\",\n        \"type\": \"text\",\n        \"label\": \"Subject\"\n    },\n    {\n        \"name\": \"to\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        },\n        \"label\": \"To\"\n    },\n    {\n        \"name\": \"from\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"name\",\n                \"type\": \"text\",\n                \"label\": \"Name\"\n            },\n            {\n                \"name\": \"email_address\",\n                \"type\": \"email\",\n                \"label\": \"Email Address\"\n            }\n        ],\n        \"label\": \"From\"\n    },\n    {\n        \"name\": \"content\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"html\",\n                \"type\": \"text\",\n                \"label\": \"Html\"\n            },\n            {\n                \"name\": \"plain_text\",\n                \"type\": \"text\",\n                \"label\": \"Plain Text\"\n            }\n        ],\n        \"label\": \"Content\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created At\"\n    },\n    {\n        \"name\": \"sent_at\",\n        \"type\": \"date\",\n        \"label\": \"Sent At\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "makeApiCall": {
+      "id": 28643,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://emailoctopus.com/api/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "makeApiCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://emailoctopus.com/api`. For example: `/1.5/campaigns`",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "email-octopus",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"https://emailoctopus.com/api/{{parameters.url}}\",\n    \"method\": \"{{parameters.method}}\",\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"response\": {\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"help\": \"Enter a path relative to `https://emailoctopus.com/api`. For example: `/1.5/campaigns`\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"required\": true,\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ]\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n        \"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n        \"default\": [\n            {\n                \"key\": \"Content-Type\",\n                \"value\": \"application/json\"\n            }\n        ]\n    },\n    {\n        \"name\": \"qs\",\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n        \"type\": \"collection\"\n    },\n    {\n        \"name\": \"statusCode\",\n        \"label\": \"Status code\",\n        \"type\": \"number\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getCampaigns": {
+      "id": 28644,
+      "api": {
+        "qs": {
+          "limit": 100
+        },
+        "url": "/campaigns",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{parseDateFromISOFormat(item)}}",
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.paging.next}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "getCampaigns",
+      "epoch": null,
+      "flags": {},
+      "label": "Get Campaigns",
+      "scope": [],
+      "expect": [
+        {
+          "help": "The maximum total number of records that will be returned",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "email-octopus",
+      "samples": {
+        "data": [
+          {
+            "id": "00000000-0000-0000-0000-000000000000",
+            "to": [
+              "00000000-0000-0000-0000-000000000001",
+              "00000000-0000-0000-0000-000000000002"
+            ],
+            "from": {
+              "name": "John Doe",
+              "email_address": "john.doe@gmail.com"
+            },
+            "name": "Foo",
+            "status": "SENT",
+            "content": {
+              "html": "<html>Foo Bar<html>",
+              "plain_text": "Foo Bar"
+            },
+            "sent_at": "2020-04-20T22:37:55+00:00",
+            "subject": "Bar",
+            "created_at": "2020-04-19T22:37:55+00:00"
+          },
+          {
+            "id": "00000000-0000-0000-0000-000000000003",
+            "to": [
+              "00000000-0000-0000-0000-000000000004",
+              "00000000-0000-0000-0000-000000000005"
+            ],
+            "from": {
+              "name": "Jane Doe",
+              "email_address": "jane.doe@gmail.com"
+            },
+            "name": "Bar",
+            "status": "SENT",
+            "content": {
+              "html": "<html>Bar Foo<html>",
+              "plain_text": "Bar Foo"
+            },
+            "sent_at": "2020-04-22T22:37:55+00:00",
+            "subject": "Foo",
+            "created_at": "2020-04-21T22:37:55+00:00"
+          }
+        ],
+        "paging": {
+          "next": null,
+          "previous": null
+        }
+      },
+      "apiJsonc": "{\n    \"url\": \"/campaigns\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"limit\": 100 // The number of records to return per page, up to a maximum of 100. Defaults to 100.\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"page\": \"{{pagination.page}}\"\n        },\n        \"condition\": \"{{body.paging.next}}\"\n    },\n    \"response\": {\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": \"{{parseDateFromISOFormat(item)}}\",\n        \"iterate\": \"{{body.data}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "Campaign ID"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "subject",
+          "type": "text",
+          "label": "Subject"
+        },
+        {
+          "name": "to",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "To"
+        },
+        {
+          "name": "from",
+          "spec": [
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            },
+            {
+              "name": "email_address",
+              "type": "email",
+              "label": "Email Address"
+            }
+          ],
+          "type": "collection",
+          "label": "From"
+        },
+        {
+          "name": "content",
+          "spec": [
+            {
+              "name": "html",
+              "type": "text",
+              "label": "Html"
+            },
+            {
+              "name": "plain_text",
+              "type": "text",
+              "label": "Plain Text"
+            }
+          ],
+          "type": "collection",
+          "label": "Content"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created At"
+        },
+        {
+          "name": "sent_at",
+          "type": "date",
+          "label": "Sent At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Gets details of all campaigns.",
+      "expectJsonc": "[\n    {\n        \"name\": \"limit\",\n        \"label\": \"Limit\",\n        \"help\": \"The maximum total number of records that will be returned\",\n        \"type\": \"uinteger\",\n        \"default\": 10\n    }\n]",
+      "samplesJsonc": "{\r\n    \"data\": [\r\n        {\r\n            \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n            \"status\": \"SENT\",\r\n            \"name\": \"Foo\",\r\n            \"subject\": \"Bar\",\r\n            \"to\": [\r\n                \"00000000-0000-0000-0000-000000000001\",\r\n                \"00000000-0000-0000-0000-000000000002\"\r\n            ],\r\n            \"from\": {\r\n                \"name\": \"John Doe\",\r\n                \"email_address\": \"john.doe@gmail.com\"\r\n            },\r\n            \"content\": {\r\n                \"html\": \"<html>Foo Bar<html>\",\r\n                \"plain_text\": \"Foo Bar\"\r\n            },\r\n            \"created_at\": \"2020-04-19T22:37:55+00:00\",\r\n            \"sent_at\": \"2020-04-20T22:37:55+00:00\"\r\n        },\r\n        {\r\n            \"id\": \"00000000-0000-0000-0000-000000000003\",\r\n            \"status\": \"SENT\",\r\n            \"name\": \"Bar\",\r\n            \"subject\": \"Foo\",\r\n            \"to\": [\r\n                \"00000000-0000-0000-0000-000000000004\",\r\n                \"00000000-0000-0000-0000-000000000005\"\r\n            ],\r\n            \"from\": {\r\n                \"name\": \"Jane Doe\",\r\n                \"email_address\": \"jane.doe@gmail.com\"\r\n            },\r\n            \"content\": {\r\n                \"html\": \"<html>Bar Foo<html>\",\r\n                \"plain_text\": \"Bar Foo\"\r\n            },\r\n            \"created_at\": \"2020-04-21T22:37:55+00:00\",\r\n            \"sent_at\": \"2020-04-22T22:37:55+00:00\"\r\n        }\r\n    ],\r\n    \"paging\": {\r\n        \"next\": null,\r\n        \"previous\": null\r\n    }\r\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"Campaign ID\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n        \"label\": \"Status\"\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n        \"label\": \"Name\"\n    },\n    {\n        \"name\": \"subject\",\n        \"type\": \"text\",\n        \"label\": \"Subject\"\n    },\n    {\n        \"name\": \"to\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        },\n        \"label\": \"To\"\n    },\n    {\n        \"name\": \"from\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"name\",\n                \"type\": \"text\",\n                \"label\": \"Name\"\n            },\n            {\n                \"name\": \"email_address\",\n                \"type\": \"email\",\n                \"label\": \"Email Address\"\n            }\n        ],\n        \"label\": \"From\"\n    },\n    {\n        \"name\": \"content\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"html\",\n                \"type\": \"text\",\n                \"label\": \"Html\"\n            },\n            {\n                \"name\": \"plain_text\",\n                \"type\": \"text\",\n                \"label\": \"Plain Text\"\n            }\n        ],\n        \"label\": \"Content\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created At\"\n    },\n    {\n        \"name\": \"sent_at\",\n        \"type\": \"date\",\n        \"label\": \"Sent At\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchContacts": {
+      "id": 28645,
+      "api": {
+        "qs": {
+          "limit": 100
+        },
+        "url": "/lists/{{parameters.listId}}/{{parameters.category}}",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{parseDateFromISOFormat(item)}}",
+          "iterate": "{{body.data}}",
+          "trigger": {
+            "id": "{{item.id}}",
+            "date": "{{item.created_at}}",
+            "type": "date",
+            "order": "desc"
+          }
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.paging.next}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "watchContacts",
+      "epoch": {
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{item.created_at}}",
+            "label": "{{item.email_address}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Contacts",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "email-octopus",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/lists/{{parameters.listId}}/{{parameters.category}}\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"limit\": 100 // The number of records to return per page, up to a maximum of 100. Defaults to 100.\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"page\": \"{{pagination.page}}\"\n        },\n        \"condition\": \"{{body.paging.next}}\"\n    },\n    \"response\": {\n        \"iterate\": \"{{body.data}}\",\n        \"trigger\": {\n            \"id\": \"{{item.id}}\",\n            \"date\": \"{{item.created_at}}\",\n            \"type\": \"date\",\n            \"order\": \"desc\"\n        },\n        \"output\": \"{{parseDateFromISOFormat(item)}}\",\n        \"limit\": \"{{parameters.limit}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "Contact ID"
+        },
+        {
+          "name": "email_address",
+          "type": "email",
+          "label": "Email Address"
+        },
+        {
+          "name": "fields",
+          "spec": [
+            {
+              "name": "FirstName",
+              "type": "text",
+              "label": "First Name"
+            },
+            {
+              "name": "LastName",
+              "type": "text",
+              "label": "Last Name"
+            }
+          ],
+          "type": "collection",
+          "label": "Fields"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n    \"response\": {\n        \"limit\": 300,\n        \"output\": {\n            \"date\": \"{{item.created_at}}\",\n            \"label\": \"{{item.email_address}}\"\n        }\n    }\n}",
+      "parameters": [
+        {
+          "name": "listId",
+          "type": "select",
+          "label": "List ID",
+          "options": "rpc://app%23email-octopus@1/getLists",
+          "required": true
+        },
+        {
+          "name": "category",
+          "type": "select",
+          "label": "Category",
+          "options": [
+            {
+              "label": "All",
+              "value": "contacts"
+            },
+            {
+              "label": "Subscribed",
+              "value": "contacts/subscribed"
+            },
+            {
+              "label": "Unsubscribed",
+              "value": "contacts/unsubscribed"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Triggers when a new contact is added to a list as subscribed or unsubscribed or as any.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"Contact ID\"\n    },\n    {\n        \"name\": \"email_address\",\n        \"type\": \"email\",\n        \"label\": \"Email Address\"\n    },\n    {\n        \"name\": \"fields\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"FirstName\",\n                \"type\": \"text\",\n                \"label\": \"First Name\"\n            },\n            {\n                \"name\": \"LastName\",\n                \"type\": \"text\",\n                \"label\": \"Last Name\"\n            }\n        ],\n        \"label\": \"Fields\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n        \"label\": \"Status\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    }\n]",
+      "parametersJsonc": "[\n    {\n        \"name\": \"listId\",\n        \"type\": \"select\",\n        \"label\": \"List ID\",\n        \"options\": \"rpc://getLists\",\n        \"required\": true\n    },\n    {\n        \"name\": \"category\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"value\": \"contacts\",\n                \"label\": \"All\"\n            },\n            {\n                \"value\": \"contacts/subscribed\",\n                \"label\": \"Subscribed\"\n            },\n            {\n                \"value\": \"contacts/unsubscribed\",\n                \"label\": \"Unsubscribed\"\n            }\n        ],\n        \"label\": \"Category\",\n        \"required\": true\n    },\n    {\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 10,\n        \"required\": true\n    }\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchCampaigns": {
+      "id": 28646,
+      "api": {
+        "qs": {
+          "limit": 100
+        },
+        "url": "/campaigns",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{parseDateFromISOFormat(item)}}",
+          "iterate": "{{body.data}}",
+          "trigger": {
+            "id": "{{item.id}}",
+            "date": "{{item.created_at}}",
+            "type": "date",
+            "order": "desc"
+          }
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.paging.next}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "watchCampaigns",
+      "epoch": {
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{item.created_at}}",
+            "label": "{{item.subject}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Campaigns",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "email-octopus",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/campaigns\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"limit\": 100 // The number of records to return per page, up to a maximum of 100. Defaults to 100.\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"page\": \"{{pagination.page}}\"\n        },\n        \"condition\": \"{{body.paging.next}}\"\n    },\n    \"response\": {\n        \"iterate\": \"{{body.data}}\",\n        \"trigger\": {\n            \"id\": \"{{item.id}}\",\n            \"date\": \"{{item.created_at}}\",\n            \"type\": \"date\",\n            \"order\": \"desc\"\n        },\n        \"output\": \"{{parseDateFromISOFormat(item)}}\",\n        \"limit\": \"{{parameters.limit}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "Campaign ID"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "subject",
+          "type": "text",
+          "label": "Subject"
+        },
+        {
+          "name": "to",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "To"
+        },
+        {
+          "name": "from",
+          "spec": [
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            },
+            {
+              "name": "email_address",
+              "type": "email",
+              "label": "Email Address"
+            }
+          ],
+          "type": "collection",
+          "label": "From"
+        },
+        {
+          "name": "content",
+          "spec": [
+            {
+              "name": "html",
+              "type": "text",
+              "label": "Html"
+            },
+            {
+              "name": "plain_text",
+              "type": "text",
+              "label": "Plain Text"
+            }
+          ],
+          "type": "collection",
+          "label": "Content"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created At"
+        },
+        {
+          "name": "sent_at",
+          "type": "date",
+          "label": "Sent At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n    \"response\": {\n        \"limit\": 300,\n        \"output\": {\n            \"date\": \"{{item.created_at}}\",\n            \"label\": \"{{item.subject}}\"\n        }\n    }\n}",
+      "parameters": [
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Triggers when a new campaign is created.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"Campaign ID\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n        \"label\": \"Status\"\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n        \"label\": \"Name\"\n    },\n    {\n        \"name\": \"subject\",\n        \"type\": \"text\",\n        \"label\": \"Subject\"\n    },\n    {\n        \"name\": \"to\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        },\n        \"label\": \"To\"\n    },\n    {\n        \"name\": \"from\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"name\",\n                \"type\": \"text\",\n                \"label\": \"Name\"\n            },\n            {\n                \"name\": \"email_address\",\n                \"type\": \"email\",\n                \"label\": \"Email Address\"\n            }\n        ],\n        \"label\": \"From\"\n    },\n    {\n        \"name\": \"content\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"html\",\n                \"type\": \"text\",\n                \"label\": \"Html\"\n            },\n            {\n                \"name\": \"plain_text\",\n                \"type\": \"text\",\n                \"label\": \"Plain Text\"\n            }\n        ],\n        \"label\": \"Content\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created At\"\n    },\n    {\n        \"name\": \"sent_at\",\n        \"type\": \"date\",\n        \"label\": \"Sent At\"\n    }\n]",
+      "parametersJsonc": "[\n    {\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 10,\n        \"required\": true\n    }\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createListField": {
+      "id": 28647,
+      "api": {
+        "url": "/lists/{{parameters.listId}}/fields",
+        "body": {
+          "tag": "{{parameters.tag}}",
+          "type": "{{parameters.type}}",
+          "label": "{{parameters.label}}",
+          "fallback": "{{parameters.fallback}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "createListField",
+      "epoch": null,
+      "flags": {},
+      "label": "Create List Field",
+      "scope": [],
+      "expect": [
+        {
+          "name": "listId",
+          "type": "select",
+          "label": "List ID",
+          "options": "rpc://app%23email-octopus@1/getLists",
+          "required": true
+        },
+        {
+          "name": "label",
+          "type": "text",
+          "label": "Label",
+          "required": true
+        },
+        {
+          "name": "tag",
+          "type": "text",
+          "label": "Tag",
+          "required": true,
+          "validate": {
+            "pattern": "^[A-Za-z_]{1}[A-Za-z0-9_]+$"
+          }
+        },
+        {
+          "name": "type",
+          "type": "select",
+          "label": "Type",
+          "options": [
+            {
+              "label": "Text",
+              "value": "TEXT"
+            },
+            {
+              "label": "Number",
+              "value": "NUMBER"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "A default value for the field, used when there is no other value available.",
+          "name": "fallback",
+          "type": "text",
+          "label": "Fallback"
+        }
+      ],
+      "public": false,
+      "typeId": 4,
+      "appName": "email-octopus",
+      "samples": {
+        "tag": "Hometown",
+        "type": "TEXT",
+        "label": "What is your hometown?",
+        "fallback": "Unknown"
+      },
+      "apiJsonc": "{\n    \"url\": \"/lists/{{parameters.listId}}/fields\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"label\": \"{{parameters.label}}\",\n        \"tag\": \"{{parameters.tag}}\",\n        \"type\": \"{{parameters.type}}\",\n        \"fallback\": \"{{parameters.fallback}}\"\n    },\n    \"response\": {\n        \"output\": \"{{body}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "label",
+          "type": "text",
+          "label": "Label"
+        },
+        {
+          "name": "tag",
+          "type": "text",
+          "label": "Tag"
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "label": "Type"
+        },
+        {
+          "name": "fallback",
+          "type": "text",
+          "label": "Fallback"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "!!!NOTE by developer: Zapier does not implement, not finalized.\nCreates list field.",
+      "expectJsonc": "[\n    {\n        \"name\": \"listId\",\n        \"type\": \"select\",\n        \"label\": \"List ID\",\n        \"options\": \"rpc://getLists\",\n        \"required\": true\n    },\n    {\n        \"name\": \"label\",\n        \"type\": \"text\",\n        \"label\": \"Label\",\n        \"required\": true\n    },\n    {\n        \"name\": \"tag\",\n        \"type\": \"text\",\n        \"label\": \"Tag\",\n        \"validate\": {\n            \"pattern\": \"^[A-Za-z_]{1}[A-Za-z0-9_]+$\"\n        },\n        \"required\": true\n    },\n    {\n        \"name\": \"type\",\n        \"type\": \"select\",\n        \"required\": true,\n        \"options\": [\n            {\n                \"value\": \"TEXT\",\n                \"label\": \"Text\"\n            },\n            {\n                \"value\": \"NUMBER\",\n                \"label\": \"Number\"\n            }\n        ],\n        \"label\": \"Type\"\n    },\n    {\n        \"name\": \"fallback\",\n        \"type\": \"text\",\n        \"label\": \"Fallback\",\n        \"help\": \"A default value for the field, used when there is no other value available.\"\n    }\n]",
+      "samplesJsonc": "{\r\n    \"label\": \"What is your hometown?\",\r\n    \"tag\": \"Hometown\",\r\n    \"type\": \"TEXT\",\r\n    \"fallback\": \"Unknown\"\r\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"label\",\n        \"type\": \"text\",\n        \"label\": \"Label\"\n    },\n    {\n        \"name\": \"tag\",\n        \"type\": \"text\",\n        \"label\": \"Tag\"\n    },\n    {\n        \"name\": \"type\",\n        \"type\": \"text\",\n        \"label\": \"Type\"\n    },\n    {\n        \"name\": \"fallback\",\n        \"type\": \"text\",\n        \"label\": \"Fallback\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getContactsList": {
+      "id": 28648,
+      "api": {
+        "qs": {
+          "limit": 100
+        },
+        "url": "/lists/{{parameters.listId}}/{{parameters.category}}",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{parseDateFromISOFormat(item)}}",
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.paging.next}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "getContactsList",
+      "epoch": null,
+      "flags": {},
+      "label": "Get Contacts from a List",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listId",
+          "type": "select",
+          "label": "List ID",
+          "options": "rpc://app%23email-octopus@1/getLists",
+          "required": true
+        },
+        {
+          "name": "category",
+          "type": "select",
+          "label": "Category",
+          "options": [
+            {
+              "label": "All",
+              "value": "contacts"
+            },
+            {
+              "label": "Subscribed",
+              "value": "contacts/subscribed"
+            },
+            {
+              "label": "Unsubscribed",
+              "value": "contacts/unsubscribed"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "The maximum total number of records that will be returned",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "email-octopus",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/lists/{{parameters.listId}}/{{parameters.category}}\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"limit\": 100 // The number of records to return per page, up to a maximum of 100. Defaults to 100.\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"page\": \"{{pagination.page}}\"\n        },\n        \"condition\": \"{{body.paging.next}}\"\n    },\n    \"response\": {\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": \"{{parseDateFromISOFormat(item)}}\",\n        \"iterate\": \"{{body.data}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "Contact ID"
+        },
+        {
+          "name": "email_address",
+          "type": "email",
+          "label": "Email Address"
+        },
+        {
+          "name": "fields",
+          "spec": [
+            {
+              "name": "FirstName",
+              "type": "text",
+              "label": "First Name"
+            },
+            {
+              "name": "LastName",
+              "type": "text",
+              "label": "Last Name"
+            }
+          ],
+          "type": "collection",
+          "label": "Fields"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Gets details of all contacts of a list.",
+      "expectJsonc": "[\n    {\n        \"name\": \"listId\",\n        \"type\": \"select\",\n        \"label\": \"List ID\",\n        \"options\": \"rpc://getLists\",\n        \"mode\": \"edit\",\n        \"required\": true\n    },\n    {\n        \"name\": \"category\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"value\": \"contacts\",\n                \"label\": \"All\"\n            },\n            {\n                \"value\": \"contacts/subscribed\",\n                \"label\": \"Subscribed\"\n            },\n            {\n                \"value\": \"contacts/unsubscribed\",\n                \"label\": \"Unsubscribed\"\n            }\n        ],\n        \"label\": \"Category\",\n        \"required\": true\n    },\n    {\n        \"name\": \"limit\",\n        \"label\": \"Limit\",\n        \"help\": \"The maximum total number of records that will be returned\",\n        \"type\": \"uinteger\",\n        \"default\": 10\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"Contact ID\"\n    },\n    {\n        \"name\": \"email_address\",\n        \"type\": \"email\",\n        \"label\": \"Email Address\"\n    },\n    {\n        \"name\": \"fields\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"FirstName\",\n                \"type\": \"text\",\n                \"label\": \"First Name\"\n            },\n            {\n                \"name\": \"LastName\",\n                \"type\": \"text\",\n                \"label\": \"Last Name\"\n            }\n        ],\n        \"label\": \"Fields\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n        \"label\": \"Status\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getContactOfList": {
+      "id": 28649,
+      "api": {
+        "url": "/lists/{{parameters.listId}}/contacts/{{parameters.memberId}}",
+        "method": "GET",
+        "response": {
+          "output": "{{parseDateFromISOFormat(body)}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "getContactOfList",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Contact from a List",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listId",
+          "type": "select",
+          "label": "List ID",
+          "options": {
+            "store": "rpc://app%23email-octopus@1/getLists",
+            "nested": [
+              {
+                "mode": "edit",
+                "name": "memberId",
+                "type": "select",
+                "label": "Member ID",
+                "options": "rpc://app%23email-octopus@1/getAllContactsOfList",
+                "required": true
+              }
+            ]
+          },
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "email-octopus",
+      "samples": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "fields": {
+          "LastName": "Doe",
+          "FirstName": "John"
+        },
+        "status": "SUBSCRIBED",
+        "created_at": "2020-04-24T00:00:00+00:00",
+        "email_address": "john.doe@example.com"
+      },
+      "apiJsonc": "{\n    \"url\": \"/lists/{{parameters.listId}}/contacts/{{parameters.memberId}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": \"{{parseDateFromISOFormat(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "Contact ID"
+        },
+        {
+          "name": "email_address",
+          "type": "email",
+          "label": "Email Address"
+        },
+        {
+          "name": "fields",
+          "spec": [
+            {
+              "name": "FirstName",
+              "type": "text",
+              "label": "First Name"
+            },
+            {
+              "name": "LastName",
+              "type": "text",
+              "label": "Last Name"
+            }
+          ],
+          "type": "collection",
+          "label": "Fields"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Gets details of a contact of a list.",
+      "expectJsonc": "[\n    {\n        \"name\": \"listId\",\n        \"type\": \"select\",\n        \"label\": \"List ID\",\n        \"options\": {\n            \"store\": \"rpc://getLists\",\n            \"nested\": [\n                {\n                    \"name\": \"memberId\",\n                    \"type\": \"select\",\n                    \"label\": \"Member ID\",\n                    \"options\": \"rpc://getAllContactsOfList\",\n                    \"mode\": \"edit\",\n                    \"required\": true\n                }\n            ]\n        },\n        \"mode\": \"edit\",\n        \"required\": true\n    }\n]",
+      "samplesJsonc": "{\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"email_address\": \"john.doe@example.com\",\r\n    \"fields\": {\r\n        \"FirstName\": \"John\",\r\n        \"LastName\": \"Doe\"\r\n    },\r\n    \"status\": \"SUBSCRIBED\",\r\n    \"created_at\": \"2020-04-24T00:00:00+00:00\"\r\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"Contact ID\"\n    },\n    {\n        \"name\": \"email_address\",\n        \"type\": \"email\",\n        \"label\": \"Email Address\"\n    },\n    {\n        \"name\": \"fields\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"FirstName\",\n                \"type\": \"text\",\n                \"label\": \"First Name\"\n            },\n            {\n                \"name\": \"LastName\",\n                \"type\": \"text\",\n                \"label\": \"Last Name\"\n            }\n        ],\n        \"label\": \"Fields\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n        \"label\": \"Status\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created At\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deleteContactOfList": {
+      "id": 28650,
+      "api": {
+        "url": "/lists/{{parameters.listId}}/contacts/{{parameters.memberId}}",
+        "method": "DELETE",
+        "response": {
+          "output": null
+        }
+      },
+      "rev": 4,
+      "crud": "delete",
+      "name": "deleteContactOfList",
+      "epoch": null,
+      "flags": {},
+      "label": "Delete a Contact from a List",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listId",
+          "type": "select",
+          "label": "List ID",
+          "options": {
+            "store": "rpc://app%23email-octopus@1/getLists",
+            "nested": [
+              {
+                "mode": "edit",
+                "name": "memberId",
+                "type": "select",
+                "label": "Member ID",
+                "options": "rpc://app%23email-octopus@1/getAllContactsOfList",
+                "required": true
+              }
+            ]
+          },
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "email-octopus",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/lists/{{parameters.listId}}/contacts/{{parameters.memberId}}\",\n    \"method\": \"DELETE\",\n    \"response\": {\n        \"output\": null\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Deletes a contact of a list.",
+      "expectJsonc": "[\n    {\n        \"name\": \"listId\",\n        \"type\": \"select\",\n        \"label\": \"List ID\",\n        \"options\": {\n            \"store\": \"rpc://getLists\",\n            \"nested\": [\n                {\n                    \"name\": \"memberId\",\n                    \"type\": \"select\",\n                    \"label\": \"Member ID\",\n                    \"options\": \"rpc://getAllContactsOfList\",\n                    \"mode\": \"edit\",\n                    \"required\": true\n                }\n            ]\n        },\n        \"mode\": \"edit\",\n        \"required\": true\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "updateContactOfList": {
+      "id": 28651,
+      "api": {
+        "url": "/lists/{{parameters.listId}}/contacts/{{parameters.memberId}}",
+        "body": "{{parameters}}",
+        "method": "PUT",
+        "response": {
+          "output": "{{parseDateFromISOFormat(body)}}"
+        }
+      },
+      "rev": 4,
+      "crud": "update",
+      "name": "updateContactOfList",
+      "epoch": null,
+      "flags": {},
+      "label": "Update a Contact in a List",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listId",
+          "type": "select",
+          "label": "List ID",
+          "options": {
+            "store": "rpc://app%23email-octopus@1/getLists",
+            "nested": [
+              {
+                "mode": "edit",
+                "name": "memberId",
+                "type": "select",
+                "label": "Member ID",
+                "options": "rpc://app%23email-octopus@1/getAllContactsOfList",
+                "required": true
+              },
+              "rpc://app%23email-octopus@1/getListFields"
+            ]
+          },
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "label": "Status",
+          "options": [
+            {
+              "label": "Subscribed",
+              "value": "SUBSCRIBED"
+            },
+            {
+              "label": "Unsubscribed",
+              "value": "UNSUBSCRIBED"
+            },
+            {
+              "label": "Pending",
+              "value": "PENDING"
+            }
+          ],
+          "required": true
+        },
+        {
+          "name": "email_address",
+          "type": "email",
+          "label": "Email Address"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "email-octopus",
+      "samples": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "fields": {
+          "LastName": "Doe",
+          "FirstName": "John"
+        },
+        "status": "SUBSCRIBED",
+        "created_at": "2020-04-24T00:00:00+00:00",
+        "email_address": "john.doe@example.com"
+      },
+      "apiJsonc": "{\n    \"url\": \"/lists/{{parameters.listId}}/contacts/{{parameters.memberId}}\",\n    \"method\": \"PUT\",\n    \"body\": \"{{parameters}}\",\n    \"response\": {\n        \"output\": \"{{parseDateFromISOFormat(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "Contact ID"
+        },
+        {
+          "name": "email_address",
+          "type": "email",
+          "label": "Email Address"
+        },
+        {
+          "name": "fields",
+          "spec": [
+            {
+              "name": "FirstName",
+              "type": "text",
+              "label": "First Name"
+            },
+            {
+              "name": "LastName",
+              "type": "text",
+              "label": "Last Name"
+            }
+          ],
+          "type": "collection",
+          "label": "Fields"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Updates a contact of a list.",
+      "expectJsonc": "[\n    {\n        \"name\": \"listId\",\n        \"type\": \"select\",\n        \"label\": \"List ID\",\n        \"options\": {\n            \"store\": \"rpc://getLists\",\n            \"nested\": [\n                {\n                    \"name\": \"memberId\",\n                    \"type\": \"select\",\n                    \"label\": \"Member ID\",\n                    \"options\": \"rpc://getAllContactsOfList\",\n                    \"mode\": \"edit\",\n                    \"required\": true\n                },\n                \"rpc://getListFields\"\n            ]\n        },\n        \"mode\": \"edit\",\n        \"required\": true\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"select\",\n        \"required\": true,\n        \"options\": [\n            {\n                \"value\": \"SUBSCRIBED\",\n                \"label\": \"Subscribed\"\n            },\n            {\n                \"value\": \"UNSUBSCRIBED\",\n                \"label\": \"Unsubscribed\"\n            },\n            {\n                \"value\": \"PENDING\",\n                \"label\": \"Pending\"\n            }\n        ],\n        \"label\": \"Status\"\n    },\n    {\n        \"name\": \"email_address\",\n        \"type\": \"email\",\n        \"label\": \"Email Address\"\n    }\n]",
+      "samplesJsonc": "{\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"email_address\": \"john.doe@example.com\",\r\n    \"fields\": {\r\n        \"FirstName\": \"John\",\r\n        \"LastName\": \"Doe\"\r\n    },\r\n    \"status\": \"SUBSCRIBED\",\r\n    \"created_at\": \"2020-04-24T00:00:00+00:00\"\r\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"Contact ID\"\n    },\n    {\n        \"name\": \"email_address\",\n        \"type\": \"email\",\n        \"label\": \"Email Address\"\n    },\n    {\n        \"name\": \"fields\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"FirstName\",\n                \"type\": \"text\",\n                \"label\": \"First Name\"\n            },\n            {\n                \"name\": \"LastName\",\n                \"type\": \"text\",\n                \"label\": \"Last Name\"\n            }\n        ],\n        \"label\": \"Fields\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n        \"label\": \"Status\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created At\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createContactOfAList": {
+      "id": 28652,
+      "api": {
+        "url": "/lists/{{parameters.listId}}/contacts",
+        "body": "{{parameters}}",
+        "method": "POST",
+        "response": {
+          "output": "{{parseDateFromISOFormat(body)}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "createContactOfAList",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Contact in a List",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listId",
+          "type": "select",
+          "label": "List ID",
+          "options": {
+            "store": "rpc://app%23email-octopus@1/getLists",
+            "nested": "rpc://app%23email-octopus@1/getListFields"
+          },
+          "required": true
+        },
+        {
+          "name": "email_address",
+          "type": "email",
+          "label": "Email Address",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "label": "Status",
+          "options": [
+            {
+              "label": "Subscribed",
+              "value": "SUBSCRIBED"
+            },
+            {
+              "label": "Unsubscribed",
+              "value": "UNSUBSCRIBED"
+            },
+            {
+              "label": "Pending",
+              "value": "PENDING"
+            }
+          ]
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "email-octopus",
+      "samples": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "fields": {
+          "LastName": "Doe",
+          "FirstName": "John"
+        },
+        "status": "SUBSCRIBED",
+        "created_at": "2020-04-24T00:00:00+00:00",
+        "email_address": "john.doe@example.com"
+      },
+      "apiJsonc": "{\n    \"url\": \"/lists/{{parameters.listId}}/contacts\",\n    \"method\": \"POST\",\n    \"body\": \"{{parameters}}\",\n    \"response\": {\n        \"output\": \"{{parseDateFromISOFormat(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "Contact ID"
+        },
+        {
+          "name": "email_address",
+          "type": "email",
+          "label": "Email Address"
+        },
+        {
+          "name": "fields",
+          "spec": [
+            {
+              "name": "FirstName",
+              "type": "text",
+              "label": "First Name"
+            },
+            {
+              "name": "LastName",
+              "type": "text",
+              "label": "Last Name"
+            }
+          ],
+          "type": "collection",
+          "label": "Fields"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created At"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Creates a contact of a list.",
+      "expectJsonc": "[\n    {\n        \"name\": \"listId\",\n        \"type\": \"select\",\n        \"label\": \"List ID\",\n        \"options\": {\n            \"store\": \"rpc://getLists\",\n            \"nested\": \"rpc://getListFields\"\n        },\n        \"mode\": \"edit\",\n        \"required\": true\n    },\n    {\n        \"name\": \"email_address\",\n        \"type\": \"email\",\n        \"label\": \"Email Address\",\n        \"required\": true\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"value\": \"SUBSCRIBED\",\n                \"label\": \"Subscribed\"\n            },\n            {\n                \"value\": \"UNSUBSCRIBED\",\n                \"label\": \"Unsubscribed\"\n            },\n            {\n                \"value\": \"PENDING\",\n                \"label\": \"Pending\"\n            }\n        ],\n        \"label\": \"Status\"\n    }\n]",
+      "samplesJsonc": "{\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"email_address\": \"john.doe@example.com\",\r\n    \"fields\": {\r\n        \"FirstName\": \"John\",\r\n        \"LastName\": \"Doe\"\r\n    },\r\n    \"status\": \"SUBSCRIBED\",\r\n    \"created_at\": \"2020-04-24T00:00:00+00:00\"\r\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"Contact ID\"\n    },\n    {\n        \"name\": \"email_address\",\n        \"type\": \"email\",\n        \"label\": \"Email Address\"\n    },\n    {\n        \"name\": \"fields\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"FirstName\",\n                \"type\": \"text\",\n                \"label\": \"First Name\"\n            },\n            {\n                \"name\": \"LastName\",\n                \"type\": \"text\",\n                \"label\": \"Last Name\"\n            }\n        ],\n        \"label\": \"Fields\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n        \"label\": \"Status\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created At\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getCampaignReportSummary": {
+      "id": 28653,
+      "api": {
+        "url": "/campaigns/{{parameters.campaignId}}/reports/summary",
+        "method": "GET",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "getCampaignReportSummary",
+      "epoch": null,
+      "flags": {},
+      "label": "Get Campaign Report: Summary",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "campaignId",
+          "type": "select",
+          "label": "Campaign ID",
+          "options": "rpc://app%23email-octopus@1/getCampaigns",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "email-octopus",
+      "samples": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "sent": 200,
+        "opened": {
+          "total": 110,
+          "unique": 85
+        },
+        "bounced": {
+          "hard": 5,
+          "soft": 10
+        },
+        "clicked": {
+          "total": 70,
+          "unique": 65
+        },
+        "complained": 50,
+        "unsubscribed": 25
+      },
+      "apiJsonc": "{\n    \"url\": \"/campaigns/{{parameters.campaignId}}/reports/summary\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": \"{{body}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "label": "Campaign ID"
+        },
+        {
+          "name": "sent",
+          "type": "integer",
+          "label": "Sent"
+        },
+        {
+          "name": "bounced",
+          "spec": [
+            {
+              "name": "soft",
+              "type": "integer",
+              "label": "Soft"
+            },
+            {
+              "name": "hard",
+              "type": "integer",
+              "label": "Hard"
+            }
+          ],
+          "type": "collection",
+          "label": "Bounced"
+        },
+        {
+          "name": "opened",
+          "spec": [
+            {
+              "name": "total",
+              "type": "integer",
+              "label": "Total"
+            },
+            {
+              "name": "unique",
+              "type": "integer",
+              "label": "Unique"
+            }
+          ],
+          "type": "collection",
+          "label": "Opened"
+        },
+        {
+          "name": "clicked",
+          "spec": [
+            {
+              "name": "total",
+              "type": "integer",
+              "label": "Total"
+            },
+            {
+              "name": "unique",
+              "type": "integer",
+              "label": "Unique"
+            }
+          ],
+          "type": "collection",
+          "label": "Clicked"
+        },
+        {
+          "name": "complained",
+          "type": "integer",
+          "label": "Complained"
+        },
+        {
+          "name": "unsubscribed",
+          "type": "integer",
+          "label": "Unsubscribed"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "email-octopus",
+      "description": "Gets a summary of the campaign.",
+      "expectJsonc": "[\n    {\n        \"name\": \"campaignId\",\n        \"type\": \"select\",\n        \"label\": \"Campaign ID\",\n        \"options\": \"rpc://getCampaigns\",\n        \"mode\": \"edit\",\n        \"required\": true\n    }\n]",
+      "samplesJsonc": "{\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"sent\": 200,\r\n    \"bounced\": {\r\n        \"soft\": 10,\r\n        \"hard\": 5\r\n    },\r\n    \"opened\": {\r\n        \"total\": 110,\r\n        \"unique\": 85\r\n    },\r\n    \"clicked\": {\r\n        \"total\": 70,\r\n        \"unique\": 65\r\n    },\r\n    \"complained\": 50,\r\n    \"unsubscribed\": 25\r\n}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"uuid\",\n        \"label\": \"Campaign ID\"\n    },\n    {\n        \"name\": \"sent\",\n        \"type\": \"integer\",\n        \"label\": \"Sent\"\n    },\n    {\n        \"name\": \"bounced\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"soft\",\n                \"type\": \"integer\",\n                \"label\": \"Soft\"\n            },\n            {\n                \"name\": \"hard\",\n                \"type\": \"integer\",\n                \"label\": \"Hard\"\n            }\n        ],\n        \"label\": \"Bounced\"\n    },\n    {\n        \"name\": \"opened\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"total\",\n                \"type\": \"integer\",\n                \"label\": \"Total\"\n            },\n            {\n                \"name\": \"unique\",\n                \"type\": \"integer\",\n                \"label\": \"Unique\"\n            }\n        ],\n        \"label\": \"Opened\"\n    },\n    {\n        \"name\": \"clicked\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"total\",\n                \"type\": \"integer\",\n                \"label\": \"Total\"\n            },\n            {\n                \"name\": \"unique\",\n                \"type\": \"integer\",\n                \"label\": \"Unique\"\n            }\n        ],\n        \"label\": \"Clicked\"\n    },\n    {\n        \"name\": \"complained\",\n        \"type\": \"integer\",\n        \"label\": \"Complained\"\n    },\n    {\n        \"name\": \"unsubscribed\",\n        \"type\": \"integer\",\n        \"label\": \"Unsubscribed\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 38145,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "email-octopus": {
+      "api": {
+        "qs": {
+          "api_key": "{{parameters.apiKey}}"
+        },
+        "log": {
+          "sanitize": [
+            "request.qs.api_key"
+          ]
+        },
+        "url": "https://emailoctopus.com/api/1.5/campaigns",
+        "response": {
+          "error": {
+            "message": "[{{statusCode}}] {{body.error.message}} (error code: {{body.error.code}})"
+          }
+        }
+      },
+      "rev": 4,
+      "name": "email-octopus",
+      "type": "basic",
+      "label": "EmailOctopus",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "email-octopus",
+      "install": {},
+      "apiJsonc": "{\n    \"url\": \"https://emailoctopus.com/api/1.5/campaigns\",\n    \"qs\": {\n        \"api_key\": \"{{parameters.apiKey}}\"\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error.message}} (error code: {{body.error.code}})\"\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.qs.api_key\"\n        ]\n    }\n}",
+      "authorId": 38145,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "apiKey",
+          "type": "password",
+          "label": "API Key",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "installSpec": [],
+      "scopesJsonc": "{\n}",
+      "installJsonc": "{\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"apiKey\",\n        \"type\": \"password\",\n        \"label\": \"API Key\",\n        \"editable\": true,\n        \"required\": true\n    }\n]",
+      "installSpecJsonc": "[\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://emailoctopus.com/api/1.5\",\n    \"qs\": {\n        \"api_key\": \"{{connection.apiKey}}\"\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error.message}} (error code: {{body.error.code}})\"\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.qs.api_key\"\n        ]\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "getListFields": {
+      "rev": 3,
+      "code": "function getListFields(list) {\n  // ToDo: delete this function (error: Can't delete function in approved app.)\n  const listFields = list.fields\n    .filter(field => field.tag !== 'EmailAddress')\n    .map(field => iml.convertToFieldTypeIntegromat(field));\n\n  return {\n    name: 'fields',\n    type: 'collection',\n    spec: listFields,\n    label: 'Fields'\n  };\n}",
+      "name": "getListFields",
+      "test": null,
+      "appName": "email-octopus",
+      "arguments": "(list)",
+      "appVersion": 1
+    },
+    "parseListFields": {
+      "rev": 3,
+      "code": "function parseListFields(list) {\n  if (list.data) {\n    return null;\n  }\n\n  const listFields = list.fields\n    .filter(field => field.tag !== 'EmailAddress')\n    .map(field => {\n      if (field.tag === 'FirstName' || field.tag === 'LastName') {\n        field.label = field.label\n          .split(' ')\n          .map(word => iml.capitalize(word))\n          .join(' ');\n      }\n      \n      return iml.convertToFieldTypeIntegromat(field);\n    });\n\n  return {\n    name: 'fields',\n    type: 'collection',\n    spec: listFields,\n    label: 'Fields'\n  };\n}",
+      "name": "parseListFields",
+      "test": null,
+      "appName": "email-octopus",
+      "arguments": "(list)",
+      "appVersion": 1
+    },
+    "capitalizeFirstLetter": {
+      "rev": 3,
+      "code": "function capitalizeFirstLetter(string) {\n  // ToDo: delete this function (error: Can't delete function in approved app.)\n  return string[0].toUpperCase() + string.slice(1);\n}",
+      "name": "capitalizeFirstLetter",
+      "test": null,
+      "appName": "email-octopus",
+      "arguments": "(string)",
+      "appVersion": 1
+    },
+    "parseDateFromISOFormat": {
+      "rev": 3,
+      "code": "function parseDateFromISOFormat(item) {\n  if (item.created_at) {\n    item.created_at = iml.parseDate(item.created_at);\n  }\n  if (item.sent_at) {\n    item.sent_at = iml.parseDate(item.sent_at);\n  }\n  \n  return item;\n}",
+      "name": "parseDateFromISOFormat",
+      "test": null,
+      "appName": "email-octopus",
+      "arguments": "(item)",
+      "appVersion": 1
+    },
+    "convertToFieldTypeIntegromat": {
+      "rev": 3,
+      "code": "function convertToFieldTypeIntegromat(field) {\n  return {\n    name: field.tag,\n    type: field.type.toLowerCase(),\n    label: field.label\n  };\n}",
+      "name": "convertToFieldTypeIntegromat",
+      "test": null,
+      "appName": "email-octopus",
+      "arguments": "(field)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-05-06T15:06:07.570212+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "EmailOctopus is an affordable, easy-to-use email marketing platform for anyone with an audience.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "c13200a220e2be6f86476df608a6177a",
+  "versionFull": "1.4.1",
+  "compiledName": "email-octopus",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

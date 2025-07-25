@@ -1,0 +1,1417 @@
+{
+  "rev": 7,
+  "base": {
+    "qs": {
+      "access_token": "{{connection.apiKey}}"
+    },
+    "log": {
+      "sanitize": [
+        "request.qs.access_token"
+      ]
+    },
+    "baseUrl": "https://graph.facebook.com/v3.3/",
+    "response": {
+      "type": "json",
+      "error": {
+        "message": "{{body.error.code}}: {{body.error.message}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": "# How to create a bot and connect it to Facebook Messenger and Integromat\n\nThe Facebook Messenger app supports a connection of a bot that can then be used to send and receive messages on behalf of a designated page that belongs to the bot. \n\n![Scenario](https://integromat.zendesk.com/hc/article_attachments/360009138334/file.png)\n\nThe following steps are necessary for the correct setup.\n\n1. Log into Facebook, navigate to [Facebook developer portal](https://developers.facebook.com/apps) and create a new app.\n\n    ![New app](https://integromat.zendesk.com/hc/article_attachments/360009183793/file.png)\n2. Once you create the app, you will be shown the Product Setup page. Select **Messenger** and click **Set up**. \n\n    ![Select messenger](https://integromat.zendesk.com/hc/article_attachments/360009183813/file.png)\n3. Scroll down a bit on the displayed page until you see the **Webhooks** section. Click on **Setup Webhooks**. You will be promted to fill in a **New page subscription** form. The requested values can be generated through Integromat.\n\n    ![Setup webhooks](https://integromat.zendesk.com/hc/article_attachments/360009183833/file.png)\n4. Log into your Integromat account and create a new scenario. Add the module - **Facebook messenger- Watch messages** as the first module to your scenario. Click the **Add** button to create a new webhook. Enter a webhook name and a verification token of your choice into respective field. You will need this verification token later. Click **Save**. \n\n    ![Create webhook](https://integromat.zendesk.com/hc/article_attachments/360009138354/file.png)\n5. Clicking the save button will generate an URL of the webhook. Copy this URL into your clipboard.\n\n    ![Copy address](https://integromat.zendesk.com/hc/article_attachments/360009183853/file.png)\n6. Go back to the **New page subscription** form. In the **Callback URL** field enter the URL from your clipboard and in the **Verify token** field enter the same token that you entered in step 4. In the **Subscription Fields** section,  select `messages` and `messaging_postbacks`and click **Verify and Save**. A green check mark next to the webhook indicates that the validation has run successfully.\n\n    ![New subscription](https://integromat.zendesk.com/hc/article_attachments/360009138374/file.png)\n7. Now you have to generate an access token for the bot. Go to the **Token generation** section (just above the Webhooks section) and select a page for which you want to generate the access token. Copy the generated access token into your clipboard.\n\n    ![Token](https://integromat.zendesk.com/hc/article_attachments/360009138394/file.png)\n8. To create a new connection between Integromat and Facebook messenger, go to the settings of the **Send a message** module and click the **Add** button. Enter the access token from the previous step into the respective field and click **Continue**.\n9. As a last step, go back to the **Webhooks** setup section and select a page to subscribe your bot to the page events and click **Subscribe**.\n\nOnce you have set up a connection in both directions, you can finish your scenario.\n\n![Completed](https://integromat.zendesk.com/hc/article_attachments/360009138414/file.png)\n\n## Setting up developer roles\n\nIn order to test your application before publishing it, you need to set up roles for developers who will test it. For non-developer accounts, the app does not respond until it is officially released. For more information on how to set up the roles see the [official Facebook documentation](https://developers.facebook.com/docs/apps/test-apps). The settings of the roles is done in the the app settings in the left menu.\n\n![Roles](https://integromat.zendesk.com/hc/article_attachments/360009138434/file.png)\n\n\n\n",
+  "name": "facebook-messenger",
+  "_rpcs": {
+    "getPages": {
+      "api": {
+        "qs": {
+          "access_token": "{{connection.accessToken}}"
+        },
+        "url": "/me/accounts",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.data}}"
+        }
+      },
+      "rev": 3,
+      "name": "getPages",
+      "label": "Get pages",
+      "appName": "facebook-messenger",
+      "apiJsonc": "{\n    \"qs\": {\n        \"access_token\": \"{{connection.accessToken}}\"\n    },\n    \"url\": \"/me/accounts\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": {\n            \"label\": \"{{item.name}}\",\n            \"value\": \"{{item.id}}\"\n        },\n        \"iterate\": \"{{body.data}}\"\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "facebook-messenger",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "markSeen": {
+      "api": [
+        {
+          "qs": {
+            "access_token": "{{connection.accessToken}}"
+          },
+          "url": "/me/accounts",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "pageAccessToken": "{{retrieveToken(body.data, parameters.pageId)}}"
+            }
+          }
+        },
+        {
+          "qs": {
+            "access_token": "{{temp.pageAccessToken}}"
+          },
+          "url": "/me/messages",
+          "body": {
+            "recipient": {
+              "id": "{{parameters.recipient}}"
+            },
+            "sender_action": "mark_seen"
+          },
+          "method": "POST",
+          "response": {
+            "output": "{{body}}"
+          }
+        }
+      ],
+      "rev": 3,
+      "name": "markSeen",
+      "label": "Mark seen",
+      "appName": "facebook-messenger",
+      "apiJsonc": "[\n    {\n        \"qs\": {\n            \"access_token\": \"{{connection.accessToken}}\"\n        },\n        \"url\": \"/me/accounts\",\n        \"method\": \"GET\",\n        \"response\": {\n            \"temp\": {\n                \"pageAccessToken\": \"{{retrieveToken(body.data, parameters.pageId)}}\"\n            }\n        }\n    },\n    {\n        \"qs\": {\n            \"access_token\": \"{{temp.pageAccessToken}}\"\n        },\n        \"url\": \"/me/messages\",\n        \"body\": {\n            \"recipient\": {\n                \"id\": \"{{parameters.recipient}}\"\n            },\n            \"sender_action\": \"mark_seen\"\n        },\n        \"method\": \"POST\",\n        \"response\": {\n            \"output\": \"{{body}}\"\n        }\n    }\n]",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "recipient"
+        }
+      ],
+      "accountName": "facebook-messenger",
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"recipient\"\n    }\n]"
+    },
+    "typingOn": {
+      "api": [
+        {
+          "qs": {
+            "access_token": "{{connection.accessToken}}"
+          },
+          "url": "/me/accounts",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "pageAccessToken": "{{retrieveToken(body.data, parameters.pageId)}}"
+            }
+          }
+        },
+        {
+          "qs": {
+            "access_token": "{{temp.pageAccessToken}}"
+          },
+          "url": "/me/messages",
+          "body": {
+            "recipient": {
+              "id": "{{parameters.recipient}}"
+            },
+            "sender_action": "typing_on"
+          },
+          "method": "POST",
+          "response": {
+            "output": "{{body}}"
+          }
+        }
+      ],
+      "rev": 3,
+      "name": "typingOn",
+      "label": "Typing on",
+      "appName": "facebook-messenger",
+      "apiJsonc": "[\n    {\n        \"qs\": {\n            \"access_token\": \"{{connection.accessToken}}\"\n        },\n        \"url\": \"/me/accounts\",\n        \"method\": \"GET\",\n        \"response\": {\n            \"temp\": {\n                \"pageAccessToken\": \"{{retrieveToken(body.data, parameters.pageId)}}\"\n            }\n        }\n    },\n    {\n        \"qs\": {\n            \"access_token\": \"{{temp.pageAccessToken}}\"\n        },\n        \"url\": \"/me/messages\",\n        \"body\": {\n            \"recipient\": {\n                \"id\": \"{{parameters.recipient}}\"\n            },\n            \"sender_action\": \"typing_on\"\n        },\n        \"method\": \"POST\",\n        \"response\": {\n            \"output\": \"{{body}}\"\n        }\n    }\n]",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "recipient"
+        }
+      ],
+      "accountName": "facebook-messenger",
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"recipient\"\n    }\n]"
+    },
+    "typingOff": {
+      "api": [
+        {
+          "qs": {
+            "access_token": "{{connection.accessToken}}"
+          },
+          "url": "/me/accounts",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "pageAccessToken": "{{retrieveToken(body.data, parameters.pageId)}}"
+            }
+          }
+        },
+        {
+          "qs": {
+            "access_token": "{{temp.pageAccessToken}}"
+          },
+          "url": "/me/messages",
+          "body": {
+            "recipient": {
+              "id": "{{parameters.recipient}}"
+            },
+            "sender_action": "typing_off"
+          },
+          "method": "POST",
+          "response": {
+            "output": "{{body}}"
+          }
+        }
+      ],
+      "rev": 3,
+      "name": "typingOff",
+      "label": "Typing off",
+      "appName": "facebook-messenger",
+      "apiJsonc": "[\n    {\n        \"qs\": {\n            \"access_token\": \"{{connection.accessToken}}\"\n        },\n        \"url\": \"/me/accounts\",\n        \"method\": \"GET\",\n        \"response\": {\n            \"temp\": {\n                \"pageAccessToken\": \"{{retrieveToken(body.data, parameters.pageId)}}\"\n            }\n        }\n    },\n    {\n        \"qs\": {\n            \"access_token\": \"{{temp.pageAccessToken}}\"\n        },\n        \"url\": \"/me/messages\",\n        \"body\": {\n            \"recipient\": {\n                \"id\": \"{{parameters.recipient}}\"\n            },\n            \"sender_action\": \"typing_off\"\n        },\n        \"method\": \"POST\",\n        \"response\": {\n            \"output\": \"{{body}}\"\n        }\n    }\n]",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "recipient"
+        }
+      ],
+      "accountName": "facebook-messenger",
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"recipient\"\n    }\n]"
+    },
+    "getMessageTags": {
+      "api": [
+        {
+          "qs": {
+            "access_token": "{{connection.accessToken}}"
+          },
+          "url": "/me/accounts",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "pageAccessToken": "{{retrieveToken(body.data, parameters.pageId)}}"
+            }
+          }
+        },
+        {
+          "qs": {
+            "access_token": "{{temp.pageAccessToken}}"
+          },
+          "url": "/page_message_tags",
+          "method": "GET",
+          "response": {
+            "output": {
+              "label": "{{item.tag}}",
+              "value": "{{item.tag}}"
+            },
+            "iterate": "{{body.data}}"
+          }
+        }
+      ],
+      "rev": 3,
+      "name": "getMessageTags",
+      "label": "Get message tags",
+      "appName": "facebook-messenger",
+      "apiJsonc": "[\n\t{\n\t\t\"qs\": {\n\t\t\t\"access_token\": \"{{connection.accessToken}}\"\n\t\t},\n\t\t\"url\": \"/me/accounts\",\n\t\t\"method\": \"GET\",\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"pageAccessToken\": \"{{retrieveToken(body.data, parameters.pageId)}}\"\n\t\t\t}\n\t\t}\n\t},\n\t{\n\t\t\"qs\": {\n\t\t\t\"access_token\": \"{{temp.pageAccessToken}}\"\n\t\t},\n\t\t\"url\": \"/page_message_tags\",\n\t\t\"method\": \"GET\",\n\t\t\"response\": {\n\t\t\t\"output\": {\n\t\t\t\t\"label\": \"{{item.tag}}\",\n\t\t\t\t\"value\": \"{{item.tag}}\"\n\t\t\t},\n\t\t\t\"iterate\": \"{{body.data}}\"\n\t\t}\n\t}\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "facebook-messenger",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    }
+  },
+  "flags": {},
+  "label": "Facebook Messenger",
+  "theme": "#0087fd",
+  "_hooks": {
+    "facebook-messenger": {
+      "api": {
+        "output": "{{body}}"
+      },
+      "rev": 5,
+      "name": "facebook-messenger",
+      "type": "web",
+      "flags": {},
+      "label": "basic-test",
+      "scope": [],
+      "attach": null,
+      "detach": null,
+      "update": null,
+      "aliasTo": null,
+      "appName": "facebook-messenger",
+      "apiJsonc": "{\n    \"output\": \"{{body}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "attachJsonc": null,
+      "detachJsonc": null,
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "facebook-messenger2": {
+      "api": {
+        "output": {
+          "sender": "{{item.messaging[1].sender.id}}",
+          "message": "{{item.messaging[1].message}}",
+          "referral": "{{item.messaging[1].referral}}",
+          "recipient": "{{item.messaging[1].recipient.id}}",
+          "timestamp": "{{item.messaging[1].timestamp}}"
+        },
+        "iterate": "{{body.entry}}",
+        "verification": {
+          "respond": {
+            "body": "{{query.`hub.challenge`}}",
+            "type": "text",
+            "status": 200
+          },
+          "condition": "{{if(query.`hub.verify_token` == parameters.verifyToken, true, false)}}"
+        }
+      },
+      "rev": 5,
+      "name": "facebook-messenger2",
+      "type": "web",
+      "flags": {},
+      "label": "Message receiver",
+      "scope": [],
+      "attach": null,
+      "detach": null,
+      "update": null,
+      "aliasTo": null,
+      "appName": "facebook-messenger",
+      "apiJsonc": "{\n\t\"output\": {\n\t\t\"sender\": \"{{item.messaging[1].sender.id}}\",\n\t\t\"message\": \"{{item.messaging[1].message}}\",\n\t\t\"recipient\": \"{{item.messaging[1].recipient.id}}\",\n\t\t\"timestamp\": \"{{item.messaging[1].timestamp}}\",\n\t\t\"referral\": \"{{item.messaging[1].referral}}\"\n\t},\n\t\"iterate\": \"{{body.entry}}\",\n\t\"verification\": {\n\t\t\"respond\": {\n\t\t\t\"body\": \"{{query.`hub.challenge`}}\",\n\t\t\t\"type\": \"text\",\n\t\t\t\"status\": 200\n\t\t},\n\t\t\"condition\": \"{{if(query.`hub.verify_token` == parameters.verifyToken, true, false)}}\"\n\t}\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "verifyToken",
+          "type": "text",
+          "label": "Verify Token",
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "attachJsonc": null,
+      "detachJsonc": null,
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"verifyToken\",\n        \"type\": \"text\",\n        \"label\": \"Verify Token\",\n        \"required\": true\n    }\n]"
+    }
+  },
+  "global": true,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "getSenderDetails",
+        "sendAction",
+        "sendMessage",
+        "uploadAttachment",
+        "watchmessages"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda793000002894944415458c3ed973b6b146114869fdd68a2a851888d0a8a16e2056c84802268a158a4102f3f406c043b7f818d82e05d4b492108764110444410142c040d2881152f0115622c847889ab4bf258cc597733eeeceeac0b36be3030bbf37de779e77c67ce7c03fff58f55c83b41ad9ef6c4013013078542be906d8d0e6811580d0c025b8175c0a218f20d78033c011e036f81d9bc661a82d582ba59bda0be562b66aba2be52cfc59c425dc63a822f548fa9e3e6d778cc5d98db44c097a997d47207f0aaca116359db2602be403dafcefc05bcaa995892be9626028e7a449dee02bcaae98859ff14651a58ab8e75115ed558c49ec32cd6c34387804d9d956e536d8ad873b2504c0d5a0c0cb5532ac038f0b5c9981fc054eabfa160641a58036c6cc3c023601f7006f8d9c0dc736018f894bab621180d6e2959ffbdb67eec9eaa5bacf58953ea8fb8f64e3da1ee56ef37985b0ec66feebc948f7e607e933b1f038e02cfe2f777e0549c0f005780cfc055605783f9f383919981fd66b7da97ea7675897a583da816635eafdaa3ae506f36c95e25189919f80894d385425270c781a5c008b093a4c0fa801b5107cb818b511b59fa0e4c36cbc02ab59472fd513dad5e57bfa4ae4daa074c5aedb03adba27e4ac1c834508c40f59a085096deaa776cfe96ac6ab8ba6c590650f7a8536d04cbaba988ddb811d56d1e1ec43a775b23113b7bd7549785f5ea6817ef7e3462367f19a54cecf0cf82ec44a588d51adec0c436932d56279a551faa83b9e02913bdeaed0ec0efd493eaca56f079393c41d2485e9134a4016a6dbb42f2e27901dc036e0125dad819e731f018b80cdc25e9942ba9f5f5cfc00760029886f6bf0f324745da7a81b3c07be01ad146ff7abfdf8eac7d13f49bd5bdfeab0bfa059dd2b47abfe5a3770000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000005344944415478daed9a5b8855551cc67fdb5287d1146f4997a90723438ab0b72c4421900a025f7a891022eb2102cb0a2248ba514a224246d8c5a0879a322cec6651885866106536294845690d9aa6791fcf9cf9f5b0d7f1ec8e33679fcb3e73ced0f960c30cb367fdbfef5b97fd5fffb5a08d36da68a38d36daf8bf226a64e36ae1c7b1c074e0b2f074011d25af9f06f602bf87673fd00710458da39979cb09d11700b381b9c0f5c055c0854027306a887f1f004e020780ddc0366033f03d70bcd166d42d3c3c17ab8bd52fd4a3d68f7fd4cfd5bbd5e985382d8384f049eabdea0e359781f052e4d46fd57b42ace61b114844ea5c755383840f66c427ea8deaa8a69910c477aa0faabdc320bc14bd2176e7b09a6071c84f555f54fb9a20be80bec061aac3312512e2bbd40d6abe89e20bc8072e5d0d37210498ac76375bf520e80edc1a2abe435d656bf47c29f2ea4a756ce626581cfa8bd553cd565a06278df3858aa74245695568ec1a600330a331632c33fc0c2c04765692358e4a7b21881f0b2c1d01e2091c9702154d85b206241a9847ecea48c1c2c039752aa48e00600c701730a1d9aaaac084c0794cda8b9518703530bfd98a6ac0fcc0bd36031243e766605ab3d5d48069817bd9699036023a097329431c00ba816375b43100fc021c4e796f5ed050b3015dc0ac0cc5ff0d3c022c029e26ae02558b3f8195c026cead2a956256d0503d4232719b7a26a324e598f15e3eb298552eafa2fd23ea2bea6cf53e2b2bb6f4a9b7569a140d66c00319893fae3ea48e2e9009ed8f5357a49870527d5fbd491da3dea91eaa22f692aa0db098fa3e9381f833ea5349f12571863221a76e556f0fef44eaa22ac5ab3e67b5bbc484016b3310bf220828176b9cba5aed5707d41ef57e13fb7ce3e9b8bf060e2f9733e0fc142f2ac91386421e58033c019c182a2f8fa208f504b00c10380abc0afc9678ed16e005e2aa72b528bb214833a0d67de500f046413c9cfd16cf00c6013f14c4274c38023c1c8c1b48b47503b09a5a57f3140d693d7ca8c6a0ddc41b9223e1f769c012e023e02d604ec294b3264451948ba228297e0eb016b8a2461eb56bb0f6afc046f5d2f0ffe3d53bd4edfeb762dca3ce196c6e26e6fcb5eace3ad720ade52b9020526d1ef0a17a89f18abf40fdc0a10b28e79890103f4bfd3203f175e70133d53f2a0cb6459d619ca8bc6e7ca293861fd5eb12c2512f57376720dec07d663d0674aa9f5510689bf168596ef567045f19f778a1dabc3123f106eeb59d1b247ae4b1942087d5f5eaae3a886e55e7a9ef65285ef5515392a028cd04e213de8f898fb707432eb493f6492d1b8a78b59e049c57473b49ec0716003bcad5062b497476029f96f9fbe83ac5436ce0d40cc51338f7a4bd548901fdc03ad2f7dead84c381737f5d062486ce56607db3555581f58173ea858ad411101ac811a7a37b9aadac02ec095c73999c0b24d0033c49b8aad2a2381e38a6cefdaa0c4838d94dbc2bcb375be920c8076edd259cb343f8a64e545fb3b50e48f381d3441b753a5c62c264755d8b98900f5c1a77345ec6845536f7b4f854e0307ce24b4ce8302e393503fb8c6fa575d423bee60c2e54714e03fb86d77afa88b3bc6781af01eb59f0ea4d61871339e03be025e01d32ba39daea06143649db8137897bfeaf2c840f9701b940fe107025701130be4cdc7ee2226a2ff013b0253cbb8153590a6fb40103c4bbc835c0bbc407a153882bbb5dc1882914b7e3859eee255e53f6020783812d7f417a59c9eafcabfab8c5c268b36996451623a0d03d0781b7897b7d1775aece23c98013c4b7c79e07be01fa4782f04c60f1cef0f8561fea6db4d1461b6d0c827f01d2062586bd7a4fa90000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-03-21T08:09:47.899091+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda79300000b654944415478daed9d7b8c5d551587bfcbb4a5e5d18ea4028652b52da9ad8f8035a012ff8046a54df115a90a1a2ba142490c343162a342440c1a353552d3164a31c5a8456a9b34122bb64645d458d0185a623a43551ae943603a148a9dc7cf3fd63ece993b33ed9d7bf63e8f7bf79710260373f6de6badb3f66bad7520128944229148241289442291482412894422914824128944229148ab512bba032191948c710270367056837f7a0c7809e80754abb5ae985a66644ed9a701d380d7011701f380f3dccfe703e7026a4026878183c03ee010f0b4fbf939e02830d82a4651d951a4deee3380b9c0db81cb804b800b81d7606f7ed6310af3042f02cf027f01fe043c09fc1d78850a7b894af5da291dcc955f0abc0f7817f016a013f300793008f4004f017f00b6017fc38c812a1943257a9a7adbdf08bc1ff82866008dcee9a17911f3085b801dc07e2ae2154add43a7f889d81bfe21e03acc08f27ad3c7cb20a6fc07819f00dd407f990da1943d4bbdf173815b818f00d3cbdadf511804fe0d3c04dc87ad154ae9114ad5a3d41c7f21703df0296076d1fdca4837e61136628bc84aad1172431292a648fab0a4dd9206d53a0cba317d50d2c494a1174ee1a69812c62ce076e01a6c6bd78af4626b836f02cf40f1dea0d0d69df227008b813bb0bd7c3bf024f055e0110a5e2416d6b253fe546025b6d0eb2c4c0ac5d0037c17580df4166504b9b79a72f93330977f3dd051c8e88b67005b1cde091c80fca7845c5b4b297f0eb00e5898eb68cbcb4ee026a00bf23582dc0e5452cabf02d84c547e9a85984cae8061b20a4e2ea6961ad095c0bd547f6f1f8a6ee0b3c02ec8c713046f21a5fc05d816684ef051559b2ee0e3c01310de08824e0129e5cf06be45547e23ccc164351bc24f0741cdcb75be137800bbcc8934ce36e033404f482f10cc0338e54fc1b63857071b41eb7235f02520e8d17110034875f8d3c00db4ef3e3f0b1dc08dc03208371578f72d758bbe9f013383f4bc7df817761d1e6451186a0a98067c99a87c1fccc464392dc4c3bd1a40eaed5f062c09299536630981a682101e601ef039ec962fe28709984ce7f97eb03703485dedde4a3ce90bc16c4cb6137c7a012f0690ead07b80a5390ba69d588ac9d8db54e0730a98042ca7fdeef5f3a41393f1245f0ff46900ef0616e52c90766411266b2f643600e78a3a804f10dffe3ce8c464dde1631af0e501e660717d917c588ca78bb54c0690b2c085c005c5caa4adb800175093d50bf8f00067624795858798b711354ce667667d900f039887a56447f2e5123c1c0c356d00757bff738a9646031cc21233ca8080573975b18a93710e1ece04b27a8089c0e59e8513826ee093c06d146f0447819f02bbc93e6d5e8ee9a069b21ac079c0c5be24138824d0f25758a6ee2a8a31823e2c13e83ae071e06d1e9e7931a683a6c96a0073b1da3b656558942d9688b11e8bb4399e531f06b154b015c0b5d80afe4e2c2b2a2be7633a689aac0670291e56a28178168ba8f97f88b50ba61800ee0736b89f4321cc006f033ee0da5c8a057cfa503e98ec2fcdf280a6ae6c53051c66791a886f7a802f621937c3a2686ab51a928e63411649d895ef90b5ff003f04d66059c0c2eef4bf863fe5279c0ba69366a285b2dcd99f0ebcc1f3607cd08bb9f8cd307a089533825e6c3d00fe8ca017f839f03d6c91d7ef7e7f2596089a69be1e83370393b15d453eb8620e1748ea2abaf2421d4725dd2ca9a17372378ea992be2fa93f43bb2f4bda2e69b1a449eeb9c93f57069653974c174de9328b07e820e316c4337d988b5d0f0c34e20e3d78827e6c81b706ab10f64add7fcf23156ee238fb9c1d67d9f3251d0c68d9e3a15ff6169fddcc9ba0f17b8241f7e6dd2269bafbfbf4b3f278f3139e97b4a09971673580ab249dc84fc76392287f6a162168c808d6ebe4f5890e49ba4bd26c49b5749b1a52fe7c497b721aff09498b9a1d7b9629a00c973fc9be7e1519ab6ca4a683dbb13bf76beac6989ce0dd87c5e80f9b66343c0ff21e607ed1c269842a47ee7a537e1d87805bb042554bb0797d07a6d4df0327eadbaa53febdd8dc5f09aa6c009bb1ed9e37e53b2f0056297c2556ecf151ec0877d43ac01a5edb703d15523e54d7007662073d3d63fd0f29c59c861dc73674509232822ee066f7b7a7aaf2d9097c830a563d296bcddd93b10bdbae8d5a7553432bf249980bbf0bfb7e40c324c7c6b55a6da056ab8da97c0d553afb3af0b1a205931b4ec80b645b903cd9e956dfa3de81bbdf4f90f44e493f921d0c49b6b2cfb44b18a32d1f874859296c1b3853d23f731ce81ed9f66a84f2ddef6ace38564b3a52f7b75eb68a2554be643a98d9ecb8b2ac0106b0d3b73ce8c672e3f6c290dbd7f00558525c7a1623b7a8c9a50fc02a494d2f1c5d9b67037713e62269bcf411f656737421489a2ce9d11c2cbc4b76aa36da69db344937487a428d1597cee4095c9b1d923eaf721c8249d22f65ba684a97593cc07f817f04b6b5fa808ec408cec46aeaad00de4be377124d7b020d25c0dc087c651c6d86660f196e029b3200b75512aee27520860574a4fabb00f8027015cd55151fb711d429ff6efcdfe967e130145075dcb9c385928e05706b2f4aba5643aebe26e94d92d6493aeca98d86a683541f966b685751168ec97490bfd939a1cc90ff1baf6177fa922e94744780762433823b3446fc808694bf50d2b301dacf4a974c078519c044490f7b1cd051492b249d26bb665daec6177859da1c1144a2fcaf759be16115f505929480567a1acc2b32e59f21fb6ccc1f25f5e524c87aaf5305e54b26fb4c89214def025267e6bf035e205b76503ff0036c51b909cb81cff3b33153b1c51db88822ca5fd8fa054cf69916803e2e839ec63ea79ae522e4afd8a75e7fecfe5d0489110cb8f1aca3bcca074b2ed99bf52199f60e29d773331617d7ccf3923cb9c959fbe3891ee008f6c1e9b222ec7c640364f300996e03530defc00e6d9a7a0c5653b80cca07bbda2db3f2c164fd6bc8befff7751ddc0d6c2d56266dc5569a7fe18691d9005216b805772a1509ca614cd65e4eff7c0684ecc66adc47c2b20d93b517bc18402ae9722316541909c3214cc60d25be3482ef90b03fe356a691206cc064ec0d6f06e02c72103bd0e9ca532a6d421726db419f377f218242bb80ef905f018676e0382653ef2f9657034859e6262c963ee2874730997abff70ff9c998f9582a552552a44acc5e2c4d6d583ca42fbc4f01a90eeec532777a424aa7c5e9c1641844f910283124d5d1ed58658c7ca3565b83014c76db215cc857b0cca0d4d9c06a6cef1a191f1b31d979dbf38f465edf0e9e816d612a973b57103bb18f441da8f4b783531c6064846f647492dcc703793496f7e7e32b973f9f33bbb07bfe6e6891cfc72744233825b92b1f724c0f4f0d28c9f6d9c6501dbd76a61f9345eeca879ceb03d419c132602d7916382c1faf3a192ca300e5438161586e4a980cdc8405634e2eaa2f0571002b5eb109389e7b6a97a3d0383c6704af077e4b7b7d68fa31acb8d56350405e5f8a32d4082a20ada5307a8107806fe3b679452a1fca6100ed401f566d6c0df6e18abea2159f100d202c490afd3dd89bdf0bc5bff569a201842151fc83d877039ee1d4a5e60a211a805ffab0b4b287198add2fa5e213a201646700ab2cfa38f010f01b2cb5ac54ae7e2c5ac5000630b79bd7784e00cf61f1f9bfc0b274f7bbdf5742f109553700612e7703f03c7019f056ac54dc79588a79d6d3ce414cb107817dc05358d1e8dd9811544ee969aa6a00e945d6465cd9582c06f174603af63da379582cc24558d2e76b31c318ebeca186255f1cc1c2b1f6b967efc7e6f3835875b452cfebe3a10c2781333117dae849e0882f729da2962f98a1d780b3b0228f27e325e0186624fd50ddb7bbf4687c25675f96b445d265b27ac04577bf25a8c214909ca2adc572e25f86f856faa2cc06902cf0d66273fb51888af74d190d60d4055e547c18ca66000d2ff0222d406a11b857d2d6b8c06b339c014c91f40e4967652d7a18894422914824128944229148241289442291486404ff033d9769b623be9ac00000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda793000011cc4944415478daeddd5b8c5d551dc7f1ef6979910ea089b61579506ba20fbe40bdc444148989d0d01a4d1a2542bc2472a9a0f0e0e5c118637cd0c4a444b0021a4d04837150438b054c04141223083c13adf8007466c008ed199ee86c1ffe6b4fd79c39d339977df6faafb57f9fa4e970c9cc3e7bf6ffb7d7fa9fb5d7011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111d9502ff5014873aaaa02d80a6c0f7f37e914b0049ceaf574d99442bfc9cc0c29f2156037f03eac48e7807de1efaaa11fdb03fac0e1f0f756e01fc053c016140ed9d26fcbb18162ef6185be1b389bd345be029c079cdbf2e19d005ec502a00e87d7b050780a0b1f858273facd381215fc5bb0a2be02d809ec05b66145de76a18feb44f8b30c1c011680fbb1b0780905822bfa4d24168afe1ce07cd616fc795810343d976fdb29acf05f656d20bc089c5418a4a5b3dfb2e82eff66e083c085c045e1eb37937fc16fe614f032f077e069e099f0f5cb6874d03a9ded9684c29f033e067c14bbdb9f8fddfdbbec24361ab807f80d1a19b44a67798642d16f01de097c12f80870291604b2563d327802f80b701ff06f604561303b3ab33330e46eff492c04b6a43eb64cac60c57f1f16068f007d0541f374461b1415fe25c0355800e86e3f9d3e160077028fa2206894cee49434cc6f4d1c044fa2a6612374f6261415fe3b80ab80abc3d71ae6cfd649e038f05de0cfc07f51104c4c676d02a1f8b761abf1be0fbc1d157edbe220380c2c2b04c6a7333606cdf15d528f600a3a53230885df032e030e6001a0c2f7a58f05c021e041a052106c4e676813a1f87702d702d785afc5af05e076e00e60412170663a3b1b1818ee1fc0eefe3a5f79a8b051c08f8187d06860433a2b03a2eefedbb106df3eace127f9a947037703cfa15585ebe86c4442f103ec077e80bafb255801fe037c0b980750089ca6331168ae5f3cf50686e8fc59883afc9f00be8ae6fa25536f6040a75f7db4a0672f700bb023f531492b16819bb00d4a3abd80a8b3af3c14ff0ee0206af475d132b682f06660b1ab21d0c9571d15ffad58c34fba6b1eb8918e8640a75eb1e6fb3244a7fb029d79a5036ff1dd8ae6fbb2d6223612e8d45b859d78952a7e1951e742a0f857a8f7f7654c9d5a2f50f4ab53b34fa6d089e660b1af4cc52f0d283e048a7c552a7e6950d12150dc2b52f1cb0c141b02453de91675fbaf43c52fcdd98f5d53f1355684620260e0adbeeb531f8f14e77ac24da5a41028623ca3f7f9a525c5ad13c8ff15b01a007b805f02db531f8f146d09f82270b48400c87e0a108a7f3bf01554fc327babd75a095381ac0320eaf8df868d0044dab007bbe676e41e02d90640b46bef41d4f197f615f1ce409601109df02bb0dd7c4452c8fe9d812cbb186afa8923593705b31b01a8e927ce64dd14cc2a00a2137c3d6afa891f7b088bcf720b81ac0220d8837d5497882707c8f0a6944d0068e82fce653915c8220034f4974c643715c82200020dfd2507594d05dc0740f4e93dd7a2a1bff8b71dbb56b7e5300a701d00d109dc0b5c9afa784446742961819af71070bd72219cbc5dd80736ec4a7d3c226338867d00cd31cf0b84dc8e00a2e4bc0a15bfe4671776edba1e05b80d80408d3fc999fb86a0cb008812f312d4f8937c6dc7ae61b7a300970110ec013e9ffa2044a6f4791c8f02dc0580eefe5218d7a300770110e8ee2f25713b0a701500bafb4ba1dc8e025c0540b00bf874ea831069d8a771f876b69b00d0fbfe523897eb02dc0440b013b832f54188ccc895d835ee86b700783ff0b6d4072132236fc3ae71375c04403424ba18dbea5ba44473d835ee661ae022000235ffa40b5c35033d0580ab13233223ae6e74c90320daf0e3c3a98f45a4251fc6c98621c90320b800f840ea831069c907b06b3e392f01b00f676f8f88ccd04eec9a4f2e690068f82f1de6621ae06104f026e0a2d407519015e011e085d407e2d4ebc0c9d407815df36f4a7d101e02e042e08da90fa220bfc3569cdd042ca63e18675e04ee04fe99fa40b06bfec2d407912c00b4f86726e6811bb1c2bf37fabaeb8e033fc23ec5f7383e469c2e1605a51e01b869861460b5f8a35d68e340e8a23e703ff025e01b58d1dd90faa022c99bdf67253e0167614d4099cebae2eff57af59d653efc3fb7023b521f684b2ae041e010f0281604fb1d9e836d24aec1d401a0f9fff486ddf9814e86c00af01c70177007b010febdc7e287d37d80e7531d409200d0fcbf311b167f6d2004b6023fa3cc73be00dc0edc8d85c04af8f75e8b1f4ef7018e5455458a0f1049f29125e182dc890dcfde9de2180ab069f1c7c2399fc3bae025edb9701cf835f6d6e703d8f0bfe6b9f86bcf62db852da40880945300cdff2777146b662d8d7ad18491401fb8193bf7fb53bf8829f5b11bc8216cbe5fd5e72284dd1ee036fcef2d99b40f90320092374032f557e0078c51fcb510028bd8c801f20c81750dbef83c84e2bf18f826fe8b3fb9940598fc2d900c2d013f041e9b74b8987108ac6bf00d9e8350fcdb816f011f497dc0237a23091b812903e0ec843f3b4775d11e9df61b651802eb1a7c1b14ff0e6cceef720ffe0dcc610b938ea4f8e1ad0740f40e80e6ffa3ab8b751e68a45b9c4908ac6bf00d7bed03c5eff1756c665bfd3ada6e04b6de76d43b00636bbcf8634e8b67c3065f26c73fae64ef04a49a02e81d80d1ccb4f8ebefe96824d0c7eef67732a4c137a890e287840d7175e1fd9a79f1d71c84c00af01fe0dbc0616079b3d75b50f127a500f0eba7b450fcb544211077f6376cf00d52f1374701e0d33cd6f56eb529d472086cdad91fa6d0e24f36254ef538b01e02dad8584b7c9b167ee69ae947c3e24774bf071cebf57a5d2e7e48f8587caa11c04594f940cab492167f6d462381b11a7c83a267190e36743cde245917a329801f2e8abf1685c00dd8f074d2c5356337f806456b47ae00f6a63e37255100f8e0aaf86b210496b0670fe6186f79ed440dbe4151f1ef076e4123c7462900d27359fcb510028f6177f0ef335a084cd4e01b3450fcde1febcd9202202dd7c55f1b2304465aba3b0a157f3b1400e96451fcb528047e08bc87b58fda8ebc7477142afef6a4de15b8abea0d3db228fe8d8e3dfcf303d80e4357020ff47a3d157f46340268dfc41b7aa416ed2f782ff01af05ee057c0f1865f4b2ebbf9644f01d0aea937f4482d1c7705fc31fc698c76f3699fa600eda9df539f7a438f1265ba9b4ff634026847e34ff6452be33e0ebc0a3c92eba822e3dd7cb2a70098bd468b3f144b0fb80c38005c0a3c05bc5e555576538b82d7f767215500bc96fa85b7a4b1e28f0aff72e063c0e780b786ff7c3136747eb6aaaa6c9a8b2afe3592d444aa2dc1de8dbd6f5cf2aec08d147f385f5b8077005701d7b1f179cb666d818a7f8d056c4bb067bbb225d832f07aa29fdd863e7013cd14ff4ee05ae06a2c04ced4b8ad0be9c6aaaadc86808a7f9dd7b19a689d7a00b371047be67da2e28f1a7c9760f3fccb187db4e63a0454fcbe28009a378f7dfcd658cfbbc3bac2bf069beb4ff2f49bcb1050f1fb932a00920d79666ca239f890cefe254cffd8abab1050f19f51b22971aa85400bd8e6102519bbf8abaaa2aaaa2dc02ee03bc02fb04d2f9a7ae67d753d7db4c6be75d1cfbe0e15ff3087b19a685deb2380683d79492380898a9ff11a7c934a3a121878b8e7fa567f783e96a1dd0d606b297b00a5ac0518abf8a76cf04d2a4908e8c9be91f481a753fdf02413c382d6028c5cfc0d36f85a39de69a9f847f63cf021e0f9ae8d00725f0b305231cda8c137a95646022afe7ca40c809cdf09a837c5d870d9ed982bf8da34d31050f18f2de98d306500d4ef047c3de1314ce28c1b7a0c29fc5936f82635931050f14f24d93b0090e8a28c2eb8c7b026482eceb8a14728806dc067803f616fededc257f1d766f51661bd9b8f8a7f737dac0692bc0300e957023e03bc421e7bbdd70ff7acdbd0c349836f12fbb1e1e73555558dbd7271c839d80e7c05ede633aa57b01a4826f59d29973ec0d027fbc2429efa11dd7bc29fbde451fcb5bdd8e223261d0944abfc6e431b7a8c2379233c7500e4b022705df1b7b082af4d73d827eeec87f143404b7ca79274fe0f09a700d18ac0c7b015621e8b67dda7e486c2f7dce09b445dc000f355558d342755f14f25f9fc1fd2f700c06f1f60d84764b7b1743795b14240c53fb557483cff071f01f03f6c29e405a90f24b266430fda5fba9bca4821a0e26fc4d3d8b59f54d23b58b8b89681c7539f8801ab1b7ab0b6c17739e5167f6d4d610ff60454fc8d799c093e2abd69c92f6667cf0554c06f81af02bbb11d77e3cd37bb6468f313157f1392ed0138c8c31400ec818827807d098fa1c22ef683d83cff00e90329a575d30154fc4d7902bbe6934b1e00e1ce524f035206c033c04bd867ddbd8bb21a7c935a130268438f26f4819fe360f80f0ea600b03a0dd8053c14fe4ee124f0061c84a2432f027f003e059c9ffa6032f72c36fc5ff010009eee72c780df27fcf9e7a0e2dfc8f9d8125f15fff4922ffe89b908808c1f0e1219878bc53f311701107938fc112991bbebdb4d00446b027e8e4601521e57cdbf9a9b00883c09bc90fa20441af602766dbbe2310016b055772225b90747cdbf9aab008886467763ef0a8894e018764dbb69fed55c0540e4187057ea831069c85d38bda1b90b008d02a4306eeffee03000221a054809dcdefdc1690068142085707df707a7011039067c1bad0b90fcf4b16bd7f50dcc6d004489790467aba74446f03076edbabdfb83e30000ad0e946cb95cf5378ceb0088b85b432d7206d95cafee03201a05dc817d349788674bd8b5eafeee0f190440e428f035341510bffad8357a74da6fd4962c02400d41c944168dbf581601009a0a887b590dfd6bd90440445301f126bba17f2dab008892f57ec2504bc481d50f92c9e9ee0f4e76051e57f459f4bf441f472d691d05be082ce556fc90d908a0164ef412f013d40f907456afc11c8b1f320d8088fa01924ab6f3fe58b601a07e802496edbc3f966d00c0ea89ef033773faa3bc45666d1ebbe6fa39173f64da041ca4a6a0b428eba6dfa0ac4700353505a525d937fd0615110091a3c00dd867db8b346911bbb6b26efa0d2a23c682301500fb08eb5bb18fb71699d6227023a1cf54cadd1f0a0b00500848e38a2d7e2830004021208d29baf8a1d0000085804cadf8e287820300140232b14e143f141e00a01090b175a6f8a10301000a011959a78a1fca5b073054f48bbc17f802f000504dfafda43815764d7c01bb463a51fcd09111402c8c0676602381fda98f475c98c7eefc8b5d29fc5ab75e6d1085c041601fb02df5314912cbc061ecc19ece153f743400603504b6017b815b505fa06b16819bb0c77ab3dac8b349dd7cd541d41cfc2cf033602ef531c9cc55c083c08f818780aaabc50f7056ea0348a9d7ebd521f038f00a0a80d2757ec83fa8d301209da221ff100a00299d86fc67a00090922d00b7639fd8b3a0c25f4f012025ea038f0287b0bbbfeefa1b50004849eae1fe212c00b2dfb473d61400520a0df727a00090dc69b83f050580e4aa0f3c02dc8986fb135300486e54f80d5200480e4e012f034f6273fc4751e1374201209ead00cf017701bf015e044eaaf09ba300108ffac0c3c05f81fb807f032b2afce62900c48b93d81dfe7ee02fd83c5fc3fc195300484a8345ff0436d73fa5c26f870240da740a7809781515bd0b0a001f56b079ee1f8013c0fb81ddc039c0b9a90f6e4a27b03bfdd358f7fe8f5800bc848a3e3905407af512d6bbb18ef70a56f4e7001761417036a7f72e3c17bfa110dfe10f03af014f61c57f1238a182f7a5f3bf8db023d005c0dfc2df6d1969096b38beadc076ecf7b59bb5a1308785c679b4170c27b022df125ec7616cb79d656cc30ddde133d1f9df4e8200987a25db40286cc5026037f0bef0758505431d10937e06428fd305de0fffbc05f8077667df82ddf59750b167a9f3bfb11603a0b547558704c43454e005530f60f6e2d56cad3caa1abeff29e078ea172fbe2900666b5d834f7751f14401301b7a465db2a00068961e5595ac28009aa1bde8244b0a80e9b4dee01369920260726af049f61400e353834f8aa100189d1a7c521c05c0e6d4e09362290036a6069f144f01309c1a7c225d50551555555d5055d5f355552d575575a4aaaacbabaaea85876a448ad5f9db5a28f273812f03ff02fe8ce6f922222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222d28cff034ebeaad2fe20fb050000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda793000012ea4944415478daedddd172db381205507a2affffcbde87241bc7b12c9202896edc73aab67627fb301448f4bd826467db0080386fdbb66defefefb3af0300b8d19bf007803cffcdbe0000e07e0a00000452000020900200008114000008a400004020050000022900001048010080400a00000452000020900200008114000008a400004020050000022900001048010080400a00000452000020900200008114000008a400004020050000022900001048010080400a00000452000020900200008114000008a400004020050000022900001048010080400a00000452000020900200008114000008a400004020050000022900001048010080400a00000452000020900200008114000008a400004020050000022900001048010080400a00000452000020900200008114000008a400004020050000022900001048010080400a00000452000020900200008114000008a400004020050000022900001048010080403f665f00b0cbfbec0b38e86df60500df5300a08e6e217ff6b5280750800200f75a29e4cf520ea0000500ae23ec8ffb6acd9402b88002006308fbeb280570010500ce11f8737d5e7f85000e5200601f815f9b4200072900f03581df9b42004f2800f087d05fd7c77bab0cc0a600904de067723a009b02401ea1cf674e0788a4009040e8b3d7ef67451160790a002b13fc9ce55480e52900ac46e8339a32c09214005621f8b9838f085886024067429f599c0ad09e024047829f4a9c0ad092024027829fca14015a5100e840f0d38922400b0a0055097dba5304284d01a01ac1cf6a7c619092fe9b7d01f0cbfb26fc599f679c329c00309b81481a270294e0048099843fe9ec01a67102c00c861efce1cb824ca1007027c10f8f2902dc4a01e00e821ff65304b88502c095043f9ca70870295f02e42ac21fc6b097b88413004633ac603ca7010ce7048091843f5ccb1e631827008c6028c17d9c06308413005ee1d7f7c23cf61e2f510038cbf081f994704ef31100471936508f8f0538cc090047087fa8cd1e65370580bd0c16e8c15e65171f01f08c6102fdf84880a79c00f01de10fbdd9c33ce40480af181ab00ea7017cc909009f097f5893bdcd5f14003e3220606df638ffe72300b6cd5080243e1260db362700087f4865ef875300b2190090cd0c08a600e4b2f1816d330b622900996c78e0233321902f0166b1c981477c39308c13801cc21fd8c3ac08a10064b0a18123cc8c000ac0fa6c64e00cb363710ac0da6c60e01566c8c2148075d9b8c00866c9a2fc14c07a6c5660343f21b02027006b11fec095cc98852800ebb031813b98358b5000d660430277327316a000f467230233983dcd2900bdd980c04c6650630a405f361e508159d49402d0930d0754622635a400f463a30115994dcd2800bdd86040656654230a0000045200fad0ac810eccaa2614801e6c28a01333ab0105a03e1b09e8c8ec2a4e01a8cd06023a33c30a5300eab2718015986545290035d930c04accb48214000008a400d4a329032b32db8a51006ab1418095997185280075d8184002b3ae0805a0061b024862e615a000cc672300703b05008019bcf9994c0198cb0600929981132900f378f001ccc2691480393cf0007f988913280000104801b89fa60bf02fb3f1660ac0bd3ce0008f999137520000209002701fcd16e039b3f2260ac03d3cd000fb999937500000209002703d4d16e038b3f3620ac0b53cc000e799a117520000209002701dcd15e07566e94514806b786001c631532fa00000402005603c4d15603cb375300500000229006369a800d73163075200c6f160025ccfac1d44010080400ac0181a29c07dccdc0114000008a400bc4e1305b89fd9fb2205e0351e408079cce0172800001048010080400ac0798e9e00e6338b4f5200cef1c001d461269fa000004020050000022900c7396a02a8c76c3e480138c603065097197d800200008114000008a400ece76809a03eb37a27050000022900fb6894007d98d93b280000104801784e9304e8c7ec7e42010080400a0000045200bee70809a02f33fc1b0a000004520000209002f098a32380feccf20714000008a4007c4d6304588799fe0505000002290000104801f897a32280f598ed9f2800001048010080400ac0df1c1101accb8cff40010080400a0000045200fe703404b03eb3fe17050000022900d0c7dbec0b00d6a100400f6f9ffe1b8ef0dcf00f05e0279f0951d9db937f8647de7efdc78cfb9bf5d81400a8eeede09fc36fbf9f1161c7977eccbe00e0a16721ef9d1d9f2986ece604c000a5a6bd83dcc0e7b7af9e05f3edb1f8b55100a09ea3a1ae0464fbfd39ff67f101c7f71400a8e56c982b01791e05ffb6097f765000a08e57435c09c8f05df06f9bf0672705006a1815de4ac0da9edd5fe1cf6ee905c066a182d1a1ad04ace7d9bbfe6d33cfce885eb3f40200b35d15d64ac01af604ffb6850719e7280030cfd521ad04f4b537f8b74df873527201b069984938f3c89167c31c7b5dec1afa4d8070bf3bc3df6f0bece1cc33e1bef292e413009861c63b7fa70db5097fa65000e03e33835809a8e7c8e7fc1f097f86500020871250c3d9e087a17c0700ae5769d8fb4ec03caf3e07ee1b43a59e00d84824ab5448525873ca492d007097aa83bfea75ad66d471bf372dd78a5c5f0500ae533d64ab5f5f67233fe78f0c27aea700c035ba846b97ebec62f417fc843f97510060bc6ea1daed7aab1abd8ec29f4bf9290018ab6b98fae98073aebadfee05974b3c01b0b1b84ad7f05fe5faef26fcd712b7ee890500aeb04a78aef23aae74e52ff2890b21e65100e075ab85e66aaf6794ab7f839ff0e7560a00bc66d5b05cf5759d71c7afee15fedc4e0180f3560fc9d55fdf9ed77fc71a087fa65000e09c94704c799db35eb7f0671a05008e4b0bc5a4d77be7dfd427fc994a0100f658bd04dcfd57f40a7fa65300e098d58330edb5df1dfcdb26fc29420180fd560cc0a356598319c1bf6dc29f421400d86795e01ba1fb5accba7ee15f5fd43d4a2b0051379761ba07de153aaec9ac77fddb66f650505a0180a33a06dd5dbaaccdcce0df36e14f510a003cd625e066aabc46b3837fdb843f852900f0b5d9c1d149b5b5aa10fc509e0200ff121ec75559b32ad7b16ddefd53dc8fd91700c5540a10f6ab76df843fe52900f047b510e9e6f7fadd197e15ef99f0a70505007eaa18243c56f57e097fda5000a06e987475e54940e57b25fc69c5970049573950f85be57b25fc69c70900c92a07ca0a469c0474b847c29f969c0090aa43b0a4eb708f843f6d290024ea102c2b39bade5d7e918ff0a7350580341d8265457bd6bd4bf06f9bf067010a0049ba84cbaadebef9f34ef746f8b3040500b8d3db937fae4ef8b30c3f0540826e21b3baaef743f8b31427000010c80900abebfa6e933abcf367494e005899f0077840016055c29f11bcfb67590a002b12fe8c20fc599a02c06a3a86fffb266caa713f589e2f01b2926ee12f646a725f88a000b08a4ee1fffee4cf3bbd96d5087f62f8088015740a4c0153977b4314270074d721fc8f06cb7b93d7b512e14f9cb4130043752d1deee7d9601148f7b1d6fcd661a60c9356005847f58d3ae29bfd82e97ad698580a001d550effd13fd227a0ae636d89a600d04dd5f0bff267f905d578d694780a00bcee8e301158e3584bd814007aa9f6eeffeedfe027b85e670de11705802e2a85ffcc5fdd2bc0ceb376f08102400755c2bfcaefecaf700ddd5833f84401a0ba0ae15f25f83f5f13fb582bf882024065b3c3bf62f07fbe3ebe678de081c402303b54d867f67dea121c5dae73066bc311b367ceed120b00f5cddc88d5dff53fba6680431400aa9915fe1d83fff3f5f387f5802714002a9911fedd83fff36bc13ac02e0a0055cc0affd5acf89abc7eb8800240057787ff4aeffa1fbdbe44a9af9bd7c57d0170db720b40e4cd2eeace7bb17af07f7ead49d25e2fbc2cb50050c35de19f14fc9f5f778294d709432900cc7247f8a706ffe73558d9eaaf0f2ea30030c3d5e12ff8ffb6ea5aacfabae0160a0077bb23fcf9d76aebb2daeb81db2900dce9caf0f7aeffb955d66795d701532517003f09b006c17f4cf7b5ea7efdd4139b053f665f0011aed86082e0bcf7ade7d073cf61a0e413007af28e7f8c6e6bd8ed7aa1bcf402d0f15d503723d758088cd5653dbb5c27fd4467407a01e05aa3369777fdd7b1ae104a01e02a23c25ff0dfa3f21a57be3668cd9700b9c2abe16fe8b36d9e03b8941300467b25fcbde39fa7daba57bb1e588e0210fe2590c15e0d7fe6aa720faa5c076b8b9ffd0a00a39cdd4cdef5d732fb5eccfef7430c058011ce84bfe0af6bd67df13cc08d14809fe28f825e7074ed047f0f77df23cf047732f3370580d71cd94482bf9fbbee97e702265000386b6ff80bfedeaebe779e0d984401e08c23e14f7f57dd47cf074ca400fce133a17df6ac9377fdeb197d3f3d1fcc62d6ffa2003092e05fdba87beb19810214008e78d49c057f8e57efb3e7048a5000fee668e8b1efc29f2c67efb96785d9ccf80ffc6540ecf179d318e4bc6fc77f0c1428c40900cf087f1ed9fb2c7866a02005e05f8e88fef8b8163ee7e72bcf9e09cf0c5598ed9f28003cf27bb3087e9e793ff8e740010a005f79db043fc77856a8ccbbff2f28005f4b7f580c73ce787ff0bf8182fc14003092e087269c003c967e0a00b002b3fc0105000002290000104801f89ea32380beccf06f280000104801784e8304e8c7ec7e42010080400ac03e9a24401f66f60e0a000004520000209002b09f232580faccea9d14000008a4001ca35902d465461fa00000402005e0380d13a01eb3f920050000022900e7689a007598c927280000104801384fe30498cf2c3e49010080400ac06b344f8079cce017280000104801789d060a703fb3f7450ac0181e4480fb98b90328000010480118472305b89e593b88020000811480b1345380eb98b103290000104801184f430518cf6c1d4c010080400ac03534558071ccd40b2800d7f1c002bcce2cbd8802702d0f2ec07966e88514000008a4005c4f830538ceecbc980200008114807b68b200fb9999375000eee3810678ceacbc8902702f0f36c06366e48d14000008a400dc4fc305f897d9783305600e0f3ac01f66e2040ac03c1e7800b3701a0500000229007369be403233702205603e1b004864f64da600d460230049ccbc0214000008a400d4a1110309ccba2214805a6c0c6065665c210a403d3608b022b3ad1805a0261b0558899956900250970d03acc02c2b4a010080400a406d9a33d09919569802509f0d0474647615a700f46023019d98590d28007dd85040076655130a402f3616509919d58802d08f0d0654643635a300f464a3019598490d29007dd97040056651530a406f361e309319d49802d09f0d08cc60f634a700acc14604ee64e62c400158870d09dcc1ac598402b0161b13b89219b31005603d36287005b365310ac09a6c5460243365410ac0ba6c586004b364510ac0da6c5ce01566c8c21480f5d9c0c01966c7e27eccbe006ef17b23bfcfbe10a03cc11fc20940161b1bf88e19114401c86383035f311bc22800996c74e0233321900290cb8607b6cd2c88e54b80d97c39107209fe704e00d8368300d2d8f32800fc9f810019ec75b66d5300f89bc100eb7adbec713e500000d627f8f9870200b036e1cf97fc1400c09a043fdf720200b01ee1cf530a00c05a843fbbf80800600d829f439c0000f427fc39cc0900405f829fd39c0000f424fc79891300805e043f432800003d087e865200006a13fc5cc2770000ea12fe5cc60900403d829fcb390100a845f8730b27000035087e6ea50000cc25f8994201009843f033950200702fc14f090a00c03d043fa5280000d712fc94a400005c43f0539a0200308ed0a70d0500e075829f76140080f3043f6d290000c7087d96a00000ec23f8598a0200f098d067590a00c0df843e11140000a14f2005004825f489a6000049843efca200002b13f8f08002005ffb2a38de675f14bb087dd8410180bfbd1df8ff14821a043e9ca000c04f6742c429c1fd843d0ca200c0d850510ac612f8701105806477858b52f09ca0879b290024aa1036df5dc3aae5a0c2ba03bf280024e912407baeb35a49e8b2b6c02f0a0009560ca7155f13702305809509498007fe9b7d017011e10ff00d2700ac46f003eca000b00ac10f7080024077821fe004df01a033e10f709213003a12fc002f5200e844f0030ca200d081e007184c01a032c10f701105808a043fc0c5fc1400d5087f801b3801a00ac10f70230580d9043fc0040a00b3087e80897c078019843fc0644e00b893e007284201e00e821fa01805802b097e80a21400ae20f8018a53001849f00334e1a7001845f80334e2048057097e80861400ce12fc008d29001c25f80116e03b001c21fc0116a100f0ccfbf633f8853fc0427c04c077843ec0a214003e13fa00017c0400008114000008a400004020050000022900001048010080400a00000452000020900200008114000008a400004020050000022900001048010080400a00000452000020900200008114000008a400004020050000022900001048010080400a00000452000020900200008114000008a400004020050000022900001048010080400a00000452000020900200008114000008a400004020050000022900001048010080400a00000452000020900200008114000008a40000402005000002290000104801008040ff037e76e5f0e5e893070000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "sendAction": {
+      "id": 13708,
+      "api": [
+        {
+          "url": "/me/messages",
+          "body": {
+            "recipient": {
+              "id": "{{parameters.id}}"
+            },
+            "sender_action": "{{parameters.action}}"
+          },
+          "method": "POST",
+          "response": {
+            "output": "{{body}}"
+          }
+        }
+      ],
+      "rev": 3,
+      "crud": null,
+      "name": "sendAction",
+      "epoch": null,
+      "flags": {},
+      "label": "Send an action",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Either PSID, phone number, or user_ref of the message recipient.",
+          "name": "id",
+          "type": "number",
+          "label": "Recipient ID",
+          "required": true
+        },
+        {
+          "name": "action",
+          "type": "select",
+          "label": "Action",
+          "options": [
+            {
+              "label": "Mark seen",
+              "value": "mark_seen"
+            },
+            {
+              "label": "Typing on",
+              "value": "typing_on"
+            },
+            {
+              "label": "Typing off",
+              "value": "typing_off"
+            }
+          ],
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "facebook-messenger",
+      "samples": null,
+      "apiJsonc": "[\n    {\n        \"url\": \"/me/messages\",\n        \"body\": {\n            \"recipient\": {\n                \"id\": \"{{parameters.id}}\"\n            },\n            \"sender_action\": \"{{parameters.action}}\"\n        },\n        \"method\": \"POST\",\n        \"response\": {\n            \"output\": \"{{body}}\"\n        }\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "recipient_id",
+          "type": "number",
+          "label": "Recipient ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "facebook-messenger",
+      "description": "Sends an action.",
+      "expectJsonc": "[\n    {\n        \"help\": \"Either PSID, phone number, or user_ref of the message recipient.\",\n        \"name\": \"id\",\n        \"type\": \"number\",\n        \"label\": \"Recipient ID\",\n        \"required\": true\n    },\n    {\n        \"name\": \"action\",\n        \"type\": \"select\",\n        \"label\": \"Action\",\n        \"options\": [\n            {\n                \"label\": \"Mark seen\",\n                \"value\": \"mark_seen\"\n            },\n            {\n                \"label\": \"Typing on\",\n                \"value\": \"typing_on\"\n            },\n            {\n                \"label\": \"Typing off\",\n                \"value\": \"typing_off\"\n            }\n        ],\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"recipient_id\",\n        \"type\": \"number\",\n        \"label\": \"Recipient ID\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "sendMessage": {
+      "id": 13709,
+      "api": [
+        {
+          "url": "/me/messages",
+          "body": "{{buildSendParams(omit(parameters, 'pageId'))}}",
+          "method": "POST",
+          "response": {
+            "output": "{{body}}"
+          }
+        }
+      ],
+      "rev": 4,
+      "crud": null,
+      "name": "sendMessage",
+      "epoch": null,
+      "flags": {},
+      "label": "Send a message",
+      "scope": [],
+      "expect": [
+        {
+          "name": "recipient",
+          "spec": [
+            {
+              "help": "Either PSID, phone number, or user_ref of the message recipient.",
+              "name": "id",
+              "type": "number",
+              "label": "ID",
+              "required": true
+            },
+            {
+              "help": "Phone number of the recipient with the format `+1(212)555-2368`. Your bot must be approved for [Customer Matching](https://developers.facebook.com/docs/messenger-platform/identity/customer-matching) to send messages this way.",
+              "name": "phone_number",
+              "type": "text",
+              "label": "Phone number"
+            },
+            {
+              "help": "User_ref from the [checkbox plugin](https://developers.facebook.com/docs/messenger-platform/discovery/checkbox-plugin).",
+              "name": "user_ref",
+              "type": "text",
+              "label": "User reference"
+            },
+            {
+              "help": "Providing a name increases the odds of a successful match.",
+              "name": "name",
+              "spec": [
+                {
+                  "name": "first_name",
+                  "type": "text",
+                  "label": "First name"
+                },
+                {
+                  "name": "last_name",
+                  "type": "text",
+                  "label": "Last name"
+                }
+              ],
+              "type": "collection",
+              "label": "Name"
+            }
+          ],
+          "type": "collection",
+          "label": "Recipient"
+        },
+        {
+          "name": "message",
+          "spec": [
+            {
+              "name": "message_content",
+              "type": "select",
+              "label": "Message content",
+              "options": {
+                "store": [
+                  {
+                    "label": "Text",
+                    "value": "text",
+                    "nested": [
+                      {
+                        "name": "text",
+                        "type": "text",
+                        "label": "Text"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Attachment",
+                    "value": "attachment",
+                    "nested": [
+                      {
+                        "help": "Text or attachment must be set.",
+                        "name": "attachment",
+                        "spec": [
+                          {
+                            "name": "type",
+                            "type": "select",
+                            "label": "Type",
+                            "options": {
+                              "store": [
+                                {
+                                  "label": "Image",
+                                  "value": "image",
+                                  "nested": [
+                                    {
+                                      "name": "upload_method",
+                                      "type": "select",
+                                      "label": "Upload method",
+                                      "options": {
+                                        "store": [
+                                          {
+                                            "label": "URL",
+                                            "value": "url",
+                                            "nested": [
+                                              {
+                                                "name": "payload",
+                                                "spec": [
+                                                  {
+                                                    "name": "url",
+                                                    "type": "url",
+                                                    "label": "URL"
+                                                  },
+                                                  {
+                                                    "name": "is_reusable",
+                                                    "type": "boolean",
+                                                    "label": "Is reusable",
+                                                    "default": true
+                                                  }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Payload"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "label": "Attachment Id",
+                                            "value": "attachment_id",
+                                            "nested": [
+                                              {
+                                                "name": "payload",
+                                                "spec": [
+                                                  {
+                                                    "name": "attachment_id",
+                                                    "type": "number",
+                                                    "label": "Attachment Id"
+                                                  }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Payload"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "label": "Video",
+                                  "value": "video",
+                                  "nested": [
+                                    {
+                                      "name": "upload_method",
+                                      "type": "select",
+                                      "label": "Upload method",
+                                      "options": {
+                                        "store": [
+                                          {
+                                            "label": "URL",
+                                            "value": "url",
+                                            "nested": [
+                                              {
+                                                "name": "payload",
+                                                "spec": [
+                                                  {
+                                                    "name": "url",
+                                                    "type": "url",
+                                                    "label": "URL"
+                                                  },
+                                                  {
+                                                    "name": "is_reusable",
+                                                    "type": "boolean",
+                                                    "label": "Is reusable",
+                                                    "default": true
+                                                  }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Payload"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "label": "Attachment Id",
+                                            "value": "attachment_id",
+                                            "nested": [
+                                              {
+                                                "name": "payload",
+                                                "spec": [
+                                                  {
+                                                    "name": "attachment_id",
+                                                    "type": "number",
+                                                    "label": "Attachment Id"
+                                                  }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Payload"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "label": "Audio",
+                                  "value": "audio",
+                                  "nested": [
+                                    {
+                                      "name": "upload_method",
+                                      "type": "select",
+                                      "label": "Upload method",
+                                      "options": {
+                                        "store": [
+                                          {
+                                            "label": "URL",
+                                            "value": "url",
+                                            "nested": [
+                                              {
+                                                "name": "payload",
+                                                "spec": [
+                                                  {
+                                                    "name": "url",
+                                                    "type": "url",
+                                                    "label": "URL"
+                                                  },
+                                                  {
+                                                    "name": "is_reusable",
+                                                    "type": "boolean",
+                                                    "label": "Is reusable",
+                                                    "default": true
+                                                  }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Payload"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "label": "Attachment Id",
+                                            "value": "attachment_id",
+                                            "nested": [
+                                              {
+                                                "name": "payload",
+                                                "spec": [
+                                                  {
+                                                    "name": "attachment_id",
+                                                    "type": "number",
+                                                    "label": "Attachment Id"
+                                                  }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Payload"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "label": "File",
+                                  "value": "file",
+                                  "nested": [
+                                    {
+                                      "name": "upload_method",
+                                      "type": "select",
+                                      "label": "Upload method",
+                                      "options": {
+                                        "store": [
+                                          {
+                                            "label": "URL",
+                                            "value": "url",
+                                            "nested": [
+                                              {
+                                                "name": "payload",
+                                                "spec": [
+                                                  {
+                                                    "name": "url",
+                                                    "type": "url",
+                                                    "label": "URL"
+                                                  },
+                                                  {
+                                                    "name": "is_reusable",
+                                                    "type": "boolean",
+                                                    "label": "Is reusable",
+                                                    "default": true
+                                                  }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Payload"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "label": "Attachment Id",
+                                            "value": "attachment_id",
+                                            "nested": [
+                                              {
+                                                "name": "payload",
+                                                "spec": [
+                                                  {
+                                                    "name": "attachment_id",
+                                                    "type": "number",
+                                                    "label": "Attachment Id"
+                                                  }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Payload"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "label": "Template",
+                                  "value": "template",
+                                  "nested": [
+                                    {
+                                      "help": "You can find more about templates in the [documentation](https://developers.facebook.com/docs/messenger-platform/send-messages/templates).",
+                                      "name": "payload",
+                                      "type": "text",
+                                      "label": "Payload",
+                                      "multiline": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            "required": true
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Attachment"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "required": true
+            },
+            {
+              "help": "You can get more information about quick replies in the [documentation](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies).",
+              "name": "quick_replies",
+              "spec": [
+                {
+                  "name": "content_type",
+                  "type": "select",
+                  "label": "Content type",
+                  "options": {
+                    "store": [
+                      {
+                        "label": "Text",
+                        "value": "text",
+                        "nested": [
+                          {
+                            "name": "title",
+                            "type": "text",
+                            "label": "Title",
+                            "required": true,
+                            "validate": {
+                              "max": 20
+                            }
+                          },
+                          {
+                            "name": "payload",
+                            "type": "text",
+                            "label": "Payload",
+                            "required": true,
+                            "validate": {
+                              "max": 1000
+                            }
+                          },
+                          {
+                            "help": "URL of image to display on the quick reply button for text quick replies. Image should be a minimum of 24px x 24px. Larger images will be automatically cropped and resized.",
+                            "name": "image_url",
+                            "type": "text",
+                            "label": "Image URL"
+                          }
+                        ]
+                      },
+                      {
+                        "label": "Location",
+                        "value": "location"
+                      },
+                      {
+                        "label": "User phone number",
+                        "value": "user_phone_number"
+                      },
+                      {
+                        "label": "User email",
+                        "value": "user_email"
+                      }
+                    ]
+                  },
+                  "required": true
+                }
+              ],
+              "type": "array",
+              "label": "Quick replies"
+            },
+            {
+              "name": "metadata",
+              "type": "text",
+              "label": "Metadata",
+              "validate": {
+                "max": 1000
+              }
+            }
+          ],
+          "type": "collection",
+          "label": "Message"
+        },
+        {
+          "help": "You can get more information about messaging types in the [documentation](https://developers.facebook.com/docs/messenger-platform/send-messages/#messaging_types).",
+          "name": "messaging_type",
+          "type": "select",
+          "label": "Messaging type",
+          "options": {
+            "store": [
+              {
+                "label": "Response",
+                "value": "RESPONSE"
+              },
+              {
+                "label": "Update",
+                "value": "UPDATE"
+              },
+              {
+                "label": "Message tag",
+                "value": "MESSAGE_TAG",
+                "nested": [
+                  {
+                    "help": "You can get more information about message tags int the [documentation](https://developers.facebook.com/docs/messenger-platform/send-messages/message-tags).",
+                    "name": "tag",
+                    "type": "select",
+                    "label": "Tag",
+                    "options": "rpc://app%23facebook-messenger@1/getMessageTags",
+                    "editable": true,
+                    "mappable": true,
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          },
+          "required": true
+        },
+        {
+          "name": "notification_type",
+          "type": "select",
+          "label": "Notification type",
+          "options": [
+            {
+              "label": "Regular",
+              "value": "REGULAR"
+            },
+            {
+              "label": "On-screen notification only",
+              "value": "SILENT_PUSH"
+            },
+            {
+              "label": "No notification",
+              "value": "NO_PUSH"
+            }
+          ],
+          "advanced": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "facebook-messenger",
+      "samples": null,
+      "apiJsonc": "[\n    {\n        \"url\": \"/me/messages\",\n        \"body\": \"{{buildSendParams(omit(parameters, 'pageId'))}}\",\n        \"method\": \"POST\",\n        \"response\": {\n            \"output\": \"{{body}}\"\n        }\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "recipient_id",
+          "type": "text",
+          "label": "Recipient Id"
+        },
+        {
+          "name": "message_id",
+          "type": "text",
+          "label": "Message Id"
+        },
+        {
+          "name": "attachment_id",
+          "type": "number",
+          "label": "Attachment Id"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "facebook-messenger",
+      "description": "Sends a message.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"recipient\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"help\": \"Either PSID, phone number, or user_ref of the message recipient.\",\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"ID\",\n\t\t\t\t\"required\": true\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"help\": \"Phone number of the recipient with the format `+1(212)555-2368`. Your bot must be approved for [Customer Matching](https://developers.facebook.com/docs/messenger-platform/identity/customer-matching) to send messages this way.\",\n\t\t\t\t\"name\": \"phone_number\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Phone number\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"help\": \"User_ref from the [checkbox plugin](https://developers.facebook.com/docs/messenger-platform/discovery/checkbox-plugin).\",\n\t\t\t\t\"name\": \"user_ref\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"User reference\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"help\": \"Providing a name increases the odds of a successful match.\",\n\t\t\t\t\"name\": \"name\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"first_name\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"First name\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"last_name\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Last name\"\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\"label\": \"Name\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"collection\",\n\t\t\"label\": \"Recipient\"\n\t},\n\t{\n\t\t\"name\": \"message\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"message_content\",\n\t\t\t\t\"type\": \"select\",\n\t\t\t\t\"label\": \"Message content\",\n\t\t\t\t\"options\": {\n\t\t\t\t\t\"store\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Text\",\n\t\t\t\t\t\t\t\"value\": \"text\",\n\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"name\": \"text\",\n\t\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\t\"label\": \"Text\"\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t]\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Attachment\",\n\t\t\t\t\t\t\t\"value\": \"attachment\",\n\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"help\": \"Text or attachment must be set.\",\n\t\t\t\t\t\t\t\t\t\"name\": \"attachment\",\n\t\t\t\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\"name\": \"type\",\n\t\t\t\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Type\",\n\t\t\t\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\t\t\t\"store\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Image\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"image\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"upload_method\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Upload method\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"store\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"URL\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"url\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"payload\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"url\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"url\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"URL\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"is_reusable\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"boolean\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Is reusable\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"default\": true\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t],\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Payload\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Attachment Id\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"attachment_id\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"payload\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"attachment_id\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Attachment Id\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t],\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Payload\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Video\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"video\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"upload_method\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Upload method\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"store\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"URL\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"url\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"payload\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"url\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"url\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"URL\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"is_reusable\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"boolean\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Is reusable\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"default\": true\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t],\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Payload\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Attachment Id\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"attachment_id\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"payload\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"attachment_id\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Attachment Id\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t],\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Payload\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Audio\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"audio\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"upload_method\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Upload method\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"store\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"URL\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"url\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"payload\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"url\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"url\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"URL\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"is_reusable\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"boolean\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Is reusable\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"default\": true\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t],\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Payload\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Attachment Id\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"attachment_id\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"payload\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"attachment_id\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Attachment Id\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t],\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Payload\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"File\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"file\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"upload_method\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Upload method\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"store\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"URL\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"url\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"payload\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"url\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"url\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"URL\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"is_reusable\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"boolean\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Is reusable\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"default\": true\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t],\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Payload\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Attachment Id\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"attachment_id\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"payload\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"attachment_id\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Attachment Id\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t],\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Payload\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Template\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"value\": \"template\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"help\": \"You can find more about templates in the [documentation](https://developers.facebook.com/docs/messenger-platform/send-messages/templates).\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"name\": \"payload\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Payload\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"multiline\": true\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t\t\"required\": true\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t],\n\t\t\t\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\t\t\t\"label\": \"Attachment\"\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t]\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t},\n\t\t\t\t\"required\": true\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"help\": \"You can get more information about quick replies in the [documentation](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies).\",\n\t\t\t\t\"name\": \"quick_replies\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"content_type\",\n\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\"label\": \"Content type\",\n\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\"store\": [\n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"label\": \"Text\",\n\t\t\t\t\t\t\t\t\t\"value\": \"text\",\n\t\t\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\"name\": \"title\",\n\t\t\t\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Title\",\n\t\t\t\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\t\t\t\"validate\": {\n\t\t\t\t\t\t\t\t\t\t\t\t\"max\": 20\n\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\"name\": \"payload\",\n\t\t\t\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Payload\",\n\t\t\t\t\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\t\t\t\t\"validate\": {\n\t\t\t\t\t\t\t\t\t\t\t\t\"max\": 1000\n\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\t\"help\": \"URL of image to display on the quick reply button for text quick replies. Image should be a minimum of 24px x 24px. Larger images will be automatically cropped and resized.\",\n\t\t\t\t\t\t\t\t\t\t\t\"name\": \"image_url\",\n\t\t\t\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\t\t\t\"label\": \"Image URL\"\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"label\": \"Location\",\n\t\t\t\t\t\t\t\t\t\"value\": \"location\"\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"label\": \"User phone number\",\n\t\t\t\t\t\t\t\t\t\"value\": \"user_phone_number\"\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"label\": \"User email\",\n\t\t\t\t\t\t\t\t\t\"value\": \"user_email\"\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t]\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"required\": true\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"type\": \"array\",\n\t\t\t\t\"label\": \"Quick replies\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"metadata\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Metadata\",\n\t\t\t\t\"validate\": {\n\t\t\t\t\t\"max\": 1000\n\t\t\t\t}\n\t\t\t}\n\t\t],\n\t\t\"type\": \"collection\",\n\t\t\"label\": \"Message\"\n\t},\n\t{\n\t\t\"help\": \"You can get more information about messaging types in the [documentation](https://developers.facebook.com/docs/messenger-platform/send-messages/#messaging_types).\",\n\t\t\"name\": \"messaging_type\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Messaging type\",\n\t\t\"options\": {\n\t\t\t\"store\": [\n\t\t\t\t{\n\t\t\t\t\t\"label\": \"Response\",\n\t\t\t\t\t\"value\": \"RESPONSE\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"label\": \"Update\",\n\t\t\t\t\t\"value\": \"UPDATE\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"label\": \"Message tag\",\n\t\t\t\t\t\"value\": \"MESSAGE_TAG\",\n\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"help\": \"You can get more information about message tags int the [documentation](https://developers.facebook.com/docs/messenger-platform/send-messages/message-tags).\",\n\t\t\t\t\t\t\t\"name\": \"tag\",\n\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\"label\": \"Tag\",\n\t\t\t\t\t\t\t\"options\": \"rpc://getMessageTags\",\n\t\t\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\t\t\"editable\": true,\n\t\t\t\t\t\t\t\"mappable\": true\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"notification_type\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Notification type\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Regular\",\n\t\t\t\t\"value\": \"REGULAR\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"On-screen notification only\",\n\t\t\t\t\"value\": \"SILENT_PUSH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"No notification\",\n\t\t\t\t\"value\": \"NO_PUSH\"\n\t\t\t}\n\t\t],\n\t\t\"advanced\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"recipient_id\",\n        \"type\": \"text\",\n        \"label\": \"Recipient Id\"\n    },\n    {\n        \"name\": \"message_id\",\n        \"type\": \"text\",\n        \"label\": \"Message Id\"\n    },\n    {\n        \"name\": \"attachment_id\",\n        \"type\": \"number\",\n        \"label\": \"Attachment Id\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchmessages": {
+      "id": 13710,
+      "api": {},
+      "rev": 3,
+      "crud": null,
+      "name": "watchmessages",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch messages",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "facebook-messenger",
+      "samples": null,
+      "apiJsonc": "{\n}",
+      "approved": false,
+      "hookName": "facebook-messenger2",
+      "learning": false,
+      "interface": [
+        {
+          "name": "sender",
+          "type": "number",
+          "label": "Sender ID"
+        },
+        {
+          "name": "recipient",
+          "type": "number",
+          "label": "Recipient ID"
+        },
+        {
+          "name": "timestamp",
+          "type": "date",
+          "label": "Timestamp"
+        },
+        {
+          "name": "message",
+          "spec": [
+            {
+              "name": "mid",
+              "type": "text",
+              "label": "ID"
+            },
+            {
+              "name": "seq",
+              "type": "number",
+              "label": "Sequence"
+            },
+            {
+              "name": "text",
+              "type": "text",
+              "label": "Text"
+            },
+            {
+              "name": "quick_reply",
+              "spec": [
+                {
+                  "name": "payload",
+                  "type": "text",
+                  "label": "Payload"
+                }
+              ],
+              "type": "collection",
+              "label": "Quick reply"
+            },
+            {
+              "name": "attachments",
+              "spec": [
+                {
+                  "name": "type",
+                  "type": "text",
+                  "label": "Type"
+                },
+                {
+                  "name": "url",
+                  "type": "text",
+                  "label": "URL"
+                },
+                {
+                  "name": "title",
+                  "type": "text",
+                  "label": "Title"
+                },
+                {
+                  "name": "payload",
+                  "spec": [
+                    {
+                      "name": "url",
+                      "type": "text",
+                      "label": "URL"
+                    },
+                    {
+                      "name": "coordinates",
+                      "spec": [
+                        {
+                          "name": "long",
+                          "type": "number",
+                          "label": "Longitude"
+                        },
+                        {
+                          "name": "lat",
+                          "type": "number",
+                          "label": "Latitude"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "Coordinates"
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Payload"
+                }
+              ],
+              "type": "array",
+              "label": "Attachments"
+            }
+          ],
+          "type": "collection",
+          "label": "Message"
+        },
+        {
+          "name": "referral",
+          "spec": [
+            {
+              "name": "ref",
+              "type": "text",
+              "label": "Ref"
+            },
+            {
+              "name": "source",
+              "type": "text",
+              "label": "Source"
+            },
+            {
+              "name": "type",
+              "type": "text",
+              "label": "Type"
+            }
+          ],
+          "type": "collection",
+          "label": "Referral"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "Triggers when a new message is received.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"sender\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Sender ID\"\n\t},\n\t{\n\t\t\"name\": \"recipient\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Recipient ID\"\n\t},\n\t{\n\t\t\"name\": \"timestamp\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"message\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"mid\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"seq\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"label\": \"Sequence\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"text\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Text\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"quick_reply\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"payload\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Payload\"\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\"label\": \"Quick reply\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"attachments\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"type\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Type\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"url\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"URL\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"title\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Title\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"payload\",\n\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"url\",\n\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\"label\": \"URL\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"coordinates\",\n\t\t\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\"name\": \"long\",\n\t\t\t\t\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\t\t\t\t\"label\": \"Longitude\"\n\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\"name\": \"lat\",\n\t\t\t\t\t\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\t\t\t\t\t\"label\": \"Latitude\"\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t],\n\t\t\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\t\t\"label\": \"Coordinates\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t],\n\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\"label\": \"Payload\"\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"type\": \"array\",\n\t\t\t\t\"label\": \"Attachments\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"collection\",\n\t\t\"label\": \"Message\"\n\t},\n\t{\n\t\t\"name\": \"referral\",\n\t\t\"label\": \"Referral\",\n\t\t\"type\": \"collection\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"ref\",\n\t\t\t\t\"label\": \"Ref\",\n\t\t\t\t\"type\": \"text\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"source\",\n\t\t\t\t\"label\": \"Source\",\n\t\t\t\t\"type\": \"text\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"type\",\n\t\t\t\t\"label\": \"Type\",\n\t\t\t\t\"type\": \"text\"\n\t\t\t}\n\t\t]\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getSenderDetails": {
+      "id": 13711,
+      "api": {
+        "qs": {
+          "fields": "{{if(parameters.locale, 'locale,')if(parameters.timezone, 'timezone,')if(parameters.gender, 'gender,')}}id,name,first_name,last_name,profile_pic"
+        },
+        "url": "/{{parameters.userId}}",
+        "method": "GET",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "getSenderDetails",
+      "epoch": null,
+      "flags": {},
+      "label": "Get Sender Details",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Map a PSID (page-specific ID) to get information about the user.",
+          "name": "userId",
+          "type": "text",
+          "label": "User ID",
+          "required": true
+        },
+        {
+          "help": "May require additional permission `pages_user_locale`.",
+          "name": "locale",
+          "type": "boolean",
+          "label": "Retrieve locale",
+          "default": false,
+          "required": true
+        },
+        {
+          "help": "May require additional permission `pages_user_timezone`.",
+          "name": "timezone",
+          "type": "boolean",
+          "label": "Retrieve timezone",
+          "default": false,
+          "required": true
+        },
+        {
+          "help": "May require additional permission `pages_user_gender`.",
+          "name": "gender",
+          "type": "boolean",
+          "label": "Retrieve gender",
+          "default": false,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "facebook-messenger",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/{{parameters.userId}}\",\n\t\"qs\": {\n\t\t\"fields\": \"{{if(parameters.locale, 'locale,')if(parameters.timezone, 'timezone,')if(parameters.gender, 'gender,')}}id,name,first_name,last_name,profile_pic\"\n\t},\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": \"{{body}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uinteger",
+          "label": "ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Full name"
+        },
+        {
+          "name": "first_name",
+          "type": "text",
+          "label": "First name"
+        },
+        {
+          "name": "last_name",
+          "type": "text",
+          "label": "Last name"
+        },
+        {
+          "name": "profile_pic",
+          "type": "url",
+          "label": "Profile picture URL"
+        },
+        {
+          "name": "locale",
+          "type": "text",
+          "label": "Locale"
+        },
+        {
+          "name": "timezone",
+          "type": "text",
+          "label": "Timezone"
+        },
+        {
+          "name": "gender",
+          "type": "text",
+          "label": "Gender"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "facebook-messenger",
+      "description": "Retrieves details of the sender.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"userId\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"User ID\",\n\t\t\"required\": true,\n\t\t\"help\": \"Map a PSID (page-specific ID) to get information about the user.\"\n\t},\n\t{\n\t\t\"name\": \"locale\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Retrieve locale\",\n\t\t\"required\": true,\n\t\t\"default\": false,\n\t\t\"help\": \"May require additional permission `pages_user_locale`.\"\n\t},\n\t{\n\t\t\"name\": \"timezone\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Retrieve timezone\",\n\t\t\"required\": true,\n\t\t\"default\": false,\n\t\t\"help\": \"May require additional permission `pages_user_timezone`.\"\n\t},\n\t{\n\t\t\"name\": \"gender\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Retrieve gender\",\n\t\t\"required\": true,\n\t\t\"default\": false,\n\t\t\"help\": \"May require additional permission `pages_user_gender`.\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"ID\"\n\t},\n\t{\n\t\t\"name\": \"name\",\n\t\t\"label\": \"Full name\",\n\t\t\"type\": \"text\"\n\t},\n\t{\n\t\t\"name\": \"first_name\",\n\t\t\"label\": \"First name\",\n\t\t\"type\": \"text\"\n\t},\n\t{\n\t\t\"name\": \"last_name\",\n\t\t\"label\": \"Last name\",\n\t\t\"type\": \"text\"\n\t},\n\t{\n\t\t\"name\": \"profile_pic\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Profile picture URL\"\n\t},\n\t{\n\t\t\"name\": \"locale\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Locale\"\n\t},\n\t{\n\t\t\"name\": \"timezone\",\n\t\t\"label\": \"Timezone\",\n\t\t\"type\": \"text\"\n\t},\n\t{\n\t\t\"name\": \"gender\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Gender\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "uploadAttachment": {
+      "id": 13712,
+      "api": [
+        {
+          "url": "/me/message_attachments",
+          "body": {
+            "message": "{{omit(parameters, 'pageId')}}"
+          },
+          "method": "POST",
+          "response": {
+            "output": "{{body}}"
+          }
+        }
+      ],
+      "rev": 3,
+      "crud": null,
+      "name": "uploadAttachment",
+      "epoch": null,
+      "flags": {},
+      "label": "Upload an attachment",
+      "scope": [],
+      "expect": [
+        {
+          "name": "attachment",
+          "spec": [
+            {
+              "name": "type",
+              "type": "select",
+              "label": "Type",
+              "options": [
+                {
+                  "label": "Image",
+                  "value": "image"
+                },
+                {
+                  "label": "Video",
+                  "value": "video"
+                },
+                {
+                  "label": "Audio",
+                  "value": "audio"
+                },
+                {
+                  "label": "File",
+                  "value": "file"
+                }
+              ],
+              "required": true
+            },
+            {
+              "name": "payload",
+              "spec": [
+                {
+                  "help": "Only attachments that were uploaded with the is_reusable property set to true can be sent to other message recipients.",
+                  "name": "is_reusable",
+                  "type": "boolean",
+                  "label": "Is reusable?",
+                  "default": true,
+                  "required": true
+                },
+                {
+                  "name": "url",
+                  "type": "url",
+                  "label": "URL",
+                  "required": true
+                }
+              ],
+              "type": "collection",
+              "label": "Payload"
+            }
+          ],
+          "type": "collection",
+          "label": "Attachment"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "facebook-messenger",
+      "samples": null,
+      "apiJsonc": "[\n    {\n        \"url\": \"/me/message_attachments\",\n        \"body\": {\n            \"message\": \"{{omit(parameters, 'pageId')}}\"\n        },\n        \"method\": \"POST\",\n        \"response\": {\n            \"output\": \"{{body}}\"\n        }\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "attachment_id",
+          "type": "number",
+          "label": "Attachment Id"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "facebook-messenger",
+      "description": "Uploads assets that can be sent in messages at a later time.",
+      "expectJsonc": "[\n    {\n        \"name\": \"attachment\",\n        \"spec\": [\n            {\n                \"name\": \"type\",\n                \"type\": \"select\",\n                \"label\": \"Type\",\n                \"options\": [\n                    {\n                        \"label\": \"Image\",\n                        \"value\": \"image\"\n                    },\n                    {\n                        \"label\": \"Video\",\n                        \"value\": \"video\"\n                    },\n                    {\n                        \"label\": \"Audio\",\n                        \"value\": \"audio\"\n                    },\n                    {\n                        \"label\": \"File\",\n                        \"value\": \"file\"\n                    }\n                ],\n                \"required\": true\n            },\n            {\n                \"name\": \"payload\",\n                \"spec\": [\n                    {\n                        \"help\": \"Only attachments that were uploaded with the is_reusable property set to true can be sent to other message recipients.\",\n                        \"name\": \"is_reusable\",\n                        \"type\": \"boolean\",\n                        \"label\": \"Is reusable?\",\n                        \"default\": true,\n                        \"required\": true\n                    },\n                    {\n                        \"name\": \"url\",\n                        \"type\": \"url\",\n                        \"label\": \"URL\",\n                        \"required\": true\n                    }\n                ],\n                \"type\": \"collection\",\n                \"label\": \"Payload\"\n            }\n        ],\n        \"type\": \"collection\",\n        \"label\": \"Attachment\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"attachment_id\",\n        \"type\": \"number\",\n        \"label\": \"Attachment Id\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "facebook-messenger": {
+      "api": {},
+      "rev": 5,
+      "name": "facebook-messenger",
+      "type": "basic",
+      "label": "Facebook Messenger",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "facebook-messenger",
+      "install": {},
+      "apiJsonc": "{\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "apiKey",
+          "type": "text",
+          "label": "API Key",
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "installSpec": [],
+      "scopesJsonc": "{\n}",
+      "installJsonc": "{\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"apiKey\",\n        \"type\": \"text\",\n        \"label\": \"API Key\",\n        \"required\": true\n    }\n]",
+      "installSpecJsonc": "[\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n\t\"qs\": {\n\t\t\"access_token\": \"{{connection.apiKey}}\"\n\t},\n\t\"baseUrl\": \"https://graph.facebook.com/v3.3/\",\n\t\"response\": {\n\t\t\"type\": \"json\",\n\t\t\"error\": {\n\t\t\t\"message\": \"{{body.error.code}}: {{body.error.message}}\"\n\t\t}\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\"request.qs.access_token\"]\n\t}\n}",
+  "countries": null,
+  "_functions": {
+    "omit": {
+      "rev": 3,
+      "code": "function omit(collection, ...parameters) {\n    const result = {};\n    \n    for (let key in collection) {\n        if (!parameters.includes(key)) {\n            result[key] = collection[key];\n        }\n    }\n    \n    return result;\n}",
+      "name": "omit",
+      "test": null,
+      "appName": "facebook-messenger",
+      "arguments": "(collection, ...parameters)",
+      "appVersion": 1
+    },
+    "retrieveToken": {
+      "rev": 3,
+      "code": "function retrieveToken(pages, id) {\n\tfor(let i in pages){\n\t\tlet page = pages[i];\n\t\tif(page.id === id){\n\t\t\treturn page.access_token\n\t\t}\n\t}\n}",
+      "name": "retrieveToken",
+      "test": null,
+      "appName": "facebook-messenger",
+      "arguments": "(pages, id)",
+      "appVersion": 1
+    },
+    "buildSendParams": {
+      "rev": 3,
+      "code": "function buildSendParams(parameters) {\n\tif(parameters.message.quick_replies.length === 0){\n\t\tdelete parameters.message.quick_replies\n\t}\n\tif(parameters.message.message_content){\n\t\tdelete parameters.message.message_content\n\t}\n\tif(parameters.recipient.name.first_name === null && parameters.recipient.name.last_name === null) {\n\t\tdelete parameters.recipient.name\n\t}\n\tif(parameters.recipient.phone_number === null) {\n\t\tdelete parameters.recipient.phone_number\n\t}\n\tif(parameters.recipient.user_ref === null) {\n\t\tdelete parameters.recipient.user_ref\n\t}\n\tif(parameters.message.attachment){\n\t\tif(parameters.message.attachment.upload_method){\n\t\t\tdelete parameters.message.attachment.upload_method\n\t\t}\n\t\tif(parameters.message.attachment.type === \"template\"){\n\t\t\tparameters.message.attachment.payload = JSON.parse(parameters.message.attachment.payload)\n\t\t}\n\t}\n\treturn parameters\n}",
+      "name": "buildSendParams",
+      "test": null,
+      "appName": "facebook-messenger",
+      "arguments": "(parameters)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-03-21T08:09:53.362311+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Connect Facebook Messenger to HubSpot CRM, SalesForce, WordPress and many other apps using {{integromat}}. Create your own automated workflows with our incredible visual builder!",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "a12cdceb16bbe4b736af72f00f2973cc",
+  "versionFull": "1.1.0",
+  "compiledName": "facebook-messenger",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 1,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

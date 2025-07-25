@@ -1,0 +1,2569 @@
+{
+  "rev": 30,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "https://cloud.leonardo.ai/api/rest/v1",
+    "headers": {
+      "Authorization": "Bearer {{connection.apiKey}}"
+    },
+    "timeout": "{{common.timeout}}",
+    "response": {
+      "error": {
+        "429": {
+          "type": "RateLimitError",
+          "message": "[{{statusCode}}] {{body.error}}"
+        },
+        "502": {
+          "type": "ConnectionError",
+          "message": "[{{statusCode}}] {{body.error}}"
+        },
+        "503": {
+          "type": "ConnectionError",
+          "message": "[{{statusCode}}] {{body.error}}"
+        },
+        "message": "[{{statusCode}}] {{body.error || join(map(body.errors, 'message'), '\n')}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "leonardo-ai",
+  "_rpcs": {
+    "listPlatformModels": {
+      "api": {
+        "url": "/platformModels",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{sort(body.custom_models, 'name')}}"
+        }
+      },
+      "rev": 3,
+      "name": "listPlatformModels",
+      "label": "List Platform Models",
+      "appName": "leonardo-ai",
+      "apiJsonc": "{\n\t\"url\": \"/platformModels\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"iterate\": \"{{sort(body.custom_models, 'name')}}\",\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t}\n\t//PAGINATION DOES NOT WORK AS FOR 27-09-2023\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "leonardo-ai",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listOwnModelsAssets": {
+      "api": {
+        "url": "/models-3d/user/{{connection.userId}}",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.model_assets}}"
+        }
+      },
+      "rev": 2,
+      "name": "listOwnModelsAssets",
+      "label": "List Own Model Assets",
+      "appName": "leonardo-ai",
+      "apiJsonc": "{\n\t\"url\": \"/models-3d/user/{{connection.userId}}\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"iterate\": \"{{body.model_assets}}\",\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t}\n\t//PAGINATION DOES NOT WORK AS FOR 27-09-2023\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "leonardo-ai",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listTexturesForModel": {
+      "api": {
+        "url": "/generations-texture/model/{{parameters.modelId}}",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{'('+item.status+') '+if(length(item.prompt) > 40, substring(item.prompt, 0, 40) + ' ...', item.prompt)}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.model_asset_texture_generations}}"
+        }
+      },
+      "rev": 2,
+      "name": "listTexturesForModel",
+      "label": "List Textures Gens for Model",
+      "appName": "leonardo-ai",
+      "apiJsonc": "{\n\t\"url\": \"/generations-texture/model/{{parameters.modelId}}\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"iterate\": \"{{body.model_asset_texture_generations}}\",\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"label\": \"{{'('+item.status+') '+if(length(item.prompt) > 40, substring(item.prompt, 0, 40) + ' ...', item.prompt)}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "leonardo-ai",
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {},
+  "label": "Leonardo.Ai",
+  "theme": "#7376fb",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Generations",
+      "modules": [
+        "generateImage",
+        "generateTexture",
+        "getTextureGen",
+        "generateMotionVideo",
+        "createMotionVideoGenerationJob"
+      ]
+    },
+    {
+      "label": "Variations",
+      "modules": [
+        "unzoomImage",
+        "upscaleImage",
+        "upscaleAnImageUniversalUpscaler"
+      ]
+    },
+    {
+      "label": "Init Images",
+      "modules": [
+        "uploadInitImage"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "universal"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000001704944415458c3edd2bb6a546114c5f1df1966061927263331894a0ab1d05a44d1424940042f85c45be903c4c7109fc057b010acc4ca425010c452b109a885201a1be325d1882e9b2d5807c1e6fce1c0076b7f7bafbdce474b4b4b4b4bcb7fa64932c277ac374db3e54649a08719bcc3afbffb95de2dfd03fae875700d27aba897643ec9204993644f9251927e92d924bb9274928cebdc4f329d6402431cc20d4c617792a9247f86c331dcc3611cc15217230caa60198b58c1739cc63a9ee03c7ee0560d3a80fb388747d857db8d71090bf886eb7859fd172b9d05bcc0b853c2b6ba78161decc505dcc5479cc2ab32b28859cce160e92bd8819bd8c419dcc1571cadb877e278993a81790cbaf53f96b01f0f2b9ec778832bf8549b4ee36d0d9ec1fbdaa68ba7657219ab7880cbf88267b88ad775be8d8bd56fb54932c4047e62ad84b58a7e0e1bf5f5aba683ed95dc069a3239c4646dfdb94c6e943659c974cad4b08c6f6ef9d5b7b4b4b4b4b4fc2b7e03a81987bf03092cf30000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000003934944415478daedd65988d65518c7f1cffbce98394acb2415d862d146d0545a5154942d42642a5dd46511b4dd94d20e5137062d44145109419095446258b428d29eada450168a15ada864a58d6539f33e5d9ce7cdbf4373e195179e2ffc79cf9ce539cff93dcf73ce50a9542a954aa552a9542a954aa552a9542a954aa552a9ec11b422a21707e12ffc0aad566b77fb2522a017c7a66fdfec8a6f8df50767d77a0c657b7f8cc546117158447c1011f7474477e16e277d991411ab23e28588e8dd15df72fd3911b12622d646c4b4eef922e28188581a11fbf5a64a87e080ff51b09dfd7be3978c4497f139f627362152d5b1184e95ffc0e69cdfcaf97d397f6bee3d1edb30267f87b04f7efbe63721d78b8809e8c7207e438ccc8a865033714cb62fc29bd9de8c0de8b447532f1dbd3517bd83e770424eb9004bb0026f632ef6c215588e9772ec159c9b6337e32dbc8bc53809a7e0752cc4529c8119780d1f62418ad63dd18578396dbf81eb316694cc9888f3f1193ec97637c86331ae1be1d1b81c77e1533c81b371374ec46338221dfc01f7e0321c8853d18357310537e6dc4bf0111ec7e998930e4dc599588343f1a852b70bb031b36f38c59f9f739ecdecba0f978e887a97a919fd855884e353709884a3d1339a006d4ccfcd8fca28b6f3f033b2ef11dc819b94749e95ca76f0206ec13a4c562ed7f9d88eb33223fa53a8369ec15519b5c3716fc3f6a6f4e9bcb4350fb7e186b437bb19c88610d395b2599f367ab26f277a1bed91d76b27bf75f82e7fbf55ea54378546d8a0a4ebf6c6fa4e6efcb07293af4c1bcdfdb68ce2d748dbf220dd20b5ec288f9e88682977c8444c4ba11f6aac9b66e792fa6f83e18cf253f9f706a5ee6764440695b45da7d4e7174a6a4fc64066cae2cc8c914246f6f7e369e502ea6b3ad160798a74a7926d0376d4ed325ca394e5c9382d0fb5286dcd532ede394afa1fa764dd921c9f8d2b9532e874376ce36f7c9e5198921306941abe3d1d9f891ff15e66c1d5f81817e7e1e7e279fcac5c3a5b52d4d54a6dbf98df2c259557e0eb1463257e4a7fbec475589bb687f07ece5d8d6bd3deacf47d8e7229b695d762628a722456e149e5725d96ed5539f63dbec2702b22daca53d4bc0f3a19f54801fa9467705b63ceb8dc70abfc072a536e5cf60da5dd56daea4b5b5d71a4f8e395e7f59f86ed0919cddfd3878ef2dc6ad819cc718dfe7663afde6c77a3dd4ebb4369b327fdac542a954aa552a9542a954aa552a9542a954aa552a954f604fe05aa4731ba4f00616f0000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2023-09-27T08:20:50.42575+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000008b84944415478daed996d8c5e4515c77fcfeeb3ed626d2dd8f5a5b428102a514925f8d2a0506ab142d4103510514451886f246ad0c01725fac51a0c89188ca9b4688c2f340144694b2d464c6a251185a22988a5406d49e956bb2d14b6dd97bf1fceb97d66ef3ebbdd5da595e4ff4b36fbdc7bcfcc9c3933e7cc991930c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618f322d29004d009bc1a6802027a81fe46a371acf5fbbf25edd604de0a1c4fd8edafc0cea361b7a2fd57e57f804160373058ead046f605628ce3a3a4b9923649da2e69aba4f3b2901983c26e8f4a1accbf6b8f96ddb2fdc592fe2ee9a9fc7b4cd205751d527651eaba53d28f2435251d9e399dc05c603e3000741f6b03bf446812b6eacce7a362b71ce0067009b0a0f6f943c07a49aa45a2d9c0294017110900e838064633ff1be602ef6ef3fe9cfc36219a1315ac53849969400fe10543c4da7208a0be16166566002710b378549942ae99324ab9aea2ad67813e406dd6bbba5e02fe0d1ca8b5d141cb7b87b38dce7c3f040c17b20dc28b66a67cdf246c54f6b71fd853d5fd5fb088f06888b57f38fb7c32b010d859937f1cf856daf0d1949fda04c88e1d075c045c9c0d7611cbc783c0adc0064903b5017d2511a23e029c9a06195526657b801b88e47400f835702e7076b6f54cbe5b256947a1de71c052e013c09929ab34c0cf81db243d9bb2970297e7ef3f037fcc7773801f033f4ddde70357001f20c26703d80e6ca04dd82ffadb035c06bcbfe8ef73c026e07649f7524bd82668fb06f0de1c7052ef21e03c603ab018582ba974c299c019f9fd60d6713841982fe9490587da2512a502926649ba49d2f36acf3e49df90d495f2483a45d23d9206c6297383a499297f52a1d350b635dca6dc3a4973b24c53d2f271f43a947a77a7fcf5c5b7bd92fa8ae7eb53e66c490f8cd1f650ed7d55a6ecefe018baec95f439499d93491cb3ee13253d52d4758da4cf14ba6c4999b2cc05d97f495a9bb69a5c0e50287a35f0f9f4b643c0466025f0707adb2ce08bc07b527e16f09d9cb54d22fc3c033c05ecad95f954d55cd17447b6d597650e14dfce07de97bf97029f4dd941c2ab4bbdbab2fea56dba373b75184c6f7a1e780db01c382b3da6ae77e3b0278da407b839fbdb592b77a0686f39117198cc246064f8ff17f05be07e62998388368b2652d15492c053804fd25a5b5702170257124bc2c6947b45ca35800f12619034ee4a6009f0ae1cbc4df9ad0bf802f0fa345ac9e3c0c78077665bbdf9be99ef20c2f26a628dfd193101af24969d2d29338318d076fc01f878eaf413227c9f3301bdeb5c062ccbdf83c02d45b9cb81adf96d16f0552698b48d11fe37116bfa3f8087f2ddb494691c69624d250778730e10c45ad204be442b091c2a64cf04e6e54074e5bb8781af111e01b003f836f00be065c4ec5d02acafb5bb1a5897bfef043e4d783fd94617f00811017e98cf0bb3be53d3d815edbc762f702dad419d46aca9159b8fa077452711612ae7da085c97f557e5ba899c671af006e02dc0d313b4ff5c5a9372386dd19fcff7d08a6ed56e60e778954d6502bc89d6607603578d23db959d9c5dbcdb4586aa2241dc4c78ed4969b8796dea3a58fc1e2612c31265d9738949f076e0b5a9432747663f3138153dc0e9c5f3efc9c11f43ef4aaf39b5729bc8c12fcadd4f9cd8cd2392b285c0da09dabf0cfffdc429e4b2ec7fb5f43553661170fb78954d791b980ca65106f3b9dab2298dfe74f18d42e6c56098586656103b07886834404cbae319e9a92f29c608ffc71151a85a2ecb6d6db50cdcc1c87c6a045399009b096f9c9e0d7f13f825e169c3c4766316313106080f29c3d002e034604bb13ebd8df01cb28e1d4c8e2a89bc9ad6e06f036e24d6fe3dc02ae2dc7ea2f4126beba9f9bc14781df0d4187a5703b0a74db9ef02bb8b72e713092669cbcd13d4a90cff101362bc313ce232d0ae7027b1f60d492a436783c860ff46ecdb1711b3ec0a22c46dc9c63e4a2459eb88bdf42ee05744023783084ddf2376053b88f5efebb4bcf371e0774c2e5288386839ad7877179189439c559c3e89fa20763777d1dab99c91f5dd3c86de1543596e19e114671113f116c22996005f296cff20f02738ece58b699df03d469c5d541e5e86ff3e228fe82b6c2562b9bd82d6d1eff8cb409b7300e5def560ee1babbf01c545d189922ecd7dbb72ef7948d26e492f147bd1e7255d9cf5774bfa7ef16d38657767d9eafd3e49578da153b9c7eecabd6cc51a49b3256d28de6d9774a3a455d98edad4559e033ca9387b28ed324771ce503196def57a6749baa356ee5949bb34f21c64afa48b8a7ed5755aabd6594a43d28ae2dbbd926694597ecacdc86f152ba6720ed049787757f1d7ccbf0e22f3bdae987dd5116d773eef076e02eecefafa81eb811f10fbeb46caf664d90691145d47846a985c04a8dabc15d897efe6035f2ebce1b949d457b187d896ae273cbbaef72079845d633fe1e57712cb60037839ad2b77807f125bc0bb61f4b1791be611096ec56f18791e527120bf559c4b2c37c3ed2aad94e907ee4b05c74a183a8027883378115bad27800f13c7b333f3dbc3c41e7a033050754c522f700d91ed56c7b4d37260eecbc1fb0bad6de47e621939390db8b5d06530cb544bd40329735b1ae02a22e43789b38135d9c70b6b756d4d6329fbb2bf6aa0c8d8b7116703e5912ec452b59ad8c6bd31eb78a8d0711b710e7209710eb1809834bdc42e602511feeb83ff10b19debc87e55037702915b3c4138d19a7ad942e735c03b88e5e92091a7f466bdd3b3dec82a35fae2653caa0b93fa85ca1cc233fa892dde609b8e8d755133ea72a490ab2e6660f4e54cbb8b9c8ae9a95307919f3c57931fca326deb98c02516b42e972a1dab0b2bb5e947a54f7589b58f36974145a6df49ebe4b1ea5799f06902362ec7b3da89b5abd718638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c61863cc8bc77f00d8a7f29b91c21cc20000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000e5c4944415478daeddd5f8c5dc75dc0f1ef5d1b24baae13a98affd445ade3a402f1962ae5291039a016270e8d7045022eaa50abb485480515f1576cda8a0255291114822a9e2824a56ab1ec4d43fb4094d0a7d2367d0d216e81c4f6da7d71122f0565bd3f1e66eedeb377cf9c3f7bffac9b7c3fd295ffdc73cecc99993367cefc39172449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449925ed306c3bf4404c02ee086fce7f8762f022f0f0683ce07974a72791b003f07fc24b05ef97a01f83af0cf40bc1acb5ccbf5367415f81e70b56b1a341cb7f91a8e0822e24044fc5b44bc1011cf573e1722e237f2c1a58955cadb3351ef99fcfd4e477596e77f2c229e1dbbd6aa9f67f336d3386eed35bc7b6cff5dc041e050cdb1f7ee74a2e9556717b058f86e91f29df1075ae522bc1db8b965f3fb81a72262b5474be8d6c271b75cc30b3b9d18d26bd411e09e0edbdd4afd0d792aac00a49d710f705387ed0e0277cf2a125600d21ce5e6ff22705b8fdd6e031667d11f620520cddf2152d3beab993d06580148f37737a969df55dfc780978015e085ca6725ffff26bb7b1c74265ac6437b8f83b684f37ae03a60bc2d35b5703a9cd74461fd20ccd7e89aa73308b32e7faf8934a9c4b1a9f9bf06fc1ff52323fb86c7e8701e9f051ea949872be31bee48055029206f204d02f969e0ae9a135f051e230d833c01f4190a1986b3001c067e9e34ecf236364f3ae9154ea5a0bd8fad856d017802788a34c1e58e9af3dad639550acfd186f45a00be053c1911a781ef02ebe3c7ef710e8bf91c866936bc98fe969a0baa631cff875438ff8e092b81ca79bc11b8b390bfd534f932709e9dad0c9a9aff5f06ce011faaf9ee6ee0d3a43b799bb791f2a09abebb48f9faafc5c48c884379d2409da5697442e4701623e2be88f8f7887831dabd1c116722e29d1131688b470e6321226eccf17e2e22d6a6114e87747a38227e2f22ce4fe39c2ae97557defee50ee7b196cf79296a26d37438870723e28e4278cfe77dc78f37c8e7d2258e6b9126aafc4d445c2e6cb3259c9afc3d1c118f44c44a44bcd212e62b79bbe5b6349f951cef8f34c4f1c3f9532a2fc7dbe29cc3582a1c63a9b87f8742b1d41678c704d89733ad4b411e773e0a857a2c0c22e2dd117136ba5df89dc3e9904e57a2bd3056ad44c48961bca79c5eeb11f1857c8c3ee7f0f586ef365d98319ad1b714ed955e1fb515404c277f8b693e2b31aac84f17e2743e226e8a88b744c47f14b6399d8fd116ce5261ffa5f17de7d6099803de077c06b817d8b38dc31c041e24cd8eaabd60b213c05f0237b2bdd964078125e02f807dd1af902cd2efd16a3ff0c7a4892175e7f241e0be6da6d720a7c543f41b467a3bf0a6b68d62d4e4ff744eaf3e1d5bbd4d317ff793cae189b1e3ce5a53f3ff1bc005e03f8153856da63e1a30970aa052501e22257ad303d88bf9d3e483c0b1c277c74899bb7fc2680f8077e7b0665d486e024ed684736c18fe04e935008e939e0967e178feccf4a17aece29f46feee4425d0d4fbff3552ff10c0a5c236539f1434cf61c0a3940bca3aa903e441e097815f023e45aa11ebec27b50236ee6a9516c687682e1c2f01cf331a1eb940ea7d2d69aa6c9aace563bf90c37ba965fbfb80039573d993c3ae3b97abc073c09fe5b46a4baf3da40ebf694c265965d4b9748c54a937b54efaa6779323a4d652d7fc6d4bf7dad6d7b4556e80a5deff0bc099cabfcf50cecba94e0a9af92840e5e4df477d4109e04bc0af03970683c1709fc7494b424bb5fdd1fc591e6b2edf5988ca3af055e0af80a719557eaf235d7c1fa0be761e56364f45c42add04f04fc0ef03dfcf61df02fc1af00eea2bdebdf933ece51d909a853f0ebc85515377985ebf03fc17a31eefb6f4ba05b89ed15da68b2bc0bf907ad117182dd35d21e5e9fd942fc6eda6f7d6c41c95a18f53be58ebc2eb92ee47f271df1ffd16dcf4d5d6fc3f57f9f7b9fc7f7577fbe163c0b3538d5dcca813301ff778943bb19623e28686ce9e5f6cd8f79395ed9a9696d676868d85736f43381b3db01dd2a9a9e3ed4843074f44ea21ae6e3f3e92b19eff3cd2701e7f5238f646a75a877388481d65f7464da753deffad51eef49b34bdebe23b4978fbf2f7eb85fdcfe7e34ff59a1a8b43a9f77f4bef7ecbf69bca4921aca5c27e4bb1439d80b7507ff7ff3e703ac7e350cef04311718854cb1d24d574a566dcdde46633cd1d246781df25b730aa2aff5e268d93d6d943f7b9db2bc01fd48595e371aa61df8d31f3c160c060305807be43ba43bd8374d77f201f6798d9bb22e2403ef723c04ff4cb9aa28781cf539ea7d0f43c3b697af70def712a2dc89af02ee5ef1f2fec3fb30537d1defc1fdeedc7cde53160a68f00950896d67cff10e9b97fa9e130c3196575aa6bc64b950ca48bee6c2980fcd8b14a9ae072b4709cae1331ae52d3ccae3cdaf469820f0bf07a449c253de7bf01786b8ecf62fe0cffde94567d5c001ead84bfa192a7fb1af69f467a8f6b0aef49ea2bdc6a7897f276a547c43e33edfa6a6afe9fa1be4ccde531601e33010f50ae5d7733c3b5ce15ab40978c7d1ab84c7d81dc91175454ee20d5d9757b4917faacf2afb612ab68cad32ba41eed49d3bb6b78e31d684dce00bf497d4ba2cf4cbbbe4aad97ffcd69b029ad2a15e4d385f31eb6583e3569c4e6510134bdf54505319ac6fc66e08f482328db990b300b4d797a995ca8e7145e5b6555551dc11837f50abe43f3ff874923383747c4f8e3f83a696a73c96dc0c33161c7e58e2f0652a3779226bcbc9957e9ebb15e039a9aff0b8ce651f43595c7807954004d35f41a7091adabf3ba18909a7f535d55762d88cd731a6eecb0cb1a6985dd1a6971cfacdfdfd894a7d793fa63ce753eda64e1f5696136dde59b5a0793e8bbf4b7aba93c06cca30258213d7bfd56cd77af903a01975be212f93360f344a2e1d252686e06de42ea356d6b2e0dc7caebccaa8094fc0ae50eababa4957ea772bc5649697c9994ce1f9971dc9af2743862b2dca143ad29bdbb86779034afe0a3a5f02a1d97f751be184b9d71dbd2a1f93f0d133f06ccb402a8f47c97a636fe08a953eb510ac34d319a15b797341c78a5d033ddd4c1339c85f8f9ba4252b9e3de4ff9397baa05a44553c1d93211a892ce8bb4bf6576221df21452e5f5248561b78ee93dae29bc93c0dfd330f2401a223dd976fc298f00f47df34f5f133f06f49907b008db9e337d8a3475b5ce1da417246e1ad7cc63dcc3b5fc9f25cd467b14b8334fecd8351697d2782aa442f61035f3be2b85f13394a7fc6ef46ccfc9f5a4bb639de13c83ef0e0683f1b5fe47737ace43539eee077e1bd8b2ecb6637af70def08f009e070a4c9531b6155cad02728cf227c8e9af919d57916d5392af9f3a688787dcbf5506afe57a78977f994a64f4f3c7fa14f0be024e9eeb31a115daac9eacb23ce926ae8076bb6db439a747202f876447c0b7886f4028ffda4cae130e9d9ed2ee0a77282fc03f05044bcdc715c793f6975dfdb818b915e98f163a49727dc4a7a8147e9bc9ea0dfa495b9191b2de873479d54539e42caa79bf3367dd3bb6f7803e0174895e669d2cb3fbe91c3b99d54960e3784d7d47ab881d4fa7b239bfbaa76039f04fe7c7c870ecdffef912edcf31dd22072d867a8af4ca6321ad0757a685fd5e99c6dd360872e47c4b9685f53ff6c54d6ebc768bdf523519ef239f44a0ee372b45b89caafb37448a7b617592c3584b554398fd2baf1ab11f17844dc19110723e2e6e8f6d2933e53818be730762e5df3b44f7ad7c62146537a1febb0ef8b11f1dfd1ed65338f45cd14e28e79bdd4b05fd3d4e5d675fd63c76a7b8fc0c634e6b846a702c3687ae8c596edae23d5784dad932bc01f527926cfb5df2af061ca533e8776e730ae6bd9ee22cd5348676595f223c702e9eef9086961ce53a4478223cc7fa8b06b9e764defa2ca94debfee10de5ee047691f0db9988f776906b3ff5a97fe7609b352ae4be561a2c78079bf15f88ba40baa2d039b0469d460b9924054fe7e09f853d20f4baef73ffc86e1c5ffc5f170e6a4e999174685fc203b309fa3921ed3c8d33e86f3fe270d6f26957bf45ffadbd54cd606ccad02985281b9007c94d4db5f5b83e6fffb1af05ee01fa979136a8baba405380fb073173f74bfbb56ad912ac0edaeb7ef652c4f1f20a55b9fa1d2357aac8da884f72552fe6ea7925fcffbbd371f67de73ffc797fe76d5d4c9bded3705cdba02d834765e93818f910a785b81bd42bae3ff2af03160a529d32a2d81f793c67e9769af08ae922eba8f033f4b73e1e833fdb42e4d1a6db3a05f21557827681e32eb1ac74e17f2585c7f06f802ed793a4ceb25e0737de290574906f01546e5e16c87f80ec3fc58deef2b83c1a0cb4f8f6f27afdfc5149aff6369dcf618f0ae9e714cc71efe259a5f15bd1d8dbff15e09aff44ae705e09ba479e5df26bd98a2774f67d42fa6a9ce1cdb786d34a907b9f655da63c72bfdae7d97d7661f00de93e350fb3aeeea7e957d4e9246328e57e25f97460b3579b8295ef9ff9a5e0b5eccb70e69dd96a7d5b43e9bf3e4285b5fe5dd1a87d8fcdaf77b6ad207d285b34caa944eb5e56f8fbc6ecaafdbd9fa5aee418ecbe768b98135c4a5547686affc7e32ffbb94a65be2bbb3bf94b0f9e4c67fd461aa3fe810e51fabb8667e38621bf1bf66e33e8f3ced903e30831f7d912449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449d2abc6ff037d091420b797403a0000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000e374944415478daedddd98edb46024051f620ffffcb3d0f81914cc6b12571a9e59e0304086247aa228bd415c5561f070090f3751cc7f1fdfd3d7a1c00c083bebcf80340cf7f460f0000789e000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082040000040900000812000010240000204800004090000080200100004102000082fe183d0080c1bedffcfb5fa3070c57782500de3d388ec30102ace193f3dbf7e11cb78b4ff6ffdf3dbd0ede19ef6fc7e62300008acebef85ff518c39e4b00004090000080cf3d7915e0520200809a655fb4af240000204800005072c7bbff25af280800000812000010240000a8b8f352fd721f0308000008120000102400002878e212fd521f0308000008f2eb8001607e97ffe641570000d8dd5297e69fe20ac0ff7b77a1ccfc7bc13f59f433cfe7cc1c679957619f3c61a7e3b43cc7d97d1defef87ef63917d2100fe74a60efffeffceb0d3cf96eeddf3b9e205f093c718b99f66dc275786c82b8f75c5b8af384e673846ef9ee30af35cc16cdbf0f2202c07c09ddf073d62e1ec369f3be7f9d4bc76df274f5d56bdf27966da7e77ccef678f39d35c4770f9ff5f5403e0ee05f1e449e6c91f6d19792259e9c574f77db2e20bffa839cc308e198edf9a253e06a8dd04f87d3c7be0df7d027bfa2436eaa4f954b05df138bbef931d5efc6750582b2bfbfa977fdf4a290046be785dfddc230fe41127aea7e635f2ff5fe1b99f7ab7bae3fafae71c8bcf5d9beff4dbba120033ec882bdf65ce609671cc30a719b6c50c63308735e638c31856b3e555804200ecb4d8679bcb6ce3a95b797fac3cf615e738d35866b3e58bfdcfec1e00b32df2ab7ec46726b38eeba9f9ec367fee31e33a99714cbbcd6f8631fcab9d0360d60d7ff667d899c78cfb65c631ed38e65de637f3d8b8d9ce0170a5af237459e803bb9d449e9e4f797dedb676569cdf0a637ccad7877fb6a45dbf07e0ec82fe7ae1bf9fbd9cffea625ae5e05ce2e75e2f9eef195fbff96f4fadaf915659dbac67a6b535edf1b86b009cf1ea8efae43ba2df75d5e3bf32a7990e98b3739a792e33adafd9e67ce7e38fd8964f1dbf577d3be6942f52dc67c700387330bc7b009c39493f71c0bdf3f83ffeee0aef3c7ff71c57cce5d531bcf31c4faeaf277db2cfaf98d7d3eb7bd6f95d35b77a04bc32f7558ec997b807e02f9f2efcbb0e98bb3ec618359fab7c72d2ffc43bbf65f0d513c7ddf37ddac87b1776dc9e67c7b9cadcee36e30bf48c63da2e003eddc8670f9cd90ebc91f379e25df78c6a37f28d9ceb6ec7eb95e39b7d6eb34a6eb7dd02603577bc58eeba905779c7f7b310d86d9f9c9dcf931fd38d307a7eb306fc2e5658832f110073eecc190ec219b7cb4abe8e6bae0accb0167634e3fabe724c33ceef09331f2fd38d6dc79b00df35dd4e39619683be7e33d1275659872b5ffa879fc9ae2b01c0af6c75c7eb246ccf7958df7c6a8bb5b3d34700cbef0cb6f4fd8f7fea76df06a36e44bef23157dd472b8c7baa31ba0200d79bea20df44f6322db74aafab9dae00c068dee5c35ad2c7ab2b00708df48904065be957ad4f7393b4008073bcf0034bf211007cce8b3fb02c0100c0ca560cf129c62c00e033531cc021b6375c6ca77b003efd6286296ec660294fffc2a39d5efcb6f802951be677c78d61337d270113da29003e35cd1d9913ce65e713f568bbacb99559dfeb5b791f0e7fedf111c09c567f71587dfc77aafddae02bad7cb27f7a7ebb6f2b2e2000feb4d3c172d55c76da26577afa57bdda0fffcbfa868bec1600a3df59cdf2bdef679fdbc9f17aa3d7e64c466f8bbbd7f799f95d31b6a72375941dce5343e7b05b009c71c78be6991018f57be4cf6e87954e20b3dbe104778733c7d50adb74a56fb5636177dd0438f2e6863377197fffed31defd7f5efd3b4f6e9777f78393074fb9e2a701665edf67e7f7eeb9e88ab93d7de562c46bc4ddcfb9d439f4ce9f02786a43dcb143ff39f6af5ffcd9a78ffdcab8af3a49de35979f8d976b2c752219e8c9f53d7a7e5fbff8b39a9de63eec0df3ae3f0678f5cf1aefb6d878deab077969ffdcf19d00336dbf95ce43e23dc83d00f35be5c05c659c23e7f9abcfae47df38ca3d56382e5618e32af35c6a5bee1c0033ef8877c736f35c5618df6cbe7ff24f95b5c3bb763c5e86cc69e700388e394f2e9f8e69c6b9cc3c2ed6b1fb1a9a797e338f8d9bed1e00c76181dfa9ba6dabf3bed3eedb74c6f9cd38a61de6bacc762d04c071ccb343ce8e63a6af919d651cec63f73535d3fc661acb3b76bcfc3f6c6e9500388ef10bfecae7df692eabb20deeb1fb769d617e338c81099402e038c67df1c41dcf3bf28b96f8936d718fddb7eba82b79335d417c7ade85e77c5b2d008e63afcf829e3ca0ab278fdfd9691fcfe4a9798fdcb63b9d8b9eb0f3e5ff2173dcf58b807ee7c7c170d7c67efa60bb733e3b9c38ee76d7f6b7edeff9b2a01f8f3b83ddce452c64f500b8e2a6ba1f467f97f615ae3c99dc3597bb4ee8333ce755cf337a1dcd36ae2b8fd32be670e7477a57add3116f42667c873efa0acf8cdbe4af017e7f4f3dbe515edd28b39ea83f99cb2af359cd2bdbdf76ffcc4ec769798e0c22000020a878132000e409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041ff05a38363002c010dca0000000049454e44ae426082",
+  "install": {
+    "common": {
+      "timeout": "{{parameters.timeout}}"
+    }
+  },
+  "ipmRepo": null,
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "universal": {
+      "id": 114509,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://cloud.leonardo.ai/api/rest/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "universal",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://cloud.leonardo.ai/api/rest`, e.g. `/v1/me` ",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query string"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "leonardo-ai",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"url\": \"https://cloud.leonardo.ai/api/rest/{{parameters.url}}\", // Defines the fixed base URL and maps the relative path URL from the user.\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"method\": \"{{parameters.method}}\",\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"body\": \"{{body}}\",\n            \"headers\": \"{{headers}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "leonardo-ai",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n\t{\n\t\t\"help\": \"Enter a path relative to `https://cloud.leonardo.ai/api/rest`, e.g. `/v1/me` \", // Gives instructions to the user about the relative path.\n\t\t\"name\": \"url\", // Makes value accesible via \"{{parameters.url}}\"\".\n\t\t\"type\": \"text\",\n\t\t\"label\": \"URL\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"method\", // Allows the user to select the method by themselves.\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Method\",\n\t\t\"default\": \"GET\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"GET\",\n\t\t\t\t\"value\": \"GET\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"POST\",\n\t\t\t\t\"value\": \"POST\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PUT\",\n\t\t\t\t\"value\": \"PUT\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PATCH\",\n\t\t\t\t\"value\": \"PATCH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"DELETE\",\n\t\t\t\t\"value\": \"DELETE\"\n\t\t\t}\n\t\t],\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n\t\t\"name\": \"headers\", // Allows the user to add headers by themselves.\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"key\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Key\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"value\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Value\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Headers\",\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"qs\", // Allows the user to set Query String by themselves.\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"key\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Key\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"value\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Value\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Query string\"\n\t},\n\t{\n\t\t\"name\": \"body\", // Allows the user to set Body by themselves.\n\t\t\"type\": \"any\",\n\t\t\"label\": \"Body\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "unzoomImage": {
+      "id": 114496,
+      "api": [
+        {
+          "url": "/variations/unzoom",
+          "body": {
+            "id": "{{parameters.id}}",
+            "isVariation": "{{if(parameters.imageType == 'variation', true, false)}}"
+          },
+          "method": "POST",
+          "response": {
+            "temp": {
+              "genId": "{{body.sdUnzoomJob.id}}"
+            },
+            "output": null
+          }
+        },
+        {
+          "url": "/variations/{{temp.genId}}",
+          "method": "GET",
+          "repeat": {
+            "delay": 7000,
+            "limit": 20,
+            "condition": "{{temp.status === 'PENDING'}}"
+          },
+          "response": {
+            "temp": {
+              "genId": "{{body.generated_image_variation_generic[1].id}}",
+              "status": "{{body.generated_image_variation_generic[1].status}}"
+            },
+            "output": null
+          },
+          "condition": "{{temp.genId}}"
+        },
+        {
+          "url": "/variations/{{temp.genId}}",
+          "method": "GET",
+          "response": {
+            "output": "{{transformDates(body.generated_image_variation_generic[1])}}"
+          },
+          "condition": "{{temp.status === 'COMPLETE'}}"
+        }
+      ],
+      "rev": 6,
+      "crud": "create",
+      "name": "unzoomImage",
+      "epoch": null,
+      "flags": {},
+      "label": "Unzoom a Generated or Variation Image",
+      "scope": [],
+      "expect": [
+        {
+          "name": "imageType",
+          "type": "select",
+          "label": "Image type",
+          "nested": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Image ID",
+              "required": true
+            }
+          ],
+          "options": [
+            {
+              "label": "Generated",
+              "value": "generated"
+            },
+            {
+              "label": "Variation",
+              "value": "variation"
+            }
+          ],
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "leonardo-ai",
+      "samples": null,
+      "apiJsonc": "[\n\t{\n\t\t\"url\": \"/variations/unzoom\",\n\t\t\"method\": \"POST\",\n\t\t\"body\": {\n\t\t\t\"isVariation\": \"{{if(parameters.imageType == 'variation', true, false)}}\",\n\t\t\t\"id\": \"{{parameters.id}}\"\n\t\t},\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"genId\": \"{{body.sdUnzoomJob.id}}\"\n\t\t\t},\n\t\t\t\"output\": null\n\t\t}\n\t},\n\t{\n\t\t\"condition\": \"{{temp.genId}}\",\n\t\t\"url\": \"/variations/{{temp.genId}}\",\n\t\t\"method\": \"GET\",\n\t\t\"repeat\": {\n\t\t\t\"condition\": \"{{temp.status === 'PENDING'}}\",\n\t\t\t\"delay\": 7000,\n\t\t\t\"limit\": 20\n\t\t},\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"status\": \"{{body.generated_image_variation_generic[1].status}}\",\n\t\t\t\t\"genId\": \"{{body.generated_image_variation_generic[1].id}}\"\n\t\t\t},\n\t\t\t\"output\": null\n\t\t}\n\t},\n\t{\n\t\t\"condition\": \"{{temp.status === 'COMPLETE'}}\",\n\t\t\"url\": \"/variations/{{temp.genId}}\",\n\t\t\"method\": \"GET\",\n\t\t\"response\": {\n\t\t\t\"output\": \"{{transformDates(body.generated_image_variation_generic[1])}}\"\n\t\t}\n\t}\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "url",
+          "type": "url",
+          "label": "URL"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Image ID"
+        },
+        {
+          "name": "createdAt",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "transformType",
+          "type": "text",
+          "label": "Transform type"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "leonardo-ai",
+      "description": "Creates an unzoom variation for a generated or variation image.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"imageType\",\n\t\t\"label\": \"Image type\",\n\t\t\"type\": \"select\",\n\t\t\"required\": true,\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Generated\",\n\t\t\t\t\"value\": \"generated\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Variation\",\n\t\t\t\t\"value\": \"variation\"\n\t\t\t}\n\t\t],\n\t\t\"nested\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"required\": true,\n\t\t\t\t\"label\": \"Image ID\"\n\t\t\t}\n\t\t]\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"url\",\n        \"label\": \"URL\",\n        \"type\": \"url\"\n    },\n    {\n        \"name\": \"status\",\n        \"label\": \"Status\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"id\",\n        \"label\": \"Image ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"createdAt\",\n        \"label\": \"Created at\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"transformType\",\n        \"label\": \"Transform type\",\n        \"type\": \"text\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "upscaleImage": {
+      "id": 114501,
+      "api": [
+        {
+          "url": "/variations/upscale",
+          "body": {
+            "{{...}}": "{{parameters}}"
+          },
+          "method": "POST",
+          "response": {
+            "temp": {
+              "genId": "{{body.sdUpscaleJob.id}}"
+            },
+            "output": null
+          }
+        },
+        {
+          "url": "/variations/{{temp.genId}}",
+          "method": "GET",
+          "repeat": {
+            "delay": 7000,
+            "limit": 20,
+            "condition": "{{temp.status === 'PENDING'}}"
+          },
+          "response": {
+            "temp": {
+              "genId": "{{body.generated_image_variation_generic[1].id}}",
+              "status": "{{body.generated_image_variation_generic[1].status}}"
+            },
+            "output": null
+          },
+          "condition": "{{temp.genId}}"
+        },
+        {
+          "url": "/variations/{{temp.genId}}",
+          "method": "GET",
+          "response": {
+            "output": "{{transformDates(body.generated_image_variation_generic[1])}}"
+          },
+          "condition": "{{temp.status === 'COMPLETE'}}"
+        }
+      ],
+      "rev": 7,
+      "crud": "create",
+      "name": "upscaleImage",
+      "epoch": null,
+      "flags": {},
+      "label": "Upscale a Generated Image (Deprecated)",
+      "scope": [],
+      "expect": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Image ID",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "leonardo-ai",
+      "samples": null,
+      "apiJsonc": "[\n\t{\n\t\t\"url\": \"/variations/upscale\",\n\t\t\"method\": \"POST\",\n\t\t\"body\": {\n\t\t\t\"{{...}}\": \"{{parameters}}\"\n\t\t},\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"genId\": \"{{body.sdUpscaleJob.id}}\"\n\t\t\t},\n\t\t\t\"output\": null\n\t\t}\n\t},\n\t{\n\t\t\"condition\": \"{{temp.genId}}\",\n\t\t\"url\": \"/variations/{{temp.genId}}\",\n\t\t\"method\": \"GET\",\n\t\t\"repeat\": {\n\t\t\t\"condition\": \"{{temp.status === 'PENDING'}}\",\n\t\t\t\"delay\": 7000,\n\t\t\t\"limit\": 20\n\t\t},\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"status\": \"{{body.generated_image_variation_generic[1].status}}\",\n\t\t\t\t\"genId\": \"{{body.generated_image_variation_generic[1].id}}\"\n\t\t\t},\n\t\t\t\"output\": null\n\t\t}\n\t},\n\t{\n\t\t\"condition\": \"{{temp.status === 'COMPLETE'}}\",\n\t\t\"url\": \"/variations/{{temp.genId}}\",\n\t\t\"method\": \"GET\",\n\t\t\"response\": {\n\t\t\t\"output\": \"{{transformDates(body.generated_image_variation_generic[1])}}\"\n\t\t}\n\t}\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "url",
+          "type": "url",
+          "label": "URL"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Image ID"
+        },
+        {
+          "name": "createdAt",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "transformType",
+          "type": "text",
+          "label": "Transform type"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": true,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "leonardo-ai",
+      "description": "Creates an upscale variation of a generated image.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Image ID\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"url\",\n        \"label\": \"URL\",\n        \"type\": \"url\"\n    },\n    {\n        \"name\": \"status\",\n        \"label\": \"Status\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"id\",\n        \"label\": \"Image ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"createdAt\",\n        \"label\": \"Created at\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"transformType\",\n        \"label\": \"Transform type\",\n        \"type\": \"text\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "generateImage": {
+      "id": 114456,
+      "api": [
+        {
+          "url": "/generations",
+          "body": {
+            "{{...}}": "{{omit(parameters, 'source')}}"
+          },
+          "method": "POST",
+          "response": {
+            "temp": {
+              "genId": "{{body.sdGenerationJob.generationId}}"
+            },
+            "output": null
+          }
+        },
+        {
+          "url": "/generations/{{temp.genId}}",
+          "method": "GET",
+          "repeat": {
+            "delay": 7000,
+            "limit": 20,
+            "condition": "{{temp.status === 'PENDING'}}"
+          },
+          "timeout": 300000,
+          "response": {
+            "temp": {
+              "genId": "{{body.generations_by_pk.id}}",
+              "status": "{{body.generations_by_pk.status}}"
+            },
+            "error": {
+              "type": "DataError",
+              "message": "Image generation failed."
+            },
+            "valid": "{{temp.status !== 'FAILED'}}",
+            "output": null
+          },
+          "condition": "{{temp.genId}}"
+        },
+        {
+          "url": "/generations/{{temp.genId}}",
+          "method": "GET",
+          "response": {
+            "output": "{{transformDates(body.generations_by_pk)}}"
+          },
+          "condition": "{{temp.status === 'COMPLETE'}}"
+        }
+      ],
+      "rev": 10,
+      "crud": "create",
+      "name": "generateImage",
+      "epoch": null,
+      "flags": {},
+      "label": "Generate an Image",
+      "scope": [],
+      "expect": [
+        {
+          "name": "prompt",
+          "type": "text",
+          "label": "Prompt",
+          "required": true
+        },
+        {
+          "name": "modelId",
+          "type": "select",
+          "label": "Model",
+          "options": "rpc://app%23leonardo-ai@1/listPlatformModels"
+        },
+        {
+          "help": "If either **Width** or **Height** is over `768` pixels, must be between `1` and `4`.",
+          "name": "num_images",
+          "type": "uinteger",
+          "label": "Number of images to generate",
+          "validate": {
+            "max": 8,
+            "min": 1
+          }
+        },
+        {
+          "help": "The source of the image for Image2Image generation.",
+          "name": "source",
+          "type": "select",
+          "label": "Source",
+          "options": [
+            {
+              "label": "Uploaded image",
+              "value": "im",
+              "nested": [
+                {
+                  "help": "The ID of an uploaded Image to use in Image2Image. It is possible to map this from the `Upload an Image` module.",
+                  "name": "init_image_id",
+                  "type": "text",
+                  "label": "Uploaded Image ID"
+                }
+              ]
+            },
+            {
+              "label": "Generated image",
+              "value": "gen",
+              "nested": [
+                {
+                  "help": "The ID of an existing image to use in Image2Image.",
+                  "name": "init_generation_image_id",
+                  "type": "text",
+                  "label": "Generated Image ID"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "help": "Whether the generated images should show in the community feed.",
+          "name": "public",
+          "type": "boolean",
+          "label": "Public",
+          "advanced": true
+        },
+        {
+          "help": "The height of the generated images. Must be a multiple of 8.",
+          "name": "height",
+          "type": "uinteger",
+          "label": "Height",
+          "advanced": true,
+          "validate": {
+            "max": 1536,
+            "min": 32
+          }
+        },
+        {
+          "help": "The width of the generated images. Must be a multiple of 8.",
+          "name": "width",
+          "type": "uinteger",
+          "label": "Width",
+          "advanced": true,
+          "validate": {
+            "max": 1536,
+            "min": 32
+          }
+        },
+        {
+          "help": "Whether the generated images should be unzoomed.",
+          "name": "unzoom",
+          "type": "boolean",
+          "label": "Unzoom",
+          "nested": [
+            {
+              "help": "How much the image should be unzoomed.",
+              "name": "unzoomAmount",
+              "type": "number",
+              "label": "Unzoom Amount"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "help": "This feature is in **BETA** for paid users. Brings incredibly high-fidelity image generation and coherence to all existing platform models.",
+          "name": "alchemy",
+          "type": "boolean",
+          "label": "Alchemy",
+          "nested": [
+            {
+              "help": "Adjust dynamic range of your image.",
+              "name": "contrastRatio",
+              "type": "number",
+              "label": "Contrast ratio",
+              "validate": {
+                "max": 1,
+                "min": 0
+              }
+            },
+            {
+              "help": "Enable to use the Expanded Domain feature of Alchemy.",
+              "name": "expandedDomain",
+              "type": "boolean",
+              "label": "Expanded domain"
+            },
+            {
+              "name": "photoReal",
+              "type": "boolean",
+              "label": "PhotoReal",
+              "nested": [
+                {
+                  "help": "If using `v1`, the **Model** field must be left empty. Defaults to `v1`.",
+                  "name": "photoRealVersion",
+                  "type": "select",
+                  "label": "PhotoReal Version",
+                  "options": [
+                    {
+                      "value": "v1"
+                    },
+                    {
+                      "value": "v2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "help": "Enable to use Prompt Magic. Custom render pipeline that has greater prompt adherence, higher image fidelity and can improve the output with any chosen model. Increases token cost.",
+          "name": "promptMagic",
+          "type": "boolean",
+          "label": "Prompt Magic",
+          "nested": [
+            {
+              "help": "Prompt magic `v3` can be used with **Alchemy** only.",
+              "name": "promptMagicVersion",
+              "type": "select",
+              "label": "Prompt Magic Version",
+              "options": [
+                {
+                  "label": "v2",
+                  "value": "v2"
+                },
+                {
+                  "label": "v3",
+                  "value": "v3"
+                }
+              ]
+            },
+            {
+              "help": "High Contrast mode will give moodier images with more shadows. High Contrast: `false` is similar to enabling RAW mode.",
+              "name": "highContrast",
+              "type": "boolean",
+              "label": "High Contrast"
+            },
+            {
+              "name": "highResolution",
+              "type": "boolean",
+              "label": "High Resolution"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "name": "controlnets",
+          "spec": {
+            "spec": [
+              {
+                "help": "It is possible to map this from the `Upload an Image` module if you want to use an external image.",
+                "name": "initImageId",
+                "type": "text",
+                "label": "Init Image ID",
+                "required": true
+              },
+              {
+                "name": "initImageType",
+                "type": "select",
+                "label": "Init Image Type",
+                "options": [
+                  {
+                    "label": "Uploaded",
+                    "value": "UPLOADED"
+                  },
+                  {
+                    "label": "Generated",
+                    "value": "GENERATED"
+                  }
+                ],
+                "required": true
+              },
+              {
+                "help": "The preprocessor ID varies depending on the model that's being used. See the [Leonardo.Ai ControlNets guide](https://docs.leonardo.ai/docs/generate-images-using-image-to-image-guidance#other-controlnets) for details and a table of IDs.",
+                "name": "preprocessorId",
+                "type": "number",
+                "label": "Preprocessor ID",
+                "required": true
+              },
+              {
+                "name": "weight",
+                "type": "number",
+                "label": "Weight",
+                "required": false,
+                "validate": {
+                  "max": 2,
+                  "min": 0
+                }
+              },
+              {
+                "help": "Alternative to **Weight**. Can only be used for **Style Reference**, **Character Reference** and **Content Reference** ControlNets. Leave empty if using other types.",
+                "name": "strengthType",
+                "type": "select",
+                "label": "Strength Type",
+                "options": [
+                  {
+                    "value": "Low"
+                  },
+                  {
+                    "value": "Mid"
+                  },
+                  {
+                    "value": "High"
+                  },
+                  {
+                    "value": "Ultra"
+                  },
+                  {
+                    "value": "Max"
+                  }
+                ]
+              }
+            ],
+            "type": "collection",
+            "label": "ControlNet"
+          },
+          "type": "array",
+          "label": "ControlNets",
+          "labels": {
+            "add": "Add ControlNet"
+          },
+          "advanced": true
+        },
+        {
+          "help": "The style to generate images with.",
+          "name": "presetStyle",
+          "type": "select",
+          "label": "Preset style",
+          "grouped": true,
+          "options": [
+            {
+              "label": "PhotoReal (enabled)",
+              "options": [
+                {
+                  "label": "Cinematic",
+                  "value": "CINEMATIC"
+                },
+                {
+                  "label": "Creative",
+                  "value": "CREATIVE"
+                },
+                {
+                  "label": "Vibrant",
+                  "value": "VIBRANT"
+                },
+                {
+                  "label": "None",
+                  "value": "NONE"
+                }
+              ]
+            },
+            {
+              "label": "Alchemy (enabled)",
+              "options": [
+                {
+                  "label": "Anime",
+                  "value": "ANIME"
+                },
+                {
+                  "label": "Creative",
+                  "value": "CREATIVE"
+                },
+                {
+                  "label": "Dynamic",
+                  "value": "DYNAMIC"
+                },
+                {
+                  "label": "Environment",
+                  "value": "ENVIRONMENT"
+                },
+                {
+                  "label": "General",
+                  "value": "GENERAL"
+                },
+                {
+                  "label": "Illustration",
+                  "value": "ILLUSTRATION"
+                },
+                {
+                  "label": "Photography",
+                  "value": "PHOTOGRAPHY"
+                },
+                {
+                  "label": "Raytraced",
+                  "value": "RAYTRACED"
+                },
+                {
+                  "label": "Render 3D",
+                  "value": "RENDER_3D"
+                },
+                {
+                  "label": "Sketch B&W",
+                  "value": "SKETCH_BW"
+                },
+                {
+                  "label": "Sketch color",
+                  "value": "SKETCH_COLOR"
+                },
+                {
+                  "label": "None",
+                  "value": "NONE"
+                }
+              ]
+            },
+            {
+              "label": "Alchemy (disabled)",
+              "options": [
+                {
+                  "label": "Leonardo",
+                  "value": "LEONARDO"
+                },
+                {
+                  "label": "None",
+                  "value": "NONE"
+                }
+              ]
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "help": "How strongly the generation should reflect the prompt. `7` is recommended.",
+          "name": "guidance_scale",
+          "type": "uinteger",
+          "label": "Guidance scale",
+          "advanced": true,
+          "validate": {
+            "max": 20,
+            "min": 1
+          }
+        },
+        {
+          "help": "How much weighting to use for generation.",
+          "name": "weighting",
+          "type": "number",
+          "label": "Weighting",
+          "advanced": true
+        },
+        {
+          "help": "A higher init strength will preserve the original image more in Image2Image.",
+          "name": "init_strength",
+          "type": "number",
+          "label": "Init strength",
+          "advanced": true,
+          "validate": {
+            "max": 0.9,
+            "min": 0.1
+          }
+        },
+        {
+          "name": "nsfw",
+          "type": "boolean",
+          "label": "NSFW",
+          "advanced": true
+        },
+        {
+          "help": "Whether the generated images should tile on all axis.",
+          "name": "tiling",
+          "type": "boolean",
+          "label": "Tiling",
+          "advanced": true
+        },
+        {
+          "name": "num_inference_steps",
+          "type": "uinteger",
+          "label": "Number of inference steps",
+          "advanced": true,
+          "validate": {
+            "max": 60,
+            "min": 30
+          }
+        },
+        {
+          "help": "The base version of stable diffusion to use if not using a custom model.",
+          "name": "sd_version",
+          "type": "select",
+          "label": "SD version",
+          "options": [
+            {
+              "label": "v1.5",
+              "value": "v1_5"
+            },
+            {
+              "label": "v2",
+              "value": "v2"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "help": "Image IDs to use as image prompt. It is possible to map this from the `Upload an Image` module.",
+          "name": "imagePrompts",
+          "spec": {
+            "type": "text",
+            "label": "Image prompt"
+          },
+          "type": "array",
+          "label": "Image prompts",
+          "labels": {
+            "add": "Add image prompt"
+          },
+          "advanced": true
+        },
+        {
+          "name": "imagePromptWeight",
+          "type": "number",
+          "label": "Image prompt weight",
+          "advanced": true
+        },
+        {
+          "help": "The scheduler to generate images with. Defaults to `Euler Discrete` if not specified.",
+          "name": "scheduler",
+          "type": "select",
+          "label": "Scheduler",
+          "options": [
+            {
+              "label": "KLMS",
+              "value": "KLMS"
+            },
+            {
+              "label": "Euler ancestral",
+              "value": "EULER_ANCESTRAL_DISCRETE"
+            },
+            {
+              "label": "Euler discrete",
+              "value": "EULER_DISCRETE"
+            },
+            {
+              "label": "DDIM",
+              "value": "DDIM"
+            },
+            {
+              "label": "DPM solver",
+              "value": "DPM_SOLVER"
+            },
+            {
+              "label": "PNDM",
+              "value": "PNDM"
+            },
+            {
+              "label": "Leonardo",
+              "value": "LEONARDO"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "help": "The deterministic number for the random number generator.",
+          "name": "seed",
+          "type": "uinteger",
+          "label": "Seed",
+          "advanced": true
+        },
+        {
+          "help": "The negative prompt used for the image generation.",
+          "name": "negative_prompt",
+          "type": "text",
+          "label": "Negative prompt",
+          "advanced": true
+        },
+        {
+          "help": "How much the image should be upscaled. **(Enterprise Only)**",
+          "name": "upscaleRatio",
+          "type": "number",
+          "label": "Upscale ratio",
+          "advanced": true
+        },
+        {
+          "help": "Do you want to generate the image with a transparent background",
+          "name": "transparency",
+          "type": "select",
+          "label": "Transparency",
+          "options": [
+            {
+              "label": "No",
+              "value": "disabled"
+            },
+            {
+              "label": "Yes, transparent background",
+              "value": "foreground_only"
+            }
+          ],
+          "advanced": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "leonardo-ai",
+      "samples": null,
+      "apiJsonc": "[\n\t{\n\t\t\"url\": \"/generations\",\n\t\t\"method\": \"POST\",\n\t\t\"body\": {\n\t\t\t\"{{...}}\": \"{{omit(parameters, 'source')}}\"\n\t\t},\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"genId\": \"{{body.sdGenerationJob.generationId}}\"\n\t\t\t},\n\t\t\t\"output\": null\n\t\t}\n\t},\n\t{\n\t\t\"condition\": \"{{temp.genId}}\",\n\t\t\"url\": \"/generations/{{temp.genId}}\",\n\t\t\"timeout\": 300000,\n\t\t\"method\": \"GET\",\n\t\t\"repeat\": {\n\t\t\t\"condition\": \"{{temp.status === 'PENDING'}}\",\n\t\t\t\"delay\": 7000,\n\t\t\t\"limit\": 20\n\t\t},\n\t\t\"response\": {\n\t\t\t\"valid\": \"{{temp.status !== 'FAILED'}}\",\n\t\t\t\"error\": {\n\t\t\t\t\"type\": \"DataError\",\n\t\t\t\t\"message\": \"Image generation failed.\"\n\t\t\t},\n\t\t\t\"temp\": {\n\t\t\t\t\"status\": \"{{body.generations_by_pk.status}}\",\n\t\t\t\t\"genId\": \"{{body.generations_by_pk.id}}\"\n\t\t\t},\n\t\t\t\"output\": null\n\t\t}\n\t},\n\t{\n\t\t\"condition\": \"{{temp.status === 'COMPLETE'}}\",\n\t\t\"url\": \"/generations/{{temp.genId}}\",\n\t\t\"method\": \"GET\",\n\t\t\"response\": {\n\t\t\t\"output\": \"{{transformDates(body.generations_by_pk)}}\"\n\t\t}\n\t}\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "generated_images",
+          "spec": {
+            "spec": [
+              {
+                "name": "url",
+                "type": "url",
+                "label": "URL"
+              },
+              {
+                "name": "nsfw",
+                "type": "boolean",
+                "label": "NSFW"
+              },
+              {
+                "name": "id",
+                "type": "text",
+                "label": "ID"
+              },
+              {
+                "name": "likeCount",
+                "type": "number",
+                "label": "Like count"
+              },
+              {
+                "name": "motionMP4URL",
+                "type": "url",
+                "label": "Motion MP4 URL"
+              },
+              {
+                "name": "generated_image_variation_generics",
+                "spec": {
+                  "type": "text"
+                },
+                "type": "array",
+                "label": "Generated image variation generics"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Generated images"
+        },
+        {
+          "name": "modelId",
+          "type": "text",
+          "label": "Model ID"
+        },
+        {
+          "name": "motion",
+          "type": "text",
+          "label": "Motion"
+        },
+        {
+          "name": "motionModel",
+          "type": "text",
+          "label": "Motion model"
+        },
+        {
+          "name": "motionStrength",
+          "type": "text",
+          "label": "Motion strength"
+        },
+        {
+          "name": "prompt",
+          "type": "text",
+          "label": "Prompt"
+        },
+        {
+          "name": "negativePrompt",
+          "type": "text",
+          "label": "Negative prompt"
+        },
+        {
+          "name": "imageHeight",
+          "type": "integer",
+          "label": "Image height"
+        },
+        {
+          "name": "imageWidth",
+          "type": "integer",
+          "label": "Image width"
+        },
+        {
+          "name": "imageToVideo",
+          "type": "text",
+          "label": "Image to video"
+        },
+        {
+          "name": "inferenceSteps",
+          "type": "integer",
+          "label": "Inference steps"
+        },
+        {
+          "name": "seed",
+          "type": "uinteger",
+          "label": "Seed"
+        },
+        {
+          "name": "public",
+          "type": "boolean",
+          "label": "Public"
+        },
+        {
+          "name": "scheduler",
+          "type": "text",
+          "label": "Scheduler"
+        },
+        {
+          "name": "sdVersion",
+          "type": "text",
+          "label": "SD version"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "presetStyle",
+          "type": "text",
+          "label": "Preset style"
+        },
+        {
+          "name": "initStrength",
+          "type": "text",
+          "label": "Init strength"
+        },
+        {
+          "name": "guidanceScale",
+          "type": "number",
+          "label": "Guidance scale"
+        },
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Image generation job ID"
+        },
+        {
+          "name": "createdAt",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "promptMagic",
+          "type": "boolean",
+          "label": "PromptMagic"
+        },
+        {
+          "name": "promptMagicVersion",
+          "type": "text",
+          "label": "PromptMagic version"
+        },
+        {
+          "name": "promptMagicStrength",
+          "type": "text",
+          "label": "PromptMagic strength"
+        },
+        {
+          "name": "photoReal",
+          "type": "boolean",
+          "label": "PhotoReal"
+        },
+        {
+          "name": "photoRealStrength",
+          "type": "text",
+          "label": "PhotoReal strength"
+        },
+        {
+          "name": "fantasyAvatar",
+          "type": "text",
+          "label": "Fantasy avatar"
+        },
+        {
+          "name": "prompt_moderations",
+          "spec": [
+            {
+              "name": "moderationClassification",
+              "type": "array",
+              "label": "Moderation classification"
+            }
+          ],
+          "type": "array",
+          "label": "Prompt moderations"
+        },
+        {
+          "name": "generation_elements",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Generation elements"
+        },
+        {
+          "name": "transparency",
+          "type": "text",
+          "label": "Transparency"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "leonardo-ai",
+      "description": "Generates new images.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"prompt\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Prompt\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"modelId\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Model\",\n\t\t\"options\": \"rpc://listPlatformModels\"\n\t},\n\t{\n\t\t\"name\": \"num_images\",\n\t\t\"type\": \"uinteger\",\n\t\t\"validate\": {\n\t\t\t\"min\": 1,\n\t\t\t\"max\": 8\n\t\t},\n\t\t\"help\": \"If either **Width** or **Height** is over `768` pixels, must be between `1` and `4`.\",\n\t\t\"label\": \"Number of images to generate\"\n\t},\n\t{\n\t\t\"name\": \"source\",\n\t\t\"type\": \"select\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Uploaded image\",\n\t\t\t\t\"value\": \"im\",\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"init_image_id\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"help\": \"The ID of an uploaded Image to use in Image2Image. It is possible to map this from the `Upload an Image` module.\",\n\t\t\t\t\t\t\"label\": \"Uploaded Image ID\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Generated image\",\n\t\t\t\t\"value\": \"gen\",\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"init_generation_image_id\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"help\": \"The ID of an existing image to use in Image2Image.\",\n\t\t\t\t\t\t\"label\": \"Generated Image ID\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"help\": \"The source of the image for Image2Image generation.\",\n\t\t\"label\": \"Source\"\n\t},\n\t{\n\t\t\"name\": \"public\",\n\t\t\"type\": \"boolean\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Whether the generated images should show in the community feed.\",\n\t\t\"label\": \"Public\"\n\t},\n\t{\n\t\t\"name\": \"height\",\n\t\t\"type\": \"uinteger\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"The height of the generated images. Must be a multiple of 8.\",\n\t\t\"label\": \"Height\",\n\t\t\"validate\": {\n\t\t\t\"min\": 32,\n\t\t\t\"max\": 1536\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"width\",\n\t\t\"type\": \"uinteger\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"The width of the generated images. Must be a multiple of 8.\",\n\t\t\"label\": \"Width\",\n\t\t\"validate\": {\n\t\t\t\"min\": 32,\n\t\t\t\"max\": 1536\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"unzoom\",\n\t\t\"type\": \"boolean\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Whether the generated images should be unzoomed.\",\n\t\t\"nested\": [\n\t\t\t{\n\t\t\t\t\"name\": \"unzoomAmount\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"help\": \"How much the image should be unzoomed.\",\n\t\t\t\t\"label\": \"Unzoom Amount\"\n\t\t\t}\n\t\t],\n\t\t\"label\": \"Unzoom\"\n\t},\n\t{\n\t\t\"name\": \"alchemy\",\n\t\t\"type\": \"boolean\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"This feature is in **BETA** for paid users. Brings incredibly high-fidelity image generation and coherence to all existing platform models.\",\n\t\t\"nested\": [\n\t\t\t{\n\t\t\t\t\"name\": \"contrastRatio\",\n\t\t\t\t\"type\": \"number\",\n\t\t\t\t\"validate\": {\n\t\t\t\t\t\"min\": 0,\n\t\t\t\t\t\"max\": 1\n\t\t\t\t},\n\t\t\t\t\"help\": \"Adjust dynamic range of your image.\",\n\t\t\t\t\"label\": \"Contrast ratio\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"expandedDomain\",\n\t\t\t\t\"type\": \"boolean\",\n\t\t\t\t\"help\": \"Enable to use the Expanded Domain feature of Alchemy.\",\n\t\t\t\t\"label\": \"Expanded domain\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"photoReal\",\n\t\t\t\t\"type\": \"boolean\",\n\t\t\t\t\"label\": \"PhotoReal\",\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"photoRealVersion\",\n\t\t\t\t\t\t\"label\": \"PhotoReal Version\",\n\t\t\t\t\t\t\"help\": \"If using `v1`, the **Model** field must be left empty. Defaults to `v1`.\",\n\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\"options\": [\n\t\t\t\t\t\t\t{ \"value\": \"v1\" },\n\t\t\t\t\t\t\t{ \"value\": \"v2\" }\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"label\": \"Alchemy\"\n\t},\n\t{\n\t\t\"name\": \"promptMagic\",\n\t\t\"type\": \"boolean\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Enable to use Prompt Magic. Custom render pipeline that has greater prompt adherence, higher image fidelity and can improve the output with any chosen model. Increases token cost.\",\n\t\t\"nested\": [\n\t\t\t{\n\t\t\t\t\"name\": \"promptMagicVersion\",\n\t\t\t\t\"type\": \"select\",\n\t\t\t\t\"help\": \"Prompt magic `v3` can be used with **Alchemy** only.\",\n\t\t\t\t\"options\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"v2\",\n\t\t\t\t\t\t\"value\": \"v2\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"v3\",\n\t\t\t\t\t\t\"value\": \"v3\"\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"label\": \"Prompt Magic Version\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"highContrast\",\n\t\t\t\t\"type\": \"boolean\",\n\t\t\t\t\"help\": \"High Contrast mode will give moodier images with more shadows. High Contrast: `false` is similar to enabling RAW mode.\",\n\t\t\t\t\"label\": \"High Contrast\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"highResolution\",\n\t\t\t\t\"type\": \"boolean\",\n\t\t\t\t\"label\": \"High Resolution\"\n\t\t\t}\n\t\t],\n\t\t\"label\": \"Prompt Magic\"\n\t},\n\t{\n\t\t\"name\": \"controlnets\",\n\t\t\"label\": \"ControlNets\",\n\t\t\"advanced\": true,\n\t\t\"type\": \"array\",\n\t\t\"labels\": {\n\t\t\t\"add\": \"Add ControlNet\"\n\t\t},\n\t\t\"spec\": {\n\t\t\t\"label\": \"ControlNet\",\n\t\t\t\"type\": \"collection\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"initImageId\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"help\": \"It is possible to map this from the `Upload an Image` module if you want to use an external image.\",\n\t\t\t\t\t\"label\": \"Init Image ID\",\n\t\t\t\t\t\"required\": true\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"initImageType\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"label\": \"Init Image Type\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"options\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"value\": \"UPLOADED\",\n\t\t\t\t\t\t\t\"label\": \"Uploaded\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"value\": \"GENERATED\",\n\t\t\t\t\t\t\t\"label\": \"Generated\"\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"preprocessorId\",\n\t\t\t\t\t\"label\": \"Preprocessor ID\",\n\t\t\t\t\t\"required\": true,\n\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\"help\": \"The preprocessor ID varies depending on the model that's being used. See the [Leonardo.Ai ControlNets guide](https://docs.leonardo.ai/docs/generate-images-using-image-to-image-guidance#other-controlnets) for details and a table of IDs.\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"weight\",\n\t\t\t\t\t\"label\": \"Weight\",\n\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\"required\": false,\n\t\t\t\t\t\"validate\": {\n\t\t\t\t\t\t\"min\": 0,\n\t\t\t\t\t\t\"max\": 2\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"strengthType\",\n\t\t\t\t\t\"label\": \"Strength Type\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"help\": \"Alternative to **Weight**. Can only be used for **Style Reference**, **Character Reference** and **Content Reference** ControlNets. Leave empty if using other types.\",\n\t\t\t\t\t\"options\": [\n\t\t\t\t\t\t{ \"value\": \"Low\" },\n\t\t\t\t\t\t{ \"value\": \"Mid\" },\n\t\t\t\t\t\t{ \"value\": \"High\" },\n\t\t\t\t\t\t{ \"value\": \"Ultra\" },\n\t\t\t\t\t\t{ \"value\": \"Max\" }\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"presetStyle\",\n\t\t\"type\": \"select\",\n\t\t\"grouped\": true,\n\t\t\"help\": \"The style to generate images with.\",\n\t\t\"advanced\": true,\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"PhotoReal (enabled)\",\n\t\t\t\t\"options\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Cinematic\",\n\t\t\t\t\t\t\"value\": \"CINEMATIC\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Creative\",\n\t\t\t\t\t\t\"value\": \"CREATIVE\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Vibrant\",\n\t\t\t\t\t\t\"value\": \"VIBRANT\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"None\",\n\t\t\t\t\t\t\"value\": \"NONE\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Alchemy (enabled)\",\n\t\t\t\t\"options\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Anime\",\n\t\t\t\t\t\t\"value\": \"ANIME\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Creative\",\n\t\t\t\t\t\t\"value\": \"CREATIVE\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Dynamic\",\n\t\t\t\t\t\t\"value\": \"DYNAMIC\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Environment\",\n\t\t\t\t\t\t\"value\": \"ENVIRONMENT\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"General\",\n\t\t\t\t\t\t\"value\": \"GENERAL\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Illustration\",\n\t\t\t\t\t\t\"value\": \"ILLUSTRATION\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Photography\",\n\t\t\t\t\t\t\"value\": \"PHOTOGRAPHY\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Raytraced\",\n\t\t\t\t\t\t\"value\": \"RAYTRACED\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Render 3D\",\n\t\t\t\t\t\t\"value\": \"RENDER_3D\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Sketch B&W\",\n\t\t\t\t\t\t\"value\": \"SKETCH_BW\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Sketch color\",\n\t\t\t\t\t\t\"value\": \"SKETCH_COLOR\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"None\",\n\t\t\t\t\t\t\"value\": \"NONE\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Alchemy (disabled)\",\n\t\t\t\t\"options\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Leonardo\",\n\t\t\t\t\t\t\"value\": \"LEONARDO\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"None\",\n\t\t\t\t\t\t\"value\": \"NONE\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"label\": \"Preset style\"\n\t},\n\t{\n\t\t\"name\": \"guidance_scale\",\n\t\t\"type\": \"uinteger\",\n\t\t\"advanced\": true,\n\t\t\"validate\": {\n\t\t\t\"min\": 1,\n\t\t\t\"max\": 20\n\t\t},\n\t\t\"help\": \"How strongly the generation should reflect the prompt. `7` is recommended.\",\n\t\t\"label\": \"Guidance scale\"\n\t},\n\t{\n\t\t\"name\": \"weighting\",\n\t\t\"type\": \"number\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"How much weighting to use for generation.\",\n\t\t\"label\": \"Weighting\"\n\t},\n\t{\n\t\t\"name\": \"init_strength\",\n\t\t\"type\": \"number\",\n\t\t\"advanced\": true,\n\t\t\"validate\": {\n\t\t\t\"min\": 0.1,\n\t\t\t\"max\": 0.9\n\t\t},\n\t\t\"help\": \"A higher init strength will preserve the original image more in Image2Image.\",\n\t\t\"label\": \"Init strength\"\n\t},\n\t{\n\t\t\"name\": \"nsfw\",\n\t\t\"type\": \"boolean\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"NSFW\"\n\t},\n\t{\n\t\t\"name\": \"tiling\",\n\t\t\"type\": \"boolean\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Whether the generated images should tile on all axis.\",\n\t\t\"label\": \"Tiling\"\n\t},\n\t{\n\t\t\"name\": \"num_inference_steps\",\n\t\t\"type\": \"uinteger\",\n\t\t\"advanced\": true,\n\t\t\"validate\": {\n\t\t\t\"min\": 30,\n\t\t\t\"max\": 60\n\t\t},\n\t\t\"label\": \"Number of inference steps\"\n\t},\n\t{\n\t\t\"name\": \"sd_version\",\n\t\t\"type\": \"select\",\n\t\t\"help\": \"The base version of stable diffusion to use if not using a custom model.\",\n\t\t\"advanced\": true,\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"v1.5\",\n\t\t\t\t\"value\": \"v1_5\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"v2\",\n\t\t\t\t\"value\": \"v2\"\n\t\t\t}\n\t\t],\n\t\t\"label\": \"SD version\"\n\t},\n\t{\n\t\t\"name\": \"imagePrompts\",\n\t\t\"type\": \"array\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Image IDs to use as image prompt. It is possible to map this from the `Upload an Image` module.\",\n\t\t\"labels\": {\n\t\t\t\"add\": \"Add image prompt\"\n\t\t},\n\t\t\"spec\": {\n\t\t\t\"type\": \"text\",\n\t\t\t\"label\": \"Image prompt\"\n\t\t},\n\t\t\"label\": \"Image prompts\"\n\t},\n\t{\n\t\t\"name\": \"imagePromptWeight\",\n\t\t\"type\": \"number\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"Image prompt weight\"\n\t},\n\t{\n\t\t\"name\": \"scheduler\",\n\t\t\"type\": \"select\",\n\t\t\"help\": \"The scheduler to generate images with. Defaults to `Euler Discrete` if not specified.\",\n\t\t\"advanced\": true,\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"KLMS\",\n\t\t\t\t\"value\": \"KLMS\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Euler ancestral\",\n\t\t\t\t\"value\": \"EULER_ANCESTRAL_DISCRETE\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Euler discrete\",\n\t\t\t\t\"value\": \"EULER_DISCRETE\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"DDIM\",\n\t\t\t\t\"value\": \"DDIM\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"DPM solver\",\n\t\t\t\t\"value\": \"DPM_SOLVER\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PNDM\",\n\t\t\t\t\"value\": \"PNDM\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Leonardo\",\n\t\t\t\t\"value\": \"LEONARDO\"\n\t\t\t}\n\t\t],\n\t\t\"label\": \"Scheduler\"\n\t},\n\t{\n\t\t\"name\": \"seed\",\n\t\t\"type\": \"uinteger\",\n\t\t\"help\": \"The deterministic number for the random number generator.\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"Seed\"\n\t},\n\t{\n\t\t\"name\": \"negative_prompt\",\n\t\t\"type\": \"text\",\n\t\t\"help\": \"The negative prompt used for the image generation.\",\n\t\t\"advanced\": true,\n\t\t\"label\": \"Negative prompt\"\n\t},\n\t{\n\t\t\"name\": \"upscaleRatio\",\n\t\t\"type\": \"number\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"How much the image should be upscaled. **(Enterprise Only)**\",\n\t\t\"label\": \"Upscale ratio\"\n\t},\n\t{\n\t\t\"name\": \"transparency\",\n\t\t\"type\": \"select\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Do you want to generate the image with a transparent background\",\n\t\t\"label\": \"Transparency\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"No\",\n\t\t\t\t\"value\": \"disabled\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Yes, transparent background\",\n\t\t\t\t\"value\": \"foreground_only\"\n\t\t\t}\n\t\t]\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"generated_images\",\n        \"label\": \"Generated images\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"url\",\n                    \"label\": \"URL\",\n                    \"type\": \"url\"\n                },\n                {\n                    \"name\": \"nsfw\",\n                    \"label\": \"NSFW\",\n                    \"type\": \"boolean\"\n                },\n                {\n                    \"name\": \"id\",\n                    \"label\": \"ID\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"likeCount\",\n                    \"label\": \"Like count\",\n                    \"type\": \"number\"\n                },\n                {\n                    \"name\": \"motionMP4URL\",\n                    \"label\": \"Motion MP4 URL\",\n                    \"type\": \"url\"\n                },\n                {\n                    \"name\": \"generated_image_variation_generics\",\n                    \"label\": \"Generated image variation generics\",\n                    \"type\": \"array\",\n                    \"spec\": {\n                        \"type\": \"text\"\n                    }\n                }\n            ]\n        }\n    },\n    {\n        \"name\": \"modelId\",\n        \"label\": \"Model ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"motion\",\n        \"label\": \"Motion\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"motionModel\",\n        \"label\": \"Motion model\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"motionStrength\",\n        \"label\": \"Motion strength\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"prompt\",\n        \"label\": \"Prompt\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"negativePrompt\",\n        \"label\": \"Negative prompt\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"imageHeight\",\n        \"label\": \"Image height\",\n        \"type\": \"integer\"\n    },\n    {\n        \"name\": \"imageWidth\",\n        \"label\": \"Image width\",\n        \"type\": \"integer\"\n    },\n    {\n        \"name\": \"imageToVideo\",\n        \"label\": \"Image to video\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"inferenceSteps\",\n        \"label\": \"Inference steps\",\n        \"type\": \"integer\"\n    },\n    {\n        \"name\": \"seed\",\n        \"label\": \"Seed\",\n        \"type\": \"uinteger\"\n    },\n    {\n        \"name\": \"public\",\n        \"label\": \"Public\",\n        \"type\": \"boolean\"\n    },\n    {\n        \"name\": \"scheduler\",\n        \"label\": \"Scheduler\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"sdVersion\",\n        \"label\": \"SD version\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"status\",\n        \"label\": \"Status\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"presetStyle\",\n        \"label\": \"Preset style\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"initStrength\",\n        \"label\": \"Init strength\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"guidanceScale\",\n        \"label\": \"Guidance scale\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"id\",\n        \"label\": \"Image generation job ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"createdAt\",\n        \"label\": \"Created at\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"promptMagic\",\n        \"label\": \"PromptMagic\",\n        \"type\": \"boolean\"\n    },\n    {\n        \"name\": \"promptMagicVersion\",\n        \"label\": \"PromptMagic version\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"promptMagicStrength\",\n        \"label\": \"PromptMagic strength\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"photoReal\",\n        \"label\": \"PhotoReal\",\n        \"type\": \"boolean\"\n    },\n    {\n        \"name\": \"photoRealStrength\",\n        \"label\": \"PhotoReal strength\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"fantasyAvatar\",\n        \"label\": \"Fantasy avatar\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"prompt_moderations\",\n        \"label\": \"Prompt moderations\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"moderationClassification\",\n                \"label\": \"Moderation classification\",\n                \"type\": \"array\"\n            }\n        ]\n    },\n    {\n        \"name\": \"generation_elements\",\n        \"label\": \"Generation elements\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        }\n    },\n    {\n        \"name\": \"transparency\",\n        \"label\": \"Transparency\",\n        \"type\": \"text\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getTextureGen": {
+      "id": 114508,
+      "api": {
+        "url": "/generations-texture/{{parameters.id}}",
+        "method": "GET",
+        "response": {
+          "output": "{{transformDates(body.model_asset_texture_generations_by_pk)}}"
+        }
+      },
+      "rev": 2,
+      "crud": "read",
+      "name": "getTextureGen",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Texture Generation",
+      "scope": [],
+      "expect": [
+        {
+          "name": "mapOrSelect",
+          "type": "select",
+          "label": "Input Manually or Select",
+          "default": "map",
+          "options": [
+            {
+              "label": "Input manually",
+              "value": "map",
+              "nested": [
+                {
+                  "name": "id",
+                  "type": "text",
+                  "label": "Texture Generation Job ID",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "label": "Select from the list",
+              "value": "select",
+              "nested": [
+                {
+                  "name": "modelId",
+                  "type": "select",
+                  "label": "Model ID",
+                  "options": {
+                    "store": "rpc://app%23leonardo-ai@1/listOwnModelsAssets",
+                    "nested": [
+                      {
+                        "name": "id",
+                        "type": "select",
+                        "label": "Texture Generation Job ID",
+                        "options": "rpc://app%23leonardo-ai@1/listTexturesForModel",
+                        "mappable": false,
+                        "required": true
+                      }
+                    ]
+                  },
+                  "mappable": false,
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "mappable": false,
+          "required": true
+        }
+      ],
+      "public": false,
+      "typeId": 4,
+      "appName": "leonardo-ai",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/generations-texture/{{parameters.id}}\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": \"{{transformDates(body.model_asset_texture_generations_by_pk)}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Texture Generation Job ID"
+        },
+        {
+          "name": "createdAt",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "prompt",
+          "type": "text",
+          "label": "Prompt"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "negativePrompt",
+          "type": "text",
+          "label": "Negative Prompt"
+        },
+        {
+          "name": "seed",
+          "type": "uinteger",
+          "label": "Seed"
+        },
+        {
+          "name": "model_asset_texture_images",
+          "spec": {
+            "spec": [
+              {
+                "name": "id",
+                "type": "text",
+                "label": "ID"
+              },
+              {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+              },
+              {
+                "name": "url",
+                "type": "url",
+                "label": "URL"
+              },
+              {
+                "name": "__typename",
+                "type": "text",
+                "label": "Typename"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Model Asset Texture Images"
+        },
+        {
+          "name": "__typename",
+          "type": "text",
+          "label": "Typename"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "leonardo-ai",
+      "description": "Returns information about a texture generation job.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"mapOrSelect\",\n\t\t\"type\": \"select\",\n\t\t\"default\": \"map\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Input manually\",\n\t\t\t\t\"value\": \"map\",\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Texture Generation Job ID\",\n\t\t\t\t\t\t\"required\": true\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Select from the list\",\n\t\t\t\t\"value\": \"select\",\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"modelId\",\n\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\"options\": {\n\t\t\t\t\t\t\t\"store\": \"rpc://listOwnModelsAssets\",\n\t\t\t\t\t\t\t\"nested\": [\n\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\t\"options\": \"rpc://listTexturesForModel\",\n\t\t\t\t\t\t\t\t\t\"label\": \"Texture Generation Job ID\",\n\t\t\t\t\t\t\t\t\t\"mappable\": false,\n\t\t\t\t\t\t\t\t\t\"required\": true\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t]\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"label\": \"Model ID\",\n\t\t\t\t\t\t\"mappable\": false,\n\t\t\t\t\t\t\"required\": true\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"mappable\": false,\n\t\t\"label\": \"Input Manually or Select\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"label\": \"Texture Generation Job ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"createdAt\",\n        \"label\": \"Created at\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"prompt\",\n        \"label\": \"Prompt\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"status\",\n        \"label\": \"Status\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"negativePrompt\",\n        \"label\": \"Negative Prompt\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"seed\",\n        \"label\": \"Seed\",\n        \"type\": \"uinteger\"\n    },\n    {\n        \"name\": \"model_asset_texture_images\",\n        \"label\": \"Model Asset Texture Images\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"id\",\n                    \"label\": \"ID\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"type\",\n                    \"label\": \"Type\",\n                    \"type\": \"text\"\n                },\n                {\n                    \"name\": \"url\",\n                    \"label\": \"URL\",\n                    \"type\": \"url\"\n                },\n                {\n                    \"name\": \"__typename\",\n                    \"label\": \"Typename\",\n                    \"type\": \"text\"\n                }\n            ]\n        }\n    },\n    {\n        \"name\": \"__typename\",\n        \"label\": \"Typename\",\n        \"type\": \"text\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "generateTexture": {
+      "id": 114421,
+      "api": {
+        "url": "/generations-texture",
+        "body": {
+          "{{...}}": "{{parameters}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{body.textureGenerationJob}}"
+        }
+      },
+      "rev": 2,
+      "crud": "create",
+      "name": "generateTexture",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Texture Generation Job",
+      "scope": [],
+      "expect": [
+        {
+          "name": "modelAssetId",
+          "type": "select",
+          "label": "Model Asset ID",
+          "options": "rpc://app%23leonardo-ai@1/listOwnModelsAssets",
+          "required": true
+        },
+        {
+          "name": "prompt",
+          "type": "text",
+          "label": "Prompt",
+          "required": true
+        },
+        {
+          "name": "negative_prompt",
+          "type": "text",
+          "label": "Negative Prompt"
+        },
+        {
+          "help": "Whether texture only the front side of the object.",
+          "name": "preview",
+          "type": "boolean",
+          "label": "Preview"
+        },
+        {
+          "name": "preview_direction",
+          "type": "text",
+          "label": "Preview Direction",
+          "advanced": true
+        },
+        {
+          "name": "front_rotation_offset",
+          "type": "integer",
+          "label": "Front Rotation Offset",
+          "advanced": true
+        },
+        {
+          "name": "sd_version",
+          "type": "select",
+          "label": "SD Version",
+          "options": [
+            {
+              "label": "v1.5",
+              "value": "v1_5"
+            },
+            {
+              "label": "v2",
+              "value": "v2"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "help": "The deterministic number for the random number generator.",
+          "name": "seed",
+          "type": "integer",
+          "label": "Seed",
+          "advanced": true
+        }
+      ],
+      "public": false,
+      "typeId": 4,
+      "appName": "leonardo-ai",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/generations-texture\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"{{...}}\": \"{{parameters}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{body.textureGenerationJob}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "__typename",
+          "type": "text",
+          "label": "Typename"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "leonardo-ai",
+      "description": "Creates a new texture generation job.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"modelAssetId\",\n\t\t\"type\": \"select\",\n\t\t\"options\": \"rpc://listOwnModelsAssets\",\n\t\t\"required\": true,\n\t\t\"label\": \"Model Asset ID\"\n\t},\n\t{\n\t\t\"name\": \"prompt\",\n\t\t\"type\": \"text\",\n\t\t\"required\": true,\n\t\t\"label\": \"Prompt\"\n\t},\n\t{\n\t\t\"name\": \"negative_prompt\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Negative Prompt\"\n\t},\n\t{\n\t\t\"name\": \"preview\",\n\t\t\"type\": \"boolean\",\n\t\t\"help\": \"Whether texture only the front side of the object.\",\n\t\t\"label\": \"Preview\"\n\t},\n\t{\n\t\t\"name\": \"preview_direction\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Preview Direction\",\n\t\t\"advanced\": true\n\t},\n\t{\n\t\t\"name\": \"front_rotation_offset\",\n\t\t\"type\": \"integer\",\n\t\t\"label\": \"Front Rotation Offset\",\n\t\t\"advanced\": true\n\t},\n\t{\n\t\t\"name\": \"sd_version\",\n\t\t\"type\": \"select\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"v1.5\",\n\t\t\t\t\"value\": \"v1_5\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"v2\",\n\t\t\t\t\"value\": \"v2\"\n\t\t\t}\n\t\t],\n\t\t\"label\": \"SD Version\",\n\t\t\"advanced\": true\n\t},\n\t{\n\t\t\"name\": \"seed\",\n\t\t\"type\": \"integer\",\n\t\t\"help\": \"The deterministic number for the random number generator.\",\n\t\t\"label\": \"Seed\",\n\t\t\"advanced\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"label\": \"ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"__typename\",\n        \"label\": \"Typename\",\n        \"type\": \"text\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "uploadInitImage": {
+      "id": 114505,
+      "api": [
+        {
+          "url": "/init-image",
+          "body": {
+            "extension": "{{getFileExtension(parameters.fileName)}}"
+          },
+          "method": "POST",
+          "response": {
+            "temp": {
+              "imgId": "{{body.uploadInitImage.id}}",
+              "reqUrl": "{{body.uploadInitImage.url}}",
+              "reqFields": "{{body.uploadInitImage.fields}}"
+            },
+            "output": null
+          }
+        },
+        {
+          "url": "{{temp.reqUrl}}",
+          "body": "{{formatFileUploadRequest(parameters, temp.reqFields)}}",
+          "type": "multipart/form-data",
+          "method": "POST",
+          "headers": {
+            "Authorization": "{{undefined}}"
+          },
+          "response": {
+            "output": {
+              "id": "{{temp.imgId}}"
+            }
+          }
+        }
+      ],
+      "rev": 4,
+      "crud": "create",
+      "name": "uploadInitImage",
+      "epoch": null,
+      "flags": {},
+      "label": "Upload an Image",
+      "scope": [],
+      "expect": [
+        {
+          "name": "fileName",
+          "type": "filename",
+          "label": "File name",
+          "required": true,
+          "semantic": "file:name"
+        },
+        {
+          "name": "fileData",
+          "type": "buffer",
+          "label": "File data",
+          "required": true,
+          "semantic": "file:data"
+        },
+        {
+          "type": "html",
+          "label": "<div class=\"form-text text-muted\" >File extension has to be <b>png</b>, <b>jpg</b>, <b>jpeg</b>, or <b>webp</b>.</div>"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "leonardo-ai",
+      "samples": null,
+      "apiJsonc": "[\n\t{\n\t\t\"url\": \"/init-image\",\n\t\t\"method\": \"POST\",\n\t\t\"body\": {\n\t\t\t\"extension\": \"{{getFileExtension(parameters.fileName)}}\"\n\t\t},\n\t\t\"response\": {\n\t\t\t\"temp\": {\n\t\t\t\t\"imgId\": \"{{body.uploadInitImage.id}}\",\n\t\t\t\t\"reqFields\": \"{{body.uploadInitImage.fields}}\",\n\t\t\t\t\"reqUrl\": \"{{body.uploadInitImage.url}}\"\n\t\t\t},\n\t\t\t\"output\": null\n\t\t}\n\t},\n\t{\n\t\t\"url\": \"{{temp.reqUrl}}\",\n\t\t\"method\": \"POST\",\n\t\t\"headers\": {\n\t\t\t\"Authorization\": \"{{undefined}}\"\n\t\t},\n\t\t\"type\": \"multipart/form-data\",\n\t\t\"body\": \"{{formatFileUploadRequest(parameters, temp.reqFields)}}\",\n\t\t\"response\": {\n\t\t\t\"output\": {\n\t\t\t\t\"id\": \"{{temp.imgId}}\"\n\t\t\t}\n\t\t}\n\t}\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Image ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "leonardo-ai",
+      "description": "Uploads a new image.",
+      "expectJsonc": "[\n    {\n        \"name\": \"fileName\",\n        \"type\": \"filename\",\n        \"label\": \"File name\",\n        \"semantic\": \"file:name\",\n        \"required\": true\n    },\n    {\n        \"name\": \"fileData\",\n        \"type\": \"buffer\",\n        \"label\": \"File data\",\n        \"semantic\": \"file:data\",\n        \"required\": true\n    },\n    {\n        \"type\": \"html\",\n        \"label\": \"<div class=\\\"form-text text-muted\\\" >File extension has to be <b>png</b>, <b>jpg</b>, <b>jpeg</b>, or <b>webp</b>.</div>\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        //\"label\": \"Init image ID\",\n        \"label\": \"Image ID\",\n        \"type\": \"text\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "generateMotionVideo": {
+      "id": 150714,
+      "api": [
+        {
+          "url": "/generations-motion-svd",
+          "body": {
+            "{{...}}": "{{omit(parameters, 'imageType')}}",
+            "isInitImage": "{{if(parameters.imageType = 'init', true, false)}}",
+            "isVariation": "{{if(parameters.imageType = 'variation', true, false)}}"
+          },
+          "method": "POST",
+          "response": {
+            "temp": {
+              "genId": "{{body.motionSvdGenerationJob.generationId}}",
+              "apiCreditCost": "{{body.motionSvdGenerationJob.apiCreditCost}}"
+            }
+          }
+        },
+        {
+          "url": "/generations/{{temp.genId}}",
+          "method": "GET",
+          "repeat": {
+            "delay": 20000,
+            "limit": 20,
+            "condition": "{{temp.status === 'PENDING'}}"
+          },
+          "response": {
+            "temp": {
+              "genId": "{{body.generations_by_pk.id}}",
+              "status": "{{body.generations_by_pk.status}}"
+            },
+            "output": null
+          },
+          "condition": "{{temp.genId}}"
+        },
+        {
+          "url": "/generations/{{temp.genId}}",
+          "method": "GET",
+          "response": {
+            "output": {
+              "{{...}}": "{{omit(body.generations_by_pk, 'createdAt')}}",
+              "createdAt": "{{parseDate(body.generations_by_pk.createdAt, 'YYYY-MM-DDTHH:mm:ss', 'UTC')}}",
+              "resultVideo": "{{body.generations_by_pk.generated_images[1].motionMP4URL}}",
+              "apiCreditCost": "{{temp.apiCreditCost}}"
+            }
+          },
+          "condition": "{{temp.status === 'COMPLETE'}}"
+        }
+      ],
+      "rev": 7,
+      "crud": "create",
+      "name": "generateMotionVideo",
+      "epoch": null,
+      "flags": {},
+      "label": "Generate a Motion (Video)",
+      "scope": [],
+      "expect": [
+        {
+          "help": "To upload a new image, use the `Upload an Image` module, choose `Init (uploaded)` here.",
+          "name": "imageType",
+          "type": "select",
+          "label": "Image type",
+          "nested": [
+            {
+              "name": "imageId",
+              "type": "text",
+              "label": "Image ID",
+              "required": true
+            }
+          ],
+          "options": [
+            {
+              "label": "Generated",
+              "value": "generated"
+            },
+            {
+              "label": "Variation",
+              "value": "variation"
+            },
+            {
+              "label": "Init (uploaded)",
+              "value": "init"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "Determines the amount of movement added to the video. Defaults to 5.",
+          "name": "motionStrength",
+          "type": "uinteger",
+          "label": "Motion strength",
+          "validate": {
+            "max": 10,
+            "min": 1
+          }
+        },
+        {
+          "help": "Set this option to `Yes` to make your generated content public.",
+          "name": "isPublic",
+          "type": "boolean",
+          "label": "Is public",
+          "default": "false",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "leonardo-ai",
+      "samples": {
+        "id": "uuid-uuid-uuid",
+        "seed": 8068852871686256,
+        "ultra": null,
+        "motion": true,
+        "prompt": "output prompt shows up here",
+        "public": false,
+        "status": "COMPLETE",
+        "modelId": "uuid-uuid-uuid",
+        "createdAt": "2024-09-25T14:45:07.000Z",
+        "photoReal": null,
+        "scheduler": null,
+        "sdVersion": null,
+        "imageWidth": 768,
+        "imageHeight": 768,
+        "motionModel": "SVD",
+        "presetStyle": null,
+        "promptMagic": false,
+        "resultVideo": "https://cdn.leonardo.ai/users/uuid-uuid-uuid/generations/uuid-uuid-uuid/uuid-uuid-uuid.mp4",
+        "imageToVideo": true,
+        "initStrength": null,
+        "apiCreditCost": 45,
+        "fantasyAvatar": null,
+        "guidanceScale": null,
+        "inferenceSteps": null,
+        "motionStrength": 2,
+        "negativePrompt": "",
+        "generated_images": [
+          {
+            "id": "uuid-uuid-uuid",
+            "url": "https://cdn.leonardo.ai/users/uuid-uuid-uuid/generations/uuid-uuid-uuid/uuid-uuid-uuid.jpg",
+            "nsfw": false,
+            "likeCount": 0,
+            "motionMP4URL": "https://cdn.leonardo.ai/users/uuid-uuid-uuid/generations/uuid-uuid-uuid/uuid-uuid-uuid.mp4",
+            "generated_image_variation_generics": []
+          }
+        ],
+        "photoRealStrength": null,
+        "promptMagicVersion": null,
+        "prompt_moderations": [],
+        "generation_elements": [],
+        "promptMagicStrength": null
+      },
+      "apiJsonc": "[\n    {\n        \"url\": \"/generations-motion-svd\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"{{...}}\": \"{{omit(parameters, 'imageType')}}\",\n            \"isVariation\": \"{{if(parameters.imageType = 'variation', true, false)}}\",\n            \"isInitImage\": \"{{if(parameters.imageType = 'init', true, false)}}\"\n        },\n        \"response\": {\n            //\"output\": \"{{body}}\"\n            \"temp\": {\n                \"genId\": \"{{body.motionSvdGenerationJob.generationId}}\",\n                \"apiCreditCost\": \"{{body.motionSvdGenerationJob.apiCreditCost}}\"\n            }\n        }\n    },\n    {\n        \"condition\": \"{{temp.genId}}\",\n        \"url\": \"/generations/{{temp.genId}}\",\n        \"method\": \"GET\",\n        \"repeat\": {\n            \"condition\": \"{{temp.status === 'PENDING'}}\",\n            \"delay\": 20000,\n            \"limit\": 20\n        },\n        \"response\": {\n            \"temp\": {\n                \"status\": \"{{body.generations_by_pk.status}}\",\n                \"genId\": \"{{body.generations_by_pk.id}}\"\n            },\n            \"output\": null\n        }\n    },\n    {\n        \"condition\": \"{{temp.status === 'COMPLETE'}}\",\n        \"url\": \"/generations/{{temp.genId}}\",\n        \"method\": \"GET\",\n        \"response\": {\n            \"output\": {\n                \"resultVideo\": \"{{body.generations_by_pk.generated_images[1].motionMP4URL}}\",\n                \"createdAt\": \"{{parseDate(body.generations_by_pk.createdAt, 'YYYY-MM-DDTHH:mm:ss', 'UTC')}}\",\n                \"apiCreditCost\": \"{{temp.apiCreditCost}}\",\n                \"{{...}}\": \"{{omit(body.generations_by_pk, 'createdAt')}}\"\n            }\n        }\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "resultVideo",
+          "type": "text",
+          "label": "Result video"
+        },
+        {
+          "name": "generated_images",
+          "spec": {
+            "spec": [
+              {
+                "name": "url",
+                "type": "text",
+                "label": "URL"
+              },
+              {
+                "name": "nsfw",
+                "type": "boolean",
+                "label": "NSFW"
+              },
+              {
+                "name": "id",
+                "type": "text",
+                "label": "ID"
+              },
+              {
+                "name": "likeCount",
+                "type": "number",
+                "label": "Like count"
+              },
+              {
+                "name": "motionMP4URL",
+                "type": "text",
+                "label": "Motion MP4 URL"
+              },
+              {
+                "name": "generated_image_variation_generics",
+                "type": "array",
+                "label": "Generated image variation generics"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Generated images"
+        },
+        {
+          "name": "modelId",
+          "type": "text",
+          "label": "Model ID"
+        },
+        {
+          "name": "motion",
+          "type": "boolean",
+          "label": "Motion"
+        },
+        {
+          "name": "motionModel",
+          "type": "text",
+          "label": "Motion model"
+        },
+        {
+          "name": "motionStrength",
+          "type": "number",
+          "label": "Motion strength"
+        },
+        {
+          "name": "prompt",
+          "type": "text",
+          "label": "Prompt"
+        },
+        {
+          "name": "negativePrompt",
+          "type": "text",
+          "label": "Negative prompt"
+        },
+        {
+          "name": "imageHeight",
+          "type": "number",
+          "label": "Image height"
+        },
+        {
+          "name": "imageToVideo",
+          "type": "boolean",
+          "label": "Image to video"
+        },
+        {
+          "name": "imageWidth",
+          "type": "number",
+          "label": "Image width"
+        },
+        {
+          "name": "inferenceSteps",
+          "type": "text",
+          "label": "Inference steps"
+        },
+        {
+          "name": "seed",
+          "type": "number",
+          "label": "Seed"
+        },
+        {
+          "name": "ultra",
+          "type": "text",
+          "label": "Ultra"
+        },
+        {
+          "name": "public",
+          "type": "boolean",
+          "label": "Public"
+        },
+        {
+          "name": "scheduler",
+          "type": "text",
+          "label": "Scheduler"
+        },
+        {
+          "name": "sdVersion",
+          "type": "text",
+          "label": "SD version"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "presetStyle",
+          "type": "text",
+          "label": "Preset style"
+        },
+        {
+          "name": "initStrength",
+          "type": "text",
+          "label": "Init strength"
+        },
+        {
+          "name": "guidanceScale",
+          "type": "text",
+          "label": "Guidance scale"
+        },
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "promptMagic",
+          "type": "boolean",
+          "label": "PromptMagic"
+        },
+        {
+          "name": "promptMagicVersion",
+          "type": "text",
+          "label": "PromptMagic version"
+        },
+        {
+          "name": "promptMagicStrength",
+          "type": "text",
+          "label": "PromptMagic strength"
+        },
+        {
+          "name": "photoReal",
+          "type": "text",
+          "label": "PhotoReal"
+        },
+        {
+          "name": "photoRealStrength",
+          "type": "text",
+          "label": "PhotoReal strength"
+        },
+        {
+          "name": "fantasyAvatar",
+          "type": "text",
+          "label": "Fantasy avatar"
+        },
+        {
+          "name": "prompt_moderations",
+          "type": "array",
+          "label": "Prompt moderations"
+        },
+        {
+          "name": "generation_elements",
+          "type": "array",
+          "label": "Generation elements"
+        },
+        {
+          "name": "createdAt",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "apiCreditCost",
+          "type": "number",
+          "label": "API credit cost"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "leonardo-ai",
+      "description": "Generates a motion (video) from the provided image (any type).",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"imageType\",\n\t\t\"label\": \"Image type\",\n\t\t\"type\": \"select\",\n\t\t\"required\": true,\n\t\t\"help\": \"To upload a new image, use the `Upload an Image` module, choose `Init (uploaded)` here.\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Generated\",\n\t\t\t\t\"value\": \"generated\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Variation\",\n\t\t\t\t\"value\": \"variation\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Init (uploaded)\",\n\t\t\t\t\"value\": \"init\"\n\t\t\t}\n\t\t],\n\t\t\"nested\": [\n\t\t\t{\n\t\t\t\t\"name\": \"imageId\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"required\": true,\n\t\t\t\t\"label\": \"Image ID\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"motionStrength\",\n\t\t\"label\": \"Motion strength\",\n\t\t\"type\": \"uinteger\",\n\t\t\"validate\": {\n\t\t\t\"min\": 1,\n\t\t\t\"max\": 10\n\t\t},\n\t\t\"help\": \"Determines the amount of movement added to the video. Defaults to 5.\"\n\t},\n\t{\n\t\t\"name\": \"isPublic\",\n\t\t\"label\": \"Is public\",\n\t\t\"type\": \"boolean\",\n\t\t\"default\": \"false\",\n\t\t\"required\": true,\n\t\t\"help\": \"Set this option to `Yes` to make your generated content public.\"\n\t}\n]",
+      "samplesJsonc": "\r\n{\r\n\t\"resultVideo\": \"https://cdn.leonardo.ai/users/uuid-uuid-uuid/generations/uuid-uuid-uuid/uuid-uuid-uuid.mp4\",\r\n\t\"generated_images\": [\r\n\t\t{\r\n\t\t\t\"url\": \"https://cdn.leonardo.ai/users/uuid-uuid-uuid/generations/uuid-uuid-uuid/uuid-uuid-uuid.jpg\",\r\n\t\t\t\"nsfw\": false,\r\n\t\t\t\"id\": \"uuid-uuid-uuid\",\r\n\t\t\t\"likeCount\": 0,\r\n\t\t\t\"motionMP4URL\": \"https://cdn.leonardo.ai/users/uuid-uuid-uuid/generations/uuid-uuid-uuid/uuid-uuid-uuid.mp4\",\r\n\t\t\t\"generated_image_variation_generics\": [ ]\r\n\t\t}\r\n\t],\r\n\t\"modelId\": \"uuid-uuid-uuid\",\r\n\t\"motion\": true,\r\n\t\"motionModel\": \"SVD\",\r\n\t\"motionStrength\": 2,\r\n\t\"prompt\": \"output prompt shows up here\",\r\n\t\"negativePrompt\": \"\",\r\n\t\"imageHeight\": 768,\r\n\t\"imageToVideo\": true,\r\n\t\"imageWidth\": 768,\r\n\t\"inferenceSteps\": null,\r\n\t\"seed\": 8068852871686256,\r\n\t\"ultra\": null,\r\n\t\"public\": false,\r\n\t\"scheduler\": null,\r\n\t\"sdVersion\": null,\r\n\t\"status\": \"COMPLETE\",\r\n\t\"presetStyle\": null,\r\n\t\"initStrength\": null,\r\n\t\"guidanceScale\": null,\r\n\t\"id\": \"uuid-uuid-uuid\",\r\n\t\"promptMagic\": false,\r\n\t\"promptMagicVersion\": null,\r\n\t\"promptMagicStrength\": null,\r\n\t\"photoReal\": null,\r\n\t\"photoRealStrength\": null,\r\n\t\"fantasyAvatar\": null,\r\n\t\"prompt_moderations\": [ ],\r\n\t\"generation_elements\": [ ],\r\n\t\"createdAt\": \"2024-09-25T14:45:07.000Z\",\r\n\t\"apiCreditCost\": 45\r\n}\r\n",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"resultVideo\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Result video\"\n\t},\n\t{\n\t\t\"name\": \"generated_images\",\n\t\t\"type\": \"array\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"collection\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"url\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"URL\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"nsfw\",\n\t\t\t\t\t\"type\": \"boolean\",\n\t\t\t\t\t\"label\": \"NSFW\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"ID\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"likeCount\",\n\t\t\t\t\t\"type\": \"number\",\n\t\t\t\t\t\"label\": \"Like count\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"motionMP4URL\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Motion MP4 URL\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"generated_image_variation_generics\",\n\t\t\t\t\t\"type\": \"array\",\n\t\t\t\t\t\"label\": \"Generated image variation generics\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"label\": \"Generated images\"\n\t},\n\t{\n\t\t\"name\": \"modelId\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Model ID\"\n\t},\n\t{\n\t\t\"name\": \"motion\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Motion\"\n\t},\n\t{\n\t\t\"name\": \"motionModel\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Motion model\"\n\t},\n\t{\n\t\t\"name\": \"motionStrength\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Motion strength\"\n\t},\n\t{\n\t\t\"name\": \"prompt\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Prompt\"\n\t},\n\t{\n\t\t\"name\": \"negativePrompt\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Negative prompt\"\n\t},\n\t{\n\t\t\"name\": \"imageHeight\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Image height\"\n\t},\n\t{\n\t\t\"name\": \"imageToVideo\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Image to video\"\n\t},\n\t{\n\t\t\"name\": \"imageWidth\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Image width\"\n\t},\n\t{\n\t\t\"name\": \"inferenceSteps\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Inference steps\"\n\t},\n\t{\n\t\t\"name\": \"seed\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Seed\"\n\t},\n\t{\n\t\t\"name\": \"ultra\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Ultra\"\n\t},\n\t{\n\t\t\"name\": \"public\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Public\"\n\t},\n\t{\n\t\t\"name\": \"scheduler\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Scheduler\"\n\t},\n\t{\n\t\t\"name\": \"sdVersion\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"SD version\"\n\t},\n\t{\n\t\t\"name\": \"status\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Status\"\n\t},\n\t{\n\t\t\"name\": \"presetStyle\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Preset style\"\n\t},\n\t{\n\t\t\"name\": \"initStrength\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Init strength\"\n\t},\n\t{\n\t\t\"name\": \"guidanceScale\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Guidance scale\"\n\t},\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"ID\"\n\t},\n\t{\n\t\t\"name\": \"promptMagic\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"PromptMagic\"\n\t},\n\t{\n\t\t\"name\": \"promptMagicVersion\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"PromptMagic version\"\n\t},\n\t{\n\t\t\"name\": \"promptMagicStrength\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"PromptMagic strength\"\n\t},\n\t{\n\t\t\"name\": \"photoReal\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"PhotoReal\"\n\t},\n\t{\n\t\t\"name\": \"photoRealStrength\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"PhotoReal strength\"\n\t},\n\t{\n\t\t\"name\": \"fantasyAvatar\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Fantasy avatar\"\n\t},\n\t{\n\t\t\"name\": \"prompt_moderations\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Prompt moderations\"\n\t},\n\t{\n\t\t\"name\": \"generation_elements\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Generation elements\"\n\t},\n\t{\n\t\t\"name\": \"createdAt\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Created at\"\n\t},\n\t{\n\t\t\"name\": \"apiCreditCost\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"API credit cost\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createMotionVideoGenerationJob": {
+      "id": 150725,
+      "api": {
+        "url": "/generations-motion-svd",
+        "body": {
+          "{{...}}": "{{omit(parameters, 'imageType')}}",
+          "isInitImage": "{{if(parameters.imageType = 'init', true, false)}}",
+          "isVariation": "{{if(parameters.imageType = 'variation', true, false)}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{body.motionSvdGenerationJob}}"
+        }
+      },
+      "rev": 6,
+      "crud": "create",
+      "name": "createMotionVideoGenerationJob",
+      "epoch": null,
+      "flags": {},
+      "label": "Create Motion (Video) Generation Job (Deprecated)",
+      "scope": [],
+      "expect": [
+        {
+          "help": "To upload a new image, use the `Upload an Image` module,  choose `Init (Uploaded)` here.",
+          "name": "imageType",
+          "type": "select",
+          "label": "Image type",
+          "nested": [
+            {
+              "name": "imageId",
+              "type": "text",
+              "label": "Image ID",
+              "required": true
+            }
+          ],
+          "options": [
+            {
+              "label": "Generated",
+              "value": "generated"
+            },
+            {
+              "label": "Variation",
+              "value": "variation"
+            },
+            {
+              "label": "Init (uploaded)",
+              "value": "init"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "Determines the amount of movement added to the video. Defaults to 5.",
+          "name": "motionStrength",
+          "type": "uinteger",
+          "label": "Motion strength",
+          "validate": {
+            "max": 10,
+            "min": 1
+          }
+        },
+        {
+          "help": "Set this option to `Yes` to make your generated content public.",
+          "name": "isPublic",
+          "type": "boolean",
+          "label": "Is public",
+          "default": "false",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "leonardo-ai",
+      "samples": {
+        "generationId": "uuid-uuid-uuid",
+        "apiCreditCost": 45
+      },
+      "apiJsonc": "{\n\t\t\"url\": \"/generations-motion-svd\",\n\t\t\"method\": \"POST\",\n\t\t\"body\": {\n\t\t\t\"{{...}}\": \"{{omit(parameters, 'imageType')}}\",\n\t\t\t\"isVariation\": \"{{if(parameters.imageType = 'variation', true, false)}}\",\n\t\t\t\"isInitImage\": \"{{if(parameters.imageType = 'init', true, false)}}\"\n\t\t},\n\n\t\t\"response\": {\n\t\t\t\"output\": \"{{body.motionSvdGenerationJob}}\"\n\t\t}\n\t}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "apiCreditCost",
+          "type": "number",
+          "label": "API credit cost"
+        },
+        {
+          "name": "generationId",
+          "type": "text",
+          "label": "Generation ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": true,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "leonardo-ai",
+      "description": "Creates a job that will generate a Motion in the background. You can use the Instant Trigger to receive data once the job is completed.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"imageType\",\n\t\t\"label\": \"Image type\",\n\t\t\"type\": \"select\",\n\t\t\"required\": true,\n\t\t\"help\": \"To upload a new image, use the `Upload an Image` module,  choose `Init (Uploaded)` here.\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Generated\",\n\t\t\t\t\"value\": \"generated\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Variation\",\n\t\t\t\t\"value\": \"variation\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Init (uploaded)\",\n\t\t\t\t\"value\": \"init\"\n\t\t\t}\n\t\t],\n\t\t\"nested\": [\n\t\t\t{\n\t\t\t\t\"name\": \"imageId\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"required\": true,\n\t\t\t\t\"label\": \"Image ID\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"motionStrength\",\n\t\t\"label\": \"Motion strength\",\n\t\t\"type\": \"uinteger\",\n\t\t\"validate\": {\n\t\t\t\"min\": 1,\n\t\t\t\"max\": 10\n\t\t},\n\t\t\"help\": \"Determines the amount of movement added to the video. Defaults to 5.\"\n\t},\n\t{\n\t\t\"name\": \"isPublic\",\n\t\t\"label\": \"Is public\",\n\t\t\"type\": \"boolean\",\n\t\t\"default\": \"false\",\n\t\t\"required\": true,\n\t\t\"help\": \"Set this option to `Yes` to make your generated content public.\"\n\t}\n]",
+      "samplesJsonc": "{\r\n        \"apiCreditCost\": 45,\r\n        \"generationId\": \"uuid-uuid-uuid\"\r\n    }",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"apiCreditCost\",\n        \"type\": \"number\",\n        \"label\": \"API credit cost\"\n    },\n    {\n        \"name\": \"generationId\",\n        \"type\": \"text\",\n        \"label\": \"Generation ID\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "upscaleAnImageUniversalUpscaler": {
+      "id": 150706,
+      "api": [
+        {
+          "url": "/variations/universal-upscaler",
+          "body": {
+            "{{...}}": "{{omit(parameters, 'upscalerStyle', 'imageType', 'id')}}",
+            "initImageId": "{{if(parameters.imageType = 'initImageId', parameters.id, undefined)}}",
+            "variationId": "{{if(parameters.imageType = 'variationId', parameters.id, undefined)}}",
+            "upscalerStyle": "{{if(contains(add(emptyarray, 'ARTISTIC', 'REALISTIC'), parameters.upscalerStyle), undefined, parameters.upscalerStyle)}}",
+            "generatedImageId": "{{if(parameters.imageType = 'generatedImageId', parameters.id, undefined)}}",
+            "ultraUpscaleStyle": "{{if(contains(add(emptyarray, 'ARTISTIC', 'REALISTIC'), parameters.upscalerStyle), parameters.upscalerStyle, undefined)}}"
+          },
+          "method": "POST",
+          "response": {
+            "temp": {
+              "genId": "{{body.universalUpscaler.id}}",
+              "apiCreditCost": "{{body.motionSvdGenerationJob.apiCreditCost}}"
+            }
+          }
+        },
+        {
+          "url": "/variations/{{temp.genId}}",
+          "method": "GET",
+          "repeat": {
+            "delay": 7000,
+            "limit": 20,
+            "condition": "{{temp.status === 'PENDING'}}"
+          },
+          "response": {
+            "temp": {
+              "genId": "{{body.generated_image_variation_generic[1].id}}",
+              "status": "{{body.generated_image_variation_generic[1].status}}"
+            },
+            "output": null
+          },
+          "condition": "{{temp.genId}}"
+        },
+        {
+          "url": "/variations/{{temp.genId}}",
+          "method": "GET",
+          "response": {
+            "output": {
+              "{{...}}": "{{omit(body.generated_image_variation_generic[1], 'createdAt')}}",
+              "createdAt": "{{parseDate(body.generated_image_variation_generic[1].createdAt, 'YYYY-MM-DDTHH:mm:ss', 'UTC')}}",
+              "apiCreditCost": "{{temp.apiCreditCost}}"
+            }
+          },
+          "condition": "{{temp.status === 'COMPLETE'}}"
+        }
+      ],
+      "rev": 5,
+      "crud": "create",
+      "name": "upscaleAnImageUniversalUpscaler",
+      "epoch": null,
+      "flags": {},
+      "label": "Upscale an Image (Universal Upscaler)",
+      "scope": [],
+      "expect": [
+        {
+          "help": "To upload a new image, use the `Upload an Image` module, choose `Init (uploaded)` here.",
+          "name": "imageType",
+          "type": "select",
+          "label": "Image type",
+          "nested": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Image ID",
+              "required": true
+            }
+          ],
+          "options": [
+            {
+              "label": "Generated",
+              "value": "generatedImageId"
+            },
+            {
+              "label": "Variation",
+              "value": "variationId"
+            },
+            {
+              "label": "Init (uploaded)",
+              "value": "initImageId"
+            }
+          ],
+          "required": true
+        },
+        {
+          "name": "prompt",
+          "type": "text",
+          "label": "Prompt"
+        },
+        {
+          "help": "Defaults to 5.",
+          "name": "creativityStrength",
+          "type": "uinteger",
+          "label": "Creativity strength",
+          "validate": {
+            "max": 10,
+            "min": 1
+          }
+        },
+        {
+          "help": "Use `.` as decimal separator. For example `1.5`",
+          "name": "upscaleMultiplier",
+          "type": "number",
+          "label": "Upscale multiplier",
+          "validate": {
+            "max": 2,
+            "min": 1
+          }
+        },
+        {
+          "name": "upscalerStyle",
+          "type": "select",
+          "label": "Upscaler style",
+          "default": "GENERAL",
+          "options": [
+            {
+              "label": "ULTRA - Artistic",
+              "value": "ARTISTIC",
+              "nested": [
+                {
+                  "help": "Can only be used with ULTRA upscaler types.",
+                  "name": "detailContrast",
+                  "type": "uinteger",
+                  "label": "Detail contrast",
+                  "validate": {
+                    "max": 10,
+                    "min": 1
+                  }
+                },
+                {
+                  "help": "Can only be used with ULTRA upscaler types.",
+                  "name": "similarity",
+                  "type": "uinteger",
+                  "label": "Similarity",
+                  "validate": {
+                    "max": 10,
+                    "min": 1
+                  }
+                }
+              ]
+            },
+            {
+              "label": "ULTRA - Realistic",
+              "value": "REALISTIC",
+              "nested": [
+                {
+                  "help": "Can only be used with ULTRA upscaler types.",
+                  "name": "detailContrast",
+                  "type": "uinteger",
+                  "label": "Detail contrast",
+                  "validate": {
+                    "max": 10,
+                    "min": 1
+                  }
+                },
+                {
+                  "help": "Can only be used with ULTRA upscaler types.",
+                  "name": "similarity",
+                  "type": "uinteger",
+                  "label": "Similarity",
+                  "validate": {
+                    "max": 10,
+                    "min": 1
+                  }
+                }
+              ]
+            },
+            {
+              "label": "General",
+              "value": "GENERAL"
+            },
+            {
+              "label": "Cinematic",
+              "value": "CINEMATIC"
+            },
+            {
+              "label": "2D art & illustration",
+              "value": "2D ART & ILLUSTRATION"
+            },
+            {
+              "label": "CG art & game assets",
+              "value": "CG ART & GAME ASSETS"
+            }
+          ],
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "leonardo-ai",
+      "samples": {
+        "id": "uuid-uuid",
+        "url": "https://cdn.leonardo.ai/users/uuid-uuid/generations/uuid-uuid/variations/UniversalUpscaler_uuid-uuid.jpg",
+        "status": "COMPLETE",
+        "createdAt": "2024-09-25T12:51:26.873Z",
+        "apiCreditCost": 20,
+        "transformType": "UPSCALE"
+      },
+      "apiJsonc": "[\n    {\n        \"url\": \"/variations/universal-upscaler\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"generatedImageId\": \"{{if(parameters.imageType = 'generatedImageId', parameters.id, undefined)}}\",\n            \"initImageId\": \"{{if(parameters.imageType = 'initImageId', parameters.id, undefined)}}\",\n            \"variationId\": \"{{if(parameters.imageType = 'variationId', parameters.id, undefined)}}\",\n            \"ultraUpscaleStyle\": \"{{if(contains(add(emptyarray, 'ARTISTIC', 'REALISTIC'), parameters.upscalerStyle), parameters.upscalerStyle, undefined)}}\",\n            \"upscalerStyle\": \"{{if(contains(add(emptyarray, 'ARTISTIC', 'REALISTIC'), parameters.upscalerStyle), undefined, parameters.upscalerStyle)}}\",\n            \"{{...}}\": \"{{omit(parameters, 'upscalerStyle', 'imageType', 'id')}}\"\n        },\n        \"response\": {\n            //\"output\": \"{{body}}\"\n            \"temp\": {\n                \"genId\": \"{{body.universalUpscaler.id}}\",\n                \"apiCreditCost\": \"{{body.motionSvdGenerationJob.apiCreditCost}}\"\n            }\n        }\n    },\n    {\n        \"condition\": \"{{temp.genId}}\",\n        \"url\": \"/variations/{{temp.genId}}\",\n        \"method\": \"GET\",\n        \"repeat\": {\n            \"condition\": \"{{temp.status === 'PENDING'}}\",\n            \"delay\": 7000,\n            \"limit\": 20\n        },\n        \"response\": {\n            \"temp\": {\n                \"status\": \"{{body.generated_image_variation_generic[1].status}}\",\n                \"genId\": \"{{body.generated_image_variation_generic[1].id}}\"\n            },\n            \"output\": null\n        }\n    },\n    {\n        \"condition\": \"{{temp.status === 'COMPLETE'}}\",\n        \"url\": \"/variations/{{temp.genId}}\",\n        \"method\": \"GET\",\n        \"response\": {\n            \"output\": {\n                \"{{...}}\": \"{{omit(body.generated_image_variation_generic[1], 'createdAt')}}\",\n                \"createdAt\": \"{{parseDate(body.generated_image_variation_generic[1].createdAt, 'YYYY-MM-DDTHH:mm:ss', 'UTC')}}\",\n                \"apiCreditCost\": \"{{temp.apiCreditCost}}\"\n            }\n        }\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "url",
+          "type": "text",
+          "label": "URL"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "id",
+          "type": "text",
+          "label": "ID"
+        },
+        {
+          "name": "createdAt",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "transformType",
+          "type": "text",
+          "label": "Transform type"
+        },
+        {
+          "name": "apiCreditCost",
+          "type": "number",
+          "label": "API credit cost"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "leonardo-ai",
+      "description": "Creates a high-resolution upscale of the provided image (any type).",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"imageType\",\n\t\t\"label\": \"Image type\",\n\t\t\"type\": \"select\",\n\t\t\"required\": true,\n\t\t\"help\": \"To upload a new image, use the `Upload an Image` module, choose `Init (uploaded)` here.\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Generated\",\n\t\t\t\t\"value\": \"generatedImageId\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Variation\",\n\t\t\t\t\"value\": \"variationId\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Init (uploaded)\",\n\t\t\t\t\"value\": \"initImageId\"\n\t\t\t}\n\t\t],\n\t\t\"nested\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"required\": true,\n\t\t\t\t\"label\": \"Image ID\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"prompt\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Prompt\"\n\t},\n\t{\n\t\t\"name\": \"creativityStrength\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Creativity strength\",\n\t\t\"help\": \"Defaults to 5.\",\n\t\t\"validate\": {\n\t\t\t\"min\": 1,\n\t\t\t\"max\": 10\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"upscaleMultiplier\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Upscale multiplier\",\n\t\t\"help\": \"Use `.` as decimal separator. For example `1.5`\",\n\t\t\"validate\": {\n\t\t\t\"min\": 1.0,\n\t\t\t\"max\": 2.0\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"upscalerStyle\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Upscaler style\",\n\t\t\"default\": \"GENERAL\",\n\t\t\"required\": true,\n\t\t// \"help\": \"`ULTRA` upscaler styles are only available for certain subscriptions. See the [Leonardo.Ai pricing page](https://app.leonardo.ai/buy) for details.\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"ULTRA - Artistic\",\n\t\t\t\t\"value\": \"ARTISTIC\",\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"detailContrast\",\n\t\t\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\t\t\"label\": \"Detail contrast\",\n\t\t\t\t\t\t\"help\": \"Can only be used with ULTRA upscaler types.\",\n\t\t\t\t\t\t\"validate\": {\n\t\t\t\t\t\t\t\"min\": 1,\n\t\t\t\t\t\t\t\"max\": 10\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"similarity\",\n\t\t\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\t\t\"label\": \"Similarity\",\n\t\t\t\t\t\t\"help\": \"Can only be used with ULTRA upscaler types.\",\n\t\t\t\t\t\t\"validate\": {\n\t\t\t\t\t\t\t\"min\": 1,\n\t\t\t\t\t\t\t\"max\": 10\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"ULTRA - Realistic\",\n\t\t\t\t\"value\": \"REALISTIC\",\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"detailContrast\",\n\t\t\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\t\t\"label\": \"Detail contrast\",\n\t\t\t\t\t\t\"help\": \"Can only be used with ULTRA upscaler types.\",\n\t\t\t\t\t\t\"validate\": {\n\t\t\t\t\t\t\t\"min\": 1,\n\t\t\t\t\t\t\t\"max\": 10\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"similarity\",\n\t\t\t\t\t\t\"type\": \"uinteger\",\n\t\t\t\t\t\t\"label\": \"Similarity\",\n\t\t\t\t\t\t\"help\": \"Can only be used with ULTRA upscaler types.\",\n\t\t\t\t\t\t\"validate\": {\n\t\t\t\t\t\t\t\"min\": 1,\n\t\t\t\t\t\t\t\"max\": 10\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"General\",\n\t\t\t\t\"value\": \"GENERAL\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Cinematic\",\n\t\t\t\t\"value\": \"CINEMATIC\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"2D art & illustration\",\n\t\t\t\t\"value\": \"2D ART & ILLUSTRATION\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"CG art & game assets\",\n\t\t\t\t\"value\": \"CG ART & GAME ASSETS\"\n\t\t\t}\n\t\t]\n\t}\n]",
+      "samplesJsonc": " {\r\n        \"url\": \"https://cdn.leonardo.ai/users/uuid-uuid/generations/uuid-uuid/variations/UniversalUpscaler_uuid-uuid.jpg\",\r\n        \"status\": \"COMPLETE\",\r\n        \"id\": \"uuid-uuid\",\r\n        \"createdAt\": \"2024-09-25T12:51:26.873Z\",\r\n        \"transformType\": \"UPSCALE\",\r\n        \"apiCreditCost\": 20\r\n    }",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"url\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"URL\"\n\t},\n\t{\n\t\t\"name\": \"status\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Status\"\n\t},\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"ID\"\n\t},\n\t{\n\t\t\"name\": \"createdAt\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Created at\"\n\t},\n\t{\n\t\t\"name\": \"transformType\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Transform type\"\n\t},\n\t{\n\t\t\"name\": \"apiCreditCost\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"API credit cost\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "leonardo-ai": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.authorization"
+          ]
+        },
+        "url": "https://cloud.leonardo.ai/api/rest/v1/me",
+        "headers": {
+          "Authorization": "Bearer {{parameters.apiKey}}"
+        },
+        "response": {
+          "data": {
+            "userId": "{{body.user_details[1].user.id}}"
+          },
+          "error": {
+            "message": "[{{statusCode}}] {{body.error}}"
+          },
+          "metadata": {
+            "type": "text",
+            "value": "{{body.user_details[1].user.username}}"
+          }
+        }
+      },
+      "rev": 8,
+      "name": "leonardo-ai",
+      "type": "basic",
+      "label": "Leonardo.AI",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "leonardo-ai",
+      "install": {},
+      "apiJsonc": "{\n\t\"url\": \"https://cloud.leonardo.ai/api/rest/v1/me\",\n\t\"headers\": {\n\t\t\"Authorization\": \"Bearer {{parameters.apiKey}}\"\n\t},\n\t\"response\": {\n\t\t\"metadata\": {\n\t\t\t\"type\": \"text\",\n\t\t\t\"value\": \"{{body.user_details[1].user.username}}\"\n\t\t},\n\t\t\"error\": {\n\t\t\t\"message\": \"[{{statusCode}}] {{body.error}}\"\n\t\t},\n\t\t\"data\": {\n\t\t\t\"userId\": \"{{body.user_details[1].user.id}}\"\n\t\t}\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\n\t\t\t\"request.headers.authorization\"\n\t\t]\n\t}\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "help": "For information on how to create your API Key value, see the [Leonardo.Ai API documentation](https://docs.leonardo.ai/docs/create-your-api-key).",
+          "name": "apiKey",
+          "type": "password",
+          "label": "API Key",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "installSpec": [],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"apiKey\",\n        \"type\": \"password\",\n        \"help\": \"For information on how to create your API Key value, see the [Leonardo.Ai API documentation](https://docs.leonardo.ai/docs/create-your-api-key).\",\n        \"label\": \"API Key\",\n        \"required\": true,\n        \"editable\": true\n    }\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n\t\"baseUrl\": \"https://cloud.leonardo.ai/api/rest/v1\",\n\t\"headers\": {\n\t\t\"Authorization\": \"Bearer {{connection.apiKey}}\"\n\t},\n\t\"timeout\": \"{{common.timeout}}\",\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"429\": {\n\t\t\t\t\"type\": \"RateLimitError\",\n\t\t\t\t\"message\": \"[{{statusCode}}] {{body.error}}\"\n\t\t\t},\n\t\t\t\"502\": {\n\t\t\t\t\"type\": \"ConnectionError\",\n\t\t\t\t\"message\": \"[{{statusCode}}] {{body.error}}\"\n\t\t\t},\n\t\t\t\"503\": {\n\t\t\t\t\"type\": \"ConnectionError\",\n\t\t\t\t\"message\": \"[{{statusCode}}] {{body.error}}\"\n\t\t\t},\n\t\t\t\"message\": \"[{{statusCode}}] {{body.error || join(map(body.errors, 'message'), '\\n')}}\"\n\t\t}\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\n\t\t\t\"request.headers.authorization\"\n\t\t]\n\t}\n}",
+  "countries": null,
+  "_functions": {
+    "transformDates": {
+      "rev": 6,
+      "code": "function transformDates(obj) {\n    if (!obj || typeof obj !== 'object') return undefined;\n\n    const objWithDates = JSON.parse(JSON.stringify(obj));\n\n    if (objWithDates.createdAt) {objWithDates.createdAt = iml.parseDate(objWithDates.createdAt);}\n\n    return objWithDates;\n}",
+      "name": "transformDates",
+      "test": "it('should not throw any kind of error on valid input', () => {\r\n    const result = transformDates({ createdAt: new Date() });\r\n    assert.equal(result.createdAt instanceof Date, true);\r\n  });\r\n\r\n  it('should not return errors on empty, null, or undefined values', () => {\r\n    assert.strictEqual(transformDates(), undefined);\r\n    assert.strictEqual(transformDates(''), undefined);\r\n    assert.strictEqual(transformDates(null), undefined);\r\n    assert.strictEqual(transformDates(undefined), undefined);\r\n  });\r\n\r\n  it('should not return errors if input is not an object', () => {\r\n    assert.strictEqual(transformDates('this is definitely not an object'), undefined);\r\n  });\r\n\r\n  it('should just return the object in case of no \\'createdAt\\' field', () => {\r\n    const input = { name: 'Vlad', surname: 'Bezdushnyi', date: '2024-01-31T12:00:50Z'};\r\n    const result = transformDates(input);\r\n    assert.deepStrictEqual(result, input);\r\n  });",
+      "appName": "leonardo-ai",
+      "arguments": "(obj)",
+      "appVersion": 1
+    },
+    "getFileExtension": {
+      "rev": 2,
+      "code": "function getFileExtension(filename) {\n    if (!filename) return undefined;\n    return filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename;\n}",
+      "name": "getFileExtension",
+      "test": "it('should not throw any kind of error on valid input', () => {\r\n    assert.equal(getFileExtension('image.jpeg'), 'jpeg');\r\n  });\r\n\r\n  it('should return filename if no extension is present', () => {\r\n    const filename = 'imageNoExtension';\r\n    assert.equal(getFileExtension(filename), filename);\r\n  });\r\n\r\n  it('should return the last value in case of multiple dots in the filename', () => {\r\n    assert.equal(getFileExtension('image.jpeg.jpg'), 'jpg');\r\n  });\r\n\r\n  it('should not return errors on empty, null, or undefined values', () => {\r\n    assert.strictEqual(getFileExtension(), undefined);\r\n    assert.strictEqual(getFileExtension(''), undefined);\r\n    assert.strictEqual(getFileExtension(null), undefined);\r\n    assert.strictEqual(getFileExtension(undefined), undefined);\r\n  });",
+      "appName": "leonardo-ai",
+      "arguments": "(filename)",
+      "appVersion": 1
+    },
+    "formatFileUploadRequest": {
+      "rev": 2,
+      "code": "function formatFileUploadRequest(inputParams, requestFields) {\n    if (!requestFields) throw new Error('Request fields for the file upload do not exist.');\n    if (!inputParams) throw new Error('Input fields for the file upload do not exist.');\n\n    if (typeof inputParams !== 'object') throw new Error('Input data is not an object.');\n\n    const fields = JSON.parse(requestFields);\n    fileObj = {\n        value: inputParams.fileData,\n\t\toptions: {\n        \tfilename: inputParams.fileName\n\t\t}\n    };\n    fields.file = fileObj;\n\n    return fields;\n}",
+      "name": "formatFileUploadRequest",
+      "test": "  const testInputParams = {\r\n    fileName: 'filename.jpg',\r\n    fileData: 'fileDataBufferString'\r\n  }\r\n\r\n  const testRequestFields = '{\\\"Content-Type\\\":\\\"image/jpeg\\\",\\\"bucket\\\":\\\"image-flex-213441772509-prod-images\\\",\\\"X-Amz-Algorithm\\\":\\\"AWS4-HMAC-SHA256\\\",\\\"X-Amz-Credential\\\":\\\"ASIATDMQ67POXJ3CZ3XN/20231003/us-east-1/s3/aws4_request\\\",\\\"X-Amz-Date\\\":\\\"20231003T133417Z\\\",\\\"X-Amz-Security-Token\\\":\\\"zzlM5EqoqiAPK50KrsW26aNSBhpGro=\\\",\\\"key\\\":\\\"users/7e07dab0-81f6-4e69-bb5e-19df4da7b60e/initImages/c8f4b413-762b-43cd-a212-87d6d08bc0a4.jpg\\\",\\\"Policy\\\":\\\"JidWNrZlEREViYzBhNC5qcGcifV19\\\",\\\"X-Amz-Signature\\\":\\\"a31631cf29b0981173010f95156b46790034f20c0f082c9920985a81554d5148\\\"}'\r\n  \r\n  it('should return an error if  \\'requestFields\\' string is null, empty or undefined', () => {\r\n    assert.throws(() => { formatFileUploadRequest(testInputParams, undefined) }, Error, 'Request fields for the file upload do not exist.');\r\n    assert.throws(() => { formatFileUploadRequest(testInputParams, null) }, Error, 'Request fields for the file upload do not exist.');\r\n    assert.throws(() => { formatFileUploadRequest(testInputParams) }, Error, 'Request fields for the file upload do not exist.');\r\n  });\r\n\r\n  it('should return an error if  \\'inputParams\\' object is null, empty or undefined', () => {\r\n    assert.throws(() => { formatFileUploadRequest(undefined, testRequestFields) }, Error, 'Input fields for the file upload do not exist.');\r\n    assert.throws(() => { formatFileUploadRequest(null, testRequestFields) }, Error, 'Input fields for the file upload do not exist.');\r\n  });\r\n\r\n  it('should return an error if \\'inputParams\\' is not an object', () => {\r\n    assert.throws(() => { formatFileUploadRequest('this is definitely not an object', testRequestFields) }, Error, 'Input data is not an object.');\r\n  });\r\n\r\n  it('should correctly format request fields', () => {\r\n    const result = formatFileUploadRequest(testInputParams, testRequestFields);\r\n    assert.deepStrictEqual(result, {\r\n        'Content-Type': 'image/jpeg',\r\n        bucket: 'image-flex-213441772509-prod-images',\r\n        'X-Amz-Algorithm': 'AWS4-HMAC-SHA256',\r\n        'X-Amz-Credential': 'ASIATDMQ67POXJ3CZ3XN/20231003/us-east-1/s3/aws4_request',\r\n        'X-Amz-Date': '20231003T133417Z',\r\n        'X-Amz-Security-Token': 'zzlM5EqoqiAPK50KrsW26aNSBhpGro=',\r\n        key: 'users/7e07dab0-81f6-4e69-bb5e-19df4da7b60e/initImages/c8f4b413-762b-43cd-a212-87d6d08bc0a4.jpg',\r\n        Policy: 'JidWNrZlEREViYzBhNC5qcGcifV19',\r\n        'X-Amz-Signature': 'a31631cf29b0981173010f95156b46790034f20c0f082c9920985a81554d5148',\r\n        file: {\r\n          value: 'fileDataBufferString',\r\n          options: {\r\n            filename: 'filename.jpg'\r\n          }\r\n        }\r\n      });\r\n  });\r\n  \r\n",
+      "appName": "leonardo-ai",
+      "arguments": "(inputParams, requestFields)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2023-10-05T12:19:54.404477+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "AI-powered suite for asset production.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [
+    {
+      "name": "timeout",
+      "type": "uinteger",
+      "label": "Module timeout",
+      "default": 40000
+    }
+  ],
+  "inviteToken": "08d54b8aed703c2583ded915b56cb983",
+  "versionFull": "1.5.7",
+  "compiledName": "leonardo-ai",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n    \"common\": {\n        \"timeout\": \"{{parameters.timeout}}\"\n    }\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n    {\n        \"name\": \"timeout\",\n        \"label\": \"Module timeout\",\n        \"type\": \"uinteger\",\n        \"default\": 40000\n    }\n]"
+}

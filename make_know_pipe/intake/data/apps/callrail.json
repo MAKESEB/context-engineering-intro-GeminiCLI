@@ -1,0 +1,3379 @@
+{
+  "rev": 7,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.Authorization"
+      ]
+    },
+    "baseUrl": "https://api.callrail.com/v3",
+    "headers": {
+      "Authorization": "Token token={{connection.apiKey}}"
+    },
+    "response": {
+      "error": {
+        "message": "[{{statusCode}}] {{body.error}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "callrail",
+  "_rpcs": {
+    "companies": {
+      "api": {
+        "qs": {
+          "per_page": 250
+        },
+        "url": "/a/{{connection.accId}}/companies.json",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.companies}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.total_pages >= pagination.page}}"
+        }
+      },
+      "rev": 3,
+      "name": "companies",
+      "label": "List companies",
+      "appName": "callrail",
+      "apiJsonc": "{\n\t\"url\": \"/a/{{connection.accId}}/companies.json\",\n\t\"qs\": {\n        \"per_page\": 250\n    },\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"iterate\": \"{{body.companies}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t},\n    \"pagination\": {\n        \"qs\": {\n            \"page\": \"{{pagination.page}}\"\n        },\n        \"condition\": \"{{body.total_pages >= pagination.page}}\"\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "callrail",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    }
+  },
+  "flags": {},
+  "label": "CallRail",
+  "theme": "#388aed",
+  "_hooks": {
+    "callrail": {
+      "api": {
+        "output": "{{body}}"
+      },
+      "rev": 4,
+      "name": "callrail",
+      "type": "web",
+      "flags": {},
+      "label": "SMS Received",
+      "scope": [],
+      "attach": null,
+      "detach": null,
+      "update": null,
+      "aliasTo": null,
+      "appName": "callrail",
+      "apiJsonc": "{\n    \"output\": \"{{body}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "attachJsonc": null,
+      "detachJsonc": null,
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "callrail2": {
+      "api": {
+        "output": "{{body}}"
+      },
+      "rev": 4,
+      "name": "callrail2",
+      "type": "web",
+      "flags": {},
+      "label": "Form Submited",
+      "scope": [],
+      "attach": null,
+      "detach": null,
+      "update": null,
+      "aliasTo": null,
+      "appName": "callrail",
+      "apiJsonc": "{\n    \"output\": \"{{body}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "attachJsonc": null,
+      "detachJsonc": null,
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "callrail3": {
+      "api": {
+        "output": "{{body}}"
+      },
+      "rev": 4,
+      "name": "callrail3",
+      "type": "web",
+      "flags": {},
+      "label": "SMS Sent",
+      "scope": [],
+      "attach": null,
+      "detach": null,
+      "update": null,
+      "aliasTo": null,
+      "appName": "callrail",
+      "apiJsonc": "{\n    \"output\": \"{{body}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "attachJsonc": "{\n\n}",
+      "detachJsonc": "{\n\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n\n]"
+    },
+    "callrail4": {
+      "api": {
+        "output": "{{body}}"
+      },
+      "rev": 4,
+      "name": "callrail4",
+      "type": "web",
+      "flags": {},
+      "label": "Pre-Call",
+      "scope": [],
+      "attach": null,
+      "detach": null,
+      "update": null,
+      "aliasTo": null,
+      "appName": "callrail",
+      "apiJsonc": "{\n    \"output\": \"{{body}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "attachJsonc": "{\n\n}",
+      "detachJsonc": "{\n\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n\n]"
+    },
+    "callrail5": {
+      "api": {
+        "output": "{{body}}"
+      },
+      "rev": 4,
+      "name": "callrail5",
+      "type": "web",
+      "flags": {},
+      "label": "Call Modified",
+      "scope": [],
+      "attach": null,
+      "detach": null,
+      "update": null,
+      "aliasTo": null,
+      "appName": "callrail",
+      "apiJsonc": "{\n\t\"output\": \"{{body}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "attachJsonc": "{\n\n}",
+      "detachJsonc": "{\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n\n]"
+    },
+    "callrail6": {
+      "api": {
+        "output": "{{body}}"
+      },
+      "rev": 5,
+      "name": "callrail6",
+      "type": "web",
+      "flags": {},
+      "label": "Universal Webhook",
+      "scope": [],
+      "attach": {
+        "url": "/a/{{connection.accId}}/integrations.json",
+        "body": {
+          "type": "Webhooks",
+          "config": {
+            "pre_call_webhook": "{{toArray(webhook.url)}}",
+            "sms_sent_webhook": "{{toArray(webhook.url)}}",
+            "sms_received_webhook": "{{toArray(webhook.url)}}",
+            "updated_call_webhook": "{{toArray(webhook.url)}}"
+          },
+          "company_id": "{{parameters.companyID}}"
+        },
+        "method": "POST",
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "/a/{{connection.accId}}/integrations/{{webhook.externalHookId}}.json",
+        "method": "DELETE"
+      },
+      "update": null,
+      "aliasTo": null,
+      "appName": "callrail",
+      "apiJsonc": "{\n    \"output\": \"{{body}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "companyID",
+          "type": "select",
+          "label": "Company ID",
+          "options": "rpc://app%23callrail@1/companies",
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "callrail",
+      "attachJsonc": "{\n\t\"url\": \"/a/{{connection.accId}}/integrations.json\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"type\": \"Webhooks\",\n\t\t\"company_id\": \"{{parameters.companyID}}\",\n\t\t\"config\": {\n\t\t\t\"updated_call_webhook\": \"{{toArray(webhook.url)}}\",\n\t\t\t\"pre_call_webhook\": \"{{toArray(webhook.url)}}\",\n\t\t\t\"sms_received_webhook\": \"{{toArray(webhook.url)}}\",\n\t\t\t\"sms_sent_webhook\": \"{{toArray(webhook.url)}}\"\n\t\t}\n    },\n\t\"response\": {\n\t\t\"data\": {\n\t\t\t\"externalHookId\": \"{{body.id}}\"\n\t\t}\n\t}\n}",
+      "detachJsonc": "{\n \t\"url\": \"/a/{{connection.accId}}/integrations/{{webhook.externalHookId}}.json\",\n\t\"method\": \"DELETE\"\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"companyID\",\n\t\t\"type\": \"select\",\n\t\t\"options\": \"rpc://companies\",\n\t\t\"label\": \"Company ID\",\n\t\t\"required\": true\n\t}\n]"
+    }
+  },
+  "global": true,
+  "groups": [
+    {
+      "label": "Triggers",
+      "modules": [
+        "newPreCall",
+        "callModified",
+        "triggerSMSReceived",
+        "triggerSMSSent",
+        "test",
+        "newTracker",
+        "CompanyCreated",
+        "UserCreated",
+        "triggerSourceTracker",
+        "triggerSessionTracker"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "universal",
+        "watchCalls"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000001b24944415458c3ed96314b565118c77f372ef1e6602d0642e1e0e0d0a2b594814b0d0ef509a2c116973e4b839f2041c886ca1792a0c541d0ad56972078214287501c44cb9f83cfc5d355e85ebdb7a1de3f3c70ce73fee73cfff39cfb9c73a18f3efe776475c86ad1bc0c8c0237a3df03be00fb0059566bd9eac1c3c6d50575533d50f7d46fe11b2f786d05bfaf6ea83fd515f54db40b6c04a75911b1e090ba1a815ea983ea98daf377ac06b7f1dd3f89941faa4fc397ab8b250107c1ad94854b35b4dc057240e057f8ee01c3255e1edc4aa823e06a32678ce30a7a0e4c9dc1bd46c50aab23e06bd29e023ac0c7c8866129b7d24790ff899065597196ebc05e04be034c025de016b005cc0223c1592be63682a40a3e251fdb6bf58a9ac5f85cf83fabd7ab56419d23d802de27fdc7c0334ecefa03c737e132b0d9ccd64f676142fd9e64e187fa429d51bb7123de6efc264c04e4eacb52dd1f86a9ce07a73501a80fd46d4f635b7dd8ca5b5012d151df9e21e05d8cb513bc948547ea6e127c377cededbe2462405d4a0474c3d76ef05216a6d59db0e9bfb2fb92884ebc848b1739fb73dd9549b01bb1460f5afa15eba38f7f1e4796e825702a7d73b00000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000003744944415478daed9acd6b5c5518879fa4b6d46a3a966a162268ab14c58d22a52282b8d1a2551011c4858b22082e2afe01eebb74d58d1ff89196aefc5650c1851f482ba2b8b325884ec1a6420ba6a94dd2e47171df90c3ed9de44e9849e68ee78140ee3de7bc737ebff3def331772093c96432994c2693c964fe878cacd707a900a3c02dc03dc01ee0ba289e014e01bf006780c5919175eb5aff85aba3ea5ef5887a5a9df56a66a3ec48d41d0dd39a4b886fa9afaa67adcfd968d36aac09217ea7fab63a5f127825445e5ac18479f51df5a6c69910e2c7d437d58592f0efd597d43bd5b756c984c5a833d61813423cea2bea5c49d0847a6352e749f5f22a26cc452c1a614274f42e75b224a4addebd2422ea8dab3fd79813262366cffb3bda6bf1c133c0ee52f14f144b5dca39e0eb1aa17747cc9e67414f0d085ac0fe8afb7f03f34b17c93aff29305d23eefe883df006eca2d8e4ac88cb1b2381d91a71f744ec8137e06660ace27e0bd894887f00781d980076d688bb9d6217d953aee98301e3c0e68afb778409e7e3fa69e06017713747ec9ed28f0c9806162aeedf16262c7182644ea8c10270b10906b4290e376576000f26d73f00935dc49d01fe6c82017f509ce8aa780cb83efe6f031f7511b70dfcde0403ce01273b94ed8dbf25262846751ef811f80cf8b743db93117b7049b6b8cfc7bebf8a37d44d516f447d4a7d2e0e4edbd5af2ada5c899883bf1d8e4ede6a71b6af624add57169398f7428579a72366cffbdb8f47008ab4eeb4c51d070e015bd39bc9cef04bae9e1cbfa198039a418ce423eac50e5970493db84216bc56aafb7823d2bf24a4a57ebbc209ef4c95b0b87e36790cbe536f688cf84404ea218b2f353ad1565f547744fd6b637e783fca17d5971b35fa251376a9bfb93297d513165f9d7da19e4fca4ea9b7374e7c6200ea61d7cee1468e7ec9847bd5bfd6207e4abdafdfe2fbb50ca6fc0a7cb286769f53bc28693691050fa917ba18fd0beac38d4eff92015bd4635d18702cdaf4bd7febf10800cc01ef52ef3c3f03bc176d860397d7f80f6b8cfec7eab6c6a77e8501a807ecbc3d36ca0e0cc5b3dfc1846dab64c1f08d7ec900d447d57f2ac44f0fede8974cd8aa1eaf30e078946d7437fb6e00b1c6a7fb82e159f76b9ab0453d9a187074bdd6fd0d27c9827d16678429f5fe8d1afd0df92592cbef059fa078e3f301b030343f8cca6432994c2693c964329941e73f3a8923e174dd24b00000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-05-03T14:09:33.376457+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda7930000076e4944415478daed9d49881c5518c77f3d63e21231241845a34216e38a18c10d17708428a207770511113d78f2e2cd430e5e446f828801c5283989625c1097b8a122d121104d824e1231714922594467628c3d7f0fef0dfd6caa7baa6aaaaaebd57c3f6898a4badefbea7dcb5bbf6a300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300c233e5a8316a00a244dfd390c1c0f2c487876010781c3401ba0d56a7ef334f60903a59f009c075c0b5c0a9ce93f2d9cd209fedeed3f5f039f01db800968ae3134eea9bce25bc052e036e0066025c95edfb3185c34d804bc07bc0eec04d45443881e49539fa592564b1a93d4d6cc69fbb256fbb2c3e862d401af94e325dd2f699ba4c90214dfcda42ffb7e5fd7a01fdb08bc7eb1a4e7244d94a0f86e267c5d8b2d1a0c9040f9cb247d5881e2bbf9d0d76d46503581f2cf95f46506a54d4afa53d24f92c60b3082af25ad3423a810fd7fb097d6f3db9276487a56d288a433243dae6206891b6483c3eaf00dbd48d2bb293d7e54d26372e17a2830a07324ed2ec000e46559640650325e71437253b234de9bd84ffb7fcf91f46a4106d0f6320d99119444e0b937493a984229df485aae84d01c94f5504a434ac3412f9b750565e01bf624496fa750c61149f7f653863a3388b1820c405eb693623280a1410b9086a041ef0656a5b8e53b60034cbb86bf13f8b84051577919a38902511880671eae71e7a4f8eea7c0be7e5ff08621dc5aff3f05c938c7cb386f60ad9491980ce072ff998e36b01152efe07d858b0455cb590b6a6f0041285d059c98e29649e050862a7e053e2a50e413bdac517403b53700cf0260a4e842836ee035e0af028b1ef132d79e580c6029b0acc4f27700070a2c6f9997b9f6c462006703f38b2c309822ce076e05161558fc7c2f73ed3966d002a46405ee3c5f1a5ac0b14917823e792eb0043762bf05b8007756b02886bdccb5a7d6061028ecd80cb71d8353e87a4949338125c0d3c015c069941705174c3d439d8f91d5da003cc3c0f919efb910a7d8c9846b2b705e3fb764b957e0daf7dfb21b6826c4300618225b0480fe63865d143be0eb458b080eddc660006db2cdeba1ffac6117b0a502b98f901c816a450c063009fc90f19e85c0d590b818330ebc5f81dc5bf1092675a6d606100c9e7ea693c49196abe8da3708cadb00ec2f59fc7d5d75d6925a1b40c08fb8909a852be8bd18b315f8a24479ffa69a6e66c6c462003b80df32de733a7ef938a11b380cbc4271bb80ddfc066cafb07d72138b01fc028ce678b6dbe9da9a0d42f2a7b8d4af3218f532d79e580ce028f942f64ae0a21ed77e075e20799e2effff79b7f3bef032d79eda1b40e0b19f937dfebe107800180ebb81a0cc37806f82efb771a1fb29e01ee019dcac210b07bcacb51f004683dfb8592069638e737abbe5124892ca44d27592bef7653f226989a496bf364fd9b38e367a5907dd6ccd2150d693390f6bae56ffd3c1e7483a35fc4e70ed61494733d4f5a4ec6470f1f846bd52d2fe1c0630269f1f90a3cec592b6a6ac67bf9771d0cd959ada8f01bad84cbe91fb72e03ec8754ceb17e0ad94dfdde4658c86d80c601c778a370f0f029764b9a16bb0986600fa3ed9078d465ad4c908ce9bd3b756d27159a2803a2f9f78739ab2f7c8670ac7446c1100600cf820e7bd77027741e6aee030ee3d41fdf6f63fc325a41865e23df266e5cfef1f93744996917a3018dcd6a3cc2392eec852a69113dfc80be55ece90974c39fdea4c09d7f4286f54d229312a3fc62e00dc802cedc83c8911600d7eb73083e27ae50eac679a5434a34034f3c1e0141f4dd71d04debf42d2e6843212571a8d12f10a1996f4fc0c0d409276497a54d2c981b2c397485c2cb792f8ad925f3ff7a29765d0cd928b68772b7c838fe0c26f9a9cc17e1c05be053ec125961e04ce026e04aec1258d24b5d5382eb7e01ddbf8a918efa12768faf9791626e5d6fd8f48fa37c5f7dff4320cba397213eb20708a09e0658a3bd9d3c29de59fcbf49948fff8ba2706dd0833215a03a8e8644f3f36f9baa3def78fd600027e07d652fd19fcd77cdd5113b501049ef71eeee068556cc72d0d47edfd10b90104ec04d65558df3aaa35b8d288de00020fac4a297b7153cfe8bd1f1a6000013bc87f56200beb89ecd0473f1a6100c1bb7ed652ee9afc3edc51f27613bc1f1a620001a3b8d33b65f106d913548caaf0ab839749da5be0eae0147b7dd9837ecc42695a04806081a66006b5e0542a4d3480a3c04bc01f0596398e5bf68d22dd6b56e3bb81b92aeeb7001ab1e9d38b264600701b356b29e688f638eef450d49b3eb30a15bb55dc58ef87e64600701ebb86994501f3fe5829280a34dafb1b8dfeff1b43877228ff2fb9fc033beb1f2beacc08d699f7cf42822870bddc2f869af7cf36bc128f934b0c4d4be62452a3c628db1e4123d7fc6735ca9648f2bc224ef4307a90320a98f737959451c0bcbfc90451604f82f2f798f7371c6f002d494f2418c013fedaa0c534ca449d1f8dfe2e50fe16e5788d9c1121ea2c0e8d48da24f70ec0bb67eba24f338eb666c42bba4527ed7b1fa0a69cf4350cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300ca3e9fc079b74a35befb688410000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000c7d4944415478daedddcf8b9d571dc7f1f7a4dd25ad8162fac3554de91f102dae6a6b3796d689142a54ed4eb1544444746b952e8428a22248d59586144408495074532bae44db75300dba691a05a166d29569be2e9e33e632a693b977cecfe7be5f70194866ee3df7b9f77cce79ce73ce7940922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449eacc46eb02a8ac8800b803781f107bfcb30de0dfc0d6c6865f9139f3d39d9185ca7e07f021e0c3c0b5f4f3c3c0f53d3ed501e02fe9717bfaf91ab085a1302b7e92835ba8f4f7014f028f02c7d2bfdd99e965ae3055fed78157815f0397300c86e7a737a09b54fa47808f007731b5d8255d03fe05fc09f80386c1d0fcc406922afe41e063c073c043d4a9f4ef653b0cfe0cbc04fc1e78c72018879fd4007654fc2fa49f875a976b87ab4c01f0130c8261f809756c908abf934120ed474410110722e2fe883815115b319ead54f6fbd37b697d58a5fea5ca7f30229e89888b1171ad754dde876be93d3c93de53ebc3ab1dec9b7524559023c0f7814dfaefeeefd555e01cf015e09f9e12f4c34fa203a9e26f001f07be9c7e1e685daeccae03bf037e987e8641d09e9f40630bdde2a7811f0177b72e5361ff00be04fc0ac01068cba3dfd01a56fe6d8640273cf28dc48dd97c5f66aa0cf7b42e53656f314d1e7a09b86c08b4e1516f60a1e57f06f829e507fbae30adee83695560ae3502397c13f816d81368c1235e59c56effbbc0df80334c0b785e4bfffe51e007055f77599e0e683da46bfc44c4d31171b9d0b5f7ad883813115f8d88a3b1300967e1f54fb49e20b0c3e5744c1603529a8fc295ff3fe939cf45c42762974937a90c9bd1dfec424340f395bed84723e242e68a732922be11110f46c41db7aa3ca91cf744c4f9d635fe262ea463d4fae392f2891bd37b4f45c4f58c1566e95633fa3d0d88746c4e85d386ab99db6cb3ee2c7c9137d323d728d74a83670bbff747a629ba3dd9e0c671f25440e34baded1391f7bc7f5fe7cbd1f769c0f6fb7bc20028cf1e404171633dff73e4bdecf663f67fd9ec3270b6e1e1d9cddd4cc7cc5381c20c80f21e4b8f5c7ecd14002b57fece4f03b6e53e6eba0903a090b8b1b4f739f2cef47b957c4b6a5f498f1e1d623a7647ec0594630014b0f0857d9e69d7de5cde004ee778a21420ef30f5027af524d3317440b01003a09ca3c0b3999ff3347031f3739e655a98d3ab67998ea50a3000ca790a7820e3f35d25b5d699e7cbbfc9b4ad77af1e603a962ac000c86c61e4ffe1cc4ffd36d39d79b219e43400a663e91581020c80324a8c60bfce140225f47e1ae01581420c808c165aa887c9bfc6ff75caedb1dffb69c021528fca5e405e06407ef700c75b1762af063a0d38cefaed9a549c0190df43c0075a176205a7992e33f6ea034cc7561919009914eefed770914c730c0af134a0000320afa1baffdb06991a0c9e06646700e475277d6db8b9ac92571a7218fdf876c700c8eb38706feb42ccd8bd0cd8c3ea990190d7c1d60558c58ef18bc3adcb730b431ee35edddeba0073b030fbef58ebb2ac50eedb80bb9826da7c9ffe07308f31cd0a2c352762ad1800f91c6690005808acc780479856ddddc718e7d7c7988ef53bad0b320706c0380ec254795769f976b4f60f31adb5ff18fdb7f82ac80018c771e07b4c5b79ed59dcb807e1e79826d37c82715a7b156600e47390a985edf1f91f055e641eadfd61a6d380375b17640ebc0a904fe94b8087597d8ce118f3a8fca4f731c458cb080c807c4a5f9ef28bafec0c80b1fc6f207049afd3f7145f3562008c65d5b9f0bd4ff1552306c058569d0bff3699b713d33c1800f9d4e8662f3d177ea00d3f96e124a04c0c807c6a75b357dd20b3f77dfff6ea2dfabda5d9700c80f16c4f855d56effbfeedd5bbd803c8c600c8a7d617f3304b5e0e9ce96980323000f2a975b7ddfd6c8d3587d300af6864640064b0b038a756d774d5cb8173380d28b93dfada3100f2aa15004bef90bb701af033c69e14e4f97f4606405eb5bad8fb390de8f996e0b7e21580cc0c80bcaea4470d4fb1e45d7367301858f3f8ae050320af5a0381b0bfbbe6f67e1390f7729625f743d0ee0c804c1aedadbfeaa4a08bc0c94a65cca5d4edd1d79a01905fcdcb544bdf866ca1f29c64ac5ec0dbb89e213b0320bfb7a9f745bd17f834ac3418385a2fc0ebff05180019351a647b96d5060361b95ec015e03c70223dce537740ee8f78fd5fbd8b0822e2c188b814f5bc905e77d97292fe76375b117136229e8c88231171203dde1f119f4dff5fdaa5744c5b7fbcd2ee52a5ba2722ce570c80f3e9355729eb9188f865445c5f78be6b11712122be1b119b11f17f038de96f0f46c4995edf9f545ddc68594f540c80ad5451572def76085c8b883762ea157c30a696fe567ffbb50aefef442cd9c3919a495fd6cda8d33dde76266ed2522f51de7b23e28b11f1c0ad2afe8ebf3b1a536fa19495c34d6a22da9c0654af28b1f77184fdb0fb5f905701cab90cbc5cf1f50e019f67b589412b5918917f99726b205ec6d97fc518000554aa1837f3587ad4566a99f15ba410f5f25f19064059b5d7dfb7ea05945a66fc67bc0558510640210d57deb5ea0594a8ac4efe29cc0028aff6365c87986efd7da4f2c059ee310fd7fe57600094d7621bae2781e761a535024b2b34e661f7bf0203a0a0c6db702dbd4620839c6167f7bf0203a08e16add951e0452a0d08660ebb3798362d516106401db5e704006c009be951731a6d8eb03bcdb45c5985190085359c1300d380e08bd43d15d86fd8b9f34f4506403dadf6e43f0a7c9b0a57053285ddc8bb160fc700a8a0f160e006f0292a5e15607f61e7e05f4506405d2d2f6d3d0f3c0d6543609f13a01cfcabcc00a8abe6b6e13bdd0dfc880a2190ac3201cac1bfca0c804a1a6d1bbe53cd107887e98ec97be5e05f0306407dad07b96a85c031a65b998f725cd6920150514737e82c16020bcff530d365c8bdb89a8e89837f9ab746bb05bd974b69379f2c3bee2cec10f474445c76d71f6987a8b38dd632de8d88df44c4e311b1b14a258c1b3b046f46c47762f92dd15f0837fd6cc2fe5603e98b7e14f82dd34d3e7bf016f012f00be0efc0f5ddbae3e93d1c00ee073e093cc2b40fc15ebbfd8baffb28f057bbfff579c41b5868e94e005f6f5d9e05ef027f03ce00af32dd8e6b0bd8dad8d8d82ef76dc05dc047982afd279942e0b6155ff32cf0193cff6fc223de48aa4c9bc029966f356bb8c254f95f03fec2d4da472aeb26701f70e73e5fe32a53e53f67e56fc3a3de480a80834c0170bc75791ab1f56fcccb808d747449b0152ffd75c000686f5d27c0acebfbee8a01d050c39d837be0aabf0e18007d38cdb4126e5db8eaaf1306401f2e02275b17a2a293b8eaaf0b0640630b5de093ac472fc0db7d75c400e8c745d6a35bec7eff1d31003ad0c95e013578e9af3306405fe67e696ceeef6f38064027d6606290ad7f870c80feccb5959cebfb1a9a01d09199f7029cf8d32103a04f736b2d9df8d32903a033339d1eecc49f4e1900fd9acbf4e03748b31cedfef7c700e8d75ca607dbfa77cc00e8d08ca607dbfa77ce00e8dbe8bd005bffce19009d9a412fc0d67f000640ff46ed05d8fa0fc000e8d8c0bd005bff41180063186da9b0b7f91e8401d0b901970a7b9bef811800e318657af028e51406c01016a607bf04fca3757976e192dfc1180063f90df0f3d685d885adff600c80410c301660eb3f2003603cbdb6b2bd964bbb300006d2f18621b6fe833200c6d45b6bdb5b79b44706c0603aec05d8fa0fcc0018572fad6e2fe5d00a0c800175d40bb0f51f9c0130b6d6ad6febd7d73e190083eaa01760eb3f0306c0f85ab5c2b6fe3360000cace11a015bff993000e6a1f61a015bff99300006b7d002bf4a9d5e80adff8c1800f351ab1760eb3f2306c00c545c2968eb3f3306c0bcbc029c03a2c073477a6e5b7fa9471141441c8d880b91df85f4dcaddfa632b207303fa5ee23e03eff52ef0af5026cfd67ca1ec03ce5ee05d8fa4ba3c8dc0bb0f59f317b00f395ab1760eb2f8d26532fc0d67fe6ec01ccdb7e7b01b6fed2a8f6d90bb0f55f03f600e66fd55e80adbf34ba157b01b6fed21ca40020229e8988ad3d54feadf4bb1800d20ca4ca7c3022ceec2100cea4df6d5d6c49b9a410d8bc452f602bfd4eebe24aca69a117702a22aedfa4f25f4fff67eb2fcd510a812311f1cb9b8480037fd2dc2d84c0cb11f1667a9c8b88c72362c300582feeebb4865225bf03785ffaa77f035b6ef325499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224a9b9ff0228b4775d51e9a3070000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000e0e4944415478daeddd616fe3d611865139f0ffffcbce87cd66bdb62c9316c93b33ef394081a20d108a643dcf5c799b97b7b7b71b0090e59fd51700005c4f0000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000815e575f007098b78bfe3e2fab3f28f03c0100fd5c35e8f7fefd8501342200a0bed503ffa7d72908a0300100357519fa5b3f831880620400d43161e86ff96c62000a1000b0d6e4a1bfe5338b01584400c0f51287fe57c4002c2200e03a06ff63bfef8f10800b0800389fc1bf8f10800b0800388fc1ff1c2100271200703c83ff5842004e2000e03806ffb984001c4800c0f30cfe6b090138807f1a203cc7f05fc7bd87273801809f317c6a701a003fe40400f633fcebf14c60272700b09d21539bd300d8c109006c63f8f7e159c1060200be67a0f4e399c1377c05005f33447af395003ce00400ee33fce7f02ce10e01009f1918f378a6f0810080bf19147379b6f08e00803f0c88f93c63f88f00805f0c861c9e35dcfc2900300c32f91302c4730200241380c4120024f3c31f88e52b00524d1cfe5f1d674ffcac477abbf92a80404e0048346920bebcfbd7a3bf86c726bd13b0890020cd941ff4df0dfd7b7f3d8f4d793760135f0190a4fb0f7843fc7cbe0e2086130052741efe7bb77d9ed3f95d81cd040009bafe403f7af08b88edbabe33b099af0098aedb0f7243ba0e5f07309a00801a0c1ae052be0260b22edbff95c35f68ecd3e51d82dd04005375f9c16d20d7d7e55d825d0400ac63f803cb080026eab0b1ad1cfec263bf0eef14ec220098a6c30f6a03b8a70eef166c260098a4c30f68c3bfb70eef186c2200e03a95867fa56b011610004c6133e32ade35461000700d1b37508a006082ea1b59d5e15ff5ba3aa8fecec1b70400000412007467137b8e53809ff3eed19a00a0b30e3f800dd8d93abc837097000080400280ae3a6c5e5db6ff2ed759558777113e110000104800d0918d8b6abc93b42300e01cdd8ed5bb5d2ff024010000810400dd386aa52aef26ad0800e0375f0340100140275d362c833457977714040000241200c07b4e2f208400a00b47ab74e15da505010000810400f091af01208000a00347aa74e39da53c0100dce3140086130000104800509da354baf2ee529a0000bee26b00184c0000402001000081040095f90e95eebcc3942500002090000080400200f88ae36b184c0000f718fe309c00a02a03681df7fe58ee2725bdaebe00a004430ac20800c865e843300100790c7e40004010831ff89f0080e3bdddeafc83740c7de02e0100b318f8c026fe1820000412003087edbf2ecf8672040015f9610970320100e71031406902000002090000082400002090008039aafc9f0f010d0800388f5f0404ca1200001048000040200100b3f83d0060130100e7f27b00404902808a6cb100271300308f80aac733a11c0100e7f33500508e0000804002006672e40c3c240000209000806bf83d00a0140140558eb09fe71e025f120000e71262942400e03abe0600ca1000309bed13b84b000040200100d75af135805300e0130140650617dd7987294b0040068308f88b0080ebf9d300c072020000020900aa9b7a74ed9701e773bf294d000040200100596ca5c0ed761300f4307568f965c0b9a6beb30c2200208fe10408000048240060ad555f033805807002802e0c2cbaf0aed2820080f59c0200977b5d7d01c0681f23c39f7c80225ededefcef915626bfb0ab36f2a3efe9d6cf31f1593a55a10d5f01004779b9ed1b8086252c2400a08eaebf0bb077f003050800e076db3fc05f6ec70c7ee1008b0800ba3130ceb3e5dedaf6bfe6bed08a00805a56ff62dccb83ffdc8083410400f0d1cb877f7ff6e01716b08000a0a3e90363f529c0ed66e3dfcbbda21d0100546080c2c50400d454e11400184c00d0958d719eaecfb4eb75134e00405d4e0180d308003ab379b19a7790b60400d496760a60a0c2450400000412007497b0313a05a8a9cb75c25d020000020900e821ed1400389900600247b1f3547fa6d5af0fbe2500a00fa700c0610400f4921401b66c389100600ac382ab78d7184100403f49a700c049040093d8cce6f14ce12402007a720ab08620610c01007da54480a10b2710004c63587016ef16a30800e82de5140038980060a2b44d2d2102d29e299c4e00007c4f80308e0080199c0200bb0800a64a1c160911b042e2bb44000100b38800601301c06436b7793c5338880080799c021c477030960080994400f0900060bae40d6e6a045cf54c93df1d020800986d6a04004f1200309f08003e11002470942b02f6f2ce309e00801c2200f89f0020858dee97091170f667f0ae104100409e0911003c490090c466f78708b8cf3b420c0100b93a4640c76b86920400647bbbf519aa5dae135a1000a471c47b5ff5e17ac5f5793788f2bafa0280327e0fd92a83b07a94406b4e00485465c055b57af0aef85ac23b411c2700c03d579f06ac8e0e88e304805436be6dcedec63bfd12228ce20400d8e2fd907e369eaa0d7c3148240100ecf571806f19a0d5863ec41300247bb9194c47e87c0f6dffc4f23b000010480090ce0698cbb3279a0000804002006c82893c73e2090000082400e0171b610ecf1a6e02000022090000082400e00f47c3f379c6f01f010000810400fccd863897670bef080000082400e0339be23c9e297c20000020900080fb6c8cc0680200984eccc11d020000020900f89acdb13fcf10be20000020900080c76c907d7976f080000080400200be6793ecc733836f080000082400601b1b651f9e156c20000020900080ed6c96c01802009844a4c1460200f6316080110400308538831d040000041200b09f4db31ecf0476120000104800c0cfd838ebf02ce007040000041200f07336cff53c03f8210100008104003cc706ba8e7b0f4f100000104800c0f36ca2d773cfe14902000002090038868df43aee351c40000040200100c7b1999ecf3d8683080000082400e05836d4f3b8b7702001000081040000041200703c47d5c7734fe16002000002090038878df538ee259c40000040200100e7b1b93ecf3d849308003897010694240080aac4139c48000040200100e7b3c9eee79ec1c9040000041200700d1bed76ee155c40000040200100d7b1d97ecf3d828b080000082400e05a36dcafb93770210100008104005ccfa6fb997b0217130000104800c01a36de3fdc0b5840000040200100ebd87cdd0358460000402001006b256fc0c99f1d96130000104800c07a899b70e26786520400000412005043d2469cf459a12c010000810400d491b019277c46684100402d0624700901005c45dc4021020000020900a867e2a63cf133416b02006a323081530900e06c62060a120000104800405d1336e7099f0146120000104800406d9d37e8ced70ee30900a8afe320ed78cd10450000402001003d74daa83b5d2bc4120000104800401f1d36eb0ed708dc040000441200d04be50dbbf2b5011f080000082400a09f8a9b76c56b021e100000104800404f9536ee4ad7026c24000020900080be2a6cde15ae01f801010000810400f4b67203b7fd4363020000020900e86fc5266efb87e604000004120030c3951bb9ed1f06100000104800c01c576ce6b67f1842000040200100b39cb9a1dbfe61100100f39c31a80d7f1846000040200100331db9b1dbfe6120010000810400cc75c4e66efb87a104000004120030db331bbced1f06130030df4f06b9e10fc30900c860a0037f110090636b04880508200020cbcb37ff9de10f215e575f007039431e7002000089040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010e85fee78c4a889877f6c0000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "test": {
+      "id": 26898,
+      "api": {},
+      "rev": 3,
+      "crud": null,
+      "name": "test",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch Form Captured",
+      "scope": [],
+      "expect": [],
+      "public": false,
+      "typeId": 10,
+      "appName": "callrail",
+      "samples": null,
+      "apiJsonc": "{\n}",
+      "approved": false,
+      "hookName": "callrail2",
+      "learning": false,
+      "interface": [
+        {
+          "name": "resource_id",
+          "type": "text",
+          "label": "Resource ID"
+        },
+        {
+          "name": "company_id",
+          "type": "uinteger",
+          "label": "Company ID"
+        },
+        {
+          "name": "company_resource_id",
+          "type": "text",
+          "label": "Company Reource ID"
+        },
+        {
+          "name": "person_resource_id",
+          "type": "text",
+          "label": "Person Resource ID"
+        },
+        {
+          "name": "lead_status",
+          "type": "text",
+          "label": "Lead Status"
+        },
+        {
+          "name": "form_data",
+          "spec": [],
+          "type": "collection",
+          "label": "From Data"
+        },
+        {
+          "name": "url",
+          "type": "url",
+          "label": "URL"
+        },
+        {
+          "name": "form_url",
+          "type": "url",
+          "label": "Form URL"
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "label": "Source"
+        },
+        {
+          "name": "keywords",
+          "type": "text",
+          "label": "Keywords"
+        },
+        {
+          "name": "campaign",
+          "type": "text",
+          "label": "Campaign"
+        },
+        {
+          "name": "medium",
+          "type": "text",
+          "label": "Medium"
+        },
+        {
+          "name": "landing",
+          "type": "text",
+          "label": "Landing"
+        },
+        {
+          "name": "landing_page_url",
+          "type": "url",
+          "label": "Landing Page URL"
+        },
+        {
+          "name": "referrer",
+          "type": "text",
+          "label": "Referrer"
+        },
+        {
+          "name": "referrer_url",
+          "type": "url",
+          "label": "Referrer URL"
+        },
+        {
+          "name": "referring_url",
+          "type": "url",
+          "label": "Referring URL"
+        },
+        {
+          "name": "utm_source",
+          "type": "text",
+          "label": "UTM Source"
+        },
+        {
+          "name": "utm_medium",
+          "type": "text",
+          "label": "UTM Medium"
+        },
+        {
+          "name": "utm_campaign",
+          "type": "text",
+          "label": "UTM Campaign"
+        },
+        {
+          "name": "submitted_at",
+          "type": "date",
+          "label": "Submitted At"
+        },
+        {
+          "name": "first_form",
+          "type": "boolean",
+          "label": "First Form"
+        },
+        {
+          "name": "utma",
+          "type": "text",
+          "label": "UTMA"
+        },
+        {
+          "name": "utmb",
+          "type": "text",
+          "label": "UTMB"
+        },
+        {
+          "name": "utmc",
+          "type": "text",
+          "label": "UTMC"
+        },
+        {
+          "name": "utmv",
+          "type": "text",
+          "label": "UTMV"
+        },
+        {
+          "name": "utmz",
+          "type": "text",
+          "label": "UTMZ"
+        },
+        {
+          "name": "ga",
+          "type": "text",
+          "label": "GA"
+        },
+        {
+          "name": "session_uuid",
+          "type": "text",
+          "label": "Session UUID"
+        },
+        {
+          "name": "masked_resource_id",
+          "type": "text",
+          "label": "Masked Resource ID"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created At"
+        },
+        {
+          "name": "updated_at",
+          "type": "date",
+          "label": "Updated At"
+        },
+        {
+          "name": "hidden",
+          "type": "text",
+          "label": "Hidden"
+        },
+        {
+          "name": "fcid",
+          "type": "text",
+          "label": "FCID"
+        },
+        {
+          "name": "timestamp",
+          "type": "text",
+          "label": "Timestamp"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "Triggers when a form is captured. !!!I made that trigger like 3-4 months ago but can't find a way to use it now. Set as private for now!!!",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"resource_id\",\n        \"type\": \"text\",\n\t\t\"label\": \"Resource ID\"\n    },\n    {\n        \"name\": \"company_id\",\n        \"type\": \"uinteger\",\n\t\t\"label\": \"Company ID\"\n    },\n    {\n        \"name\": \"company_resource_id\",\n        \"type\": \"text\",\n\t\t\"label\": \"Company Reource ID\"\n    },\n    {\n        \"name\": \"person_resource_id\",\n        \"type\": \"text\",\n\t\t\"label\": \"Person Resource ID\"\n    },\n    {\n        \"name\": \"lead_status\",\n        \"type\": \"text\",\n\t\t\"label\": \"Lead Status\"\n    },\n    {\n        \"name\": \"form_data\",\n        \"type\": \"collection\",\n        \"spec\": [],\n\t\t\"label\": \"From Data\"\n    },\n    {\n        \"name\": \"url\",\n        \"type\": \"url\",\n\t\t\"label\": \"URL\"\n    },\n    {\n        \"name\": \"form_url\",\n        \"type\": \"url\",\n\t\t\"label\": \"Form URL\"\n    },\n    {\n        \"name\": \"source\",\n        \"type\": \"text\",\n\t\t\"label\": \"Source\"\n    },\n    {\n        \"name\": \"keywords\",\n        \"type\": \"text\",\n\t\t\"label\": \"Keywords\"\n    },\n    {\n        \"name\": \"campaign\",\n        \"type\": \"text\",\n\t\t\"label\": \"Campaign\"\n    },\n    {\n        \"name\": \"medium\",\n        \"type\": \"text\",\n\t\t\"label\": \"Medium\"\n    },\n    {\n        \"name\": \"landing\",\n        \"type\": \"text\",\n\t\t\"label\": \"Landing\"\n    },\n    {\n        \"name\": \"landing_page_url\",\n        \"type\": \"url\",\n\t\t\"label\": \"Landing Page URL\"\n    },\n    {\n        \"name\": \"referrer\",\n        \"type\": \"text\",\n\t\t\"label\": \"Referrer\"\n    },\n    {\n        \"name\": \"referrer_url\",\n        \"type\": \"url\",\n\t\t\"label\": \"Referrer URL\"\n    },\n    {\n        \"name\": \"referring_url\",\n        \"type\": \"url\",\n\t\t\"label\": \"Referring URL\"\n    },\n    {\n        \"name\": \"utm_source\",\n        \"type\": \"text\",\n\t\t\"label\": \"UTM Source\"\n    },\n    {\n        \"name\": \"utm_medium\",\n        \"type\": \"text\",\n\t\t\"label\": \"UTM Medium\"\n    },\n    {\n        \"name\": \"utm_campaign\",\n        \"type\": \"text\",\n\t\t\"label\": \"UTM Campaign\"\n    },\n    {\n        \"name\": \"submitted_at\",\n        \"type\": \"date\",\n\t\t\"label\": \"Submitted At\"\n    },\n    {\n        \"name\": \"first_form\",\n        \"type\": \"boolean\",\n\t\t\"label\": \"First Form\"\n    },\n    {\n        \"name\": \"utma\",\n        \"type\": \"text\",\n\t\t\"label\": \"UTMA\"\n    },\n    {\n        \"name\": \"utmb\",\n        \"type\": \"text\",\n\t\t\"label\": \"UTMB\"\n    },\n    {\n        \"name\": \"utmc\",\n        \"type\": \"text\",\n\t\t\"label\": \"UTMC\"\n    },\n    {\n        \"name\": \"utmv\",\n        \"type\": \"text\",\n\t\t\"label\": \"UTMV\"\n    },\n    {\n        \"name\": \"utmz\",\n        \"type\": \"text\",\n\t\t\"label\": \"UTMZ\"\n    },\n    {\n        \"name\": \"ga\",\n        \"type\": \"text\",\n\t\t\"label\": \"GA\"\n    },\n    {\n        \"name\": \"session_uuid\",\n        \"type\": \"text\",\n\t\t\"label\": \"Session UUID\"\n    },\n    {\n        \"name\": \"masked_resource_id\",\n        \"type\": \"text\",\n\t\t\"label\": \"Masked Resource ID\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n\t\t\"label\": \"Created At\"\n    },\n    {\n        \"name\": \"updated_at\",\n        \"type\": \"date\",\n\t\t\"label\": \"Updated At\"\n    },\n    {\n        \"name\": \"hidden\",\n        \"type\": \"text\",\n\t\t\"label\": \"Hidden\"\n    },\n    {\n        \"name\": \"fcid\",\n        \"type\": \"text\",\n\t\t\"label\": \"FCID\"\n    },\n    {\n        \"name\": \"timestamp\",\n        \"type\": \"text\",\n\t\t\"label\": \"Timestamp\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "universal": {
+      "id": 26899,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://api.callrail.com/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "universal",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://api.callrail.com/`.For example `v3/a/<Account ID>/companies.json`",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "callrail",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"https://api.callrail.com/{{parameters.url}}\",\n    \"method\": \"{{parameters.method}}\",\n    \"qs\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n\t},\n    \"headers\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n\t},\n\t\"body\": \"{{parameters.body}}\",\n\t\"type\": \"text\",\n    \"response\": {\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n\t\t\t\"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "callrail",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"help\": \"Enter a path relative to `https://api.callrail.com/`.For example `v3/a/<Account ID>/companies.json`\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"required\": true,\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ]\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n    },\n    {\n        \"name\": \"qs\",\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"body\",\n\t\t\"label\": \"Body\",\n\t\t\"type\": \"any\"\n\t},\n\t{\n\t\t\"name\": \"headers\",\n\t\t\"label\": \"Headers\",\n\t\t\"type\": \"collection\"\n\t},\n\t{\n\t\t\"name\": \"statusCode\",\n\t\t\"label\": \"Status code\",\n\t\t\"type\": \"number\"\n\t}\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "newPreCall": {
+      "id": 26900,
+      "api": {
+        "response": {
+          "output": "{{transformDate(payload)}}"
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "newPreCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch Pre-Call",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "callrail",
+      "samples": null,
+      "apiJsonc": "{\n\t\"response\":{\n\t\t\"output\": \"{{transformDate(payload)}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": "callrail4",
+      "learning": false,
+      "interface": [
+        {
+          "name": "answered",
+          "type": "boolean",
+          "label": "Answered"
+        },
+        {
+          "name": "business_phone_number",
+          "type": "text",
+          "label": "Business Phone Number"
+        },
+        {
+          "name": "call_type",
+          "type": "text",
+          "label": "Call Type"
+        },
+        {
+          "name": "company_id",
+          "type": "uinteger",
+          "label": "Company ID"
+        },
+        {
+          "name": "company_name",
+          "type": "text",
+          "label": "Company Name"
+        },
+        {
+          "name": "company_time_zone",
+          "type": "timezone",
+          "label": "Company Time Zone"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "customer_city",
+          "type": "text",
+          "label": "Customer City"
+        },
+        {
+          "name": "customer_country",
+          "type": "text",
+          "label": "Customer Country"
+        },
+        {
+          "name": "customer_name",
+          "type": "text",
+          "label": "Customer Name"
+        },
+        {
+          "name": "customer_phone_number",
+          "type": "text",
+          "label": "Customer Phone Number"
+        },
+        {
+          "name": "customer_state",
+          "type": "text",
+          "label": "Customer State"
+        },
+        {
+          "name": "device_type",
+          "type": "text",
+          "label": "Device Type"
+        },
+        {
+          "name": "direction",
+          "type": "text",
+          "label": "Direction"
+        },
+        {
+          "name": "duration",
+          "type": "text",
+          "label": "Duration"
+        },
+        {
+          "name": "first_call",
+          "type": "boolean",
+          "label": "First Call"
+        },
+        {
+          "name": "formatted_call_type",
+          "type": "text",
+          "label": "Formatted Call Type"
+        },
+        {
+          "name": "formatted_customer_location",
+          "type": "text",
+          "label": "Formatted Customer Location"
+        },
+        {
+          "name": "formatted_business_phone_number",
+          "type": "text",
+          "label": "Formatted Business Phone Number"
+        },
+        {
+          "name": "formatted_customer_name",
+          "type": "text",
+          "label": "Formatted Customer Name"
+        },
+        {
+          "name": "prior_calls",
+          "type": "number",
+          "label": "Prior Calls"
+        },
+        {
+          "name": "formatted_customer_name_or_phone_number",
+          "type": "text",
+          "label": "Formatted Customer Name or Phone Number"
+        },
+        {
+          "name": "formatted_customer_phone_number",
+          "type": "text",
+          "label": "Formatted Customer Phone Number"
+        },
+        {
+          "name": "formatted_duration",
+          "type": "text",
+          "label": "Formatted Duration"
+        },
+        {
+          "name": "formatted_tracking_phone_number",
+          "type": "text",
+          "label": "Formatted Tracking Phone Number"
+        },
+        {
+          "name": "formatted_tracking_source",
+          "type": "text",
+          "label": "Formatted Tracking Source"
+        },
+        {
+          "name": "formatted_value",
+          "type": "text",
+          "label": "Formatted Value"
+        },
+        {
+          "name": "good_lead_call_id",
+          "type": "text",
+          "label": "Good Lead Call ID"
+        },
+        {
+          "name": "good_lead_call_time",
+          "type": "text",
+          "label": "Good Lead Call Time"
+        },
+        {
+          "name": "lead_status",
+          "type": "text",
+          "label": "Lead Status"
+        },
+        {
+          "name": "note",
+          "type": "text",
+          "label": "Note"
+        },
+        {
+          "name": "recording",
+          "type": "text",
+          "label": "Recording"
+        },
+        {
+          "name": "recording_duration",
+          "type": "text",
+          "label": "Recording Duration"
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "label": "Source"
+        },
+        {
+          "name": "source_name",
+          "type": "text",
+          "label": "Source Name"
+        },
+        {
+          "name": "start_time",
+          "type": "text",
+          "label": "Start Time"
+        },
+        {
+          "name": "tags",
+          "type": "array",
+          "label": "Tags"
+        },
+        {
+          "name": "total_calls",
+          "type": "number",
+          "label": "Total Calls"
+        },
+        {
+          "name": "tracking_phone_number",
+          "type": "text",
+          "label": "Tracking Phone Number"
+        },
+        {
+          "name": "transcription",
+          "type": "text",
+          "label": "Transcription"
+        },
+        {
+          "name": "value",
+          "type": "text",
+          "label": "Value"
+        },
+        {
+          "name": "voicemail",
+          "type": "boolean",
+          "label": "Voicemail"
+        },
+        {
+          "name": "waveforms",
+          "type": "text",
+          "label": "Waveforms"
+        },
+        {
+          "name": "keywords",
+          "type": "text",
+          "label": "Keywords"
+        },
+        {
+          "name": "medium",
+          "type": "text",
+          "label": "Medium"
+        },
+        {
+          "name": "referring_url",
+          "type": "url",
+          "label": "Referring URL"
+        },
+        {
+          "name": "landing_page_url",
+          "type": "url",
+          "label": "Landing Page URL"
+        },
+        {
+          "name": "last_requested_url",
+          "type": "url",
+          "label": "Last Requested URL"
+        },
+        {
+          "name": "referrer_domain",
+          "type": "text",
+          "label": "Referrer Domain"
+        },
+        {
+          "name": "conversational_transcript",
+          "type": "text",
+          "label": "Conversational Transcript"
+        },
+        {
+          "name": "utm_source",
+          "type": "text",
+          "label": "UTM Source"
+        },
+        {
+          "name": "utm_medium",
+          "type": "text",
+          "label": "UTM Medium"
+        },
+        {
+          "name": "utm_term",
+          "type": "text",
+          "label": "UTM Term"
+        },
+        {
+          "name": "utm_content",
+          "type": "text",
+          "label": "UTM Content"
+        },
+        {
+          "name": "utm_campaign",
+          "type": "text",
+          "label": "UTM Campaign"
+        },
+        {
+          "name": "utma",
+          "type": "text",
+          "label": "UTMA"
+        },
+        {
+          "name": "utmb",
+          "type": "text",
+          "label": "UTMB"
+        },
+        {
+          "name": "utmc",
+          "type": "text",
+          "label": "UTMC"
+        },
+        {
+          "name": "utmv",
+          "type": "text",
+          "label": "UTMV"
+        },
+        {
+          "name": "utmz",
+          "type": "text",
+          "label": "UTMZ"
+        },
+        {
+          "name": "ga",
+          "type": "text",
+          "label": "GA"
+        },
+        {
+          "name": "fbclid",
+          "type": "text",
+          "label": "FBCLID"
+        },
+        {
+          "name": "gclid",
+          "type": "text",
+          "label": "GCLID"
+        },
+        {
+          "name": "integration_data",
+          "spec": {
+            "spec": [
+              {
+                "name": "integration",
+                "type": "text",
+                "label": "Integration"
+              },
+              {
+                "name": "data",
+                "type": "text",
+                "label": "Data"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Integration Data"
+        },
+        {
+          "name": "keywords_spotted",
+          "type": "text",
+          "label": "Keywords Spotted"
+        },
+        {
+          "name": "recording_player",
+          "type": "text",
+          "label": "Recording Player"
+        },
+        {
+          "name": "speaker_percent",
+          "type": "text",
+          "label": "Speaker Percent"
+        },
+        {
+          "name": "call_highlights",
+          "type": "array",
+          "label": "Call Highlights"
+        },
+        {
+          "name": "agent_email",
+          "type": "email",
+          "label": "Agent Email"
+        },
+        {
+          "name": "campaign",
+          "type": "text",
+          "label": "Campaign"
+        },
+        {
+          "name": "msclkid",
+          "type": "text",
+          "label": "Msclkid"
+        },
+        {
+          "name": "callercity",
+          "type": "text",
+          "label": "Caller City"
+        },
+        {
+          "name": "callercountry",
+          "type": "text",
+          "label": "Caller Country"
+        },
+        {
+          "name": "callername",
+          "type": "text",
+          "label": "Caller Name"
+        },
+        {
+          "name": "callernum",
+          "type": "text",
+          "label": "Caller Num"
+        },
+        {
+          "name": "callerstate",
+          "type": "text",
+          "label": "Caller State"
+        },
+        {
+          "name": "callsource",
+          "type": "text",
+          "label": "Call Source"
+        },
+        {
+          "name": "custom",
+          "type": "text",
+          "label": "Custom"
+        },
+        {
+          "name": "datetime",
+          "type": "date",
+          "label": "Datetime"
+        },
+        {
+          "name": "destinationnum",
+          "type": "text",
+          "label": "Destination Num"
+        },
+        {
+          "name": "kissmetrics_id",
+          "type": "text",
+          "label": "Kissmetrics ID"
+        },
+        {
+          "name": "landingpage",
+          "type": "text",
+          "label": "Landing Page"
+        },
+        {
+          "name": "referrer",
+          "type": "text",
+          "label": "Referrer"
+        },
+        {
+          "name": "referrermedium",
+          "type": "text",
+          "label": "Referrer Medium"
+        },
+        {
+          "name": "score",
+          "type": "text",
+          "label": "Score"
+        },
+        {
+          "name": "tag",
+          "type": "text",
+          "label": "Tag"
+        },
+        {
+          "name": "trackingnum",
+          "type": "text",
+          "label": "Tracking Num"
+        },
+        {
+          "name": "timestamp",
+          "type": "date",
+          "label": "Timestamp"
+        },
+        {
+          "name": "person_resource_id",
+          "type": "text",
+          "label": "Person Resource ID"
+        },
+        {
+          "name": "resource_id",
+          "type": "text",
+          "label": "Resource ID"
+        },
+        {
+          "name": "company_resource_id",
+          "type": "text",
+          "label": "Company Resource ID"
+        },
+        {
+          "name": "tracker_resource_id",
+          "type": "text",
+          "label": "Tracker Resource ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "Triggers when an inbound phone call is received by CallRail.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"answered\",\n        \"type\": \"boolean\",\n        \"label\": \"Answered\"\n    },\n    {\n        \"name\": \"business_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Business Phone Number\"\n    },\n    {\n        \"name\": \"call_type\",\n        \"type\": \"text\",\n        \"label\": \"Call Type\"\n    },\n    {\n        \"name\": \"company_id\",\n        \"type\": \"uinteger\",\n        \"label\": \"Company ID\"\n    },\n    {\n        \"name\": \"company_name\",\n        \"type\": \"text\",\n        \"label\": \"Company Name\"\n    },\n    {\n        \"name\": \"company_time_zone\",\n        \"type\": \"timezone\",\n        \"label\": \"Company Time Zone\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    },\n    {\n        \"name\": \"customer_city\",\n        \"type\": \"text\",\n        \"label\": \"Customer City\"\n    },\n    {\n        \"name\": \"customer_country\",\n        \"type\": \"text\",\n        \"label\": \"Customer Country\"\n    },\n    {\n        \"name\": \"customer_name\",\n        \"type\": \"text\",\n        \"label\": \"Customer Name\"\n    },\n    {\n        \"name\": \"customer_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Customer Phone Number\"\n    },\n    {\n        \"name\": \"customer_state\",\n        \"type\": \"text\",\n        \"label\": \"Customer State\"\n    },\n    {\n        \"name\": \"device_type\",\n        \"type\": \"text\",\n        \"label\": \"Device Type\"\n    },\n    {\n        \"name\": \"direction\",\n        \"type\": \"text\",\n        \"label\": \"Direction\"\n    },\n    {\n        \"name\": \"duration\",\n        \"type\": \"text\",\n        \"label\": \"Duration\"\n    },\n    {\n        \"name\": \"first_call\",\n        \"type\": \"boolean\",\n        \"label\": \"First Call\"\n    },\n    {\n        \"name\": \"formatted_call_type\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Call Type\"\n    },\n    {\n        \"name\": \"formatted_customer_location\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Customer Location\"\n    },\n    {\n        \"name\": \"formatted_business_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Business Phone Number\"\n    },\n    {\n        \"name\": \"formatted_customer_name\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Customer Name\"\n    },\n    {\n        \"name\": \"prior_calls\",\n        \"type\": \"number\",\n        \"label\": \"Prior Calls\"\n    },\n    {\n        \"name\": \"formatted_customer_name_or_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Customer Name or Phone Number\"\n    },\n    {\n        \"name\": \"formatted_customer_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Customer Phone Number\"\n    },\n    {\n        \"name\": \"formatted_duration\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Duration\"\n    },\n    {\n        \"name\": \"formatted_tracking_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Tracking Phone Number\"\n    },\n    {\n        \"name\": \"formatted_tracking_source\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Tracking Source\"\n    },\n    {\n        \"name\": \"formatted_value\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Value\"\n    },\n    {\n        \"name\": \"good_lead_call_id\",\n        \"type\": \"text\",\n        \"label\": \"Good Lead Call ID\"\n    },\n    {\n        \"name\": \"good_lead_call_time\",\n        \"type\": \"text\",\n        \"label\": \"Good Lead Call Time\"\n    },\n    {\n        \"name\": \"lead_status\",\n        \"type\": \"text\",\n        \"label\": \"Lead Status\"\n    },\n    {\n        \"name\": \"note\",\n        \"type\": \"text\",\n        \"label\": \"Note\"\n    },\n    {\n        \"name\": \"recording\",\n        \"type\": \"text\",\n        \"label\": \"Recording\"\n    },\n    {\n        \"name\": \"recording_duration\",\n        \"type\": \"text\",\n        \"label\": \"Recording Duration\"\n    },\n    {\n        \"name\": \"source\",\n        \"type\": \"text\",\n        \"label\": \"Source\"\n    },\n    {\n        \"name\": \"source_name\",\n        \"type\": \"text\",\n        \"label\": \"Source Name\"\n    },\n    {\n        \"name\": \"start_time\",\n        \"type\": \"text\",\n        \"label\": \"Start Time\"\n    },\n    {\n        \"name\": \"tags\",\n        \"type\": \"array\",\n        \"label\": \"Tags\"\n    },\n    {\n        \"name\": \"total_calls\",\n        \"type\": \"number\",\n        \"label\": \"Total Calls\"\n    },\n    {\n        \"name\": \"tracking_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Tracking Phone Number\"\n    },\n    {\n        \"name\": \"transcription\",\n        \"type\": \"text\",\n        \"label\": \"Transcription\"\n    },\n    {\n        \"name\": \"value\",\n        \"type\": \"text\",\n        \"label\": \"Value\"\n    },\n    {\n        \"name\": \"voicemail\",\n        \"type\": \"boolean\",\n        \"label\": \"Voicemail\"\n    },\n    {\n        \"name\": \"waveforms\",\n        \"type\": \"text\",\n        \"label\": \"Waveforms\"\n    },\n    {\n        \"name\": \"keywords\",\n        \"type\": \"text\",\n        \"label\": \"Keywords\"\n    },\n    {\n        \"name\": \"medium\",\n        \"type\": \"text\",\n        \"label\": \"Medium\"\n    },\n    {\n        \"name\": \"referring_url\",\n        \"type\": \"url\",\n        \"label\": \"Referring URL\"\n    },\n    {\n        \"name\": \"landing_page_url\",\n        \"type\": \"url\",\n        \"label\": \"Landing Page URL\"\n    },\n    {\n        \"name\": \"last_requested_url\",\n        \"type\": \"url\",\n        \"label\": \"Last Requested URL\"\n    },\n    {\n        \"name\": \"referrer_domain\",\n        \"type\": \"text\",\n        \"label\": \"Referrer Domain\"\n    },\n    {\n        \"name\": \"conversational_transcript\",\n        \"type\": \"text\",\n        \"label\": \"Conversational Transcript\"\n    },\n    {\n        \"name\": \"utm_source\",\n        \"type\": \"text\",\n        \"label\": \"UTM Source\"\n    },\n    {\n        \"name\": \"utm_medium\",\n        \"type\": \"text\",\n        \"label\": \"UTM Medium\"\n    },\n    {\n        \"name\": \"utm_term\",\n        \"type\": \"text\",\n        \"label\": \"UTM Term\"\n    },\n    {\n        \"name\": \"utm_content\",\n        \"type\": \"text\",\n        \"label\": \"UTM Content\"\n    },\n    {\n        \"name\": \"utm_campaign\",\n        \"type\": \"text\",\n        \"label\": \"UTM Campaign\"\n    },\n    {\n        \"name\": \"utma\",\n        \"type\": \"text\",\n        \"label\": \"UTMA\"\n    },\n    {\n        \"name\": \"utmb\",\n        \"type\": \"text\",\n        \"label\": \"UTMB\"\n    },\n    {\n        \"name\": \"utmc\",\n        \"type\": \"text\",\n        \"label\": \"UTMC\"\n    },\n    {\n        \"name\": \"utmv\",\n        \"type\": \"text\",\n        \"label\": \"UTMV\"\n    },\n    {\n        \"name\": \"utmz\",\n        \"type\": \"text\",\n        \"label\": \"UTMZ\"\n    },\n    {\n        \"name\": \"ga\",\n        \"type\": \"text\",\n        \"label\": \"GA\"\n    },\n    {\n        \"name\": \"fbclid\",\n        \"type\": \"text\",\n        \"label\": \"FBCLID\"\n    },\n    {\n        \"name\": \"gclid\",\n        \"type\": \"text\",\n        \"label\": \"GCLID\"\n    },\n    {\n        \"name\": \"integration_data\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"integration\",\n                    \"type\": \"text\",\n                    \"label\": \"Integration\"\n                },\n                {\n                    \"name\": \"data\",\n                    \"type\": \"text\",\n                    \"label\": \"Data\"\n                }\n            ]\n        },\n        \"label\": \"Integration Data\"\n    },\n    {\n        \"name\": \"keywords_spotted\",\n        \"type\": \"text\",\n        \"label\": \"Keywords Spotted\"\n    },\n    {\n        \"name\": \"recording_player\",\n        \"type\": \"text\",\n        \"label\": \"Recording Player\"\n    },\n    {\n        \"name\": \"speaker_percent\",\n        \"type\": \"text\",\n        \"label\": \"Speaker Percent\"\n    },\n    {\n        \"name\": \"call_highlights\",\n        \"type\": \"array\",\n        \"label\": \"Call Highlights\"\n    },\n    {\n        \"name\": \"agent_email\",\n        \"type\": \"email\",\n        \"label\": \"Agent Email\"\n    },\n    {\n        \"name\": \"campaign\",\n        \"type\": \"text\",\n        \"label\": \"Campaign\"\n    },\n    {\n        \"name\": \"msclkid\",\n        \"type\": \"text\",\n        \"label\": \"Msclkid\"\n    },\n    {\n        \"name\": \"callercity\",\n        \"type\": \"text\",\n        \"label\": \"Caller City\"\n    },\n    {\n        \"name\": \"callercountry\",\n        \"type\": \"text\",\n        \"label\": \"Caller Country\"\n    },\n    {\n        \"name\": \"callername\",\n        \"type\": \"text\",\n        \"label\": \"Caller Name\"\n    },\n    {\n        \"name\": \"callernum\",\n        \"type\": \"text\",\n        \"label\": \"Caller Num\"\n    },\n    {\n        \"name\": \"callerstate\",\n        \"type\": \"text\",\n        \"label\": \"Caller State\"\n    },\n    {\n        \"name\": \"callsource\",\n        \"type\": \"text\",\n        \"label\": \"Call Source\"\n    },\n    {\n        \"name\": \"custom\",\n        \"type\": \"text\",\n        \"label\": \"Custom\"\n    },\n    {\n        \"name\": \"datetime\",\n        \"type\": \"date\",\n        \"label\": \"Datetime\"\n    },\n    {\n        \"name\": \"destinationnum\",\n        \"type\": \"text\",\n        \"label\": \"Destination Num\"\n    },\n    {\n        \"name\": \"kissmetrics_id\",\n        \"type\": \"text\",\n        \"label\": \"Kissmetrics ID\"\n    },\n    {\n        \"name\": \"landingpage\",\n        \"type\": \"text\",\n        \"label\": \"Landing Page\"\n    },\n    {\n        \"name\": \"referrer\",\n        \"type\": \"text\",\n        \"label\": \"Referrer\"\n    },\n    {\n        \"name\": \"referrermedium\",\n        \"type\": \"text\",\n        \"label\": \"Referrer Medium\"\n    },\n    {\n        \"name\": \"score\",\n        \"type\": \"text\",\n        \"label\": \"Score\"\n    },\n    {\n        \"name\": \"tag\",\n        \"type\": \"text\",\n        \"label\": \"Tag\"\n    },\n    {\n        \"name\": \"trackingnum\",\n        \"type\": \"text\",\n        \"label\": \"Tracking Num\"\n    },\n    {\n        \"name\": \"timestamp\",\n        \"type\": \"date\",\n        \"label\": \"Timestamp\"\n    },\n    {\n        \"name\": \"person_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Person Resource ID\"\n    },\n    {\n        \"name\": \"resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Resource ID\"\n    },\n    {\n        \"name\": \"company_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Company Resource ID\"\n    },\n    {\n        \"name\": \"tracker_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Tracker Resource ID\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "newTracker": {
+      "id": 26901,
+      "api": {
+        "qs": {
+          "per_page": 250
+        },
+        "url": "/a/{{connection.accId}}/trackers.json",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{item}}",
+          "iterate": "{{body.trackers}}",
+          "trigger": {
+            "id": "{{item.id}}",
+            "date": "{{item.created_at}}",
+            "type": "date",
+            "order": "asc"
+          }
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.total_pages >= pagination.page}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "newTracker",
+      "epoch": {
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{item.created_at}}",
+            "label": "{{item.name}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Trackers",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "callrail",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/a/{{connection.accId}}/trackers.json\",\n\t\"method\": \"GET\",\n\t\"qs\": {\t\n\t\t\"per_page\": 250\n\t\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.trackers}}\",\n\t\t\"trigger\": {\n\t\t\t\"id\": \"{{item.id}}\",\n\t\t\t\"date\": \"{{item.created_at}}\",\n\t\t\t\"type\": \"date\",\n\t\t\t\"order\": \"asc\"\n\t\t},\n\t\t\"output\": \"{{item}}\",\n\t\t\"limit\": \"{{parameters.limit}}\"\n\t},\n\t\"pagination\": {\n\t\"qs\": {\n\t\t\"page\": \"{{pagination.page}}\"\n\t},\n\t\"condition\": \"{{body.total_pages >= pagination.page}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Tracker ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "label": "Type"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "destination_number",
+          "type": "text",
+          "label": "Destination Number"
+        },
+        {
+          "name": "tracking_numbers",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Tracking Numbers"
+        },
+        {
+          "name": "whisper_message",
+          "type": "text",
+          "label": "Whisper Message"
+        },
+        {
+          "name": "sms_supported",
+          "type": "boolean",
+          "label": "SMS Supported"
+        },
+        {
+          "name": "sms_enabled",
+          "type": "boolean",
+          "label": "SMS Enabled"
+        },
+        {
+          "name": "company",
+          "spec": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Company ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            }
+          ],
+          "type": "collection",
+          "label": "Company"
+        },
+        {
+          "name": "source",
+          "spec": [
+            {
+              "name": "type",
+              "type": "text",
+              "label": "Type"
+            }
+          ],
+          "type": "collection",
+          "label": "Source"
+        },
+        {
+          "name": "call_flow",
+          "spec": [
+            {
+              "name": "type",
+              "type": "text",
+              "label": "Type"
+            },
+            {
+              "name": "recording_enabled",
+              "type": "boolean",
+              "label": "Recording Enabled"
+            },
+            {
+              "name": "destination_number",
+              "type": "text",
+              "label": "Destination Number"
+            },
+            {
+              "name": "greeting_text",
+              "type": "text",
+              "label": "Greeting Text"
+            },
+            {
+              "name": "greeting_recording_url",
+              "type": "url",
+              "label": "Greeting Recording URL"
+            }
+          ],
+          "type": "collection",
+          "label": "Call Flow"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "disabled_at",
+          "type": "date",
+          "label": "Disabled at"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"date\": \"{{item.created_at}}\",\n\t\t\t\"label\": \"{{item.name}}\"\n\t\t}\n\t}\n}",
+      "parameters": [
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 2,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "callrail",
+      "description": "Triggers when a new tracker is created.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n\t\t\"label\": \"Tracker ID\"\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n\t\t\"label\": \"Name\"\n    },\n    {\n        \"name\": \"type\",\n        \"type\": \"text\",\n\t\t\"label\": \"Type\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n\t\t\"label\": \"Status\"\n    },\n    {\n        \"name\": \"destination_number\",\n        \"type\": \"text\",\n\t\t\"label\": \"Destination Number\"\n    },\n    {\n        \"name\": \"tracking_numbers\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        },\n\t\t\"label\": \"Tracking Numbers\"\n    },\n    {\n        \"name\": \"whisper_message\",\n        \"type\": \"text\",\n\t\t\"label\": \"Whisper Message\"\n    },\n    {\n        \"name\": \"sms_supported\",\n        \"type\": \"boolean\",\n\t\t\"label\": \"SMS Supported\"\n    },\n    {\n        \"name\": \"sms_enabled\",\n        \"type\": \"boolean\",\n\t\t\"label\": \"SMS Enabled\"\n    },\n    {\n        \"name\": \"company\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"id\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Company ID\"\n            },\n            {\n                \"name\": \"name\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Name\"\n            }\n        ],\n\t\t\"label\": \"Company\"\n    },\n    {\n        \"name\": \"source\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"type\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Type\"\n            }\n        ],\n\t\t\"label\": \"Source\"\n    },\n    {\n        \"name\": \"call_flow\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"type\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Type\"\n            },\n            {\n                \"name\": \"recording_enabled\",\n                \"type\": \"boolean\",\n\t\t\t\t\"label\": \"Recording Enabled\"\n            },\n            {\n                \"name\": \"destination_number\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Destination Number\"\n            },\n            {\n                \"name\": \"greeting_text\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Greeting Text\"\n            },\n            {\n                \"name\": \"greeting_recording_url\",\n                \"type\": \"url\",\n\t\t\t\t\"label\": \"Greeting Recording URL\"\n            }\n        ],\n\t\t\"label\": \"Call Flow\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n\t\t\"label\": \"Created at\"\n    },\n    {\n        \"name\": \"disabled_at\",\n        \"type\": \"date\",\n\t\t\"label\": \"Disabled at\"\n    }\n]",
+      "parametersJsonc": "[\n\t{\n\t\t\"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Limit\",\n\t\t\"default\": 2,\n\t\t\"required\": true\n\t}\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchCalls": {
+      "id": 26902,
+      "api": {
+        "response": {
+          "output": "{{transformDate(payload)}}",
+          "condition": "{{body.metadata.event_type == 'activity.email.link_clicked'}}"
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "watchCalls",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch Calls",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "callrail",
+      "samples": null,
+      "apiJsonc": "{\n\t\"response\":{\n\t\t\"condition\": \"{{body.metadata.event_type == 'activity.email.link_clicked'}}\",\n\t\t\"output\": \"{{transformDate(payload)}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": "callrail6",
+      "learning": false,
+      "interface": [
+        {
+          "name": "answered",
+          "type": "boolean",
+          "label": "Answered"
+        },
+        {
+          "name": "business_phone_number",
+          "type": "text",
+          "label": "Business Phone Number"
+        },
+        {
+          "name": "call_type",
+          "type": "text",
+          "label": "Call Type"
+        },
+        {
+          "name": "company_id",
+          "type": "uinteger",
+          "label": "Company ID"
+        },
+        {
+          "name": "company_name",
+          "type": "text",
+          "label": "Company Name"
+        },
+        {
+          "name": "company_time_zone",
+          "type": "timezone",
+          "label": "Company Time Zone"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "customer_city",
+          "type": "text",
+          "label": "Customer City"
+        },
+        {
+          "name": "customer_country",
+          "type": "text",
+          "label": "Customer Country"
+        },
+        {
+          "name": "customer_name",
+          "type": "text",
+          "label": "Customer Name"
+        },
+        {
+          "name": "customer_phone_number",
+          "type": "text",
+          "label": "Customer Phone Number"
+        },
+        {
+          "name": "customer_state",
+          "type": "text",
+          "label": "Customer State"
+        },
+        {
+          "name": "device_type",
+          "type": "text",
+          "label": "Device Type"
+        },
+        {
+          "name": "direction",
+          "type": "text",
+          "label": "Direction"
+        },
+        {
+          "name": "duration",
+          "type": "text",
+          "label": "Duration"
+        },
+        {
+          "name": "first_call",
+          "type": "boolean",
+          "label": "First Call"
+        },
+        {
+          "name": "formatted_call_type",
+          "type": "text",
+          "label": "Formatted Call Type"
+        },
+        {
+          "name": "formatted_customer_location",
+          "type": "text",
+          "label": "Formatted Customer Location"
+        },
+        {
+          "name": "formatted_business_phone_number",
+          "type": "text",
+          "label": "Formatted Business Phone Number"
+        },
+        {
+          "name": "formatted_customer_name",
+          "type": "text",
+          "label": "Formatted Customer Name"
+        },
+        {
+          "name": "prior_calls",
+          "type": "number",
+          "label": "Prior Calls"
+        },
+        {
+          "name": "formatted_customer_name_or_phone_number",
+          "type": "text",
+          "label": "Formatted Customer Name or Phone Number"
+        },
+        {
+          "name": "formatted_customer_phone_number",
+          "type": "text",
+          "label": "Formatted Customer Phone Number"
+        },
+        {
+          "name": "formatted_duration",
+          "type": "text",
+          "label": "Formatted Duration"
+        },
+        {
+          "name": "formatted_tracking_phone_number",
+          "type": "text",
+          "label": "Formatted Tracking Phone Number"
+        },
+        {
+          "name": "formatted_tracking_source",
+          "type": "text",
+          "label": "Formatted Tracking Source"
+        },
+        {
+          "name": "formatted_value",
+          "type": "text",
+          "label": "Formatted Value"
+        },
+        {
+          "name": "good_lead_call_id",
+          "type": "text",
+          "label": "Good Lead Call ID"
+        },
+        {
+          "name": "good_lead_call_time",
+          "type": "text",
+          "label": "Good Lead Call Time"
+        },
+        {
+          "name": "lead_status",
+          "type": "text",
+          "label": "Lead Status"
+        },
+        {
+          "name": "note",
+          "type": "text",
+          "label": "Note"
+        },
+        {
+          "name": "recording",
+          "type": "text",
+          "label": "Recording"
+        },
+        {
+          "name": "recording_duration",
+          "type": "text",
+          "label": "Recording Duration"
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "label": "Source"
+        },
+        {
+          "name": "source_name",
+          "type": "text",
+          "label": "Source Name"
+        },
+        {
+          "name": "start_time",
+          "type": "text",
+          "label": "Start Time"
+        },
+        {
+          "name": "tags",
+          "type": "array",
+          "label": "Tags"
+        },
+        {
+          "name": "total_calls",
+          "type": "number",
+          "label": "Total Calls"
+        },
+        {
+          "name": "tracking_phone_number",
+          "type": "text",
+          "label": "Tracking Phone Number"
+        },
+        {
+          "name": "transcription",
+          "type": "text",
+          "label": "Transcription"
+        },
+        {
+          "name": "value",
+          "type": "text",
+          "label": "Value"
+        },
+        {
+          "name": "voicemail",
+          "type": "boolean",
+          "label": "Voicemail"
+        },
+        {
+          "name": "waveforms",
+          "type": "text",
+          "label": "Waveforms"
+        },
+        {
+          "name": "keywords",
+          "type": "text",
+          "label": "Keywords"
+        },
+        {
+          "name": "medium",
+          "type": "text",
+          "label": "Medium"
+        },
+        {
+          "name": "referring_url",
+          "type": "url",
+          "label": "Referring URL"
+        },
+        {
+          "name": "landing_page_url",
+          "type": "url",
+          "label": "Landing Page URL"
+        },
+        {
+          "name": "last_requested_url",
+          "type": "url",
+          "label": "Last Requested URL"
+        },
+        {
+          "name": "referrer_domain",
+          "type": "text",
+          "label": "Referrer Domain"
+        },
+        {
+          "name": "conversational_transcript",
+          "type": "text",
+          "label": "Conversational Transcript"
+        },
+        {
+          "name": "utm_source",
+          "type": "text",
+          "label": "UTM Source"
+        },
+        {
+          "name": "utm_medium",
+          "type": "text",
+          "label": "UTM Medium"
+        },
+        {
+          "name": "utm_term",
+          "type": "text",
+          "label": "UTM Term"
+        },
+        {
+          "name": "utm_content",
+          "type": "text",
+          "label": "UTM Content"
+        },
+        {
+          "name": "utm_campaign",
+          "type": "text",
+          "label": "UTM Campaign"
+        },
+        {
+          "name": "utma",
+          "type": "text",
+          "label": "UTMA"
+        },
+        {
+          "name": "utmb",
+          "type": "text",
+          "label": "UTMB"
+        },
+        {
+          "name": "utmc",
+          "type": "text",
+          "label": "UTMC"
+        },
+        {
+          "name": "utmv",
+          "type": "text",
+          "label": "UTMV"
+        },
+        {
+          "name": "utmz",
+          "type": "text",
+          "label": "UTMZ"
+        },
+        {
+          "name": "ga",
+          "type": "text",
+          "label": "GA"
+        },
+        {
+          "name": "fbclid",
+          "type": "text",
+          "label": "FBCLID"
+        },
+        {
+          "name": "gclid",
+          "type": "text",
+          "label": "GCLID"
+        },
+        {
+          "name": "integration_data",
+          "spec": {
+            "spec": [
+              {
+                "name": "integration",
+                "type": "text",
+                "label": "Integration"
+              },
+              {
+                "name": "data",
+                "type": "text",
+                "label": "Data"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Integration Data"
+        },
+        {
+          "name": "keywords_spotted",
+          "type": "text",
+          "label": "Keywords Spotted"
+        },
+        {
+          "name": "recording_player",
+          "type": "text",
+          "label": "Recording Player"
+        },
+        {
+          "name": "speaker_percent",
+          "type": "text",
+          "label": "Speaker Percent"
+        },
+        {
+          "name": "call_highlights",
+          "type": "array",
+          "label": "Call Highlights"
+        },
+        {
+          "name": "agent_email",
+          "type": "email",
+          "label": "Agent Email"
+        },
+        {
+          "name": "campaign",
+          "type": "text",
+          "label": "Campaign"
+        },
+        {
+          "name": "msclkid",
+          "type": "text",
+          "label": "Msclkid"
+        },
+        {
+          "name": "callercity",
+          "type": "text",
+          "label": "Caller City"
+        },
+        {
+          "name": "callercountry",
+          "type": "text",
+          "label": "Caller Country"
+        },
+        {
+          "name": "callername",
+          "type": "text",
+          "label": "Caller Name"
+        },
+        {
+          "name": "callernum",
+          "type": "text",
+          "label": "Caller Num"
+        },
+        {
+          "name": "callerstate",
+          "type": "text",
+          "label": "Caller State"
+        },
+        {
+          "name": "callsource",
+          "type": "text",
+          "label": "Call Source"
+        },
+        {
+          "name": "custom",
+          "type": "text",
+          "label": "Custom"
+        },
+        {
+          "name": "datetime",
+          "type": "date",
+          "label": "Datetime"
+        },
+        {
+          "name": "destinationnum",
+          "type": "text",
+          "label": "Destination Num"
+        },
+        {
+          "name": "kissmetrics_id",
+          "type": "text",
+          "label": "Kissmetrics ID"
+        },
+        {
+          "name": "landingpage",
+          "type": "text",
+          "label": "Landing Page"
+        },
+        {
+          "name": "referrer",
+          "type": "text",
+          "label": "Referrer"
+        },
+        {
+          "name": "referrermedium",
+          "type": "text",
+          "label": "Referrer Medium"
+        },
+        {
+          "name": "score",
+          "type": "text",
+          "label": "Score"
+        },
+        {
+          "name": "tag",
+          "type": "text",
+          "label": "Tag"
+        },
+        {
+          "name": "trackingnum",
+          "type": "text",
+          "label": "Tracking Num"
+        },
+        {
+          "name": "timestamp",
+          "type": "date",
+          "label": "Timestamp"
+        },
+        {
+          "name": "person_resource_id",
+          "type": "text",
+          "label": "Person Resource ID"
+        },
+        {
+          "name": "resource_id",
+          "type": "text",
+          "label": "Resource ID"
+        },
+        {
+          "name": "company_resource_id",
+          "type": "text",
+          "label": "Company Resource ID"
+        },
+        {
+          "name": "tracker_resource_id",
+          "type": "text",
+          "label": "Tracker Resource ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "Triggers when an inbound phone call is received or a call has changed after it's ended. ",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"answered\",\n        \"type\": \"boolean\",\n        \"label\": \"Answered\"\n    },\n    {\n        \"name\": \"business_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Business Phone Number\"\n    },\n    {\n        \"name\": \"call_type\",\n        \"type\": \"text\",\n        \"label\": \"Call Type\"\n    },\n    {\n        \"name\": \"company_id\",\n        \"type\": \"uinteger\",\n        \"label\": \"Company ID\"\n    },\n    {\n        \"name\": \"company_name\",\n        \"type\": \"text\",\n        \"label\": \"Company Name\"\n    },\n    {\n        \"name\": \"company_time_zone\",\n        \"type\": \"timezone\",\n        \"label\": \"Company Time Zone\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    },\n    {\n        \"name\": \"customer_city\",\n        \"type\": \"text\",\n        \"label\": \"Customer City\"\n    },\n    {\n        \"name\": \"customer_country\",\n        \"type\": \"text\",\n        \"label\": \"Customer Country\"\n    },\n    {\n        \"name\": \"customer_name\",\n        \"type\": \"text\",\n        \"label\": \"Customer Name\"\n    },\n    {\n        \"name\": \"customer_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Customer Phone Number\"\n    },\n    {\n        \"name\": \"customer_state\",\n        \"type\": \"text\",\n        \"label\": \"Customer State\"\n    },\n    {\n        \"name\": \"device_type\",\n        \"type\": \"text\",\n        \"label\": \"Device Type\"\n    },\n    {\n        \"name\": \"direction\",\n        \"type\": \"text\",\n        \"label\": \"Direction\"\n    },\n    {\n        \"name\": \"duration\",\n        \"type\": \"text\",\n        \"label\": \"Duration\"\n    },\n    {\n        \"name\": \"first_call\",\n        \"type\": \"boolean\",\n        \"label\": \"First Call\"\n    },\n    {\n        \"name\": \"formatted_call_type\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Call Type\"\n    },\n    {\n        \"name\": \"formatted_customer_location\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Customer Location\"\n    },\n    {\n        \"name\": \"formatted_business_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Business Phone Number\"\n    },\n    {\n        \"name\": \"formatted_customer_name\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Customer Name\"\n    },\n    {\n        \"name\": \"prior_calls\",\n        \"type\": \"number\",\n        \"label\": \"Prior Calls\"\n    },\n    {\n        \"name\": \"formatted_customer_name_or_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Customer Name or Phone Number\"\n    },\n    {\n        \"name\": \"formatted_customer_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Customer Phone Number\"\n    },\n    {\n        \"name\": \"formatted_duration\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Duration\"\n    },\n    {\n        \"name\": \"formatted_tracking_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Tracking Phone Number\"\n    },\n    {\n        \"name\": \"formatted_tracking_source\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Tracking Source\"\n    },\n    {\n        \"name\": \"formatted_value\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Value\"\n    },\n    {\n        \"name\": \"good_lead_call_id\",\n        \"type\": \"text\",\n        \"label\": \"Good Lead Call ID\"\n    },\n    {\n        \"name\": \"good_lead_call_time\",\n        \"type\": \"text\",\n        \"label\": \"Good Lead Call Time\"\n    },\n    {\n        \"name\": \"lead_status\",\n        \"type\": \"text\",\n        \"label\": \"Lead Status\"\n    },\n    {\n        \"name\": \"note\",\n        \"type\": \"text\",\n        \"label\": \"Note\"\n    },\n    {\n        \"name\": \"recording\",\n        \"type\": \"text\",\n        \"label\": \"Recording\"\n    },\n    {\n        \"name\": \"recording_duration\",\n        \"type\": \"text\",\n        \"label\": \"Recording Duration\"\n    },\n    {\n        \"name\": \"source\",\n        \"type\": \"text\",\n        \"label\": \"Source\"\n    },\n    {\n        \"name\": \"source_name\",\n        \"type\": \"text\",\n        \"label\": \"Source Name\"\n    },\n    {\n        \"name\": \"start_time\",\n        \"type\": \"text\",\n        \"label\": \"Start Time\"\n    },\n    {\n        \"name\": \"tags\",\n        \"type\": \"array\",\n        \"label\": \"Tags\"\n    },\n    {\n        \"name\": \"total_calls\",\n        \"type\": \"number\",\n        \"label\": \"Total Calls\"\n    },\n    {\n        \"name\": \"tracking_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Tracking Phone Number\"\n    },\n    {\n        \"name\": \"transcription\",\n        \"type\": \"text\",\n        \"label\": \"Transcription\"\n    },\n    {\n        \"name\": \"value\",\n        \"type\": \"text\",\n        \"label\": \"Value\"\n    },\n    {\n        \"name\": \"voicemail\",\n        \"type\": \"boolean\",\n        \"label\": \"Voicemail\"\n    },\n    {\n        \"name\": \"waveforms\",\n        \"type\": \"text\",\n        \"label\": \"Waveforms\"\n    },\n    {\n        \"name\": \"keywords\",\n        \"type\": \"text\",\n        \"label\": \"Keywords\"\n    },\n    {\n        \"name\": \"medium\",\n        \"type\": \"text\",\n        \"label\": \"Medium\"\n    },\n    {\n        \"name\": \"referring_url\",\n        \"type\": \"url\",\n        \"label\": \"Referring URL\"\n    },\n    {\n        \"name\": \"landing_page_url\",\n        \"type\": \"url\",\n        \"label\": \"Landing Page URL\"\n    },\n    {\n        \"name\": \"last_requested_url\",\n        \"type\": \"url\",\n        \"label\": \"Last Requested URL\"\n    },\n    {\n        \"name\": \"referrer_domain\",\n        \"type\": \"text\",\n        \"label\": \"Referrer Domain\"\n    },\n    {\n        \"name\": \"conversational_transcript\",\n        \"type\": \"text\",\n        \"label\": \"Conversational Transcript\"\n    },\n    {\n        \"name\": \"utm_source\",\n        \"type\": \"text\",\n        \"label\": \"UTM Source\"\n    },\n    {\n        \"name\": \"utm_medium\",\n        \"type\": \"text\",\n        \"label\": \"UTM Medium\"\n    },\n    {\n        \"name\": \"utm_term\",\n        \"type\": \"text\",\n        \"label\": \"UTM Term\"\n    },\n    {\n        \"name\": \"utm_content\",\n        \"type\": \"text\",\n        \"label\": \"UTM Content\"\n    },\n    {\n        \"name\": \"utm_campaign\",\n        \"type\": \"text\",\n        \"label\": \"UTM Campaign\"\n    },\n    {\n        \"name\": \"utma\",\n        \"type\": \"text\",\n        \"label\": \"UTMA\"\n    },\n    {\n        \"name\": \"utmb\",\n        \"type\": \"text\",\n        \"label\": \"UTMB\"\n    },\n    {\n        \"name\": \"utmc\",\n        \"type\": \"text\",\n        \"label\": \"UTMC\"\n    },\n    {\n        \"name\": \"utmv\",\n        \"type\": \"text\",\n        \"label\": \"UTMV\"\n    },\n    {\n        \"name\": \"utmz\",\n        \"type\": \"text\",\n        \"label\": \"UTMZ\"\n    },\n    {\n        \"name\": \"ga\",\n        \"type\": \"text\",\n        \"label\": \"GA\"\n    },\n    {\n        \"name\": \"fbclid\",\n        \"type\": \"text\",\n        \"label\": \"FBCLID\"\n    },\n    {\n        \"name\": \"gclid\",\n        \"type\": \"text\",\n        \"label\": \"GCLID\"\n    },\n    {\n        \"name\": \"integration_data\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"integration\",\n                    \"type\": \"text\",\n                    \"label\": \"Integration\"\n                },\n                {\n                    \"name\": \"data\",\n                    \"type\": \"text\",\n                    \"label\": \"Data\"\n                }\n            ]\n        },\n        \"label\": \"Integration Data\"\n    },\n    {\n        \"name\": \"keywords_spotted\",\n        \"type\": \"text\",\n        \"label\": \"Keywords Spotted\"\n    },\n    {\n        \"name\": \"recording_player\",\n        \"type\": \"text\",\n        \"label\": \"Recording Player\"\n    },\n    {\n        \"name\": \"speaker_percent\",\n        \"type\": \"text\",\n        \"label\": \"Speaker Percent\"\n    },\n    {\n        \"name\": \"call_highlights\",\n        \"type\": \"array\",\n        \"label\": \"Call Highlights\"\n    },\n    {\n        \"name\": \"agent_email\",\n        \"type\": \"email\",\n        \"label\": \"Agent Email\"\n    },\n    {\n        \"name\": \"campaign\",\n        \"type\": \"text\",\n        \"label\": \"Campaign\"\n    },\n    {\n        \"name\": \"msclkid\",\n        \"type\": \"text\",\n        \"label\": \"Msclkid\"\n    },\n    {\n        \"name\": \"callercity\",\n        \"type\": \"text\",\n        \"label\": \"Caller City\"\n    },\n    {\n        \"name\": \"callercountry\",\n        \"type\": \"text\",\n        \"label\": \"Caller Country\"\n    },\n    {\n        \"name\": \"callername\",\n        \"type\": \"text\",\n        \"label\": \"Caller Name\"\n    },\n    {\n        \"name\": \"callernum\",\n        \"type\": \"text\",\n        \"label\": \"Caller Num\"\n    },\n    {\n        \"name\": \"callerstate\",\n        \"type\": \"text\",\n        \"label\": \"Caller State\"\n    },\n    {\n        \"name\": \"callsource\",\n        \"type\": \"text\",\n        \"label\": \"Call Source\"\n    },\n    {\n        \"name\": \"custom\",\n        \"type\": \"text\",\n        \"label\": \"Custom\"\n    },\n    {\n        \"name\": \"datetime\",\n        \"type\": \"date\",\n        \"label\": \"Datetime\"\n    },\n    {\n        \"name\": \"destinationnum\",\n        \"type\": \"text\",\n        \"label\": \"Destination Num\"\n    },\n    {\n        \"name\": \"kissmetrics_id\",\n        \"type\": \"text\",\n        \"label\": \"Kissmetrics ID\"\n    },\n    {\n        \"name\": \"landingpage\",\n        \"type\": \"text\",\n        \"label\": \"Landing Page\"\n    },\n    {\n        \"name\": \"referrer\",\n        \"type\": \"text\",\n        \"label\": \"Referrer\"\n    },\n    {\n        \"name\": \"referrermedium\",\n        \"type\": \"text\",\n        \"label\": \"Referrer Medium\"\n    },\n    {\n        \"name\": \"score\",\n        \"type\": \"text\",\n        \"label\": \"Score\"\n    },\n    {\n        \"name\": \"tag\",\n        \"type\": \"text\",\n        \"label\": \"Tag\"\n    },\n    {\n        \"name\": \"trackingnum\",\n        \"type\": \"text\",\n        \"label\": \"Tracking Num\"\n    },\n    {\n        \"name\": \"timestamp\",\n        \"type\": \"date\",\n        \"label\": \"Timestamp\"\n    },\n    {\n        \"name\": \"person_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Person Resource ID\"\n    },\n    {\n        \"name\": \"resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Resource ID\"\n    },\n    {\n        \"name\": \"company_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Company Resource ID\"\n    },\n    {\n        \"name\": \"tracker_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Tracker Resource ID\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "UserCreated": {
+      "id": 26903,
+      "api": {
+        "qs": {
+          "per_page": 250
+        },
+        "url": "/a/{{connection.accId}}/users.json",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{transformDate(item)}}",
+          "iterate": "{{body.users}}",
+          "trigger": {
+            "id": "{{item.id}}",
+            "date": "{{item.created_at}}",
+            "type": "date",
+            "order": "asc"
+          }
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.total_pages >= pagination.page}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "UserCreated",
+      "epoch": {
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{transformDate(item.created_at)}}",
+            "label": "{{item.name}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Users",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "callrail",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/a/{{connection.accId}}/users.json\",\n\t\"method\": \"GET\",\n\t\"qs\": {\t\n\t\t\"per_page\": 250\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.users}}\",\n\t\t\"trigger\": {\n\t\t\t\"id\": \"{{item.id}}\",\n\t\t\t\"date\": \"{{item.created_at}}\",\n\t\t\t\"type\": \"date\",\n\t\t\t\"order\": \"asc\"\n\t\t},\n\t\t\"output\": \"{{transformDate(item)}}\",\n\t\t\"limit\": \"{{parameters.limit}}\"\n\t},\n\t\"pagination\": {\n\t\"qs\": {\n\t\t\"page\": \"{{pagination.page}}\"\n\t},\n\t\"condition\": \"{{body.total_pages >= pagination.page}}\"\n}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "id",
+          "type": "text",
+          "label": "User ID"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "role",
+          "type": "text",
+          "label": "Role"
+        },
+        {
+          "name": "first_name",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "last_name",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "accepted",
+          "type": "boolean",
+          "label": "Accepted"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"date\": \"{{transformDate(item.created_at)}}\",\n\t\t\t\"label\": \"{{item.name}}\"\n\t\t}\n\t}\n}",
+      "parameters": [
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 2,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "callrail",
+      "description": "Triggers when a new user is created.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\n                {\n                    \"name\": \"email\",\n                    \"type\": \"email\",\n\t\t\t\t\t\"label\": \"Email\"\n                },\n                {\n                    \"name\": \"id\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"label\": \"User ID\"\n                },\n                {\n                    \"name\": \"created_at\",\n                    \"type\": \"date\",\n\t\t\t\t\t\"label\": \"Created at\"\n                },\n                {\n                    \"name\": \"role\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"label\": \"Role\"\n                },\n                {\n                    \"name\": \"first_name\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"label\": \"First Name\"\n                },\n                {\n                    \"name\": \"last_name\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"label\": \"Last Name\"\n                },\n                {\n                    \"name\": \"name\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"label\": \"Name\"\n                },\n                {\n                    \"name\": \"accepted\",\n                    \"type\": \"boolean\",\n\t\t\t\t\t\"label\": \"Accepted\"\n                }\n            \n    \n]",
+      "parametersJsonc": "[\n\t{\n\t\t\"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Limit\",\n\t\t\"default\": 2,\n\t\t\"required\": true\n\t}\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "callModified": {
+      "id": 26904,
+      "api": {
+        "response": {
+          "output": "{{transformDate(payload)}}"
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "callModified",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch Modified Call",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "callrail",
+      "samples": null,
+      "apiJsonc": "{\n\t\"response\":{\n\t\t\"output\": \"{{transformDate(payload)}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": "callrail5",
+      "learning": false,
+      "interface": [
+        {
+          "name": "answered",
+          "type": "boolean",
+          "label": "Answered"
+        },
+        {
+          "name": "business_phone_number",
+          "type": "text",
+          "label": "Business Phone Number"
+        },
+        {
+          "name": "call_type",
+          "type": "text",
+          "label": "Call Type"
+        },
+        {
+          "name": "company_id",
+          "type": "uinteger",
+          "label": "Company ID"
+        },
+        {
+          "name": "company_name",
+          "type": "text",
+          "label": "Company Name"
+        },
+        {
+          "name": "company_time_zone",
+          "type": "timezone",
+          "label": "Company Time Zone"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "customer_city",
+          "type": "text",
+          "label": "Customer City"
+        },
+        {
+          "name": "customer_country",
+          "type": "text",
+          "label": "Customer Country"
+        },
+        {
+          "name": "customer_name",
+          "type": "text",
+          "label": "Customer Name"
+        },
+        {
+          "name": "customer_phone_number",
+          "type": "text",
+          "label": "Customer Phone Number"
+        },
+        {
+          "name": "customer_state",
+          "type": "text",
+          "label": "Customer State"
+        },
+        {
+          "name": "device_type",
+          "type": "text",
+          "label": "Device Type"
+        },
+        {
+          "name": "direction",
+          "type": "text",
+          "label": "Direction"
+        },
+        {
+          "name": "duration",
+          "type": "text",
+          "label": "Duration"
+        },
+        {
+          "name": "first_call",
+          "type": "boolean",
+          "label": "First Call"
+        },
+        {
+          "name": "formatted_call_type",
+          "type": "text",
+          "label": "Formatted Call Type"
+        },
+        {
+          "name": "formatted_customer_location",
+          "type": "text",
+          "label": "Formatted Customer Location"
+        },
+        {
+          "name": "formatted_business_phone_number",
+          "type": "text",
+          "label": "Formatted Business Phone Number"
+        },
+        {
+          "name": "formatted_customer_name",
+          "type": "text",
+          "label": "Formatted Customer Name"
+        },
+        {
+          "name": "prior_calls",
+          "type": "number",
+          "label": "Prior Calls"
+        },
+        {
+          "name": "formatted_customer_name_or_phone_number",
+          "type": "text",
+          "label": "Formatted Customer Name or Phone Number"
+        },
+        {
+          "name": "formatted_customer_phone_number",
+          "type": "text",
+          "label": "Formatted Customer Phone Number"
+        },
+        {
+          "name": "formatted_duration",
+          "type": "text",
+          "label": "Formatted Duration"
+        },
+        {
+          "name": "formatted_tracking_phone_number",
+          "type": "text",
+          "label": "Formatted Tracking Phone Number"
+        },
+        {
+          "name": "formatted_tracking_source",
+          "type": "text",
+          "label": "Formatted Tracking Source"
+        },
+        {
+          "name": "formatted_value",
+          "type": "text",
+          "label": "Formatted Value"
+        },
+        {
+          "name": "good_lead_call_id",
+          "type": "text",
+          "label": "Good Lead Call ID"
+        },
+        {
+          "name": "good_lead_call_time",
+          "type": "text",
+          "label": "Good Lead Call Time"
+        },
+        {
+          "name": "lead_status",
+          "type": "text",
+          "label": "Lead Status"
+        },
+        {
+          "name": "note",
+          "type": "text",
+          "label": "Note"
+        },
+        {
+          "name": "recording",
+          "type": "text",
+          "label": "Recording"
+        },
+        {
+          "name": "recording_duration",
+          "type": "text",
+          "label": "Recording Duration"
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "label": "Source"
+        },
+        {
+          "name": "source_name",
+          "type": "text",
+          "label": "Source Name"
+        },
+        {
+          "name": "start_time",
+          "type": "text",
+          "label": "Start Time"
+        },
+        {
+          "name": "tags",
+          "type": "array",
+          "label": "Tags"
+        },
+        {
+          "name": "total_calls",
+          "type": "number",
+          "label": "Total Calls"
+        },
+        {
+          "name": "tracking_phone_number",
+          "type": "text",
+          "label": "Tracking Phone Number"
+        },
+        {
+          "name": "transcription",
+          "type": "text",
+          "label": "Transcription"
+        },
+        {
+          "name": "value",
+          "type": "text",
+          "label": "Value"
+        },
+        {
+          "name": "voicemail",
+          "type": "boolean",
+          "label": "Voicemail"
+        },
+        {
+          "name": "waveforms",
+          "type": "text",
+          "label": "Waveforms"
+        },
+        {
+          "name": "keywords",
+          "type": "text",
+          "label": "Keywords"
+        },
+        {
+          "name": "medium",
+          "type": "text",
+          "label": "Medium"
+        },
+        {
+          "name": "referring_url",
+          "type": "url",
+          "label": "Referring URL"
+        },
+        {
+          "name": "landing_page_url",
+          "type": "url",
+          "label": "Landing Page URL"
+        },
+        {
+          "name": "last_requested_url",
+          "type": "url",
+          "label": "Last Requested URL"
+        },
+        {
+          "name": "referrer_domain",
+          "type": "text",
+          "label": "Referrer Domain"
+        },
+        {
+          "name": "conversational_transcript",
+          "type": "text",
+          "label": "Conversational Transcript"
+        },
+        {
+          "name": "utm_source",
+          "type": "text",
+          "label": "UTM Source"
+        },
+        {
+          "name": "utm_medium",
+          "type": "text",
+          "label": "UTM Medium"
+        },
+        {
+          "name": "utm_term",
+          "type": "text",
+          "label": "UTM Term"
+        },
+        {
+          "name": "utm_content",
+          "type": "text",
+          "label": "UTM Content"
+        },
+        {
+          "name": "utm_campaign",
+          "type": "text",
+          "label": "UTM Campaign"
+        },
+        {
+          "name": "utma",
+          "type": "text",
+          "label": "UTMA"
+        },
+        {
+          "name": "utmb",
+          "type": "text",
+          "label": "UTMB"
+        },
+        {
+          "name": "utmc",
+          "type": "text",
+          "label": "UTMC"
+        },
+        {
+          "name": "utmv",
+          "type": "text",
+          "label": "UTMV"
+        },
+        {
+          "name": "utmz",
+          "type": "text",
+          "label": "UTMZ"
+        },
+        {
+          "name": "ga",
+          "type": "text",
+          "label": "GA"
+        },
+        {
+          "name": "fbclid",
+          "type": "text",
+          "label": "FBCLID"
+        },
+        {
+          "name": "gclid",
+          "type": "text",
+          "label": "GCLID"
+        },
+        {
+          "name": "integration_data",
+          "spec": {
+            "spec": [
+              {
+                "name": "integration",
+                "type": "text",
+                "label": "Integration"
+              },
+              {
+                "name": "data",
+                "type": "text",
+                "label": "Data"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Integration Data"
+        },
+        {
+          "name": "keywords_spotted",
+          "type": "text",
+          "label": "Keywords Spotted"
+        },
+        {
+          "name": "recording_player",
+          "type": "text",
+          "label": "Recording Player"
+        },
+        {
+          "name": "speaker_percent",
+          "type": "text",
+          "label": "Speaker Percent"
+        },
+        {
+          "name": "call_highlights",
+          "type": "array",
+          "label": "Call Highlights"
+        },
+        {
+          "name": "agent_email",
+          "type": "email",
+          "label": "Agent Email"
+        },
+        {
+          "name": "campaign",
+          "type": "text",
+          "label": "Campaign"
+        },
+        {
+          "name": "msclkid",
+          "type": "text",
+          "label": "Msclkid"
+        },
+        {
+          "name": "callercity",
+          "type": "text",
+          "label": "Caller City"
+        },
+        {
+          "name": "callercountry",
+          "type": "text",
+          "label": "Caller Country"
+        },
+        {
+          "name": "callername",
+          "type": "text",
+          "label": "Caller Name"
+        },
+        {
+          "name": "callernum",
+          "type": "text",
+          "label": "Caller Num"
+        },
+        {
+          "name": "callerstate",
+          "type": "text",
+          "label": "Caller State"
+        },
+        {
+          "name": "callsource",
+          "type": "text",
+          "label": "Call Source"
+        },
+        {
+          "name": "custom",
+          "type": "text",
+          "label": "Custom"
+        },
+        {
+          "name": "datetime",
+          "type": "date",
+          "label": "Datetime"
+        },
+        {
+          "name": "destinationnum",
+          "type": "text",
+          "label": "Destination Num"
+        },
+        {
+          "name": "kissmetrics_id",
+          "type": "text",
+          "label": "Kissmetrics ID"
+        },
+        {
+          "name": "landingpage",
+          "type": "text",
+          "label": "Landing Page"
+        },
+        {
+          "name": "referrer",
+          "type": "text",
+          "label": "Referrer"
+        },
+        {
+          "name": "referrermedium",
+          "type": "text",
+          "label": "Referrer Medium"
+        },
+        {
+          "name": "score",
+          "type": "text",
+          "label": "Score"
+        },
+        {
+          "name": "tag",
+          "type": "text",
+          "label": "Tag"
+        },
+        {
+          "name": "trackingnum",
+          "type": "text",
+          "label": "Tracking Num"
+        },
+        {
+          "name": "timestamp",
+          "type": "date",
+          "label": "Timestamp"
+        },
+        {
+          "name": "person_resource_id",
+          "type": "text",
+          "label": "Person Resource ID"
+        },
+        {
+          "name": "resource_id",
+          "type": "text",
+          "label": "Resource ID"
+        },
+        {
+          "name": "company_resource_id",
+          "type": "text",
+          "label": "Company Resource ID"
+        },
+        {
+          "name": "tracker_resource_id",
+          "type": "text",
+          "label": "Tracker Resource ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "Triggers when a call has changed after it’s ended.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"answered\",\n        \"type\": \"boolean\",\n        \"label\": \"Answered\"\n    },\n    {\n        \"name\": \"business_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Business Phone Number\"\n    },\n    {\n        \"name\": \"call_type\",\n        \"type\": \"text\",\n        \"label\": \"Call Type\"\n    },\n    {\n        \"name\": \"company_id\",\n        \"type\": \"uinteger\",\n        \"label\": \"Company ID\"\n    },\n    {\n        \"name\": \"company_name\",\n        \"type\": \"text\",\n        \"label\": \"Company Name\"\n    },\n    {\n        \"name\": \"company_time_zone\",\n        \"type\": \"timezone\",\n        \"label\": \"Company Time Zone\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    },\n    {\n        \"name\": \"customer_city\",\n        \"type\": \"text\",\n        \"label\": \"Customer City\"\n    },\n    {\n        \"name\": \"customer_country\",\n        \"type\": \"text\",\n        \"label\": \"Customer Country\"\n    },\n    {\n        \"name\": \"customer_name\",\n        \"type\": \"text\",\n        \"label\": \"Customer Name\"\n    },\n    {\n        \"name\": \"customer_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Customer Phone Number\"\n    },\n    {\n        \"name\": \"customer_state\",\n        \"type\": \"text\",\n        \"label\": \"Customer State\"\n    },\n    {\n        \"name\": \"device_type\",\n        \"type\": \"text\",\n        \"label\": \"Device Type\"\n    },\n    {\n        \"name\": \"direction\",\n        \"type\": \"text\",\n        \"label\": \"Direction\"\n    },\n    {\n        \"name\": \"duration\",\n        \"type\": \"text\",\n        \"label\": \"Duration\"\n    },\n    {\n        \"name\": \"first_call\",\n        \"type\": \"boolean\",\n        \"label\": \"First Call\"\n    },\n    {\n        \"name\": \"formatted_call_type\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Call Type\"\n    },\n    {\n        \"name\": \"formatted_customer_location\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Customer Location\"\n    },\n    {\n        \"name\": \"formatted_business_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Business Phone Number\"\n    },\n    {\n        \"name\": \"formatted_customer_name\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Customer Name\"\n    },\n    {\n        \"name\": \"prior_calls\",\n        \"type\": \"number\",\n        \"label\": \"Prior Calls\"\n    },\n    {\n        \"name\": \"formatted_customer_name_or_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Customer Name or Phone Number\"\n    },\n    {\n        \"name\": \"formatted_customer_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Customer Phone Number\"\n    },\n    {\n        \"name\": \"formatted_duration\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Duration\"\n    },\n    {\n        \"name\": \"formatted_tracking_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Tracking Phone Number\"\n    },\n    {\n        \"name\": \"formatted_tracking_source\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Tracking Source\"\n    },\n    {\n        \"name\": \"formatted_value\",\n        \"type\": \"text\",\n        \"label\": \"Formatted Value\"\n    },\n    {\n        \"name\": \"good_lead_call_id\",\n        \"type\": \"text\",\n        \"label\": \"Good Lead Call ID\"\n    },\n    {\n        \"name\": \"good_lead_call_time\",\n        \"type\": \"text\",\n        \"label\": \"Good Lead Call Time\"\n    },\n    {\n        \"name\": \"lead_status\",\n        \"type\": \"text\",\n        \"label\": \"Lead Status\"\n    },\n    {\n        \"name\": \"note\",\n        \"type\": \"text\",\n        \"label\": \"Note\"\n    },\n    {\n        \"name\": \"recording\",\n        \"type\": \"text\",\n        \"label\": \"Recording\"\n    },\n    {\n        \"name\": \"recording_duration\",\n        \"type\": \"text\",\n        \"label\": \"Recording Duration\"\n    },\n    {\n        \"name\": \"source\",\n        \"type\": \"text\",\n        \"label\": \"Source\"\n    },\n    {\n        \"name\": \"source_name\",\n        \"type\": \"text\",\n        \"label\": \"Source Name\"\n    },\n    {\n        \"name\": \"start_time\",\n        \"type\": \"text\",\n        \"label\": \"Start Time\"\n    },\n    {\n        \"name\": \"tags\",\n        \"type\": \"array\",\n        \"label\": \"Tags\"\n    },\n    {\n        \"name\": \"total_calls\",\n        \"type\": \"number\",\n        \"label\": \"Total Calls\"\n    },\n    {\n        \"name\": \"tracking_phone_number\",\n        \"type\": \"text\",\n        \"label\": \"Tracking Phone Number\"\n    },\n    {\n        \"name\": \"transcription\",\n        \"type\": \"text\",\n        \"label\": \"Transcription\"\n    },\n    {\n        \"name\": \"value\",\n        \"type\": \"text\",\n        \"label\": \"Value\"\n    },\n    {\n        \"name\": \"voicemail\",\n        \"type\": \"boolean\",\n        \"label\": \"Voicemail\"\n    },\n    {\n        \"name\": \"waveforms\",\n        \"type\": \"text\",\n        \"label\": \"Waveforms\"\n    },\n    {\n        \"name\": \"keywords\",\n        \"type\": \"text\",\n        \"label\": \"Keywords\"\n    },\n    {\n        \"name\": \"medium\",\n        \"type\": \"text\",\n        \"label\": \"Medium\"\n    },\n    {\n        \"name\": \"referring_url\",\n        \"type\": \"url\",\n        \"label\": \"Referring URL\"\n    },\n    {\n        \"name\": \"landing_page_url\",\n        \"type\": \"url\",\n        \"label\": \"Landing Page URL\"\n    },\n    {\n        \"name\": \"last_requested_url\",\n        \"type\": \"url\",\n        \"label\": \"Last Requested URL\"\n    },\n    {\n        \"name\": \"referrer_domain\",\n        \"type\": \"text\",\n        \"label\": \"Referrer Domain\"\n    },\n    {\n        \"name\": \"conversational_transcript\",\n        \"type\": \"text\",\n        \"label\": \"Conversational Transcript\"\n    },\n    {\n        \"name\": \"utm_source\",\n        \"type\": \"text\",\n        \"label\": \"UTM Source\"\n    },\n    {\n        \"name\": \"utm_medium\",\n        \"type\": \"text\",\n        \"label\": \"UTM Medium\"\n    },\n    {\n        \"name\": \"utm_term\",\n        \"type\": \"text\",\n        \"label\": \"UTM Term\"\n    },\n    {\n        \"name\": \"utm_content\",\n        \"type\": \"text\",\n        \"label\": \"UTM Content\"\n    },\n    {\n        \"name\": \"utm_campaign\",\n        \"type\": \"text\",\n        \"label\": \"UTM Campaign\"\n    },\n    {\n        \"name\": \"utma\",\n        \"type\": \"text\",\n        \"label\": \"UTMA\"\n    },\n    {\n        \"name\": \"utmb\",\n        \"type\": \"text\",\n        \"label\": \"UTMB\"\n    },\n    {\n        \"name\": \"utmc\",\n        \"type\": \"text\",\n        \"label\": \"UTMC\"\n    },\n    {\n        \"name\": \"utmv\",\n        \"type\": \"text\",\n        \"label\": \"UTMV\"\n    },\n    {\n        \"name\": \"utmz\",\n        \"type\": \"text\",\n        \"label\": \"UTMZ\"\n    },\n    {\n        \"name\": \"ga\",\n        \"type\": \"text\",\n        \"label\": \"GA\"\n    },\n    {\n        \"name\": \"fbclid\",\n        \"type\": \"text\",\n        \"label\": \"FBCLID\"\n    },\n    {\n        \"name\": \"gclid\",\n        \"type\": \"text\",\n        \"label\": \"GCLID\"\n    },\n    {\n        \"name\": \"integration_data\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"integration\",\n                    \"type\": \"text\",\n                    \"label\": \"Integration\"\n                },\n                {\n                    \"name\": \"data\",\n                    \"type\": \"text\",\n                    \"label\": \"Data\"\n                }\n            ]\n        },\n        \"label\": \"Integration Data\"\n    },\n    {\n        \"name\": \"keywords_spotted\",\n        \"type\": \"text\",\n        \"label\": \"Keywords Spotted\"\n    },\n    {\n        \"name\": \"recording_player\",\n        \"type\": \"text\",\n        \"label\": \"Recording Player\"\n    },\n    {\n        \"name\": \"speaker_percent\",\n        \"type\": \"text\",\n        \"label\": \"Speaker Percent\"\n    },\n    {\n        \"name\": \"call_highlights\",\n        \"type\": \"array\",\n        \"label\": \"Call Highlights\"\n    },\n    {\n        \"name\": \"agent_email\",\n        \"type\": \"email\",\n        \"label\": \"Agent Email\"\n    },\n    {\n        \"name\": \"campaign\",\n        \"type\": \"text\",\n        \"label\": \"Campaign\"\n    },\n    {\n        \"name\": \"msclkid\",\n        \"type\": \"text\",\n        \"label\": \"Msclkid\"\n    },\n    {\n        \"name\": \"callercity\",\n        \"type\": \"text\",\n        \"label\": \"Caller City\"\n    },\n    {\n        \"name\": \"callercountry\",\n        \"type\": \"text\",\n        \"label\": \"Caller Country\"\n    },\n    {\n        \"name\": \"callername\",\n        \"type\": \"text\",\n        \"label\": \"Caller Name\"\n    },\n    {\n        \"name\": \"callernum\",\n        \"type\": \"text\",\n        \"label\": \"Caller Num\"\n    },\n    {\n        \"name\": \"callerstate\",\n        \"type\": \"text\",\n        \"label\": \"Caller State\"\n    },\n    {\n        \"name\": \"callsource\",\n        \"type\": \"text\",\n        \"label\": \"Call Source\"\n    },\n    {\n        \"name\": \"custom\",\n        \"type\": \"text\",\n        \"label\": \"Custom\"\n    },\n    {\n        \"name\": \"datetime\",\n        \"type\": \"date\",\n        \"label\": \"Datetime\"\n    },\n    {\n        \"name\": \"destinationnum\",\n        \"type\": \"text\",\n        \"label\": \"Destination Num\"\n    },\n    {\n        \"name\": \"kissmetrics_id\",\n        \"type\": \"text\",\n        \"label\": \"Kissmetrics ID\"\n    },\n    {\n        \"name\": \"landingpage\",\n        \"type\": \"text\",\n        \"label\": \"Landing Page\"\n    },\n    {\n        \"name\": \"referrer\",\n        \"type\": \"text\",\n        \"label\": \"Referrer\"\n    },\n    {\n        \"name\": \"referrermedium\",\n        \"type\": \"text\",\n        \"label\": \"Referrer Medium\"\n    },\n    {\n        \"name\": \"score\",\n        \"type\": \"text\",\n        \"label\": \"Score\"\n    },\n    {\n        \"name\": \"tag\",\n        \"type\": \"text\",\n        \"label\": \"Tag\"\n    },\n    {\n        \"name\": \"trackingnum\",\n        \"type\": \"text\",\n        \"label\": \"Tracking Num\"\n    },\n    {\n        \"name\": \"timestamp\",\n        \"type\": \"date\",\n        \"label\": \"Timestamp\"\n    },\n    {\n        \"name\": \"person_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Person Resource ID\"\n    },\n    {\n        \"name\": \"resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Resource ID\"\n    },\n    {\n        \"name\": \"company_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Company Resource ID\"\n    },\n    {\n        \"name\": \"tracker_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Tracker Resource ID\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "CompanyCreated": {
+      "id": 26905,
+      "api": {
+        "qs": {
+          "per_page": 250
+        },
+        "url": "/a/{{connection.accId}}/companies.json",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{item}}",
+          "iterate": "{{body.companies}}",
+          "trigger": {
+            "id": "{{item.id}}",
+            "date": "{{item.created_at}}",
+            "type": "date",
+            "order": "asc"
+          }
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.total_pages >= pagination.page}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "CompanyCreated",
+      "epoch": {
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{item.created_at}}",
+            "label": "{{item.name}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Companies",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "callrail",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/a/{{connection.accId}}/companies.json\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"per_page\": 250\n    },\n    \"response\": {\n        \"iterate\": \"{{body.companies}}\",\n        \"trigger\": {\n            \"id\": \"{{item.id}}\",\n            \"date\": \"{{item.created_at}}\",\n            \"type\": \"date\",\n            \"order\": \"asc\"\n        },\n        \"output\": \"{{item}}\",\n        \"limit\": \"{{parameters.limit}}\"\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"page\": \"{{pagination.page}}\"\n        },\n        \"condition\": \"{{body.total_pages >= pagination.page}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Company ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "time_zone",
+          "type": "timezone",
+          "label": "Time Zone"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "disabled_at",
+          "type": "date",
+          "label": "Disabled at"
+        },
+        {
+          "name": "script_url",
+          "type": "url",
+          "label": "Script URL"
+        },
+        {
+          "name": "callscore_enabled",
+          "type": "boolean",
+          "label": "Callscore Enabled"
+        },
+        {
+          "name": "lead_scoring_enabled",
+          "type": "boolean",
+          "label": "Lead Scoring Enabled"
+        },
+        {
+          "name": "swap_exclude_jquery",
+          "type": "text",
+          "label": "Swap Exclude JQuery"
+        },
+        {
+          "name": "swap_ppc_override",
+          "type": "text",
+          "label": "Swap PPC Override"
+        },
+        {
+          "name": "swap_landing_override",
+          "type": "text",
+          "label": "Swap Landing Override"
+        },
+        {
+          "name": "swap_cookie_duration",
+          "type": "number",
+          "label": "Swap Cookie Duration"
+        },
+        {
+          "name": "callscribe_enabled",
+          "type": "boolean",
+          "label": "Callscribe Enabled"
+        },
+        {
+          "name": "keyword_spotting_enabled",
+          "type": "text",
+          "label": "Keyword Spotting Enabled"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"date\": \"{{item.created_at}}\",\n\t\t\t\"label\": \"{{item.name}}\"\n\t\t}\n\t}\n}",
+      "parameters": [
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 2,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "callrail",
+      "description": "Triggers when a new company is created.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\n                {\n                    \"name\": \"id\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"label\": \"Company ID\"\n                },\n                {\n                    \"name\": \"name\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"label\": \"Name\"\n                },\n                {\n                    \"name\": \"status\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"label\": \"Status\"\n                },\n                {\n                    \"name\": \"time_zone\",\n                    \"type\": \"timezone\",\n\t\t\t\t\t\"label\": \"Time Zone\"\n                },\n                {\n                    \"name\": \"created_at\",\n                    \"type\": \"date\",\n\t\t\t\t\t\"label\": \"Created at\"\n                },\n                {\n                    \"name\": \"disabled_at\",\n                    \"type\": \"date\",\n\t\t\t\t\t\"label\": \"Disabled at\"\n                },\n                {\n                    \"name\": \"script_url\",\n                    \"type\": \"url\",\n\t\t\t\t\t\"label\": \"Script URL\"\n                },\n                {\n                    \"name\": \"callscore_enabled\",\n                    \"type\": \"boolean\",\n\t\t\t\t\t\"label\": \"Callscore Enabled\"\n                },\n                {\n                    \"name\": \"lead_scoring_enabled\",\n                    \"type\": \"boolean\",\n\t\t\t\t\t\"label\": \"Lead Scoring Enabled\"\n                },\n                {\n                    \"name\": \"swap_exclude_jquery\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"label\": \"Swap Exclude JQuery\"\n                },\n                {\n                    \"name\": \"swap_ppc_override\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"label\": \"Swap PPC Override\"\n                },\n                {\n                    \"name\": \"swap_landing_override\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"label\": \"Swap Landing Override\"\n                },\n                {\n                    \"name\": \"swap_cookie_duration\",\n                    \"type\": \"number\",\n\t\t\t\t\t\"label\": \"Swap Cookie Duration\"\n                },\n                {\n                    \"name\": \"callscribe_enabled\",\n                    \"type\": \"boolean\",\n\t\t\t\t\t\"label\": \"Callscribe Enabled\"\n                },\n                {\n                    \"name\": \"keyword_spotting_enabled\",\n                    \"type\": \"text\",\n\t\t\t\t\t\"label\": \"Keyword Spotting Enabled\"\n                }\n]",
+      "parametersJsonc": "[\n\t{\n\t\t\"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Limit\",\n\t\t\"default\": 2,\n\t\t\"required\": true\n\t}\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "triggerSMSSent": {
+      "id": 26906,
+      "api": {
+        "response": {
+          "output": "{{transformDate(payload)}}"
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "triggerSMSSent",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch SMS Sent",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "callrail",
+      "samples": null,
+      "apiJsonc": "{\n\t\"response\":{\n\t\t\"output\": \"{{transformDate(payload)}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": "callrail3",
+      "learning": false,
+      "interface": [
+        {
+          "name": "thread_resource_id",
+          "type": "text",
+          "label": "Thread Resource ID"
+        },
+        {
+          "name": "resource_id",
+          "type": "text",
+          "label": "Resource ID"
+        },
+        {
+          "name": "agent",
+          "type": "text",
+          "label": "Agent"
+        },
+        {
+          "name": "source_number",
+          "type": "text",
+          "label": "Source Number"
+        },
+        {
+          "name": "destination_number",
+          "type": "text",
+          "label": "Destination Number"
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "label": "Content"
+        },
+        {
+          "name": "timestamp",
+          "type": "date",
+          "label": "Timestamp"
+        },
+        {
+          "name": "lead_status",
+          "type": "text",
+          "label": "Lead Status"
+        },
+        {
+          "name": "conversation_id",
+          "type": "text",
+          "label": "Conversation ID"
+        },
+        {
+          "name": "company_resource_id",
+          "type": "text",
+          "label": "Company Resource ID"
+        },
+        {
+          "name": "person_resource_id",
+          "type": "text",
+          "label": "Person Resource ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "Triggers when an SMS message is sent.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n        \"name\": \"thread_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Thread Resource ID\"\n    },\n    {\n        \"name\": \"resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Resource ID\"\n    },\n    {\n        \"name\": \"agent\",\n        \"type\": \"text\",\n        \"label\": \"Agent\"\n    },\n    {\n        \"name\": \"source_number\",\n        \"type\": \"text\",\n        \"label\": \"Source Number\"\n    },\n    {\n        \"name\": \"destination_number\",\n        \"type\": \"text\",\n        \"label\": \"Destination Number\"\n    },\n    {\n        \"name\": \"content\",\n        \"type\": \"text\",\n        \"label\": \"Content\"\n    },\n    {\n        \"name\": \"timestamp\",\n        \"type\": \"date\",\n        \"label\": \"Timestamp\"\n    },\n    {\n        \"name\": \"lead_status\",\n        \"type\": \"text\",\n        \"label\": \"Lead Status\"\n    },\n    {\n        \"name\": \"conversation_id\",\n        \"type\": \"text\",\n        \"label\": \"Conversation ID\"\n    },\n    {\n        \"name\": \"company_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Company Resource ID\"\n    },\n    {\n        \"name\": \"person_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Person Resource ID\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "triggerSMSReceived": {
+      "id": 26907,
+      "api": {
+        "response": {
+          "output": "{{transformDate(payload)}}"
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "triggerSMSReceived",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch SMS Received",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "callrail",
+      "samples": null,
+      "apiJsonc": "{\n\t\"response\":{\n\t\t\"output\": \"{{transformDate(payload)}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": "callrail",
+      "learning": false,
+      "interface": [
+        {
+          "name": "resource_id",
+          "type": "text",
+          "label": "Resource ID"
+        },
+        {
+          "name": "thread_resource_id",
+          "type": "text",
+          "label": "Thread Resource ID"
+        },
+        {
+          "name": "source_number",
+          "type": "text",
+          "label": "Source Number"
+        },
+        {
+          "name": "destination_number",
+          "type": "text",
+          "label": "Destination Number"
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "label": "Content"
+        },
+        {
+          "name": "timestamp",
+          "type": "date",
+          "label": "Timestamp"
+        },
+        {
+          "name": "lead_status",
+          "type": "text",
+          "label": "Lead Status"
+        },
+        {
+          "name": "conversation_id",
+          "type": "text",
+          "label": "Conversation ID"
+        },
+        {
+          "name": "company_resource_id",
+          "type": "text",
+          "label": "Company Resource ID"
+        },
+        {
+          "name": "person_resource_id",
+          "type": "text",
+          "label": "Person Resource ID"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": null,
+      "description": "Triggers when an SMS message is received.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Resource ID\"\n    },\n\t{\n        \"name\": \"thread_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Thread Resource ID\"\n    },\n    {\n        \"name\": \"source_number\",\n        \"type\": \"text\",\n        \"label\": \"Source Number\"\n    },\n    {\n        \"name\": \"destination_number\",\n        \"type\": \"text\",\n        \"label\": \"Destination Number\"\n    },\n    {\n        \"name\": \"content\",\n        \"type\": \"text\",\n        \"label\": \"Content\"\n    },\n    {\n        \"name\": \"timestamp\",\n        \"type\": \"date\",\n        \"label\": \"Timestamp\"\n    },\n    {\n        \"name\": \"lead_status\",\n        \"type\": \"text\",\n        \"label\": \"Lead Status\"\n    },\n    {\n        \"name\": \"conversation_id\",\n        \"type\": \"text\",\n        \"label\": \"Conversation ID\"\n    },\n    {\n        \"name\": \"company_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Company Resource ID\"\n    },\n    {\n        \"name\": \"person_resource_id\",\n        \"type\": \"text\",\n        \"label\": \"Person Resource ID\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "triggerSourceTracker": {
+      "id": 26908,
+      "api": {
+        "qs": {
+          "per_page": 250
+        },
+        "url": "/a/{{connection.accId}}/trackers.json",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{getSource(item)}}",
+          "iterate": "{{body.trackers}}",
+          "trigger": {
+            "id": "{{item.id}}",
+            "date": "{{item.created_at}}",
+            "type": "date",
+            "order": "asc"
+          }
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.total_pages >= pagination.page}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "triggerSourceTracker",
+      "epoch": {
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{item.created}}",
+            "label": "{{item.name}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Source Trackers",
+      "scope": [],
+      "expect": [],
+      "public": false,
+      "typeId": 1,
+      "appName": "callrail",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/a/{{connection.accId}}/trackers.json\",\n\t\"method\": \"GET\",\n\t\"qs\": {\t\n\t\t\"per_page\": 250\n\t\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.trackers}}\",\n\t\t\"trigger\": {\n\t\t\t\"id\": \"{{item.id}}\",\n\t\t\t\"date\": \"{{item.created_at}}\",\n\t\t\t\"type\": \"date\",\n\t\t\t\"order\": \"asc\"\n\t\t},\n\t\t\"output\": \"{{getSource(item)}}\",\n\t\t\"limit\": \"{{parameters.limit}}\"\n\t},\n\t\"pagination\": {\n\t\"qs\": {\n\t\t\"page\": \"{{pagination.page}}\"\n\t},\n\t\"condition\": \"{{body.total_pages >= pagination.page}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Tracker ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "label": "Type"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "destination_number",
+          "type": "text",
+          "label": "Destination Number"
+        },
+        {
+          "name": "tracking_numbers",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Tracking Numbers"
+        },
+        {
+          "name": "whisper_message",
+          "type": "text",
+          "label": "Whisper Message"
+        },
+        {
+          "name": "sms_supported",
+          "type": "boolean",
+          "label": "SMS Supported"
+        },
+        {
+          "name": "sms_enabled",
+          "type": "boolean",
+          "label": "SMS Enabled"
+        },
+        {
+          "name": "company",
+          "spec": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Company ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            }
+          ],
+          "type": "collection",
+          "label": "Company"
+        },
+        {
+          "name": "source",
+          "spec": [
+            {
+              "name": "type",
+              "type": "text",
+              "label": "Type"
+            }
+          ],
+          "type": "collection",
+          "label": "Source"
+        },
+        {
+          "name": "call_flow",
+          "spec": [
+            {
+              "name": "type",
+              "type": "text",
+              "label": "Type"
+            },
+            {
+              "name": "recording_enabled",
+              "type": "boolean",
+              "label": "Recording Enabled"
+            },
+            {
+              "name": "destination_number",
+              "type": "text",
+              "label": "Destination Number"
+            },
+            {
+              "name": "greeting_text",
+              "type": "text",
+              "label": "Greeting Text"
+            },
+            {
+              "name": "greeting_recording_url",
+              "type": "url",
+              "label": "Greeting Recording URL"
+            }
+          ],
+          "type": "collection",
+          "label": "Call Flow"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "disabled_at",
+          "type": "date",
+          "label": "Disabled at"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"date\": \"{{item.created}}\",\n\t\t\t\"label\": \"{{item.name}}\"\n\t\t}\n\t}\n}",
+      "parameters": [
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "callrail",
+      "description": "Triggers when a new source tracker is created.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n\t\t\"label\": \"Tracker ID\"\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n\t\t\"label\": \"Name\"\n    },\n    {\n        \"name\": \"type\",\n        \"type\": \"text\",\n\t\t\"label\": \"Type\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n\t\t\"label\": \"Status\"\n    },\n    {\n        \"name\": \"destination_number\",\n        \"type\": \"text\",\n\t\t\"label\": \"Destination Number\"\n    },\n    {\n        \"name\": \"tracking_numbers\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        },\n\t\t\"label\": \"Tracking Numbers\"\n    },\n    {\n        \"name\": \"whisper_message\",\n        \"type\": \"text\",\n\t\t\"label\": \"Whisper Message\"\n    },\n    {\n        \"name\": \"sms_supported\",\n        \"type\": \"boolean\",\n\t\t\"label\": \"SMS Supported\"\n    },\n    {\n        \"name\": \"sms_enabled\",\n        \"type\": \"boolean\",\n\t\t\"label\": \"SMS Enabled\"\n    },\n    {\n        \"name\": \"company\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"id\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Company ID\"\n            },\n            {\n                \"name\": \"name\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Name\"\n            }\n        ],\n\t\t\"label\": \"Company\"\n    },\n    {\n        \"name\": \"source\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"type\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Type\"\n            }\n        ],\n\t\t\"label\": \"Source\"\n    },\n    {\n        \"name\": \"call_flow\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"type\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Type\"\n            },\n            {\n                \"name\": \"recording_enabled\",\n                \"type\": \"boolean\",\n\t\t\t\t\"label\": \"Recording Enabled\"\n            },\n            {\n                \"name\": \"destination_number\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Destination Number\"\n            },\n            {\n                \"name\": \"greeting_text\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Greeting Text\"\n            },\n            {\n                \"name\": \"greeting_recording_url\",\n                \"type\": \"url\",\n\t\t\t\t\"label\": \"Greeting Recording URL\"\n            }\n        ],\n\t\t\"label\": \"Call Flow\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n\t\t\"label\": \"Created at\"\n    },\n    {\n        \"name\": \"disabled_at\",\n        \"type\": \"date\",\n\t\t\"label\": \"Disabled at\"\n    }\n]",
+      "parametersJsonc": "[\n\t{\n\t\t\"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Limit\",\n\t\t\"default\": 10,\n\t\t\"required\": true\n\t}\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "triggerSessionTracker": {
+      "id": 26909,
+      "api": {
+        "qs": {
+          "per_page": 250
+        },
+        "url": "/a/{{connection.accId}}/trackers.json",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{getSession(item)}}",
+          "iterate": "{{body.trackers}}",
+          "trigger": {
+            "id": "{{item.id}}",
+            "date": "{{item.created_at}}",
+            "type": "date",
+            "order": "asc"
+          }
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.total_pages >= pagination.page}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "triggerSessionTracker",
+      "epoch": {
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{item.created}}",
+            "label": "{{item.name}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Session Trackers",
+      "scope": [],
+      "expect": [],
+      "public": false,
+      "typeId": 1,
+      "appName": "callrail",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/a/{{connection.accId}}/trackers.json\",\n\t\"method\": \"GET\",\n\t\"qs\": {\t\n\t\t\"per_page\": 250\n\t\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.trackers}}\",\n\t\t\"trigger\": {\n\t\t\t\"id\": \"{{item.id}}\",\n\t\t\t\"date\": \"{{item.created_at}}\",\n\t\t\t\"type\": \"date\",\n\t\t\t\"order\": \"asc\"\n\t\t},\n\t\t\"output\": \"{{getSession(item)}}\",\n\t\t\"limit\": \"{{parameters.limit}}\"\n\t},\n\t\"pagination\": {\n\t\"qs\": {\n\t\t\"page\": \"{{pagination.page}}\"\n\t},\n\t\"condition\": \"{{body.total_pages >= pagination.page}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Tracker ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "label": "Type"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "destination_number",
+          "type": "text",
+          "label": "Destination Number"
+        },
+        {
+          "name": "tracking_numbers",
+          "spec": {
+            "type": "text"
+          },
+          "type": "array",
+          "label": "Tracking Numbers"
+        },
+        {
+          "name": "whisper_message",
+          "type": "text",
+          "label": "Whisper Message"
+        },
+        {
+          "name": "sms_supported",
+          "type": "boolean",
+          "label": "SMS Supported"
+        },
+        {
+          "name": "sms_enabled",
+          "type": "boolean",
+          "label": "SMS Enabled"
+        },
+        {
+          "name": "company",
+          "spec": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Company ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Name"
+            }
+          ],
+          "type": "collection",
+          "label": "Company"
+        },
+        {
+          "name": "source",
+          "spec": [
+            {
+              "name": "type",
+              "type": "text",
+              "label": "Type"
+            }
+          ],
+          "type": "collection",
+          "label": "Source"
+        },
+        {
+          "name": "call_flow",
+          "spec": [
+            {
+              "name": "type",
+              "type": "text",
+              "label": "Type"
+            },
+            {
+              "name": "recording_enabled",
+              "type": "boolean",
+              "label": "Recording Enabled"
+            },
+            {
+              "name": "destination_number",
+              "type": "text",
+              "label": "Destination Number"
+            },
+            {
+              "name": "greeting_text",
+              "type": "text",
+              "label": "Greeting Text"
+            },
+            {
+              "name": "greeting_recording_url",
+              "type": "url",
+              "label": "Greeting Recording URL"
+            }
+          ],
+          "type": "collection",
+          "label": "Call Flow"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "disabled_at",
+          "type": "date",
+          "label": "Disabled at"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"date\": \"{{item.created}}\",\n\t\t\t\"label\": \"{{item.name}}\"\n\t\t}\n\t}\n}",
+      "parameters": [
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "accountName": "callrail",
+      "description": "Trrigers when a new session tracker is created.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n\t\t\"label\": \"Tracker ID\"\n    },\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n\t\t\"label\": \"Name\"\n    },\n    {\n        \"name\": \"type\",\n        \"type\": \"text\",\n\t\t\"label\": \"Type\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n\t\t\"label\": \"Status\"\n    },\n    {\n        \"name\": \"destination_number\",\n        \"type\": \"text\",\n\t\t\"label\": \"Destination Number\"\n    },\n    {\n        \"name\": \"tracking_numbers\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"text\"\n        },\n\t\t\"label\": \"Tracking Numbers\"\n    },\n    {\n        \"name\": \"whisper_message\",\n        \"type\": \"text\",\n\t\t\"label\": \"Whisper Message\"\n    },\n    {\n        \"name\": \"sms_supported\",\n        \"type\": \"boolean\",\n\t\t\"label\": \"SMS Supported\"\n    },\n    {\n        \"name\": \"sms_enabled\",\n        \"type\": \"boolean\",\n\t\t\"label\": \"SMS Enabled\"\n    },\n    {\n        \"name\": \"company\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"id\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Company ID\"\n            },\n            {\n                \"name\": \"name\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Name\"\n            }\n        ],\n\t\t\"label\": \"Company\"\n    },\n    {\n        \"name\": \"source\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"type\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Type\"\n            }\n        ],\n\t\t\"label\": \"Source\"\n    },\n    {\n        \"name\": \"call_flow\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"type\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Type\"\n            },\n            {\n                \"name\": \"recording_enabled\",\n                \"type\": \"boolean\",\n\t\t\t\t\"label\": \"Recording Enabled\"\n            },\n            {\n                \"name\": \"destination_number\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Destination Number\"\n            },\n            {\n                \"name\": \"greeting_text\",\n                \"type\": \"text\",\n\t\t\t\t\"label\": \"Greeting Text\"\n            },\n            {\n                \"name\": \"greeting_recording_url\",\n                \"type\": \"url\",\n\t\t\t\t\"label\": \"Greeting Recording URL\"\n            }\n        ],\n\t\t\"label\": \"Call Flow\"\n    },\n    {\n        \"name\": \"created_at\",\n        \"type\": \"date\",\n\t\t\"label\": \"Created at\"\n    },\n    {\n        \"name\": \"disabled_at\",\n        \"type\": \"date\",\n\t\t\"label\": \"Disabled at\"\n    }\n]",
+      "parametersJsonc": "[\n\t{\n\t\t\"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Limit\",\n\t\t\"default\": 10,\n\t\t\"required\": true\n\t}\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "callrail": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.Authorization"
+          ]
+        },
+        "url": "https://api.callrail.com/v3/a/{{parameters.accId}}",
+        "method": "GET",
+        "headers": {
+          "Authorization": "Token token={{parameters.apiKey}}"
+        },
+        "response": {
+          "error": {
+            "message": "[{{statusCode}}] {{body.error || body.message}}"
+          },
+          "metadata": {
+            "type": "text",
+            "value": "{{body.name}}"
+          }
+        }
+      },
+      "rev": 5,
+      "name": "callrail",
+      "type": "basic",
+      "label": "CallRail",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "callrail",
+      "install": {},
+      "apiJsonc": "{\n\t\"url\": \"https://api.callrail.com/v3/a/{{parameters.accId}}\",\n\t\"headers\": {\n\t\t\"Authorization\": \"Token token={{parameters.apiKey}}\"\n\t},\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error || body.message}}\"\n        },\n\t\t\"metadata\": {\n            \"value\": \"{{body.name}}\",\n            \"type\": \"text\"\n    \t}\n    },\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.Authorization\"]\n\t}\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "apiKey",
+          "type": "password",
+          "label": "API Key",
+          "editable": true,
+          "required": true
+        },
+        {
+          "help": "The nine digit number following /a/ in the URL displayed in your browser when viewing the CallRail dashboard.",
+          "name": "accId",
+          "type": "integer",
+          "label": "Account ID",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[\n]",
+      "installSpec": [],
+      "scopesJsonc": "{\n}",
+      "installJsonc": "{\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"apiKey\",\n\t\t\"type\": \"password\",\n\t\t\"label\": \"API Key\",\n\t\t\"required\": true,\n\t\t\"editable\": true\n\t},\n\t{\n\t\t\"name\": \"accId\",\n\t\t\"type\": \"integer\",\n\t\t\"label\": \"Account ID\",\n\t\t\"required\": true,\n\t\t\"help\": \"The nine digit number following /a/ in the URL displayed in your browser when viewing the CallRail dashboard.\",\n\t\t\"editable\": true\n\t}\n]",
+      "installSpecJsonc": "[\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n\t\"baseUrl\": \"https://api.callrail.com/v3\",\n\t\"headers\": {\n\t\t\"Authorization\": \"Token token={{connection.apiKey}}\"\n\t},\n\t\"response\": {\n\t\t\"error\": {\n            \"message\": \"[{{statusCode}}] {{body.error}}\"\n        }\n    },\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.Authorization\"]\n\t}\n}",
+  "countries": null,
+  "_functions": {
+    "toArray": {
+      "rev": 3,
+      "code": "function toArray(param) {\n\tlet arr = new Array();\n\tif(typeof param !== 'undefined' && param){\n\t\tarr.push(param);\n\t\treturn arr;\n\t}\n}",
+      "name": "toArray",
+      "test": null,
+      "appName": "callrail",
+      "arguments": "(param)",
+      "appVersion": 1
+    },
+    "getSource": {
+      "rev": 3,
+      "code": "function getSource(obj) {\n\tif(obj.type == \"source\"){\n\t\treturn obj;\n\t}\n}",
+      "name": "getSource",
+      "test": null,
+      "appName": "callrail",
+      "arguments": "(obj)",
+      "appVersion": 1
+    },
+    "getSession": {
+      "rev": 3,
+      "code": "function getSession(obj) {\n\tif(obj.type == \"session\"){\n\t\treturn obj;\n\t} else return null;\n}",
+      "name": "getSession",
+      "test": null,
+      "appName": "callrail",
+      "arguments": "(obj)",
+      "appVersion": 1
+    },
+    "transformDate": {
+      "rev": 3,
+      "code": "function transformDate(obj) {\n\tif (obj.created_at) {obj.created_at = iml.parseDate(obj.created_at);}\n\tif (obj.start_time) {obj.start_time = new Date(obj.start_time);}\n\tif (obj.timestamp) {obj.timestamp = new Date(obj.timestamp);}\n\treturn obj;\n}",
+      "name": "transformDate",
+      "test": null,
+      "appName": "callrail",
+      "arguments": "(obj)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-05-03T14:09:52.176541+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Tracking and analytics for phone calls and web forms.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "a65575be0b2ec9b8f6a7161c6e8663f7",
+  "versionFull": "1.1.1",
+  "compiledName": "callrail",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

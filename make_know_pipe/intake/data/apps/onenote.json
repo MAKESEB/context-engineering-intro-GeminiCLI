@@ -1,0 +1,2538 @@
+{
+  "rev": 25,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "https://graph.microsoft.com/v1.0",
+    "headers": {
+      "Authorization": "Bearer {{connection.accessToken}}"
+    },
+    "response": {
+      "error": {
+        "type": "DataError",
+        "message": "{{body.error.code}}: {{body.error.message}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": "# Connecting the OneNote service to Integromat\n\nTo connect your OneNote account to Integromat, follow the general instructions for [Connecting to services](https://support.integromat.com/hc/en-us/articles/360001990194.html#create-a-connection). After you click the **Continue** button, you will be prompted to sign in to your Microsoft account.\n\n![Creating a connection](https://integromat.zendesk.com/hc/article_attachments/360009137094/file.png)\n\n![Microsoft login](https://integromat.zendesk.com/hc/article_attachments/360009137114/file.png)\n\nIf everything went right, the connection is now established and you can finish your integration.\n \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+  "name": "onenote",
+  "_rpcs": {
+    "test": {
+      "api": {
+        "method": "GET",
+        "response": {
+          "output": {
+            "name": "file",
+            "spec": [
+              {
+                "name": "value",
+                "type": "buffer",
+                "label": "Data",
+                "required": true,
+                "semantic": "file:data"
+              },
+              {
+                "name": "fileName",
+                "type": "filename",
+                "label": "File Name",
+                "required": true,
+                "semantic": "file:name"
+              },
+              {
+                "help": "Only for `img` tag.",
+                "name": "contentType",
+                "type": "select",
+                "label": "Contant Type",
+                "options": [
+                  {
+                    "label": "image/jpeg",
+                    "value": "image/jpeg"
+                  },
+                  {
+                    "label": "image/png",
+                    "value": "image/png"
+                  },
+                  {
+                    "label": "image/gif",
+                    "value": "image/gif"
+                  },
+                  {
+                    "label": "image/tiff",
+                    "value": "image/tiff"
+                  },
+                  {
+                    "label": "image/bmp",
+                    "value": "image/bmp"
+                  },
+                  {
+                    "label": "application/pdf",
+                    "value": "application/pdf"
+                  }
+                ]
+              }
+            ],
+            "type": "collection",
+            "label": "File"
+          }
+        }
+      },
+      "rev": 5,
+      "name": "test",
+      "label": "Get File Params",
+      "appName": "onenote",
+      "apiJsonc": "{\r\n    \"method\": \"GET\",\r\n    \"response\": {\r\n        \"output\": {\r\n            \"name\": \"file\",\r\n            \"label\": \"File\",\r\n            \"type\": \"collection\",\r\n            \"spec\": [\r\n                {\r\n                    \"name\": \"value\",\r\n                    \"type\": \"buffer\",\r\n                    \"label\": \"Data\",\r\n                    \"semantic\": \"file:data\",\r\n                    \"required\": true\r\n                },\r\n                {\r\n                    \"name\": \"fileName\",\r\n                    \"type\": \"filename\",\r\n                    \"label\": \"File Name\",\r\n                    \"semantic\": \"file:name\",\r\n                    \"required\": true\r\n                },\r\n                {\r\n                    \"type\": \"select\",\r\n                    \"name\": \"contentType\",\r\n                    \"label\": \"Contant Type\",\r\n                    \"help\": \"Only for `img` tag.\",\r\n                    \"options\": [\r\n                        {\r\n                            \"value\": \"image/jpeg\",\r\n                            \"label\": \"image/jpeg\"\r\n                        },\r\n                        {\r\n                            \"value\": \"image/png\",\r\n                            \"label\": \"image/png\"\r\n                        },\r\n                        {\r\n                            \"value\": \"image/gif\",\r\n                            \"label\": \"image/gif\"\r\n                        },\r\n                        {\r\n                            \"value\": \"image/tiff\",\r\n                            \"label\": \"image/tiff\"\r\n                        },\r\n                        {\r\n                            \"value\": \"image/bmp\",\r\n                            \"label\": \"image/bmp\"\r\n                        },\r\n                        {\r\n                            \"value\": \"application/pdf\",\r\n                            \"label\": \"application/pdf\"\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "onenote",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "getParams": {
+      "api": {
+        "temp": {
+          "filesArray": "{{length(parameters.files)}}"
+        },
+        "method": "GET",
+        "response": {
+          "output": [
+            {
+              "name": "value",
+              "type": "buffer",
+              "label": "Data",
+              "required": true,
+              "semantic": "file:data"
+            },
+            {
+              "name": "fileName",
+              "type": "filename",
+              "label": "File Name",
+              "required": true,
+              "semantic": "file:name"
+            }
+          ]
+        }
+      },
+      "rev": 2,
+      "name": "getParams",
+      "label": "getParams",
+      "appName": "onenote",
+      "apiJsonc": "{\n    \"method\": \"GET\",\n    \"temp\": {\n        \"filesArray\": \"{{length(parameters.files)}}\"\n    },\n    \"response\": {\n        \"output\": [\n            {\n                \"name\": \"value\",\n                \"type\": \"buffer\",\n                \"label\": \"Data\",\n                \"semantic\": \"file:data\",\n                \"required\": true\n            },\n            {\n                \"name\": \"fileName\",\n                \"type\": \"filename\",\n                \"label\": \"File Name\",\n                \"semantic\": \"file:name\",\n                \"required\": true\n            }\n        ]\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "onenote",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listPages": {
+      "api": {
+        "qs": {
+          "$top": 50
+        },
+        "url": "/me/onenote/{{if(parameters.sectionId, 'sections/' + parameters.sectionId + '/', '')}}pages",
+        "method": "GET",
+        "response": {
+          "temp": {
+            "page": "{{ifempty(temp.page, 0) + 1}}"
+          },
+          "output": {
+            "label": "{{item.title}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.value}}"
+        },
+        "pagination": {
+          "qs": {
+            "$skip": "{{(temp.page) * 50}}"
+          }
+        }
+      },
+      "rev": 3,
+      "name": "listPages",
+      "label": "List pages",
+      "appName": "onenote",
+      "apiJsonc": "{\n    \"qs\": {\n        \"$top\": 50\n    },\n    \"url\": \"/me/onenote/{{if(parameters.sectionId, 'sections/' + parameters.sectionId + '/', '')}}pages\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"temp\": {\n            \"page\": \"{{ifempty(temp.page, 0) + 1}}\"\n        },\n        \"output\": {\n            \"label\": \"{{item.title}}\",\n            \"value\": \"{{item.id}}\"\n        },\n        \"iterate\": \"{{body.value}}\"\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"$skip\": \"{{(temp.page) * 50}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "onenote",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "listSections": {
+      "api": {
+        "qs": {
+          "$top": 50
+        },
+        "url": "/me/onenote/sections",
+        "method": "GET",
+        "response": {
+          "temp": {
+            "page": "{{ifempty(temp.page, 0) + 1}}"
+          },
+          "output": {
+            "label": "{{item.displayName}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.value}}"
+        },
+        "pagination": {
+          "qs": {
+            "$skip": "{{(temp.page) * 50}}"
+          }
+        }
+      },
+      "rev": 2,
+      "name": "listSections",
+      "label": "List sections",
+      "appName": "onenote",
+      "apiJsonc": "{\n    \"qs\": {\n        \"$top\": 50\n    },\n    \"url\": \"/me/onenote/sections\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"temp\": {\n            \"page\": \"{{ifempty(temp.page, 0) + 1}}\"\n        },\n        \"output\": {\n            \"label\": \"{{item.displayName}}\",\n            \"value\": \"{{item.id}}\"\n        },\n        \"iterate\": \"{{body.value}}\"\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"$skip\": \"{{(temp.page) * 50}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "onenote",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "listNotebooks": {
+      "api": {
+        "qs": {
+          "$top": 10
+        },
+        "url": "/me/onenote/notebooks",
+        "method": "GET",
+        "response": {
+          "temp": {
+            "page": "{{ifempty(temp.page, 0) + 1}}"
+          },
+          "output": {
+            "label": "{{item.displayName}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.value}}"
+        },
+        "pagination": {
+          "qs": {
+            "$skip": "{{(temp.page) * 10}}"
+          }
+        }
+      },
+      "rev": 2,
+      "name": "listNotebooks",
+      "label": "List notebooks",
+      "appName": "onenote",
+      "apiJsonc": "{\n    \"qs\": {\n        \"$top\": 10\n    },\n    \"url\": \"/me/onenote/notebooks\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"temp\": {\n            \"page\": \"{{ifempty(temp.page, 0) + 1}}\"\n        },\n        \"output\": {\n            \"label\": \"{{item.displayName}}\",\n            \"value\": \"{{item.id}}\"\n        },\n        \"iterate\": \"{{body.value}}\"\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"$skip\": \"{{(temp.page) * 10}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "onenote",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    },
+    "listNotebookSections": {
+      "api": {
+        "qs": {
+          "$top": 50
+        },
+        "url": "/me/onenote/notebooks/{{parameters.notebook}}/sections",
+        "method": "GET",
+        "response": {
+          "temp": {
+            "page": "{{ifempty(temp.page, 0) + 1}}"
+          },
+          "output": {
+            "label": "{{item.displayName}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.value}}"
+        },
+        "pagination": {
+          "qs": {
+            "$skip": "{{(temp.page) * 50}}"
+          }
+        }
+      },
+      "rev": 2,
+      "name": "listNotebookSections",
+      "label": "List notebook's sections",
+      "appName": "onenote",
+      "apiJsonc": "{\n    \"qs\": {\n        \"$top\": 50\n    },\n    \"url\": \"/me/onenote/notebooks/{{parameters.notebook}}/sections\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"temp\": {\n            \"page\": \"{{ifempty(temp.page, 0) + 1}}\"\n        },\n        \"output\": {\n            \"label\": \"{{item.displayName}}\",\n            \"value\": \"{{item.id}}\"\n        },\n        \"iterate\": \"{{body.value}}\"\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"$skip\": \"{{(temp.page) * 50}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "onenote",
+      "altAccountName": null,
+      "parametersJsonc": "[\n]"
+    }
+  },
+  "flags": {
+    "sandboxes": [
+      {
+        "allowed": true,
+        "version": 1
+      },
+      {
+        "allowed": false,
+        "version": 2
+      }
+    ]
+  },
+  "label": "OneNote",
+  "theme": "#80397b",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Notebooks",
+      "modules": [
+        "createNotebook",
+        "getnotebook",
+        "listnotebooks"
+      ]
+    },
+    {
+      "label": "Sections",
+      "modules": [
+        "createSection",
+        "getsection",
+        "listsections",
+        "copyAPageToTheSection"
+      ]
+    },
+    {
+      "label": "Pages",
+      "modules": [
+        "watchPages",
+        "createpage",
+        "updateAPage",
+        "getpage",
+        "listPages",
+        "deletePage"
+      ]
+    },
+    {
+      "label": "Files",
+      "modules": [
+        "downloadAFile"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "makeAnApiCall"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda793000003254944415458c3b5d74ba8d55514c7f1cfbe9e5b57af17d4bae5e3caeda1626483a01a950327d520937210154411f6d041440fa246cd22084a222d881c142551412f098342b45911598382ec465041a928bd40cf6eb0f79ffbf7b8ffe7711f0b2ef79cfddfe7bfbefbb7d65e7bed60008b31561f87b1042b703136e037bc8a1842e8fb9dc59935472d8c611cab7109d6610d26b13c832cc41bb87350805676b6203b3a1f13b8b4e6e8a2bcd2251869829ea9b5701db667a72bb034af68268e26311e6b1216143f891f703a84a025c56f6b56613616f110eec5a9863943f81937e148a5c05cda428cf6a1d23d988a311e9a6b804afad30dab0f588ca7f2d8f3730910b00b1fd740eacf1ec6c68ef191f950a0dd00504ccc26805ff10b16e1b22c1ffc83b7f2f3dba578d69d3f80fb324449a1be0176e359a926bc8d2bf2f8493c83a92ce764878337f14d0120e06e5cd5a95813c05ff81bdfe325bc50802dad682affae1482cdf9f3291cc6711cec9503017b719bb313a8d3221ec136e53a309cff1fc3d352a5fdae1bc039d8844fb013d7f401bb1f279443b019974b5b741c4f62a2d5e38577e1283ec03ea96c77b383f8bae15d1b32c019aa74036863151e942ad74eacd77c46443c9ee796423056fa51af1c88b8057bf0b9940fdd0e9ac3f8d0d99530e05aa9771818604c3a2dbfc0cbd20e196a98ffae54094b702fce04a0b21b7103decbdf1737c03e8a3b944370610de6183ec2a7fd022cc20e7c26eddf26fb033f2a1f46a3193c6415bfc24f4d00a3520754ef1136620b5ecbab2d159b57a47c5178b61bb74ac93d216dc3d54d00f7e366a94baa6c184f4867c37fd20ee90cc10e29694b0aac298cb59a0096e7bf4e5b87c7ba84e0dc2c7329078abee6ba1f784ecaf6d2b35d599d790320b5e5d72b87e0eaf95620e24a29777a297514ef63ff7cf584ddac8d6ff18edc0ffc299de31748fb7da88f9734adec757ca9dc1155737e975af276084188318e48556a95e9abd75aa96caec4b20cd6eba232b3ab5908e1dfacc0548cf1501e1f92b6d37952d1a8df092bb0d9dca0a601ced0679abc2d3516277024c678208f2fc860d51db2025b2f5db706b659d1775cd787a57ed02021f81f38cab7df51c7f9340000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000006174944415478dae5db7b885d471d07f0cfecdd6cb649ec2b5bdbb4a6696212b11ab4a208622b6a51a416b4be91a8f840ea03fc43948028f88f0a5a14a518a106458508da4a11ac2f2a82f86ed56aab285aadd1349a466dd26cbbf78e7fcc1c73bc59b377ce3df7b1ee170ef7de7367ce99df777e33f37bcc0413468cb1faba0ee7e0221cc1e110c2c8df3f3b014167b10917e031d881ddd8896db810efc4c171b4ab75026a8276b2a00b354177e5eb325c8cf3308f7a5747491bc682c604d4049dc9826ec6254ef568bfa01bfa049d0aac48409fa01b6a826e77aa47b7674137e732339316ac110159d89085383f0b55177447167e3336ae2641ff270159e8dd78b23411edae09ba9005ed4cbaa1232340eac57d78dda41b5343c47931c6671a5ecb027e835f41ffd23a9b0bcc4f5ae23e74b1075f68a16d33b8032fc69ffaff1c9b1dd00021b7af8d363e0e5b571b016d631eeb638c1d69889d445c2b049c850fe31f9266f5f025ec5f2b04747045dfbd6db86dd5afe343601ef3d3aa0133b80ffb95cd533d3c1e570f5a619a09f85d08e11d2595b251b717cf35a0dfb1968700a657037ad81163bcbeb08d3d5caec0eb1c35011127a43577317f2ee0ec0104d98ab719b1955a42c071dc897f65418e4b6c5f71863a27b2103fae1170035e3a4aa14645c0eff14a1c967a760957e1cb927bbc1c96f00bdc957f073c34c0bb8264b47c1f73056d8c78b4e4bab74e402f37fe91104235e37e0f5fc4f505cf19041d49dbae2dacb724ad02fb0d380f349e0332094bf824aec1a52d932084f06049f9dc2927072cfe4f3cd8c624f8731cc0fb5a943d6221c678b5b2604c17cf707aef2fe1dbb8bf56ee56fc7128026a43e1005e8227b64440174fc0a7b5b30a9cc4fbf12329d4d7c503e8353284628cffb932ee958642b725022a8486d77258924ce46f4adab00feb9b6a40c07324f53f92ef1dc42b70654bc23f2ca9ecfac27af35286a91f31dfaf0ca54d38d894808817498ec727f2bdbfe5ef4f95fcef61d0c14ff17c65b9842529f4f5c101eacd616e9839600e6fc62d92e7065fc56d999c6110b01842b8a7a4521e927f29a9330c015d69d2db8b0fe47bc7f1713c4bca063545c47c8c71a7720dd83a2e022abc5eb2067f9d7f7f570a37bd71886776f114c9c86a32078cd519da8937e0dd52cf3d821bf1022b3b3d67c23ac9c41ea933d4563ce0d5fedb29ba139f957ab2d7f09931d72fbd8aded7963b7cb1e40fbc45d280281931574ae3b2141dc981daabdc127cb6e4818ed6175806d7e1f3b83dfffe2d3e6570dbbc8e80a321849b4b2ae5556053499d3609381f6fc50f9c72796fd57c0888319eab7c15d83829024813dff3f01508211cab0953f29c6a15b851d92a10a58e1884b42338d636011ba5f177bb14d0688a8847e149da5b0566f04b7c4822f8ebf8f3286282574996e067628cc6b1d3ab8080bbf13169583e6044b9c1396945f89a143e6bdad87bf111e551ab3d78e132ff7525dfe2066988dc82f78e2a2afc34bc0a1f6da80533f84308e13d25956a89916b9c3e0f54c3aa32af5f8e9b4a0ca18e34c6e7f2f7334935833749fb8b1a23c6184aaec2c7cf62b64403b64bb6f93129dcbd6785f297e3ed381063ac42e20f1b6c56ef497b95dea56ccf60cfa91e1e988541b1014f2f284f5a115e2be5042a122e1c50902d92893d358991265827adcb538b69cd0d061c95e277a589914b140467a795808e94512a4da12de135b8c9049ca1d61142582c299f97c122ef735a09e8614b8cf13a65ee704fe1443dcd04ec967676ad8a88d06ac4211c9d560d1805aa2db3fb240dfb0e0ead25023ab8a73fd7b05686c0a264be9f8669d58080bfe31bca0ca1e510f12d2916b02c013d295272b7b481e99c165e3a2caaa8f0cb5a785695ab88cbb9e5211b0f733857da5fb34df2a876e5cf4bf3fdb38de7345794acb9cf8de5dc607e49958abe1f77d50298eb333117d588a98ed46cad1133ad4369650296bb59637e510a6b1dc6cf6a87aa2a62b664627665621e2b9d11bc408acf4f3d31450dccc454870dfe9aaf3b6ac4cc4b59e12d5200a51a4a15310b9998a93984d54a0fd58879285f87f0931a316759f918de2613589647aaa235624ee4ebbe18e30ff3dfd541cc8a98fad1daa24d0e43b5715c2f5a097d275403ba539453f8ffc5bf0153a8b1f61748a1a20000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-02-21T23:55:59.036561+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda79300000b204944415478daed9d7b8c5c551dc73f7766976db7af856dbbbbddd63e962e3ef04944221a8815116b685512c5478468547cfda17f906040234605a37f588c6f311a4c831a1f448808282d16a5a1e111492d516a8bda620ab4f4b1db76e7e71fbf733b67a773676766e7de73ee9df3496e766776f6de33f7f7bde7fcceef9cdf3910e86a22d705f00d11897f2d030b8041603930056c032a51549cdbd6e3ba00aea831f43c6031b00c58039c6d8e35c008b014f815f0a0eb72779ac20bc032740935f420c9861e349f29d53955040805a33002a831743f70266ae8d5c018306e7e2ea36ae8b2eb72bb26970230c68ea81a7a0458853ecd6b51a32f47abf5f979fd9e59e0f58db10c3d1718a06ae831d4d063c028b00475d8bcfe3e3ee2c50db30c3d0758040c032f428d7c0eda462fa76ae85ed7652e0a990ac06aa7fb986ee8b88d5e635e2f450ddde7fa06159d54045063e885a8a15770baa187ccdf83a11d312b015886ee450d398456d5711bbd1635f4b0f9fb1cd75f38309da6045063e8056815bd1c7d92e3277a156ae801d4d0c5099715986902b00cdd831a7a095543c75ef76aaa869e4b3074aee98153865f01ac43fbd2e3e8133d82f6b3fb09862e24760db00ef801213ad655d80228513f061ea841442e022ec79fb18108781af80970a095d14a2f024139e43ce033ae0b51c314da6c5f2b2213cd8ac07ee2431b9f6fcac00780f35bf9275b00be546781f65984c65d9a26b4f9c5a3a59a3c08a0cb093e4097137a01c522023e085c2022f56af7a3c09f80bb81c9288a82000a468406f4d635f8cc8781eb814d92a09240b159087c149d1b19ba815dca5274626c7002bb9808420dd0f50427b03d4ea01e7525a3ebcd25a551da2080f6f835f028d9d49a65e0f3c0c5699c3c08a00da228da0bec4dfb3a66a24e19d89fd6354237301fa4e6a0070174394100f920355fc3f601421ca0494464049d449b85135802ce4aebe4b600421ca079de097c99ecba81fd699d38f402da234e79cb3d451080a01322a7d000cda4751c438328ab084d5c5d5c0840a8569db38d6e4d01df04ee478d7d0c386c8ef8f506e07b1db85621494b00fb81bb808368c8f418701c38625e1f46d3cebe80aee2d12e15e05ee077f5a6419b40ca0b297dc74290960076029f048e34304c197809f089595c2762e6aa3d54fd0d48b31b98d8ab88a208119902be0bac47dbe83cf177e036b2e93945c01b6971ba77b3b8ee063e0efc186d0af2c49d6813970565546ca90b20534c2d00702bdaaf7e85abb2b45176218307c65a3b29b56bf93023680ff01de0a4a3eb772315b407e5764690e520de0efcd9f55de9229e04fe0bfe04820e00df025e4b8a61cf4e2122cdf43e3a45a9c56b356a9e2a680fed4be83d772f00cb17b813f83df00ed7656a82f5c07bc9ae177041939f15b439ddc2e981af088dc7ec007683de7be702b038026c022e22c5d1af0e310e5ce9ba1075107449fbcdedac0fe00cabb05b815fb82e4fce89407b1022324f4406ac63be8844d66260fecc07304dc149e0dbc065e8787ba07d4ac075c0a5188f1f6d02ee02be2f22cfd63601becc0778145debe673ae0b9273227459bff36ade7f039a15749d889cccb40930d5d2a0888c9bdfa797589b02017e08fccdd59d2b10f51eea32700526b2e8c2097c1970237035f0cf84cf3c850ee17e033f877127d191ceac6604cd03cee8e0f91698c38900ca687fff2ae00611b19d40bb5bb8197837f07a07659c895f020f91dd9cc01b81b7a47172571342227445abcdc013099f7b06b805780d9e2d321d45d13e605fdad7b186cd9f4beb1aaec6022ae810f0478072822f007007f0870ccbe52b854a0cb1bfcc7bd0e62089c36870e87907e5ec0a5c0c06d9d71902ae01ce68500bdc8feed9d7cd649218e28a0de88487bb131cc2e3e840d1a598654d5c23222bd065f3b3ca0e1e4aebe42e0450db9e2d42e7056e43abfc7aec007e0a5ceba0bcf5d8087c956cd70748051f6a00804b80b701b727d40271706823ba8b986b7ac9c1b07533b87002eb559b73818fd37814f049343894d553d71578311a68b8100d51d2c021fc19b0dd75418b844f02e841d7af1b6df0997da84338695edb59468136f0490000af06de070d6b81df00f799df2b683e60a04d7c71026322e043e8224cbb123e73080d0e5d887691269b3a7367790c9d7a95d594b037a39b79751cdf04003addea6a74bc5a12068aee43e710be1d3702b8c71cb4b23f4fab586301b79192007c6b0262de0fbcaac1df27d11dcef6e020f9338aa2534756974cebc4be0a6039ea10f634f005b6a221621fe70be406d783418db8023317204104c75187d05711e7026f2685d661100d116f472733d663070e04202265b2f39fca697e471f9d409bcb500ff88e7a2162aa4bc364cd46e06364d70b787987cf791ce33cbb9815dcca7516a0b5c016740e9e2fac4485e93b49b5fa5f304bdde6a1fdbc18dda6f5345f20302387d0e964ff33c7bfd144dcebd14c2cef9b00d025d9ae41f3069f715d981c514193406fa15aeb4ea27b0c1f05ff72031b713e3a437853ad2f10a88f59c4628f3912f16142483394d109a4bf05fee5a0ccb9c3349703680d1a53417da9e3f143e46a5a783b9c8bee89f7450f6a81a3689b9ad548e4225a9f1a5f026e4053d9e39ed2141a40bb594476437e6a8098abd0a40cd769633f477b265950066e06dedae2ff45e81ccaf19af7cf05e6a335ea445e7c8098d5e8c6879f15918aab5a208aa203981536d2c41a0c6ab70b9c54dbbe09cd0ddce5cb94b056b892c6b90445a4d34aefc34c34cd431ca096c45c8240eba4258008334a97929136a04bc9744b70287789212f057e84a6741d149178f5ee4368db33dbeb0ea021e20749ce25480d1119075e4976d9c1a9ad96929600166366f8d621ce0e9e2d97009f02b68b48bc9163bc1af90974c0e3289dcdab8f590f7c9decba81851a0dec9443d38f863a4fa0fddb49d4e8f1110b62219dbf81f13a81b99f8c92b76e602d25aa91ae4264ea644d1e7b01810e1204d0e5040174393ecf09f499edc04d64d70dbc1c78711a27f771a148ef89a2682b3aaa962ad658c04a5212406802f241d7258604322208a0cbc97b20c80922d247768b579648d14e4100edf12ee0d36497183296d6c98300da6318789deb4274021fb68d0b38c4e9b67101674c60126e432fa0d824d5eaf7621246820f505c04cd05dcc9f4bc802dc0d7d05a2008a0c054d08d266eaa79ef2070c265665020038c819f9fe973c107e87282008a474bbdb9100728168798211dbc961007280e13c0adb4b898769811d41e0f015fc19f876602781c5dbdf4582b49b3a117d00651143d003ce0ba1c9dc016c0c3e87a326368fad6109a54d1d7c6790339a1074e2dc2fc083ac439075d91620815c218bac8c01af37a292a8c3452ae021973aa06b0da8d0973ec071e33131323b4261840874263619c83ae623d8a0a6301ba9f4e2027cce803583b7a4fa03b76ec031eb184311715c608ba1be818b0d6fc1c0596a0c208fe8687b46d144b1847cdf11fe0614b18fdc0994c1746dc948ca219c4f3675386c0ece9f8cdb78471c41c4f8b48dc372d5115c63274cd9fb8c6588de6c10fa2dba5e73ef3360f64f2f459fe45055dd0e130b05744fe6ade2fa1461f4485b106f52dce36bf8f501546085f7710a7d56f8d305e30c76e11d966de2f5315c628f58571165aab0461b48197edaf258c2934be7d08784a44e2e04b19f51f16335d18e36853328c3633fd84086743bc14401235c238688e7f8848bc68630fdae358820ac3763c63610ca03d97200c722680242c619c4497477f0ed825227f34eff7a2c2588aee47647755575215c61cba4c188510401296304e00cf9a63a788dc63deef45a39a434c17c65a34d8358c4645fba8ae0b54280a2d80246a84112ffbfa84b5e6601f2a8c61b46b3a8e8ac797d1bfcedd0bd705c8030db6ae0b0402814020affc1f3174ba5491a422f90000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda793000015104944415478daeddd7b9064e559c7f16fcf7df6c27d2fb377965d021b5812023196246a82d79060205425e20d35265ac53fc15846ff48b4d4c468a5caf286d1145131a245b8448244c124240421a1889122980b48580c7796dd9d996577ba5fff78de337da6a77ba6bb4f9f7ecf39efef53756a67e77ace4cbfcf79def73ceffb82888888c4a716fa04a41a9c73c99b13fedf63b59a5e5e453716fa04a45c5a1afa14b01e381dd80a6c01ce056e026e0b7daeb23a0500692bd5d0c7b186be0ed8096cc31afa79c07660837fdf3affb90eb837f4f94b77140022976ae863341bfa0eac516fc5eee8db818dfedfa4a1777aed2c008dd0d725dd51008844aaa18f02d3c05aac41ef0036630d7d27d6d077f88f4fa0d748a5e98f5b41beb18f6277f4355843df06ccd06ce89bb186be0e35f468e98f5e62bea18f6077f429ac81efa2d9d077b1b4a14fa2bfb9a4e8c55002a9863ee58fcdd8c8fb26602f70163618b7054be127b07ebac88a14000ac437f41acd86be096be81bb1867eb67f7b2bd6e027b1547f24f4b94b39290004906ae89358fabe8166babe1778857f3bddd0c7504397015300c8514b439f024ec506e0b6007bb03b7abaa14fa1862e43a4003000a9476c49433f85e660dc1eac8f3e838dc46ff49f378e1aba04a600d0833665b0276377f4adc06eec8e3e43b370660a357429300580365aca60a769d6bb6ff1c77eac916fc706eaa6b0a0a0862ea512750058a1de7d3b76274f1afa069696c18e863e779141882200b4a9775f4bb3a16f01cef1ff6f6de851fc7e245e957a81b734f449ac2127a97a521db7034bdb55ef2ed12bed0b3f55ef3eed0fd5bb8bf4a8f00da2a50c769a66196c6bbdfb4eec8eae7a77912e15a6a174a877df85a5eb67d2ac779ff1ef53bdbb4846430f001deadd77f97ff700fbb067e8c9c496e48eae05e644062cb700b04abd7b521db709ebb7abde5d2480cc0160957af73368d6bb270d5df5ee2205d175006829839dc6ca6093c1b8d6892d2a831529816501a04dbdfb0934977dde8df5d137b3b40c560d5da484960400dff8c7814b81376369fb692cad8e534317a988765d8009e0a781b7853e3911c957a7bbb91eb98944a05d06e0fc213210a9aee55e6ccc483a6b004f00cf03e4bdbf62612a01a5f2d6037f029c8f760e5a8903ee047e07f81fe75cae4140014086650438095b2e4d56760596295d033c96e70fd288be0c93ba96dd1903de8a0580b5a947f303a70020524ca3c065c045b0a43e67a0da05801a7a0a20520433c00f93e38d5a198048b16d23c769efed02801e038a4442198048c414004422a6002012313d0510899806014522a60c40a4d872bd196b2e8048b1cd006f02167aac0674c033c0e3c04b806b37a9480140a4d8de005cd8e7d7be083c0c5c077cc63937d71a041400448a6d9cfe2b014fc056e87e15565178ad736e3e1d04f41850a4fa6680f70197c0d289457a0a20128719e02ae0c4f43bf51440241e6763bb732d520620128f93b19dbb16690c40241e355adabcba00221153062012318d0188444c198048c434062012316d0d26c394bcb6eaa14f2407239430a3d65c00199639e0a358255ad56e300ef8116c479f5265cfed0280ba0032507ef2c91cf04fa1cf250fbeb67e04b81cdbd0a334f414402462a5ebb38848df96ddd8f514402462ea0288c463d98d5d5d009188a90b20128faec600d40510a926750144a4495d009188a9145872e72be5a6b035eed753bd2e661dd85fc6ebd26420199675c00780f38146e893c9c128252b03066500325ce358262005a141409188290088444c014024621a0328aeba3f1680e32dc73c36bf7e1edbfa791fb609a4484f1400c2fb16703fd6900f618d7a1e38923a5e020e0287fdc71668068706f047c0bb425f88948f0240783703bf8d35e4062caea0b32aff7c7d946aaeb1274350b600d0008ed2bcf3d553c731ffef71ff39b334d3e4a3feed59ec8efa6ae0628a51f198dcc9bb6ef8228352b635013f075c8b35e239ac61cfa7de7634efa40b2c0f14c9ffcf056e02f684be209190ca96013c8235dc46bf774b9f363f047c02f85df424442256b6e9c09933131f381cf0f7c0d7425f90484865eb020cd277b1eec49f0113a14f2612c9184d15e7028ca1b900e550abd592aec04dc03b8037863ea708cc021fa29a1b8334809f00aea46437cfd867033e0ffc05f05a6cb69ae4c077bbe6814f873e973cf89bc93ae09d942c0b8876002c35887807707be8f3111982aed6048c860f02b35816f06ce8f311c959576b02c6320898762f7063e8931019b6a8330058cc028e011f03fe37f4f9880c53f40120e5eb586d402c03a0129f6358d5ec22050016b38006561df8f5d0e7239293c7b1fa974565ab04ccdba3c05f61c52a22555207fe1d782afd4e65005eeab1e08dd8a0a04855d4b147dd7f032ca4e7d128002cf72cf658702eeb371209cc014f03d703ef07bed3fa0951960277922a11be1df837e0a7429f5315f8dfe934f09354b314b88e6d7a92c70df5512c23ed75fe84039e00be0cdc83ad2ab56ccd090580f60e037f8efd514f097d3215b116f80de002aab982d108f9d4cfdc07fc2ab6de45afdf7f8155a6ce2b00b44865017763e301bf12fa9c2aa4863514753dbbd7c01edf1dcf63c528fd21da481507fd352d8f4d44aa440160650fa2e220a9b09817045991ef0ad4b1e2a04b8173429f93082c0eaa8eb37217de61f52c75e8bce0acc60056f76decf9e91fa3df9714c7c5c0552b7cbc81755fef06ee76ce1d82ee9e02c45c09b8446a40f006e00ae007429f9388b71db88c95172071c0cf039f013e023ce29c438540bd7b1af84b6c551b9122e8e6465d0336023f07fc016db68f530058452a5ade06dc15fa7c44fa300abc19f81960cc67b5400401c03987736ed41f59bed54bd80ac22f86be26913e4c6083d99bd3efac7c00f0ce07ae064ee92708a4b280cf03b784be18913eeda6a51b104b00380bf83de003c0648620f032365df8c9d01724d287716c4ec6a2581e6bad07d66083219f056e6f1d0dedc157814f02ef0b7d5125740c1b48adeac6201394ac86269600903c2a3909780ff025e050afdf24551c741df0162cb390ee1c013e8805e3aa3d66ae033f8abdb64ad5a64a75b219a4a3f21bb13fd68d19b2806f001f073e4cc9368208c1ff8e8f0277863e973cf82ee50c25bbfb433c6300e93bce5ae0978193fbf946a980f10f587740a4b462d917a0b568e207b1149e0c8f06bf8715071d0d7d7122fd8a7551d0296c9185997ebe389505dc0afc47e88b11e9572c1940bb6bba00dbcc314b167010cb027a1e5014298258c600da19037e09d8dbcf17a7b280bb807f097d3122fd88b50b90381bab0d18c9501c348fad22fc54cfdf4024b058ba009d5a770d9b20715ec6ef7f3f366558a45462c900560a68bbb0c782e319b280056cd1906f86be50915ec43206b05a507b3bf0da8c3fe3616cf9b02a2e792d1515cb9a80ab5dd346ecb1e003ceb9a3bd5607fa1261872d20fa36e0c2d0175c243eb35a83d55e54716310872dd155ba1baa96046bba042b13ce3251e800702db01f980c7d4105b306782f161cab9825e5b53148ae62990b9004b595fe40276259c0e2364abd48ad1f780b565f7071e88b2ea024138be5755778b13c05e8f69ade846502598a835ec01e0b1e0e7dd122ab89e52940b7d7330dbc1bd8d0cf0f49751b3e8badc42a5268a51bb4e8532f19cdeb80cba1bf2cc00781396c73d167425fb8c84a620900bd6435e3d886a03b32feccfb807f0e7de1222b892500f4ea3ce067815a862ce038561cf468e88b11e9448380ed8d603baaeccbf873ff1bf85baab9069e54402c19403f839a7b815fa06523856ef92ca0810580ff1af0b9890c442c4f0192ebead53b815767fcb98f634b891feff0f1e33d7c2f91818a2503e8b75bb3151b109cc8b8a1c8a7b09588db5968f95c91bc2c7b11c71200b2643497011765fcf9cf61c54147da7c2ca6350515e5c25af6fb8fa92473b552e04e4e017e0db8df3977a4cf8942007760054297a73edcc06a0662e0fcb51ea139289a04e65a9bcf6df7fe5e7e5696afefc738b6d664a9825c4c01208b1fc3f612b8a99f89423e081c01fe145b91f834ffa13af16c397e18f84d601dd51b63aa63331dafa6646daa54279b41d6479bebb089429fc76afdfb752f7033f02effff06b65d56a5f98079cc5f7fe5f80c6f2f25bbfb433c750083b8e3bc9e0c7b09a41ac127689608471100a4b8f418b07b9364d84b20e501e036fff6cbc0b3817f2f12b158328041790d19f612486d317e2df05deceeafd58425989832804118037e11d893f1fb3c802d1fb680ca8425a058ea000699d5ec23fb5e020d2c003c45f66022d2b75802c020b39a642f81fd19bfcfb7812f023b03fe5e2472b10480418f6b9c8e6d2b96652f813a7013da5750028a2500e4e10ab2ef25700f16044482d05380fe6d02de034cf59b05d46ab57aad569bd744a0f2cab0786c21c4520998974b801f02eec8b09740e5f946b2167b82b20d1b044d7e59c91c8dd6fafd95de4f878f2df9b11d3eb6528b5dedfbb4fb9ec9f8d28514ffc6e96879ea144b00c8eb0f73123651e8cba82fbf9a696c95a5d7843e9188bd484be1592c630079e66917937d2f8158a8e621ac87b0056a16c5520894e7354d6363017ded252032244f021fa725538d2503c8dbebb01d86950548d1386ccfca0f03ff0a4b579f8a650c00f21da019c7a6f8de063c11fa42250ac78183c068878fd7b0a9ebff095c0f7c0e78b975a03a9600308cd1d9fdc095c01f3ae79c9e0848ceee64e9ea52ad1cb614dd016c15a6b6afc958024037bb0367350a5c057c1a7838f4054b75f9867cc01f99c4320630ace2a633b167dd7ded2520326cb154020eb335be83ec7b09880c452c8f018799e96cc50604fbda4b406498621a0318a6cb807fc4465e4506cadf58a68135ab7cea02300b2c741a948e2900e43d0898762ab67ee0fdceb9593d1158a45fc4e0bc05782f2bff4ee7b032f54f3ae71ea6cd938058024088718d1fc7f612b8591385000bc087b067d7552c099ec4eec8c3fa439f88cdab58ad0d5f84ed6bf1fbc0adceb9468c8540c3ce0000d6631385be40b6bd04aae210700dd648aa363852c79ec95f43e7c29c50c6b040f1116c39fa7bd237a4580240a8271baf072e05ae8b390bf0d77d1cf85ae873c983ef93bf2af479ac620fb68ad583a4b6a38ba50e20d41d67127b22b029f42f40047803b023fd8e580240c85bef8564d84b4064804ea565639b580a81421ac3522f2dff2da18dd0d2ed8fa51028f435bd125b0da7afbd04440668c90b30962e4068c95e02e7853e11913475018667173651a8afbd0444f2104b17a02841ededd8a0a0482194ad0b50f6c0b4990c7b09880c5ad90a81cec76aec679d73735859e9617fcc615b6fd7b152d33a567c328705ba61570276f256e006e0f6588a8352c1ae6c379c6e3568bec64aa56c01e0fb81efc31af702d6c01752c731e068ea38e88f3328ce8bef442c0bf81271ed25b00eb81ad84e091bca2a1c702ec5798d75ad5d00284a7fb993117f8c635322cbe8622c13b83e962c0098c2eae5b5314881b40b00551c042c9a69e0fdd85de3b073ee1896bd1c4e1db3fedf23c03c9666a6b39da48b53a69975653ad72894ad0b5025fbfc9170341bf542cb91bc6f160b0847b0b18d435890b828f4c5483995b10b505535ecefa1a02c4353ba410b11199c580a8144a40d650022115300108998028048c4140044e2b16c6c4f0140241ecb1eef2b00c830a9bea460547422c3d2c0f64778966a9604afc1f68228155502cab01cc2a6724f863e911c34802b81dfa2781b83a42d1b03500620b9f3b31d178047439f4b1efc7a0707429f4717ba1a035025a048243408281231050091886959709188690c402462ea0288444c5d009188a90b201231150249ee7ca14c8d6a56018215398d51c21ba702800ccb7a6c29f45d546f2e8003f650c2313505001996096c43940b429f8834952e6249a9952e45ae3a05009188e931a048c4940188c465c9cd5d0140241e0d6c9fc9452a041289c773c0ffa5dfa10c40241e5f009e48bf43838022717804f818309f7ea7ba0022d5761cb81ff875e02bb0b84623a04a4091b23a08dc47e76cdd0173c03dc00dc03701976efca000205256b70177adf2390bc02c506f6df80905009192f18d799e96fe7c3f34082812310d028a444c750022115300108998028048b1e53a1ea70020526cb92e9fa6a70022c5768096197c83a40c40a4b89e06be488e59801e038a14531db815b81b96d6ef0f52bb4a407501242f7a5d75671ef814f021e0489e3fa85d00500620796800cf03cf50dc7d0192d77d2f812afd35aec7af4dab630b761c006e016ec67e5fb9ddfd4119800ccf4bc0bba9eeee405939ec6e9f1c2ecf869fd06420c99d7f21d781c7439f8b2ca5a70022116b17001ad8ba61cf610b0ad4439fa488e4a35d17e028f041e0ef806dc016e05c6007b0d1ffbb0edbeb4d5d0891125bd2807d5fcd012f002f38e7be9afabc69602db0dd1f33c07e60271618b6fb8f4f00a3a12f4c4456b7e21d3c350ab9001cf6c753ceb9aff8f78f03535846b00bd8cad28c61031618d6f9cf5560102990be52f8546038ee8fc3c0f79c5b2c1f18c73286f55886b01dd80c9ce7dfde80752f92c0a0c148910006da876f13180e014fa602c30496319c00ecc63286ddc05958e6b00dd8843d2b9e40814124574319c44b058663fe38041c480586492c309c82650c5b803380b3b1b1866dd838c324ca18440626e8287e2a30bcec8f9780c7528161ca1fa762630c33586038cbbfbd15050691be15f2315e2a301cf5c741e03b3e30d4b0063f0d9c069c8e751bf66019c3262c63d8e03f6f0c050691b60a19003a493da64c02c38bc0b7528121c918366119c366602f96316c6069c63086e63c48e44a15003a49058664b3841781477c6018c182c22416104ec782c02bb08c6103d69d48328651943148242a11003af181a1819534cf6181e11ba9c0308d0587196cf071139631ecc382c50eec5166923188544a942fea546098f5c7f3c0432d81610d3696b0030b10e760dd8a4da81c5a2a422fde943681e159e0411f18466906861d5841d3162c30689e8494925ea45d48cd674f166b786685791249c6702ecd791249d5a3e64948a12800f4a9c779123b593eb352f3242438058001eb719ec42e2c3024f324928ac76d346756ea8984e4460160487a9c27713a56b3902e87de8a050acd939081510008ac8779122761816106ab7a4c1e556a9e84f44d01a0a03acc9378bca51cbadd3c89b3b1c0a07912b22a05809269530e7d9095e7496c667960d03c090114002aa3cf7912c904aa8dd8130acd93888c0240c575394f22090cbbb1207026ede7498c87be1e192c058048b59927f1022bcf93d80abc92e6f4eb9d580d83e6499498fe70b24497f324d6624f1f92d5a193e2a619ac2b51d4bdffa485fa799249cb3c89b55820780e786c187bdb8988888888888888888888888888888888f97f46b60ed815b0903d0000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda79300001fbf4944415478daeddd7faca457791ff06fee7ab3d1cad676d1caf6b2f6eadacbdaabc53f1a2410d25ac605414355292834a4a401e100c50241020ac24d020802292d2ea42010049011ae8402690405194ae4d4585e81948a0a5a90554363b935aee92636d85ab22c6bf78f33c31d5feeaf993b77cefbbee7f39146b377e69d7b9fbbb6f63cef39cf79ce2f3cf1c4130100dab2543b000060f1240000d02009000034480200000d9200004083ceab1d00c03a0e27393e7abe34c95b6b0704432201006a3b9832d01f49b29ce46892fd497e29c989d13577d50e12864602002ccac194c17df2aefe70925d5919e8d773ba76f03034120060de2e4cb9933f367a5c9ce492247bb3f9400f2c88040098d581943bfae594817e79f4dabe18e8a1f32400c066f6a50ceed726399432e81f4c72410cf4d05b120060ecfc9435f9ab935c9932c82fc7400f83240180f69c9f52717f24c9552977f517a54cdf1be8a111120018aea594b5f92329d3f657a60cf4fb935c5f3b38a02e0900f4dfee9441feca9429fb232953f9fb92dc503b38a09b2400d01f4b492ecbcfefa5bf28a6ee81294900a09b26bbe21d4f599f3f1877f4c09c4800a0aee594417e5c7d7f7192a744d31c608749006031c6fdeec78d738ee4e7fbdd032c8c0400e6ebc294c1fdeaacf4ba3f9c52a867a0073a430200b3190ff4c752eeeaf5bb077a4502001bdb9f953ef7e3ad764f897ef740cf4900a0383f65a03f9e957ef7eee881c19200d09a711bdc632977f38752d6e8f5bb079a220160a8c607db2ca79c62b71cfdee017e460240dfed49724592cbb3b246afdf3dc0262400f4c5ee943bfaabb2d2256f39a518cf400f302509005db33b655dfe58ca607fc9e8eb8331750f303712006a594ab9a33f9252797f2c65dafe50dcd103ec3809008b70382b2d70c7a7d8ed4bf2fcda8101b44a02c03c8dfbdd8fd7e82f4fa9bad7ef1ea0632400cc62bc77feea9441fee0e835033d404f4800d8c8852977f257a414e41d4cb9a3d70617a0e72400244fee777f2ce5ae5ebf7b80019300b4e5fc94bbf9e32947d5ea770fd02809c0309d9fe4b29481fe6856d6ecddd103904402d077e3836d965306fbe5e8770fc0164800fa6129656dfe58caddfcf194823cfdee01988904a05b76a7dcc55f9db2467f594a41de05496ea81d1c00c32101a863b2dffdb8339e7ef7002c8c0460e72d67658dfe8a94bdf507e38e1e808a2400f333ee773f3e93fe50ca5e7a5bec00e81c09c0f40ea60cf4e3ce784746cfbb63a007a0272400eb1bb7c1fd87a3e78b538af20cf400f49e04a00cf447468ff15dfd852995f7067a0006a9a504605fcadafc78b03f1a07db00d0a8212600fb5206f76359e9777f30eee801e067fa9c00ec4ba9bcbf3cc9b52955f797c41d3d006caa0f09c0de9429fb4b533ae41d4d69817b510cf40030932e2500bb53a6ed8f66a571ce81e8770f007357230158ca938faa5d1e3df6c5400f000bb19309c064bffb2bf3e47ef7067a00a8685e09c07256b6d61d4fd9477f51f4bb07804e9a3601189f453fee7b7f34657b9d7ef700d023d32400bf97e44531d00340ef2d4d71ad1ef8003010d3240000c040480000a04112000068d03409c0e3b5830500e6639a5d00660b80be7856925db5836030ee4bf260ed20e66d9a04c00c00d017ef8b5d4bcccfc9247f9ce4f6da81ccd33477f5660080be385b3b0006e54492df4f7263ed40e6a94ba7010240574dce28dd5a3b9879b00400005b334e021e4cf2e5dac16c97697d00d8ba1349de9272364eafa9010080e9dc90e43db583d82e833a004cefb224bf563b88edd0080800a67722c93fab1dc47658020080d91c4e72a47610b332a803c06c4e24b9b27610b3920000c0ec0ed40e60561200006890224000689022400068901900006890bb7a0068900400001a2401008006490000a04112000068906d8000d020833a0034480200000dd20808001aa40600001a64500780064900006076bd5d1e3faf760000d063cf4d727e92dd0bf8594b497e9ce4ff247920c937b7f3cd24000030bb1b478f453b99e4d1d1f30793fc70da6f20010080fe39317afe9524cf4ff289249f9ae61b480000a0dfae4fb22bc9d1246fddea8714010240ff9d48f28f92bc67ab1f900000c0309c48725db658936009000086e34492b3493e9be4b18d2ed40a180086e58624bfbbd9455a0103c0f09cd8ec02833a000ccf0549aedee8020900000ccf8924cb1b5d20010080613ab0d19b8a00016098f66cf4a619000068905d0000d020833a0034480200000d9200004083240000d02009000034481f0000689019000068900400001aa411100034c8a00e000d520408000d3203000c917fdb6013e7d50e0060079c4e7247ed2098c9f36a07d08a6912001935d0172fac1d0033b930c99f25b9a176202d30a803d0153fa81d404b240000d02009000034c836400068904e8000d020330000304c1b8edb660000a04106750018a6a599df5cc51200000c8419000068900400001aa40810001a64500780619adb364000a03fe6b60b00001808db0001a0418a0001a041660000a041660000a04106750068900400001a745eed000076c07b92ecaa1d04533997646fdc982ecc3409802240a02fae4b72a27610d065322d6088ced60e00ba4e0200000db20d10001a6450078006e90408000d320300000d520300000d32a8034083d400004083cc00004083a669052c5980d99c4ef2e8e8f1a3d1d7a7933c92e45492fb935c9be4a5b50305dae12c00d8dcb99481fb6f47cf8f2479382b83f8c32903f943a3e74746cfe36bce6de1673c23120060819c0608c987937c2b2b03f9e4207e7a4131ecadfd9700b4450200c9eb6a0700b068d6f521d95f3b0080459300004083ec02e89e33294563e792fc34c94f46af4d56913f9ab2467d7af4f58fb35259fea3896bc7d73f92e417937c23c945b57f4100ea5303b0b3ee4ef2dfb232288fabc64f4f3c26b7868d07ed9df2ba247f5efb2f0580fa24003beb7752eebabbe23fa654bb5f533b1000ea32adbfb37eb176006bb8b1760000d4270168cf37927ca5761000d4e530a036bdbc760000d46506a04d0f25f964ed2000a8679a0440b2302c37a66c2f04a04106f5b6fd51ed006087ecae1d00749d6d806d7b7792d747732086e77f26f99bda4130b5dd497ea37610ad9000f0e6249faa1d04ccd96fd70e8099ec49b921b9a176202db004c06d49eea91d0440d4252d946d8024c94db5030060b1ec022049be1acd81009a620680b157d70e0080b9da70dc7657cfd8fdd11c08604896667e93e6dc94e45ced2000d8796a00987426c92db5830060e719d459ede624a76a0701c0ce9200b09637d70e00809d2501602d9f8c36aa00832601603d9a0301f4dbe98dde9400b09eaf24f97aed200098d9031bbd2901602337d60e0080999c4cf2e046174800d8c83d493e5d3b0800a6f67749beb3d105120036f3aa38a10ba06feed8ec026701b099d349fea47610006cd91d493ebcd9456600d88a9b933c5a3b080036753265f03fbbd9855a01b3559a030174dbc9249f4bf2175bb9d812005bf5d194130301e89ef1e0bfe5f35cce9be29b9b01e0d549fe73ed2000f899932915ff1f4972fb341f9c26013003c057927c23c9336a07020cd29eda01f4c8c99459d93b93fce92cdfc00c00d37a7992ff513b08d8c46793ecae1d04533997f2dfec86da814ce9c32955f78bf8ff6d29a5b8ef0749eecd268d7e36334d020049f2ed245f4cf24f6b07021b3898e444ed2068c2ddd962d15dd7280264162faf1d006c62d32d503027bd9d6932adcf2c1e4ef2feda4100303b0900b37a53340702e82d0900dbf1ceda0100301b0900db714b340702e8250900dbf586da0100303d0900dbf5f9247f5d3b0800a6e33020e6e155b50300603a0675e6e15b49be543b0800b64e2740e6e5e549fe5fed20003aeea694330f6669aeb794e4b19416c0f725f9ce76029100302fa7528e0c7e4ded40003aecb7329f36d52753feddbd3d331e0664098079ba29c9e9da410074d8bcfe8d3c91e45753665f3f97e479d37e03c701336f6f4ff2deda410034623c9b7020c9914c311b601700f3764b92876a0701d0981329b301ff72ab1f701a203be18db5030068d03809b87e2b179b0160277c3ac9b76b0701d0a01349fed5562e3403c04eb9a97600008dba20c9eb37bbc85d3d3be5ee245fa91d0440834e2479fe66174900d84937d60e00a0514f49726ca30bd4000ccb7392bcb8761013be9fe413b5830068d08924976f74811a80617966923f4f726bed4026bc2ac9b9da410034e8a28dde3403302ce3e99e5724f95fb58399f0eeda01003468cf466f9a011896c96cefb2241fa91dd0c8db537a5603d011660086e51facfafa35490ed70e6ae44db503006085198061d9bbc66b7f563ba891db927cb77610346377ed00a0eb1c073c2c6bfdf77c76caee80afd60e2ea520f0ceda41d0843b92dcb5cdef712ec9ae05c75de367d68a75f5e7cfa534b0f9e56cb1952ddb334d026009a0fb7ebaceebef4df2acdac1a524217727b9ae76200cdedb6b07c0ccfe4bed005a61096058d64be89e99e405b5831bf917b50300c05d7d4b3e543b8091fb530e0b02a02209403b9e96e485b58318b9319a030154651be0b0fc7493f7bbd217e04c92f7d40e02a06506f5b61c4ef2cada418cfc6192476b0701d02a09407bba74e7fdc6da0100b44a02d09e0349de563b88914f24b9a77610002db20db04d6fcbda5d036b785ded00005aa408b04dbbd29d6d817f95e4ebb58300688d417d58a6e9ecf88a244fad1df0c88db50300688d04a06db7d50e60e49e245fac1d04404b2400c3b2591f80d59e9be49ada418ffc46ed00005aa20870586639ddf1e3b5831e399de496da4100b44211e0b04c3b0390948382bad222f8cdd11c0860210ceac332cb0c40927ca076e0131ce30ab00012806199650620290705bda676f023ef4ff237b58300183a090063efaa1dc08437d40e0060e814010ecbac4b0049b75a047f31c95fd70e0260c8cc000ccbac4b0063bf5ffb1798f0aada01000c990480497bd29d82c06f25f97ced200086ca3640567b7d92fdb58318310b006d395c3b80966c67cd98ee99d77fcf5b93bca8f62f93e454caae8037d60e84def952caa157f4cb52921b6a07d18a69060c4580edf8d52497a51bdbf1de94b245b12bc717d30f7b935c5f3b08e832d3fac3b2dd22c049b7d6fe6526dc5c3b007ac70d0b6c4202c07a9e93e4bada418c7c30c943b58300181209001bf948ed0026680e04304776010ccbbc8b3a9f9ee4a5b57fa991cfa46c0d04600e0cea6ce6fdb50398d095f30a007a4f02302cf32c021cbb28ddd986f7f594ed5d006c93b300d88a77d40e60c28db5030018023500c3b2538d9d2e4877928087927cb47610007d670680adfa8394b302bae0a624e76a0701d067eeea8765276a00c67625f958ed5f70c21fd40e00a0cf24004ce3652945815df06fa23910c0cc24004cab4b2d82bbb23b01a077140132ad17267946ed20463e9de49eda4100f491419d5974a916e0d5b50300e82309c0b0ecd436c0d59e913213d0057727f96aed2000fa4602302c3bb90b60b50fd4fe6527fc66ed0000fa4602c0ac9e96e415b58318f97e92dbb6f1f933b57f0180459300b01defad1dc0841b33fb402e01009aa31320db7120c95b6a0731722ec92d337e4e5741a0396600d8aeae9c1190247f98e454ed2000fa4002302c8bda0530694f920fd5fec527bc79caeb4fd70e1860876c38732f01189645ee0298f4da941303bbe09349be3dc5f5120060a896667e731bd7d29e2eb5087ec314d73e5a3b58801a1401322f2f4ed91ad8057f95e4eb5bbcf6e1dac102d4e0ae9e79dace5efc797bd916afb305709876d70e00baae46d118c3f5ec24d7a5b4e7adedbb298705bd7493eb2c010cd3ad49fec306ef4fce682eadf3fed23a9f595ae7bac733fb4dd5563ebbd6cf9ff67bcc3ba6793a9bb2b5f89f24b97e813fb7591200e6ed4349aead1dc4c8cb92bc24c9ae0dae5104384c9fa81d0033fb95da01b4421120f3764dcaa0db055b690ef493da4102d4a0087058ba32a3f3feda014cb8391baff3ab01009a640660586af50158eda9495e533b88097fb2c17b1200a049067576cabfae1dc0848d66012c01004d9200b053f6277957ed2026ac5714766fedc0006a5003c04eba39e5ac802e78d33aaf7fb776600035a8016027ed4af2b1da418c9c49f2f6355ebfbf7660003518d4d9692f4b290aec827726f9d6aad71eaa1d14400d960058842e1d1474f3aaafed02009a6406804578414a83a02ef8529e7c5050578e3106582809c0b074a511d05a3e5a3b8009af9af8f3736a070350830480457976ca4c40177c3bc937467fbeae76300035480086a52b9d00d7f3ef6b0730e183a3e703b50301a84102c0221d4bd915d0059f1c3d5f543b10801a24002c5a9766013e9de499b58300a84123a061e97211e0d8fe246fa91dc4c86f26f97eed20006ad007801ade513b8009476b07005083198061e97a11e0d89e241faa1d0440cb0ceac3d2872580b1d746131e806a2400d4d4a516c1004de9d31d239bebcb12c0d88b931c8e13f998bf0b27febcba7e69698df796d6b976f57b4beb3c6ff4fd97d6f839ab7fd65a9f59ebcf9bc5b6dae4cf5dfdf31edfe0cfebdd1cae15db7a9f5debef76bdcf26c9d924cb61612400c3d2c7ff9e1f4bf28f6b07c1e07c36c9f5b58380ca4e6ff4a625006a7b414a9b609827bb96207960a33725007441970e0a02188293491edce80209c0b0f4ad0660ec9a947a0000e6e3ef927c67a30b2400c3d2c71a80b10fd40e006040eedcec029d0087a5af330049f2d424afaf1d04c000dc9195134fd7a513205df2eeda0100f4dcc9241f4ed956b921330074c90549de553b08809e3a99e47349fe622b17bbaba76b6e4e392b0080ad1b0ffeb76cf5037d2e1a639876a534077a79ed40007ae0644ac5ff4792dc3ecd07250074d1cb92fc4e92876b070230677be7f47d4ea6b451bf33c99fcef20da649002c1774df9012ba5b93bca876100073f6be6ca1427f1d4b29c57d3f48726f3669f4b39969060c4580ddd7e76d80abfd6a92a727f976ed4000e6684b057a8be0ae9e2efb78ed0000864a1f00baecd9298705013067fa00d0751faa1d00c010b9ab1f962115018e3d2dc92b6b070130349600866548458093de533b0080a131a8d3070792bca576100043a206605886b80430f6b6da01000c891900fa626f920fd40e0260282400f4c9ebe3a02080b95004382c432d029cf4a9da01000c8156c0f4cd4b92bc39e5100c80bef94fd9de81408f27f9fb24ff3bc95d49be90e4f42cdf68c845630cd7ad499e573b0880195c90e486397dafd7a69c06f885944386a6620960585a49e89e9bd22618a06fcecef9fbdd90e4d7927c2ec9e1693e681be0b0b4500330f6d1da01d069bb6b07000b7422e504d5db925cbbd50f4d73c76806802eb926a51ee033b503a193de15ff66f5cdd92407535a7f5f5f3b989eba3ec9bf4bf2cf939cdaec624580f4d9fb2301606d5fae1d0033bbb176003df7bc24ff36c96f6f76a11a806169a50660eca929bd010058714592e76f76911a00face4141004f7622c94b37bbc80cc0b0b4540438b637c93b6a0701d03147520e525b97190086c04981004f767d92e31b5de0ae7e585aab0118db93e4e3b58300e898831bbd690960585a5c02187b653699ee0268ccfe8dde34a80f4bab3300630e0a02d82209c0b0b43c0390242f4cf2f4da4100f4810480a1b9b57600007d60170043f3cc949900003660068021fa40ed0000bace2e0086e86929bb02005887419da1d222186003120086ea4092dfab1d044057290264c89c1100b00e3500c3d27a23a0d5f626795fed2000bac80cc0b0b4de08682d6f4c49040098600660679d5bf0cf3303b036cd8100563103b0b32e58f0cf3303b0b69724b9ac7610005d32cd1da31980e9dd96e48124a7933c3a7a3e9de4e1240f253995e491d1d7e3e7c9eba6b5e819873eb935c90db58300e88a6912003300d37beae8318b332949c08f93fc28c94f465f9f494916fe6f56128853a3f70ed5fe853bec39499e9de4ebb50361219e553b00a6f6d3f8376ca1ac1977d79ed1637f664f2278b28f26b9b676102cc4fb929ca81d04749922405a724d4a3d00c377b67600d07506755ae3a02080480068cf4529e7041cc8e2776900748622405af496d123294595e302cb735929be3c357a3c9a27efd27864e2fdf1ae8df17bdb31cbae0f80992902a475e362cbedce069c4ba962fec9e8f96f5392827192f0689ebccdf354ca56d04793dc1f056bc0824900603e768d1e7b465fefaf1d10c046ec0200800619d401a04112000068900400001ae4344000689022400068901900006890bb7a0068900400001a2401008006290204800629020480069901008061daf0c6dd0c00000cd3d2cc6f0200c3640900001a6450078006a9010080069901008006a90100866877ed00a0ebceab1d00c00ef8ad24bb6a07c154ce26594ef24749aeaf1d4c0b2400c010dd573b0066727fd49bcdd3dc1a010100fda1111000f064b601024083ec02008006990100800699010080069901008006b9ab078006590200800619d401a0411200006890224000689019000068900400001a6417000034c8a00e000d520408000d320300000d92000040831401024083ce9be25a3500405fdc583b00a6762ec9feda41b4649a04c00c00d017af4c72a27610d0657601004374b67600d075eeea01a0418a0001a041960000a041eeea01a04112000068901a00006890411d001a2401008006490000a041120000689004000086e9d4466f4a000060981ed8e84d9d00016078ee4cf29d8d2e30030000c3f3bd243fdce8028d800060584e26f9d4661719d4016058be99e4aecd2e920000c070dc9ee477b772a122400018863b92bc2ec9d9ad5c7c5eed6801806d3999e4fe94c1ffe1ad7e480200008bb37bcedfefcb493e93e4d6693f384d02a05e0000b6e754922f6ce3f38f27399d72c77f574a0230d312bd190000589c5faf1dc0982240006890697d0068900400001aa415300034c8a00e000d520408000d320300000d9200004083240000d02009000034480200000d92000040833402028006e9030000b3db553b8059b9ab0780d9fd7ded00666509000066f783da01cccaa00e00b33999e4beda41cc4a020000b37930c9f76a07312b0900004cef6492db6b07b11d760100c0f41e4a726bed20b6c30c00004ce76492b7d60e62bbec020080ad3b99e48f937ca77620db755eed0000a027ee48f2ce2477d50e641e240000b0b19349ee4ef2ae248fd50e665ea649001401027db1bb7600f4dac9d1f34349be96e4f349eead1dd4bc4d9300a80100fae2d7b3f26fd6e399eddfaf593f37ebf799d7cf9bd7f71edff4cd2ba6f56258ebe7ccfab3b7fb7738fefc9924a7e6f47b7796250060881eac1d00749dbb7a0068900400001aa4132000344823200068d03483faaedac10200f3314d02f06856f64602003df60b4f3cf1c434d7ef497224c9d5492e1dfd7939c9de24d7d7fe6580c1fa729217d60e028664da3e0067520e40587d08c2f949ae48727992a3a3c753921c4872a2f62f09003cd9bc1a013d96e41ba3c7a47d2933044753660d2e4e72c9e8758901005432ed12c0bcec4b593eb836254138347afea5480c809f670900e6ac562be01f66ed19830329b305c7526a0c8e26b928a5c64062000073d2b5b3004e8d1e5f5bf5fa852949c1e124578d9ef727b920120300985ad71280f5fc60f4586dbc74702cc9f19444e1602c2500c086fa9200ace781d163757f824359594a581e3d0ea63433921800d0bcbe2700eb19270677ae7a7dbc84b09cb26d7139650be3f36a070c008b34d404603df78f1e93965276241c4d49089e9eb294b03f12030006aab504602d8f27b977f498b43b2531b834a587c191acd418584600a0d76af501e8b33d294b09c75296130ea6cc1c3c251203d829fa00c09c4900e6674f4a5dc19559e97e78494a8d817312607b240030679600e6e74c92ff3e7a4c3a3f2b87261d8f731200e8003300f5ec4f72594a42305e4ab8309612602d660060ce2400dd334e0c8ea79cae782865064173235a26018039b304d03d0f8f1eabcf49d89f92145c91b233e158ca3282731200989a04a03f1e4ee978b8baebe1f89c84712f834b5396111cb90cc0ba2400fd373e27e1ae55af1f4c594238367a5c98b27d7177240600cd93000cd783a3c7ea198383294b09933d0c9c9300d01809407bc689c11dab5e5fcecae1494752660ff645f121c020490018bb6ff4586d9c0c1c49726d4ae1a17312007a4e02c066be377afce5c46be37312965396122e8b7312007a451f00e6694f569a1b1d4f293a1cef4a9018b01dfa00c09c49005884dd29f505c7b3d2c3e0609c93c0d6490060ce2c01b00867b3fe390957a4d4181c8d731200164602404d8fa5743c5cddf5705f567623fc72ca6cc1c1686e0430379600e893f1390957a52407875212055b1587cf1200cc991900fa64bd73120e6465096179f47c20c905911800ac4902c0109c1a3dbeb6eaf5713be4cb527a185c1c890140124b00b469bc74f0f42457a62405ce49e8364b003067660068d103a3c7ea73120ea52c1f5c9d9573120ec53909c000490060c53831b873d5ebcb59696c343e76f9fc68870cf498040036775f7efe9c84a59464609c108c8f5c764e02d00b6a0060be96b2d20ef9aa2497a42c233827617bd400c09c990180f97a3c2b07287d79e2f5f13909c75392834329b3079a1b015548006031ce24b967f498b4372511b832a5c6e0ca945903e724003b4a0200759dcefae7248c6b0cae8c73128039930040373d96e49ba3c7a47d59293cbc2ace490066a4081086615f4a5230deae78f9e87928e72428028439330300c3f0c324ff75f498b43fa5b1d1724a827064f49a76c8d03809000cdbc349ee1a3d261dcccae149c75376253827011a220180363d387aac4e0cd63a276139da21c3e048008049eb9d9370384fae31b83465164162003d250100b6e2fed1e38e55af2f67a5b660bca4b02fda2143e7490080edb86ff4f8cb89d796925c91e4e224d7a69c93b03f65c6407323e8080900306f8f67a5ebe19d13af8fdb215f9eb233e170ca014ace49800af401006adb93920c5c9d95fe054753da248f670cee4af29cda81c2909801006a3b93e4ded163d2f89c84e329cb09c01c99010080062dd50e0000583c09000034480200000d9200004083240000d02009000034480200000d9200004083240000d02009000034480200000d9200004083240000d02009000034480200000d9200004083fe3fe250ed2e23fe4dc50000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "getpage": {
+      "id": 3888,
+      "api": {
+        "qs": {
+          "includeIDs": "{{parameters.includeIDs}}"
+        },
+        "url": "/me/onenote/pages/{{parameters.id}}/content",
+        "method": "GET",
+        "response": {
+          "output": {
+            "content": "{{body}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "getpage",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Page Content",
+      "scope": [
+        "Notes.ReadWrite",
+        "Notes.ReadWrite.All"
+      ],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "id",
+          "type": "select",
+          "label": "Page ID",
+          "options": "rpc://app%23onenote@1/listPages",
+          "mappable": true,
+          "required": true
+        },
+        {
+          "help": "Use `true` to get generated `IDs` used to `Update a Page`.",
+          "name": "includeIDs",
+          "type": "boolean",
+          "label": "Include IDs"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/me/onenote/pages/{{parameters.id}}/content\",\n    \"method\": \"GET\",\n    \"qs\": {\n        \"includeIDs\": \"{{parameters.includeIDs}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"content\": \"{{body}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "content",
+          "type": "text",
+          "label": "Content"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n    \"Notes.ReadWrite\",\n    \"Notes.ReadWrite.All\"\n]",
+      "accountName": "onenote",
+      "description": "Retrieves a content of a selected page.",
+      "expectJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"select\",\n        \"label\": \"Page ID\",\n        \"options\": \"rpc://listPages\",\n        \"mode\": \"edit\",\n        \"mappable\": true,\n        \"required\": true\n    },\n    {\n        \"name\": \"includeIDs\",\n        \"label\": \"Include IDs\",\n        \"type\": \"boolean\",\n        \"help\": \"Use `true` to get generated `IDs` used to `Update a Page`.\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"content\",\n        \"type\": \"text\",\n        \"label\": \"Content\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "listPages": {
+      "id": 3889,
+      "api": {
+        "qs": {
+          "$top": 50,
+          "$orderby": "{{if(parameters.orderby === null, undefined, parameters.orderby + ' ' + parameters.order)}}"
+        },
+        "url": "{{if(parameters.section, '/me/onenote/sections/'+parameters.section+'/pages', '/me/onenote/pages')}}",
+        "method": "GET",
+        "response": {
+          "temp": {
+            "page": "{{ifempty(temp.page, 0) + 1}}"
+          },
+          "limit": "{{parameters.limit}}",
+          "output": {
+            "id": "{{item.id}}",
+            "url": "{{item.links.oneNoteWebUrl.href}}",
+            "title": "{{item.title}}",
+            "parent": "{{item.parentSection.id}}",
+            "created": "{{item.createdDateTime}}",
+            "modified": "{{item.lastModifiedDateTime}}"
+          },
+          "iterate": "{{body.value}}"
+        },
+        "pagination": {
+          "qs": {
+            "$skip": "{{(temp.page) * 50}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "listPages",
+      "epoch": null,
+      "flags": {},
+      "label": "List pages",
+      "scope": [
+        "Notes.ReadWrite",
+        "Notes.ReadWrite.All"
+      ],
+      "expect": [
+        {
+          "help": "If this field is empty, all pages from all notebooks will be retrieved.",
+          "name": "notebook",
+          "type": "select",
+          "label": "Notebook",
+          "options": {
+            "store": "rpc://listNotebooks",
+            "nested": [
+              {
+                "name": "section",
+                "type": "select",
+                "label": "Section",
+                "options": "rpc://listNotebookSections",
+                "editable": true,
+                "required": true
+              }
+            ]
+          },
+          "editable": true,
+          "required": false
+        },
+        {
+          "name": "orderby",
+          "type": "select",
+          "label": "Sort by",
+          "options": {
+            "store": [
+              {
+                "label": "Date of creation",
+                "value": "createdDateTime"
+              },
+              {
+                "label": "Date of last modificaion",
+                "value": "lastModifiedDateTime"
+              },
+              {
+                "label": "Title",
+                "value": "title"
+              }
+            ],
+            "nested": [
+              {
+                "name": "order",
+                "type": "select",
+                "label": "Order by",
+                "default": "asc",
+                "options": [
+                  {
+                    "label": "ASC",
+                    "value": "asc"
+                  },
+                  {
+                    "label": "DESC",
+                    "value": "desc"
+                  }
+                ],
+                "required": true
+              }
+            ]
+          }
+        },
+        {
+          "help": "Maximum records returned by Integromat.",
+          "name": "limit",
+          "type": "number",
+          "label": "Limit",
+          "default": 50,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"$top\": 50,\n        \"$orderby\": \"{{if(parameters.orderby === null, undefined, parameters.orderby + ' ' + parameters.order)}}\"\n    },\n    \"url\": \"{{if(parameters.section, '/me/onenote/sections/'+parameters.section+'/pages', '/me/onenote/pages')}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"temp\": {\n            \"page\": \"{{ifempty(temp.page, 0) + 1}}\"\n        },\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": {\n            \"id\": \"{{item.id}}\",\n            \"url\": \"{{item.links.oneNoteWebUrl.href}}\",\n            \"title\": \"{{item.title}}\",\n            \"parent\": \"{{item.parentSection.id}}\",\n            \"created\": \"{{item.createdDateTime}}\",\n            \"modified\": \"{{item.lastModifiedDateTime}}\"\n        },\n        \"iterate\": \"{{body.value}}\"\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"$skip\": \"{{(temp.page) * 50}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Id"
+        },
+        {
+          "name": "parent",
+          "type": "text",
+          "label": "Parent section Id"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "name": "url",
+          "type": "url",
+          "label": "URL"
+        },
+        {
+          "name": "created",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "modified",
+          "type": "date",
+          "label": "Last modified at"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n    \"Notes.ReadWrite\",\n    \"Notes.ReadWrite.All\"\n]",
+      "accountName": "onenote",
+      "description": "Retrieves a list of pages in a selected section.",
+      "expectJsonc": "[\n    {\n        \"help\": \"If this field is empty, all pages from all notebooks will be retrieved.\",\n        \"name\": \"notebook\",\n        \"type\": \"select\",\n        \"label\": \"Notebook\",\n        \"options\": {\n            \"store\": \"rpc://listNotebooks\",\n            \"nested\": [\n                {\n                    \"name\": \"section\",\n                    \"type\": \"select\",\n                    \"label\": \"Section\",\n                    \"options\": \"rpc://listNotebookSections\",\n                    \"editable\": true,\n                    \"required\": true\n                }\n            ]\n        },\n        \"editable\": true,\n        \"required\": false\n    },\n    {\n        \"name\": \"orderby\",\n        \"type\": \"select\",\n        \"label\": \"Sort by\",\n        \"options\": {\n            \"store\": [\n                {\n                    \"label\": \"Date of creation\",\n                    \"value\": \"createdDateTime\"\n                },\n                {\n                    \"label\": \"Date of last modificaion\",\n                    \"value\": \"lastModifiedDateTime\"\n                },\n                {\n                    \"label\": \"Title\",\n                    \"value\": \"title\"\n                }\n            ],\n            \"nested\": [\n                {\n                    \"name\": \"order\",\n                    \"type\": \"select\",\n                    \"label\": \"Order by\",\n                    \"default\": \"asc\",\n                    \"options\": [\n                        {\n                            \"label\": \"ASC\",\n                            \"value\": \"asc\"\n                        },\n                        {\n                            \"label\": \"DESC\",\n                            \"value\": \"desc\"\n                        }\n                    ],\n                    \"required\": true\n                }\n            ]\n        }\n    },\n    {\n        \"help\": \"Maximum records returned by Integromat.\",\n        \"name\": \"limit\",\n        \"type\": \"number\",\n        \"label\": \"Limit\",\n        \"default\": 50,\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"Id\"\n    },\n    {\n        \"name\": \"parent\",\n        \"type\": \"text\",\n        \"label\": \"Parent section Id\"\n    },\n    {\n        \"name\": \"title\",\n        \"type\": \"text\",\n        \"label\": \"Title\"\n    },\n    {\n        \"name\": \"url\",\n        \"type\": \"url\",\n        \"label\": \"URL\"\n    },\n    {\n        \"name\": \"created\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    },\n    {\n        \"name\": \"modified\",\n        \"type\": \"date\",\n        \"label\": \"Last modified at\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createpage": {
+      "id": 3890,
+      "api": {
+        "url": "/me/onenote/sections/{{parameters.sid}}/pages",
+        "body": "{{processInputFiles(parameters.title, parameters.content, parameters.files)}}",
+        "type": "multipart/form-data",
+        "method": "POST",
+        "response": {
+          "output": {
+            "id": "{{body.id}}",
+            "url": "{{body.links.oneNoteWebUrl.href}}",
+            "title": "{{body.title}}",
+            "createdDateTime": "{{parseDate(body.createdDateTime)}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "createpage",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Page",
+      "scope": [
+        "Notes.Create",
+        "Notes.ReadWrite.All"
+      ],
+      "expect": [
+        {
+          "name": "sid",
+          "type": "select",
+          "label": "Section",
+          "options": "rpc://app%23onenote@1/listSections",
+          "editable": true,
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "help": "Because OneNote pages act like HTML pages, you can insert here text preformated with HTML markup. Everything from this field will be send in `<body>` tag.\n\n◉ The following list shows the basic element types:\n- `<h1>` through `<h6>` for section headings\n- `<p>` for paragraphs\n- `<ul>`, `<ol>`, and `<li>` for lists and list items\n- `<table>`, `<tr>` and `<td>`, including nested tables\n- `<pre>` for preformatted text (preserves white space and line breaks)\n- `<b>` and `<i>` for bold and italic character styles.\n\n◉ You can upload images or attachments with **Files** parameter. In order to show them on a new page, here are two methods below:\n- For uploading an image,\n<img src=\"name:{`n`}\" alt=\"a cool image\" width=\"500\"/>\n- For uploading an attachment, \n<object data-attachment=\"sample.pdf\" data=\"name:{`n`}\" type=\"application/pdf\"/>\n\n`n`: Index of **Files** parameter, starting from 1.",
+          "name": "content",
+          "type": "text",
+          "label": "Body"
+        },
+        {
+          "help": "Please read the help message from **Body** parameter above how to show images or files on a new page.",
+          "name": "files",
+          "spec": "rpc://app%23onenote@1/getParams",
+          "type": "array",
+          "label": "Files"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/me/onenote/sections/{{parameters.sid}}/pages\",\n    \"method\": \"POST\",\n    \"body\": \"{{processInputFiles(parameters.title, parameters.content, parameters.files)}}\",\n    \"type\": \"multipart/form-data\",\n    \"response\": {\n        \"output\": {\n            \"id\": \"{{body.id}}\",\n            \"url\": \"{{body.links.oneNoteWebUrl.href}}\",\n            \"title\": \"{{body.title}}\",\n            \"createdDateTime\": \"{{parseDate(body.createdDateTime)}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Page ID"
+        },
+        {
+          "name": "createdDateTime",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "name": "url",
+          "type": "url",
+          "label": "URL"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n    \"Notes.Create\",\n    \"Notes.ReadWrite.All\"\n]",
+      "accountName": "onenote",
+      "description": "Creates a new page.",
+      "expectJsonc": "[\n    {\n        \"name\": \"sid\",\n        \"type\": \"select\",\n        \"label\": \"Section\",\n        \"options\": \"rpc://listSections\",\n        \"editable\": true,\n        \"required\": true\n    },\n    {\n        \"name\": \"title\",\n        \"type\": \"text\",\n        \"label\": \"Title\"\n    },\n    {\n        \"help\": \"Because OneNote pages act like HTML pages, you can insert here text preformated with HTML markup. Everything from this field will be send in `<body>` tag.\\n\\n◉ The following list shows the basic element types:\\n- `<h1>` through `<h6>` for section headings\\n- `<p>` for paragraphs\\n- `<ul>`, `<ol>`, and `<li>` for lists and list items\\n- `<table>`, `<tr>` and `<td>`, including nested tables\\n- `<pre>` for preformatted text (preserves white space and line breaks)\\n- `<b>` and `<i>` for bold and italic character styles.\\n\\n◉ You can upload images or attachments with **Files** parameter. In order to show them on a new page, here are two methods below:\\n- For uploading an image,\\n<img src=\\\"name:{`n`}\\\" alt=\\\"a cool image\\\" width=\\\"500\\\"/>\\n- For uploading an attachment, \\n<object data-attachment=\\\"sample.pdf\\\" data=\\\"name:{`n`}\\\" type=\\\"application/pdf\\\"/>\\n\\n`n`: Index of **Files** parameter, starting from 1.\",\n        \"name\": \"content\",\n        \"type\": \"text\",\n        \"label\": \"Body\"\n    },\n    {\n        \"name\": \"files\",\n        \"label\": \"Files\",\n        \"type\": \"array\",\n        \"spec\": \"rpc://getParams\",\n        \"help\": \"Please read the help message from **Body** parameter above how to show images or files on a new page.\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"Page ID\"\n    },\n    {\n        \"name\": \"createdDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    },\n    {\n        \"name\": \"title\",\n        \"type\": \"text\",\n        \"label\": \"Title\"\n    },\n    {\n        \"name\": \"url\",\n        \"type\": \"url\",\n        \"label\": \"URL\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deletePage": {
+      "id": 3891,
+      "api": {
+        "url": "/me/onenote/pages/{{parameters.id}}",
+        "method": "DELETE",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "deletePage",
+      "epoch": null,
+      "flags": {},
+      "label": "Delete a page",
+      "scope": [
+        "Notes.ReadWrite",
+        "Notes.ReadWrite.All"
+      ],
+      "expect": [
+        {
+          "name": "id",
+          "type": "select",
+          "label": "Page ID",
+          "options": "rpc://listPages",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/me/onenote/pages/{{parameters.id}}\",\n    \"method\": \"DELETE\",\n    \"response\": {\n        \"output\": \"{{body}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n    \"Notes.ReadWrite\",\n    \"Notes.ReadWrite.All\"\n]",
+      "accountName": "onenote",
+      "description": "Deletes a page.",
+      "expectJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"select\",\n        \"label\": \"Page ID\",\n        \"options\": \"rpc://listPages\",\n        \"editable\": true,\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getsection": {
+      "id": 3892,
+      "api": {
+        "url": "/me/onenote/sections/{{parameters.sid}}",
+        "method": "GET",
+        "response": {
+          "output": {
+            "id": "{{body.id}}",
+            "parent": "{{body.parentNotebook.id}}",
+            "isDefault": "{{body.isDefault}}",
+            "createdById": "{{body.createdBy.user.id}}",
+            "displayName": "{{body.displayName}}",
+            "createdByName": "{{body.createdBy.user.displayName}}",
+            "createdDateTime": "{{body.createdDateTime}}",
+            "lastModifiedById": "{{body.lastModifiedBy.user.id}}",
+            "lastModifiedByName": "{{body.lastModifiedBy.user.displayName}}",
+            "lastModifiedDateTime": "{{body.lastModifiedDateTime}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "getsection",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a section",
+      "scope": [
+        "Notes.Read.All",
+        "Notes.ReadWrite.All"
+      ],
+      "expect": [
+        {
+          "name": "sid",
+          "type": "select",
+          "label": "Section",
+          "options": "rpc://listSections",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/me/onenote/sections/{{parameters.sid}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": {\n            \"id\": \"{{body.id}}\",\n            \"parent\": \"{{body.parentNotebook.id}}\",\n            \"isDefault\": \"{{body.isDefault}}\",\n            \"createdById\": \"{{body.createdBy.user.id}}\",\n            \"displayName\": \"{{body.displayName}}\",\n            \"createdByName\": \"{{body.createdBy.user.displayName}}\",\n            \"createdDateTime\": \"{{body.createdDateTime}}\",\n            \"lastModifiedById\": \"{{body.lastModifiedBy.user.id}}\",\n            \"lastModifiedByName\": \"{{body.lastModifiedBy.user.displayName}}\",\n            \"lastModifiedDateTime\": \"{{body.lastModifiedDateTime}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Id"
+        },
+        {
+          "name": "parent",
+          "type": "text",
+          "label": "Parent notebook ID"
+        },
+        {
+          "name": "displayName",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "createdById",
+          "type": "text",
+          "label": "Created by ID"
+        },
+        {
+          "name": "createdByName",
+          "type": "text",
+          "label": "Created by user"
+        },
+        {
+          "name": "createdDateTime",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "lastModifiedById",
+          "type": "text",
+          "label": "Last modified by ID"
+        },
+        {
+          "name": "lastModifiedByName",
+          "type": "text",
+          "label": "Last modified by user"
+        },
+        {
+          "name": "lastModifiedDateTime",
+          "type": "date",
+          "label": "Last modified at"
+        },
+        {
+          "name": "isDefault",
+          "type": "boolean",
+          "label": "Is default"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"Notes.Read.All\",\n\t\"Notes.ReadWrite.All\"\n]",
+      "accountName": "onenote",
+      "description": "Retrieves a selected section based on its id.",
+      "expectJsonc": "[\n    {\n        \"name\": \"sid\",\n        \"type\": \"select\",\n        \"label\": \"Section\",\n        \"options\": \"rpc://listSections\",\n        \"editable\": true,\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"Id\"\n    },\n    {\n        \"name\": \"parent\",\n        \"type\": \"text\",\n        \"label\": \"Parent notebook ID\"\n    },\n    {\n        \"name\": \"displayName\",\n        \"type\": \"text\",\n        \"label\": \"Name\"\n    },\n    {\n        \"name\": \"createdById\",\n        \"type\": \"text\",\n        \"label\": \"Created by ID\"\n    },\n    {\n        \"name\": \"createdByName\",\n        \"type\": \"text\",\n        \"label\": \"Created by user\"\n    },\n    {\n        \"name\": \"createdDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    },\n    {\n        \"name\": \"lastModifiedById\",\n        \"type\": \"text\",\n        \"label\": \"Last modified by ID\"\n    },\n    {\n        \"name\": \"lastModifiedByName\",\n        \"type\": \"text\",\n        \"label\": \"Last modified by user\"\n    },\n    {\n        \"name\": \"lastModifiedDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Last modified at\"\n    },\n    {\n        \"name\": \"isDefault\",\n        \"type\": \"boolean\",\n        \"label\": \"Is default\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchPages": {
+      "id": 3893,
+      "api": {
+        "qs": {
+          "$top": 50
+        },
+        "url": "{{if(parameters.section, '/me/onenote/sections/'+parameters.section+'/pages', '/me/onenote/pages')}}",
+        "method": "GET",
+        "response": {
+          "temp": {
+            "page": "{{ifempty(temp.page, 0) + 1}}"
+          },
+          "limit": "{{parameters.limit}}",
+          "output": {
+            "id": "{{item.id}}",
+            "url": "{{item.links.oneNoteWebUrl.href}}",
+            "title": "{{item.title}}",
+            "parent": "{{item.parentSection.id}}",
+            "created": "{{item.createdDateTime}}",
+            "modified": "{{item.lastModifiedDateTime}}"
+          },
+          "iterate": "{{body.value}}",
+          "trigger": {
+            "id": "{{item.id}}",
+            "date": "{{item.lastModifiedDateTime}}",
+            "type": "date",
+            "order": "desc"
+          }
+        },
+        "pagination": {
+          "qs": {
+            "$skip": "{{(temp.page) * 50}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "watchPages",
+      "epoch": {
+        "response": {
+          "limit": "{{undefined}}",
+          "output": {
+            "date": "{{item.lastModifiedDateTime}}",
+            "label": "{{item.title}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch pages",
+      "scope": [
+        "Notes.ReadWrite",
+        "Notes.ReadWrite.All"
+      ],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"$top\": 50\n    },\n    \"url\": \"{{if(parameters.section, '/me/onenote/sections/'+parameters.section+'/pages', '/me/onenote/pages')}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"temp\": {\n            \"page\": \"{{ifempty(temp.page, 0) + 1}}\"\n        },\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": {\n            \"id\": \"{{item.id}}\",\n            \"url\": \"{{item.links.oneNoteWebUrl.href}}\",\n            \"title\": \"{{item.title}}\",\n            \"parent\": \"{{item.parentSection.id}}\",\n            \"created\": \"{{item.createdDateTime}}\",\n            \"modified\": \"{{item.lastModifiedDateTime}}\"\n        },\n        \"iterate\": \"{{body.value}}\",\n        \"trigger\": {\n            \"id\": \"{{item.id}}\",\n            \"date\": \"{{item.lastModifiedDateTime}}\",\n            \"type\": \"date\",\n            \"order\": \"desc\"\n        }\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"$skip\": \"{{(temp.page) * 50}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Id"
+        },
+        {
+          "name": "parent",
+          "type": "text",
+          "label": "Parent section Id"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "name": "url",
+          "type": "url",
+          "label": "URL"
+        },
+        {
+          "name": "created",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "modified",
+          "type": "date",
+          "label": "Last modified at"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n    \"response\": {\n        \"limit\": \"{{undefined}}\",\n        \"output\": {\n            \"date\": \"{{item.lastModifiedDateTime}}\",\n            \"label\": \"{{item.title}}\"\n        }\n    }\n}",
+      "parameters": [
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 2,
+          "required": true
+        },
+        {
+          "help": "If this field is empty, all pages from all notebooks will be retrieved.",
+          "name": "notebook",
+          "type": "select",
+          "label": "Notebook",
+          "options": {
+            "store": "rpc://listNotebooks",
+            "nested": [
+              {
+                "name": "section",
+                "type": "select",
+                "label": "Section",
+                "options": "rpc://listNotebookSections",
+                "editable": true,
+                "required": true
+              }
+            ]
+          },
+          "editable": true,
+          "required": false
+        }
+      ],
+      "scopeJsonc": "[\n    \"Notes.ReadWrite\",\n    \"Notes.ReadWrite.All\"\n]",
+      "accountName": "onenote",
+      "description": "Triggers when a new page is added or updated in a notebook.",
+      "expectJsonc": "[\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"Id\"\n    },\n    {\n        \"name\": \"parent\",\n        \"type\": \"text\",\n        \"label\": \"Parent section Id\"\n    },\n    {\n        \"name\": \"title\",\n        \"type\": \"text\",\n        \"label\": \"Title\"\n    },\n    {\n        \"name\": \"url\",\n        \"type\": \"url\",\n        \"label\": \"URL\"\n    },\n    {\n        \"name\": \"created\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    },\n    {\n        \"name\": \"modified\",\n        \"type\": \"date\",\n        \"label\": \"Last modified at\"\n    }\n]",
+      "parametersJsonc": "[\n    {\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 2,\n        \"required\": true\n    },\n    {\n        \"help\": \"If this field is empty, all pages from all notebooks will be retrieved.\",\n        \"name\": \"notebook\",\n        \"type\": \"select\",\n        \"label\": \"Notebook\",\n        \"options\": {\n            \"store\": \"rpc://listNotebooks\",\n            \"nested\": [\n                {\n                    \"name\": \"section\",\n                    \"type\": \"select\",\n                    \"label\": \"Section\",\n                    \"options\": \"rpc://listNotebookSections\",\n                    \"editable\": true,\n                    \"required\": true\n                }\n            ]\n        },\n        \"editable\": true,\n        \"required\": false\n    }\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getnotebook": {
+      "id": 3894,
+      "api": {
+        "url": "/me/onenote/notebooks/{{parameters.id}}",
+        "method": "GET",
+        "response": {
+          "output": {
+            "id": "{{body.id}}",
+            "url": "{{body.links.oneNoteWebUrl.href}}",
+            "isShared": "{{body.isShared}}",
+            "userRole": "{{body.userRole}}",
+            "isDefault": "{{body.isDefault}}",
+            "createdById": "{{body.createdBy.user.id}}",
+            "displayName": "{{body.displayName}}",
+            "createdByName": "{{body.createdBy.user.displayName}}",
+            "createdDateTime": "{{body.createdDateTime}}",
+            "lastModifiedById": "{{body.lastModifiedBy.user.id}}",
+            "lastModifiedByName": "{{body.lastModifiedBy.user.displayName}}",
+            "lastModifiedDateTime": "{{body.lastModifiedDateTime}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "getnotebook",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a notebook",
+      "scope": [
+        "Notes.Read.All"
+      ],
+      "expect": [
+        {
+          "name": "id",
+          "type": "select",
+          "label": "Notebook",
+          "options": "rpc://listNotebooks",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/me/onenote/notebooks/{{parameters.id}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": {\n            \"id\": \"{{body.id}}\",\n            \"url\": \"{{body.links.oneNoteWebUrl.href}}\",\n            \"isShared\": \"{{body.isShared}}\",\n            \"userRole\": \"{{body.userRole}}\",\n            \"isDefault\": \"{{body.isDefault}}\",\n            \"createdById\": \"{{body.createdBy.user.id}}\",\n            \"displayName\": \"{{body.displayName}}\",\n            \"createdByName\": \"{{body.createdBy.user.displayName}}\",\n            \"createdDateTime\": \"{{body.createdDateTime}}\",\n            \"lastModifiedById\": \"{{body.lastModifiedBy.user.id}}\",\n            \"lastModifiedByName\": \"{{body.lastModifiedBy.user.displayName}}\",\n            \"lastModifiedDateTime\": \"{{body.lastModifiedDateTime}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Id"
+        },
+        {
+          "name": "displayName",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "createdById",
+          "type": "text",
+          "label": "Created by ID"
+        },
+        {
+          "name": "createdByName",
+          "type": "text",
+          "label": "Created by user"
+        },
+        {
+          "name": "createdDateTime",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "lastModifiedById",
+          "type": "text",
+          "label": "Last modified by ID"
+        },
+        {
+          "name": "lastModifiedByName",
+          "type": "text",
+          "label": "Last modified by user"
+        },
+        {
+          "name": "lastModifiedDateTime",
+          "type": "date",
+          "label": "Last modified at"
+        },
+        {
+          "name": "userRole",
+          "type": "text",
+          "label": "User role"
+        },
+        {
+          "name": "url",
+          "type": "url",
+          "label": "URL"
+        },
+        {
+          "name": "isDefault",
+          "type": "boolean",
+          "label": "Is default"
+        },
+        {
+          "name": "isShared",
+          "type": "boolean",
+          "label": "Is shared"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n    \"Notes.Read.All\"\n]",
+      "accountName": "onenote",
+      "description": "Retrieves a detail of a selected notebook.",
+      "expectJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"select\",\n        \"label\": \"Notebook\",\n        \"options\": \"rpc://listNotebooks\",\n        \"editable\": true,\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"Id\"\n    },\n    {\n        \"name\": \"displayName\",\n        \"type\": \"text\",\n        \"label\": \"Name\"\n    },\n    {\n        \"name\": \"createdById\",\n        \"type\": \"text\",\n        \"label\": \"Created by ID\"\n    },\n    {\n        \"name\": \"createdByName\",\n        \"type\": \"text\",\n        \"label\": \"Created by user\"\n    },\n    {\n        \"name\": \"createdDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    },\n    {\n        \"name\": \"lastModifiedById\",\n        \"type\": \"text\",\n        \"label\": \"Last modified by ID\"\n    },\n    {\n        \"name\": \"lastModifiedByName\",\n        \"type\": \"text\",\n        \"label\": \"Last modified by user\"\n    },\n    {\n        \"name\": \"lastModifiedDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Last modified at\"\n    },\n    {\n        \"name\": \"userRole\",\n        \"type\": \"text\",\n        \"label\": \"User role\"\n    },\n    {\n        \"name\": \"url\",\n        \"type\": \"url\",\n        \"label\": \"URL\"\n    },\n    {\n        \"name\": \"isDefault\",\n        \"type\": \"boolean\",\n        \"label\": \"Is default\"\n    },\n    {\n        \"name\": \"isShared\",\n        \"type\": \"boolean\",\n        \"label\": \"Is shared\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "updateAPage": {
+      "id": 59978,
+      "api": {
+        "url": "/me/onenote/pages/{{parameters.page_id}}/content",
+        "body": "{{processInputFilesUpdate(createRemoveAction(parameters.data), parameters.files)}}",
+        "type": "multipart/form-data",
+        "method": "PATCH",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "crud": "create",
+      "name": "updateAPage",
+      "epoch": null,
+      "flags": {},
+      "label": "Update a Page",
+      "scope": [
+        "Notes.Create",
+        "Notes.ReadWrite.All"
+      ],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "page_id",
+          "type": "select",
+          "label": "Page ID",
+          "options": "rpc://app%23onenote@1/listPages",
+          "mappable": true,
+          "required": true
+        },
+        {
+          "name": "data",
+          "spec": [
+            {
+              "help": "◉ `#{data-id}` - This `ID` is optionally defined on elements in the input HTML when creating a page or updating a page. Prefix the value with a `#`.\nExample: `'#intro'` targets the element `<div data-id=\"intro\" ...>`\n◉ `id` - this is the generated `ID` from Microsoft Graph, and is required for most `replace` operations. Do not prefix with a `#`.\nExample: `'div:{33f8a2...}{37}'` targets the element `<div id=\"div:{33f8a2...}{37}\" ...>`\n◉ `body` - the keyword that targets the `first div` on the page. Do not prefix with a `#`.\n◉ `title` - the keyword that targets the page `title`. Do not prefix with a `#`.",
+              "name": "target",
+              "type": "text",
+              "label": "Target",
+              "required": true
+            },
+            {
+              "help": "◉ `Append` - adds the supplied content to the target as a first or last child, as determined by the `position` attribute.\n◉ `Applies` only to `body`, `div`, `ol`, and `ul` elements.\n◉ `Insert` - adds the supplied content as a sibling before or after the target, as determined by the `position` attribute.\n◉ `Prepend` - adds the supplied content to the target as a first child. Shortcut for `append + before`. Applies only to `body`, `div`, `ol`, and `ul` elements.\n◉ `Replace` - replaces the target with the supplied content. Most `replace` actions require using the `generated ID` for the target (except `img` and `object` elements within a `div`, which also support using `data-id`).\n◉ `Remove` - removes the selected `target`.",
+              "name": "action",
+              "type": "select",
+              "label": "Action",
+              "options": [
+                {
+                  "label": "Insert",
+                  "value": "insert",
+                  "nested": [
+                    {
+                      "help": "After (default).\nWith `append`: The last child of the target element.\nWith `insert`: The subsequent sibling of the target element.",
+                      "name": "position",
+                      "type": "select",
+                      "label": "Position",
+                      "options": [
+                        {
+                          "label": "Before",
+                          "value": "before"
+                        },
+                        {
+                          "label": "After",
+                          "value": "after",
+                          "default": true
+                        }
+                      ],
+                      "mappable": false
+                    },
+                    {
+                      "help": "◉ Supported elements:\n- `body` (targets first div on the page) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\n- `div` ([absolute positioned](https://docs.microsoft.com/en-us/graph/onenote-abs-pos)) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\n- `div` (within a `div`) (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\n- `img`, `object` (within a `div`) (`Replace` - yes, `Append child` - no, `Insert sibling` - yes)\n- `ol`, `ul` (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\n- `table` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\n- `p`, `li`, `h1-h6` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\n- `title` - (`Replace` - yes, `Append child` - no, `Insert sibling` - no).\n\n◉ You can upload images or attachments with **Files** parameter. In order to show them on an updated page, here are two methods below:\n- For uploading an image,\n<img src=\"name:{`n`}\" alt=\"a cool image\" width=\"500\"/>\n- For uploading an attachment, \n<object data-attachment=\"sample.pdf\" data=\"name:{`n`}\" type=\"application/pdf\"/>\n\n`n`: Index of **Files** parameter, starting from 1.",
+                      "name": "content",
+                      "type": "text",
+                      "label": "Content",
+                      "required": true
+                    }
+                  ]
+                },
+                {
+                  "label": "Append",
+                  "value": "append",
+                  "nested": [
+                    {
+                      "help": "After (default).\nWith `append`: The last child of the target element.\nWith `insert`: The subsequent sibling of the target element.",
+                      "name": "position",
+                      "type": "select",
+                      "label": "Position",
+                      "options": [
+                        {
+                          "label": "Before",
+                          "value": "before"
+                        },
+                        {
+                          "label": "After",
+                          "value": "after"
+                        }
+                      ],
+                      "mappable": false
+                    },
+                    {
+                      "help": "◉ Supported elements:\n- `body` (targets first div on the page) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\n- `div` ([absolute positioned](https://docs.microsoft.com/en-us/graph/onenote-abs-pos)) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\n- `div` (within a `div`) (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\n- `img`, `object` (within a `div`) (`Replace` - yes, `Append child` - no, `Insert sibling` - yes)\n- `ol`, `ul` (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\n- `table` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\n- `p`, `li`, `h1-h6` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\n- `title` - (`Replace` - yes, `Append child` - no, `Insert sibling` - no).\n\n◉ You can upload images or attachments with **Files** parameter. In order to show them on an updated page, here are two methods below:\n- For uploading an image,\n<img src=\"name:{`n`}\" alt=\"a cool image\" width=\"500\"/>\n- For uploading an attachment, \n<object data-attachment=\"sample.pdf\" data=\"name:{`n`}\" type=\"application/pdf\"/>\n\n`n`: Index of **Files** parameter, starting from 1.",
+                      "name": "content",
+                      "type": "text",
+                      "label": "Content",
+                      "required": true
+                    }
+                  ]
+                },
+                {
+                  "label": "Prepend",
+                  "value": "prepend",
+                  "nested": [
+                    {
+                      "help": "◉ Supported elements:\n- `body` (targets first div on the page) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\n- `div` ([absolute positioned](https://docs.microsoft.com/en-us/graph/onenote-abs-pos)) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\n- `div` (within a `div`) (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\n- `img`, `object` (within a `div`) (`Replace` - yes, `Append child` - no, `Insert sibling` - yes)\n- `ol`, `ul` (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\n- `table` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\n- `p`, `li`, `h1-h6` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\n- `title` - (`Replace` - yes, `Append child` - no, `Insert sibling` - no).\n\n◉ You can upload images or attachments with **Files** parameter. In order to show them on an updated page, here are two methods below:\n- For uploading an image,\n<img src=\"name:{`n`}\" alt=\"a cool image\" width=\"500\"/>\n- For uploading an attachment, \n<object data-attachment=\"sample.pdf\" data=\"name:{`n`}\" type=\"application/pdf\"/>\n\n`n`: Index of **Files** parameter, starting from 1.",
+                      "name": "content",
+                      "type": "text",
+                      "label": "Content",
+                      "required": true
+                    }
+                  ]
+                },
+                {
+                  "label": "Replace",
+                  "value": "replace",
+                  "nested": [
+                    {
+                      "help": "◉ Supported elements:\n- `body` (targets first div on the page) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\n- `div` ([absolute positioned](https://docs.microsoft.com/en-us/graph/onenote-abs-pos)) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\n- `div` (within a `div`) (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\n- `img`, `object` (within a `div`) (`Replace` - yes, `Append child` - no, `Insert sibling` - yes)\n- `ol`, `ul` (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\n- `table` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\n- `p`, `li`, `h1-h6` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\n- `title` - (`Replace` - yes, `Append child` - no, `Insert sibling` - no).\n\n◉ You can upload images or attachments with **Files** parameter. In order to show them on an updated page, here are two methods below:\n- For uploading an image,\n<img src=\"name:{`n`}\" alt=\"a cool image\" width=\"500\"/>\n- For uploading an attachment, \n<object data-attachment=\"sample.pdf\" data=\"name:{`n`}\" type=\"application/pdf\"/>\n\n`n`: Index of **Files** parameter, starting from 1.",
+                      "name": "content",
+                      "type": "text",
+                      "label": "Content",
+                      "required": true
+                    }
+                  ]
+                },
+                {
+                  "label": "Remove",
+                  "value": "remove"
+                }
+              ],
+              "mappable": false,
+              "required": true
+            }
+          ],
+          "type": "array",
+          "label": "Data",
+          "required": true
+        },
+        {
+          "help": "Please read the help message from **Content** parameter above how to show images or files on an updated page.",
+          "name": "files",
+          "spec": "rpc://app%23onenote@1/getParams",
+          "type": "array",
+          "label": "Files"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/me/onenote/pages/{{parameters.page_id}}/content\",\n    \"method\": \"PATCH\",\n    \"body\": \"{{processInputFilesUpdate(createRemoveAction(parameters.data), parameters.files)}}\",\n    \"type\": \"multipart/form-data\",\n    \"response\": {\n        \"output\": \"{{body}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\r\n    \"Notes.Create\",\r\n    \"Notes.ReadWrite.All\"\r\n]",
+      "accountName": "onenote",
+      "description": "Updates an existing page.",
+      "expectJsonc": "[\n    {\n        \"name\": \"page_id\",\n        \"label\": \"Page ID\",\n        \"type\": \"select\",\n        \"required\": true,\n        \"mode\": \"edit\",\n        \"mappable\": true,\n        \"options\": \"rpc://listPages\"\n    },\n    {\n        \"name\": \"data\",\n        \"label\": \"Data\",\n        \"required\": true,\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"target\",\n                \"label\": \"Target\",\n                \"required\": true,\n                \"type\": \"text\",\n                \"help\": \"◉ `#{data-id}` - This `ID` is optionally defined on elements in the input HTML when creating a page or updating a page. Prefix the value with a `#`.\\nExample: `'#intro'` targets the element `<div data-id=\\\"intro\\\" ...>`\\n◉ `id` - this is the generated `ID` from Microsoft Graph, and is required for most `replace` operations. Do not prefix with a `#`.\\nExample: `'div:{33f8a2...}{37}'` targets the element `<div id=\\\"div:{33f8a2...}{37}\\\" ...>`\\n◉ `body` - the keyword that targets the `first div` on the page. Do not prefix with a `#`.\\n◉ `title` - the keyword that targets the page `title`. Do not prefix with a `#`.\"\n            },\n            {\n                \"name\": \"action\",\n                \"label\": \"Action\",\n                \"required\": true,\n                \"mappable\": false,\n                \"type\": \"select\",\n                \"options\": [\n                    {\n                        \"value\": \"insert\",\n                        \"label\": \"Insert\",\n                        \"nested\": [\n                            {\n                                \"name\": \"position\",\n                                \"label\": \"Position\",\n                                \"type\": \"select\",\n                                \"mappable\": false,\n                                \"help\": \"After (default).\\nWith `append`: The last child of the target element.\\nWith `insert`: The subsequent sibling of the target element.\",\n                                \"options\": [\n                                    {\n                                        \"value\": \"before\",\n                                        \"label\": \"Before\"\n                                    },\n                                    {\n                                        \"value\": \"after\",\n                                        \"label\": \"After\",\n                                        \"default\": true\n                                    }\n                                ]\n                            },\n                            {\n                                \"name\": \"content\",\n                                \"label\": \"Content\",\n                                \"required\": true,\n                                \"type\": \"text\",\n                                \"help\": \"◉ Supported elements:\\n- `body` (targets first div on the page) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\\n- `div` ([absolute positioned](https://docs.microsoft.com/en-us/graph/onenote-abs-pos)) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\\n- `div` (within a `div`) (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\\n- `img`, `object` (within a `div`) (`Replace` - yes, `Append child` - no, `Insert sibling` - yes)\\n- `ol`, `ul` (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\\n- `table` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\\n- `p`, `li`, `h1-h6` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\\n- `title` - (`Replace` - yes, `Append child` - no, `Insert sibling` - no).\\n\\n◉ You can upload images or attachments with **Files** parameter. In order to show them on an updated page, here are two methods below:\\n- For uploading an image,\\n<img src=\\\"name:{`n`}\\\" alt=\\\"a cool image\\\" width=\\\"500\\\"/>\\n- For uploading an attachment, \\n<object data-attachment=\\\"sample.pdf\\\" data=\\\"name:{`n`}\\\" type=\\\"application/pdf\\\"/>\\n\\n`n`: Index of **Files** parameter, starting from 1.\"\n                            }\n                        ]\n                    },\n                    {\n                        \"value\": \"append\",\n                        \"label\": \"Append\",\n                        \"nested\": [\n                            {\n                                \"name\": \"position\",\n                                \"label\": \"Position\",\n                                \"type\": \"select\",\n                                \"help\": \"After (default).\\nWith `append`: The last child of the target element.\\nWith `insert`: The subsequent sibling of the target element.\",\n                                \"mappable\": false,\n                                \"options\": [\n                                    {\n                                        \"value\": \"before\",\n                                        \"label\": \"Before\"\n                                    },\n                                    {\n                                        \"value\": \"after\",\n                                        \"label\": \"After\"\n                                    }\n                                ]\n                            },\n                            {\n                                \"name\": \"content\",\n                                \"label\": \"Content\",\n                                \"required\": true,\n                                \"type\": \"text\",\n                                \"help\": \"◉ Supported elements:\\n- `body` (targets first div on the page) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\\n- `div` ([absolute positioned](https://docs.microsoft.com/en-us/graph/onenote-abs-pos)) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\\n- `div` (within a `div`) (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\\n- `img`, `object` (within a `div`) (`Replace` - yes, `Append child` - no, `Insert sibling` - yes)\\n- `ol`, `ul` (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\\n- `table` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\\n- `p`, `li`, `h1-h6` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\\n- `title` - (`Replace` - yes, `Append child` - no, `Insert sibling` - no).\\n\\n◉ You can upload images or attachments with **Files** parameter. In order to show them on an updated page, here are two methods below:\\n- For uploading an image,\\n<img src=\\\"name:{`n`}\\\" alt=\\\"a cool image\\\" width=\\\"500\\\"/>\\n- For uploading an attachment, \\n<object data-attachment=\\\"sample.pdf\\\" data=\\\"name:{`n`}\\\" type=\\\"application/pdf\\\"/>\\n\\n`n`: Index of **Files** parameter, starting from 1.\"\n                            }\n                        ]\n                    },\n                    {\n                        \"value\": \"prepend\",\n                        \"label\": \"Prepend\",\n                        \"nested\": [\n                            {\n                                \"name\": \"content\",\n                                \"label\": \"Content\",\n                                \"required\": true,\n                                \"type\": \"text\",\n                                \"help\": \"◉ Supported elements:\\n- `body` (targets first div on the page) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\\n- `div` ([absolute positioned](https://docs.microsoft.com/en-us/graph/onenote-abs-pos)) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\\n- `div` (within a `div`) (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\\n- `img`, `object` (within a `div`) (`Replace` - yes, `Append child` - no, `Insert sibling` - yes)\\n- `ol`, `ul` (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\\n- `table` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\\n- `p`, `li`, `h1-h6` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\\n- `title` - (`Replace` - yes, `Append child` - no, `Insert sibling` - no).\\n\\n◉ You can upload images or attachments with **Files** parameter. In order to show them on an updated page, here are two methods below:\\n- For uploading an image,\\n<img src=\\\"name:{`n`}\\\" alt=\\\"a cool image\\\" width=\\\"500\\\"/>\\n- For uploading an attachment, \\n<object data-attachment=\\\"sample.pdf\\\" data=\\\"name:{`n`}\\\" type=\\\"application/pdf\\\"/>\\n\\n`n`: Index of **Files** parameter, starting from 1.\"\n                            }\n                        ]\n                    },\n                    {\n                        \"value\": \"replace\",\n                        \"label\": \"Replace\",\n                        \"nested\": [\n                            {\n                                \"name\": \"content\",\n                                \"label\": \"Content\",\n                                \"required\": true,\n                                \"type\": \"text\",\n                                \"help\": \"◉ Supported elements:\\n- `body` (targets first div on the page) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\\n- `div` ([absolute positioned](https://docs.microsoft.com/en-us/graph/onenote-abs-pos)) (`Replace` - no, `Append child` - yes, `Insert sibling` - no)\\n- `div` (within a `div`) (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\\n- `img`, `object` (within a `div`) (`Replace` - yes, `Append child` - no, `Insert sibling` - yes)\\n- `ol`, `ul` (`Replace` - yes (id only), `Append child` - yes, `Insert sibling` - yes)\\n- `table` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\\n- `p`, `li`, `h1-h6` (`Replace` - yes (id only), `Append child` - no, `Insert sibling` - yes)\\n- `title` - (`Replace` - yes, `Append child` - no, `Insert sibling` - no).\\n\\n◉ You can upload images or attachments with **Files** parameter. In order to show them on an updated page, here are two methods below:\\n- For uploading an image,\\n<img src=\\\"name:{`n`}\\\" alt=\\\"a cool image\\\" width=\\\"500\\\"/>\\n- For uploading an attachment, \\n<object data-attachment=\\\"sample.pdf\\\" data=\\\"name:{`n`}\\\" type=\\\"application/pdf\\\"/>\\n\\n`n`: Index of **Files** parameter, starting from 1.\"\n                            }\n                        ]\n                    },\n                    {\n                        \"value\": \"remove\",\n                        \"label\": \"Remove\"\n                    }\n                ],\n                \"help\": \"◉ `Append` - adds the supplied content to the target as a first or last child, as determined by the `position` attribute.\\n◉ `Applies` only to `body`, `div`, `ol`, and `ul` elements.\\n◉ `Insert` - adds the supplied content as a sibling before or after the target, as determined by the `position` attribute.\\n◉ `Prepend` - adds the supplied content to the target as a first child. Shortcut for `append + before`. Applies only to `body`, `div`, `ol`, and `ul` elements.\\n◉ `Replace` - replaces the target with the supplied content. Most `replace` actions require using the `generated ID` for the target (except `img` and `object` elements within a `div`, which also support using `data-id`).\\n◉ `Remove` - removes the selected `target`.\"\n            }\n        ]\n    },\n    {\n        \"name\": \"files\",\n        \"label\": \"Files\",\n        \"type\": \"array\",\n        \"spec\": \"rpc://getParams\",\n        \"help\": \"Please read the help message from **Content** parameter above how to show images or files on an updated page.\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "listsections": {
+      "id": 3895,
+      "api": {
+        "qs": {
+          "$top": 50,
+          "$orderby": "{{if(parameters.orderby === null, undefined, parameters.orderby + ' ' + parameters.order)}}"
+        },
+        "url": "{{if(parameters.notebook, '/me/onenote/notebooks/'+parameters.notebook+'/sections', '/me/onenote/sections')}}",
+        "method": "GET",
+        "response": {
+          "temp": {
+            "page": "{{ifempty(temp.page, 0) + 1}}"
+          },
+          "limit": "{{parameters.limit}}",
+          "output": {
+            "id": "{{item.id}}",
+            "parent": "{{item.parentNotebook.id}}",
+            "isDefault": "{{item.isDefault}}",
+            "createdById": "{{item.createdBy.user.id}}",
+            "displayName": "{{item.displayName}}",
+            "createdByName": "{{item.createdBy.user.displayName}}",
+            "createdDateTime": "{{item.createdDateTime}}",
+            "lastModifiedById": "{{item.lastModifiedBy.user.id}}",
+            "lastModifiedByName": "{{item.lastModifiedBy.user.displayName}}",
+            "lastModifiedDateTime": "{{item.lastModifiedDateTime}}"
+          },
+          "iterate": "{{body.value}}"
+        },
+        "pagination": {
+          "qs": {
+            "$skip": "{{(temp.page) * 50}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "listsections",
+      "epoch": null,
+      "flags": {},
+      "label": "List sections",
+      "scope": [
+        "Notes.Read.All"
+      ],
+      "expect": [
+        {
+          "help": "If this field is empty, all sections from all notebooks will be retrieved.",
+          "name": "notebook",
+          "type": "select",
+          "label": "Notebook",
+          "options": "rpc://listNotebooks",
+          "editable": true,
+          "required": false
+        },
+        {
+          "name": "orderby",
+          "type": "select",
+          "label": "Sort by",
+          "options": {
+            "store": [
+              {
+                "label": "Date of creation",
+                "value": "createdDateTime"
+              },
+              {
+                "label": "Date of last modificaion",
+                "value": "lastModifiedDateTime"
+              },
+              {
+                "label": "Name",
+                "value": "displayName"
+              }
+            ],
+            "nested": [
+              {
+                "name": "order",
+                "type": "select",
+                "label": "Order by",
+                "default": "asc",
+                "options": [
+                  {
+                    "label": "ASC",
+                    "value": "asc"
+                  },
+                  {
+                    "label": "DESC",
+                    "value": "desc"
+                  }
+                ],
+                "required": true
+              }
+            ]
+          }
+        },
+        {
+          "help": "Maximum records returned by Integromat.",
+          "name": "limit",
+          "type": "number",
+          "label": "Limit",
+          "default": 50,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"$top\": 50,\n        \"$orderby\": \"{{if(parameters.orderby === null, undefined, parameters.orderby + ' ' + parameters.order)}}\"\n    },\n    \"url\": \"{{if(parameters.notebook, '/me/onenote/notebooks/'+parameters.notebook+'/sections', '/me/onenote/sections')}}\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"temp\": {\n            \"page\": \"{{ifempty(temp.page, 0) + 1}}\"\n        },\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": {\n            \"id\": \"{{item.id}}\",\n            \"parent\": \"{{item.parentNotebook.id}}\",\n            \"isDefault\": \"{{item.isDefault}}\",\n            \"createdById\": \"{{item.createdBy.user.id}}\",\n            \"displayName\": \"{{item.displayName}}\",\n            \"createdByName\": \"{{item.createdBy.user.displayName}}\",\n            \"createdDateTime\": \"{{item.createdDateTime}}\",\n            \"lastModifiedById\": \"{{item.lastModifiedBy.user.id}}\",\n            \"lastModifiedByName\": \"{{item.lastModifiedBy.user.displayName}}\",\n            \"lastModifiedDateTime\": \"{{item.lastModifiedDateTime}}\"\n        },\n        \"iterate\": \"{{body.value}}\"\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"$skip\": \"{{(temp.page) * 50}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Id"
+        },
+        {
+          "name": "parent",
+          "type": "text",
+          "label": "Parent notebook ID"
+        },
+        {
+          "name": "displayName",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "createdById",
+          "type": "text",
+          "label": "Created by ID"
+        },
+        {
+          "name": "createdByName",
+          "type": "text",
+          "label": "Created by user"
+        },
+        {
+          "name": "createdDateTime",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "lastModifiedById",
+          "type": "text",
+          "label": "Last modified by ID"
+        },
+        {
+          "name": "lastModifiedByName",
+          "type": "text",
+          "label": "Last modified by user"
+        },
+        {
+          "name": "lastModifiedDateTime",
+          "type": "date",
+          "label": "Last modified at"
+        },
+        {
+          "name": "isDefault",
+          "type": "boolean",
+          "label": "Is default"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n    \"Notes.Read.All\"\n]",
+      "accountName": "onenote",
+      "description": "Retrieves a list of sections in a specified notebook.",
+      "expectJsonc": "[\n    {\n        \"help\": \"If this field is empty, all sections from all notebooks will be retrieved.\",\n        \"name\": \"notebook\",\n        \"type\": \"select\",\n        \"label\": \"Notebook\",\n        \"options\": \"rpc://listNotebooks\",\n        \"editable\": true,\n        \"required\": false\n    },\n    {\n        \"name\": \"orderby\",\n        \"type\": \"select\",\n        \"label\": \"Sort by\",\n        \"options\": {\n            \"store\": [\n                {\n                    \"label\": \"Date of creation\",\n                    \"value\": \"createdDateTime\"\n                },\n                {\n                    \"label\": \"Date of last modificaion\",\n                    \"value\": \"lastModifiedDateTime\"\n                },\n                {\n                    \"label\": \"Name\",\n                    \"value\": \"displayName\"\n                }\n            ],\n            \"nested\": [\n                {\n                    \"name\": \"order\",\n                    \"type\": \"select\",\n                    \"label\": \"Order by\",\n                    \"default\": \"asc\",\n                    \"options\": [\n                        {\n                            \"label\": \"ASC\",\n                            \"value\": \"asc\"\n                        },\n                        {\n                            \"label\": \"DESC\",\n                            \"value\": \"desc\"\n                        }\n                    ],\n                    \"required\": true\n                }\n            ]\n        }\n    },\n    {\n        \"help\": \"Maximum records returned by Integromat.\",\n        \"name\": \"limit\",\n        \"type\": \"number\",\n        \"label\": \"Limit\",\n        \"default\": 50,\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"Id\"\n    },\n    {\n        \"name\": \"parent\",\n        \"type\": \"text\",\n        \"label\": \"Parent notebook ID\"\n    },\n    {\n        \"name\": \"displayName\",\n        \"type\": \"text\",\n        \"label\": \"Name\"\n    },\n    {\n        \"name\": \"createdById\",\n        \"type\": \"text\",\n        \"label\": \"Created by ID\"\n    },\n    {\n        \"name\": \"createdByName\",\n        \"type\": \"text\",\n        \"label\": \"Created by user\"\n    },\n    {\n        \"name\": \"createdDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    },\n    {\n        \"name\": \"lastModifiedById\",\n        \"type\": \"text\",\n        \"label\": \"Last modified by ID\"\n    },\n    {\n        \"name\": \"lastModifiedByName\",\n        \"type\": \"text\",\n        \"label\": \"Last modified by user\"\n    },\n    {\n        \"name\": \"lastModifiedDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Last modified at\"\n    },\n    {\n        \"name\": \"isDefault\",\n        \"type\": \"boolean\",\n        \"label\": \"Is default\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createSection": {
+      "id": 3896,
+      "api": {
+        "url": "/me/onenote/notebooks/{{parameters.nid}}/sections",
+        "body": {
+          "displayName": "{{parameters.displayName}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": {
+            "id": "{{body.id}}",
+            "isDefault": "{{body.isDefault}}",
+            "createdById": "{{body.createdBy.user.id}}",
+            "displayName": "{{body.displayName}}",
+            "createdByName": "{{body.createdBy.user.displayName}}",
+            "createdDateTime": "{{body.createdDateTime}}",
+            "lastModifiedById": "{{body.lastModifiedBy.user.id}}",
+            "lastModifiedByName": "{{body.lastModifiedBy.user.displayName}}",
+            "lastModifiedDateTime": "{{body.lastModifiedDateTime}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "createSection",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a section",
+      "scope": [
+        "Notes.Create",
+        "Notes.ReadWrite.All"
+      ],
+      "expect": [
+        {
+          "name": "nid",
+          "type": "select",
+          "label": "Parent notebook",
+          "options": "rpc://listNotebooks",
+          "editable": true,
+          "required": true
+        },
+        {
+          "name": "displayName",
+          "type": "text",
+          "label": "Name",
+          "required": true,
+          "validate": {
+            "max": 50
+          }
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/me/onenote/notebooks/{{parameters.nid}}/sections\",\n    \"body\": {\n        \"displayName\": \"{{parameters.displayName}}\"\n    },\n    \"method\": \"POST\",\n    \"response\": {\n        \"output\": {\n            \"id\": \"{{body.id}}\",\n            \"isDefault\": \"{{body.isDefault}}\",\n            \"createdById\": \"{{body.createdBy.user.id}}\",\n            \"displayName\": \"{{body.displayName}}\",\n            \"createdByName\": \"{{body.createdBy.user.displayName}}\",\n            \"createdDateTime\": \"{{body.createdDateTime}}\",\n            \"lastModifiedById\": \"{{body.lastModifiedBy.user.id}}\",\n            \"lastModifiedByName\": \"{{body.lastModifiedBy.user.displayName}}\",\n            \"lastModifiedDateTime\": \"{{body.lastModifiedDateTime}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Id"
+        },
+        {
+          "name": "parent",
+          "type": "text",
+          "label": "Parent notebook ID"
+        },
+        {
+          "name": "displayName",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "createdById",
+          "type": "text",
+          "label": "Created by ID"
+        },
+        {
+          "name": "createdByName",
+          "type": "text",
+          "label": "Created by user"
+        },
+        {
+          "name": "createdDateTime",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "lastModifiedById",
+          "type": "text",
+          "label": "Last modified by ID"
+        },
+        {
+          "name": "lastModifiedByName",
+          "type": "text",
+          "label": "Last modified by user"
+        },
+        {
+          "name": "lastModifiedDateTime",
+          "type": "date",
+          "label": "Last modified at"
+        },
+        {
+          "name": "isDefault",
+          "type": "boolean",
+          "label": "Is default"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n    \"Notes.Create\",\n    \"Notes.ReadWrite.All\"\n]",
+      "accountName": "onenote",
+      "description": "Creates a new section.",
+      "expectJsonc": "[\n    {\n        \"name\": \"nid\",\n        \"type\": \"select\",\n        \"label\": \"Parent notebook\",\n        \"options\": \"rpc://listNotebooks\",\n        \"editable\": true,\n        \"required\": true\n    },\n    {\n        \"name\": \"displayName\",\n        \"type\": \"text\",\n        \"label\": \"Name\",\n        \"required\": true,\n        \"validate\": {\n            \"max\": 50\n        }\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"Id\"\n    },\n    {\n        \"name\": \"parent\",\n        \"type\": \"text\",\n        \"label\": \"Parent notebook ID\"\n    },\n    {\n        \"name\": \"displayName\",\n        \"type\": \"text\",\n        \"label\": \"Name\"\n    },\n    {\n        \"name\": \"createdById\",\n        \"type\": \"text\",\n        \"label\": \"Created by ID\"\n    },\n    {\n        \"name\": \"createdByName\",\n        \"type\": \"text\",\n        \"label\": \"Created by user\"\n    },\n    {\n        \"name\": \"createdDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    },\n    {\n        \"name\": \"lastModifiedById\",\n        \"type\": \"text\",\n        \"label\": \"Last modified by ID\"\n    },\n    {\n        \"name\": \"lastModifiedByName\",\n        \"type\": \"text\",\n        \"label\": \"Last modified by user\"\n    },\n    {\n        \"name\": \"lastModifiedDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Last modified at\"\n    },\n    {\n        \"name\": \"isDefault\",\n        \"type\": \"boolean\",\n        \"label\": \"Is default\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "downloadAFile": {
+      "id": 60551,
+      "api": {
+        "url": "/me/onenote/resources/{{parameters.resourceId}}/content",
+        "temp": {
+          "name": "{{parameters.name}}"
+        },
+        "method": "GET",
+        "response": {
+          "output": {
+            "fileData": "{{toBinary(body)}}",
+            "fileName": "{{temp.name}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "downloadAFile",
+      "epoch": null,
+      "flags": {},
+      "label": "Download a File",
+      "scope": [
+        "Notes.Read.All"
+      ],
+      "expect": [
+        {
+          "help": "The following is an example of where to get the `Resource ID`.\n<img src=\"https://graph.microsoft.com/v1.0/me/onenote/resources/`{resouce-id}`/$value\" data-src-type=\"image/png\" data-fullres-src=\"https://graph.microsoft.com/v1.0/me/onenote/resources/`{resouce-id}`/$value\" data-fullres-src-type=\"image/png\" ... />\n\nFor example, in this object <img alt=\"a csssool image\" width=\"500\" height=\"333\" src=\"https://graph.microsoft.com/v1.0/users('111...')/onenote/resources/`1-16c137e8a5ac43cd9683ebe98d514f7a!1-d8579671-90ca-4d9f-abd4-ed58c3fca2fc`/$value\" data-src-type=\"image/jpeg\" data-fullres-src=\"https://graph.microsoft.com/v1.0/users('111...')/onenote/resources/`1-16c137e8a5ac43cd9683ebe98d514f7a!1-d8579671-90ca-4d9f-abd4-ed58c3fca2fc`/$value\" data-fullres-src-type=\"image/jpeg\" /> id is `1-16c137e8a5ac43cd9683ebe98d514f7a!1-d8579671-90ca-4d9f-abd4-ed58c3fca2fc`.",
+          "name": "resourceId",
+          "type": "text",
+          "label": "Resource ID",
+          "required": true
+        },
+        {
+          "help": "Enter a name and file format.\nExample: `file name.jpg`\nYou can find the `file format` by attributes:`data`, `data-src-type` or `data-fullres-src-type`\nThe following is an example of where to get the `file format`.\n<img src=\"https://graph.microsoft.com/v1.0/me/onenote/resources/{resouce-id}/$value\" `data-src-type=\"image/png\"` data-fullres-src=\"https://graph.microsoft.com/v1.0/me/onenote/resources/{resouce-id}/$value\" `data-fullres-src-type=\"image/png\"` ... />",
+          "name": "name",
+          "type": "text",
+          "label": "File Name",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/me/onenote/resources/{{parameters.resourceId}}/content\",\n    \"method\": \"GET\",\n    \"temp\": {\n        \"name\": \"{{parameters.name}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"fileName\": \"{{temp.name}}\",\n            \"fileData\": \"{{toBinary(body)}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "fileName",
+          "type": "filename",
+          "label": "File Name",
+          "semantic": "file:name"
+        },
+        {
+          "name": "fileData",
+          "type": "buffer",
+          "label": "File Data",
+          "semantic": "file:data"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\r\n    \"Notes.Read.All\"\r\n]",
+      "accountName": "onenote",
+      "description": "Downloads an existing file.",
+      "expectJsonc": "[\n    {\n        \"name\": \"resourceId\",\n        \"label\": \"Resource ID\",\n        \"type\": \"text\",\n        \"required\": true,\n        \"help\": \"The following is an example of where to get the `Resource ID`.\\n<img src=\\\"https://graph.microsoft.com/v1.0/me/onenote/resources/`{resouce-id}`/$value\\\" data-src-type=\\\"image/png\\\" data-fullres-src=\\\"https://graph.microsoft.com/v1.0/me/onenote/resources/`{resouce-id}`/$value\\\" data-fullres-src-type=\\\"image/png\\\" ... />\\n\\nFor example, in this object <img alt=\\\"a csssool image\\\" width=\\\"500\\\" height=\\\"333\\\" src=\\\"https://graph.microsoft.com/v1.0/users('111...')/onenote/resources/`1-16c137e8a5ac43cd9683ebe98d514f7a!1-d8579671-90ca-4d9f-abd4-ed58c3fca2fc`/$value\\\" data-src-type=\\\"image/jpeg\\\" data-fullres-src=\\\"https://graph.microsoft.com/v1.0/users('111...')/onenote/resources/`1-16c137e8a5ac43cd9683ebe98d514f7a!1-d8579671-90ca-4d9f-abd4-ed58c3fca2fc`/$value\\\" data-fullres-src-type=\\\"image/jpeg\\\" /> id is `1-16c137e8a5ac43cd9683ebe98d514f7a!1-d8579671-90ca-4d9f-abd4-ed58c3fca2fc`.\"\n    },\n    {\n        \"name\": \"name\",\n        \"label\": \"File Name\",\n        \"type\": \"text\",\n        \"required\": true,\n        \"help\": \"Enter a name and file format.\\nExample: `file name.jpg`\\nYou can find the `file format` by attributes:`data`, `data-src-type` or `data-fullres-src-type`\\nThe following is an example of where to get the `file format`.\\n<img src=\\\"https://graph.microsoft.com/v1.0/me/onenote/resources/{resouce-id}/$value\\\" `data-src-type=\\\"image/png\\\"` data-fullres-src=\\\"https://graph.microsoft.com/v1.0/me/onenote/resources/{resouce-id}/$value\\\" `data-fullres-src-type=\\\"image/png\\\"` ... />\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"fileName\",\n        \"type\": \"filename\",\n        \"label\": \"File Name\",\n        \"semantic\": \"file:name\"\n    },\n    {\n        \"name\": \"fileData\",\n        \"type\": \"buffer\",\n        \"label\": \"File Data\",\n        \"semantic\": \"file:data\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "listnotebooks": {
+      "id": 3897,
+      "api": {
+        "qs": {
+          "$top": 10,
+          "$orderby": "{{if(parameters.orderby === null, undefined, parameters.orderby + ' ' + parameters.order)}}"
+        },
+        "url": "/me/onenote/notebooks",
+        "method": "GET",
+        "response": {
+          "temp": {
+            "page": "{{ifempty(temp.page, 0) + 1}}"
+          },
+          "limit": "{{parameters.limit}}",
+          "output": {
+            "id": "{{item.id}}",
+            "url": "{{item.links.oneNoteWebUrl.href}}",
+            "isShared": "{{item.isShared}}",
+            "userRole": "{{item.userRole}}",
+            "isDefault": "{{item.isDefault}}",
+            "createdById": "{{item.createdBy.user.id}}",
+            "displayName": "{{item.displayName}}",
+            "createdByName": "{{item.createdBy.user.displayName}}",
+            "createdDateTime": "{{item.createdDateTime}}",
+            "lastModifiedById": "{{item.lastModifiedBy.user.id}}",
+            "lastModifiedByName": "{{item.lastModifiedBy.user.displayName}}",
+            "lastModifiedDateTime": "{{item.lastModifiedDateTime}}"
+          },
+          "iterate": "{{body.value}}"
+        },
+        "pagination": {
+          "qs": {
+            "$skip": "{{(temp.page) * 10}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "listnotebooks",
+      "epoch": null,
+      "flags": {},
+      "label": "List notebooks",
+      "scope": [
+        "Notes.Read.All"
+      ],
+      "expect": [
+        {
+          "name": "orderby",
+          "type": "select",
+          "label": "Sort by",
+          "options": {
+            "store": [
+              {
+                "label": "Date of creation",
+                "value": "createdDateTime"
+              },
+              {
+                "label": "Date of last modificaion",
+                "value": "lastModifiedDateTime"
+              },
+              {
+                "label": "Name",
+                "value": "displayName"
+              }
+            ],
+            "nested": [
+              {
+                "name": "order",
+                "type": "select",
+                "label": "Order by",
+                "default": "asc",
+                "options": [
+                  {
+                    "label": "ASC",
+                    "value": "asc"
+                  },
+                  {
+                    "label": "DESC",
+                    "value": "desc"
+                  }
+                ],
+                "required": true
+              }
+            ]
+          }
+        },
+        {
+          "help": "Maximum records returned by Integromat.",
+          "name": "limit",
+          "type": "number",
+          "label": "Limit",
+          "default": 50,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"$top\": 10,\n        \"$orderby\": \"{{if(parameters.orderby === null, undefined, parameters.orderby + ' ' + parameters.order)}}\"\n    },\n    \"url\": \"/me/onenote/notebooks\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"temp\": {\n            \"page\": \"{{ifempty(temp.page, 0) + 1}}\"\n        },\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": {\n            \"id\": \"{{item.id}}\",\n            \"url\": \"{{item.links.oneNoteWebUrl.href}}\",\n            \"isShared\": \"{{item.isShared}}\",\n            \"userRole\": \"{{item.userRole}}\",\n            \"isDefault\": \"{{item.isDefault}}\",\n            \"createdById\": \"{{item.createdBy.user.id}}\",\n            \"displayName\": \"{{item.displayName}}\",\n            \"createdByName\": \"{{item.createdBy.user.displayName}}\",\n            \"createdDateTime\": \"{{item.createdDateTime}}\",\n            \"lastModifiedById\": \"{{item.lastModifiedBy.user.id}}\",\n            \"lastModifiedByName\": \"{{item.lastModifiedBy.user.displayName}}\",\n            \"lastModifiedDateTime\": \"{{item.lastModifiedDateTime}}\"\n        },\n        \"iterate\": \"{{body.value}}\"\n    },\n    \"pagination\": {\n        \"qs\": {\n            \"$skip\": \"{{(temp.page) * 10}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Id"
+        },
+        {
+          "name": "displayName",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "createdById",
+          "type": "text",
+          "label": "Created by ID"
+        },
+        {
+          "name": "createdByName",
+          "type": "text",
+          "label": "Created by user"
+        },
+        {
+          "name": "createdDateTime",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "lastModifiedById",
+          "type": "text",
+          "label": "Last modified by ID"
+        },
+        {
+          "name": "lastModifiedByName",
+          "type": "text",
+          "label": "Last modified by user"
+        },
+        {
+          "name": "lastModifiedDateTime",
+          "type": "date",
+          "label": "Last modified at"
+        },
+        {
+          "name": "isDefault",
+          "type": "boolean",
+          "label": "Is default"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n    \"Notes.Read.All\"\n]",
+      "accountName": "onenote",
+      "description": "Retrieves a list of users notebooks.",
+      "expectJsonc": "[\n    {\n        \"name\": \"orderby\",\n        \"type\": \"select\",\n        \"label\": \"Sort by\",\n        \"options\": {\n            \"store\": [\n                {\n                    \"label\": \"Date of creation\",\n                    \"value\": \"createdDateTime\"\n                },\n                {\n                    \"label\": \"Date of last modificaion\",\n                    \"value\": \"lastModifiedDateTime\"\n                },\n                {\n                    \"label\": \"Name\",\n                    \"value\": \"displayName\"\n                }\n            ],\n            \"nested\": [\n                {\n                    \"name\": \"order\",\n                    \"type\": \"select\",\n                    \"label\": \"Order by\",\n                    \"default\": \"asc\",\n                    \"options\": [\n                        {\n                            \"label\": \"ASC\",\n                            \"value\": \"asc\"\n                        },\n                        {\n                            \"label\": \"DESC\",\n                            \"value\": \"desc\"\n                        }\n                    ],\n                    \"required\": true\n                }\n            ]\n        }\n    },\n    {\n        \"help\": \"Maximum records returned by Integromat.\",\n        \"name\": \"limit\",\n        \"type\": \"number\",\n        \"label\": \"Limit\",\n        \"default\": 50,\n        \"required\": true\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"Id\"\n    },\n    {\n        \"name\": \"displayName\",\n        \"type\": \"text\",\n        \"label\": \"Name\"\n    },\n    {\n        \"name\": \"createdById\",\n        \"type\": \"text\",\n        \"label\": \"Created by ID\"\n    },\n    {\n        \"name\": \"createdByName\",\n        \"type\": \"text\",\n        \"label\": \"Created by user\"\n    },\n    {\n        \"name\": \"createdDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    },\n    {\n        \"name\": \"lastModifiedById\",\n        \"type\": \"text\",\n        \"label\": \"Last modified by ID\"\n    },\n    {\n        \"name\": \"lastModifiedByName\",\n        \"type\": \"text\",\n        \"label\": \"Last modified by user\"\n    },\n    {\n        \"name\": \"lastModifiedDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Last modified at\"\n    },\n    {\n        \"name\": \"isDefault\",\n        \"type\": \"boolean\",\n        \"label\": \"Is default\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "makeAnApiCall": {
+      "id": 60749,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://graph.microsoft.com/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "makeAnApiCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://graph.microsoft.com`. For example: `/v1.0/me/onenote/notebooks`",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"url\": \"https://graph.microsoft.com/{{parameters.url}}\",\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"method\": \"{{parameters.method}}\",\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"body\": \"{{body}}\",\n            \"headers\": \"{{headers}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "onenote",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"help\": \"Enter a path relative to `https://graph.microsoft.com`. For example: `/v1.0/me/onenote/notebooks`\",\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ],\n        \"required\": true\n    },\n    {\n        \"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"name\": \"headers\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"type\": \"text\",\n                \"label\": \"Key\"\n            },\n            {\n                \"name\": \"value\",\n                \"type\": \"text\",\n                \"label\": \"Value\"\n            }\n        ],\n        \"type\": \"array\",\n        \"label\": \"Headers\",\n        \"default\": [\n            {\n                \"key\": \"Content-Type\",\n                \"value\": \"application/json\"\n            }\n        ]\n    },\n    {\n        \"name\": \"qs\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"type\": \"text\",\n                \"label\": \"Key\"\n            },\n            {\n                \"name\": \"value\",\n                \"type\": \"text\",\n                \"label\": \"Value\"\n            }\n        ],\n        \"type\": \"array\",\n        \"label\": \"Query String\"\n    },\n    {\n        \"name\": \"body\",\n        \"type\": \"any\",\n        \"label\": \"Body\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createNotebook": {
+      "id": 3898,
+      "api": {
+        "url": "/me/onenote/notebooks",
+        "body": {
+          "displayName": "{{parameters.displayName}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": {
+            "id": "{{body.id}}",
+            "url": "{{body.links.oneNoteWebUrl.href}}",
+            "isShared": "{{body.isShared}}",
+            "userRole": "{{body.userRole}}",
+            "isDefault": "{{body.isDefault}}",
+            "createdById": "{{body.createdBy.user.id}}",
+            "displayName": "{{body.displayName}}",
+            "createdByName": "{{body.createdBy.user.displayName}}",
+            "createdDateTime": "{{body.createdDateTime}}",
+            "lastModifiedById": "{{body.lastModifiedBy.user.id}}",
+            "lastModifiedByName": "{{body.lastModifiedBy.user.displayName}}",
+            "lastModifiedDateTime": "{{body.lastModifiedDateTime}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "createNotebook",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a notebook",
+      "scope": [
+        "Notes.Create",
+        "Notes.ReadWrite.All"
+      ],
+      "expect": [
+        {
+          "name": "displayName",
+          "type": "text",
+          "label": "Name",
+          "required": true,
+          "validate": {
+            "max": 50
+          }
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/me/onenote/notebooks\",\n    \"body\": {\n        \"displayName\": \"{{parameters.displayName}}\"\n    },\n    \"method\": \"POST\",\n    \"response\": {\n        \"output\": {\n            \"id\": \"{{body.id}}\",\n            \"url\": \"{{body.links.oneNoteWebUrl.href}}\",\n            \"isShared\": \"{{body.isShared}}\",\n            \"userRole\": \"{{body.userRole}}\",\n            \"isDefault\": \"{{body.isDefault}}\",\n            \"createdById\": \"{{body.createdBy.user.id}}\",\n            \"displayName\": \"{{body.displayName}}\",\n            \"createdByName\": \"{{body.createdBy.user.displayName}}\",\n            \"createdDateTime\": \"{{body.createdDateTime}}\",\n            \"lastModifiedById\": \"{{body.lastModifiedBy.user.id}}\",\n            \"lastModifiedByName\": \"{{body.lastModifiedBy.user.displayName}}\",\n            \"lastModifiedDateTime\": \"{{body.lastModifiedDateTime}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Id"
+        },
+        {
+          "name": "displayName",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "createdById",
+          "type": "text",
+          "label": "Created by ID"
+        },
+        {
+          "name": "createdByName",
+          "type": "text",
+          "label": "Created by user"
+        },
+        {
+          "name": "createdDateTime",
+          "type": "date",
+          "label": "Created at"
+        },
+        {
+          "name": "lastModifiedById",
+          "type": "text",
+          "label": "Last modified by ID"
+        },
+        {
+          "name": "lastModifiedByName",
+          "type": "text",
+          "label": "Last modified by user"
+        },
+        {
+          "name": "lastModifiedDateTime",
+          "type": "date",
+          "label": "Last modified at"
+        },
+        {
+          "name": "userRole",
+          "type": "text",
+          "label": "User role"
+        },
+        {
+          "name": "url",
+          "type": "url",
+          "label": "URL"
+        },
+        {
+          "name": "isDefault",
+          "type": "boolean",
+          "label": "Is default"
+        },
+        {
+          "name": "isShared",
+          "type": "boolean",
+          "label": "Is shared"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n    \"Notes.Create\",\n    \"Notes.ReadWrite.All\"\n]",
+      "accountName": "onenote",
+      "description": "Creates a new notebook.",
+      "expectJsonc": "[\n    {\n        \"name\": \"displayName\",\n        \"type\": \"text\",\n        \"label\": \"Name\",\n        \"required\": true,\n        \"validate\": {\n            \"max\": 50\n        }\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"Id\"\n    },\n    {\n        \"name\": \"displayName\",\n        \"type\": \"text\",\n        \"label\": \"Name\"\n    },\n    {\n        \"name\": \"createdById\",\n        \"type\": \"text\",\n        \"label\": \"Created by ID\"\n    },\n    {\n        \"name\": \"createdByName\",\n        \"type\": \"text\",\n        \"label\": \"Created by user\"\n    },\n    {\n        \"name\": \"createdDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Created at\"\n    },\n    {\n        \"name\": \"lastModifiedById\",\n        \"type\": \"text\",\n        \"label\": \"Last modified by ID\"\n    },\n    {\n        \"name\": \"lastModifiedByName\",\n        \"type\": \"text\",\n        \"label\": \"Last modified by user\"\n    },\n    {\n        \"name\": \"lastModifiedDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Last modified at\"\n    },\n    {\n        \"name\": \"userRole\",\n        \"type\": \"text\",\n        \"label\": \"User role\"\n    },\n    {\n        \"name\": \"url\",\n        \"type\": \"url\",\n        \"label\": \"URL\"\n    },\n    {\n        \"name\": \"isDefault\",\n        \"type\": \"boolean\",\n        \"label\": \"Is default\"\n    },\n    {\n        \"name\": \"isShared\",\n        \"type\": \"boolean\",\n        \"label\": \"Is shared\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "copyAPageToTheSection": {
+      "id": 60150,
+      "api": {
+        "url": "/me/onenote/pages/{{parameters.page_id}}/copyToSection",
+        "body": {
+          "id": "{{parameters.id}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{parseDates(body)}}"
+        }
+      },
+      "rev": 6,
+      "crud": "create",
+      "name": "copyAPageToTheSection",
+      "epoch": null,
+      "flags": {},
+      "label": "Copy a Page to the Section",
+      "scope": [
+        "Notes.Create",
+        "Notes.ReadWrite.All"
+      ],
+      "expect": [
+        {
+          "rpc": {
+            "url": "rpc://app%23onenote@1/listPages",
+            "label": "Search Pages",
+            "parameters": [
+              {
+                "name": "sectionId",
+                "type": "select",
+                "label": "Source Section ID",
+                "options": "rpc://app%23onenote@1/listSections",
+                "editable": true
+              }
+            ]
+          },
+          "name": "page_id",
+          "type": "text",
+          "label": "Page ID",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "select",
+          "label": "Destination Section ID",
+          "options": "rpc://app%23onenote@1/listSections",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "onenote",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/me/onenote/pages/{{parameters.page_id}}/copyToSection\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"id\": \"{{parameters.id}}\"\n    },\n    \"response\": {\n        \"output\": \"{{parseDates(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "@odata.context",
+          "type": "text",
+          "label": "Data Context"
+        },
+        {
+          "name": "@odata.type",
+          "type": "text",
+          "label": "Data Type"
+        },
+        {
+          "name": "id",
+          "type": "uinteger",
+          "label": "Copy Page ID"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "createdDateTime",
+          "type": "date",
+          "label": "Created Date Time"
+        },
+        {
+          "name": "lastActionDateTime",
+          "type": "date",
+          "label": "Last Action Date Time"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\r\n    \"Notes.Create\",\r\n    \"Notes.ReadWrite.All\"\r\n]",
+      "accountName": "onenote",
+      "description": "Copies an existing page to another section.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"page_id\",\n\t\t\"label\": \"Page ID\",\n\t\t\"type\": \"text\",\n\t\t\"required\": true,\n\t\t\"rpc\": {\n\t\t\t\"url\": \"rpc://listPages\",\n\t\t\t\"label\": \"Search Pages\",\n\t\t\t\"parameters\": [{\n\t\t\t\t\"name\": \"sectionId\",\n\t\t\t\t\"label\": \"Source Section ID\",\n\t\t\t\t\"type\": \"select\",\n\t\t\t\t\"options\": \"rpc://listSections\",\n\t\t\t\t\"editable\": true\n\t\t\t}]\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"id\",\n\t\t\"label\": \"Destination Section ID\",\n\t\t\"type\": \"select\",\n\t\t\"required\": true,\n\t\t\"options\": \"rpc://listSections\",\n\t\t\"editable\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"@odata.context\",\n        \"type\": \"text\",\n        \"label\": \"Data Context\"\n    },\n    {\n        \"name\": \"@odata.type\",\n        \"type\": \"text\",\n        \"label\": \"Data Type\"\n    },\n    {\n        \"name\": \"id\",\n        \"type\": \"uinteger\",\n        \"label\": \"Copy Page ID\"\n    },\n    {\n        \"name\": \"status\",\n        \"type\": \"text\",\n        \"label\": \"Status\"\n    },\n    {\n        \"name\": \"createdDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Created Date Time\"\n    },\n    {\n        \"name\": \"lastActionDateTime\",\n        \"type\": \"date\",\n        \"label\": \"Last Action Date Time\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "onenote": {
+      "api": {
+        "info": {
+          "log": {
+            "sanitize": [
+              "request.headers.authorization"
+            ]
+          },
+          "url": "https://graph.microsoft.com/v1.0/me",
+          "headers": {
+            "Authorization": "Bearer {{connection.accessToken}}"
+          },
+          "response": {
+            "uid": "{{body.id}}",
+            "data": {
+              "userId": "{{body.id}}"
+            },
+            "metadata": {
+              "type": "text",
+              "value": "{{body.displayName}}"
+            }
+          }
+        },
+        "token": {
+          "log": {
+            "sanitize": [
+              "request.body.code",
+              "request.body.client_secret",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+          "body": {
+            "code": "{{temp.code}}",
+            "client_id": "{{ifempty(data.clientId, common.clientId)}}",
+            "grant_type": "authorization_code",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "client_secret": "{{ifempty(data.clientSecret, common.clientSecret)}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}"
+            }
+          }
+        },
+        "refresh": {
+          "log": {
+            "sanitize": [
+              "request.body.client_secret",
+              "request.body.refresh_token",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+          "body": {
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "grant_type": "refresh_token",
+            "client_secret": "{{ifempty(parameters.clientSecret, common.clientSecret)}}",
+            "refresh_token": "{{data.refreshToken}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}"
+            }
+          },
+          "condition": "{{data.expires < addMinutes(now, 1)}}"
+        },
+        "authorize": {
+          "qs": {
+            "scope": "{{join(distinct(merge(oauth.scope, ifempty(parameters.scopes, emptyarray))), ' ')}}",
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "response_type": "code"
+          },
+          "url": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+          "response": {
+            "temp": {
+              "code": "{{query.code}}"
+            }
+          }
+        }
+      },
+      "rev": 11,
+      "name": "onenote",
+      "type": "oauth",
+      "label": "OneNote",
+      "scope": [
+        "User.Read",
+        "offline_access"
+      ],
+      "scopes": {
+        "User.Read": "Allows users to sign-in to the app, and allows the app to read the profile of signed-in users. It also allows the app to read basic company informatin of signed-in users.",
+        "Notes.Create": "Allows the app to read the titles of OneNote notebooks and sections and to create new pages, notebooks, and sections on behalf of the signed-in user.",
+        "Notes.Read.All": "Allows the app to read OneNote notebooks that the signed-in user has access to in the organization.",
+        "offline_access": "Allows the app to work with your data until you unauthorize it.",
+        "Notes.ReadWrite.All": "Allows the app to read, share, and modify OneNote notebooks that the signed-in user has access to in the organization."
+      },
+      "aliasTo": null,
+      "appName": "onenote",
+      "install": {
+        "common": {
+          "clientId": "{{parameters.clientId}}",
+          "clientSecret": "{{parameters.clientSecret}}"
+        }
+      },
+      "apiJsonc": "{\n    \"info\": {\n        \"url\": \"https://graph.microsoft.com/v1.0/me\",\n        \"headers\": {\n            \"Authorization\": \"Bearer {{connection.accessToken}}\"\n        },\n        \"response\": {\n            \"uid\": \"{{body.id}}\",\n            \"data\": {\n                \"userId\": \"{{body.id}}\"\n            },\n            \"metadata\": {\n                \"type\": \"text\",\n                \"value\": \"{{body.displayName}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.headers.authorization\"\n            ]\n        }\n    },\n    \"token\": {\n        \"url\": \"https://login.microsoftonline.com/common/oauth2/v2.0/token\",\n        \"body\": {\n            \"code\": \"{{temp.code}}\",\n            \"client_id\": \"{{ifempty(data.clientId, common.clientId)}}\",\n            \"grant_type\": \"authorization_code\",\n            \"redirect_uri\": \"{{oauth.redirectUri}}\",\n            \"client_secret\": \"{{ifempty(data.clientSecret, common.clientSecret)}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"method\": \"POST\",\n        \"response\": {\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\",\n                \"refreshToken\": \"{{body.refresh_token}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.code\",\n                \"request.body.client_secret\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },\n    \"refresh\": {\n        \"url\": \"https://login.microsoftonline.com/common/oauth2/v2.0/token\",\n        \"body\": {\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"grant_type\": \"refresh_token\",\n            \"client_secret\": \"{{ifempty(parameters.clientSecret, common.clientSecret)}}\",\n            \"refresh_token\": \"{{data.refreshToken}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"method\": \"POST\",\n        \"response\": {\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\",\n                \"refreshToken\": \"{{body.refresh_token}}\"\n            }\n        },\n        \"condition\": \"{{data.expires < addMinutes(now, 1)}}\",\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.client_secret\",\n                \"request.body.refresh_token\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },\n    \"authorize\": {\n        \"qs\": {\n            // \"scope\": \"{{join(oauth.scope, ' ')}}\",\n            \"scope\": \"{{join(distinct(merge(oauth.scope, ifempty(parameters.scopes, emptyarray))), ' ')}}\",\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"redirect_uri\": \"{{oauth.redirectUri}}\",\n            \"response_type\": \"code\"\n        },\n        \"url\": \"https://login.microsoftonline.com/common/oauth2/v2.0/authorize\",\n        \"response\": {\n            \"temp\": {\n                \"code\": \"{{query.code}}\"\n            }\n        }\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "advanced": true,
+          "editable": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "password",
+          "label": "Client Secret",
+          "advanced": true,
+          "editable": true
+        },
+        {
+          "name": "scopes",
+          "type": "select",
+          "label": "Additional Scopes",
+          "dynamic": true,
+          "options": [
+            {
+              "label": "Notes Create",
+              "value": "Notes.Create"
+            },
+            {
+              "label": "Notes Read All",
+              "value": "Notes.Read.All"
+            },
+            {
+              "label": "Notes Read Write All",
+              "value": "Notes.ReadWrite.All"
+            }
+          ],
+          "advanced": true,
+          "editable": true,
+          "multiple": true
+        }
+      ],
+      "scopeJsonc": "[\n    \"User.Read\",\n    \"offline_access\"\n]",
+      "installSpec": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "required": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "required": true
+        }
+      ],
+      "scopesJsonc": "{\n    \"User.Read\": \"Allows users to sign-in to the app, and allows the app to read the profile of signed-in users. It also allows the app to read basic company informatin of signed-in users.\",\n    \"Notes.Create\": \"Allows the app to read the titles of OneNote notebooks and sections and to create new pages, notebooks, and sections on behalf of the signed-in user.\",\n    \"Notes.Read.All\": \"Allows the app to read OneNote notebooks that the signed-in user has access to in the organization.\",\n    \"offline_access\": \"Allows the app to work with your data until you unauthorize it.\",\n    \"Notes.ReadWrite.All\": \"Allows the app to read, share, and modify OneNote notebooks that the signed-in user has access to in the organization.\"\n}",
+      "installJsonc": "{\n\t\"common\": {\n\t\t\"clientId\": \"{{parameters.clientId}}\",\n\t\t\"clientSecret\": \"{{parameters.clientSecret}}\"\n\t}\n}",
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"advanced\": true,\n\t\t\"editable\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"password\",\n        \"label\": \"Client Secret\",\n        \"advanced\": true,\n\t\t\"editable\": true\n    },\n    {\n        \"name\": \"scopes\",\n        \"label\": \"Additional Scopes\",\n        \"type\": \"select\",\n        \"advanced\": true,\n        \"multiple\": true,\n        \"dynamic\": true,\n\t\t\"editable\": true,\n        \"options\": [\n            {\n                \"value\": \"Notes.Create\",\n                \"label\": \"Notes Create\"\n            },\n            {\n                \"value\": \"Notes.Read.All\",\n                \"label\": \"Notes Read All\"\n            },\n            {\n                \"value\": \"Notes.ReadWrite.All\",\n                \"label\": \"Notes Read Write All\"\n            }\n        ]\n    }\n]",
+      "installSpecJsonc": "[\n\t{\n\t\t\"name\": \"clientId\",\n\t\t\"label\": \"Client ID\",\n\t\t\"type\": \"text\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"clientSecret\",\n\t\t\"label\": \"Client Secret\",\n\t\t\"type\": \"text\",\n\t\t\"required\": true\n\t}\n]",
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://graph.microsoft.com/v1.0\",\n    \"headers\": {\n        \"Authorization\": \"Bearer {{connection.accessToken}}\"\n    },\n    \"response\": {\n        \"error\": {\n            \"type\": \"DataError\",\n            \"message\": \"{{body.error.code}}: {{body.error.message}}\"\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.authorization\"\n        ]\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "test2": {
+      "rev": 2,
+      "code": "function test2(item) {\n  //   let stack = [];\n  //   let obj = { presentation: item.presentation };\n  //   item.files.map((e) => {\n  //     const newArr = {\n  //       [e.file.options.fileName]: {\n  //         value: e.file.value,\n  //         options: e.file.options,\n  //       },\n  //     };\n  //     stack.push(newArr);\n  //   });\n  //   stack.map((e) => {\n  //     Object.keys(e).map((i) => {\n  //       obj[i] = e[i];\n  //     });\n  //   });\n  return item;\n}\n",
+      "name": "test2",
+      "test": null,
+      "appName": "onenote",
+      "arguments": "(item)",
+      "appVersion": 1
+    },
+    "testNew": {
+      "rev": 1,
+      "code": "function testNew() {\n\n}",
+      "name": "testNew",
+      "test": null,
+      "appName": "onenote",
+      "arguments": "()",
+      "appVersion": 1
+    },
+    "parseDates": {
+      "rev": 2,
+      "code": "function parseDates(obj) {\n  const digitsAtEndValidator = (str) => {\n    let strValid = true;\n    let currentPosition = -1;\n\n    while (currentPosition * -1 <= 7) {\n      const currentSubstr = str.slice(currentPosition);\n\n      if (JSON.stringify(new Date(currentSubstr)) !== \"null\") {\n        strValid = false;\n      } else {\n        if (currentPosition * -1 > 6) {\n          strValid = true;\n        }\n      }\n      currentPosition--;\n    }\n\n    return strValid;\n  };\n\n  function dateWithoutTime(date) {\n    const formatPatterns = [\n      /^[0-9]+-([0][1-9]|[1][0-2])-([0][1-9]|[1-2][0-9]|[3][0-1])$/,\n      /^([1-9]|[1][0-2])\\/([1-9]|[1-2][0-9]|[3][0-1])\\/[0-9]+$/,\n      /^([0-2][0-9]|[3][0-1])\\/([0][1-9]|[1][0-2])\\/[0-9]+$/,\n    ];\n\n    let matchFound = false;\n\n    formatPatterns.forEach((formatPattern) => {\n      const match = date.match(formatPattern);\n\n      if (match) {\n        matchFound = true;\n      }\n    });\n\n    return matchFound;\n  }\n\n  for (let [key, value] of Object.entries(obj)) {\n    if (value) {\n      if (\n        typeof value === \"string\" &&\n        value.length > 7 &&\n        JSON.stringify(new Date(value)) !== \"null\" &&\n        digitsAtEndValidator(value) &&\n        !dateWithoutTime(value)\n      ) {\n        obj[key] = iml.parseDate(iml.formatDate(value, \"YYYY-MM-DD HH:mm:ss\"));\n      } else if (Array.isArray(value)) {\n        obj[key] = value.map((item) => iml.parseDates(item));\n      } else if (typeof value === \"object\") {\n        obj[key] = iml.parseDates(value);\n      } else if (key === \"dob\") {\n        obj[key] = iml.parseDate(iml.formatDate(value, \"YYYY-MM-DD\"));\n      }\n    }\n  }\n  return obj;\n}\n",
+      "name": "parseDates",
+      "test": null,
+      "appName": "onenote",
+      "arguments": "(obj)",
+      "appVersion": 1
+    },
+    "pageSkeleton": {
+      "rev": 2,
+      "code": "function pageSkeleton(title, content) {\n\treturn \"<!DOCTYPE html><html><head><title>\"+title+\"</title></head><body>\"+content+\"</body></html>\";\n}",
+      "name": "pageSkeleton",
+      "test": null,
+      "appName": "onenote",
+      "arguments": "(title, content)",
+      "appVersion": 1
+    },
+    "normUploadFile": {
+      "rev": 2,
+      "code": "function normUploadFile() {\n//not used\n}",
+      "name": "normUploadFile",
+      "test": null,
+      "appName": "onenote",
+      "arguments": "()",
+      "appVersion": 1
+    },
+    "processInputFiles": {
+      "rev": 2,
+      "code": "function processInputFiles(title, content, files) {\n\n  const stack = [];\n\n  if (files && files.length > 0) {\n    files.forEach((e, i) => {\n      stack.push({\n        key: \"{\" + ++i + \"}\",\n        file: {\n          value: e.value,\n          options: {\n            filename: e.fileName,\n            contentType: iml.mime(e.fileName)\n          }\n        }\n      });\n    });\n  }\n\n  return {\n    Presentation: {\n      value: iml.pageSkeleton(iml.ifempty(title, \"\"), iml.ifempty(content, \"\")),\n      options: {\n        contentType: \"text/html\"\n      }\n    },\n    ...iml.toCollection(stack, \"key\", \"file\")\n  };\n}\n",
+      "name": "processInputFiles",
+      "test": null,
+      "appName": "onenote",
+      "arguments": "(title, content, files)",
+      "appVersion": 1
+    },
+    "createRemoveAction": {
+      "rev": 2,
+      "code": "function createRemoveAction(item) {\n  return item.map((e) => {\n    if (e.action === \"remove\") {\n      e.action = \"replace\";\n      e.content = \"<p></p>\";\n    }\n    return e;\n  });\n}\n",
+      "name": "createRemoveAction",
+      "test": null,
+      "appName": "onenote",
+      "arguments": "(item)",
+      "appVersion": 1
+    },
+    "normalizeUploadFile": {
+      "rev": 2,
+      "code": "function normalizeUploadFile(html, buffer, fileName) {\n  const contentForm = `Content-Disposition:form-data; name=ggg`;\n  const contentType = \"Content-Type:image/jpeg\";\n  return `${html}\\n--MyPartBoundary198374\\n${contentForm}\\n${contentType}\\n${buffer}`;\n}\n",
+      "name": "normalizeUploadFile",
+      "test": null,
+      "appName": "onenote",
+      "arguments": "(html, buffer, fileName)",
+      "appVersion": 1
+    },
+    "normalizeUpdloadFile": {
+      "rev": 2,
+      "code": "function normalizeUpdloadFile(title, content, files) {\n  // if(files.length !== 0){\n\n  // }\n  return {\n    presentation: {\n      value: `{{iml.pageSkeleton(iml.ifempty(${title}, ''),iml.ifempty(${content}, ''))}}`,\n      options: {\n        contentType: \"text/html\",\n      },\n    },\n    files: `{{${files}}}`,\n  };\n  //   let stack = [];\n  //   let obj = { presentation: item.presentation };\n  //   item.files.map((e) => {\n  //     const newArr = {\n  //       [e.file.options.fileName]: {\n  //         value: e.file.value,\n  //         options: e.file.options,\n  //       },\n  //     };\n  //     stack.push(newArr);\n  //   });\n  //   stack.map((e) => {\n  //     Object.keys(e).map((i) => {\n  //       obj[i] = e[i];\n  //     });\n  //   });\n  //   return obj;\n}\n",
+      "name": "normalizeUpdloadFile",
+      "test": null,
+      "appName": "onenote",
+      "arguments": "(title, content, files)",
+      "appVersion": 1
+    },
+    "processInputFilesUpdate": {
+      "rev": 2,
+      "code": "function processInputFilesUpdate(data, files) {\n\n  const stack = [];\n\n  if (files && files.length > 0) {\n    files.forEach((e, i) => {\n      stack.push({\n        key: \"{\" + ++i + \"}\",\n        file: {\n          value: e.value,\n          options: {\n            filename: e.fileName,\n            contentType: iml.mime(e.fileName)\n          }\n        }\n      });\n    });\n  }\n\n  return {\n    commands: {\n      value: JSON.stringify(data),\n      options: {\n        contentType: \"application/json\"\n      }\n    },\n    ...iml.toCollection(stack, \"key\", \"file\")\n  };\n}\n",
+      "name": "processInputFilesUpdate",
+      "test": null,
+      "appName": "onenote",
+      "arguments": "(data, files)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-02-21T23:56:02.618982+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": null,
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "80abd91adeb9c066f0301fdbb90bf1a2",
+  "versionFull": "1.5.10",
+  "compiledName": "onenote",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n}",
+  "manifestVersion": 1,
+  "compilationError": null,
+  "installSpecJsonc": "[\n]"
+}

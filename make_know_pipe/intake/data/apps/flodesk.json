@@ -1,0 +1,1628 @@
+{
+  "rev": 25,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "https://api.flodesk.com/v1",
+    "headers": {
+      "Authorization": "Basic {{base64(connection.apiKey + ':')}}"
+    },
+    "response": {
+      "error": {
+        "429": {
+          "type": "RateLimitError",
+          "message": "[429] Rate limit exceed. You can make up to 100 requests per minute."
+        },
+        "type": "RuntimeError",
+        "message": "[{{statusCode}}] {{body.message}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "flodesk",
+  "_rpcs": {
+    "optionsSegments": {
+      "api": {
+        "qs": {
+          "per_page": 100
+        },
+        "url": "/segments",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.meta.total_pages >= pagination.page}}"
+        }
+      },
+      "rev": 3,
+      "name": "optionsSegments",
+      "label": "Options: Segments",
+      "appName": "flodesk",
+      "apiJsonc": "{\n\t\"url\": \"/segments\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"per_page\": 100\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.data}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t},\n\t\t\"limit\": \"{{parameters.limit}}\"\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t},\n\t\t\"condition\": \"{{body.meta.total_pages >= pagination.page}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "flodesk",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "interfaceWebhook": {
+      "api": {
+        "qs": {
+          "per_page": 100
+        },
+        "url": "/custom-fields",
+        "method": "GET",
+        "response": {
+          "output": {
+            "name": "{{item.key}}",
+            "type": "text",
+            "label": "{{item.label}}"
+          },
+          "iterate": "{{body.data}}",
+          "wrapper": [
+            {
+              "name": "event_name",
+              "type": "text",
+              "label": "Event Name"
+            },
+            {
+              "name": "event_time",
+              "type": "date",
+              "label": "Event Time"
+            },
+            {
+              "name": "webhookID",
+              "type": "text",
+              "label": "Webhook ID"
+            },
+            {
+              "name": "subscriber",
+              "spec": [
+                {
+                  "name": "id",
+                  "type": "text",
+                  "label": "Subscriber ID"
+                },
+                {
+                  "name": "status",
+                  "type": "text",
+                  "label": "Status"
+                },
+                {
+                  "name": "email",
+                  "type": "email",
+                  "label": "Email"
+                },
+                {
+                  "name": "source",
+                  "type": "text",
+                  "label": "Source"
+                },
+                {
+                  "name": "first_name",
+                  "type": "text",
+                  "label": "First Name"
+                },
+                {
+                  "name": "last_name",
+                  "type": "text",
+                  "label": "Last Name"
+                },
+                {
+                  "name": "segments",
+                  "spec": [
+                    {
+                      "name": "id",
+                      "type": "text",
+                      "label": "Segment ID"
+                    },
+                    {
+                      "name": "name",
+                      "type": "text",
+                      "label": "Segment Name"
+                    }
+                  ],
+                  "type": "array",
+                  "label": "Segments"
+                },
+                {
+                  "name": "optin_ip",
+                  "type": "text",
+                  "label": "Opt-in IP"
+                },
+                {
+                  "name": "optin_timestamp",
+                  "type": "date",
+                  "label": "Opt-in Timestamp"
+                },
+                {
+                  "name": "created_at",
+                  "type": "date",
+                  "label": "Created at"
+                },
+                {
+                  "name": "custom_fields",
+                  "spec": "{{output}}",
+                  "type": "collection",
+                  "label": "Custom Fields"
+                }
+              ],
+              "type": "collection",
+              "label": "Subscriber"
+            },
+            {
+              "name": "segment",
+              "spec": [
+                {
+                  "name": "id",
+                  "type": "text",
+                  "label": "ID"
+                },
+                {
+                  "name": "name",
+                  "type": "text",
+                  "label": "Name"
+                }
+              ],
+              "type": "collection",
+              "label": "Segment"
+            },
+            {
+              "name": "webhook_id",
+              "type": "text",
+              "label": "Webhook ID"
+            }
+          ]
+        }
+      },
+      "rev": 5,
+      "name": "interfaceWebhook",
+      "label": "Interface: Webhook",
+      "appName": "flodesk",
+      "apiJsonc": "{\n\t\"url\": \"/custom-fields\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"per_page\": 100\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.data}}\",\n\t\t\"output\": {\n\t\t\t\"name\": \"{{item.key}}\",\n\t\t\t\"type\": \"text\",\n\t\t\t\"label\": \"{{item.label}}\"\n\t\t},\n\t\t\"wrapper\": [\n\t\t\t{\n\t\t\t\t\"name\": \"event_name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Event Name\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"event_time\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Event Time\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"webhookID\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Webhook ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"subscriber\",\n\t\t\t\t\"label\": \"Subscriber\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Subscriber ID\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"status\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Status\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"email\",\n\t\t\t\t\t\t\"type\": \"email\",\n\t\t\t\t\t\t\"label\": \"Email\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"source\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Source\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"first_name\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"First Name\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"last_name\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Last Name\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"segments\",\n\t\t\t\t\t\t\"type\": \"array\",\n\t\t\t\t\t\t\"label\": \"Segments\",\n\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\"label\": \"Segment ID\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"name\",\n\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\"label\": \"Segment Name\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"optin_ip\",\n\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\"label\": \"Opt-in IP\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"optin_timestamp\",\n\t\t\t\t\t\t\"type\": \"date\",\n\t\t\t\t\t\t\"label\": \"Opt-in Timestamp\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"created_at\",\n\t\t\t\t\t\t\"type\": \"date\",\n\t\t\t\t\t\t\"label\": \"Created at\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"custom_fields\",\n\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\"label\": \"Custom Fields\",\n\t\t\t\t\t\t\"spec\": \"{{output}}\"\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"type\": \"collection\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Segment\",\n\t\t\t\t\"name\": \"segment\",\n\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\"spec\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"ID\",\n\t\t\t\t\t\t\"name\": \"id\",\n\t\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Name\",\n\t\t\t\t\t\t\"name\": \"name\",\n\t\t\t\t\t\t\"type\": \"text\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"webhook_id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Webhook ID\"\n\t\t\t}\n\t\t]\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "flodesk",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "paramsCustomFields": {
+      "api": {
+        "qs": {
+          "per_page": 100
+        },
+        "url": "/custom-fields",
+        "method": "GET",
+        "response": {
+          "output": {
+            "name": "{{item.key}}",
+            "type": "text",
+            "label": "{{item.label}}"
+          },
+          "iterate": "{{body.data}}",
+          "wrapper": {
+            "name": "custom_fields",
+            "spec": "{{output}}",
+            "type": "collection",
+            "label": "Custom Fields"
+          }
+        }
+      },
+      "rev": 2,
+      "name": "paramsCustomFields",
+      "label": "Parameters: Custom Fields",
+      "appName": "flodesk",
+      "apiJsonc": "{\n\t\"url\": \"/custom-fields\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"per_page\": 100\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.data}}\",\n\t\t\"output\": {\n\t\t\t\"name\": \"{{item.key}}\",\n\t\t\t\"type\": \"text\",\n\t\t\t\"label\": \"{{item.label}}\"\n\t\t},\n\t\t\"wrapper\": {\n\t\t\t\"name\": \"custom_fields\",\n\t\t\t\"type\": \"collection\",\n\t\t\t\"label\": \"Custom Fields\",\n\t\t\t\"spec\": \"{{output}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "flodesk",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "messageUnsubsribeFromAllLists": {
+      "api": {
+        "response": {
+          "output": {
+            "type": "html",
+            "label": "<div style='color: #205671; background: #E8F6FF; border-radius: 5px; padding: 12px 16px 12px 16px; font-size: 12px;'>Once the subscriber is unsubscribed, you cannot add them back (resubscribe) to your list. The only way they can be added back (resubscribe) as an active subscriber is if they sign up again via a Flodesk opt-in form.</div>"
+          }
+        }
+      },
+      "rev": 2,
+      "name": "messageUnsubsribeFromAllLists",
+      "label": "Message: Unsubscribe a Subscriber",
+      "appName": "flodesk",
+      "apiJsonc": "{\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"type\": \"html\",\n\t\t\t\"label\": \"<div style='color: #205671; background: #E8F6FF; border-radius: 5px; padding: 12px 16px 12px 16px; font-size: 12px;'>Once the subscriber is unsubscribed, you cannot add them back (resubscribe) to your list. The only way they can be added back (resubscribe) as an active subscriber is if they sign up again via a Flodesk opt-in form.</div>\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "flodesk",
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {
+    "sandboxes": [
+      {
+        "allowed": false,
+        "version": 1
+      },
+      {
+        "allowed": true,
+        "version": 2
+      }
+    ],
+    "imlIsUserEditable": true
+  },
+  "label": "Flodesk",
+  "theme": "#000000",
+  "_hooks": {
+    "flodesk": {
+      "api": {
+        "output": "{{body}}"
+      },
+      "rev": 3,
+      "name": "flodesk",
+      "type": "web",
+      "flags": {},
+      "label": "Watch Events",
+      "scope": [],
+      "attach": {
+        "url": "/webhooks",
+        "body": {
+          "name": "{{parameters.name}}",
+          "events": "{{parameters.events}}",
+          "post_url": "{{webhook.url}}"
+        },
+        "method": "POST",
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "/webhooks/{{webhook.externalHookId}}",
+        "method": "DELETE"
+      },
+      "update": null,
+      "aliasTo": null,
+      "appName": "flodesk",
+      "apiJsonc": "{\n  \"output\": \"{{body}}\"\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Webhook Name in Flodesk",
+          "required": true
+        },
+        {
+          "name": "events",
+          "type": "select",
+          "label": "Events",
+          "options": [
+            {
+              "label": "Subscriber Added to Segment",
+              "value": "subscriber.added_to_segment"
+            },
+            {
+              "label": "Subscriber Created",
+              "value": "subscriber.created"
+            },
+            {
+              "label": "Subscriber Unsubscribed",
+              "value": "subscriber.unsubscribed"
+            }
+          ],
+          "multiple": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "accountName": "flodesk",
+      "attachJsonc": "{\n\t\"url\": \"/webhooks\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"name\": \"{{parameters.name}}\",\n\t\t\"post_url\": \"{{webhook.url}}\",\n\t\t\"events\": \"{{parameters.events}}\"\n\t},\n\t\"response\": {\n\t\t\"data\": {\n\t\t\t\"externalHookId\": \"{{body.id}}\"\n\t\t}\n\t}\n}",
+      "detachJsonc": "{\n\t\"url\": \"/webhooks/{{webhook.externalHookId}}\",\n\t\"method\": \"DELETE\"\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"name\",\n        \"type\": \"text\",\n        \"label\": \"Webhook Name in Flodesk\",\n        \"required\": true\n    },\n    {\n        \"name\": \"events\",\n        \"type\": \"select\",\n        \"label\": \"Events\",\n        \"multiple\": true,\n        \"required\": true,\n        \"options\": [\n            {\n                \"value\": \"subscriber.added_to_segment\",\n                \"label\": \"Subscriber Added to Segment\"\n            },\n            {\n                \"value\": \"subscriber.created\",\n                \"label\": \"Subscriber Created\"\n            },\n            {\n                \"value\": \"subscriber.unsubscribed\",\n                \"label\": \"Subscriber Unsubscribed\"\n            }\n        ]\n    }\n]"
+    }
+  },
+  "global": true,
+  "groups": [
+    {
+      "label": "Subscriber",
+      "modules": [
+        "watchNewSubscribers",
+        "ListAllSubscribers",
+        "CreateASubscriber",
+        "GetASubscriber",
+        "AddASubscriberToSegments",
+        "DeleteASubscriberFromSegments",
+        "UnsubsribeFromAllLists"
+      ]
+    },
+    {
+      "label": "Segment",
+      "modules": [
+        "ListSegments",
+        "GetASegment"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "MakeAnAPICall"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000001714944415458c3edd3bd6fcd6118c6f1cfa9138e9720eda0429b3424122f531316f4af10a283c164f007342148fc13661144220d9b8992d0d1c2a45a54bc34de1654f5b15c474e8e3aabc1f39d7ebffcaee7beaffb7aee1f954aa552a9fc631a9d2fa51458851696f1034b8d46e38f83d1ae41c1620f0dacc3372c77eb9a2b884f617dbeddc7548f014e6001377b68d6e21c2e61a6dda76da4d925de8d93b88eedd8889152ca7812b986791cc330f6e10e064b29c793c80d7cc5512ce1566a0de230ee62b6ddb0afcbc067bcc313fcc4069c4fcc4d9c4df32398c136acc619ecc5102e601c07729d5ba2399d7a6f3a1b761b58c06b3c8b81cd18c0655ccd14fb318d2b7894ebda99a93fe0151e600ea3d8847eecc0edecc25f0d94c45612f95b3ccd8413788c491cc4458ce163625dc4f71818c8732b8d5fe25eea6ced6cf87b25b31c7dd883e7b9e3f7293c165353f892c98612e70b7c8aa9161e66ca43393b8d9198d815fdfc4a7f4da552a954fe4f7e01a3846b3142fa48bb0000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000003cc4944415478daed965b88d64514c07fdfba2a9a99998b5919abb86b94d1da4b9905419959a005627623a824b3f2290a1fa45eba20d9e531d2821eaca08b0525152a5ae086590445a8a8499937bc97b7747f3dccf9f033d6ddfddaa0a0f38381ffcc9c39ff3367ce39339024499224499224499224499224499224499224ff0b2add09a8d5cf46a00330be4f021d954ab72abad369e8a297bafac47e4ed4a3aba107ca07008f001f01338136e003e0cebaad3d9d61c062607e18df5b1e05de0646d5b3a8a10732b7022f002dc011a00998028ce9a5c103811b80ab7a6847775c0e4c0686d4b3a8b1b3c19ab03a1b9818063e032c03ae3f836c137021254db6017ba08462c834c4fc3060379d9c7ac80d062e0edbb603bb28695265387001256db60207ceb087c1c050e078e8b1c729a656dbb3ea6fea4975a7fab03a29fa4f854ca37a9ffa9d7a503da0ae5367a80d2133407d42dda41e52b7a8afa9bbd5656adf909ba4ae52f7aafbd51fd45935f337abdfaabf863d9fa963636e718c8d5647a8efa9ebd507d44acd41d5e5806be32747d5e7d471eae4bf38e08ed8d46675a1fab2ba55dda34e0d99d9eab19079457d3536a1fab1da476d0bc76c50e7a973d5f670eaedea60f52b7563d8305bddae2ea871c0cfea44f5c3f8ff1cb55f5d9befc4114f8711e3a33fa5c6018d71828762bcba667a6cf87df53cf5cb38d11b6b641e543bd44f42cf8bd19f1f8e1ea7deaf1e5697aa23d5efd59fc2214dea25eaa8d0b728ecf8260e60663502bba237c5c7c8b1566033d05e33b79692bbad40333032f2755d8dcc0a6027e5eaea17b215602eb03cdaf3945a713e70107829fa6fc5fcbd9caa0f028328c57021e546e8f69a6ea4771ca7dc0c8380b3807d313e10e80f1c8e762ce66b658650ae58a31da314b4272945b421c6fb027b81df8137802f80eb80e9213b06b8277476843db3e210d6a85dbe097a130115603fb09a72f73e46a9f2cd94774313b012d800ac0146030f512afc58e071e09c9acdaf08878c089d9fc666ee8e4d0ea344c06dc09bc01c4a54b5c4ba0ab00398177a170313e0b49baa3e7a5003505bd4d5ea1f917bbfa827d4e56a73c85c19b7c48998dfa96e8b1ba65a0386aaef44ceaf55574621dba2dea4f65797a84762cde7f1bd20aafc22759f7a993a2dd6aeafad3b673ac52e1d40b9f72744f8ed88d3b80b58150de0a208c9b6e87f0dbc1bf2555a81191109bb80a5c078e010b08412bee702d3806b28a1bf91f2eafc31740ca7bc46af08f9f6f8cf7e602a7029f03ae59d710b7035b089520f8e76960af53fbebb76d629c57fe35dff4ff35fb42949922449922449922449922449922449927f8f3f014b1b7615442431420000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2024-03-26T16:19:24.861793+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda7930000089c4944415478daed9a6b8c5d5519869f33d3925e68990a057b855e084525515a11530d1423f57e89c112295e62d160109b80f196d03f68881a500a5108d112f08aa218a5d514a2504449bdd40b2d30450a855e467a710a74e6cccceb8ff5ed9e7576cf39d376a69dfe789f642767efb5f6b7bff5ad6fadbdd6bb0f18638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31e66851190e2392004601e70017009380ddc0f781bd71ed2240c09ee27aa5322c8f3f125fc7021f05a60203c0af81bf8c843f0d7c9b0b5c4a8ae72bc0ddc0f323ed5b4ba7254d90f475493b250d28f18ca49951be42350e5c1f417f67841f05d78d943f0d7c7b87a4def0ab47d2e2a3e9dba8a13a1c5c0a2c0746e7c5711c8f5406393f5ea81c6ddf8694004107f0716a9dbf07f821f008b0f3683a6f86ce7024c044605a767e0b701da04aa5c2f130b59ae61c5102648bbec9a4855461a70a3c094c01fa24757118af81b03b9a9450738013a2a81b780ae802065a2d88b2841b07cc034e8bf39dc066d20c75483e65b63ac29f53e3bc376cbd10bf69e45316a739c0acb85c89f63c0eec6a766f0b7f2a11f73159510fb0e3706c150c65065800ac0226648119057c331cda0c2ce1105e0359a05f0f7c06b898d471ed59039f031e046e91b4a95163b304ba04f864d89b10c5fb804dc01dc09f0fd19fc9c0d2b0370f3831aef703db81f5c0b78175920ef893dd3f0bf802f09eb05538dc033c017c075825a9bf49c77593923eb7b928627c4a9cf7013703df1a425f1e1e0d56ab8d38a45d4094b74bba4cd2660dcee3922e8afbca3e4d90f40d49ff6b717f8fa45f48da9e5d5b51f20749b325ad91d437883fcf495a166dc86dcc92b436ab3710f1eacfaeed957445f6cc725cf31822e92d923a4bf77f3eda7dccfabf7066bea4fb24fdad14a47f49ba5fd22a49935b2540767c40d2ee52b0ba256d89635f29e89d9216956c54245da3faa41c90f44a74d2b6281bc88e66093059d2eaacbc3fee7f28dab6b1f49cdd92de5ff2e78652f98d92de27e95a497f2dc5e39c16093023ae5f28e99fad12ef58274045529ba4d749da1a4ef54afa60948fca1ad52a016645d2145425dd1d1d3c3302f02e493f8db28247b30443d279aa1fd5554977454067499a27694974629915a5cefb8a6a23b52ae93649674b1a1fed9a2ae9d3d1098dfc39b5d4592b235e85fd05929e0edb5549570e920017aa7ee477aac12c78cc090766aa26aaf44603ca755a25c032d54f8b77a934a5a9362a1fcceaf548fa901a8f3845a71db093d53b5be935d22c01664b7a322bbbaf893f48ba2a4bcaaaa48fa9b1d074a7a471aa9fad16487a67c46b7a93047836e293fbd3f01578a40cc7367028b49124e2b638df09ac04ba1b2c8aba809b80379156f82790168b3f07c6036fceea6e8dba07ec645bd28da4adeacaecb9396f0466c76f91761fe703e5a97600788924759f1cb15c08dc09fc17d8009c1e752f893af7006b816dc0fa268bd89c29c08dd416b20f00579116b387bde26fc44827c049c099d9f93f227075649db78114dc9951349b9408afa2166c2240ff6961e7f7a4843a8d83398bdaee03e06ae0b31cacc829aee5319c4e4dc3bf0d782be9bbc858e0dda4847d1a78085823e9e1f0a359678e2275be801f035f02b6b4a87fd8b40dddc4909840da1e15544923ab15f9309946daa39787ce6076f601fb9b94554abf4793926c74e928ae3593957f4b5248ff44680551ff2ce00ae047a48f501fe1e0d9a5519bb791927fd83a1f467e06d84fea8c82d10c9e9479eb9f27093be5913c989d13a917529ab107f81e699a1f2cea6d2411ac3fcefb815f018f926682c5c07c929e309e9440e701b7c673ee1fc4f6d5e1f31725750f57128c7402ec023a81d7c6f93c9278b2a949fdb9a4e9bea08b34daf791d60fa7b7b2938db2f9d48494325b49b3471b2941ef00360e21e05d92ee057e497ae52d04ae04de4e4ad40ee032600d07cf5a2f93d4c639a4befa545c1fb62418e957401fe9a351c174e073c098f2aa9bf4baf8043535ae0ff81d697adc4d5209733b4b81b67c1710cc8d67e4eff99c75a4a003bc9ad4396de5293adb995c2b6979ace8a767d717c78a7e293083d4b9bb49d3fee5c06399b9494dfce92275fada382f92e006e0d88a3f8d18a66de01c494f65e52f49fa5a6cd7c649ea9074be923630980eb0232bdf23e97a49af9174b2a46992de26e9011d4cbe0d6c97f4dd929d6b244d2c6de3664bba5d49042b04a72551fe86f0a5aab4c5bd3eec16f74f92b42e7bc66f54d34dca3ac0744967a85e55ac4aba55c75a013c4a0980921cba37ab53286f7f90f498a45daa57ee76eb60e5ad5de94f297d253bdb25fd3d92ac5b87a604ce91b43e2bef51d220beaaf4e7919b94f6e6b97eb15ad22971ff58493fcbcaf62ae912ef95f461493fc93ab95fd297d55807785149712df489878fab24186a0264e5ed4a6ad84e0d4e218eb43778ce4449374b7ab9c5fd7d4aa369438b0440d2059104036a4dafa47ba383f2fbcf55bd80537c0ba8966cae56fd4c9627c08178c6b150f58a6055d20ff2678f44024c95f4c7e8984e25d9b25c67b9925cfc6cd49ddaa04e5bdc7b4fd4ed514d2aed896bb72b4daf0d1babdae8bb3c9eb32b82d8ab34456f549279a7287dabd81ac7f206fe148ade0a49ff569a3d7ab3e3c548a465ca5e0fa5fbcf8d0e2ada93fbf284d287ab5c052c34ff4ea56f209b945e7f79f922498f442cb76471197f240930a465643cb09db40d1b455a907501fb4b9f464f8a03d2e26d0750f70934737e3449e03983b44286b44d7a86f489b9ef10ff0fd041fd37fc2a49057c21fc9c4c1268206df3f63651e62a61e34c6aa24c25dab089b452a785aa57b427ff3f40e1cb36b2ff37c43d63a87d3aee23ed6efa4a7faee920fd11a76080f479baefb8fdf3a831c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c3106f83f9a6984b798384f300000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000eb94944415478daeddd5fac65d55dc0f1ef993b31a9f3479296f9c3f4010ad6e74e419f10a4261a06688cd440424d6320406d91a0366a8a376d358d401ab56a6d34c684ead03fa66506681b5b2cf044f9f3a8d4766cebd861066c8419a67de89dfbf361adcdddf7ccd97baf7dfedc732ef7fb496eeeccb9fbcfefacbdf7da6badbdd6da20499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224499224495bd360de01b48908805dc0cf0051fbd339e065e0dc6030a8965b022eccbf87ad5b7eab6a49cf01f02a70662ba7cf282d69066f80f36afbbc031896137c1b7009f06ee06ae09dc06a5e64009c006e004ed656bd1038025cc4f927f7a8e5b7949cae3b80bf01de453a792b4bc0d7813b22e2ec663d9967e856e043c0cad0e73f06ee061e9b7780e35aa80c209fa4fb80db81f7021733fa8e1e233e5f02f603070a97df8a2e2065a8fb47fcedeafcf7b3f30e7201ed269d97a35c8119c0e4f2c5bf07f84be04616bc7a22bd112c4406902f7e803b81f7cc3b1e69abd836ef006a2e056e997710d25632f71240edee7f0b7059cba2a7f3cf8f8007f3bf254d60ee1940b60fb8b9e5efa780df019e2435e86dea472fd2a258940c6089f4886a94d7488f5a3e0be0452f4dcf22b50134791c380a5efcd2b46d860ce079c0ce29d20c6c78156044b7dd20754c69eaa8b31bd81b1155ac1bda6d7528dedda41e853b39bf5be836e059e039e0ccace2ab754dbd08b87e289601a9ca7484d448ba216d2585693493d86afb7e33f00bc0e5acf51aadab8ecfd3c00f37225d86626cea4e5c4f9fd3c0e98dbcd9cdab0de057803f07de94ff5f9d3ca3dc4aea1b30a82d3bf36eabb52ec917937a25de4c3ab92f6c49b7d3a48bff79e01b11f130f05d6075923847748fbe8a74b2bf79442c2bc03d3996c3c08311f13d465f14d348a35da40cfce68234aac7f608f044443cce1825bc86e3b33fefbfc96952b7f04781af47c4578098f01c6aed3959ebe0f617c02fd27c1c96808f009f9e249885171144c4724ce678441ca81e21e66d1ec89f772e5f18e3be1ce7772262658c185722e25844dc14113b4af7dd100b11f19ebcbd3eb1ace4f89723624f445c348d34caf16c8b884b22e29f23e26444fc648c343a93d7dfd3277d264c93cac988b8b1dad698e7eb8988787bd3fa79dd3d11f1b988586d896535223e1f117bc73d4f368d58e00c20d69fd89fed3868a5c63ac96bf15419d1890962588d888722e260447c7f0a6934e9c557772e221e8b885f8d88418ffddf18e9229e44672610ede76b639a45f9c57f226f7f5fd7777f438805cd0062fa2776dd6a3e118a33811e2750a99588783222fe6f0a69348d8b6f58e9c538edfd9f8c886b638a19405e6747a48c7fb563df9da590595a947e008be25ae093c0de296f77401ae004f0818878a9adde593b19a639366209b872dc956b31dd08fcd50cd2686fdeee8f681f5db70ff89396fd57f5fca3f9df57d0dc5e52edf7fdc0b35dc7a5473aed053e001ca27950dba9bccc17607e8fb8e795017c03f828694cfa4ee0d7480d5ca39e04bc48eafa7b969498d55380a975058eb5869af75376629fce3154472d482dbc6d0d504599c0d0857667e1575821b7aa17c632ae4b818f77a451d510fa1ca9d57d1ba9e1eb72da2f4428bb18af60f4906f4817d5dda4be233fcce9513552de04dcc1e8a1d08780df041e9824716ae7d127691ed1ba0a7c9534eaf5abb085fbb7e4a2cf2022de11cd75dcfbba8a48314115a047716d2522be1d110f44c47511b13f6ff340fef7a188381a650d62cb4ddf297f7e69de579b2a9efb22e27723354655b15c9ff7f1a5486d1025264da3aa2e7f285263e3ae585f45db95635c8eee86d5f3d2a716c3c30deb9c89d4e07a5ebac65ad561b9659f476244636d145601a2accad6bb2af88617dd17ef725762156ca3ebe4be3eda2f94d5488d8297446a246cdaceae88f8d9e86e40fc76a48b7cd4364ada484ae3d9912f8a92faf22469547462c7fa46d647faa4cf24c7b8b6fe9e96fdfe678c68888bf20c60535efc5bba0da07620ae245545462e46aaa77d1068ac23e6cfcf44c419e08f8083348f6ebc8c54ed1955e4ec1a18551c4f449c051eca1ffd5dcb77ec4aa31da4fe184deb3f46aacfb6d6a1f3df5623e2bba4a9c92e677475e232d2e8d08f44446911b96d3c49951e2f01f793aa27f5e7f1db481d844ef54d1fd2f1780ba9fda2a9d85f1db3ce34da720a72f6e5ae1c73dcbb43ac3d667ba1cfdda8201622dd79db4a150fc7509133ca4a238ff4b98b447915a72d8dda623a93ffdef7987795745e88da1db9e01847447c2c22ded42796c2589be2fc41445c1911875bd276ecc7c01b61338c0598b5b6462580cf00c74a3756cbdd8f921aa3faeef720cd77dad7483dc58aef2279b9b3c0bd7dbe478f98be46ea9959ac16fb3f911a7947d9cdf90d99af907a5936b99b346af450bee096667cd1ed21ddd99beefca780dbf2cf42def9b77415206b3bb9bf43ca007ab5d4d68adf7f0f5cd3b0fdfda43ef30fc0baa2f6c1964dff007866ccef790cf822f0fba52b14c6b49bd4bdb7efc51679dd9f6ef8fbbaf4294cd39da4f11157913296c3c0e1887891d98ccdd84eca04465988c77c255f604baa9dac3b5a16fb22e3df3521ddad5ea1398319def705b45f6c4718636af3dabb139e223d5aecd316d015d335f96716461d9bc7f3cf0d2deb55a5870fe7effb3469dcc1a3a43e02b31c48760ef83ef0072cf8c50f5601f6d17e229d85991ec01d003dee9c93c65365489b52ad3af369ca1aecb6931a196f00fe0c788254a2bb27b7eb6c9b4115e1cba4f72efc4b2de685b5d53380d696e30df06e9ae79b57b32f03efcbbf4b4739d63383fb489d70ee05de36e58ce00552296da211a01b65ab6700da6406830183c12080af00bf45ea517a8cf56f3aeab244ead5782ff0afc0af43af92589b3b807f0016b2d57fd8966d0358100fb3b95f5756ef823c6ddb69e9ee9ddb354e021f2315ebbbe649186509781ba9ebee59a6f3869f9da46ec7db2918f7316f5b3d037885542f7e6bc3df5fafa3cfe820be5ea72fbc5b4c1acf4152a3deb4bc4c2a529f60fa6f72aac67c342f903b1601c722e213a4ce4e1701d791aa56d7e5ff778d8bd84b7a1ddd13319d49667a0dfe9aa72d9b01d41e2b3d4f7343e00dc02718ff2eddf7823b47fb0c33d388a76f6fc0b698ce911eb79d98f7095ef5c404be1511df22ddddef27f5b7b81df8a58eef5e3dcd383aad90d80499806d00ed17dc01d209d44b9475317e8df33bb59c243dea9b453c7bc659b723a60b687f443817b99de0dc6030788934fd57355d595ba3e1ce31becbabc0df924a402343616df8f442b6099801a493bba937da4ed2dd639c837729a9bf7f93759d7a6a7787a7489943533cb702c5538cd596bb9334ecb558414cbde3a9c7957beaedcb5d7cdf1ab511843db7716153afbf9c199c25cd41f83e5226302d67803f05eea2f9b1e44267025bb60a50535d884dd5806b491398de56523facdd6d3f4eca049a1c667451fe991cd3cf35ac770da9b7db435d6d01b593adcfdc02a3b4c5541ccf0817039fcfe93520cd1ff06ca419a0bf496a948b5a1bc9d5797f55a36390c6fbff32a9d3cfa34d3baa0d067a869e196187203df31fd03c51caa6a80ecc45c1208fe5ae5cb3601b930e073e1311b744cbe49ed16f3ec14987039f8c8ec9466bdb2a9d3eab6d3050574cbda6b68ab2e1b3cf45c45b62fd60a00fb5c470dee0aa86fdb67d8fe586efdfb4cef07c005d69bd704382ad022455f7d2263b814f91eedaeb26bc885c8c05decefae7ca6d59fcc80146b5bbc26748e3109aec25b578d7e3d917113f957f572de1f793669e197bfaaec298f6e6fd2c038d935be6f4da9163fbc78e743a0afcefd0675fa2b9ba5695441a275a61fc769052d590df4d591d988b987309a0b6feb55176a77c3522fe27df713e1c69469e1722cd6854323576eb70de282f05d4e3391e11ff11117f9d7f1fcf9ff7d1554a2ab9c39d8b884723e29e589ba16878d6a423d13d4b51d384206d330245accdb0fb7aefbe289fa865e4b0e68e63b16e5af01ee9b4702581b989c5c9006635db6d5deb0cb443f14c7346e012a569b45cb0ad9f44ba388ed77efe3bca32a5c6ea449465d4f5a9d2fe3822ee8d9469b44dd5b61a69cc7edf29c122227e2fcecfa84ae6833013a825d85c3380da36669909cca29edcd7f188787ac2349a65c6d49a46d1bf7454aa71d29782fd2dc7e84ca3641296cea9dd66cd3680ac56d7ada6dbfa2fa6d3c57595b5c12bc523c4f2322f91ea940fd1fc68b0c4b9fc7d3ec804dd5d6b31dd457a8dd58be36e6b9c34aa7df629d2d383695c31a7803f64b261dfa3e23c4b9aa0e40b2d710e48ed205f63bae311368f589012c0d0b6eaafbd2a9d557758fdb55c63bff5a57637b929c67b61493525d5251d77b3be693488f4369f923afd54d328a6f3c6a4a23712c5182580a1754b4b4ca722e23762835f12b228fd00aa2ea503d6e796ad03420ab731c89f17ddcd8726aebc8dd4ba7c15e9d97149bff2d3accd46f320f03d26181a5aebb2fc39d2b3f1921795ae90e6c57f863476fedf58ebf1789ad4ff6065c2348a482fd77c8ad4cdf676e01da4e7f26d6954c5f634697c7eef17a8d606027d34a7c9bb0a8f4f7ddf4f92a6243b59b0df516906f0635a6668aaf53db80bf877d2716b9a016909f86dd2b17ab92821a660eebd11726e577f5df8707c9daf02efd806a4137bacd751d7b63dfcfae955e0e7f362df2455a766fa0aeaa1efd9f51aeea30ccd7e93d76f7a4df5a469b42bffbc93e6577437c6368534e97a3df858fb9e469a159c9f955552156bc35e5d3ef70c60b3ca07b5badb6ce83bdd2549922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449922449d2e2f97f022b0bbfac9e9bbd0000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000ebd4944415478daedddd96ee4b801405139c8ffffb2f364c0d399b66ba12852f71c204fe9a9a25812796bf5710000391fc7711c9f9f9f578f030098e8c3e60f003dffb97a0000c07c020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040900000802001000041020000820400000409000008120000102400002048000040d07faf1ec04d7c3ef16f3f4eb8cd576e9f8e67cf25e710af7865cd72ae5dc82b00affbfcf63f58d52be7a7739a599c6b17f20ac0f39cb0006c4f003ccec60fc06d780be031367f006e4500fccee60fc0ed08809fd9fc01b8250100004102e0ef3cfb07e0b60400000409807fe7d93f00b7e67700e6f19397002c4300fcbf11cffe6df6002ccd5b00e3d9fc01589e0018cbe60fc01604c038367f00b62100002048008ce1d93f005b110000102400002048000040901f02e26ceffcb0d29d3f5bf1ecbcdc792e1ef1ea79b4f3bcbdfba3643b1f3b131403e08cdff97ff4360b17e4c8f9fdf3b6769fbf77e6e66e73f1ecf18eba9dd5e7edaceb67f5e31e69d41cde7ece6a0170f51ff9f93cee7b52cd98db1d17b4b3e6e5eb76779987678f6bc6edaf3477d5e33ef338f9452d0018efaa0b6ef50d70d6bcac3e0fcf1cc355f77be5dc5d71ec2b3d1119398e9173b9cafc9cca870079d5e7b1466daf308615c6b4cae3f1cab8af767580d4ee7bf5e3496cfec7210078cd6a8bc74a9bdfd5e3b8fafe9f19e74a639d3d96158e7d8531ac761c99cdff380400cf5b79d1b8fa19d52a73b3ca38761bdfacc770a5e35f692c578effe3886dfec7210078dc4a1bdc6fe32cdce78e635a795cb3c6b8e2f1af38a699e3ce6dfc5f04008fd86d819839de95e766b5b1ad369ed9635df9f8571edb99e3cd6efec72100f8dd6e0bc3cc71ef3a3757d871aecefc4d0bae97defc8fc3d700f9d9ee8bd64a5f772adbf93c5aed1cfab7b18cfcd1a4958ef56f631c61f5e39c42007077672d6a3b6f6a3399a7f7fd76fe7effffdf9def9523c0e63f582d007e7ae0fdeef63fdd69e11ebda8dd696e76f4db6339faf179f7fc99f9f730befefdddced111c773b735fa6db500f8c93b17cedd4eacb3168f47e7e9ac0f608d789cce5e58cf8cd4d9ae7ac636f219f1f7db997d9dbf737f1f038ffd6a36ff930800fe347ad178e5c2bbebb3989f8ef5957fbbf2fcacb2685f7d2eedf8570c577a1b6095f3e8967c0b80b38cf8618d8f41b7f365c4fba3a38c9c9f3b1a7d5c23e66ae5e0fadb31efcce67f3201c0772b7fc8e64e17f2199bdb4a56fe3ccd6a7375b65d8fd7e63f810060b4d517ef57179695e3e8ccdb9d6df5e3d8ed5580575cfd18d8fc27f119004672d1fdececf959e1835f333ff1fecefd5c3d4f33ed745ddafc27f20a005f567ed9f68afb31ee7bbbea6b7d2bddc76a6cfe9309007634fbc35cbbc4d1ecfbfad30ecffe5993cdff020280115c786bf1783c66f579dae52f705e7d8c77fe36cca90400c7b1e722b3cb05bfcb38af74e7391af5c1d51dafd119ee7cee9c4e00f0ae5d2fc0bb2fa8bb3e2ebbb8e2fcf93cc4c077cef137f916003b9bf1696e8bed63de99a7bbcff119e7e9d7ed5537c1ea710f250078878bf067e687b37d0f8bcaf95639ced3790b00eecb42b98e198f45e12d02e7f4405e01e0ce8b0554dded95813b1cc372bc020030c7559bd8eeaf0cd8fc4f220028db7541645f576f663b870083090080b956f8e11a21800000b8c8d511701c7b84c00e63dc920000b8ce0aaf061cc71e1bec0e63dc8a00a06c8585178e638d10d86183dd618cdb100000ebf838ae8d811d36d81dc6b805bf03005ce9ea67bd2bfb3e3736bd7ffa3c9c3b6ff30a002ea2fbb269dcc7c731efd5815dce9b5dc6b92c01c03b5c803f333f9ce5eab70a56e11a7b830060672e7e38270476bab6761aeb520400fcacfe0ceb51e6e97ae5570444c00b0400efdaf5c29bb5505e353fbb3c2ebb8c73273b85c0c8b13a979e2400388e7d168bef5cec7f676e388ebdae6b11700101c00877bfe8de5d9cee3e3f5f5e9da7cafc5c4104f0577e078051667e2ff7dd0b7ca745f15916bfe7fc345f33cf93af71dcf9dc7cc4c731e61cf63b010f10007c1971e1cdb8e876dde0cccdef635f6dc1fedb7c3e3ace571e8f15e76136113089b700d8c98845e1d50561c44272e606bdcae6ffce3ccd3e8657ef6f95b9be336f074c2000f86ee54dee2e17f219c77197b999792c2bcfd9ca639b49049c4c007086917fbf7be46dbdbba08c5c9046cecf6a56ffd0e4accf9078f9f97d22e04402803f8d5cb4ded9e8466e92ab7af5183fdff86f7771c6f1ed3467770ec467898093f8102033fc79e17d3cf06f461bb5888cfa80d26fc7fef1c3ffb783953ec835720e677f3360a7cf549c69a5f3e9360400ffe68c4deebbd90bd38e17fc1d16ef918bf6f7db7ce5bfdb750e5efd7ae01dbf2a2b02061300fccdd911b03373f3b8d17375e5bc5fb9693c12023b9e93cf6ec622602001c04feeb0d19d7591df616e78dc3be7d1c87365c639b7fac6280206f121407eb3f30572f6d8779e9b99769fa711e3df650e7619e728e98817003c62c74561d698579f9b55c6b7ca382ae3bebbd1df564a12003c6aa78570f658579d9bd5c6b5da78668f77f5e35f7d7c678e77a7af880e230078c6ea0bc4957f077db5b9596d3cdfc7b5ead8668c71d5635f755cb3c79d8a0001c0b3565dc05718d30a73b3c2181e1de78a668c6bb5635f6d3c578f3f1301028057adb268acb8e17915e2f1f1ae32e6d96359e1d85718c3c863192911010280775cfd92fbca8bd7ccf1ad3e172b8fffeab9138beb1ed3ed23c0ef0030c2f70b6f979ff49de5cc9ff4dd6d2e1e3d9eda3934ebfa59edb8cf18d3ee3fa13dd5c7e7a779e234abfc15bf15bd3a37779c8bdf8c388f769cb7ea71338900e04aaffece39006ff2160057b2f1035cc487000120480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020480000409000008020010000410200008204000004090000081200001024000020e87f55fd742a692a68df0000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": null,
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "GetASegment": {
+      "id": 129515,
+      "api": {
+        "url": "/segments/{{parameters.id}}",
+        "method": "GET",
+        "response": {
+          "output": {
+            "{{...}}": "{{omit(body, 'created_at')}}",
+            "created_at": "{{parseDate(body.created_at)}}"
+          }
+        }
+      },
+      "rev": 10,
+      "crud": "read",
+      "name": "GetASegment",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Segment",
+      "scope": [],
+      "expect": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Segment ID",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flodesk",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/segments/{{parameters.id}}\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"{{...}}\": \"{{omit(body, 'created_at')}}\",\n\t\t\t\"created_at\": \"{{parseDate(body.created_at)}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Segment ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        },
+        {
+          "name": "total_active_subscribers",
+          "type": "uinteger",
+          "label": "Total Active Subscribers"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "flodesk",
+      "description": "Retrieves the details of a segment by its ID.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"id\",          \n\t\t\"type\": \"text\",          \n\t\t\"label\": \"Segment ID\",\n\t\t\"required\": true \n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Segment ID\"\n\t},\n\t{\n\t\t\"name\": \"name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Name\"\n\t},\n\t{\n\t\t\"name\": \"total_active_subscribers\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Total Active Subscribers\"\n\t},\n\t{\n\t\t\"name\": \"created_at\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Created at\"\n\t}\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "ListSegments": {
+      "id": 129514,
+      "api": {
+        "qs": {
+          "per_page": 100
+        },
+        "url": "/segments",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": {
+            "{{...}}": "{{omit(item, 'created_at')}}",
+            "created_at": "{{parseDate(item.created_at)}}"
+          },
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.meta.total_pages >= pagination.page}}"
+        }
+      },
+      "rev": 7,
+      "crud": "read",
+      "name": "ListSegments",
+      "epoch": null,
+      "flags": {},
+      "label": "List Segments",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Maximum number of results.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "flodesk",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/segments\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"per_page\": 100\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.data}}\",\n\t\t\"output\": {\n\t\t\t\"{{...}}\": \"{{omit(item, 'created_at')}}\",\n\t\t\t\"created_at\": \"{{parseDate(item.created_at)}}\"\n\t\t},\n\t\t\"limit\": \"{{parameters.limit}}\"\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t},\n\t\t\"condition\": \"{{body.meta.total_pages >= pagination.page}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Segment ID"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Segment Name"
+        },
+        {
+          "name": "total_active_subscribers",
+          "type": "integer",
+          "label": "Total Active Subscribers"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "flodesk",
+      "description": "Retrieves a list of all segments.",
+      "expectJsonc": "[\n    {\n        \"name\": \"limit\",\n        \"label\": \"Limit\",\n        \"type\": \"uinteger\",\n        \"default\": 10,\n        \"help\": \"Maximum number of results.\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Segment ID\"\n\t},\n\t{\n\t\t\"name\": \"name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Segment Name\"\n\t},\n\t{\n\t\t\"name\": \"total_active_subscribers\",\n\t\t\"type\": \"integer\",\n\t\t\"label\": \"Total Active Subscribers\"\n\t},\n\t{\n\t\t\"name\": \"created_at\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Created at\"\n\t}\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "MakeAnAPICall": {
+      "id": 129504,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://api.flodesk.com/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 5,
+      "crud": null,
+      "name": "MakeAnAPICall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "A path relative to `https://api.flodesk.com`. For example `/v1/subscribers`.",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "flodesk",
+      "samples": null,
+      "apiJsonc": "{\n\t\"qs\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n\t},\n\t\"url\": \"https://api.flodesk.com/{{parameters.url}}\",\n\t\"body\": \"{{parameters.body}}\",\n\t\"type\": \"text\",\n\t\"method\": \"{{parameters.method}}\",\n\t\"headers\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"body\": \"{{body}}\",\n\t\t\t\"headers\": \"{{headers}}\",\n\t\t\t\"statusCode\": \"{{statusCode}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "flodesk",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n\t{\n\t\t\"help\": \"A path relative to `https://api.flodesk.com`. For example `/v1/subscribers`.\",\n\t\t\"name\": \"url\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"URL\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"method\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Method\",\n\t\t\"default\": \"GET\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"GET\",\n\t\t\t\t\"value\": \"GET\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"POST\",\n\t\t\t\t\"value\": \"POST\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PUT\",\n\t\t\t\t\"value\": \"PUT\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PATCH\",\n\t\t\t\t\"value\": \"PATCH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"DELETE\",\n\t\t\t\t\"value\": \"DELETE\"\n\t\t\t}\n\t\t],\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n\t\t\"name\": \"headers\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"key\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Key\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"value\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Value\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Headers\",\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"qs\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"key\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Key\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"value\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Value\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Query String\"\n\t},\n\t{\n\t\t\"name\": \"body\",\n\t\t\"type\": \"any\",\n\t\t\"label\": \"Body\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "GetASubscriber": {
+      "id": 129507,
+      "api": {
+        "url": "/subscribers/{{parameters.id_or_email}}",
+        "method": "GET",
+        "response": {
+          "output": {
+            "{{...}}": "{{omit(body, 'optin_timestamp', 'created_at')}}",
+            "created_at": "{{parseDate(body.created_at)}}",
+            "optin_timestamp": "{{parseDate(body.optin_timestamp)}}"
+          }
+        }
+      },
+      "rev": 9,
+      "crud": "read",
+      "name": "GetASubscriber",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Subscriber",
+      "scope": [],
+      "expect": [
+        {
+          "name": "id_or_email",
+          "type": "text",
+          "label": "Subscriber ID or Email",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flodesk",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/subscribers/{{parameters.id_or_email}}\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"{{...}}\": \"{{omit(body, 'optin_timestamp', 'created_at')}}\",\n\t\t\t\"optin_timestamp\": \"{{parseDate(body.optin_timestamp)}}\",\n\t\t\t\"created_at\": \"{{parseDate(body.created_at)}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Subscriber ID"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "label": "Source"
+        },
+        {
+          "name": "first_name",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "last_name",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "segments",
+          "spec": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Segment ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Segment Name"
+            }
+          ],
+          "type": "array",
+          "label": "Segments"
+        },
+        {
+          "name": "optin_ip",
+          "type": "text",
+          "label": "Opt-in IP"
+        },
+        {
+          "name": "optin_timestamp",
+          "type": "date",
+          "label": "Opt-in Timestamp"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        "rpc://app%23flodesk@1/paramsCustomFields"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "flodesk",
+      "description": "Retrieves the details of a subscriber by their ID or Email.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"id_or_email\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Subscriber ID or Email\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Subscriber ID\"\n\t},\n\t{\n\t\t\"name\": \"status\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Status\"\n\t},\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Email\"\n\t},\n\t{\n\t\t\"name\": \"source\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Source\"\n\t},\n\t{\n\t\t\"name\": \"first_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"First Name\"\n\t},\n\t{\n\t\t\"name\": \"last_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Last Name\"\n\t},\n\t{\n\t\t\"name\": \"segments\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Segments\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Segment ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Segment Name\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"optin_ip\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Opt-in IP\"\n\t},\n\t{\n\t\t\"name\": \"optin_timestamp\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Opt-in Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"created_at\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Created at\"\n\t},\n\t\"rpc://paramsCustomFields\"\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "CreateASubscriber": {
+      "id": 129505,
+      "api": {
+        "url": "/subscribers",
+        "body": {
+          "{{...}}": "{{omit(parameters, 'optin_timestamp')}}",
+          "optin_timestamp": "{{if(parameters.optin_timestamp, formatDate(parameters.optin_timestamp, 'YYYY-MM-DDTHH:mm:ss.SSS\\Z', 'UTC'))}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": {
+            "{{...}}": "{{omit(body, 'optin_timestamp', 'created_at')}}",
+            "created_at": "{{parseDate(body.created_at)}}",
+            "optin_timestamp": "{{parseDate(body.optin_timestamp)}}"
+          }
+        }
+      },
+      "rev": 6,
+      "crud": "create",
+      "name": "CreateASubscriber",
+      "epoch": null,
+      "flags": {},
+      "label": "Create or Update a Subscriber",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Either __Email__ or __Subscriber ID__ must be included.",
+          "name": "id",
+          "type": "text",
+          "label": "Subscriber ID"
+        },
+        {
+          "help": "Either __Email__ or __Subscriber ID__ must be included.",
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "first_name",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "last_name",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "help": "Default to `No / false` when creating a new subscriber.",
+          "name": "double_optin",
+          "type": "boolean",
+          "label": "Double Optin"
+        },
+        {
+          "name": "optin_ip",
+          "type": "text",
+          "label": "Opt-in IP"
+        },
+        {
+          "name": "optin_timestamp",
+          "type": "date",
+          "label": "Opt-in Timestamp"
+        },
+        "rpc://app%23flodesk@1/paramsCustomFields"
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flodesk",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/subscribers\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"{{...}}\": \"{{omit(parameters, 'optin_timestamp')}}\",\n\t\t\"optin_timestamp\": \"{{if(parameters.optin_timestamp, formatDate(parameters.optin_timestamp, 'YYYY-MM-DDTHH:mm:ss.SSS\\\\Z', 'UTC'))}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"{{...}}\": \"{{omit(body, 'optin_timestamp', 'created_at')}}\",\n\t\t\t\"optin_timestamp\": \"{{parseDate(body.optin_timestamp)}}\",\n\t\t\t\"created_at\": \"{{parseDate(body.created_at)}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Subscriber ID"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "label": "Source"
+        },
+        {
+          "name": "first_name",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "last_name",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "segments",
+          "spec": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Segment ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Segment Name"
+            }
+          ],
+          "type": "array",
+          "label": "Segments"
+        },
+        {
+          "name": "optin_ip",
+          "type": "text",
+          "label": "Opt-in IP"
+        },
+        {
+          "name": "optin_timestamp",
+          "type": "date",
+          "label": "Opt-in Timestamp"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        "rpc://app%23flodesk@1/paramsCustomFields"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flodesk",
+      "description": "Creates a new subscriber or updates a subscriber by their ID or Email.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Subscriber ID\",\n\t\t\"help\": \"Either __Email__ or __Subscriber ID__ must be included.\"\n\t},\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Email\",\n\t\t\"help\": \"Either __Email__ or __Subscriber ID__ must be included.\"\n\t},\n\t{\n\t\t\"name\": \"first_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"First Name\"\n\t},\n\t{\n\t\t\"name\": \"last_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Last Name\"\n\t},\n\t{\n\t\t\"name\": \"double_optin\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Double Optin\",\n\t\t\"help\": \"Default to `No / false` when creating a new subscriber.\"\n\t},\n\t{\n\t\t\"name\": \"optin_ip\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Opt-in IP\"\n\t},\n\t{\n\t\t\"name\": \"optin_timestamp\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Opt-in Timestamp\"\n\t},\n\t\"rpc://paramsCustomFields\"\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Subscriber ID\"\n\t},\n\t{\n\t\t\"name\": \"status\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Status\"\n\t},\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Email\"\n\t},\n\t{\n\t\t\"name\": \"source\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Source\"\n\t},\n\t{\n\t\t\"name\": \"first_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"First Name\"\n\t},\n\t{\n\t\t\"name\": \"last_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Last Name\"\n\t},\n\t{\n\t\t\"name\": \"segments\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Segments\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Segment ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Segment Name\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"optin_ip\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Opt-in IP\"\n\t},\n\t{\n\t\t\"name\": \"optin_timestamp\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Opt-in Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"created_at\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Created at\"\n\t},\n\t\"rpc://paramsCustomFields\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "ListAllSubscribers": {
+      "id": 129440,
+      "api": {
+        "qs": {
+          "status": "{{parameters.status}}",
+          "per_page": 100
+        },
+        "url": "/subscribers",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": {
+            "{{...}}": "{{omit(item, 'created_at')}}",
+            "created_at": "{{parseDate(item.created_at)}}"
+          },
+          "iterate": "{{body.data}}"
+        },
+        "pagination": {
+          "qs": {
+            "page": "{{pagination.page}}"
+          },
+          "condition": "{{body.meta.total_pages >= pagination.page}}"
+        }
+      },
+      "rev": 5,
+      "crud": "read",
+      "name": "ListAllSubscribers",
+      "epoch": null,
+      "flags": {},
+      "label": "List Subscribers",
+      "scope": [],
+      "expect": [
+        {
+          "name": "status",
+          "type": "select",
+          "label": "Subscriber Status",
+          "options": [
+            {
+              "label": "Active",
+              "value": "active"
+            },
+            {
+              "label": "Unsubscribed",
+              "value": "unsubscribed"
+            },
+            {
+              "label": "Unconfirmed",
+              "value": "unconfirmed"
+            },
+            {
+              "label": "Bounced",
+              "value": "bounced"
+            },
+            {
+              "label": "Complained",
+              "value": "complained"
+            }
+          ]
+        },
+        {
+          "help": "Maximum number of returned results (bundles).",
+          "name": "limit",
+          "type": "number",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "flodesk",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/subscribers\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"status\": \"{{parameters.status}}\",\n\t\t\"per_page\": 100\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.data}}\",\n\t\t\"output\": {\n\t\t\t\"{{...}}\": \"{{omit(item, 'created_at')}}\",\n\t\t\t\"created_at\": \"{{parseDate(item.created_at)}}\"\n\t\t},\n\t\t\"limit\": \"{{parameters.limit}}\"\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"page\": \"{{pagination.page}}\"\n\t\t},\n\t\t\"condition\": \"{{body.meta.total_pages >= pagination.page}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Subscriber ID"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "label": "Source"
+        },
+        {
+          "name": "first_name",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "last_name",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "segments",
+          "spec": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Segment ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Segment Name"
+            }
+          ],
+          "type": "array",
+          "label": "Segments"
+        },
+        {
+          "name": "optin_ip",
+          "type": "text",
+          "label": "Opt-in IP"
+        },
+        {
+          "name": "optin_timestamp",
+          "type": "date",
+          "label": "Opt-in Timestamp"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        "rpc://app%23flodesk@1/paramsCustomFields"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "flodesk",
+      "description": "Retrieves a list of subscribers by their status.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"status\",                                                    \n\t\t\"type\": \"select\",                                                       \n\t\t\"label\": \"Subscriber Status\",                                                  \n\t\t\"options\": [\n\t\t\t{\n\t\t\t \"label\": \"Active\",\n\t\t\t \"value\": \"active\"\n\t\t\t},\n\t\t\t{\n\t\t\t \"label\": \"Unsubscribed\",\n\t\t\t \"value\": \"unsubscribed\" \n\t\t\t},\n\t\t\t{\n\t\t\t \"label\": \"Unconfirmed\",\n\t\t\t \"value\": \"unconfirmed\"\n\t\t\t},\n\t\t\t{\n\t\t\t \"label\": \"Bounced\",\n\t\t\t \"value\": \"bounced\"\n\t\t\t},\n\t\t\t{\n\t\t\t \"label\": \"Complained\",\n\t\t\t \"value\": \"complained\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Limit\",\n\t\t\"default\": 10,\n\t\t\"help\": \"Maximum number of returned results (bundles).\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Subscriber ID\"\n\t},\n\t{\n\t\t\"name\": \"status\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Status\"\n\t},\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Email\"\n\t},\n\t{\n\t\t\"name\": \"source\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Source\"\n\t},\n\t{\n\t\t\"name\": \"first_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"First Name\"\n\t},\n\t{\n\t\t\"name\": \"last_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Last Name\"\n\t},\n\t{\n\t\t\"name\": \"segments\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Segments\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Segment ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Segment Name\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"optin_ip\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Opt-in IP\"\n\t},\n\t{\n\t\t\"name\": \"optin_timestamp\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Opt-in Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"created_at\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Created at\"\n\t},\n\t\"rpc://paramsCustomFields\"\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchNewSubscribers": {
+      "id": 129974,
+      "api": {
+        "response": {
+          "output": {
+            "{{...}}": "{{omit(payload, 'event_time', 'subscriber')}}",
+            "event_time": "{{parseDate(payload.event_time)}}",
+            "subscriber": {
+              "{{...}}": "{{omit(payload.subscriber, 'optin_timestamp', 'created_at')}}",
+              "created_at": "{{parseDate(payload.subscriber.created_at)}}",
+              "optin_timestamp": "{{parseDate(payload.subscriber.optin_timestamp)}}"
+            }
+          }
+        }
+      },
+      "rev": 15,
+      "crud": null,
+      "name": "watchNewSubscribers",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch Events",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "flodesk",
+      "samples": null,
+      "apiJsonc": "{\n    \"response\": {\n        \"output\": {\n            \"{{...}}\": \"{{omit(payload, 'event_time', 'subscriber')}}\",\n            \"event_time\": \"{{parseDate(payload.event_time)}}\",\n            \"subscriber\": {\n                \"{{...}}\": \"{{omit(payload.subscriber, 'optin_timestamp', 'created_at')}}\",\n                \"optin_timestamp\": \"{{parseDate(payload.subscriber.optin_timestamp)}}\",\n                \"created_at\": \"{{parseDate(payload.subscriber.created_at)}}\"\n            }\n        }\n    }\n}",
+      "approved": false,
+      "hookName": "flodesk",
+      "learning": false,
+      "interface": [
+        "rpc://app%23flodesk@1/interfaceWebhook"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": null,
+      "description": "Triggers when a subscriber is created, added to a segment or unsubscribed.",
+      "expectJsonc": null,
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t\"rpc://interfaceWebhook\"\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "UnsubsribeFromAllLists": {
+      "id": 129513,
+      "api": {
+        "url": "/subscribers/{{parameters.id_or_email}}/unsubscribe",
+        "method": "POST",
+        "response": {
+          "output": {
+            "{{...}}": "{{omit(body, 'optin_timestamp', 'created_at')}}",
+            "created_at": "{{parseDate(body.created_at)}}",
+            "optin_timestamp": "{{parseDate(body.optin_timestamp)}}"
+          }
+        }
+      },
+      "rev": 11,
+      "crud": "delete",
+      "name": "UnsubsribeFromAllLists",
+      "epoch": null,
+      "flags": {},
+      "label": "Unsubscribe a Subscriber",
+      "scope": [],
+      "expect": [
+        {
+          "name": "id_or_email",
+          "type": "text",
+          "label": "Subscriber ID or Email",
+          "required": true
+        },
+        "rpc://app%23flodesk@1/messageUnsubsribeFromAllLists"
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flodesk",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/subscribers/{{parameters.id_or_email}}/unsubscribe\",\n\t\"method\": \"POST\",\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"{{...}}\": \"{{omit(body, 'optin_timestamp', 'created_at')}}\",\n\t\t\t\"optin_timestamp\": \"{{parseDate(body.optin_timestamp)}}\",\n\t\t\t\"created_at\": \"{{parseDate(body.created_at)}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Subscriber ID"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "label": "Source"
+        },
+        {
+          "name": "first_name",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "last_name",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "segments",
+          "spec": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Segment ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Segment Name"
+            }
+          ],
+          "type": "array",
+          "label": "Segments"
+        },
+        {
+          "name": "optin_ip",
+          "type": "text",
+          "label": "Opt-in IP"
+        },
+        {
+          "name": "optin_timestamp",
+          "type": "date",
+          "label": "Opt-in Timestamp"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        "rpc://app%23flodesk@1/paramsCustomFields"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flodesk",
+      "description": "Removes a subscriber from all segments by their ID or Email.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"id_or_email\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Subscriber ID or Email\",\n\t\t\"required\": true\n\t},\n\t\"rpc://messageUnsubsribeFromAllLists\"\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Subscriber ID\"\n\t},\n\t{\n\t\t\"name\": \"status\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Status\"\n\t},\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Email\"\n\t},\n\t{\n\t\t\"name\": \"source\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Source\"\n\t},\n\t{\n\t\t\"name\": \"first_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"First Name\"\n\t},\n\t{\n\t\t\"name\": \"last_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Last Name\"\n\t},\n\t{\n\t\t\"name\": \"segments\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Segments\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Segment ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Segment Name\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"optin_ip\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Opt-in IP\"\n\t},\n\t{\n\t\t\"name\": \"optin_timestamp\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Opt-in Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"created_at\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Created at\"\n\t},\n\t\"rpc://paramsCustomFields\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "AddASubscriberToSegments": {
+      "id": 129510,
+      "api": {
+        "url": "/subscribers/{{parameters.id_or_email}}/segments",
+        "body": {
+          "segment_ids": "{{parameters.segment_ids}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": {
+            "{{...}}": "{{omit(body, 'optin_timestamp', 'created_at')}}",
+            "created_at": "{{parseDate(body.created_at)}}",
+            "optin_timestamp": "{{parseDate(body.optin_timestamp)}}"
+          }
+        }
+      },
+      "rev": 14,
+      "crud": "create",
+      "name": "AddASubscriberToSegments",
+      "epoch": null,
+      "flags": {},
+      "label": "Add a Subscriber to Segments",
+      "scope": [],
+      "expect": [
+        {
+          "name": "id_or_email",
+          "type": "text",
+          "label": "Subscriber ID or Email",
+          "required": true
+        },
+        {
+          "name": "segment_ids",
+          "type": "select",
+          "label": "Segment IDs",
+          "options": "rpc://app%23flodesk@1/optionsSegments",
+          "multiple": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flodesk",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/subscribers/{{parameters.id_or_email}}/segments\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"segment_ids\": \"{{parameters.segment_ids}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"{{...}}\": \"{{omit(body, 'optin_timestamp', 'created_at')}}\",\n\t\t\t\"optin_timestamp\": \"{{parseDate(body.optin_timestamp)}}\",\n\t\t\t\"created_at\": \"{{parseDate(body.created_at)}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Subscriber ID"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "label": "Source"
+        },
+        {
+          "name": "first_name",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "last_name",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "segments",
+          "spec": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Segment ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Segment Name"
+            }
+          ],
+          "type": "array",
+          "label": "Segments"
+        },
+        {
+          "name": "optin_ip",
+          "type": "text",
+          "label": "Opt-in IP"
+        },
+        {
+          "name": "optin_timestamp",
+          "type": "date",
+          "label": "Opt-in Timestamp"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        "rpc://app%23flodesk@1/paramsCustomFields"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flodesk",
+      "description": "Adds a subscriber to segments.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"id_or_email\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Subscriber ID or Email\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"segment_ids\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Segment IDs\",\n\t\t\"required\": true,\n\t\t\"multiple\": true,\n\t\t\"options\": \"rpc://optionsSegments\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Subscriber ID\"\n\t},\n\t{\n\t\t\"name\": \"status\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Status\"\n\t},\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Email\"\n\t},\n\t{\n\t\t\"name\": \"source\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Source\"\n\t},\n\t{\n\t\t\"name\": \"first_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"First Name\"\n\t},\n\t{\n\t\t\"name\": \"last_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Last Name\"\n\t},\n\t{\n\t\t\"name\": \"segments\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Segments\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Segment ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Segment Name\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"optin_ip\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Opt-in IP\"\n\t},\n\t{\n\t\t\"name\": \"optin_timestamp\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Opt-in Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"created_at\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Created at\"\n\t},\n\t\"rpc://paramsCustomFields\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "DeleteASubscriberFromSegments": {
+      "id": 129509,
+      "api": {
+        "url": "/subscribers/{{parameters.id_or_email}}/segments",
+        "body": {
+          "segment_ids": "{{parameters.segment_ids}}"
+        },
+        "method": "DELETE",
+        "response": {
+          "output": {
+            "{{...}}": "{{omit(body, 'optin_timestamp', 'created_at')}}",
+            "created_at": "{{parseDate(body.created_at)}}",
+            "optin_timestamp": "{{parseDate(body.optin_timestamp)}}"
+          }
+        }
+      },
+      "rev": 13,
+      "crud": "delete",
+      "name": "DeleteASubscriberFromSegments",
+      "epoch": null,
+      "flags": {},
+      "label": "Remove a Subscriber from Segments",
+      "scope": [],
+      "expect": [
+        {
+          "name": "id_or_email",
+          "type": "text",
+          "label": "Subscriber ID or Email",
+          "required": true
+        },
+        {
+          "name": "segment_ids",
+          "type": "select",
+          "label": "Segment IDs",
+          "options": "rpc://app%23flodesk@1/optionsSegments",
+          "multiple": true,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "flodesk",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/subscribers/{{parameters.id_or_email}}/segments\",\n\t\"method\": \"DELETE\",\n\t\"body\": {\n\t\t\"segment_ids\": \"{{parameters.segment_ids}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"{{...}}\": \"{{omit(body, 'optin_timestamp', 'created_at')}}\",\n\t\t\t\"optin_timestamp\": \"{{parseDate(body.optin_timestamp)}}\",\n\t\t\t\"created_at\": \"{{parseDate(body.created_at)}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Subscriber ID"
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "label": "Status"
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email"
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "label": "Source"
+        },
+        {
+          "name": "first_name",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "last_name",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "segments",
+          "spec": [
+            {
+              "name": "id",
+              "type": "text",
+              "label": "Segment ID"
+            },
+            {
+              "name": "name",
+              "type": "text",
+              "label": "Segment Name"
+            }
+          ],
+          "type": "array",
+          "label": "Segments"
+        },
+        {
+          "name": "optin_ip",
+          "type": "text",
+          "label": "Opt-in IP"
+        },
+        {
+          "name": "optin_timestamp",
+          "type": "date",
+          "label": "Opt-in Timestamp"
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at"
+        },
+        "rpc://app%23flodesk@1/paramsCustomFields"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "flodesk",
+      "description": "Removes a subscriber from segments by their ID or Email.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"id_or_email\",          \n\t\t\"type\": \"text\",          \n\t\t\"label\": \"Subscriber ID or Email\",\n\t\t\"required\": true \n\t},\n\t{\n\t\t\"name\": \"segment_ids\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Segment IDs\",\n\t\t\"required\": true,\n\t\t\"multiple\": true,\n\t\t\"options\": \"rpc://optionsSegments\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Subscriber ID\"\n\t},\n\t{\n\t\t\"name\": \"status\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Status\"\n\t},\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Email\"\n\t},\n\t{\n\t\t\"name\": \"source\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Source\"\n\t},\n\t{\n\t\t\"name\": \"first_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"First Name\"\n\t},\n\t{\n\t\t\"name\": \"last_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Last Name\"\n\t},\n\t{\n\t\t\"name\": \"segments\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Segments\",\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"id\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Segment ID\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"name\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Segment Name\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"optin_ip\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Opt-in IP\"\n\t},\n\t{\n\t\t\"name\": \"optin_timestamp\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Opt-in Timestamp\"\n\t},\n\t{\n\t\t\"name\": \"created_at\",\n\t\t\"type\": \"date\",\n\t\t\"label\": \"Created at\"\n\t},\n\t\"rpc://paramsCustomFields\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "flodesk": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.authorization"
+          ]
+        },
+        "url": "https://api.flodesk.com/v1/subscribers",
+        "headers": {
+          "Authorization": "Basic {{base64(parameters.apiKey + ':')}}"
+        },
+        "response": {
+          "error": {
+            "message": "[{{statusCode}}] {{body.error}}"
+          }
+        }
+      },
+      "rev": 6,
+      "name": "flodesk",
+      "type": "basic",
+      "label": "Flodesk",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "flodesk",
+      "install": {},
+      "apiJsonc": "{\n\t\"url\": \"https://api.flodesk.com/v1/subscribers\",\n\t\"headers\": {\n\t\t\"Authorization\": \"Basic {{base64(parameters.apiKey + ':')}}\"\n\t},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"message\": \"[{{statusCode}}] {{body.error}}\"\n\t\t}\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [ \"request.headers.authorization\" ]\n\t}\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "help": "For information on how to obtain your __API Key__ value, see the [Flodesk API documentation](https://developers.flodesk.com/#section/Authentication).",
+          "name": "apiKey",
+          "type": "password",
+          "label": "API Key",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "installSpec": [],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"apiKey\",\n        \"type\": \"password\",\n        \"label\": \"API Key\",\n        \"required\": true,\n        \"editable\": true,\n        \"help\": \"For information on how to obtain your __API Key__ value, see the [Flodesk API documentation](https://developers.flodesk.com/#section/Authentication).\"\n    }\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n\t\"baseUrl\": \"https://api.flodesk.com/v1\",\n\t\"headers\": {\n\t\t\"Authorization\": \"Basic {{base64(connection.apiKey + ':')}}\"\n\t},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"type\": \"RuntimeError\",\n\t\t\t\"message\": \"[{{statusCode}}] {{body.message}}\",\n\t\t\t\"429\": {\n\t\t\t\t\"type\": \"RateLimitError\",\n\t\t\t\t\"message\": \"[429] Rate limit exceed. You can make up to 100 requests per minute.\"\n\t\t\t}\n\t\t}\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [ \"request.headers.authorization\" ]\n\t}\n}",
+  "countries": null,
+  "_functions": {},
+  "approvedAt": "2024-04-05T13:13:48.26676+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": null,
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "6bf63b1ab3716959c826bcbfb3e1b739",
+  "versionFull": "1.0.12",
+  "compiledName": "flodesk",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": null,
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": null
+}

@@ -1,0 +1,2725 @@
+{
+  "rev": 10,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "baseUrl": "https://campaigns.zoho.{{connection.region}}/api/v1.1",
+    "headers": {
+      "authorization": "Zoho-oauthtoken {{connection.accessToken}}"
+    },
+    "response": {
+      "type": "json",
+      "valid": {
+        "type": "RuntimeError",
+        "message": "Error {{ifempty(body.code, body.Code)}}: {{ifempty(body.message, body.error)}}",
+        "condition": "{{body.status != 'error' & if(ifempty(body.code, body.Code), ifempty(body.code, body.Code) = '200' | ifempty(body.code, body.Code) = '0', true)}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "zoho-campaigns",
+  "_rpcs": {
+    "getTopicId": {
+      "api": {
+        "url": "/topics",
+        "method": "GET",
+        "response": {
+          "output": {
+            "label": "{{item.topicName}}",
+            "value": "{{item.topicId}}"
+          },
+          "iterate": "{{body.topicDetails}}"
+        }
+      },
+      "rev": 2,
+      "name": "getTopicId",
+      "label": "getTopicId",
+      "appName": "zoho-campaigns",
+      "apiJsonc": "{\n    \"url\": \"/topics\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"iterate\": \"{{body.topicDetails}}\",\n        \"output\": {\n            \"label\": \"{{item.topicName}}\",\n            \"value\": \"{{item.topicId}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "zoho-campaigns",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listSegments": {
+      "api": {
+        "qs": {
+          "sort": "asc",
+          "range": 100,
+          "resfmt": "JSON",
+          "fromindex": 1
+        },
+        "url": "/getmailinglists",
+        "method": "GET",
+        "response": {
+          "limit": 100,
+          "output": {
+            "label": "{{item.segments}}",
+            "value": "{{item.segments}}"
+          },
+          "iterate": {
+            "condition": "{{item.listkey === parameters.listkey}}",
+            "container": "{{body.list_of_details}}"
+          }
+        }
+      },
+      "rev": 4,
+      "name": "listSegments",
+      "label": "List Segments",
+      "appName": "zoho-campaigns",
+      "apiJsonc": "{\n    \"qs\": {\n        \"sort\": \"asc\",\n        \"range\": 100,\n        \"resfmt\": \"JSON\",\n        \"fromindex\": 1\n    },\n    \"url\": \"/getmailinglists\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"limit\": 100,\n        \"output\": {\n            \"label\": \"{{item.segments}}\",\n            \"value\": \"{{item.segments}}\"\n        },\n        \"iterate\": {\n            \"condition\": \"{{item.listkey === parameters.listkey}}\",\n            \"container\": \"{{body.list_of_details}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "listkey",
+          "type": "text",
+          "label": "listkey",
+          "required": true
+        }
+      ],
+      "accountName": "zoho-campaigns",
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"listkey\",\n        \"type\": \"text\",\n        \"label\": \"listkey\",\n        \"required\": true\n    }\n]"
+    },
+    "ListMailingLists": {
+      "api": {
+        "qs": {
+          "sort": "asc",
+          "range": 100,
+          "resfmt": "JSON",
+          "fromindex": 1
+        },
+        "url": "/getmailinglists",
+        "method": "GET",
+        "response": {
+          "limit": 100,
+          "output": {
+            "label": "{{item.listname}}",
+            "value": "{{item.listkey}}"
+          },
+          "iterate": "{{body.list_of_details}}"
+        }
+      },
+      "rev": 3,
+      "name": "ListMailingLists",
+      "label": "List Mailing Lists",
+      "appName": "zoho-campaigns",
+      "apiJsonc": "{\n\t\"url\": \"/getmailinglists\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"sort\": \"asc\",\n\t\t\"fromindex\": 1,\n\t\t\"range\": 100\n\t},\n\t\"response\": {\n\t\t\"limit\": 100,\n\t\t\"iterate\": \"{{body.list_of_details}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.listname}}\",\n\t\t\t\"value\": \"{{item.listkey}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "zoho-campaigns",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "parametersContact": {
+      "api": {
+        "qs": {
+          "type": "JSON"
+        },
+        "url": "/contact/allfields",
+        "method": "GET",
+        "response": {
+          "output": "{{item}}",
+          "iterate": "{{parseFields(body.response.fieldnames.fieldname)}}",
+          "wrapper": {
+            "name": "contactinfo",
+            "spec": "{{output}}",
+            "type": "collection",
+            "label": "Contact Info"
+          }
+        }
+      },
+      "rev": 3,
+      "name": "parametersContact",
+      "label": "Parameters: Contact",
+      "appName": "zoho-campaigns",
+      "apiJsonc": "{\n\t\"url\": \"/contact/allfields\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"type\": \"JSON\"\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{parseFields(body.response.fieldnames.fieldname)}}\",\n\t\t\"output\": \"{{item}}\",\n\t\t\"wrapper\": {\n\t\t\t\"name\": \"contactinfo\",\n\t\t\t\"type\": \"collection\",\n\t\t\t\"label\": \"Contact Info\",\n\t\t\t\"spec\": \"{{output}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "zoho-campaigns",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listRecentCampaigns": {
+      "api": {
+        "qs": {
+          "sort": "asc",
+          "range": 100,
+          "resfmt": "json",
+          "status": "{{ifempty(parameters.status, 'all')}}",
+          "fromindex": 1
+        },
+        "url": "/recentcampaigns",
+        "method": "GET",
+        "response": {
+          "limit": 100,
+          "output": {
+            "label": "[{{item.campaign_status}}] {{item.campaign_name}}",
+            "value": "{{item.campaign_key}}"
+          },
+          "iterate": "{{body.recent_campaigns}}"
+        }
+      },
+      "rev": 3,
+      "name": "listRecentCampaigns",
+      "label": "List Recent Campaigns",
+      "appName": "zoho-campaigns",
+      "apiJsonc": "{\n\t\"url\": \"/recentcampaigns\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"resfmt\": \"json\",\n\t\t\"sort\": \"asc\",\n\t\t\"status\": \"{{ifempty(parameters.status, 'all')}}\",\n\t\t\"fromindex\": 1,\n\t\t\"range\": 100\n\t},\n\t\"response\": {\n\t\t\"limit\": 100,\n\t\t\"iterate\": \"{{body.recent_campaigns}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"[{{item.campaign_status}}] {{item.campaign_name}}\",\n\t\t\t\"value\": \"{{item.campaign_key}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "status",
+          "type": "select",
+          "label": "Status",
+          "default": "all",
+          "options": [
+            {
+              "label": "All",
+              "value": "all"
+            },
+            {
+              "label": "All Campaigns",
+              "value": "all campaigns"
+            },
+            {
+              "label": "Drafts",
+              "value": "drafts"
+            },
+            {
+              "label": "Scheduled",
+              "value": "scheduled"
+            },
+            {
+              "label": "In Progress",
+              "value": "inprogress"
+            },
+            {
+              "label": "Sent",
+              "value": "sent"
+            },
+            {
+              "label": "Stopped",
+              "value": "stopped"
+            },
+            {
+              "label": "Canceled",
+              "value": "canceled"
+            },
+            {
+              "label": "To be Reviewed",
+              "value": "tobereviewed"
+            },
+            {
+              "label": "Reviewed",
+              "value": "reviewed"
+            },
+            {
+              "label": "Paused",
+              "value": "paused"
+            },
+            {
+              "label": "In Testing",
+              "value": "intesting"
+            }
+          ]
+        }
+      ],
+      "accountName": "zoho-campaigns",
+      "altAccountName": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"status\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Status\",\n\t\t\"default\": \"all\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"All\",\n\t\t\t\t\"value\": \"all\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"All Campaigns\",\n\t\t\t\t\"value\": \"all campaigns\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Drafts\",\n\t\t\t\t\"value\": \"drafts\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Scheduled\",\n\t\t\t\t\"value\": \"scheduled\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"In Progress\",\n\t\t\t\t\"value\": \"inprogress\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Sent\",\n\t\t\t\t\"value\": \"sent\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Stopped\",\n\t\t\t\t\"value\": \"stopped\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Canceled\",\n\t\t\t\t\"value\": \"canceled\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"To be Reviewed\",\n\t\t\t\t\"value\": \"tobereviewed\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Reviewed\",\n\t\t\t\t\"value\": \"reviewed\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Paused\",\n\t\t\t\t\"value\": \"paused\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"In Testing\",\n\t\t\t\t\"value\": \"intesting\"\n\t\t\t}\n\t\t]\n\t}\n]"
+    }
+  },
+  "flags": {},
+  "label": "Zoho Campaigns",
+  "theme": "#e42527",
+  "_hooks": {
+    "zoho-campaigns": {
+      "api": {
+        "output": "{{body}}"
+      },
+      "rev": 4,
+      "name": "zoho-campaigns",
+      "type": "web",
+      "flags": {},
+      "label": "Zoho Campaigns Contact",
+      "scope": [],
+      "attach": null,
+      "detach": null,
+      "update": null,
+      "aliasTo": null,
+      "appName": "zoho-campaigns",
+      "apiJsonc": null,
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": null,
+      "attachJsonc": null,
+      "detachJsonc": null,
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "zoho-campaigns2": {
+      "api": {
+        "output": "{{body}}"
+      },
+      "rev": 4,
+      "name": "zoho-campaigns2",
+      "type": "web",
+      "flags": {},
+      "label": "Zoho Campaigns Campaign",
+      "scope": [],
+      "attach": null,
+      "detach": null,
+      "update": null,
+      "aliasTo": null,
+      "appName": "zoho-campaigns",
+      "apiJsonc": null,
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": null,
+      "attachJsonc": null,
+      "detachJsonc": null,
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "zoho-campaigns3": {
+      "api": {
+        "output": "{{body}}"
+      },
+      "rev": 4,
+      "name": "zoho-campaigns3",
+      "type": "web",
+      "flags": {},
+      "label": "Zoho Campaigns Unsubscribe",
+      "scope": [],
+      "attach": null,
+      "detach": null,
+      "update": null,
+      "aliasTo": null,
+      "appName": "zoho-campaigns",
+      "apiJsonc": null,
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": null,
+      "attachJsonc": null,
+      "detachJsonc": null,
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "global": true,
+  "groups": [
+    {
+      "label": "Campaigns",
+      "modules": [
+        "watchCampaigns",
+        "listRecentCampaigns",
+        "createCampaign",
+        "sendCampaign",
+        "cloneCampaign",
+        "deleteCampaign",
+        "getCampaignReport"
+      ]
+    },
+    {
+      "label": "Contacts",
+      "modules": [
+        "watchContacts",
+        "watchUnsubscribes",
+        "subscribeContact",
+        "addContactsToList",
+        "moveContactDoNotMail",
+        "unsubscribeContact"
+      ]
+    },
+    {
+      "label": "Mailing Lists",
+      "modules": [
+        "createMailingList",
+        "updateMailingList",
+        "deleteMailingList"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "universal"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000004034944415458c3b5975d68966518c77fcfeb6b53b3a95be6043fc9a9d3a20375759044257d50049507454444d641a88442901614840485d09707c242a4a820c38376d0a7146907362412d3f989a6ade648a766bab55f07f7f5c0e37a9b9bdb2e78b89ff7beaf8ffff5f9dc6fc630919abf8e071602238016e0244096654367289eebd427d447d472ec4d553f55cfa9e7d52fd4b9b9cc50199ea2ae545bd49e586b02c40613fda06e8bf78d6ae98a0184d14cbd5e5da3ee09c3a7d54fd4db83e721f5acba3b78ebd513ea4f01f08a0c97d4f9ea3af550787452dda4dea65605dfb488c4dfea63b13756dd11fcf3fa0d2084cbea42f52df578183ea1bea32e2ae41c7584ba3e7836a9a30a51dbac76abf7f609a0a0ac4a5dacbea7b687d2c3ea6bea0dc55c1664ee8b74b4aa0d857dd4b5a16365c5422c308e51ef563f0e653dea2fea8beaacf0a692ece408f3457559d148bc2f0d001b2e0150305c1dc5f359b44eb7ba4b7d2e5aaa62fb14ea635d18f8289ce8cdb340ed54bfcc53931fd4a88f47ab9c0fc33bd4a7d5497df56d01fc9d6a47a4e8a6de328508b5aafbe31dd49bc37057546d977a2cafd4cb556bf04c0c1dddeaf24a72b1372abcef8c6880fa7d0836ab0fabdfa867d4c682778dea2b01b65ca1f05e8ad06f8d34f615a9778377690ee0827a409d1e0c6f06c3a305a1170a3dbfb157ebddaafeaefe1afb5c06c08ad0b556a50c9c0246032383776fac730af24d80c093c032e041600bf015b01c98083c0fec84ca1f9a2ccb7260fb817f427f86fa6de4fe8e40b824eae0c3bccf0bcff488c6be68cdfcd9a24ee867bd34c44cd9ae561773f24c30cc56dbd49deab80a958c3a435da536a9abd5ba01146c8de97b7054ad2f033fc7f9dc58ff008e035322b4a78b610c454780f5bd43dc4fea040e02f700334bc03ee01c303bea2067a805a655d29065d97f9e015037d04aaabb86127024bc9e49babdf4900a7124509f876e28a800745fac37968076e0283019a8ebc530a7dfda07460780f3c0fc12703636c6033382e120f05700b86a18001c0bc7e79463632f9001b7907afb4fa08394967140bb5a06aa86c0780f700d69ae8cce017c47aa8315c09200530b8c21a5a6037839ce7a42d8e01be8f55652774d059a73003f02ab81558534f400d5f17b4facb348536c6c803b43cae54028032e00ef03af66704995d70213c2f853c01ad2887d9d5423134935f136b0187816f89a74e71f085d04da02488518a589f5408cd9a65ee3785e4ccaddf9041c0c95fa383b4cfa50d547b873ba0b98047c1e5e0c1b8036e037d234ac8dbdab81fb49796f86c1ffc5ea0bc029e050783b2bf616008dc02ed2ffbc4153b98fb32e607b78fc46185c44eae1ad143e52c342517075ea077145eb8ebbdce6b8030e899dff4d60c1403529f4d792c6670ba9ff87e42ff6bf830bf3262bbdf3e50000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000008ff4944415478dae59b798c5d551dc73f6f66da424b295d68d9694ba18554c408b2082e2846a2a26234a2a81183088a891a513486281aa3a9460c601441fd4345506258a3024169258168582aa10b96b640e906b4322d6da7f3f18f734ee7dc33efcdf266a6ef55bfc924efde7bb6dff7fcce6fbb77e0ff1cb5562f602450d3cf19c019c0f14027f034f077602d40adb68f89a9a2d6d459ea116a67266cde06f59dea43ea0efbb04b7d52fd943abeecdbb6c8043f4ebd4a7d5c5da95e9204ae23fc7336c62beae579dfb6445c60a77aa2fa7d7595da9b09f2983aa320e048f5e142e09eb8fb39d6c4715b2d6643c1c7a9a7aad7c7ddecb53fee5527673bdfa92e2ada2c532f563fac3e583cfb5adb684126c47eea5bd55fa91b1ba8f0cbeaadeaebb37ea8e7aa2f66edb6aa1fc89e9f15fb26dc5acf8eb44af049eabbd43f148bccb151fda5fa66754221fc21eae2a2fdf55193529b99eabfb2e7ff50a7b684806c5107a91f52ef89c6a9446f3c02d7aa6f480215e3d4d4ab8b63f2b87a8c55fb305ebd2b6bf3bc3a7faf1290097eb0fa49f5afeaf63a82ef56ffad7e4f7d8d03bbbcb3d50d59df6ef523d6f7103fcada6d57dfb15708c81670b8c1053da2eeac23788fc1577f433d36eeee4063ce50ef2bc6b8c9604beacd7f69d1f6b38ea521cc5474ae7aa5ba340a596297fa4ff50b065736e0a23281be1eb525e1297541bdfef1de39eab6acfd8fc784803868877a82fa1d7545b1d08457d5250657356b288bc9843f239ee35ca52f6a3446bc7f9cd520e91ea3411d4dc1bb0c2eea1a75adf57d78b7fa977856a70e6717ec339e771563fe469d38c89139281ebf842713f123153a59d933d59fabebad8fadea1fd5f79a05314dccf545abd1ddd3c6c86e10023ad55bb27e9bd5d7354540b69889066b7ab3d540c462a25fab6f57f76fe6dc65f39dacaecec6dea15e36d89859ffabb3bebbd4f387b5966ca003d5f7abb7c79d2dd1abae537f16cfebf866042fe69dacde56cc735bd2a6218ef131abf6e8ab435a5726f874f54283fbd9d640f0d5ea0fa37a8d38dccce6becc6a8abb266ac490888ded4e57b76463fc62c0fed9e487a89fb17f9e9db05b5dae7ecbe08a3a462a7831ff8986343857df2f0d47ab62dba30c4156c2df0ca178c3898f8e133d6affb452835f7f5cbd429de300c1cb08089868b0f239ee3658f5e18e35c9108126ac8a32d69df47386e0a29e0f4f78ca18538fa6e0c5265c6435647e5e7de370e7ccc6bb311b6b6b1a2ba103180f5c092c02e6c77b09db81eeec7a22d003a35b67cb16b400f832b05fbcee05ae03968c60ce65d9ef038063f2871dc0fb80cb8109d9fd5780bb810b81df67f7a703470fc0f60186c0687613c7630270452421e101e0a7cd089fb55f0eec4ab7099bdc47ba214acbadfa9f0cb5b64951a8cf17c7e0d3a560d979bb215adde5ea37d579831191917781d534798321fb1ba93b7dadba291bb75a1c31042e09cb8cb975f677ae218e4ff841b9a80613f51a2c792262a0b87daea1ee97f7fdb623f42e0ea5386288d513964435ce07385e7d216b7387f58b15871bb2bc12bd8604e9aa486ead187f9c7a5dd167b1c115372d7c36fec0c511ab7ef269638a9a0d30ad10ec094391a39e1a9f6270612fd521627746c4dcaccf07ad46972f46ad1bb1a7c9e6685c1c31f8d8842dea6905015d5643d28dd6293367934d50dfa2fed6fa35bf14442d325481d614cf17394a05cc6c4d8d8b23863a7cbeb88f1604a07e376bb3533dafd1020b22ce36244e8d8a9f251ece357034e020c5910e6029b033b6ef207313992b5906a4558d038e4b6d4ad46ab5d46f07703ff009e07ce01660eb006b5d458847d68e9af47d580dbc945d1f4b74fb1d043f992fac0c860056520d88163008ea10f1f148c4ef80f504dfbc0bd804dc065c00dc97fa8e323600cf67d747030701741118df4078c30a300738107839ebf06c5ce801f17a1e212adc36142200d41d51c0c57107e6100293d57113b68f91f000ff2168d8c9f17a167028b0be0bd80cac014e880f0f030e2e08d81449981daf8f2444858312501241d088a5f16f6f6137d590f840c2063cda01bc0aacc81e4e038e2a06e826bc734f98011cbe1705681a4548dc1b7f7711ed583aeb393bfb13543c3772d23fa998d76ae1868995841c27617e4ec04a822624ec31728527e889bf3b18c013b4299e231cf7846380c98980d554cffcb1843439c72afa7b8bce564b350c6ca6ea628f00662602d603ebb287b3896e22c3bad82e612e30b9d5520d03dd044d4f980ecc4e04243791300b38a418e02582a6241c06cc6cb554c34469c71624027a8a8753e87379093ba87a8ba9d4298eb4231a14473a81851dc5c33cdcad564e029eca7ed7f316ed8ed28e2dcc43de32dc9d5f87c186de621fc13ae085ec7a5e4ec0b354ddc43c60523140bda4a2f416ed8c6d54bddd949c804d8490386121f02620afe99549c56c822dd803abe5b4b6f923e41da7c54d4bd8dc955dbc023c089c15afa70337000f45e66a8400e8d0accf9ea42223e948e012fa87d3ad8484e4ed54aa9eebfe72e74e301446878a9d8697a6f91722d70ea37f2bb1423da5ccfb9f24bc98786688cceef116119d8408abddb116f80af0c89e2350abd5d259b99d10375f4a380e53a97e55de498813127939013dc08d843c61267d6eb55ebf1e604bd1662cd14b30804b809f008f4083cfe523119d518869d9a27b0911e24df49df1c5c0b9f4655a35429438ad20e61cc2ebb771f1debd843741bbd83b9fedef2678b08d404f538517fbde003d909da555966f5cfbf7c150884ce835546a5b1e447534d1a75e5231d8b93f82a001096b19bbfadf981300432c8e64bb7b16d5b7b20f52ad30ed1b040cf98d6b155dc07be83bfbbb803b0867b2e56856039e2158f084f951d07a98079c995daf2018ce96abff4808288b2373288a239936bc8daa8db88fe066db02cd12f032d560e95042585c627fe0ddf4b9b96ee04e688fdd1f09013be95f1c995da7dd42e094ec7a2931006917344b00548b231392a0856f3f8fe02613eea19a4eb71c5dc3ed9085cc4f100ce194f8e812828aa7373e270117675d374702da46fd9b461611de5e6458bb0d9fd3bc6affcfed6e76343f576f030230fc6fcff221a49e4bd593da21f41d0b124e57ff6cfd6f89bbd53bcdfeedaddd30a2c398093485506d3991be78600bf018f030e1bdc3be7ff6ff17f15f537b2b0c1c9e432a0000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-09-13T15:08:27.471732+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000012ea4944415478daed9d79b45f5575c73fbf979081246420211008100261124b40016b2958651481d6a2a558b10b8ab514b513edaacaeaaca01668a59aa215048b68a5cc94e852a0cc32889202014c0c09040299c9f8defbf68f7d7efccefbe59e7387dffd0d2fb9dfb5de4ad6bbf79d719f7dcedefb7bf6850a152aecb8a875bb01151a9054ffef486022b033d0076c02d6b87fa9d5ca9bb64a007a006ee26bc06ce024e038e00060122600eb81a5c0a3c0ff008fd30661a8d06148aaffec26e9b3925e9434a038564afa4f49ef9454f3b446854ec09bb4d192f6937488a4c9f5df1728e76d92e66798f8662c91749ea49d2a21e800bc091b27e964493748faa5a4e5921e94f43b924664998ca6c97f34e7c4fb582be922497d9510b409de644d94f44149b7495a9730196f483a338b2670ef4c9374570b935fc7eb924ecfab812aa4c09bf8a9923e2ae9479236a44cc6ed92c6c426c29559937489f2abfd101e96b447250025c09bf819923e21e921499b334ec40249d34313e195fdeb925e2969f2e504e9a2225a6064b707bc57a08629b60f7016700e7028f9c66815b031e59d29c05f03bb47de19009e04ee0536008763a6e12e81f7fb80df02ae01d6756d108723dcaae9937490a4bf95f46c41d5bc55d29f8556a1b7fa2f96d49fb29abf2e69770db5387e37456bac9034b7da0632c20dec4849874bfa92a4c592060baae0d5922e971d14437521e968492fa594759f9af673efef2f89fc5dbfcc12e9f6d0f62ebc811c25e957257d4dd2cb2d4cfc6b92ae9174bc5ba5b17a274aba25a5bc376426e6365ac4fdee28992328844b545903dbc29bf8b192de2be93a99f9540483929649bacaade8a823c6abfb9392b6a4947b9902be0457c61e929e899471bd2a9f4003dee04f90d9ca37495a5370e20724fd42d2a592deae0c4e1faffeb9ee6f637844d24cc5b5c818497747ca7848816d68878237f093259ded066d7dc189ef97f47f923e27698e72f8df5d1bc64bba31a58ed592ce50447d7b7dba2a52ce1249b3f308c07665067a1d9f0e7c003817782730ba40715b81a781eb81ff029640f6e89bd796b381d3535ebf0eb83363f9cf469e4d0166022fb63692c30cdeea9829e953921e537cbf8d6193a407245d20cf142bd8a643253d9752df93926665a9c39579b2a48d81b206259d5fa4bdc3126ab855f797f4199927ae5fc5f0a6a41f483a47d294a213efb56baca46b53ea5c27e9c359eb72ef1da2b83fe08badb47d58c07570842c9af679492fa8b85f7d8da49b65819c09ad0e9e1adae8f79c50c570b522e663a0ec5d253d1129f3166daf216237003bc9c810ff2a73aa14b5e1df90112b4e90b47359abc6957380a4a753ea5f20e9c03c75aae1bcfa7ea4dc9fca025899caecf943a0d791d1c031d8c1eefdc06e458a035e056e03ae057e026c8172a855aeada3813fc7e208216c042e039e2b504d3fb030f27c0f2ccef07acb1dea263c553a4ed22992be2b6955c1d53e28236f5c2ee908b78adad5deb364448d18aeab6b9d82f5fcbec25bde2649a795ddbf8ec11bc8893202c6ed4a266064c180a48592fe5ed2c16aa397ccb5795f498fa7b469a1ececd24a3dc7a68cc99f28e396d6335b80d7d8a9988a3f1753f9630b14d70f3c037c1bf81eb00850bb18b4aeed23814f0347445edd0cfc33e65f68054b813780f181e707b6a5a3ed80b7e26748fa2319bb252b01a3199b652ed50b25ed99751594d4fed395be457d4fe6196cb5be0992ee8fd4f3439919dae9e9ccdd919acc0972b1a4a76431f522d828e9c7923e26e3da75cc0e7675ed29f3c3c7b04876fe28c3ccac29ee6358585f0069e8f816e01ad587a9a9b3810f03fbbbdfe5c57ae03e8c09f303603574eeb284d7978b80a323af6e05ae049e28a97d226e414c03f6049675642032b5b861c3ce95f465b546c058e5d4e9a9322ba1e39e2f3554ff894a0f2ddfa612a374aededf8e68ccde20877883542760cc93b931cb20608ce9c6c437f56dbaa47b52dabc54d2bbca6cab2beb4899332b844ce490b66c015ea5638177031f034e06762d521cf0327033f02d8c2cb9b59b77e2d420907e023836f2ea007015f01094be35bd0cbc864500933007db9e063b3a306a9c52cf90f4df6a8d80f1a2a42f483a4c196fdd74b08fc7c96e05c5305fe6bb6f471b7a871ce20dca14197b75bed2032121d409189f95f9d47bea02a41a0199bb53fab15cb65595be4d79e3dd3239a4a52dc02b7c3a467a38177807c509183fc70818df272701a313f0fa7b3ef0dec8ab83c03c8cd7dfce3e74871ce249e0de923e2d737fb642c0b85fd21fc8ddaae9a5159fd0e763944eedbe57911b4225b6a7b3e410359c10073815dd2a0163be6ccb688980d109281fb5fba476f7479d2487a841c0384c7628cb92c820843a01e30c9540c0e804bcd5ff29a553bb2f55070eacea0439440d02c65192be22b3698bdaf0af4bfab6a4f7c9f9a97b7de2bd3140e6c65d94d2c78725edd5897ea90de490e60e8f91993adf9439608a6050a6a2e6497ab7cc21342c26be693cc6cbf80831a452bbdbd02e6494b8105e559ed0b31aaafe3819977d55c189f757c4916a0301a313f006f902d96135867f5187b9782a811c32d22f0c98007c128b6b4f2da18debb1b87c7f2f997339712846f18a99b64f0297d31d0fe50bd815f2246ec0682cdb189212cdd191f587d8e47f1eb800d8a9a4c6ed83d9a31b3a3d2aadc28dc958e02f718318c07ae00b18e9a41b68891c52a7488dc0a43cefe46f065660fefa244c03f6ead2c01486a732cf023e98f2fa0dc02dd035a7d5eb981084b03f1156553d067f0216d3ce3af91b817b80f380cf6014ac248c07f6ebc6a8948039c0c558b6ce1016005f023677718b5b4fdcdbb737e1801123b1b4237f0c4cce58d97dc0373102c61a602eb096e448df089c0a0aed4149f056e064ccb5bc3be61a7e029702a5cdfcbe2cd4ee0d18b57b618662db89d6c82192deef4c9818563933e81479040cf7b3bbcc2318c20dcae118f1ca3d4c1670d9e04eb96b25dde94cadf1ed30b7bcba3fa47426f2b7d403bc3bb54a0e91f46f291d7d42e6da1cdd3ce86ae4afb933f2f78f489a94530076917447a0bcf5ee59e982e0ca9aa5b8774d32cedda1dd9e7cafcdc5c921b29bb421bca64848d35b315746ca582a8b1de4e9d0714a5f81a50a821a5ecf2b53eadd24e9e3650a5e0902503873481fb63f84f000f020a4eeb9b13d68327610c983a9c0989477c601a762dcff1b81338042fc40effd53b090760cb7ba3a7b2954bd0a173e0f603666e66f833ee2172f96e1eece25c11b80e709e7c7db99b81d9d8425d801330b7c41b801388d6282b01796bf6f62e49dc598cdbf3e677fda8d4d984328843d0938f6fa8037237f389d6ca49125981486f0962590113f036eca3908e3b0ac2037904310d4f0835c041c15297f2b7005e551bbcb46167248e200c4b2553f26970a3d3680ee9d9f44cab9432e1094056a306eaf9005348a609da45b65bef0444150e30c7392d2a9ddb7aa471330a91572888c661dc2cbb20c9a69958f503c11d2d3b28f22e4edd44859287a5e098270aabc3c00decf4c49ff9b52c6521913a8270e7e81b12a440ee9c32e2a0e04ca9e44b603dc007187c87460469e4ed56a356ab55a3ff699940b31f5feef18153a0fc6bbbffd0e764e380dbb433f1df80de06a8cba1eebdb578087ebedea51bc0abc12793e87244fafcc111433b92e4c937cf7fc230a8725b7c8e5d22f0a4f231c23cba5bba2a046582fcb07bc40d928eb77ab0dd4ee32e18d4d6e72481f16c55a19293feb55e3170967aade0993c0c22ad4d3080f6317324e07be41fe4c18e35c9f0e219c7dbb8e57817fc2a26dbd8eac994386a00f588edd3209e100b2d1bc97129f8c52eeac3b41d88addb6694510d230007c158b7df4b2eaf7dbb690f04da089c0becdbfecc3eced5f44cadf9b6c81a295a48725c795d9e90441f80fca5badb7627b7fdb124bb40175724812869043eae823db016e8f0c95bf89398442d88b627703a36812843fc43c82d7505c1006813b803f6da18c6ea14e0e09611b2d5ce7033c4fd812d8059895b10131419a4a1bc9219e203c80115b8a08c21a6cd59f8f79fd7a5af527203739a42e002f12766fa61ee09af6a090eb78bc6b405b912008676267842524135706b073d077810f017f012c77e5b4bbb965233739a4eee65d8651bb427ef039d875e8b423fc626c154d4b7856cf0a928b1c5214aefcad92eec72c87591879e520d7be3eecdcb21073efbe8051dc86e3c4d7919b1c52178095c04b845768fd009716047905339da6059ecfc1fcee0374086e32fbb16deef9662d368c277b9b7eb8be2d74fd4d8ae14cc0287a8fd67f51df0236108f26653dc0adc6ed9d01cc22ddf66efb40f93fdb21166114bd248ca0693bf71333c554c7ae643bc06d216e09ccc0ac8a0aed433d734808f5cc2100f435c5f46307b8d9b15abd729e257c5628420ea9900fb9c821be06584c988431e400978217089343c690e08ca8502a7291437c0158ee7e42a81fe0d2b084786ce1a06e8fd00e80cce4105f005603bf8cfc61d603dc0ae2090ab3c6162ae444d376be29f0dace78d69e2f00651de0d6514e6ca142712cc1654d4d400d6f3bef832192f31ce103dc24b21de006895b14b9c9211572233339a4393f6fec003716a73a32ba8463b185e17a5f70b8600df1dbcafbe0bcbecd0250d6012e460e19498be4900aa9c84c0e6916801594430ea9c71642a8c7162a948c1ce4907d605b01584bfa016e528676acc2620b21ec4f38a141857290891cd22c008394c3eedd403a39a48c143415c2c8440e794b00721ce0f6cdd88032620b158a230b39645cd2573aca22873c8f8baf27601c1d2087ece0482387cc04a62609c032d2d9bd590e708b09c7168638232ab40559c8217b2709409d1c12c26cb2b17b9793ee8ce899cfd66d4f68dace43f99b2600072609c09bc4a34933c9460e59439c1cb22ff1abd8155a478c1cb2137068e84b5d6907b85852893ab612b7282a7248fb91460e192a0039c821d1035c8ed8c2bedd1ea1ed1ca9e4909006584c9c1c92d595fb02e104148937552a948a4dc4b7e1c92101a8b37b4338886c07b89728e7e2698562a8114ffe39181280d5c4c9214790cd8e4f73461c40b18f4357c886bd89a7bd591912802d581ad41066612962d3bef1b38eb8455191434a86371fbb6249af0e89bcbe601b35ee5d307800db4342e9dacec604e126609992a56090407a3287fa4d956004d22b7606f02b29e555b033da0c2c2bcaaf1176da6d01e6273e74833e0db89db80a013be5c7be4e5923fc61e87ee023c08d499734bcc93f15f8074c9a2be7513afa48f7d6fe1c382336982b80af038703a322efd5c8c6164ec2107248e0a6cec1587ab6bcb9062b843180dd9c5e94b832bd89b8114b94d04e1c488286685afdd5e4978bf9c0b51056cd75acc50e120fb6b131b38993432a6f61b97802fb0aca1b10118026afe0f998d4b4e34bd47b12be4d0ce6c8a83c45ad43d8a76ccfc3f67f6ab55a5c037842f00cf051e01f31bbbecc09494c63ead57d3bf058f7c66dd8439863ef32e01ce0a7d018dfccc44cb727f7615fd138134bb2381b6309a51d024760e664527d023e0e5cdd7c08f4ce0147027f031c4d36c7513d0976a87f039889bbbd6a967e1a1774ee016ec656fd40f318e766e67a93320ea3164f25ce141ec41c3e571056f55fc63ed1424408eadf1f9a98d2ee01ece0f85784b7b83bb115b13d0a8030e15e89b9f3d74317136138cfd414d917c64368ed1bb743ebea93f48d485d5b5c56d32a0845ba155016d6924e0e9954525db380f7449e2f6218247fec143a25006937557627218d691e78abf93dc4ef30fe8838e56d8742db05a0891c12322327510e39640ce6030f1d4a376256c570cafed956744a03409c1c328a72c82107619642080b80473ad8e79e47270520771ad3acf084e624e29ec3bb293fa9f4b0462705200b3964e78c65256117ecab5f21ac06ee82eaf0e7a3930290856e3e2563594998eb7e42781c78aa83fd1d16e8a400644d639aafd0a151c3580ea33be9bdcfbd751d1d1180a69b2a5b03afa5e6228c603a7062e4f92bd8c7ae2bf5df844e6a00484f639aebbea0f7de31c4b3973c485cfbecb0e8b400a4d1cd87a431cdd1870f10e62ef663b6ff96cc25ee40e8b400ac224e37df8ffcc9a4f7018e8f3c5f8c45c42af59f804e0bc066e29943d2c8216fc153ffc713f722fe98f8f5a81d1a9d160028f74be3a3b00f41865cbf9b30f53f58adfe64744c00daf4a5f1038177459e3f83fbe2678564744303b4fca571efd989c4bf68369ffc9f9adda1d00d01788d782ec283099fe87d4cc09c3f21aca172fda6a21b0290968b702e76f934510b78bf3b167847a49c27dd4f8508ba210003c0cf22cf77c3d8c76f076abe1078c4d46380bf236e32de45d8e954c1a1e3bad14de271d88da3d0040ab3df7f88f90dea790b4762eee21388c70d960327034f55eabfc7e0c898e325dd55f0f3ef5970bda45115e9331dddd802c0a2725fa33d2afa35601e95ebb777e1b4c02849974b1a2871e56f91f439470def76372bc4e084609aa4ef481a2c61f2fb25cd9334a19afc6100270048da4dd257256d6861f2d74aba54d2a46af287199c108c95ddd67944d2e61c13bf51d2bd927e53d5a1af107ac246f2266e372cba7702f0362c3238da6b67fddedbab18bf6f3e76cb6715541ebf22e8b91153c3d9331e73f7fa0230888594d761964475c1a342850a150ae3ff01f65e625bdec99f450000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000026184944415478daed9d79b85f5579ef3fe764207342306422049260a280caa04c0222930ca2325444a0dada568abdea955a6bef539f5e1f6f1d5a5a5b6fc56b2b165011104191290c915120226398320101329184cc3939e7bcf78f77ef9c757e39c3efb7d6dac36fffdecff39c071e65efbdd6feedf7bbd75eefbbbe0b0cc3300cc3300cc3300cc3300cc3a8346d4537c0309a011149ff7564f2b707300c180aec007626ffdc9afc3b6d6de50faff2b7d0300a2209fae1c074e010e050602eb00ff0365408da802e6023b00a580e3c07fc1e78067813e82eab1894b355865110ce9b7e02701cf011e0585404d2801f8c6e54105e02e60337034f023bca2a0486d1f2880822325a44ce11913b4464a388744b18dd22b252447e2422478bc83047640cc3289a24f01191778bc8d549e0c7a65b445e13916f88c8f4f49a866114481288c344e4e322b228c21b7f303a456481881c27226d458b807d9018b9923cf0c380bd8119e877f546e05574c2ac2bafefe4a42d23814b81af007be5782b96017f075c97679f0d23779c21f64811395e44be2f22cf89c89b22b25e44d688c8e322f27f44e41d790c8f936b8c1091af6634e4af87d522f219111952f448c030a2e304fe1811f99088fc3409f6fe86d9dd22f2b4889c95e5f03869d31011f96281c19fb24a44ce179b1330aa8213f8134467d46f127dd3d7fb7dfdb2889c924550386d3b37790397812522728c8980d1d438c13549442e16913b4564b36750dc272253331280778ac85345477d0d7789c8341300a3e970027fba885c22220f88c8d6c080d821227f2a11df8ac9b94689e6e4cb46a7887c4d44da4d048ca62009a876119925229789c8ef93c08dc53522b2478c80901e91ba484436151dedfdb05c440ecf530086e67625a332240fe810b42efebce46f2ef19fa759c06874914d0ce60297016372b9518d3313f814f0848874e6911a340130ea467a72f80703e7036703fba16290052380f648ed1e017c21697b99f930f0ff80a7f2b898098031284e001d0a5c883ea4d3c9be906c1dc9d2dac0b693b4f91391dadc0d6c4afe3a937b333ef967e8f96700a7034f8948e64b8a4d008c3e7102673470147011f0216012f955903e89560986320bf8321aa441b705580c5c0fdc032c013a92f31e9cdc9f33937be44b1b7012f07de0ad087d378cfa7126cbc68b16e45c2f22eb24fb1af95ad68ac8074326c4927e0c1791cb45a42bb03d5d2272b3e882a1dd66ea936bed2122a78ac8c381f76ba5881c12d277c3680827f0f712914f88c8ad525c955cb7887c4f0232004e7fce122d390ee51611992103a4259d6b1e24228f045c6b87887cdab7ef865137ce433b55b42e7d8184e7f04348dfb433420220e9d30c117930429b5e94e48d3c589b9cfb7986e8c8c9976fd5733dc3f02279b8da4464a6887c5ef48db53df770ef2135cef867095c2f9f1c3b5444fe51b4c026846d22f2b946da233d0b9fae0bb8ee0dc939327d0e6c12b0c5909e1cfe6ce05c349d370f4def15d224e035e0d7c035a8979eb7759613301f04fe84f014e5ad49bb1a9d91df864e147e0cbf389b8dd62b6c0b6cff809800b408d293c37f07f07134f86751dc33d0851a68de085c0b3c0dec8c94f69a8aaeefdf3bf03ccb816f031b1a39a8adad2dbddfcfa0598c899e7dd81b5813e386f4870940c5491ec43d8077039f444d2e6710a1c0c6934ee0053495767df2ef510c319cd1cd9fa3469e21ec04fe2ff028785b7cbf8c8a878f008c464701cf06df98013001a820ce307824f03e34877f3a3085e25ca03ad037e2cfd0b7fe7222da653b7d3e161580d0677b3ef0634002dab8111581591ec78e01e6a47dcbaa20c804a04238413016783f70315a54b217c505fe36e071e027c0afd0effdac1ee849c0df00d302cfb302f816b036f03c9bd1c2a1133c8f9f8d8ed4ba23dea35e9800540027f0f7044e44dff8c703e3282ef0b7000fa11368b7917ccb6611f849ffdbd149bf13034fd709fc007820427bbbd06a415f66a39f029b22ddaadd300168629cc0df1b380dadd33f0a7d680a69125abefa5be06ae06e9209b4ac86b0ce3d3802b884f06cc602e087047e9e3813814bd0edc246799c667f54c44d008c1e9c877e1fe02c7472ef5074314a214d421d7def4403ff0174f89bd7fe787ba2b5fe3303cfb30a1dfaaf8ad8b6c5c9bdf01180bdd0dff8b588ede985094013e10c75f703ce4157b71d88ee5f5748938095c06fd0a1fea3c0b69c6dbd41e73a4e0b3c5d17fae6bf17a20ad71be8e78f4f4a32cd043c12ab31b598003401c9833e14783bf047c9df0114f7fb7503af0037013f4557ed75e4e96def04ff61c0e7d05467080fa1dffeb13dfa37a39f01077a1c3b021580cc3201260025467a76a73d08b800ad2a9b4976061c83d1893ecc37003f4777c1cdc5b9a61fc6a20e3f7302cff3265af0b32283366e217c22701881be08fd61025042a4c780e3307462ef4cf231e0e88f9dc02234e87f813ed085ed66e3bcfd2f400b9b42e846f3fd77406673164b92ebf8145fcd416b02d667d13013809220bd0d388e46033f6f038e5a76004fa0c3fc9bd0edbb420a63627230f079b4d829848568c55fac32e45dd4640236a333fa8db22f3ac9690250459cc01f0f7c00cde17f10dd9fbea848db8a4ee85d834ef0ad84dc66f40724b95fa3812fa1eb1a42d8800efd9765dceca5682acf4700c6a193be4bb368980940413881ff36e014f48dff7ef4bbb62836a229bcab80bbd06fe352043ef4ba67e7267f41a743ab136fc9a18f6fa2a9bce91ec78e463f03eec9a261260039e33cc4538133d037fe7b091fca7a37091d5ede8de6f07f4be2c35796c0af611ef03f092f767a12f83702961e37405a12fc3e8f6387926126c004202792c06f43bfe93e8a16efbc8bf0f495779380d5c0ed68e03f8c0efd4b19f8cec4e8e7d1fb16c226e09f8017736afe0ec2330123c9c01bc00420636a0c38ce43d7e297c180e357e81038c880239706f78c9a3e82cefc87721dba223173b1ab9908ecc0af682b33731013808ca831e0389f1e038ea272f8a901c72f50038e67c860e63b4366037f8ddf449acbb3c0bf9063c562429a09289539880940641c038ef7a0c3fcb3288701c775a801c78b1498c36f14a718ea73e87a8710b6a2c19fa9c9463fbc4209cd414c00225063c071243aa37f1ac51b703c8d1a70fc92c8061c79e0dcd7d3d07affd0c6ff122d662a629ee32d4a680e620210408d01c7b1e88cfec9a8ca1769c0f17bf4fbfed7646bc09107fba22bfd7cde9c2e2fa2137f9b0bea4729cd414c003ca831e038090dfce328d68063333d061cb793a101471e380ba02e41d7fa87b01d4df93d51e03d29a53988094003d418709c8e0ef58fa478038e05682aef1e3236e0c8a5533df7f944e2587ba7cb950bb92f6536073101a80333e0288469c4b1f65e8696fb9661a3cdd2998398000c8063c0b13f7036e530e07883de061cdb2b14f46eddc49fa1a5d1217400ff013c06a510c7d299839800f481f3fd391735df388f1637e0c8838cacbdafa43c2b184b670e6202e0e0e49c0f462bce3e8aaec42a3287bf04cddfff1c789e620d38f260123af48f61edfd4d92054d25a174e6202600f4aa333f9c1e038e69149bc37f0eadd8bb015d0ada5439fc46713eb7fe145d0e1d422770059a1529c3d0dfa554e6202d2b0035061cc7a0817f2ac51a706ca7c780e366ca65c09119ce6f712471acbdef05fe9312896659cd415a4e006a0c384e4073f82750bc01c723e8c4dead94c8802347526bef7d03cfb392f8d6de3129953948cb08401f061c17a16ffea20d38ee475379a533e0c8036799f41fa316682174a16ffe0550dafb582a7390ca0b8013f8d350038e0b298f01c755c07d94db8023bb1bd1f3db1c4a3c6bef2b28f762a75299835456009c37cb4cd44efb1394c380e33674a85f6a038e1c19870efd67079e672d3aeb9fd92e3a9128953948e504c0292499438f01c75c8a35e058418f01c7e394dc8023979bd2dbdafbc381a74badbde7437905b58ce620951100c780e39da801c739146fc0b10c759ef919ba96bb990c38f22096b5f7636464ed9d11a53107697a01700c380ea167a3881914bb89c68b68e1cef5c04b94fb9b34771c6befcb507bb41036a0b5fecb8bee570394c61ca42905c0193e8e42978a5e88aece9b4cb19b68d41a70543e87df28ce6f771e3a4a0b3a1d3d7b179476e8df07a53107692a01701e9e71f418709c44f1061c0be931e0781d9aea612c827710c7dafb09f2b3f68e4969cc419a42009cc09f488f01c7b194c380e36a745fb9a636e0c803a7e4fa0be8f77f08a9b5f74b45f7cb83d29883945a009cc09f8cfac25d840ef98b36e0b8170dfc7ba98001471e38bfe547d149da50ae453fb59aeade97cd1ca49402e0e4f0a7a30fcc05e8245f91061c6be931e07890ea1970e4c16c74e22fd4dafb19e05fc9dfda3b26a53007299500d418709c8bbe29de49f1061cb7a0934d8f5131038e3c709659ff0fe2597b2f2aba5f8194c21ca414025063c0f1717486784e81ed4b0d387e89aecc7b8a0a1a70e48133f43f1dfd840bbd8937a27b1c34fbe8ab14e620850a401f061c1f434b778b34e0588caec1bf16dd50a3ea061c793013ddd567cfc0f3bc00fc33b0b902bf4929cc410a11006736f8bda8c166190c3816a141ff0b5ac080230f6aacbd8f0c3c5d2f6bef8a50b839486e02e00c05c7a0cb702f4297e5be8de20d387e821a70acc08a77a2e0fcde27a1d6dea1a3ba5bd0dfa9d987fea53207c95c009c076102bd0d38c6535ce06fa1b701c72a68fe07ab844c03fe0675590a6129e5b1f68e49e1e62099098013f893e831e0389ae20c3884dd0d38d681057e6c9c15997f81166c85905a7b2f84cafd56859b834417801a038e33d13afdc329d680631d6ac071352d6cc09107ceef7f3ceaed1fba1af30eca65ed1d93c2cd41a209401f061c17a0b3fb451a70aca2c780e3779801475eec8d9a7c4c0d3ccfabe8d07f5dd11dca88c2cd418205a0c4061c37a393467fa0f9168b342535d6de27069eae13f801e5b4f60ea62ce620de02e018701c488f01c7fe146fc0f10b7449ee229ac720a2e97186fe47019f25fce5722ff043aa9f8e2dd41ca4e11fa9c680e393a801c73e146bc0f1023d061c8b31038ea298481c6bef37506befd5457728070a3507a95b009ce29da3808bd1d5797b535ce00b6ac0f163b464f765aa3951547a5ad0da3b26859a830c2a00ced0ee5dc0a5e82eb97b515ce0a77402df476da05be1412925cef371186aed1dba70eb41f4dbbf554671859a830c2800c98f3b0ab5d4fe32ba436e597e9561c094a21b61005ad4f565fcde622e6b680e6bef98146a0ed2af0024c13f09f85b349f3ba6b05bd43f73d0f9881d4537a41571defe9f406b3e4248adbdef82d618d195c11c64b7fa6c11491bb50ff05de0af2867f0830a4051ee4086f22ed4e22bb4d0eb519acbda3b26a939880fa9398817fd2dd098822ebb3c9f927806f4c3f4e40618395363ed3d37f074ebd1829f978bee5741a4e6203ea499002f7a0940f2a38e01be86e6f5cb2ec5e308ffee341ac419faff113a291c743a7a1665b5c4d0bf0f5273101f7a998334ca2e0170aab8fe0c4de7e451d0d39974dc37df3b26a4f34610ad6eed1d9358e6200dd30ebb55717d81ec17ee74a03ffc57d17de1e67b9ea79df04d258d06489e9591c0178183024fb709f80efa0ddceaa4e6203ea4e6200de37edf8f03be447815d7406c476bf35d030ed0adb47c492702b764d86e835e2f8a8fa06b3e42b916b8095a76e85fb839c850e7473d033835a37e6e4157e35d83aecedb65c0e1747e077e2b07d30511850880f3e9341c55f09d54bb22710eeaef67d6de7129c41c241d018c073e855f1eb23f52038efbd075f877d3bf01479a06f1118049e8a2885511db3e70c77a44731fb482eb303473d289d6763f24220f922872151ef01a6bef43024fb705b89ce6b7f68e4921e620a9001c45b869634a6ac071171af8f733b801c78ae406f8a4f4d27ae82722b57fe0cef5ac89380f9d2f3988dee5af828ad9efd0d56c778ac85b83f4bfd4d48c122fc4acbdb3a0107390a1e86cff69840fe952038e5bd1a1fe23d46fc0b1115dcafb768feb8ef2ed7cc31dec790b7e01ad90eceb9eb5a1b66727a3c27a3ff023607e930bc14cb4dc3786b5f73f015b9af43e644521e62043d1a1eb71818ddf86aec8fb1ef0388da77462a44186a243f04c70de8267a34697f508e618545c8fa54985c0b1f6be14bfb793cb76b4baf4a9a2fb55268a340769474b394366feb7a00b383e0b3cdcd6d6e693cfed46873fbec9fcbc4a8227a3a5d1131a3c2e15822b51b3927381f14ed9752971da76323a47146aedfd6b74a7a5a610bf024833013ea4e6200dd18eeed536def3a2025c850ee936f9fca8ce318bf19fc9df2fa00f8d700cf09e80e39b5108a613cfdafb3b54cfda3b26a939880f5e25c1edc03cfcabfe5e44abb8b64650f4a5f8abdf04f41b35139ce03c84389992d20b418db5f7fb034fd7817e1e56d1da3b26a939880fbdcc41eaa59db0e1ffade8a44e0c56a38b22823a9f2143d05d8c62524a2170aefd01e033849785df0efc37d5ae8f88419a09f0253507a99b76fc6775b7a34b3863fda8210b228691fd9a80b4c8270b6a85e01c606cc14260d6def913cb1ca46eda1b3dc0611b719d5bb611ae7e2322b6a7164153955946642a043f466b28ce226721702a1b3f037c30f074a96ddbc36043ff8170ee4d6a0ee2436a0e5237edf83fd06d44f20a703abf14ff545e669900a77d0f924fc5e118b4defe6a721402e7dc4713c7dafb1ee0bfa8beb5774c723507690fb8d848fcca16b3eafc74c267aa07e3497497dabc1847fe42905a7bcf083c4f2b597bc7245773907660ade7c5f620fe77f732fcd34463c8d01c247983ed406bd81fcbea3afd90b91038d6de9f227c5158175a06fd5be7de19f591ab39483bb03ca0b1b308b78176790bcd85fab04bfd32fe5e7e0eb5bfbe0f7dd0f3241321708e3d1cadf80bfd4defa7b5acbd6392ab39483bf012feb3dbb1bfbb43d220ed497b327be29c87f9517451cc3fa069d02a08c17874996f0c6bef6f03afe77c4faa446ee620edc0f3f857e0cdc06f4ba3fed849782620d392e0b6b6b654085e05be8106dfd7298f108c6944089cffee93a83b5308dd682a737e7aaf8cfaa9c904f8ce85a5e62075d18e56f379798ad3634410bbf3bebb9dce22270bf34408bad1fbf775ca2304ff8d6ecf357a302170febfe3517fbfd034ea23c07f009d16fc41a4e6203e341493e924e08a7a0fa821c892b81f96e03f229944fcccc480945008ce468b89ae6400217076773e1df877c27fc756b7f68e496a0ee2436a0e5217eda8d2f84e3a0cc5a3fe78105ec33f33d150e763328810f87ecff93201352c4985e01c6086888c1791712232192df3bd3cf9ff0f0ebc9ea0a38f56b6f68e49c85c582f73907afee3ed84cf3a8ec2bf7aa9964de810689ec7b123c9c91ca43f926b768b482a04d7a2bb297f1cadd40a5d52db0813d0f505a7a39372afa1855693d1829109c49934fd033a8ae8b0e08f426ee62069a557a811c168e209c016c22702333507a90747085e00fe1e7542fe24f90b411bfafb1c90fcc5662366ed1d8dbccd41d2873064d6710afa46898524ed09310729cd5e86c9a741176a80f9f7e8a7c137094bf594896b518b771bfac72517739054005ec5df8860d7ee3ca1444a83cca471c79ecca9a8103c8d597b67452ee620a9006cc4bf22308b0abc1001184fa4d46416544808526befe78a6e4845c9c51c241580dc8d0806612d39a5418aa20242f073ccda3b4b7289c9f43f08352288fddd5d7673906834a9103c82aef48b610567f44d2ee620ed118d08c646ecfc76c2d46f0ed96f701a957e84e03be830b04c4ab618f80a61fb391a0390a739883b4408f9ee9e488346047576de7791529a06693a6a84e07fa125be97530e217805b80c5890b6d5c894cccd415c0178037ff3862c4c39433a3f95eccd41322511824ed484e42b142f048b804b805fa5ed333227737310570036e3b1bb684216e62021699068a9c9a229811074a1fb3c7e1a2df53567dffcc8dc1cc41580181578b1cd417cd320bb3201cd3011580f0509c14a7481cfc5a80782bdf9f3257373905ad3c774e6d927a5979a837444ea7c9a06f980c7b16df4a441ca3a93ee4512809d22f224f02cba08e72274c1cfbe84a763051d79dd015c013c04ecb4c02f8cd0981c43b24d7d5f0c85ddea8f37e3b753706a0eb2dee3d8bee8248e3988efbaea52d387105c057c0c3813988bfef0f546ada00b505e05ee066e40adbcebddddd9884ca4984ccd4106160087d488c0e762a91141c890a5afce6fc56f3bae59499b2a2900298e103c053c83beb50f058e44377e3d009d111e4ecfefdd856658d29597cfa046a7bf43bd21ec8d5f1e62c464bf737bb502b00e7d007c4c35d259c7bb23763e3507f11180340d1273f392d292ae3e045689c86dc06de87d1b8b8ecc26a2bf513bba4a6c035a71b9097dc398777f3949cd417c63720eba3f439fd40a403aeb7884c7c57a9983447a985e4753933e29bd54901e89d19066c2b9f75b93bf3c363331b2219d0b7b9fc7b1bdcc41fa8ac9da89851846043176cf753b9f9b47ba61949058e6207db24b006a2af07c67f26711d79537340d3287b8a949c3c88d48313960556c5fa985d00abcba8c081a20d4233d539b70c3c881cccc41fa12805c8c080623923948ec7d0b0ca308328bc9be0420c41ca46e238206584209f62d308c02c9cc1ca42f01289b39489a9a0ceabc61343199c5645fff632e46040d76deb73d43a8d89a00a325c92c267b09409e46040db08370f58b999a348cdcc83a26fb1baa874cbcd56544e0d1f94cd22086d12464620ed29f00646e449063e727a37b1718463393494cf6270065abc07b05ff5586953107315a9a4c62b23f01c8dc88a0413602cb3c8f1d8d5628da44a0d1cc64129303a5eb422bf0627e77c728091e12b13d865104d163723701885481971a11c4a28b709b702b09369a922c6372a011406a44e043b40a3ca7f34bd191800ffb113735691845103d26071280d488c0872cb6e70ac9044c44d705184633133d2607128090f2c35e4604915889bfb1c568d41acb309a99e831399000646a44e0d979dff664b16f8161e44df498ec53004a5a81b73542e7f788d81ec3c88dac6272b0557b99191178b218cd08f8609900a30a448dc9c104a04ae620d3d19a68c36866a2c6e460029099118127cbd0aa401fc69154041a4613133526071380b29983ac4777aff1edbc4d041acd4ed4981c2c38cb680ee2dbf9766c5190d1fc448dc97e0520a211c1d8889def08ecbc4d041a4d4b16e620f50ccf432bf0b23007d9e1791a330731aa403473907a0420c488200b53ce90ce4f42532186d1cc443307a94700ca660eb202ad89f6c15c828d2a102d26eb1180d0b5f8b3288f39c8282c1360343fd1cc41ea4dd155c91c6436bbef8a6c18cd4694981c50004a6a0ed28d9983182d4aec98ac7704503673909089c0fd80f131da631805122526eb15803781d73d2f96852bef52fc0560023033727b0c236f42cd416643fd0250367390d5a841880f960930aa409498ac5700ca680ee2dbf9615826c0687e62c4e4e8410520921141ec4cc036c217448c88d81ec3c88d88e620631b59a9b7187f57de29443207a97109eef43c8d65028c2a10920998024c6d4400428c08c6107f2d7e4826603a5a166c18cd4c684cce6d4400de02967b5e6c972571c4efeee5499b7c3b6fe62046b313620e321a98d788006cc1ffbbbb8df8e6201b5005f4edbc4d041acd4ea83fc6018d046427d5320799830a9361342ba1e620fbd42500918c086611d71c646760e7630b9261e446a4989cd8e8907c09fe9980accc41b6799e6616660e62343fabf037c819bc0ea086d7299f3988af204d42b30186d1cc0cc5ff53b6bb5101083522783b449d787b0d58eb796c161b981a462e3831b41fea73e1c3a6460520742dfed1c45d89b7092d08f261249609309a9b61c0b1c070cfe3d7f8a4e5428c088e044e84684117929a043307319a102776de079c1a70aa97eb160067e2ed05fcd7218f05be4cbc4f014105c9f744b1d72818465e4c05be0a4cf33cbe0358e433027801ff894050d5fa2e7030f88b4024679499a83f8061941e1149e365367039616fff0dc0ef7d86bfab8185f84fa0b5250ddf17f801f01b117903bf5446375a12bc19bf1a83f1e824ca72cfbef489236a6dc4ad7e345a9376f43b7f12fa09fd59e050c29ead1781453e02b01db81b38077fb7df36e09dc07780bf029e4585a5d1b9054167f37d6741d34cc002cfe37b3746037f387020701caad4be13348691321c781b300f7d71ee11e19cf7026b1b1280b6b6b6f421bf071d7acf8bd0b13914978eeb650ee27c5634444d4ae68bc0b9c064604841fd328c815805dc0afe4388e5c04d45f722127308702b72827f1ef09fe888661a16fc4679990f3c011e0290bc25bb819f1296822b0b31f60b9c08fc23fa7d660b8c8c32b306b812fd940f9a447806f811feae3c65612a9ee620cedbff6ce0f4a23b62188320c0b5c003a02f732f01484601822ac982a27b1548a86df95854006cb2cf283b4f00df033ad2f9aed014d54ae07fe3bf575f1908752bda1b38a8e84e18c620ac01be8ea6ff76e12d00ce8cf9fdc0d7f0dfb1b76842dd8af624aee5b961c4660bf04de057d02b76c34600ce897e868e043614dd534f42cc41baf02f45368cacd90afc0b7005d0559bea0eae524b4ed8995ce0ef082b132e8a59e87e693eaca17985cfa8361b816f257f5bfbaa738952a69a9cb8032dedfd4be0399aebadb817fe6e45ab81878aee8061d4f0327019f06d60737f456ed1ead4930b740137001700d7e3ef559637bb5c823de8406b229a750ec4a8163b80db810bd1c2b4ed0355b8465da8e25ce809e033c0a5c023f86f5f941723f0300771fa7b2ffa09e4ebcd6618a1ec44e3ee4bc04568ae5f062b6f8f6e86915e504436013f06ee04ce44ebe30f4367cdcb582d3707cde5372456c9fa889de8c2a661c025c4753f368cfe1074739027811bd1f2fc5780bad7b5641e88ce1b753cf06ee078e070e01d6809ed083470628c46da933ef9f4eb2154a8d6fb2c0a4afa392a39c7a7d1e59a63f15f31d917e9f2626f1348fcdd9c8ce210f4f3ba131d65ae437d3916a26ffac781f5507fe0a7e4fa2676c460343a12988e2e9c9980be7d43260e05751afa4bfc9607bf0a9c002c89b02a701c7000fa59319e38f759800f277fbedc0cfc26527b8c7c6843037f1beac4b51278030df82dd078d05792c42de5001159217e6c109113cb68109af46db488dcecd9b7b47fa794b17f467154cdad661db0c2f3d82cf62d88c981a8a9aa2f4fa34346c3d845d5042064df8221c4dfc13818a72d2713b6a5f99da8401ac62eaa26003b08b709f7b517cb9289a88fa2efc7de6a5400ec7bd1e8456504a0c625d8b7ee20863948161c0ebc2be0f84751df45c3e8456504c06131fe36e19393bf52900cff531765df1d953ad1ca30df7b6254982a0ac02b2439510f42cd41b2601a7052c0f1afa126ae36fc3776a38a02b0117f83925073906838d73f1aad29f0e57efcf74f342a4e1505207403d3107390d80c034ec3df70643b701bb646c1e887b23ce831e9222c1350a6fd02f7474ba77d598263006918b5544a009c877c294999a407fbe16f0e120567f87f023023e054f7e05f1865b40095120087904cc044c2822e16a3d1e1bfef62a24de8f0bfdbdefe467f54550056a2db1ff9b06b22b060e60147041cff0cf058d19d30ca4d550520a424780f3ccc41625153fa1b52937027b036f70e184d455505602b61998039c4d981d5973d092bfd5d8b95fe1a75505501009d07e8f23c760efe36e1313804784fc0f18fa1abff0c63402a2700356b027c2702a7a34ec1b95253fa3bc1f3345dc01de824a0610c48e504c061195a15e8c33834075f0453d0ef7f5f5e07ee061bfe1b83536501588fda7cf9b0cb1c24af8940e73a47a2d666be3c4835b66d3772a0ca02b019ff4068a7984541c3d06dc67de71f76a0b9ffed05b4dd6842aa2c001d846702f29e089c4958e9ef32e03eb0e1bf511f9514809a8940df8530b3c8694d8033fc3f1e15015feec1ffb3c768412a29000e2125c17b0353736ceb48b4f477b8e7f19b51e38f2e7bfb1bf55275015881ff9e7d79bb04cf058e0a387e11ba0d9b61d44dd50520c41c6414399404d794fe4e0938d57cd4fcd330eaa6ea0210c31c24fafe897d301e3805ffdfe34db4f8c726ff8c86a8ba0074136e0e924726e03de85e82be3c8e6e1069180d51590170de84211381fbe1efc63b28cef0ff54d487c0876e74f2cfb7ead168612a2b000e4bf1178009c0be19b76f3261a5bf6f60a5bf8627ad2000ab5183101fc610e6c85b0f47a0e61fbe3c0cbc98711b8d8ad20a021052123c8c8c3201c9f986a2a5bfbe05471dc0ade8d6d186d130ad2000db08df2f7044466d9b017c20e0f8e5c06fc186ff861f9516801a97e04ecfd3cc267226c0194d1c874e34fab200dd09c930bca8b40038846402a613b62d777f8c4087ffbed6635bd0d97f5f61338c961180e5c05b9ec78e451706c5e60074db2f5f9e4727006df86f78d32a02b001ffa1f268224e043ae73811ddf8d397bbf0b73e370ca0750420d41ce460e296048f053e84fffd5f8f96fe8abdfd8d105a45007612b626e058c226eb805e6fffc380f7069cea0fc99f6104517901a83107f1cd971f005c0c0c89f0193016f873fc4b7f057dfb6f88799f8cd6a4f202e0f03cfe56d94380bf00ce01da7c442039660fe052e0a301fd58897effdbe49f61d4838820221345e401096385885c2a22139273d67b6d4464aa887c43443604b6e146111955c4b66546f5c863ad7b5958875a661f13708ee9c0b78133801b818522b29afe77201a961c730c702e7038febbfd82ce65dc866e7d6618c1b4cc183279639e0c5c87ffae3b2e1d686dc166d478b4f695dc86ba0a8d469714c710dbc5a86fe0621bfe1b3168a51100c0a3c9df2911ce351cad10cca24ab03f6e478b9a0c230aad340908fac6fe29cdb971c61b49db3beded6fc4a26504c0099a5b4836cf68327e092c2cba1146b5681901707813f82eb0b6e88634c0f3c015c04e7bfb1b316929017082673ef05ff43f7b5f26b60097034f17dd10a37ab49400c02e11d809fc2b9a522b335dc095c04f9cb61b861182539c739088fc2eb030272bba45e406119962453f86111947048e10918545477b1fc1ff6b11d95feaac38340ca3411c11384444ee4e02af687688c8352232c382df3032c61181fd44e48722b2b9c0e05f2322ff20ba6ea1e85b6318ad4322026344e44f44e42911e9caf9adbf4044ce1491e116fc465ed8b4b283137873803f06ce478d40b22a99de013c0b5c05fc9c6403139bed37f2c29eb43e488460082a0467a00b70de0dec49b81874006bd03509b7a0e61eaf8105be913ff6c40d803322180fbc1d5dce7b30ea123c35f9df87d17f3d45171af0eb81d78197d05d7c1702cb4896f55ae01b45614f5e0338238351a8afffb0e49fc3fbfacfd1217e47f2b72df9ebb680370cc3300cc3300cc3300cc3300cc33072e1ff03919675e02525da920000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300003fba4944415478daeddd6f8866d599effdaf522fea450dd4811ea8703a9c125a2c89e2163bd0e118a604070cd3c3b4d8430c31a898a0a2a28d86285154a2c4700cb6c4a062c40e478921062b8cc3781887d421c234a4c5dda4c492f483f5907e78eae16938f78b3a502f6ee8f3e2aa9ababbacaabeffec7bffd6dafbf78122696d6badb5ebcfbaf6b5d6ba1698999959eb5c0270fefc79753fccccccac469778f23733336b9f4bd51d303333b3fa39003033336b2107006666662de400c0ccccac851c00989999b59003003333b3167200606666d6420e00cccccc5ac801809999294c02b3c094ba236d35a1ee80999935d2551b1f057000f8cfc00cb09fdde79eb3c039e0ff06568065e014b004acab07d4342e056c6666553800dc04dc08fc0d305de1e75e074ae0df80f7819340573de0dc39003033b361cd02b701b7106ffa753907fc0e781358543f845c39003033b3411d06ee23def8d556809f03bf003aeacee4c401809999f5eb0ee061626d3f35ebc0abc073c0aaba33397000606666177313f063ea4df30f6b1d789108043aeacea4cc01809999ed6616780138a2eec810ce018f114b03b60307006666b693fb89b7fedccfe92f0277127b05ac8703003333ebb50f7883d8e8d7146bc0319c0db88003003333db7410f80d91fa6fa213c0034440d07a0e00cccc0ce028f1e69f7bcaff624ae0ef89aa83ade600c0ccda669a38c676a0e79fad11656797696785b98788cd7e6db10adc407cbd5bcb018099b5c13ee20cfb2dc0a13dfede1af03f8854f1fbb423187888764dfe9bd6806f001faa3ba2e200c0cc9a6c3ff008703771fbdc20ce00df0716d48318a38768e7e4bfa9d541800300336ba239e051e0db8c7eebe93bc431b2a66d1cbb1ff899ba1309e8005fa385cb010e00ccac490ae049aa2f5cb34cac1937a5c4ec61e05d7c25fca6b3c05769ced7b72f0e00ccac09e689897f7e8c6d342508b80af8779abfdb7f50a780af13a5845be1527507cccc467004f818f83de39dfc2196157e45de6fcd53c49bbf27ff2f3a48cbf643380030b3dc4c103bfa3f2526b3a2c6b6e7898d73b97a8d0b8f3fda85ee016e5577a22e5e0230b35c4c12bfa01f2676f7abac019793df52c051a2ca9fedad035c4d0b0a0539036066a99b069e023e2752b4cac91f227dfe88b80f83da07bcacee4426a669c9b37206c0cc5235431ce5bb9df8a59c9273c097c8a750d06f880c80f5ef669a5d03c201809925e700f1867d3b8317efa9d30dc455b3a973ea7f382bc09534f854809700cc2c1505f036b1b96f98ca7d75bb51dd813e4cd3b29ded159a25f69c3496030033539b2776f37f0c7c937c8ed9cda93bd08714f64ce4ec49d25b7eaa8c0300335339429cdfff3dd557eeabc33e75072ee226e2b8a40d6f9a063f43ef0130b33a4d106bd23fa0def3fbe3b04cac11a7680af81391c6b6d1ac025f269f0d9f7d7306c0cceab07986ff53a29a5ea1ee5005fe3f7507f6f01c9efcab3243434f50380030b3719a2676f47f4e9cad6e5215ba546f07bc1eb84fdd8986b95bdd8171c865b38d99e5658678e37f90e66ea24af1fad849a2dc6f2e5689ef95d4cd139b291b551dd0190033abd22c709c78e36ff40e6ad2ac01f00ce99e4e58029e05fe16f86be012a298d225c05f11d7f11e033e20cdf5f63bd41da89a37019a5915e688aa7ddfa61d99c53562f24a6919e02071cd6f6acfff43e009060b986680fb890c522a37177e485c17dc180e00cc6c1407811f92e731be51bc0e7c57dd891e13c01f496b73e51af000706284cfb11ff819e97c7ffd355106ba11bc046066c39827ceefff91747e39d7a54becb24fc9e3a435f9af025f63b4c91f62cdfd66e0fba4b12c9043f5c7be390030b3411c212af6fd9e0802dae855e08cba133de6882c4c2a56897b12962afc9ccf03df520f8c3861d1180e00ccec6226880d507f264af616ea0e099d21f63aa46202788374d6fdd781bf673c2724de011e138fefbf8adbaf94030033dbcd24f010b1a3ff0d9a75867f186bc4e496d2c6bf878043ea4ef4f83e706a8c9fff39e29480ca55a47f4955dfbc09d0ccb69b262696fb48bfde7d5dce116bd11faa3bd26396a8ac98ca84749258f71fb7031be356653dae054a51db957206c0cc36cd70e1197e4ffea12426b694267f88ac4c2a93ff3a70674d6d9d01de128ef52a61db957200606607805f10137f932bf70d6a9d38bffe35d2daf40771467e5edd891e4f506f65c45784632d846d57ca4b0066ed55b075863f954d6429e8002f1293ccaaba333bd84fdcf437adeec88692a8e257f731bdbf6c3c8bbafd337058d06ee59c01306b9f79e09f88e37c47f1e4bf6995d8c47619f014694efe10972a4dab3bb1a14ba4fe1567f4ff4d34e6eb44ed56ce0180597b1c01fe409ce16fc41b4c45ce00f71213fff3440620557790d6d7ee59741be2c679da602f33a413808dc44b0066cd3601dc0a3c4c83d62e2b52023f21ce97a75065ee62f611b518a6d51dd9b04cec885f17b57f3d11d02adc409a97410dc4a93fb3669a246ad53f88cfef6fb748acf12fa83b32a01453ffaac91faaad3438a8ab7000606689992626fe87c9e39ef53a2d1013ffa2ba234338baf1918a178973ff4a1de2ae00c546c0461c05740060d60c9bd7a7de473a6f8929e802bf252ac895eace0c699ab8112f152bc426c9149c4613005ca31e78151c0098e56d96a8da7737e9148549c13af04b62535f6a67f807f502696573ee249d72c8cbc0df09da7506c0cc64ae021e01be8d7f8e7b758889ff39d23dc63788c3c4ceff54bc4a5a4b28aa93005344f0bda27e00a3f02f0eb3bc1c64ab788f6d592526a7e3a47d8c6f1053a495fa3f4b5a372142bdd507b72b7000606635b89198f8e7d51d49cc59e0a744d53ee58ef471788e78cb4cc5bda4175c2d11fb3c1473d99c7af0a3722120b3b41d212af6fd2b9efc7b2d136bd197116ffd4d9bfce7890d9da93801bca7eec40ebae8b20007d5831f950300b3f44c10ebbe7f06dec5057c7a95c4b5bc571293520e057c0635499cf94fc539a24472aa3e11b57b857ae0a3720060968e496247ff5f88ab5e5dc067cb22517ded5af22be033a867482bbd7c2f1104a4aa14b53b47e6276fbc07c04c6f9a98f87d15ef172d004f93ef19fe411d22be0f52f1cec647ca541501278820a0543f80510660661a33c4aeeabb881ddf16bac05bc49b70ee67f8073141a4fe53f9bddc018ea93bd1077549e052fd0086e52500b3fa1d20d6af3f27def63cf98775a2c4ec65c41e88364dfe008f93d67e8f63c4298bd4ada03b9d50a8073f8a54224db33628d83ac3ef9fbd2d1d62e27f89b4d79ac7e92ae27b2315ef13416a2e9689e593baa5b4576360fe2564367ef3c00f809bd41d49cc2a711def09d23b5f5ea709e035d2f97dbc466cfccbc947680280ebd4031f452adf70664d7484b895ef7a754712738698f8dfa479e7f787f1109ac96b378f915f853b552d801962e36e47fd008671c9f9f3e7d57d306b9209e036626dbf507726312531f1bf4333cfef0fe300f027d2394ef621f075752786703df00751db3790d6fd087d7306c0ac1a93c0778989dfe7f72fb44894eb4db1929cda6ba433f9af03df53776248ea93008bea07300c070066a39906ee2126fe94ae6c4dc102b1b96f51dd9144dd4f5ae59d9f407bb9ce283ac48985fd82b6b3bd1ad80180d97066885fe0f7e1e23dbdbac0af81e7c9f87c740df6033f5677a2c729e24e859c9d4613005ca31ef8b01c00980de60031f1df4d3aa9db14ac03bf2426feb69ddf1fc6cba453ffa14ba4fe73df97b10cfc9da05d6700cc1aee2ae011e0dbf8e7a65707789d98f857d59dc9c41dc06175277a3c4b33b235a744ed4e11d736afa81fc0a0fc8bcc6c6f878833fc47d41d49cc2af02a9136eea83b939119e00575277a2c1325979b40b97fa1c001805963dc444cfcf3ea8e246685d8d8f70a3ec33f8c9f91ce9e912e7027f9a7fe372d6d8c4531af655911d00180d996092235fb243ec3bfdd127194ef4d9a3361d4ede8c6472a5e044eaa3b51a12e910550acc91f540f7e18be0cc82c36f3dd017c0abc8b27ff5ea7809b81ab8992bd9efc87334d6cfc4bc50a71f950d37c226af70af5c087e100c0da6c9228c3fa39f0062ee0d3eb03a2c2d95789f3fc369a17807dea4ef4b893662ee194a276e7c8f054909700ac8da68989ff41d2598f4dc502f034cdd8159e8ac3448629153fa7b9c599541501278820a0543f80413b6dd61633c0a3f80cff765de02d6237b8cff0576b8ab452ff676966ea7f93ba2470a97e0083f01280b5c10162fdfa73e2addf937f582736827d997843f5e45fbde7d054a7dbcdbd34fbd8e68a707c857af0837206c09aac2076f41fc6dfebbd3ac4c4ff12704edd99069b274a45a7e204edb8906919cdf5cad91d05f42f456ba279e20cff4dea8e246695b88ef717c09aba330d3749dcf4978a73c03175276af2119a00e03af5c007e500c09ae40831f12b7ef853768698f8dfa4993bbf53f40c699d2a697aeabf97aa22e00cb1a9b8a37e00fdf21e00cbdd04b17efd317186df93ff9612f847e04ae2addf937f3d0e117b4d52f1cec6475b94c2b60bf5e007e10c80e56a12b88758634de94d2b058b44d5be36acf7a6668248fda7f2bbb5033ca0ee44cdd4270116d50fa05fa97c939af56b9ab88ef73e22e5665b168889ff4375475aec71d2ba1ef618edbba5b1431c77549cbe48e96b7f510e002c173344f19ebb71f19e5e5de0d7c475bca5ba332d57003f5477a2c77bc4ceff363a8d2600b8463df0413800b0d41d2026febbf0f9fd5eebc0ebc475bc3ebfaf374114fc49e577ea1aed4bfdf75a06fe4ed0ae33006615288889ffdbf8fbb45707789598f8db96da4dd943a4b501f53132bc9fbe42a744ed4e01b364f2ecfd8bd552733df03071a4cfb6ac1235dc5f22a363462d3107fc48dd891e8bc4f7499ba98e0242bcbcaca81f403f1c00582a6e22cef0cfab3b929833c4c4ff0a3ec697aa974967796a9d38f3df764bc4fe18c51c974d45400700a63441bce9ff90cccecfd66089d8d1ff26f18bccd2743f6905ad4fa07dfb4d4597780e8a35f983eac1f7cb0180294c02b71213bfcff05fe82451b56f41dd11bba859e0c7ea4ef43849ec0db1f0099a00e00af5c0fbe54a8056a72962b3d4e7c01b78f2eff5017003f0353cf9e7e267c4f7740aba44eadfd9a22da5a8dd39d25912da93330056876962e27f109fe1efd525ce6a3f8dcff0e7e60ee296c9543c8bbf87b65355049c20828052fd002ee692f3e7cfabfb60cd35033c4a14efc92222ae4917788bb830c667f8f3b31ff813e904b34bc0b5f8ed7fbb5922dba8f01d62ff4ed2bc0460e37080a840f617e2addf937f58075e04be4cbc417af2cfd30ba433f97781efe1c97f272be88ecc16eac1f7c34b0056a5027892488dfa7b6b4b8798f88fe333fcb93bbaf1918a1789cd7fb6b36534059ab2380ae82500abc23cb1a3ff46754712b34aece8ff05519ad5f2b60ff874e37f537006b81ad787d8cb4bc4c561755b05bea41efcc5f82dcd46718498f8b339f75a9333c4a6acb7f12fe726f96fa433f943a4fefdfdb537554d84196299a8a37e007bf11e001bd404b17efd27e05d3cf9f72a819b812b893d10fee5dc1c8789effb54fc9c8cee9d172a856d17eac15f8c0300ebd7247194efcfc419feac6ebd1ab345e01bc44eec05bc21ab69a68972bfa9384b9caeb18b531d05840c7e477a09c02e669a28777a1f91d6b22d0bc41abf376135db3368ee96dfcdbd784f49bf3a44c0a4f8fa3900b06ccd008f007791ce91a7146c9ee13f4e06853e6c64f3683691ede604513ccafa771a4d00708d7ae017e300c0b63b40a4faefc2e7f77bad03af12bb8a7d7ebf1d2689e5ae54ac02c7d49dc8d032f07782769d01b06c14c41bff37f1f745af0e31f11f277e015b7b3c4354934bc50324beab3c51a744ed4e11df3f2bea07b01bffa2b7eb818789237db6659528b2f20afea5db4687882a96a97867e3c306a7bc1eb9c0018025e83031f1cfab3b929833c411ab57f031beb69a2052ffa9fc7eec101bff6c384bc4de1dc5d733e98a80a97c835b3d26d82ade53a83b93989278e37f131fe36bbbc749eb17f731e09cba1319eb125900c59a7cd275521c00b4c324701bf00362939f6d39491ce55b5077c492501001722ade2376fedb683e4113005ca11ef85e5c08a8d9a6881dfd9f03afe1c9bfd7fbc00dc0d7f0e46f6182f83949e5c5680da7feab528ada9d23e1d354a97ca35bb5f611c57b1ec467f87b758937aaa7f1197efba287482b65fb1851c4c646a7aa0838410401a5fa01ecd6396b8efdc451bebb4938ea1458077e4d1cebf2197edbc91cf02375277a2c123527ac1aea92c0a5fa01ecc44b00cd70805827fc9c78ebf7e41fd6888d7d971117b978f2b7ddbc463a3f37ebc44d7f569d1574c7790bf5e077e30c40de0ae0497c867fbb0e31f11fc767f8ede2ee27ea61a4e2091cac8ec33251dfa16e299d28b9c025e7cf9f57f7c106374f4cfcf3ea8e246695d8d1ef33fcd6af59e26aeb297547369c04be8e8fa28ec34b68ee755805bea41efc4e9c01c8cb11e288524a1b9552700678169fe1b7c1bd4c3a937f9748fdfb7b783c5415016788cdd81df503d8ce7b00d23741ac5f7f0abc8b27ff5e2570337025b107c2bf386d10770037a93bd1e359b49bd59aae14b65da807bf132f01a46b12b887d8d437abee4c6216895f961fa83b62d9da4fa4fea7d51dd950025fc541ec384d03ff4bd4f6032478aac34b00e99926ce23df4da48e6ccb02b1c67f52dd11cbdecf4867f2ef12057f3cf98f5787a8abb05fd0769257033b0048c70c7186ff2ed2f9c594822ef016f03c4e8f5a358e92d6c9991771505b97d36802806bd403df899700f40e1013ffeda4730e3905ebc0ab44dacc47a2ac2afb88fd34fbd41dd9b00c5c8b4fadd4e579e216d4baad017fa51efc76ce00e814c4c4ff4dfc75e8d521aee37d89383e6356a5174867f28748fd7bf2afcf2951bb53c45eae15f503e8e589a77ef3c4c6be23ea8e2466954885be4282c765ac110e13b762a6e2e7c48656ab8fea2820c44bdf8afa01f47200509f23c4c43fafee4862ce1013ff2ff09b908dcf3471e63f152bc0a3ea4eb4d012b1af4831f7255711d001c0784d101b8e7e40a2e740854a62e277f11eabc37368367fede601625dd8ead525b2008a5df9c9d5707100301e9344919187894d7eb6e543e0a7c4913eb33acc13c76a537182b896da343e4113005ca11ef876ae0458ad69e20cffe744bad193ff96f7801b883ae70beace586b4c016fa83bd1e32c704cdd89962b45edce91d8492f6700aa31c356d5be69756712d22526fb6749f43e6c6bbca748ab92e631bcc9554d554f648208024af503e8ed900d6f3f7194ef6e128becc4d689e23dcfe133fca6738808ca53f1cec68769290b8a5d454201809700863347ace37d4efc82f1e41fd6888d7d9701dfc593bfe94c12a9ff545e72ce1167fe4d6f055d16a6500fbe572a3f1cb9288027f119feedce11679a8fe3f4a6a5e151d23a76f57de2e7c4d2b04c6488ea96d2f7a403803ecd1313ffbcba238959252ee779059fe1b77414c00fd59de8f11e9131b4747c842600b84e3df05e0e00f6768498f80b7547127386d8d8e733fc969a09d24afd7770ea3f45aa8a8033c446f18efa0180f700ec648238c3ff29f02e9efc7b95c0cdc0e5c41b8d277f4bcd43a4f533fb0471f4cfd2520adb2ed483dfe40060cb245b67f8df20b1b51ab145e06f895bcb16d49d31dbc51cf02375277a2c12975a597ad4270192904a9a4c699a98f8ef26d233b6658148f5ab6ed0321bc41ba47322671db853dd09db5587c8cc28ca433b0048c00cb153f8765cbca7579738c3ff3cda28d96c10f7a3d9d4b59b2748ece637fb82d36802806bd403df74c9f9f3e7d57da8db0162e2ff36e9bc2da4601d789538cab7a2ee8cd90066813f11657f5370922879ed3d32697b9eb8afa56e6bc05fa9070fedca0014c4c47f4bcbc67d311de20cff4bc4b13eb3dcbc463a937f9748fd7bf24f9f6a69738a085a57d40fa00d13e13c11e51d56772431abc4ad7cbf209123296643b803b851dd891ecfa23b626683517e9d0a1c008cd511a24cefbcba238939434cfc2770f11ecbdb7ee00575277a94c033ea4e58df96884c8d621e4ce29459d3028009e056e28dbf507726312531f1bf8dd393d60c2f93ce06de2ef03dfcb395932e910550ecca3fa81e3c342700982452810f139bfc6ccb227141cf82ba2366153a4a5acb7a2fe2e3b239fa044d0070857ae090ff298069e2d6b987f119feedde23def817d51d31abd83ea252e73e7547362c1345b2bca4969f47811f0bdaed122701a4df33b9660066807b8835fe69756712d2057e0b3c4742774e9b55ec67a433f943a4fe3df9e74955eb6482d807502a079f5b0030cb56d53e9fe1dfb24e14ef798ed8e467d65487897d3ea9f839f0a1ba1336347549e05239f85c9600e6d82ade935bd0324e1de097c4c4ef33fcd674d344c11f45f5b69dac005713855d2c5fff0b4d26f9a7c023ca81a73e991e24eef53ea2ee4862ce116f1ec7f1197e6b8fe74967f287b8e6d7937ffe96d19491961f054c350098079ec467f8b73b4b448dafe035476b9779e02e75277a9c00de5777c22af1119a00e03af5c0530b008e10137fa1ee4862ce1015c6dec4e78cad7da6889bfe52711638a6ee84554655117086587ae8a8067ea9aae11e13c419fe3f03efe2c9bf5709dc0c5c4ebc7178f2b7367a86d8009c8a6378e9ad494a61db8572e0ca006092d8d1ff1722ba77019f2d8bc00dc4d9e2057567cc840e01f7a93bd1e39d8d0f6b0ef5490019c512c03431f1df475a677953b0003c8dcff09b41bc24bc413a4b95e7888d7fd62c1d625947b1c1b43501c00c7194ef2ed2b9ba33055db6cef0fb1631b32d8f93c04ee91ec78820c09ae7349a00e01ae5a0eb58029825ae9cfd9ca8dce7c93fac13f5c32f23f64078f237db52003f5077a2c77bc4265c6b26d5efdfc66600a681a770d5beddbc4a2c8598d98526482bf5dfc1a9ffa6535de43445bc24af281a1f5706e0bbc4aefe07f1e4bf1b69eac72c618f90d669a0c78835626b2e6506b650355c75843d4b44eef3aa0165a45077c02c4173442d90542c1285b7acd99688fd588aac936c9f4b9519805b818ff1e4dfaf697c85b159afcdd47f2a59c335e04e7527ac165d74598083aa415711004c10d773fe0a5fcd3b28d917de2c41f7a029c9ba9ba711adcd9ac427a276af500d78d400601ff0afc0fdaa01642ea5234e664ab3c08fd59de87192b86ccbdaa314b53b8728eb354a00b01ff8034ef98fa25077c02c116f90ce11e17522f5efd2dbeda2aa083881e86570d800600ef8a3aad30df2157507cc12700769bd48fc04d7e568a3d695041e260098037e8f37b055618e74ce3a9b29ec075e5077a247495c3e64edb382ee92a742d1e8a001c00cf04f78f2afca24cea258bbbd4c3a9b87bb38f5df76aacc4ff24b0053c0bfe05bfbaa262d056926742b7058dd891e2fe28bb8daee2351bbd7291a1d2400f8ef78d3da3814ea0e9809ec238e0fa76299b87cc8da4d950198419009eb37007814385277e75ac219006ba39749eb3af03b89ddffd66ea5b0eda2ee06fb0900ae077e54fba3a8d7e2c687824f0258db1c068eaa3bd1e3e7c4b97fb3569d04b858003045a4fe9bba537d01b816b801f89da80fb3a4b309ca6cdca689b7ff54ac10194e33885300aa8b9f920b009e2326a826e902bf042e076e662be5530ef9f9aae09300d6162f1047ff52f13da2e6bfd9a6d3a2766bbf2176af00e01070b7e8418cc33ab1cbf732a2f0c8996dff5e99faf19d00d606f3c4cf5e2a4e001fa83b61c9516d04ac3d03b0576aff059a91faef1013ff4bc0b93dfede3960154d8d036700ace9a68872bfa9380b1c5377c292744ad4ee1491715fa9abc1dd26f8db48eb56ae61ac12253d4fd07f75a7d3680200c91950b31aa5b69cf800baaa6f96366519e8821a03809d9600268027850f6054678875bdcb88dbbc3a03fcb7aa65006700acc9525b4e7c87d8006cb6932574d5206b9d0b76ca00dc469ed5fe4ae28dff1d86ffe295a2be4f5373ea2741fb88bd10331bffbf436cce5a46fb0369a3992452ffa92c279e03ee5577c292d6257eef286ab4d4ba1f6ca71fca0705831ec522f053e0bd0a3e97fa0ce88ab07d85fdc03dc02dec1df9ae119bb55ea79aafb3d5e729d2ca703dc0de7b81cc003e4113005c516763db9700ae279fd2b40bc4f9fd1ba86e525846f7a6d9a68a80fb805f009f033fe4e213c4145189f29f803f133bc95379a3b4dd15c0c3ea4ef4780f785bdd09cb42296a778ec89ad5627b0070bf68d0fdea026f11c57b6ea6faea7debe8368014a276eb7618f814b88be126f103444af98fb83c75ca26482bf5dfc1a97feb9f2a1b3c418d19b3de00600af807d1a02f669d28d77925b147a11c635b9f89c6d88692c00f116ff155d4802f8077818f712090a247492ba8fd3eba0a6f961ff572702d7a038023d4987ae8538758dfbf8cc84e9c19e9b3f5477506b4d6d48fc0fd446d89aa15381048cd1cb1b4938a4562c9c9ac5f2be88e89167535d41b00dc221aec4e3ac0d3c4c4ff0871a6bf2eaa25805a533f35bb91f14cfebd0a1c08a46033f59f4a30bb46dcf4673628d55c50fb12c024709368b0dbbd0f5c4dec1eee08da2f85636fe246c0cd0a7075ad0517381050ba9fb48a883d41fb4ed758353e12b55b5b61b8cd00e0106944ec4f03df40bb56b7420b523f357a04cde52f050e04ea364b5a57879f244a809b0d43950198a1a61b6237038079d1407b1d23defa53d0f8d44f4da6d1d795287020509737888c4f0ad689d4bf0b48d9b04a61db451d8d6c0600ff553850880d3ac7c57de8d5f8d44f4d8e525324db87020702e3f45dd27891d8f42cda9aee96bfc69f04d80c0094d7d12e13d5b952d2f8d44f4d52da58baa9c08140d5f603ff4ddd891e2571f990d9283ae896a36b0b00d493cebd44ba2e25a5b0ed423df80a5dafeec01e0a1c0854e565d2095cbb38f56fd5392d6af79a3a1ab914edcef345aaafe6570565eaa7500fbe220748673d782f050e0446711b51dd31153f451bc05bb3a8b2c1b5650066450384f8614d51075deaa7291b01153bff4751e0406050fb187f7d87412c93ce46626b065561b8296a989b2f45f78b7a8d38f39f2a55eaa7691b017353e040a05f2f534d59e72a6ca6fe535b4eb4bc29379216e36e60730f80c2bf91f63a9d6a19a0291980dc153810d8cb11e294472a5e25cefd9b556909dd3c35f6b9e0527405804a51bba9f76f8a583fcf5d9de59bc7a9602b104869ad5b691af899ba133d5688cb87ccaad645970518fbe93c6500b0226ab75f8d3f033a666768563ab6206e32fc3d699d77577881b4f678dc492c299a8dc327a276af187703ca2580d4df1097d1a57e9a10007469664a769e0802da1a08dc08dca1ee448f13a47992c89aa314b53bf61b622f4537c9a57e44ac8b2e0b50a8075f91dfa93b3046f3b42f1098025e5377a2c759a284b8d938a9e681b1df107b29bae36ea9ec1edecb67a276bfa21e7845dea659cb003b99a73d81c073688f0d6f772fba8bbbac3d1abb1c7ce9e89f626839ec76579d011d7beaa726abc0ebea4ed4649e6607028780fbd49de8f10ef09eba13d60a2b34f486d84b8173a281e5100028cf8036611f00c033b4eb2d6d9ee6050293c44d7fa93847bcfd9bd5a59137c42a03801c0adea83200d09c00609576feb29ea73981c033a415b0df8beef796b553236f88bd14dd71bc7da4bf0f609586a67e6af636f013752744e6c93b10288007d59de8f11e91fe37ab53236f88bd9438afad92c35b6e296a37a537ae2a3c0a1c577742689efc02810922f53fa1eec8860eedcc26995e296cbb18d727be9486d73aae80aa08440e4b24833a063c40f34f06ec659e7c0281c749eb67f418ba534bd66e8d3c09702951416b4534b01cde72555ff81c964886f112702df081ba2362f3a41d08cc013f5077a2c72251f4c74ca1832ef81c6b0000bef96e2fa5b0edb1d782165906fe16b80157719b27bd406033f59fca51d435a2dcaf99926a9ebc665c9f78330068e411878a28533f393c9f512c1241800381b40281878873ffa9788cf4ef0eb1e653cd9363cf00a88ebbe570f3dd1aba8d92857af03559c481c0a679b481c02cf0a4fa21f43809bca2ee8419da7972761c9f589d01803c4e02a8360236a52470bf167120b0699ead40a0aea5a009e057a4734fc73a91fa57dd5762d6ab711be67b0300d5ceec1c0200d532400ecf661c167120b0691ef823f02ee3cf08bd465aa9ffa7d1fed235ebb5842e181dcb72f06600d045f7835688da1d44296a7792e6ef03d8cb220e04361d013e663c81c004f032695df35b02cfab3b61d643394f8e250bd87b19902acd7d85a8dd417889446b1107029b8e506d20b01ff817e01ef5c07a7471eadfd2d4a879b23700284503bb8a748e1bed6609dd1249a11e7c42167120b0e908a3050293c46eff3f0137aa07b3cd4fd01ebf35db4d296a772c37c4f60600cab7dc1cd2dc8d3b0292b1451c086c3a420402ff0adcc6c5eb8617c4e53e9f032ff4f1f7ebb6bcd13fb314a9f6834d308679b2b7c6b7f2e6bb82f423fed368dec6db761260108b1b1ff3c46456a83b2474235b6ff225f07f11d5cb3a4445c9fd44419194ab4b6ea6fedb5c2adad2a62e095c56f9097b0380cd9befa645034b5d09dc2e68f700712c6b4dfd0012b64894173e429c612fd41d122b327d063f27cefd9ba56a05dd3c59006f56f9092fddf6e7523028c82300f01249fa168840e066d2cf28d9855688cb87cc52d798cab9db0300d50ec7b1d53aae907289a4a977028ccb020e04727327ce72591e3e12b55bf9dd39db0300d5fac60c69af4d029cdbf850700660380b3810c8c1eb7833a7e543950198a1e2a587549600208f658052d46e0e1992942de0402055678147d49d301b40296cbba8f2936d0f001a57ebb862aa2592423df08658c081406aee25365599e5427d12a032db03800eba6b37734873abbef0d344fac7aab180038114bc0dbca7ee84d9803a44e64a61ac0100e8de722bdfe03006a5b06d6f04acde020e0454ce010fa83b6136a4d3a2762b5d0ede290050bde53a03b0b71c9e4fae16702050b77bd16daa351b55232ac3ee140094a2814d11456f52b68e6f4d6cb2051c08d4e19d8d0fb35ca98e854f01b3557db294320090c74900d512894b02d767010702e3b24abcfd9be5ac111be6770a0096d15dc3994300a05c229918f9b3d82016702050a5cd5aff4efd5bee96d0cd93952d07ef140074d14d7285a8dd4194a27627f13e0095051c0854e159e07d7527cc2ad0459705a86c43f8a5bbfcf3cf4403bb42d4ee2094a99f1c32244db680038161bd0d3ca5ee84598554cbc195cd93bb0500aa0d0e57116fba295b4657b3bc500fde80ad40e03bc019756732f021f03d7527cc2a568ada9da3a27972b700c037dfedad1147406c646f025712ebda0e0476b60c7c035ff463cda35a2a9fa0a27972b700a0140d0cf278cb55dd06e59300e9e902277020b09365e0063cf95b33657f626eb700e02cbafadc39bce5aa3200b3547c1b9455c681c0853e04be4e1cfb336ba21574f36451c527b9748f7fa78a6e7208004a61db392c91b4990381d823f10d7cdccf9a4ff53238d625006848ade33151a67e7c27401eda1a083c0bfc234efb5b3ba896832bb93b67af004015d9cc00fb446df7eb1cbad4a6330079694b20d0218e473e8eae408a59dd94f3e4f4a89f64af0040751410f2580650654872b835d1bea8c981c022703591fa376b9352d87631ea2748310350c9c06ae05b136d184d0a043a445dff1bd0dd8f6ea694f54980bd02800eb1cb512187494ef5859fa6c2dba04c26e740a00bbc0e5c0ebca2ee8c9950075df03bd6000074a50e73487397c2b6735822b1fee416082c10e9feefe25dfe6690f186f98b05004e73efceb7265a957a0381efa0dd83b3dd3af1c67f25b1d14fb93c68969a6c2bc35e2c002845039b020e88daeed73aba2f7ca11ebc8d4d972831fc55e06bc4c4db11f5a5048e015f26def83df19b7d912a589f62c4e5e054330090c75baeead64497046e8793c4c4fb25e2cdfb75c6bbded8252af83d41acef5f0b1cc7a97eb3bd64bb617ea28f8175fbf87be37015e91f2b3a05dc226877f336a875f503b05aac133f0b0b1b7f9e03ae277ef8afdbf8f3f4109f778558bf2c8960e3435cc0c76c504be8e6c99196cb2fd6e1eec6e00ac1c0146d0e4a15f96dde0655aa1f80492cf3c5efbd7d443a701f512464f39f4d1145abd6373e56892cc2591c409a55a14bfc3c2ab2d6235586ed2762f90ccd647c85a0cd4195c2b6af12b76f69398753f5662a9fa00900469a272fb60700741b1cae22d2dc295b4197322dd48337333340f732b6b91c3c947e0200e506871c8e03faa8a49959bba9e681cde5e0a1f4130094a281411e6fb959df0665666623cbf2c45c3f01c05974e79073380a98f56d50666636b21574f36431ec7fd84f00004e73efa514b65da8076f666680ee6570ac4b00e0ab6ff7a24cfd14eac19b991990e17270bf0180d3dcbbeba0bb0d2a870c8999591b64374ff61b00282f2629846df7cb191233b3762b856d17c3fc47a96700c01b01f7e20c8099591ab23b09d06f00d02176396633b09a296f834afdd64433b336e8a05b0e1e6b000051ea50e11a51bb83c82ef23333b3caa99683879a2707090054935c0e13dce6ad890a393c1f33b336502d078f3d03508a063645dc7296b2cd5b13150af5e0cdcc0cd02e07cf0efa1fe59001803c26b9cf44ed7e453d70333303b41be68b41ff83410200659a3b87ddeeaac86fa4dba0ccccac324b64344f0e120028d3dc0745ed0ec24725cdccdaad8b6e2e18789e1c2400005d9afb0a51bb8328856d3b0030334b83eac4dcc0f3e4a00180d3dcbb53de9a58a8076f666680ee6570e07972d0004095da98208f7d00a5a8dd1c9e8d99591ba896ca079e27070d005cf0666faad48fef0430334b4336f3e4a001c00a4e73ef45f585dfb7f16166665a2b64324f0e1a00802fbed94b296c3b87931266666d90c53c394c00f091686039a4b995a99f1c022433b336c8629ecc290330034c8bdaeed71aba5b130bf5e0cdcc0cc8649e1c2600284503833c2639d56d502e096c66968652d876d1ef5f1c2600c86687a3886f4d34336bb72ce6c96102800e51f426e9810995a27627f13e0033b31474c8609e1c2600005d9afb1a51bb83f09d00666696fc3c396c00a09ae47298e096807551db857af066660664304f0e1b00a8ee04980266456d0f22f92fbc99998d55f2f3646e1900c8e32dd72701ccccda2df97972d8006089b8f75821878d6eaa1da00788e8cfccccb4929f27870d00bae8a29b1c4adeba22a09959bb253f4f0e1b0080eee6bb2b44ed0e42b5f60379044866666d90f43c394a00508a0636479c794fd9b98d0f056700ccccd2508adaed6b9e1c250050a5b927c863922b45ede6502bc1ccac0d929e27730c00208fe36eaad44fa11eb899990189cf93a304002b44b9438542d4ee20545ff869e246283333d35a21e17972940000743b1cbd04b0376f0434334b43b2f3e4a801c047a2815d276a7710ca221039044866666d90ec3c996b0660864875a76c0dddf329d48337333320e17972d400a0140d0cf298e4541b015d12d8cc2c0da5b0ed62af7f396a0090f40ec704a89ecf1c710cc4ccccb4929d27470d003ac0d91407968852d4ee24de07606696820e89ce93a30600a0bbf92e878237ca8d8039044866666d90e43c594500a09ae47298e09689cd800a857af0666606243a4f561100a82ebe990266456d0f22c92fbc9999d526c97932e70c00e4f196ab4afdf8248099591a929c27ab080096887b8f1572d8e8a6da013a4bfab512ccccda20c979b28a00a08b2ebac9a1e46d296c3b8700c9ccace9929c27ab08004057f0e60a51bb83509e01cd214032336b83e4e6c9aa02805234b01c0ade9c0356456d3b036066968652d4ee1c511be60baa0a00546fb913e4b1db5db51130874b93ccccda40394feef832987b000079bce52a4b029b99995e722581ab0a00568872870a39ac73abbef0d3e4512bc1ccace956d0cd93c54effb0aa0000743b1c7378cb2d856de7b0446266d60649cd935506001f890696cb9d00aa33a00e00ccccd2a09a2777dc0fd6840cc07ed22f78b38eeef914eac19b9919a09b0766d8619eac3200284503833cde723f13b5eb92c066666928856d17dbff4195018072876331f267183fd56510bb9e013533b35a257512a0ca00a0039c150d2c878d80aad4cfae6740cdccac561d74f3e458030070c19bbd94c2b673582231336b03d53cf9850df3550700491d7148cc0ab0266abb500fdecccc00dd3c39f60c806a9d7b9a3c0adeb822a09959bba9e6c929b6cd934dc900401e69eea4ce809a9959ed94f364d1fb87aa0380255cf0662f499d013533b3da29e7c90bb2c15507005d5cf0662fa5b0ed423d78333393ce9317dc9d537500002e78b317d74a3033b34f44ed5ed1fb87710400ca823713a2b6fbd5c1b512ccccdaae14b57b4161b8710400ca823739ec0370ad0433b3765365832f280c378e00a0140d0cf278cb75ad0433b3764ba224f03802801574056f0e8efe29c64e7906f4807af06666c60ab124ac506cfe9f710400e082377b4922f2333333297936785c014032b58e13b48c6b259899b59dbc305cd33200fb49bfe04d17ddf329d4833733332081c2704d0b00208fb75cd74a30336bb752d87601e30b00e4034b9cb256c2e4c89fc5cccc46257f511e5700d001564503cb6123a02f4d32336bb70ebac270630d0020810d0e092b856d3b0030334b8374c3fc380300f91187849d258133a0666626a59a27c79e012845039b0666456d0fa214b59b43806466d606cac270b3e30c00e41b1c12a7ba0d2a87251233b33650ee079b1bf712800bdeec4e1520eddbf8303333ad2574f3e4fe710600ebe8a29b42d4ee204a61db39dc996066d6745d74f3e458030070c19bbd289748bc0fc0cc2c0daae5e099710700ca823713a2b6fbb546dc08a550a8076f6666802e1b3c39ee004095da98208f7d00aa33a0396448ccccda4055346f6adc0140291a18e491e6562d03e4101c9999b5812a00d837ee00608548752be4b0d1ad14b53b491e01929959d34d8bdaed8e3b0000dd5b6e0e139cef0430336bb76951bb67eb0800a4b58e13b7441c975428d483373333ddcb6a933300fb373e5227ad056d6666527f236a77b5c90100c04dc2b6fbe593006666edb41f5d36f65c1d0140291a1cc05dc2b6fba50a900e101742989999c61dc2b657ea08003ae88e391c02e6456df7cb1501cdccda670ab84fd8fe993a0200808f8483fc3169570554554b843c8e4a9a9935d1e3c08cb0fdda0200e571b743c043c2f62fe6dcc6878233006666f53b043c2c6c7f0958ab2b00f8503850882cc0bcb80f7b2945ede67054d2ccac49668077d166a64f433dc700014e0a070af1a0ff09b85edc8fdda86e832ad40337336b9119e0f76853ffb0f1525e5700b08a76190062c3c5bf00b789fbb113d546c069f4df8866666d7010f89834965e3f80fa0200807f568f980802fe3bf01bd29af84a61dbde086866363e93c033c0bf93c6bc7366e3a3d600e03df5a87b1c053e078e934634a6cc8ea4307e33b3a6d90f3c4acc353f249dd368fff1327ec9f9f3e7eb6a7402f80b694440db2d01ff464cc46780aea00fbf42f36cde22cd6591bd4c10858c52fc5e32b3769a25b2cc0788f2be85ba43bbf81a1bfbf2ea0c0020deb81f548fde2e5002d7aa3bd18729e056e09bc4111a573134331bcc19e0f2cd3fd4b90400f00bf5e8ed0be6482735b59349e029227bf41a70239efccdcc86f17aef1feace0000fc81748fe3b5d5d5684b12efe620b1617356dd1133b3ccad035fa6a7f05cdd1900809faa9f827d418a57031f2576cdceaa3b6266d6006fb1adeaac22005860e3088225a35077609ba3c4a6c8949726cccc72d1059edbfe0f150100c0d3da6761dba494013888277f33b32abdc50e2fde8a3d009b3e26bd37cfb65a012e537782d8f0f7294efb9b9955651db892f83d7f01550600e00161db76a159a22cb0daa378f23733abd24fd961f2076d0600a22c6f6e45689aea3f8a43884c1147fda6d50fc2ccac215688b7fff59dfea5320300708c6dbb124d467d27c0ad78f23733abd29dec32f9833e003807dc2bee8305f59d00df543f0033b306f939b0b8d75f50070000efe00a8129b84ed8f60451ded7cccc46b744eca9da937a0fc0a629a24260a1ee488b7580ff246a7b8ed8fd6f6666a35903be4a1fb7cca69001d8ecf0cdc0aaba232d368d6e07be6ff533331b5d17f8167d5e319f4a0000b15bf11f8960c034522a0864666683f93ef05ebf7f39a50000e043e03b441463f57300606696a7e781e383fc07a905001077057c0b07010a85a85d677dcccc86779c78fb1f488a0100c4c9000701f5fb8aa85d5f0e6566369ce3444d9d81a5720a6037d703ff429c12b0f1eb027fc51e8523c6e853f4b508cccc72728c01d3febd52cd006cfa9038cee037c47a4ca09b847fab1ebc995926364fce1d1fe593a41e00401c67f82a03ec6cb491a83602bead1eb89959069688bb5b1646fd4439040010456afe9e487728d2d36d5288da5da2826f6833b3067b8598fc97aaf864b904009b8e03d7a2bdb5aee994ebf08fe18d9f6666dbad102fc1f752e1a9a9dc0200882581af01dfc337098e83f24e8065e009f50330334bc43af02c70356358064ffd14c0c54c038f000f0393eace34c87f22965d547e031c553f043333912ef016f014f1f63f163966007a7580c781cb809fa09db49aa410b7ff2da2168499599bac03af0357027730c6c91ff20f0036ad12571f7e99582339a5ee50e60a71fb9b175abca47e106666353843ec81ba0cf82e351d7dcf7d09602f5701b702b7e00233837a15b847dd890d8781178003ea8e989955e80cf0cf44b6f34345079a1c00f49a05e6373eaec397de5ccc29a2f6422a2680db80bb8143eace98990d6109384d4cf61f904081bbb60400db4d115981392238d8bff1cff6ab3bb6cd7fd9e85fddd68892c029da4f047205b06fe3cf13ea4eede21a62a3aaca29e07fab1f82594bacb175326d75e3ffaf1013fd1912bcf4acad01402e6e057e256afb72128850333609fcffe8eeb1e8005fc285b3cc6c174dd904d85495547b1a929749467304ed2556bfc593bf99edc10140da96d155c67300309a6f8bdb3fa17e00669636070069eba2cb0214eac1676c1f7093b0fd1544bb8acd2c1f0e00d2f799a8ddafa8079eb15bd16e4c7c4bfd00cc2c7d0e00d2a72a6a3487cb2b0f4b9dfe7f53fd00cc2c7d0e00d2b72c6cdbfb000677006dad825368bf67cc2c130e00d2570adb760030b83bc4ed3bfd6f667d710090beb3e82e392ad483cf9032fddfc5e97f33eb9303803c94a2767d87c260ae4753b971d3fb6c55223333db9303803c7c226af73af5c0337387b87da7ffcdac6f0e00f2a0aa05b06fe3c32e6e12f80761fb6bc082fa2198593e1c00e4a114b65da8079f899bd0064b2efd6b660371009007df0990bedbc5ed7bf39f990dc401401ed688f2ae0a857af0195097fe3d4bdc2f6e66d6370700f9382d6ad725812fee28daaa89defc6766037300900fd5328097002ecea57fcd2c3b0e00f2518ada9dc4f500f6324b9cff5729d1ee1131b34c3900c887ef0448d36de2f69dfe37b3a13800c8c712ba635e0e0076a7dcfddf05de563f0033cb930380bca8b200857ae0893a44dcfea7b2489c0030331b980380bcf824405ad4e9ff5faa1f8099e5cb01405e549bbd0e0053eac1276602f8a6b07d97fe35b3913800c88b72b7b74f025ce830dad2bfbf23820033b3a13800c8cb2961db07d5834fccade2f64fa81f8099e5cd01405ecea1bbefdd19802d53686ffe5b2536009a990dcd01407e4a51bbd7a8079e905bd196fefd357104d0cc6c680e00f2f389a85dd702d8a22efd7b42fd00cc2c7f0e00f2a3da08b80f98510f3e01fb817961fb4be8b24066d6200e00f2530adbf64640b843dcbe4bff9a59251c00e4477927803702ead3ffbef9cfcc2ae100203f6bb824b04a813608fa0097fe35b38a3800c8936a2360db4b02df216effd7ea076066cde100204faa8d80734409dc365297fe5dc737ff9959851c00e4a914b53b497bf701dc88f614844bff9a59a51c00e4c91b01eba7bef9cf9bffccac520e00f2b48cee6db08d4701a7805b84ed9f03de573f04336b160700f9526501da5811f008dad2bf6fe1d2bf6656310700f93a2d6ab78d27016e17b7efcd7f6656390700f9529d049805a6d583af91baf4ef19e0a4fa219859f33800c857296cbb4d1b016f457bf4f197ea076066cde400205faa0c00b46b23a04bff9a59233900c8d7396055d4765b320005daf2c71f022bea876066cde400206faa8d80d7a8075e13f5d97fa7ffcd6c6c1c00e44db50cd096a380ead2bfefa81f809935970380bca9028069e2344093dd489c0050791fe8a81f829935970380bc95c2b69b9e0570fadfcc1acd0140de96d155886b720030894bff9a59c33900c8db3aba92c0857af0637494a8ffaff25be26b6b6636360e00f2f799a8dd269704f6d97f336b3c0700f93b256a770e6d85bc7199213600aa9c21ceff9b998d950380fca996002668e63e0075e9dfb7d40fc0ccdac10140fe4a61db4d0c009cfe37b356700090bf15604dd476a11e7cc5e6d0de737092580230331b3b0700cda02a08d4b43b01d467ff9dfe37b3da380068868f44ed5ea71e78c56e17b6dd05de563f00336b0f0700cda0da08384394056e8279b4a57fdf230a009999d5c201403394c2b60bf5e02be2f4bf99b58a03806650ed0180669c045097fe5d2332006666b57100d00c1de0aca8ed26040087d12e65fc1a97fe35b39a3900688ed3a2769bb011d067ffcdac751c0034876a2360ee4701f711190095b3c0a2fa219859fb3800680ed59d0053c001f5e047a02efdfb4bf50330b3767200d01cde08381ca7ffcdac951c0034c732514c4621d700e0007048d8fe29744b3766d6720e009aa38b2e0b50a8073f249ffd37b3d67200d02c9f89dabd423df02129d3ff2efd6b66520e009a45b511f02aa2984e4eae47bb79f1036055fd10ccacbd1c00348b723d39b77d004eff9b59ab3900689652d8764e01400aa57fdf513f04336b370700cd7296280bac50a8073f809b8802402abfc5a57fcd4ccc0140f394a27673aa0878bbb87d9ffd3733390700cdf389a8dd5cee04982632002a2efd6b66497000d03caa5a00fb8059f5e0fb7014ed89855fa32bd86466f61f1c00344f296cfb46f5e0fbe0f4bf99190e009a487927c037d583bf8859e2fcbf4a8936403333fb0f0e009a670d5811b57d23699f067848dcbecffe9b59321c0034d36961db3f520f7e17b3c0ddc2f65dfad7cc92e200a09994cb0087898d76a9f919dacd7f8bc4090033b32438006826d59d009b5e435b677fbb4789c044c9e97f334bca25e7cf9f57f7c1aa3703fcbfe23e2c0337a0bff0e628f01b711fd681bf26f667989925c11980665a457b31104465c03fa0bd23e021e057e2e70051fad793bf9925c5014073fdb3ba03c432c0bf03f7d7dcee3ee2adff056042fd10f0d97f334b900380e67a5fdd810d53c406bc8f8123636e6b1a780af833e96c445c053e5077c2cc6c3bef0168ae09621f80f2d6bb9dac1029f14562b3e2287b042688a58683c03f1035fe953bfd77f222fafa0366665fe000a0d95e417bf6bd5fe7187c8d7c86f426fb9d5c8babff9959821c0034db21620dde349680abd59d3033db89f70034db49fcf6a9f4aaba036666bb7100d07c2faa3bd0521de084ba136666bb7100d07c6fa32fc6d3462fe2b3ff6696300700cdb70efc44dd8996e900c7d59d3033db8b038076780538a3ee448bbc4804016666c9f22980f6b89534cae236dd2a70394eff9b59e29c01688fb789e23b365edfc793bf9965c019807699234af2e6504027471f007fabee8499593f9c01689765e00975271a6a0df89eba136666fd7200d03ec7f1e534e3702f71cf81995916bc04d04e33c452c08cba230d7102b853dd0933b341380068afeb81df1337ead9f04e015f27ea2d989965c34b00edf5215eb31ed559e0eff1e46f66197200d06e2780c7d49dc8d43962c7bfcb2c9b59961c00d873b86ceda0d6809b89531566665972006000c77010d0af0ef00d6209c5cc2c5bde0468bd1e025e50772261abc00df8cddfcc1ac001806d772bf01a30a5ee48624ae2cddf6bfe66d6085e02b0edde26de7257d41d49c89bc4513f4ffe66d6180e006c27a7806b81057547c4d6880a7fdfc117fc9859c37809c02ee60e625fc0b4ba23353b4954f7f37abf9935923300763127802b89a58136e8106ffd5fc793bf9935980300ebc72af02d62523ca9eecc9874811781cb815736fe6c66d6585e02b0611c019e040a75472ab00ebc4514443aa3ee8c99595d1c00d828e681fb888020b74b855681d78197f0ee7e336b210700568519a27ec02dc42d83a95a037e47ec67781fa7f9cdacc51c0058d5f6038789ecc0df10c1815209fc4f62c25fc437f79999010e006cfc0e107b05ae02e680ff4c040933c064456d9cdbf8f87f8875fc656089d8b0e8f3fb66663b7000606a13444030a83562d23733b32138003033336b21d7013033336b2107006666662de400c0ccccac851c00989999b59003003333b3167200606666d6420e00cccccc5ac801809999590b39003033336b2107006666662df47f004452794a461af2c70000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "universal": {
+      "id": 63771,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://campaigns.zoho.{{connection.region}}/api/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "type": "{{undefined}}",
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "universal",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://campaigns.zoho.com/api`. For example: `/v1.1/recentsentcampaigns`.",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"https://campaigns.zoho.{{connection.region}}/api/{{parameters.url}}\",\n    \"method\": \"{{parameters.method}}\",\n    \"qs\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n\t},\n    \"headers\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n\t},\n\t\"body\": \"{{parameters.body}}\",\n\t\"type\": \"text\",\n    \"response\": {\n\t\t\"type\": \"{{undefined}}\",\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n\t\t\t\"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "zoho-campaigns",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"help\": \"Enter a path relative to `https://campaigns.zoho.com/api`. For example: `/v1.1/recentsentcampaigns`.\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"required\": true,\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ]\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/x-www-form-urlencoded\"\n\t\t\t}\n\t\t]\n    },\n    {\n        \"name\": \"qs\",\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"body\",\n\t\t\"label\": \"Body\",\n\t\t\"type\": \"any\"\n\t},\n\t{\n\t\t\"name\": \"headers\",\n\t\t\"label\": \"Headers\",\n\t\t\"type\": \"collection\"\n\t},\n\t{\n\t\t\"name\": \"statusCode\",\n\t\t\"label\": \"Status code\",\n\t\t\"type\": \"number\"\n\t}\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "sendCampaign": {
+      "id": 63772,
+      "api": {
+        "url": "/sendcampaign",
+        "body": {
+          "am_pm": "{{formatDate(parameters.sendTime, 'A')}}",
+          "resfmt": "JSON",
+          "sendingTZ": "{{parameters.sendingTZ}}",
+          "isschedule": "{{parameters.isschedule}}",
+          "istimewarp": "{{!parameters.isRecipientTZ}}",
+          "campaignkey": "{{parameters.campaignkey}}",
+          "scheduledate": "{{formatDate(parameters.sendTime, 'MM/DD/YYYY')}}",
+          "schedulehour": "{{formatDate(parameters.sendTime, 'HH')}}",
+          "scheduleminute": "{{formatDate(parameters.sendTime, 'mm')}}"
+        },
+        "type": "urlencoded",
+        "method": "POST",
+        "response": {
+          "output": "{{undefined}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "sendCampaign",
+      "epoch": null,
+      "flags": {},
+      "label": "Send a Campaign",
+      "scope": [
+        "ZohoCampaigns.campaign.UPDATE",
+        "ZohoCampaigns.campaign.READ"
+      ],
+      "expect": [
+        {
+          "rpc": {
+            "url": "rpc://app%23zoho-campaigns@1/listRecentCampaigns",
+            "label": "Search",
+            "parameters": [
+              {
+                "name": "status",
+                "type": "select",
+                "label": "Status",
+                "default": "all",
+                "options": [
+                  {
+                    "label": "All",
+                    "value": "all"
+                  },
+                  {
+                    "label": "All Campaigns",
+                    "value": "all campaigns"
+                  },
+                  {
+                    "label": "Drafts",
+                    "value": "drafts"
+                  },
+                  {
+                    "label": "Scheduled",
+                    "value": "scheduled"
+                  },
+                  {
+                    "label": "In Progress",
+                    "value": "inprogress"
+                  },
+                  {
+                    "label": "Sent",
+                    "value": "sent"
+                  },
+                  {
+                    "label": "Stopped",
+                    "value": "stopped"
+                  },
+                  {
+                    "label": "Canceled",
+                    "value": "canceled"
+                  },
+                  {
+                    "label": "To be Reviewed",
+                    "value": "tobereviewed"
+                  },
+                  {
+                    "label": "Reviewed",
+                    "value": "reviewed"
+                  },
+                  {
+                    "label": "Paused",
+                    "value": "paused"
+                  },
+                  {
+                    "label": "In Testing",
+                    "value": "intesting"
+                  }
+                ]
+              }
+            ]
+          },
+          "name": "campaignkey",
+          "type": "text",
+          "label": "Campaign Key",
+          "required": true
+        },
+        {
+          "name": "isschedule",
+          "type": "boolean",
+          "label": "Is Scheduled Campaign",
+          "nested": [
+            {
+              "name": "sendTime",
+              "type": "date",
+              "label": "Send Time",
+              "required": true
+            },
+            {
+              "name": "isRecipientTZ",
+              "type": "boolean",
+              "label": "Using Recipient's Timezone",
+              "nested": [
+                {
+                  "name": "sendingTZ",
+                  "type": "timezone",
+                  "label": "Recipient's timezone",
+                  "required": true
+                }
+              ],
+              "required": true
+            }
+          ],
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/sendcampaign\",\n\t\"method\": \"POST\",\n\t\"type\": \"urlencoded\",\n\t\"body\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"isschedule\": \"{{parameters.isschedule}}\",\n\t\t\"scheduledate\": \"{{formatDate(parameters.sendTime, 'MM/DD/YYYY')}}\",\n\t\t\"schedulehour\": \"{{formatDate(parameters.sendTime, 'HH')}}\",\n\t\t\"scheduleminute\": \"{{formatDate(parameters.sendTime, 'mm')}}\",\n\t\t\"am_pm\": \"{{formatDate(parameters.sendTime, 'A')}}\",\n\t\t\"istimewarp\": \"{{!parameters.isRecipientTZ}}\",\n\t\t\"sendingTZ\": \"{{parameters.sendingTZ}}\",\n\t\t\"campaignkey\": \"{{parameters.campaignkey}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{undefined}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.campaign.UPDATE\",\n\t\"ZohoCampaigns.campaign.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Sends an existing campaign by its key.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"campaignkey\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Campaign Key\",\n\t\t\"required\": true,\n\t\t\"rpc\": {\n\t\t\t\"label\": \"Search\",\n\t\t\t\"url\": \"rpc://listRecentCampaigns\",\n\t\t\t\"parameters\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"status\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"label\": \"Status\",\n\t\t\t\t\t\"default\": \"all\",\n\t\t\t\t\t\"options\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"All\",\n\t\t\t\t\t\t\t\"value\": \"all\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"All Campaigns\",\n\t\t\t\t\t\t\t\"value\": \"all campaigns\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Drafts\",\n\t\t\t\t\t\t\t\"value\": \"drafts\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Scheduled\",\n\t\t\t\t\t\t\t\"value\": \"scheduled\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"In Progress\",\n\t\t\t\t\t\t\t\"value\": \"inprogress\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Sent\",\n\t\t\t\t\t\t\t\"value\": \"sent\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Stopped\",\n\t\t\t\t\t\t\t\"value\": \"stopped\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Canceled\",\n\t\t\t\t\t\t\t\"value\": \"canceled\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"To be Reviewed\",\n\t\t\t\t\t\t\t\"value\": \"tobereviewed\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Reviewed\",\n\t\t\t\t\t\t\t\"value\": \"reviewed\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Paused\",\n\t\t\t\t\t\t\t\"value\": \"paused\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"In Testing\",\n\t\t\t\t\t\t\t\"value\": \"intesting\"\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"isschedule\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"Is Scheduled Campaign\",\n\t\t\"required\": true,\n\t\t\"nested\": [\n\t\t\t{\n\t\t\t\t\"name\": \"sendTime\",\n\t\t\t\t\"type\": \"date\",\n\t\t\t\t\"label\": \"Send Time\",\n\t\t\t\t\"required\": true\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"isRecipientTZ\",\n\t\t\t\t\"type\": \"boolean\",\n\t\t\t\t\"label\": \"Using Recipient's Timezone\",\n\t\t\t\t\"required\": true,\n\t\t\t\t\"nested\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"name\": \"sendingTZ\",\n\t\t\t\t\t\t\"type\": \"timezone\",\n\t\t\t\t\t\t\"label\": \"Recipient's timezone\",\n\t\t\t\t\t\t\"required\": true\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "cloneCampaign": {
+      "id": 63773,
+      "api": {
+        "url": "/json/clonecampaign",
+        "body": {
+          "resfmt": "JSON",
+          "campaigninfo": "{{createJSON(parameters)}}"
+        },
+        "type": "urlencoded",
+        "method": "POST",
+        "response": {
+          "output": {
+            "{{...}}": "{{body.`campaign-details`.1}}",
+            "campaignKey": "{{body.campaignkey}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "cloneCampaign",
+      "epoch": null,
+      "flags": {},
+      "label": "Clone a Campaign",
+      "scope": [
+        "ZohoCampaigns.campaign.CREATE",
+        "ZohoCampaigns.campaign.READ"
+      ],
+      "expect": [
+        {
+          "rpc": {
+            "url": "rpc://app%23zoho-campaigns@1/listRecentCampaigns",
+            "label": "Search",
+            "parameters": [
+              {
+                "name": "status",
+                "type": "select",
+                "label": "Status",
+                "default": "all",
+                "options": [
+                  {
+                    "label": "All",
+                    "value": "all"
+                  },
+                  {
+                    "label": "All Campaigns",
+                    "value": "all campaigns"
+                  },
+                  {
+                    "label": "Drafts",
+                    "value": "drafts"
+                  },
+                  {
+                    "label": "Scheduled",
+                    "value": "scheduled"
+                  },
+                  {
+                    "label": "In Progress",
+                    "value": "inprogress"
+                  },
+                  {
+                    "label": "Sent",
+                    "value": "sent"
+                  },
+                  {
+                    "label": "Stopped",
+                    "value": "stopped"
+                  },
+                  {
+                    "label": "Canceled",
+                    "value": "canceled"
+                  },
+                  {
+                    "label": "To be Reviewed",
+                    "value": "tobereviewed"
+                  },
+                  {
+                    "label": "Reviewed",
+                    "value": "reviewed"
+                  },
+                  {
+                    "label": "Paused",
+                    "value": "paused"
+                  },
+                  {
+                    "label": "In Testing",
+                    "value": "intesting"
+                  }
+                ]
+              }
+            ]
+          },
+          "name": "oldcampaignkey",
+          "type": "text",
+          "label": "Original Campaign Key",
+          "required": true
+        },
+        {
+          "name": "campaignname",
+          "type": "text",
+          "label": "Campaign Name",
+          "required": true
+        },
+        {
+          "name": "subject",
+          "type": "text",
+          "label": "Subject",
+          "required": true
+        },
+        {
+          "name": "from_name",
+          "type": "text",
+          "label": "From Name",
+          "required": true
+        },
+        {
+          "name": "from_add",
+          "type": "email",
+          "label": "From Email",
+          "required": true
+        },
+        {
+          "name": "reply_to",
+          "type": "email",
+          "label": "Reply To",
+          "required": true
+        },
+        {
+          "name": "encode_type",
+          "type": "text",
+          "label": "Encode Type",
+          "default": "UTF-8",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/json/clonecampaign\",\n\t\"method\": \"POST\",\n\t\"type\": \"urlencoded\",\n\t\"body\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"campaigninfo\": \"{{createJSON(parameters)}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"campaignKey\": \"{{body.campaignkey}}\",\n\t\t\t\"{{...}}\": \"{{body.`campaign-details`.1}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "campaignKey",
+          "type": "text",
+          "label": "Campaign Key"
+        },
+        {
+          "name": "campaign_name",
+          "type": "text",
+          "label": "Campaign Name"
+        },
+        {
+          "name": "reply_to",
+          "type": "text",
+          "label": "Reply To"
+        },
+        {
+          "name": "email_subject",
+          "type": "text",
+          "label": "Email Subject"
+        },
+        {
+          "name": "email_from",
+          "type": "text",
+          "label": "Email From"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.campaign.CREATE\",\n\t\"ZohoCampaigns.campaign.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Clones an existing campaign by its key.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"oldcampaignkey\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Original Campaign Key\",\n\t\t\"required\": true,\n\t\t\"rpc\": {\n\t\t\t\"label\": \"Search\",\n\t\t\t\"url\": \"rpc://listRecentCampaigns\",\n\t\t\t\"parameters\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"status\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"label\": \"Status\",\n\t\t\t\t\t\"default\": \"all\",\n\t\t\t\t\t\"options\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"All\",\n\t\t\t\t\t\t\t\"value\": \"all\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"All Campaigns\",\n\t\t\t\t\t\t\t\"value\": \"all campaigns\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Drafts\",\n\t\t\t\t\t\t\t\"value\": \"drafts\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Scheduled\",\n\t\t\t\t\t\t\t\"value\": \"scheduled\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"In Progress\",\n\t\t\t\t\t\t\t\"value\": \"inprogress\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Sent\",\n\t\t\t\t\t\t\t\"value\": \"sent\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Stopped\",\n\t\t\t\t\t\t\t\"value\": \"stopped\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Canceled\",\n\t\t\t\t\t\t\t\"value\": \"canceled\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"To be Reviewed\",\n\t\t\t\t\t\t\t\"value\": \"tobereviewed\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Reviewed\",\n\t\t\t\t\t\t\t\"value\": \"reviewed\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Paused\",\n\t\t\t\t\t\t\t\"value\": \"paused\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"In Testing\",\n\t\t\t\t\t\t\t\"value\": \"intesting\"\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"campaignname\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Campaign Name\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"subject\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Subject\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"from_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"From Name\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"from_add\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"From Email\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"reply_to\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Reply To\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"encode_type\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Encode Type\",\n\t\t\"default\": \"UTF-8\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"campaignKey\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Campaign Key\"\n\t},\n\t{\n\t\t\"name\": \"campaign_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Campaign Name\"\n\t},\n\t{\n\t\t\"name\": \"reply_to\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Reply To\"\n\t},\n\t{\n\t\t\"name\": \"email_subject\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Email Subject\"\n\t},\n\t{\n\t\t\"name\": \"email_from\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Email From\"\n\t}\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchContacts": {
+      "id": 63774,
+      "api": {},
+      "rev": 3,
+      "crud": null,
+      "name": "watchContacts",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch Contacts",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": null,
+      "approved": false,
+      "hookName": "zoho-campaigns",
+      "learning": false,
+      "interface": [
+        {
+          "name": "listId",
+          "type": "text",
+          "label": "List ID"
+        },
+        {
+          "name": "Contact Email",
+          "type": "text",
+          "label": "Contact Email"
+        },
+        {
+          "name": "actionType",
+          "type": "text",
+          "label": "Action Type"
+        },
+        {
+          "name": "webhookId",
+          "type": "text",
+          "label": "Webhook ID"
+        },
+        {
+          "name": "contactId",
+          "type": "text",
+          "label": "Contact ID"
+        },
+        {
+          "name": "webhookName",
+          "type": "text",
+          "label": "Webhook Name"
+        },
+        {
+          "name": "listName",
+          "type": "text",
+          "label": "List Name"
+        },
+        {
+          "name": "Action",
+          "type": "text",
+          "label": "Action"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": null,
+      "description": "Triggers when a new contact is added to the mailing list.",
+      "expectJsonc": null,
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"listId\",\n        \"type\": \"text\",\n        \"label\": \"List ID\"\n    },\n    {\n        \"name\": \"Contact Email\",\n        \"type\": \"text\",\n        \"label\": \"Contact Email\"\n    },\n    {\n        \"name\": \"actionType\",\n        \"type\": \"text\",\n        \"label\": \"Action Type\"\n    },\n    {\n        \"name\": \"webhookId\",\n        \"type\": \"text\",\n        \"label\": \"Webhook ID\"\n    },\n    {\n        \"name\": \"contactId\",\n        \"type\": \"text\",\n        \"label\": \"Contact ID\"\n    },\n    {\n        \"name\": \"webhookName\",\n        \"type\": \"text\",\n        \"label\": \"Webhook Name\"\n    },\n    {\n        \"name\": \"listName\",\n        \"type\": \"text\",\n        \"label\": \"List Name\"\n    },\n    {\n        \"name\": \"Action\",\n        \"type\": \"text\",\n        \"label\": \"Action\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createCampaign": {
+      "id": 63775,
+      "api": {
+        "url": "/createCampaign",
+        "body": {
+          "resfmt": "JSON",
+          "subject": "{{parameters.subject}}",
+          "topicId": "{{parameters.topicId}}",
+          "from_email": "{{parameters.from_email}}",
+          "content_url": "{{parameters.content_url}}",
+          "campaignname": "{{parameters.campaignname}}",
+          "list_details": "{{listDetails(parameters.listkey)}}"
+        },
+        "type": "urlencoded",
+        "method": "POST",
+        "response": {
+          "output": {
+            "campaignKey": "{{body.campaignKey}}",
+            "campaignName": "{{body.campaign_name}}",
+            "campaignStatus": "{{body.campaign_status}}",
+            "campaignSubject": "{{body.campaign_subject}}"
+          }
+        }
+      },
+      "rev": 5,
+      "crud": "create",
+      "name": "createCampaign",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Campaign",
+      "scope": [
+        "ZohoCampaigns.campaign.CREATE",
+        "ZohoCampaigns.contact.READ"
+      ],
+      "expect": [
+        {
+          "name": "campaignname",
+          "type": "text",
+          "label": "Campaign Name",
+          "required": true
+        },
+        {
+          "name": "from_email",
+          "type": "email",
+          "label": "From Email",
+          "required": true
+        },
+        {
+          "help": "Template strings are supported. For example:\n• First name: `$[FNAME|Customer]$`\n• Last name: `$[LNAME|Customer]$`",
+          "name": "subject",
+          "type": "text",
+          "label": "Subject",
+          "required": true
+        },
+        {
+          "name": "listkey",
+          "type": "select",
+          "label": "Mailing List",
+          "options": "rpc://app%23zoho-campaigns@1/ListMailingLists",
+          "multiple": true,
+          "required": true
+        },
+        {
+          "name": "topicId",
+          "type": "select",
+          "label": "Topic ID",
+          "options": "rpc://app%23zoho-campaigns@1/getTopicId",
+          "required": true
+        },
+        {
+          "help": "A valid HTML URL for your campaign content.",
+          "name": "content_url",
+          "type": "url",
+          "label": "Content URL"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/createCampaign\",\n    \"body\": {\n        \"resfmt\": \"JSON\",\n        \"subject\": \"{{parameters.subject}}\",\n        \"from_email\": \"{{parameters.from_email}}\",\n        \"content_url\": \"{{parameters.content_url}}\",\n        \"campaignname\": \"{{parameters.campaignname}}\",\n        \"list_details\": \"{{listDetails(parameters.listkey)}}\",\n        \"topicId\": \"{{parameters.topicId}}\"\n    },\n    \"type\": \"urlencoded\",\n    \"method\": \"POST\",\n    \"response\": {\n        \"output\": {\n            \"campaignKey\": \"{{body.campaignKey}}\",\n            \"campaignName\": \"{{body.campaign_name}}\",\n            \"campaignStatus\": \"{{body.campaign_status}}\",\n            \"campaignSubject\": \"{{body.campaign_subject}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "campaignKey",
+          "type": "text",
+          "label": "Campaign Key"
+        },
+        {
+          "name": "campaignName",
+          "type": "text",
+          "label": "Campaign Name"
+        },
+        {
+          "name": "campaignStatus",
+          "type": "text",
+          "label": "Campaign Status"
+        },
+        {
+          "name": "campaignSubject",
+          "type": "text",
+          "label": "Campaign Subject"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.campaign.CREATE\",\n\t\"ZohoCampaigns.contact.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Creates a new campaign.",
+      "expectJsonc": "[\n    {\n        \"name\": \"campaignname\",\n        \"type\": \"text\",\n        \"label\": \"Campaign Name\",\n        \"required\": true\n    },\n    {\n        \"name\": \"from_email\",\n        \"type\": \"email\",\n        \"label\": \"From Email\",\n        \"required\": true\n    },\n    {\n        \"help\": \"Template strings are supported. For example:\\n• First name: `$[FNAME|Customer]$`\\n• Last name: `$[LNAME|Customer]$`\",\n        \"name\": \"subject\",\n        \"type\": \"text\",\n        \"label\": \"Subject\",\n        \"required\": true\n    },\n    {\n        \"name\": \"listkey\",\n        \"type\": \"select\",\n        \"multiple\": true,\n        \"label\": \"Mailing List\",\n        \"options\": \"rpc://ListMailingLists\",\n        \"required\": true\n    },\n    {\n        \"name\": \"topicId\",\n        \"label\": \"Topic ID\",\n        \"type\": \"select\",\n        \"options\": \"rpc://getTopicId\",\n        \"required\": true\n    },\n    {\n        \"help\": \"A valid HTML URL for your campaign content.\",\n        \"name\": \"content_url\",\n        \"type\": \"url\",\n        \"label\": \"Content URL\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"campaignKey\",\n        \"type\": \"text\",\n        \"label\": \"Campaign Key\"\n    },\n    {\n        \"name\": \"campaignName\",\n        \"type\": \"text\",\n        \"label\": \"Campaign Name\"\n    },\n    {\n        \"name\": \"campaignStatus\",\n        \"type\": \"text\",\n        \"label\": \"Campaign Status\"\n    },\n    {\n        \"name\": \"campaignSubject\",\n        \"type\": \"text\",\n        \"label\": \"Campaign Subject\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deleteCampaign": {
+      "id": 63776,
+      "api": {
+        "qs": {
+          "resfmt": "JSON",
+          "campaignkey": "{{parameters.campaignkey}}"
+        },
+        "url": "/deletecampaign",
+        "type": "urlencoded",
+        "method": "GET",
+        "response": {
+          "output": "{{undefined}}"
+        }
+      },
+      "rev": 4,
+      "crud": "delete",
+      "name": "deleteCampaign",
+      "epoch": null,
+      "flags": {},
+      "label": "Delete a Campaign",
+      "scope": [
+        "ZohoCampaigns.campaign.DELETE",
+        "ZohoCampaigns.campaign.READ"
+      ],
+      "expect": [
+        {
+          "rpc": {
+            "url": "rpc://app%23zoho-campaigns@1/listRecentCampaigns",
+            "label": "Search",
+            "parameters": [
+              {
+                "name": "status",
+                "type": "select",
+                "label": "Status",
+                "default": "all",
+                "options": [
+                  {
+                    "label": "All",
+                    "value": "all"
+                  },
+                  {
+                    "label": "All Campaigns",
+                    "value": "all campaigns"
+                  },
+                  {
+                    "label": "Drafts",
+                    "value": "drafts"
+                  },
+                  {
+                    "label": "Scheduled",
+                    "value": "scheduled"
+                  },
+                  {
+                    "label": "In Progress",
+                    "value": "inprogress"
+                  },
+                  {
+                    "label": "Sent",
+                    "value": "sent"
+                  },
+                  {
+                    "label": "Stopped",
+                    "value": "stopped"
+                  },
+                  {
+                    "label": "Canceled",
+                    "value": "canceled"
+                  },
+                  {
+                    "label": "To be Reviewed",
+                    "value": "tobereviewed"
+                  },
+                  {
+                    "label": "Reviewed",
+                    "value": "reviewed"
+                  },
+                  {
+                    "label": "Paused",
+                    "value": "paused"
+                  },
+                  {
+                    "label": "In Testing",
+                    "value": "intesting"
+                  }
+                ]
+              }
+            ]
+          },
+          "name": "campaignkey",
+          "type": "text",
+          "label": "Campaign Key",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/deletecampaign\",\n\t\"method\": \"GET\",\n\t\"type\": \"urlencoded\",\n\t\"qs\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"campaignkey\": \"{{parameters.campaignkey}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{undefined}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.campaign.DELETE\",\n\t\"ZohoCampaigns.campaign.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Deletes an existing campaign by its key.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"campaignkey\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Campaign Key\",\n\t\t\"required\": true,\n\t\t\"rpc\": {\n\t\t\t\"label\": \"Search\",\n\t\t\t\"url\": \"rpc://listRecentCampaigns\",\n\t\t\t\"parameters\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"status\",\n\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\"label\": \"Status\",\n\t\t\t\t\t\"default\": \"all\",\n\t\t\t\t\t\"options\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"All\",\n\t\t\t\t\t\t\t\"value\": \"all\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"All Campaigns\",\n\t\t\t\t\t\t\t\"value\": \"all campaigns\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Drafts\",\n\t\t\t\t\t\t\t\"value\": \"drafts\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Scheduled\",\n\t\t\t\t\t\t\t\"value\": \"scheduled\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"In Progress\",\n\t\t\t\t\t\t\t\"value\": \"inprogress\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Sent\",\n\t\t\t\t\t\t\t\"value\": \"sent\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Stopped\",\n\t\t\t\t\t\t\t\"value\": \"stopped\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Canceled\",\n\t\t\t\t\t\t\t\"value\": \"canceled\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"To be Reviewed\",\n\t\t\t\t\t\t\t\"value\": \"tobereviewed\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Reviewed\",\n\t\t\t\t\t\t\t\"value\": \"reviewed\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"Paused\",\n\t\t\t\t\t\t\t\"value\": \"paused\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"label\": \"In Testing\",\n\t\t\t\t\t\t\t\"value\": \"intesting\"\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchCampaigns": {
+      "id": 63777,
+      "api": {},
+      "rev": 3,
+      "crud": null,
+      "name": "watchCampaigns",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch Campaigns",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": null,
+      "approved": false,
+      "hookName": "zoho-campaigns2",
+      "learning": false,
+      "interface": [
+        {
+          "name": "listId",
+          "type": "text",
+          "label": "List ID"
+        },
+        {
+          "name": "webhookId",
+          "type": "text",
+          "label": "Webhook ID"
+        },
+        {
+          "name": "campaignId",
+          "type": "text",
+          "label": "Campaign ID"
+        },
+        {
+          "name": "webhookName",
+          "type": "text",
+          "label": "Webhook Name"
+        },
+        {
+          "name": "listName",
+          "type": "text",
+          "label": "List Name"
+        },
+        {
+          "name": "campaignName",
+          "type": "text",
+          "label": "Campaign Name"
+        },
+        {
+          "name": "Action",
+          "type": "text",
+          "label": "Action"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": null,
+      "description": "Triggers when a campaign is under review, reviewed, stopped, canceled, paused, resumed, sent, or A/B test is completed.",
+      "expectJsonc": null,
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\r\n    {\r\n        \"name\": \"listId\",\r\n        \"type\": \"text\",\r\n        \"label\": \"List ID\"\r\n    },\r\n    {\r\n        \"name\": \"webhookId\",\r\n        \"type\": \"text\",\r\n        \"label\": \"Webhook ID\"\r\n    },\r\n    {\r\n        \"name\": \"campaignId\",\r\n        \"type\": \"text\",\r\n        \"label\": \"Campaign ID\"\r\n    },\r\n    {\r\n        \"name\": \"webhookName\",\r\n        \"type\": \"text\",\r\n        \"label\": \"Webhook Name\"\r\n    },\r\n    {\r\n        \"name\": \"listName\",\r\n        \"type\": \"text\",\r\n        \"label\": \"List Name\"\r\n    },\r\n    {\r\n        \"name\": \"campaignName\",\r\n        \"type\": \"text\",\r\n        \"label\": \"Campaign Name\"\r\n    },\r\n    {\r\n        \"name\": \"Action\",\r\n        \"type\": \"text\",\r\n        \"label\": \"Action\"\r\n    }\r\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "subscribeContact": {
+      "id": 63778,
+      "api": {
+        "url": "/json/listsubscribe",
+        "body": {
+          "resfmt": "JSON",
+          "listkey": "{{parameters.listkey}}",
+          "sources": "{{parameters.sources}}",
+          "contactinfo": "{{createJSON(parameters.contactinfo)}}"
+        },
+        "type": "urlencoded",
+        "method": "POST",
+        "response": {
+          "output": "{{undefined}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "subscribeContact",
+      "epoch": null,
+      "flags": {},
+      "label": "Subscribe a Contact",
+      "scope": [
+        "ZohoCampaigns.contact.UPDATE",
+        "ZohoCampaigns.contact.READ"
+      ],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listkey",
+          "type": "select",
+          "label": "Mailing List",
+          "options": "rpc://app%23zoho-campaigns@1/ListMailingLists",
+          "required": true
+        },
+        "rpc://app%23zoho-campaigns@1/parametersContact",
+        {
+          "name": "sources",
+          "type": "select",
+          "label": "Sources",
+          "dynamic": true,
+          "options": [
+            {
+              "label": "Networking",
+              "value": "Networking"
+            },
+            {
+              "label": "Contact Us",
+              "value": "Contact Us"
+            },
+            {
+              "label": "Cold Call",
+              "value": "Cold Call"
+            },
+            {
+              "label": "Social Media",
+              "value": "Social Media"
+            },
+            {
+              "label": "Web Forms",
+              "value": "Web Forms"
+            },
+            {
+              "label": "Trade Shows",
+              "value": "Trade Shows"
+            },
+            {
+              "label": "Webinars",
+              "value": "Webinars"
+            },
+            {
+              "label": "Organic Search",
+              "value": "Organic Search"
+            },
+            {
+              "label": "Referrals",
+              "value": "Referrals"
+            },
+            {
+              "label": "Chat",
+              "value": "Chat"
+            },
+            {
+              "label": "Advertisements",
+              "value": "Advertisements"
+            }
+          ]
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/json/listsubscribe\",\n\t\"method\": \"POST\",\n\t\"type\": \"urlencoded\",\n\t\"body\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"listkey\": \"{{parameters.listkey}}\",\n\t\t\"contactinfo\": \"{{createJSON(parameters.contactinfo)}}\",\n\t\t\"sources\": \"{{parameters.sources}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{undefined}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.contact.UPDATE\",\n\t\"ZohoCampaigns.contact.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Subscribes a new contact or updates an existing contact in a mailing list.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"listkey\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Mailing List\",\n\t\t\"required\": true,\n\t\t\"mode\": \"edit\",\n\t\t\"options\": \"rpc://ListMailingLists\"\n\t},\n\t\"rpc://parametersContact\",\n\t{\n\t\t\"name\": \"sources\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Sources\",\n\t\t\"dynamic\": true,\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Networking\",\n\t\t\t\t\"value\": \"Networking\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Contact Us\",\n\t\t\t\t\"value\": \"Contact Us\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Cold Call\",\n\t\t\t\t\"value\": \"Cold Call\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Social Media\",\n\t\t\t\t\"value\": \"Social Media\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Web Forms\",\n\t\t\t\t\"value\": \"Web Forms\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Trade Shows\",\n\t\t\t\t\"value\": \"Trade Shows\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Webinars\",\n\t\t\t\t\"value\": \"Webinars\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Organic Search\",\n\t\t\t\t\"value\": \"Organic Search\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Referrals\",\n\t\t\t\t\"value\": \"Referrals\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Chat\",\n\t\t\t\t\"value\": \"Chat\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Advertisements\",\n\t\t\t\t\"value\": \"Advertisements\"\n\t\t\t}\n\t\t]\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "addContactsToList": {
+      "id": 63779,
+      "api": {
+        "url": "/addlistsubscribersinbulk",
+        "body": {
+          "resfmt": "JSON",
+          "listkey": "{{parameters.listkey}}",
+          "emailids": "{{join(parameters.emailids, ',')}}"
+        },
+        "type": "urlencoded",
+        "method": "POST",
+        "response": {
+          "output": "{{undefined}}"
+        }
+      },
+      "rev": 4,
+      "crud": "update",
+      "name": "addContactsToList",
+      "epoch": null,
+      "flags": {},
+      "label": "Add Contacts to a List",
+      "scope": [
+        "ZohoCampaigns.contact.CREATE",
+        "ZohoCampaigns.contact.READ"
+      ],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listkey",
+          "type": "select",
+          "label": "Mailing List",
+          "options": "rpc://app%23zoho-campaigns@1/ListMailingLists",
+          "required": true
+        },
+        {
+          "name": "emailids",
+          "spec": {
+            "type": "email",
+            "label": "Email",
+            "required": true
+          },
+          "type": "array",
+          "label": "Emails",
+          "required": true,
+          "validate": {
+            "maxItems": 10
+          }
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/addlistsubscribersinbulk\",\n\t\"method\": \"POST\",\n\t\"type\": \"urlencoded\",\n\t\"body\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"listkey\": \"{{parameters.listkey}}\",\n\t\t\"emailids\": \"{{join(parameters.emailids, ',')}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{undefined}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.contact.CREATE\",\n\t\"ZohoCampaigns.contact.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Adds multiple existing contacts to a mailing list by their emails.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"listkey\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Mailing List\",\n\t\t\"required\": true,\n\t\t\"mode\": \"edit\",\n\t\t\"options\": \"rpc://ListMailingLists\"\n\t},\n\t{\n\t\t\"name\": \"emailids\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Emails\",\n\t\t\"required\": true,\n\t\t\"spec\": {\n\t\t\t\"type\": \"email\",\n\t\t\t\"label\": \"Email\",\n\t\t\t\"required\": true\n\t\t},\n\t\t\"validate\": {\n\t\t\t\"maxItems\": 10\n\t\t}\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createMailingList": {
+      "id": 63780,
+      "api": {
+        "qs": {
+          "mode": "newlist",
+          "resfmt": "JSON",
+          "emailids": "{{join(parameters.emailids, ',')}}",
+          "listname": "{{parameters.listname}}",
+          "signupform": "{{parameters.signupform}}",
+          "listdescription": "{{parameters.listdescription}}"
+        },
+        "url": "/addlistandcontacts",
+        "method": "GET",
+        "response": {
+          "output": {
+            "listkey": "{{body.listkey}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": "create",
+      "name": "createMailingList",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Mailing List",
+      "scope": [
+        "ZohoCampaigns.contact.CREATE",
+        "ZohoCampaigns.contact.READ"
+      ],
+      "expect": [
+        {
+          "name": "listname",
+          "type": "text",
+          "label": "List Name",
+          "required": true
+        },
+        {
+          "name": "emailids",
+          "spec": {
+            "type": "email",
+            "label": "Email",
+            "required": true
+          },
+          "type": "array",
+          "label": "Emails",
+          "required": true,
+          "validate": {
+            "maxItems": 10
+          }
+        },
+        {
+          "name": "signupform",
+          "type": "select",
+          "label": "Signup Form",
+          "options": [
+            {
+              "label": "Private",
+              "value": "private"
+            },
+            {
+              "label": "Public",
+              "value": "public"
+            }
+          ],
+          "required": true
+        },
+        {
+          "name": "listdescription",
+          "type": "text",
+          "label": "List Description"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/addlistandcontacts\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"mode\": \"newlist\",\n\t\t\"listname\": \"{{parameters.listname}}\",\n\t\t\"signupform\": \"{{parameters.signupform}}\",\n\t\t\"emailids\": \"{{join(parameters.emailids, ',')}}\",\n\t\t\"listdescription\": \"{{parameters.listdescription}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"listkey\": \"{{body.listkey}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "listkey",
+          "type": "text",
+          "label": "List Key"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.contact.CREATE\",\n\t\"ZohoCampaigns.contact.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Creates a new mailing list with contacts.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"listname\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"List Name\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"emailids\",\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Emails\",\n\t\t\"required\": true,\n\t\t\"spec\": {\n\t\t\t\"type\": \"email\",\n\t\t\t\"label\": \"Email\",\n\t\t\t\"required\": true\n\t\t},\n\t\t\"validate\": {\n\t\t\t\"maxItems\": 10\n\t\t}\n\t},\n\t{\n\t\t\"name\": \"signupform\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Signup Form\",\n\t\t\"required\": true,\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Private\",\n\t\t\t\t\"value\": \"private\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Public\",\n\t\t\t\t\"value\": \"public\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"listdescription\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"List Description\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"listkey\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"List Key\"\n\t}\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deleteMailingList": {
+      "id": 63781,
+      "api": {
+        "qs": {
+          "resfmt": "JSON",
+          "listkey": "{{parameters.listkey}}",
+          "deletecontacts": "{{parameters.deletecontacts}}"
+        },
+        "url": "/deletemailinglist",
+        "method": "GET",
+        "response": {
+          "output": "{{undefined}}"
+        }
+      },
+      "rev": 4,
+      "crud": "delete",
+      "name": "deleteMailingList",
+      "epoch": null,
+      "flags": {},
+      "label": "Delete a Mailing List",
+      "scope": [
+        "ZohoCampaigns.contact.DELETE",
+        "ZohoCampaigns.contact.READ"
+      ],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listkey",
+          "type": "select",
+          "label": "Mailing List",
+          "options": "rpc://app%23zoho-campaigns@1/ListMailingLists",
+          "required": true
+        },
+        {
+          "name": "deletecontacts",
+          "type": "select",
+          "label": "Delete Contacts",
+          "default": "off",
+          "options": [
+            {
+              "label": "Removes from the list",
+              "value": "off"
+            },
+            {
+              "label": "Deletes from the organization",
+              "value": "on"
+            }
+          ],
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/deletemailinglist\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"listkey\": \"{{parameters.listkey}}\",\n\t\t\"deletecontacts\": \"{{parameters.deletecontacts}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{undefined}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.contact.DELETE\",\n\t\"ZohoCampaigns.contact.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Deletes an existing mailing list by its ID.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"listkey\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Mailing List\",\n\t\t\"required\": true,\n\t\t\"mode\": \"edit\",\n\t\t\"options\": \"rpc://ListMailingLists\"\n\t},\n\t{\n\t\t\"name\": \"deletecontacts\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Delete Contacts\",\n\t\t\"required\": true,\n\t\t\"default\": \"off\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Removes from the list\",\n\t\t\t\t\"value\": \"off\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Deletes from the organization\",\n\t\t\t\t\"value\": \"on\"\n\t\t\t}\n\t\t]\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "getCampaignReport": {
+      "id": 63782,
+      "api": {
+        "qs": {
+          "resfmt": "JSON",
+          "campaignkey": "{{parameters.campaignkey}}"
+        },
+        "url": "/campaignreports",
+        "method": "GET",
+        "response": {
+          "output": {
+            "campaign-reach": "{{body.`campaign-reach`}}",
+            "campaign-details": "{{parseDateV2(body.`campaign-details`, 'D MMM YYYY, HH:mm A', environment.timezone, 'created_time', 'sent_time')}}",
+            "campaign-reports": "{{body.`campaign-reports`}}"
+          }
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "getCampaignReport",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Campaign Report",
+      "scope": [
+        "ZohoCampaigns.campaign.READ"
+      ],
+      "expect": [
+        {
+          "help": "Only allow sent campaign.",
+          "mode": "edit",
+          "name": "campaignkey",
+          "type": "select",
+          "label": "Campaign Key",
+          "options": "rpc://app%23zoho-campaigns@1/listRecentCampaigns?status=sent",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/campaignreports\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"campaignkey\": \"{{parameters.campaignkey}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"campaign-reports\": \"{{body.`campaign-reports`}}\",\n\t\t\t\"campaign-reach\": \"{{body.`campaign-reach`}}\",\n\t\t\t\"campaign-details\": \"{{parseDateV2(body.`campaign-details`, 'D MMM YYYY, HH:mm A', environment.timezone, 'created_time', 'sent_time')}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "campaign-reach",
+          "spec": {
+            "spec": [
+              {
+                "name": "emails",
+                "type": "text",
+                "label": "Emails"
+              },
+              {
+                "name": "gplus",
+                "type": "text",
+                "label": "Gplus"
+              },
+              {
+                "name": "twitter",
+                "type": "text",
+                "label": "Twitter"
+              },
+              {
+                "name": "other",
+                "type": "text",
+                "label": "Other"
+              },
+              {
+                "name": "total",
+                "type": "text",
+                "label": "Total"
+              },
+              {
+                "name": "facebook",
+                "type": "text",
+                "label": "Facebook"
+              },
+              {
+                "name": "tumblr",
+                "type": "text",
+                "label": "Tumblr"
+              },
+              {
+                "name": "pinterest",
+                "type": "text",
+                "label": "Pinterest"
+              },
+              {
+                "name": "linkedin",
+                "type": "text",
+                "label": "Linkedin"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Campaign Reach"
+        },
+        {
+          "name": "campaign-details",
+          "spec": {
+            "spec": [
+              {
+                "name": "campaign_name",
+                "type": "text",
+                "label": "Campaign Name"
+              },
+              {
+                "name": "created_time",
+                "type": "date",
+                "label": "Created Time"
+              },
+              {
+                "name": "sent_time",
+                "type": "date",
+                "label": "Sent Time"
+              },
+              {
+                "name": "reply_to",
+                "type": "text",
+                "label": "Reply To"
+              },
+              {
+                "name": "email_type",
+                "type": "text",
+                "label": "Email Type"
+              },
+              {
+                "name": "email_options",
+                "type": "text",
+                "label": "Email Options"
+              },
+              {
+                "name": "email_subject",
+                "type": "text",
+                "label": "Email Subject"
+              },
+              {
+                "name": "email_from",
+                "type": "text",
+                "label": "Email From"
+              },
+              {
+                "name": "campaign_key",
+                "type": "text",
+                "label": "Campaign Key"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Campaign Details"
+        },
+        {
+          "name": "campaign-reports",
+          "spec": {
+            "spec": [
+              {
+                "name": "unique_clicked_percent",
+                "type": "number",
+                "label": "Unique Clicked Percent"
+              },
+              {
+                "name": "opens_count",
+                "type": "number",
+                "label": "Opens Count"
+              },
+              {
+                "name": "delivered_percent",
+                "type": "number",
+                "label": "Delivered Percent"
+              },
+              {
+                "name": "spams_count",
+                "type": "number",
+                "label": "Spams Count"
+              },
+              {
+                "name": "unsent_count",
+                "type": "number",
+                "label": "Unsent Count"
+              },
+              {
+                "name": "complaints_percent",
+                "type": "number",
+                "label": "Complaints Percent"
+              },
+              {
+                "name": "campaign_name",
+                "type": "text",
+                "label": "Campaign Name"
+              },
+              {
+                "name": "emails_sent_count",
+                "type": "number",
+                "label": "Emails Sent Count"
+              },
+              {
+                "name": "forwards_count",
+                "type": "number",
+                "label": "Forwards Count"
+              },
+              {
+                "name": "delivered_count",
+                "type": "number",
+                "label": "Delivered Count"
+              },
+              {
+                "name": "autoreply_count",
+                "type": "number",
+                "label": "Autoreply Count"
+              },
+              {
+                "name": "unopened",
+                "type": "number",
+                "label": "Unopened"
+              },
+              {
+                "name": "complaints_count",
+                "type": "number",
+                "label": "Complaints Count"
+              },
+              {
+                "name": "open_percent",
+                "type": "number",
+                "label": "Open Percent"
+              },
+              {
+                "name": "unopened_percent",
+                "type": "number",
+                "label": "Unopened Percent"
+              },
+              {
+                "name": "bounce_percent",
+                "type": "number",
+                "label": "Bounce Percent"
+              },
+              {
+                "name": "spam_percent",
+                "type": "number",
+                "label": "Spam Percent"
+              },
+              {
+                "name": "unsubscribe_percent",
+                "type": "number",
+                "label": "Unsubscribe Percent"
+              },
+              {
+                "name": "hardbounce_count",
+                "type": "number",
+                "label": "Hardbounce Count"
+              },
+              {
+                "name": "unsent_percent",
+                "type": "number",
+                "label": "Unsent Percent"
+              },
+              {
+                "name": "softbounce_count",
+                "type": "number",
+                "label": "Softbounce Count"
+              },
+              {
+                "name": "unsub_count",
+                "type": "number",
+                "label": "Unsub Count"
+              },
+              {
+                "name": "clicksperopenrate",
+                "type": "number",
+                "label": "Clicksperopenrate"
+              },
+              {
+                "name": "forward_percent",
+                "type": "number",
+                "label": "Forward Percent"
+              },
+              {
+                "name": "bounces_count",
+                "type": "number",
+                "label": "Bounces Count"
+              },
+              {
+                "name": "unique_clicks_count",
+                "type": "number",
+                "label": "Unique Clicks Count"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Campaign Reports"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.campaign.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Retrieves the detail report of a campaign by its key.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"campaignkey\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Campaign Key\",\n\t\t\"mode\": \"edit\",\n\t\t\"options\": \"rpc://listRecentCampaigns?status=sent\",\n\t\t\"help\": \"Only allow sent campaign.\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"campaign-reach\",\n        \"type\": \"array\",\n        \"label\": \"Campaign Reach\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"emails\",\n                    \"type\": \"text\",\n                    \"label\": \"Emails\"\n                },\n                {\n                    \"name\": \"gplus\",\n                    \"type\": \"text\",\n                    \"label\": \"Gplus\"\n                },\n                {\n                    \"name\": \"twitter\",\n                    \"type\": \"text\",\n                    \"label\": \"Twitter\"\n                },\n                {\n                    \"name\": \"other\",\n                    \"type\": \"text\",\n                    \"label\": \"Other\"\n                },\n                {\n                    \"name\": \"total\",\n                    \"type\": \"text\",\n                    \"label\": \"Total\"\n                },\n                {\n                    \"name\": \"facebook\",\n                    \"type\": \"text\",\n                    \"label\": \"Facebook\"\n                },\n                {\n                    \"name\": \"tumblr\",\n                    \"type\": \"text\",\n                    \"label\": \"Tumblr\"\n                },\n                {\n                    \"name\": \"pinterest\",\n                    \"type\": \"text\",\n                    \"label\": \"Pinterest\"\n                },\n                {\n                    \"name\": \"linkedin\",\n                    \"type\": \"text\",\n                    \"label\": \"Linkedin\"\n                }\n            ]\n        }\n    },\n    {\n        \"name\": \"campaign-details\",\n        \"type\": \"array\",\n        \"label\": \"Campaign Details\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"campaign_name\",\n                    \"type\": \"text\",\n                    \"label\": \"Campaign Name\"\n                },\n                {\n                    \"name\": \"created_time\",\n                    \"type\": \"date\",\n                    \"label\": \"Created Time\"\n                },\n                {\n                    \"name\": \"sent_time\",\n                    \"type\": \"date\",\n                    \"label\": \"Sent Time\"\n                },\n                {\n                    \"name\": \"reply_to\",\n                    \"type\": \"text\",\n                    \"label\": \"Reply To\"\n                },\n                {\n                    \"name\": \"email_type\",\n                    \"type\": \"text\",\n                    \"label\": \"Email Type\"\n                },\n                {\n                    \"name\": \"email_options\",\n                    \"type\": \"text\",\n                    \"label\": \"Email Options\"\n                },\n                {\n                    \"name\": \"email_subject\",\n                    \"type\": \"text\",\n                    \"label\": \"Email Subject\"\n                },\n                {\n                    \"name\": \"email_from\",\n                    \"type\": \"text\",\n                    \"label\": \"Email From\"\n                },\n                {\n                    \"name\": \"campaign_key\",\n                    \"type\": \"text\",\n                    \"label\": \"Campaign Key\"\n                }\n            ]\n        }\n    },\n    {\n        \"name\": \"campaign-reports\",\n        \"type\": \"array\",\n        \"label\": \"Campaign Reports\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"unique_clicked_percent\",\n                    \"type\": \"number\",\n                    \"label\": \"Unique Clicked Percent\"\n                },\n                {\n                    \"name\": \"opens_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Opens Count\"\n                },\n                {\n                    \"name\": \"delivered_percent\",\n                    \"type\": \"number\",\n                    \"label\": \"Delivered Percent\"\n                },\n                {\n                    \"name\": \"spams_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Spams Count\"\n                },\n                {\n                    \"name\": \"unsent_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Unsent Count\"\n                },\n                {\n                    \"name\": \"complaints_percent\",\n                    \"type\": \"number\",\n                    \"label\": \"Complaints Percent\"\n                },\n                {\n                    \"name\": \"campaign_name\",\n                    \"type\": \"text\",\n                    \"label\": \"Campaign Name\"\n                },\n                {\n                    \"name\": \"emails_sent_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Emails Sent Count\"\n                },\n                {\n                    \"name\": \"forwards_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Forwards Count\"\n                },\n                {\n                    \"name\": \"delivered_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Delivered Count\"\n                },\n                {\n                    \"name\": \"autoreply_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Autoreply Count\"\n                },\n                {\n                    \"name\": \"unopened\",\n                    \"type\": \"number\",\n                    \"label\": \"Unopened\"\n                },\n                {\n                    \"name\": \"complaints_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Complaints Count\"\n                },\n                {\n                    \"name\": \"open_percent\",\n                    \"type\": \"number\",\n                    \"label\": \"Open Percent\"\n                },\n                {\n                    \"name\": \"unopened_percent\",\n                    \"type\": \"number\",\n                    \"label\": \"Unopened Percent\"\n                },\n                {\n                    \"name\": \"bounce_percent\",\n                    \"type\": \"number\",\n                    \"label\": \"Bounce Percent\"\n                },\n                {\n                    \"name\": \"spam_percent\",\n                    \"type\": \"number\",\n                    \"label\": \"Spam Percent\"\n                },\n                {\n                    \"name\": \"unsubscribe_percent\",\n                    \"type\": \"number\",\n                    \"label\": \"Unsubscribe Percent\"\n                },\n                {\n                    \"name\": \"hardbounce_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Hardbounce Count\"\n                },\n                {\n                    \"name\": \"unsent_percent\",\n                    \"type\": \"number\",\n                    \"label\": \"Unsent Percent\"\n                },\n                {\n                    \"name\": \"softbounce_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Softbounce Count\"\n                },\n                {\n                    \"name\": \"unsub_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Unsub Count\"\n                },\n                {\n                    \"name\": \"clicksperopenrate\",\n                    \"type\": \"number\",\n                    \"label\": \"Clicksperopenrate\"\n                },\n                {\n                    \"name\": \"forward_percent\",\n                    \"type\": \"number\",\n                    \"label\": \"Forward Percent\"\n                },\n                {\n                    \"name\": \"bounces_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Bounces Count\"\n                },\n                {\n                    \"name\": \"unique_clicks_count\",\n                    \"type\": \"number\",\n                    \"label\": \"Unique Clicks Count\"\n                }\n            ]\n        }\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "updateMailingList": {
+      "id": 63783,
+      "api": {
+        "qs": {
+          "resfmt": "JSON",
+          "listkey": "{{parameters.listkey}}",
+          "signupform": "{{parameters.signupform}}",
+          "newlistname": "{{parameters.newlistname}}"
+        },
+        "url": "/updatelistdetails",
+        "method": "GET",
+        "response": {
+          "output": "{{undefined}}"
+        }
+      },
+      "rev": 4,
+      "crud": "update",
+      "name": "updateMailingList",
+      "epoch": null,
+      "flags": {},
+      "label": "Update a Mailing List",
+      "scope": [
+        "ZohoCampaigns.contact.UPDATE",
+        "ZohoCampaigns.contact.READ"
+      ],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listkey",
+          "type": "select",
+          "label": "Mailing List",
+          "options": "rpc://app%23zoho-campaigns@1/ListMailingLists",
+          "required": true
+        },
+        {
+          "name": "newlistname",
+          "type": "text",
+          "label": "New List Name"
+        },
+        {
+          "name": "signupform",
+          "type": "select",
+          "label": "Signup Form",
+          "options": [
+            {
+              "label": "Private",
+              "value": "private"
+            },
+            {
+              "label": "Public",
+              "value": "public"
+            }
+          ]
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/updatelistdetails\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"listkey\": \"{{parameters.listkey}}\",\n\t\t\"newlistname\": \"{{parameters.newlistname}}\",\n\t\t\"signupform\": \"{{parameters.signupform}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{undefined}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.contact.UPDATE\",\n\t\"ZohoCampaigns.contact.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Updates an existing mailing list by its key.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"listkey\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Mailing List\",\n\t\t\"required\": true,\n\t\t\"mode\": \"edit\",\n\t\t\"options\": \"rpc://ListMailingLists\"\n\t},\n\t{\n\t\t\"name\": \"newlistname\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"New List Name\"\n\t},\n\t{\n\t\t\"name\": \"signupform\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Signup Form\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Private\",\n\t\t\t\t\"value\": \"private\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Public\",\n\t\t\t\t\"value\": \"public\"\n\t\t\t}\n\t\t]\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchUnsubscribes": {
+      "id": 63784,
+      "api": {},
+      "rev": 3,
+      "crud": null,
+      "name": "watchUnsubscribes",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch Unsubscribes",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": null,
+      "approved": false,
+      "hookName": "zoho-campaigns3",
+      "learning": false,
+      "interface": [
+        {
+          "name": "listId",
+          "type": "text",
+          "label": "List ID"
+        },
+        {
+          "name": "contactEmail",
+          "type": "text",
+          "label": "Contact Email"
+        },
+        {
+          "name": "actionType",
+          "type": "text",
+          "label": "Action Type"
+        },
+        {
+          "name": "webhookId",
+          "type": "text",
+          "label": "Webhook ID"
+        },
+        {
+          "name": "contactId",
+          "type": "text",
+          "label": "Contact ID"
+        },
+        {
+          "name": "webhookName",
+          "type": "text",
+          "label": "Webhook Name"
+        },
+        {
+          "name": "listName",
+          "type": "text",
+          "label": "List Name"
+        },
+        {
+          "name": "action",
+          "type": "text",
+          "label": "Action"
+        },
+        {
+          "name": "Message",
+          "type": "text",
+          "label": "Message"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": null,
+      "description": "Triggers when a contact unsubscribes from any mailing list.",
+      "expectJsonc": null,
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"listId\",\n        \"type\": \"text\",\n        \"label\": \"List ID\"\n    },\n\t{\n\t\t\"name\": \"contactEmail\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Contact Email\"\n\t},\n    {\n        \"name\": \"actionType\",\n        \"type\": \"text\",\n        \"label\": \"Action Type\"\n    },\n    {\n        \"name\": \"webhookId\",\n        \"type\": \"text\",\n        \"label\": \"Webhook ID\"\n    },\n    {\n        \"name\": \"contactId\",\n        \"type\": \"text\",\n        \"label\": \"Contact ID\"\n    },\n    {\n        \"name\": \"webhookName\",\n        \"type\": \"text\",\n        \"label\": \"Webhook Name\"\n    },\n    {\n        \"name\": \"listName\",\n        \"type\": \"text\",\n        \"label\": \"List Name\"\n    },\n    {\n        \"name\": \"action\",\n        \"type\": \"text\",\n        \"label\": \"Action\"\n    },\n    {\n        \"name\": \"Message\",\n        \"type\": \"text\",\n        \"label\": \"Message\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "unsubscribeContact": {
+      "id": 63785,
+      "api": {
+        "url": "/json/listunsubscribe",
+        "body": {
+          "resfmt": "JSON",
+          "listkey": "{{parameters.listkey}}",
+          "contactinfo": "{{createJSON(temp.contactinfo)}}"
+        },
+        "temp": {
+          "contactinfo": {
+            "Contact Email": "{{parameters.email}}"
+          }
+        },
+        "type": "urlencoded",
+        "method": "POST",
+        "response": {
+          "output": "{{undefined}}"
+        }
+      },
+      "rev": 4,
+      "crud": "delete",
+      "name": "unsubscribeContact",
+      "epoch": null,
+      "flags": {},
+      "label": "Unsubscribe a Contact",
+      "scope": [
+        "ZohoCampaigns.contact.UPDATE",
+        "ZohoCampaigns.contact.READ"
+      ],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "listkey",
+          "type": "select",
+          "label": "Mailing List",
+          "options": "rpc://app%23zoho-campaigns@1/ListMailingLists",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Contact Email",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/json/listunsubscribe\",\n\t\"method\": \"POST\",\n\t\"type\": \"urlencoded\",\n\t\"temp\": {\n\t\t\"contactinfo\": {\n\t\t\t\"Contact Email\": \"{{parameters.email}}\"\n\t\t}\n\t},\n\t\"body\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"listkey\": \"{{parameters.listkey}}\",\n\t\t\"contactinfo\": \"{{createJSON(temp.contactinfo)}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{undefined}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.contact.UPDATE\",\n\t\"ZohoCampaigns.contact.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Unsubscribes an existing contact from a list by its email.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"listkey\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Mailing List\",\n\t\t\"required\": true,\n\t\t\"mode\": \"edit\",\n\t\t\"options\": \"rpc://ListMailingLists\"\n\t},\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Contact Email\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "listRecentCampaigns": {
+      "id": 63786,
+      "api": {
+        "qs": {
+          "sort": "asc",
+          "range": "{{min(parameters.limit, 100)}}",
+          "resfmt": "JSON",
+          "status": "{{parameters.status}}",
+          "fromindex": 1
+        },
+        "url": "/recentcampaigns",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "valid": {
+            "type": "RuntimeError",
+            "message": "Error {{body.code}}: {{ifempty(body.message, body.error)}}",
+            "condition": "{{if(body.code, body.code = '0', true)}}"
+          },
+          "output": {
+            "{{...}}": "{{omit(item, 'created_time_gmt', 'updated_time_gmt', 'sent_time_gmt', 'created_date_string', 'updated_date_string', 'sent_date_string')}}",
+            "sent_time": "{{if(item.sent_time_gmt, parseDate(item.sent_time_gmt / 1000, 'X'), undefined)}}",
+            "created_time": "{{parseDate(item.created_time_gmt / 1000, 'X')}}",
+            "updated_time": "{{if(item.updated_time_gmt, parseDate(item.updated_time_gmt / 1000, 'X'), undefined)}}"
+          },
+          "iterate": "{{body.recent_campaigns}}"
+        },
+        "pagination": {
+          "qs": {
+            "fromindex": "{{(pagination.page - 1) * 100 + 1}}"
+          },
+          "condition": "{{body.total_record_count > (pagination.page - 1) * 100}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "listRecentCampaigns",
+      "epoch": null,
+      "flags": {},
+      "label": "List Campaigns",
+      "scope": [
+        "ZohoCampaigns.campaign.READ"
+      ],
+      "expect": [
+        {
+          "name": "status",
+          "type": "select",
+          "label": "Status",
+          "default": "all",
+          "options": [
+            {
+              "label": "All",
+              "value": "all"
+            },
+            {
+              "label": "All Campaigns",
+              "value": "all campaigns"
+            },
+            {
+              "label": "Drafts",
+              "value": "drafts"
+            },
+            {
+              "label": "Scheduled",
+              "value": "scheduled"
+            },
+            {
+              "label": "In Progress",
+              "value": "inprogress"
+            },
+            {
+              "label": "Sent",
+              "value": "sent"
+            },
+            {
+              "label": "Stopped",
+              "value": "stopped"
+            },
+            {
+              "label": "Canceled",
+              "value": "canceled"
+            },
+            {
+              "label": "To be Reviewed",
+              "value": "tobereviewed"
+            },
+            {
+              "label": "Reviewed",
+              "value": "reviewed"
+            },
+            {
+              "label": "Paused",
+              "value": "paused"
+            },
+            {
+              "label": "In Testing",
+              "value": "intesting"
+            }
+          ]
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/recentcampaigns\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"status\": \"{{parameters.status}}\",\n\t\t\"sort\": \"asc\",\n\t\t\"fromindex\": 1,\n\t\t\"range\": \"{{min(parameters.limit, 100)}}\"\n\t},\n\t\"response\": {\n\t\t\"limit\": \"{{parameters.limit}}\",\n\t\t\"valid\": {\n\t\t\t\"condition\": \"{{if(body.code, body.code = '0', true)}}\",\n\t\t\t\"message\": \"Error {{body.code}}: {{ifempty(body.message, body.error)}}\",\n\t\t\t\"type\": \"RuntimeError\"\n\t\t},\n\t\t\"iterate\": \"{{body.recent_campaigns}}\",\n\t\t\"output\": {\n\t\t\t\"{{...}}\": \"{{omit(item, 'created_time_gmt', 'updated_time_gmt', 'sent_time_gmt', 'created_date_string', 'updated_date_string', 'sent_date_string')}}\",\n\t\t\t\"created_time\": \"{{parseDate(item.created_time_gmt / 1000, 'X')}}\",\n\t\t\t\"updated_time\": \"{{if(item.updated_time_gmt, parseDate(item.updated_time_gmt / 1000, 'X'), undefined)}}\",\n\t\t\t\"sent_time\": \"{{if(item.sent_time_gmt, parseDate(item.sent_time_gmt / 1000, 'X'), undefined)}}\"\n\t\t}\n\t},\n\t\"pagination\": {\n\t\t\"condition\": \"{{body.total_record_count > (pagination.page - 1) * 100}}\",\n\t\t\"qs\": {\n\t\t\t\"fromindex\": \"{{(pagination.page - 1) * 100 + 1}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "created_time",
+          "type": "date",
+          "label": "Created Time"
+        },
+        {
+          "name": "updated_time",
+          "type": "date",
+          "label": "Updated Time"
+        },
+        {
+          "name": "sent_time",
+          "type": "date",
+          "label": "Sent Time"
+        },
+        {
+          "name": "from_email",
+          "type": "text",
+          "label": "From Email"
+        },
+        {
+          "name": "subject",
+          "type": "text",
+          "label": "Subject"
+        },
+        {
+          "name": "is_hybrid",
+          "type": "boolean",
+          "label": "Is Hybrid"
+        },
+        {
+          "name": "campaign_preview",
+          "type": "text",
+          "label": "Campaign Preview"
+        },
+        {
+          "name": "zuid",
+          "type": "text",
+          "label": "ZUID"
+        },
+        {
+          "name": "campaign_name",
+          "type": "text",
+          "label": "Campaign Name"
+        },
+        {
+          "name": "campaigntype",
+          "type": "text",
+          "label": "Campaign Type"
+        },
+        {
+          "name": "reply_to",
+          "type": "text",
+          "label": "Reply To"
+        },
+        {
+          "name": "campaign_status",
+          "type": "text",
+          "label": "Campaign Status"
+        },
+        {
+          "name": "folder_id",
+          "type": "text",
+          "label": "Folder ID"
+        },
+        {
+          "name": "campaign_key",
+          "type": "text",
+          "label": "Campaign Key"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.campaign.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Retrieves a list of campaigns.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"status\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Status\",\n\t\t\"default\": \"all\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"All\",\n\t\t\t\t\"value\": \"all\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"All Campaigns\",\n\t\t\t\t\"value\": \"all campaigns\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Drafts\",\n\t\t\t\t\"value\": \"drafts\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Scheduled\",\n\t\t\t\t\"value\": \"scheduled\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"In Progress\",\n\t\t\t\t\"value\": \"inprogress\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Sent\",\n\t\t\t\t\"value\": \"sent\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Stopped\",\n\t\t\t\t\"value\": \"stopped\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Canceled\",\n\t\t\t\t\"value\": \"canceled\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"To be Reviewed\",\n\t\t\t\t\"value\": \"tobereviewed\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Reviewed\",\n\t\t\t\t\"value\": \"reviewed\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Paused\",\n\t\t\t\t\"value\": \"paused\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"In Testing\",\n\t\t\t\t\"value\": \"intesting\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"uinteger\",\n\t\t\"label\": \"Limit\",\n\t\t\"default\": 10\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"created_time\",\n        \"type\": \"date\",\n        \"label\": \"Created Time\"\n    },\n    {\n        \"name\": \"updated_time\",\n        \"type\": \"date\",\n        \"label\": \"Updated Time\"\n    },\n    {\n        \"name\": \"sent_time\",\n        \"type\": \"date\",\n        \"label\": \"Sent Time\"\n    },\n    {\n        \"name\": \"from_email\",\n        \"type\": \"text\",\n        \"label\": \"From Email\"\n    },\n    {\n        \"name\": \"subject\",\n        \"type\": \"text\",\n        \"label\": \"Subject\"\n    },\n    {\n        \"name\": \"is_hybrid\",\n        \"type\": \"boolean\",\n        \"label\": \"Is Hybrid\"\n    },\n    {\n        \"name\": \"campaign_preview\",\n        \"type\": \"text\",\n        \"label\": \"Campaign Preview\"\n    },\n    {\n        \"name\": \"zuid\",\n        \"type\": \"text\",\n        \"label\": \"ZUID\"\n    },\n    {\n        \"name\": \"campaign_name\",\n        \"type\": \"text\",\n        \"label\": \"Campaign Name\"\n    },\n    {\n        \"name\": \"campaigntype\",\n        \"type\": \"text\",\n        \"label\": \"Campaign Type\"\n    },\n    {\n        \"name\": \"reply_to\",\n        \"type\": \"text\",\n        \"label\": \"Reply To\"\n    },\n    {\n        \"name\": \"campaign_status\",\n        \"type\": \"text\",\n        \"label\": \"Campaign Status\"\n    },\n    {\n        \"name\": \"folder_id\",\n        \"type\": \"text\",\n        \"label\": \"Folder ID\"\n    },\n    {\n        \"name\": \"campaign_key\",\n        \"type\": \"text\",\n        \"label\": \"Campaign Key\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "moveContactDoNotMail": {
+      "id": 63787,
+      "api": {
+        "url": "/json/contactdonotmail",
+        "body": {
+          "resfmt": "JSON",
+          "contactinfo": "{{createJSON(temp.contactinfo)}}"
+        },
+        "temp": {
+          "contactinfo": {
+            "Contact Email": "{{parameters.email}}"
+          }
+        },
+        "type": "urlencoded",
+        "method": "POST",
+        "response": {
+          "output": "{{undefined}}"
+        }
+      },
+      "rev": 3,
+      "crud": "update",
+      "name": "moveContactDoNotMail",
+      "epoch": null,
+      "flags": {},
+      "label": "Move a Contact to Do-Not-Mail",
+      "scope": [
+        "ZohoCampaigns.contact.UPDATE",
+        "ZohoCampaigns.contact.READ"
+      ],
+      "expect": [
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Contact Email",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "zoho-campaigns",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/json/contactdonotmail\",\n\t\"method\": \"POST\",\n\t\"type\": \"urlencoded\",\n\t\"temp\": {\n\t\t\"contactinfo\": {\n\t\t\t\"Contact Email\": \"{{parameters.email}}\"\n\t\t}\n\t},\n\t\"body\": {\n\t\t\"resfmt\": \"JSON\",\n\t\t\"contactinfo\": \"{{createJSON(temp.contactinfo)}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{undefined}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n\t\"ZohoCampaigns.contact.UPDATE\",\n\t\"ZohoCampaigns.contact.READ\"\n]",
+      "accountName": "zoho-campaigns",
+      "description": "Moves an existing contact to Do-Not-Mail list by its email.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Contact Email\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "zoho-campaigns": {
+      "api": {
+        "token": {
+          "log": {
+            "sanitize": [
+              "request.body.code",
+              "request.body.client_secret",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://accounts.zoho.{{data.region}}/oauth/v2/token",
+          "body": {
+            "code": "{{temp.code}}",
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "grant_type": "authorization_code",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "client_secret": "{{ifempty(parameters.clientSecret, common.clientSecret)}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}",
+              "refreshToken": "{{body.refresh_token}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] {{body.error}}"
+            },
+            "valid": "{{!body.error}}"
+          }
+        },
+        "refresh": {
+          "log": {
+            "sanitize": [
+              "request.body.client_secret",
+              "request.body.refresh_token",
+              "response.body.access_token",
+              "response.body.refresh_token"
+            ]
+          },
+          "url": "https://accounts.zoho.{{data.region}}/oauth/v2/token",
+          "body": {
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "grant_type": "refresh_token",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "client_secret": "{{ifempty(parameters.clientSecret, common.clientSecret)}}",
+            "refresh_token": "{{data.refreshToken}}"
+          },
+          "type": "urlencoded",
+          "method": "POST",
+          "response": {
+            "data": {
+              "expires": "{{addSeconds(now, body.expires_in)}}",
+              "accessToken": "{{body.access_token}}"
+            },
+            "error": {
+              "message": "[{{statusCode}}] {{body.error}}"
+            },
+            "valid": "{{!body.error}}"
+          },
+          "condition": "{{data.expires < addMinutes(now, 15)}}"
+        },
+        "authorize": {
+          "qs": {
+            "scope": "{{join(distinct(merge(oauth.scope, ifempty(parameters.scopes, emptyarray))), ',')}}",
+            "prompt": "consent",
+            "client_id": "{{ifempty(parameters.clientId, common.clientId)}}",
+            "access_type": "offline",
+            "redirect_uri": "{{oauth.redirectUri}}",
+            "response_type": "code"
+          },
+          "url": "https://accounts.zoho.{{parameters.region}}/oauth/v2/auth",
+          "response": {
+            "temp": {
+              "code": "{{query.code}}"
+            }
+          }
+        },
+        "invalidate": {
+          "qs": {
+            "token": "{{connection.refreshToken}}"
+          },
+          "log": {
+            "sanitize": [
+              "request.qs.token"
+            ]
+          },
+          "url": "https://accounts.zoho.{{data.region}}/oauth/v2/token/revoke",
+          "body": {},
+          "method": "POST"
+        }
+      },
+      "rev": 7,
+      "name": "zoho-campaigns",
+      "type": "oauth",
+      "label": "Zoho Campaigns",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "zoho-campaigns",
+      "install": {
+        "common": {
+          "clientId": "{{parameters.clientId}}",
+          "clientSecret": "{{parameters.clientSecret}}"
+        }
+      },
+      "apiJsonc": "{\n    \"authorize\": {\n        \"qs\": {\n            \"scope\": \"{{join(distinct(merge(oauth.scope, ifempty(parameters.scopes, emptyarray))), ',')}}\",\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"redirect_uri\": \"{{oauth.redirectUri}}\",\n            \"response_type\": \"code\",\n            \"access_type\": \"offline\",\n            \"prompt\": \"consent\"\n        },\n        \"url\": \"https://accounts.zoho.{{parameters.region}}/oauth/v2/auth\",\n        \"response\": {\n            \"temp\": {\n                \"code\": \"{{query.code}}\"\n            }\n        }\n    },\n    \"token\": {\n        \"url\": \"https://accounts.zoho.{{data.region}}/oauth/v2/token\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"code\": \"{{temp.code}}\",\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"grant_type\": \"authorization_code\",\n            \"redirect_uri\": \"{{oauth.redirectUri}}\",\n\t\t\t\"client_secret\": \"{{ifempty(parameters.clientSecret, common.clientSecret)}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n\t\t\t\"valid\": \"{{!body.error}}\",\n            \"error\": {\n                \"message\": \"[{{statusCode}}] {{body.error}}\"\n            },\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\",\n                \"refreshToken\": \"{{body.refresh_token}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.code\",\n                \"request.body.client_secret\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },\n    \"refresh\": {\n        \"condition\": \"{{data.expires < addMinutes(now, 15)}}\",\n        \"url\": \"https://accounts.zoho.{{data.region}}/oauth/v2/token\",\n        \"method\": \"POST\",\n        \"body\": {\n            \"client_id\": \"{{ifempty(parameters.clientId, common.clientId)}}\",\n            \"grant_type\": \"refresh_token\",\n            \"client_secret\": \"{{ifempty(parameters.clientSecret, common.clientSecret)}}\",\n            \"redirect_uri\": \"{{oauth.redirectUri}}\",\n            \"refresh_token\": \"{{data.refreshToken}}\"\n        },\n        \"type\": \"urlencoded\",\n        \"response\": {\n\t\t\t\"valid\": \"{{!body.error}}\",\n            \"error\": {\n                \"message\": \"[{{statusCode}}] {{body.error}}\"\n            },\n            \"data\": {\n                \"expires\": \"{{addSeconds(now, body.expires_in)}}\",\n                \"accessToken\": \"{{body.access_token}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.body.client_secret\",\n                \"request.body.refresh_token\",\n                \"response.body.access_token\",\n                \"response.body.refresh_token\"\n            ]\n        }\n    },/*\n    \"info\": {\n        \"url\": \"https://campaigns.zoho.{{data.region}}/api/v1.1/recentsentcampaigns\",\n        \"method\": \"GET\",\n        \"headers\": {\n            \"authorization\": \"Zoho-oauthtoken {{connection.accessToken}}\"\n        },\n        \"response\": {\n            \"error\": {\n                \"message\": \"[{{body.code}}] {{body.message}}\"\n            }\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.headers.authorization\"\n            ]\n        }\n    },*/\n    \"invalidate\": {\n        \"url\": \"https://accounts.zoho.{{data.region}}/oauth/v2/token/revoke\",\n        \"method\": \"POST\",\n        \"body\": {},\n        \"qs\": {\n            \"token\": \"{{connection.refreshToken}}\"\n        },\n        \"log\": {\n            \"sanitize\": [\n                \"request.qs.token\"\n            ]\n        }\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "region",
+          "type": "select",
+          "label": "Region",
+          "options": [
+            {
+              "label": "United States (campaigns.zoho.com)",
+              "value": "com"
+            },
+            {
+              "label": "Europe (campaigns.zoho.eu)",
+              "value": "eu"
+            },
+            {
+              "label": "India (campaigns.zoho.in)",
+              "value": "in"
+            },
+            {
+              "label": "Australia (campaigns.zoho.com.au)",
+              "value": "com.au"
+            },
+            {
+              "label": "China (campaigns.zoho.com.cn)",
+              "value": "com.cn"
+            },
+            {
+              "label": "Japan (campaigns.zoho.jp)",
+              "value": "jp"
+            }
+          ],
+          "editable": true,
+          "required": true
+        },
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "advanced": true,
+          "editable": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "password",
+          "label": "Client Secret",
+          "advanced": true,
+          "editable": true
+        },
+        {
+          "help": "Use this to get an access to extra scopes.",
+          "name": "scopes",
+          "type": "array",
+          "label": "Additional Scopes",
+          "advanced": true,
+          "editable": true
+        }
+      ],
+      "scopeJsonc": "[]",
+      "installSpec": [
+        {
+          "name": "clientId",
+          "type": "text",
+          "label": "Client ID",
+          "required": true
+        },
+        {
+          "name": "clientSecret",
+          "type": "text",
+          "label": "Client Secret",
+          "required": true
+        }
+      ],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"region\",\n        \"type\": \"select\",\n        \"label\": \"Region\",\n        \"options\": [\n            {\n                \"label\": \"United States (campaigns.zoho.com)\",\n                \"value\": \"com\"\n            },\n            {\n                \"label\": \"Europe (campaigns.zoho.eu)\",\n                \"value\": \"eu\"\n            },\n            {\n                \"label\": \"India (campaigns.zoho.in)\",\n                \"value\": \"in\"\n            },\n            {\n                \"label\": \"Australia (campaigns.zoho.com.au)\",\n                \"value\": \"com.au\"\n            },\n            {\n                \"label\": \"China (campaigns.zoho.com.cn)\",\n                \"value\": \"com.cn\"\n            },\n            {\n                \"label\": \"Japan (campaigns.zoho.jp)\",\n                \"value\": \"jp\"\n            }\n        ],\n        \"editable\": true,\n        \"required\": true\n    },\n    {\n        \"name\": \"clientId\",\n        \"type\": \"text\",\n        \"label\": \"Client ID\",\n        \"editable\": true,\n        \"advanced\": true\n    },\n    {\n        \"name\": \"clientSecret\",\n        \"type\": \"password\",\n        \"label\": \"Client Secret\",\n        \"editable\": true,\n        \"advanced\": true\n    },\n    {\n        \"name\": \"scopes\",\n        \"label\": \"Additional Scopes\",\n        \"type\": \"array\",\n        \"help\": \"Use this to get an access to extra scopes.\",\n        \"editable\": true,\n        \"advanced\": true\n    }\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://campaigns.zoho.{{connection.region}}/api/v1.1\",\n    \"headers\": {\n        \"authorization\": \"Zoho-oauthtoken {{connection.accessToken}}\"\n    },\n    \"response\": {\n        \"type\": \"json\",\n        \"valid\": {\n            \"condition\": \"{{body.status != 'error' & if(ifempty(body.code, body.Code), ifempty(body.code, body.Code) = '200' | ifempty(body.code, body.Code) = '0', true)}}\",\n            \"message\": \"Error {{ifempty(body.code, body.Code)}}: {{ifempty(body.message, body.error)}}\",\n            \"type\": \"RuntimeError\"\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.authorization\"\n        ]\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "toArray": {
+      "rev": 3,
+      "code": "function toArray(collection, key = \"_id\") {\n\tif (typeof collection !== 'object' || collection === null) return undefined;\n\treturn Object.entries(collection).map(([k, v]) => ({ [key]: k, ...v }));\n}",
+      "name": "toArray",
+      "test": null,
+      "appName": "zoho-campaigns",
+      "arguments": "(collection, key = \"_id\")",
+      "appVersion": 1
+    },
+    "listDetails": {
+      "rev": 2,
+      "code": "function listDetails(ids) {\n  let newObj = {};\n  if (ids) {\n    ids.forEach((id) => {\n      newObj[id] = [];\n    });\n    return JSON.stringify(newObj);\n  }\n}\n",
+      "name": "listDetails",
+      "test": null,
+      "appName": "zoho-campaigns",
+      "arguments": "(ids)",
+      "appVersion": 1
+    },
+    "parseDateV2": {
+      "rev": 3,
+      "code": "function parseDateV2(input, format, timezone, ...keys) {\n\tif (Array.isArray(input)) return input.map(i => iml.parseDateV2(i, format, timezone, ...keys));\n\tif (typeof input === 'object' && input !== null) {\n\t\tObject.entries(input).forEach(([k, v]) => {\n\t\t\tif (keys.includes(k) && typeof v === \"string\") {\n\t\t\t\tinput[k] = iml.parseDate(v, format, timezone);\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tif (typeof v === 'object' && input !== null) {\n\t\t\t\tinput[k] = iml.parseDateV2(v, format, timezone, ...keys);\n\t\t\t}\n\t\t});\n\t\treturn input;\n\t}\n\treturn undefined;\n}",
+      "name": "parseDateV2",
+      "test": null,
+      "appName": "zoho-campaigns",
+      "arguments": "(input, format, timezone, ...keys)",
+      "appVersion": 1
+    },
+    "parseFields": {
+      "rev": 3,
+      "code": "function parseFields(fields) {\n\tif (!Array.isArray(fields)) return undefined;\n\treturn fields\n\t\t.sort((a, b) => {\n\t\t\tif (a.block_sequence < b.block_sequence) return -1;\n\t\t\tif (a.block_sequence > b.block_sequence) return 1;\n\t\t\treturn a.SEQUENCE - b.SEQUENCE;\n\t\t}).map(field => {\n\t\t\tlet base = {\n\t\t\t\t\"name\": field.DISPLAY_NAME,\n\t\t\t\t\"label\": field.DISPLAY_NAME,\n\t\t\t\t\"required\": field.IS_MANDATORY\n\t\t\t}\n\t\t\tswitch (field.UITYPE) {\n\t\t\t\tcase \"textarea\":\n\t\t\t\t\tbase.multiline = true;\n\t\t\t\tcase \"text\":\n\t\t\t\t\tbase.type = \"text\";\n\t\t\t\t\tif (field.MAXLENGTH) base.validate = { max: field.MAXLENGTH };\n\t\t\t\t\tbreak;\n\t\t\t\t\t\n\t\t\t\tcase \"email\":\n\t\t\t\t\tbase.type = \"email\";\n\t\t\t\t\tbreak;\n\t\t\t\t\t\n\t\t\t\tcase \"date\":\n\t\t\t\t\tbase.type = \"date\";\n\t\t\t\t\tbreak;\n\t\t\t\t\t\n\t\t\t\tdefault:\n\t\t\t\t\tbase.type = \"text\";\n\t\t\t}\n\t\t\treturn base;\n\t\t});\n}",
+      "name": "parseFields",
+      "test": null,
+      "appName": "zoho-campaigns",
+      "arguments": "(fields)",
+      "appVersion": 1
+    },
+    "findSegments": {
+      "rev": 4,
+      "code": "function findSegments(object, listKey) {\n  var item = [];\n  for (var i = 1; i <= object.length; i++) {\n    if (object[i - 1].listkey == listKey) {\n      item = object[i - 1];\n    }\n  }\n  debug(item.segments);\n  return item.segments;\n}\n",
+      "name": "findSegments",
+      "test": null,
+      "appName": "zoho-campaigns",
+      "arguments": "(object, listKey)",
+      "appVersion": 1
+    },
+    "collectionTo2": {
+      "rev": 4,
+      "code": "function collectionTo2(item) {\n  var re = [];\n  var te = {};\n  var m = '{';\n  for (var i = 0; i < item.length; i++) {\n    if (item[i].segment_IDs) {\n      te[item[i].listkey] = item[i].segment_IDs;\n      m =\n        m +\n        item[i].listkey.toString() +\n        ':[' +\n        item[i].segment_IDs.toString() +\n        ']';\n      if (i < item.length - 1) {\n        m = m + ',';\n      }\n      //te[segment_IDs]=item[i].segment_IDs;\n    } else {\n      te[item[i].listkey] = [];\n      m = m + item[i].listkey.toString() + ':[]';\n      if (i < item.length - 1) {\n        m = m + ',';\n      }\n      //te[segment_IDs]=\" \";\n    }\n  }\n  m = m + '}';\n  return m;\n}\n",
+      "name": "collectionTo2",
+      "test": null,
+      "appName": "zoho-campaigns",
+      "arguments": "(item)",
+      "appVersion": 1
+    },
+    "collectionsTo": {
+      "rev": 4,
+      "code": "function collectionsTo(item) {\n  var re = [];\n  for (var i = 0; i < item.length; i++) {\n    var te = {};\n    if (item[i].segment_IDs) {\n      te[item[i].listkey] = item[i].segment_IDs;\n      //te[segment_IDs]=item[i].segment_IDs;\n    } else {\n      te[item[i].listkey] = [];\n      //te[segment_IDs]=\" \";\n    }\n    re.push(te);\n  }\n  return re;\n}\n",
+      "name": "collectionsTo",
+      "test": null,
+      "appName": "zoho-campaigns",
+      "arguments": "(item)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-09-13T15:08:41.72892+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Email marketing software to Engage your audience.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "5d76ec0e7bac7209e151e1e637400ee2",
+  "versionFull": "1.1.4",
+  "compiledName": "zoho-campaigns",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": null,
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": null
+}

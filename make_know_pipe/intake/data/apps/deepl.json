@@ -1,0 +1,1003 @@
+{
+  "rev": 21,
+  "base": {
+    "log": {
+      "sanitize": []
+    },
+    "baseUrl": "{{if(connection.url, connection.url, 'https://api-free.deepl.com/v2')}}",
+    "headers": {
+      "authorization": "DeepL-Auth-Key {{connection.apiKey}}"
+    },
+    "response": {
+      "error": {
+        "400": {
+          "message": "[{{statusCode}}] Bad request. {{body.message}}"
+        },
+        "403": {
+          "message": "[{{statusCode}}] Authorization failed. Please supply a valid auth_key parameter."
+        },
+        "404": {
+          "message": "[{{statusCode}}] The requested resource could not be found."
+        },
+        "413": {
+          "message": "[{{statusCode}}] The request size exceeds the limit."
+        },
+        "414": {
+          "message": "[{{statusCode}}] The request URL is too long. You can avoid this error by using a POST request instead of a GET request, and sending the parameters in the HTTP body."
+        },
+        "429": {
+          "message": "[{{statusCode}}] Too many requests. Please wait and resend your request."
+        },
+        "456": {
+          "message": "[{{statusCode}}] Quota exceeded. The character limit has been reached."
+        },
+        "503": {
+          "message": "[{{statusCode}}] Resource currently unavailable. Try again later."
+        },
+        "529": {
+          "message": "[{{statusCode}}] Too many requests. Please wait and resend your request."
+        },
+        "message": "[{{statusCode}}] Something went wrong."
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "deepl",
+  "_rpcs": {
+    "glossaries": {
+      "api": {
+        "url": "/glossaries",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.glossary_id}}"
+          },
+          "iterate": "{{body.glossaries}}"
+        }
+      },
+      "rev": 3,
+      "name": "glossaries",
+      "label": "Glossaries",
+      "appName": "deepl",
+      "apiJsonc": "{\n    \"url\": \"/glossaries\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"limit\": 300,\n        \"iterate\": \"{{body.glossaries}}\",\n        \"output\": {\n            \"label\": \"{{item.name}}\",\n            \"value\": \"{{item.glossary_id}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "deepl",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "sourceLanguages": {
+      "api": {
+        "response": {
+          "output": [
+            {
+              "label": "Bulgarian",
+              "value": "BG"
+            },
+            {
+              "label": "Czech",
+              "value": "CS"
+            },
+            {
+              "label": "Danish",
+              "value": "DA"
+            },
+            {
+              "label": "German",
+              "value": "DE"
+            },
+            {
+              "label": "Greek",
+              "value": "EL"
+            },
+            {
+              "label": "English",
+              "value": "EN"
+            },
+            {
+              "label": "Spanish",
+              "value": "ES"
+            },
+            {
+              "label": "Estonian",
+              "value": "ET"
+            },
+            {
+              "label": "Finnish",
+              "value": "FI"
+            },
+            {
+              "label": "French",
+              "value": "FR"
+            },
+            {
+              "label": "Hungarian",
+              "value": "HU"
+            },
+            {
+              "label": "Italian",
+              "value": "IT"
+            },
+            {
+              "label": "Japanese",
+              "value": "JA"
+            },
+            {
+              "label": "Lithuanian",
+              "value": "LT"
+            },
+            {
+              "label": "Latvian",
+              "value": "LV"
+            },
+            {
+              "label": "Dutch",
+              "value": "NL"
+            },
+            {
+              "label": "Polish",
+              "value": "PL"
+            },
+            {
+              "label": "Portuguese",
+              "value": "PT"
+            },
+            {
+              "label": "Romanian",
+              "value": "RO"
+            },
+            {
+              "label": "Russian",
+              "value": "RU"
+            },
+            {
+              "label": "Slovak",
+              "value": "SK"
+            },
+            {
+              "label": "Slovenian",
+              "value": "SL"
+            },
+            {
+              "label": "Swedish",
+              "value": "SV"
+            },
+            {
+              "label": "Chinese",
+              "value": "ZH"
+            }
+          ]
+        }
+      },
+      "rev": 3,
+      "name": "sourceLanguages",
+      "label": "Source Languages",
+      "appName": "deepl",
+      "apiJsonc": "{\n    \"response\": {\n        \"output\": [\n            {\n                \"label\": \"Bulgarian\",\n                \"value\": \"BG\"\n            },\n            {\n                \"label\": \"Czech\",\n                \"value\": \"CS\"\n            },\n            {\n                \"label\": \"Danish\",\n                \"value\": \"DA\"\n            },\n            {\n                \"label\": \"German\",\n                \"value\": \"DE\"\n            },\n            {\n                \"label\": \"Greek\",\n                \"value\": \"EL\"\n            },\n            {\n                \"label\": \"English\",\n                \"value\": \"EN\"\n            },\n            {\n                \"label\": \"Spanish\",\n                \"value\": \"ES\"\n            },\n            {\n                \"label\": \"Estonian\",\n                \"value\": \"ET\"\n            },\n            {\n                \"label\": \"Finnish\",\n                \"value\": \"FI\"\n            },\n            {\n                \"label\": \"French\",\n                \"value\": \"FR\"\n            },\n            {\n                \"label\": \"Hungarian\",\n                \"value\": \"HU\"\n            },\n            {\n                \"label\": \"Italian\",\n                \"value\": \"IT\"\n            },\n            {\n                \"label\": \"Japanese\",\n                \"value\": \"JA\"\n            },\n            {\n                \"label\": \"Lithuanian\",\n                \"value\": \"LT\"\n            },\n            {\n                \"label\": \"Latvian\",\n                \"value\": \"LV\"\n            },\n            {\n                \"label\": \"Dutch\",\n                \"value\": \"NL\"\n            },\n            {\n                \"label\": \"Polish\",\n                \"value\": \"PL\"\n            },\n            {\n                \"label\": \"Portuguese\",\n                \"value\": \"PT\"\n            },\n            {\n                \"label\": \"Romanian\",\n                \"value\": \"RO\"\n            },\n            {\n                \"label\": \"Russian\",\n                \"value\": \"RU\"\n            },\n            {\n                \"label\": \"Slovak\",\n                \"value\": \"SK\"\n            },\n            {\n                \"label\": \"Slovenian\",\n                \"value\": \"SL\"\n            },\n            {\n                \"label\": \"Swedish\",\n                \"value\": \"SV\"\n            },\n            {\n                \"label\": \"Chinese\",\n                \"value\": \"ZH\"\n            }\n        ]\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "deepl",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "targetLanguages": {
+      "api": {
+        "response": {
+          "output": [
+            {
+              "label": "Bulgarian",
+              "value": "BG"
+            },
+            {
+              "label": "Czech",
+              "value": "CS"
+            },
+            {
+              "label": "Danish",
+              "value": "DA"
+            },
+            {
+              "label": "German",
+              "value": "DE",
+              "nested": [
+                {
+                  "help": "Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).",
+                  "name": "formality",
+                  "type": "select",
+                  "label": "Formality",
+                  "options": [
+                    {
+                      "label": "Default",
+                      "value": "default"
+                    },
+                    {
+                      "label": "More Formal",
+                      "value": "more"
+                    },
+                    {
+                      "label": "Less Formal",
+                      "value": "less"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Greek",
+              "value": "EL"
+            },
+            {
+              "label": "English (British)",
+              "value": "EN-GB"
+            },
+            {
+              "label": "English (American)",
+              "value": "EN-US"
+            },
+            {
+              "label": "Spanish",
+              "value": "ES",
+              "nested": [
+                {
+                  "help": "Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).",
+                  "name": "formality",
+                  "type": "select",
+                  "label": "Formality",
+                  "options": [
+                    {
+                      "label": "Default",
+                      "value": "default"
+                    },
+                    {
+                      "label": "More Formal",
+                      "value": "more"
+                    },
+                    {
+                      "label": "Less Formal",
+                      "value": "less"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Estonian",
+              "value": "ET"
+            },
+            {
+              "label": "Finnish",
+              "value": "FI"
+            },
+            {
+              "label": "French",
+              "value": "FR",
+              "nested": [
+                {
+                  "help": "Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).",
+                  "name": "formality",
+                  "type": "select",
+                  "label": "Formality",
+                  "options": [
+                    {
+                      "label": "Default",
+                      "value": "default"
+                    },
+                    {
+                      "label": "More Formal",
+                      "value": "more"
+                    },
+                    {
+                      "label": "Less Formal",
+                      "value": "less"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Hungarian",
+              "value": "HU"
+            },
+            {
+              "label": "Italian",
+              "value": "IT",
+              "nested": [
+                {
+                  "help": "Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).",
+                  "name": "formality",
+                  "type": "select",
+                  "label": "Formality",
+                  "options": [
+                    {
+                      "label": "Default",
+                      "value": "default"
+                    },
+                    {
+                      "label": "More Formal",
+                      "value": "more"
+                    },
+                    {
+                      "label": "Less Formal",
+                      "value": "less"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Japanese",
+              "value": "JA"
+            },
+            {
+              "label": "Lithuanian",
+              "value": "LT"
+            },
+            {
+              "label": "Latvian",
+              "value": "LV"
+            },
+            {
+              "label": "Dutch",
+              "value": "NL",
+              "nested": [
+                {
+                  "help": "Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).",
+                  "name": "formality",
+                  "type": "select",
+                  "label": "Formality",
+                  "options": [
+                    {
+                      "label": "Default",
+                      "value": "default"
+                    },
+                    {
+                      "label": "More Formal",
+                      "value": "more"
+                    },
+                    {
+                      "label": "Less Formal",
+                      "value": "less"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Polish",
+              "value": "PL",
+              "nested": [
+                {
+                  "help": "Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).",
+                  "name": "formality",
+                  "type": "select",
+                  "label": "Formality",
+                  "options": [
+                    {
+                      "label": "Default",
+                      "value": "default"
+                    },
+                    {
+                      "label": "More Formal",
+                      "value": "more"
+                    },
+                    {
+                      "label": "Less Formal",
+                      "value": "less"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Portuguese (Excluding Brazilian Portuguese)",
+              "value": "PT-PT",
+              "nested": [
+                {
+                  "help": "Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).",
+                  "name": "formality",
+                  "type": "select",
+                  "label": "Formality",
+                  "options": [
+                    {
+                      "label": "Default",
+                      "value": "default"
+                    },
+                    {
+                      "label": "More Formal",
+                      "value": "more"
+                    },
+                    {
+                      "label": "Less Formal",
+                      "value": "less"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Portuguese (Brazilian)",
+              "value": "PT-BR",
+              "nested": [
+                {
+                  "help": "Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).",
+                  "name": "formality",
+                  "type": "select",
+                  "label": "Formality",
+                  "options": [
+                    {
+                      "label": "Default",
+                      "value": "default"
+                    },
+                    {
+                      "label": "More Formal",
+                      "value": "more"
+                    },
+                    {
+                      "label": "Less Formal",
+                      "value": "less"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Romanian",
+              "value": "RO"
+            },
+            {
+              "label": "Russian",
+              "value": "RU",
+              "nested": [
+                {
+                  "help": "Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).",
+                  "name": "formality",
+                  "type": "select",
+                  "label": "Formality",
+                  "options": [
+                    {
+                      "label": "Default",
+                      "value": "default"
+                    },
+                    {
+                      "label": "More Formal",
+                      "value": "more"
+                    },
+                    {
+                      "label": "Less Formal",
+                      "value": "less"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Slovak",
+              "value": "SK"
+            },
+            {
+              "label": "Slovenian",
+              "value": "SL"
+            },
+            {
+              "label": "Swedish",
+              "value": "SV"
+            },
+            {
+              "label": "Chinese",
+              "value": "ZH"
+            }
+          ]
+        }
+      },
+      "rev": 3,
+      "name": "targetLanguages",
+      "label": "Target Languages",
+      "appName": "deepl",
+      "apiJsonc": "{\n    \"response\": {\n        \"output\": [\n            {\n                \"label\": \"Bulgarian\",\n                \"value\": \"BG\"\n            },\n            {\n                \"label\": \"Czech\",\n                \"value\": \"CS\"\n            },\n            {\n                \"label\": \"Danish\",\n                \"value\": \"DA\"\n            },\n            {\n                \"label\": \"German\",\n                \"value\": \"DE\",\n                \"nested\": [\n                    {\n                        \"name\": \"formality\",\n                        \"type\": \"select\",\n                        \"label\": \"Formality\",\n                        \"options\": [\n                            {\n                                \"label\": \"Default\",\n                                \"value\": \"default\"\n                            },\n                            {\n                                \"label\": \"More Formal\",\n                                \"value\": \"more\"\n                            },\n                            {\n                                \"label\": \"Less Formal\",\n                                \"value\": \"less\"\n                            }\n                        ],\n                        \"help\": \"Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).\"\n                    }\n                ]\n            },\n            {\n                \"label\": \"Greek\",\n                \"value\": \"EL\"\n            },\n            {\n                \"label\": \"English (British)\",\n                \"value\": \"EN-GB\"\n            },\n            {\n                \"label\": \"English (American)\",\n                \"value\": \"EN-US\"\n            },\n            {\n                \"label\": \"Spanish\",\n                \"value\": \"ES\",\n                \"nested\": [\n                    {\n                        \"name\": \"formality\",\n                        \"type\": \"select\",\n                        \"label\": \"Formality\",\n                        \"options\": [\n                            {\n                                \"label\": \"Default\",\n                                \"value\": \"default\"\n                            },\n                            {\n                                \"label\": \"More Formal\",\n                                \"value\": \"more\"\n                            },\n                            {\n                                \"label\": \"Less Formal\",\n                                \"value\": \"less\"\n                            }\n                        ],\n                        \"help\": \"Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).\"\n                    }\n                ]\n            },\n            {\n                \"label\": \"Estonian\",\n                \"value\": \"ET\"\n            },\n            {\n                \"label\": \"Finnish\",\n                \"value\": \"FI\"\n            },\n            {\n                \"label\": \"French\",\n                \"value\": \"FR\",\n                \"nested\": [\n                    {\n                        \"name\": \"formality\",\n                        \"type\": \"select\",\n                        \"label\": \"Formality\",\n                        \"options\": [\n                            {\n                                \"label\": \"Default\",\n                                \"value\": \"default\"\n                            },\n                            {\n                                \"label\": \"More Formal\",\n                                \"value\": \"more\"\n                            },\n                            {\n                                \"label\": \"Less Formal\",\n                                \"value\": \"less\"\n                            }\n                        ],\n                        \"help\": \"Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).\"\n                    }\n                ]\n            },\n            {\n                \"label\": \"Hungarian\",\n                \"value\": \"HU\"\n            },\n            {\n                \"label\": \"Italian\",\n                \"value\": \"IT\",\n                \"nested\": [\n                    {\n                        \"name\": \"formality\",\n                        \"type\": \"select\",\n                        \"label\": \"Formality\",\n                        \"options\": [\n                            {\n                                \"label\": \"Default\",\n                                \"value\": \"default\"\n                            },\n                            {\n                                \"label\": \"More Formal\",\n                                \"value\": \"more\"\n                            },\n                            {\n                                \"label\": \"Less Formal\",\n                                \"value\": \"less\"\n                            }\n                        ],\n                        \"help\": \"Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).\"\n                    }\n                ]\n            },\n            {\n                \"label\": \"Japanese\",\n                \"value\": \"JA\"\n            },\n            {\n                \"label\": \"Lithuanian\",\n                \"value\": \"LT\"\n            },\n            {\n                \"label\": \"Latvian\",\n                \"value\": \"LV\"\n            },\n            {\n                \"label\": \"Dutch\",\n                \"value\": \"NL\",\n                \"nested\": [\n                    {\n                        \"name\": \"formality\",\n                        \"type\": \"select\",\n                        \"label\": \"Formality\",\n                        \"options\": [\n                            {\n                                \"label\": \"Default\",\n                                \"value\": \"default\"\n                            },\n                            {\n                                \"label\": \"More Formal\",\n                                \"value\": \"more\"\n                            },\n                            {\n                                \"label\": \"Less Formal\",\n                                \"value\": \"less\"\n                            }\n                        ],\n                        \"help\": \"Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).\"\n                    }\n                ]\n            },\n            {\n                \"label\": \"Polish\",\n                \"value\": \"PL\",\n                \"nested\": [\n                    {\n                        \"name\": \"formality\",\n                        \"type\": \"select\",\n                        \"label\": \"Formality\",\n                        \"options\": [\n                            {\n                                \"label\": \"Default\",\n                                \"value\": \"default\"\n                            },\n                            {\n                                \"label\": \"More Formal\",\n                                \"value\": \"more\"\n                            },\n                            {\n                                \"label\": \"Less Formal\",\n                                \"value\": \"less\"\n                            }\n                        ],\n                        \"help\": \"Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).\"\n                    }\n                ]\n            },\n            {\n                \"label\": \"Portuguese (Excluding Brazilian Portuguese)\",\n                \"value\": \"PT-PT\",\n                \"nested\": [\n                    {\n                        \"name\": \"formality\",\n                        \"type\": \"select\",\n                        \"label\": \"Formality\",\n                        \"options\": [\n                            {\n                                \"label\": \"Default\",\n                                \"value\": \"default\"\n                            },\n                            {\n                                \"label\": \"More Formal\",\n                                \"value\": \"more\"\n                            },\n                            {\n                                \"label\": \"Less Formal\",\n                                \"value\": \"less\"\n                            }\n                        ],\n                        \"help\": \"Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).\"\n                    }\n                ]\n            },\n            {\n                \"label\": \"Portuguese (Brazilian)\",\n                \"value\": \"PT-BR\",\n                \"nested\": [\n                    {\n                        \"name\": \"formality\",\n                        \"type\": \"select\",\n                        \"label\": \"Formality\",\n                        \"options\": [\n                            {\n                                \"label\": \"Default\",\n                                \"value\": \"default\"\n                            },\n                            {\n                                \"label\": \"More Formal\",\n                                \"value\": \"more\"\n                            },\n                            {\n                                \"label\": \"Less Formal\",\n                                \"value\": \"less\"\n                            }\n                        ],\n                        \"help\": \"Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).\"\n                    }\n                ]\n            },\n            {\n                \"label\": \"Romanian\",\n                \"value\": \"RO\"\n            },\n            {\n                \"label\": \"Russian\",\n                \"value\": \"RU\",\n                \"nested\": [\n                    {\n                        \"name\": \"formality\",\n                        \"type\": \"select\",\n                        \"label\": \"Formality\",\n                        \"options\": [\n                            {\n                                \"label\": \"Default\",\n                                \"value\": \"default\"\n                            },\n                            {\n                                \"label\": \"More Formal\",\n                                \"value\": \"more\"\n                            },\n                            {\n                                \"label\": \"Less Formal\",\n                                \"value\": \"less\"\n                            }\n                        ],\n                        \"help\": \"Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages DE (German), FR (French), IT (Italian), ES (Spanish), NL (Dutch), PL (Polish), PT-PT, PT-BR (Portuguese) and RU (Russian).\"\n                    }\n                ]\n            },\n            {\n                \"label\": \"Slovak\",\n                \"value\": \"SK\"\n            },\n            {\n                \"label\": \"Slovenian\",\n                \"value\": \"SL\"\n            },\n            {\n                \"label\": \"Swedish\",\n                \"value\": \"SV\"\n            },\n            {\n                \"label\": \"Chinese\",\n                \"value\": \"ZH\"\n            }\n        ]\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "deepl",
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {
+    "sandboxes": [
+      {
+        "allowed": false,
+        "version": 1
+      },
+      {
+        "allowed": true,
+        "version": 2
+      }
+    ],
+    "imlIsUserEditable": true
+  },
+  "label": "DeepL",
+  "theme": "#0f2b46",
+  "_hooks": {},
+  "global": false,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "translateText",
+        "makeApiCall"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda7930000023a4944415458c3ed973d68144118869f4d0c26208a51b01245b49104a28d9a225a59199242b0d146d14684148256da5988085a058385828a6863974e047f886021588885a6f1274692901844cebbc762e7bce5382f3b9b843479ab6197fdde6766beef9b1d58d50a2b29f2915a1db60115a00c9024f1e15a628d8379077014780c8c00fb80960cd8d22b98b7aabdea2375de9abea957d51d19c8253546dda95e57bfdb5815f5bd7a4eddb468908cf1667548fd104c1652497da60eaaed854032cb3da03e0f4163f5537da0f64443840f0eaa3fea82ceabf7d5e1265b51af31754b1180930d823d54d786f79772024ca97bfe07d0ac0c1b15f53c500ae327c00b420f888cf34f6be2b28341600298065a8121a00f380b6c0f706d44f49758808dc08530ab0a700cb8011c07ba81716000385320764d618f4fe5dce3927a4f5d17bedba67eccbc9f2e9a0379540eb3ee030e8467bb800dcbb505029fa925e22de0257013b80dbc017a80cee50218034e03b3a4f9d00d5c03ba4893726bec12c602bc02de85712fe949d89e63d50a014c00bf488fdeaa0e01fb8139e0440e738049602a6a9a219b3bd4f3ea7826a32beaa4fa552d2f501d7fd4d76a7ff459908148d42e75449dc95996aa9fd48bd53320dabc01489b7a581d557f2f603eaaee0ef0c58d1b40a0ae0f0dea6d932db81c639cab11254952fde19c25adf723c015e0cbd24cb1d88ab4a87bd5bbea5cd115582c04a6ff07fdead35025510085ee05f520419da4bd6106b893f78eb068803a9084b4b9958a5c5256b522fa0be5726c9c305882180000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000004574944415478daed9b5b681c6514c77f9b9ba86d4a51a346095e2a111495a828152f78296db55eb02f82222844ac82054510f541fa50955a452a22e293a2a020e641ad972a142b4505c15aa4dea8a5b6b534a5b7689336fbf3e19b34eb641337939dd9cd667eb024994ce69bf3ffe69cef7ce74c2027272727272767a652c8723075e4db5380db814b807ea00ff81e28160a99de527686479fe3d5a5ea06f588a3ec5457aa678d9cdb30440635abf3d5f7d401cb535437ab0faa73a7bd1025b37e9eba5add6d650ca95faa4bd4e3a69d0825869fac2e577f8e6677b21c54df522f539bea5e88989fdfa97e15f3f3a4d47f7c88f9f9bb13f87952ea333e94ccfa3cf5052bf7f3a40ca95f58ebf8e07ffdfc11758bc9fc3c2907d437ad457c880c2fa80bad9e9f276587fa8c915b6439f3d7aa7f567893c3ea5e43301b4c418461c332db924484a6043a14807b80ce0ace3d04ac026e04ae03ee033655795e9a80bb80f3ab7cddb144b3dfaa7e58e1ecac1a999992cf35ea5f557e0a060d2e9948bdb43800bc0f1c2d140a946c723602dfa4305ea25d549a020c0387cb1c1f027e4971dcba11a01db8022897b43c073c016c6d64019a81c7813b8013d456a01b58040c00cf02b700af01fb6a2d4445240882aafbd5f5ea47eaefeadf6a9f61296d8e82e40dd1350f4f21082e4a12045b32d0ad1db83a76ec56e02ae06de015601d21302e051e02f6026ba3736f02ae07da32b8d78949f8044c4451fd557dd49056a376a8731c5d3667ab6bd27a02d28c01955000ce25c4833ee036600fb0bf64e93c08ac01b6a77103b516608416603ef02430bbccef7701bb1b598011cea07c8a7d2aa192dc9002ec00de212c859dc0326096a3458f59c0c3c099690c9ec52a301e87087eff12b0197815b817e805ce063e8ece5b082c20a51e4616020c005ba2afddc05c6003b01af894901af744c7212c7737038ba39f53ed94a42dc0364236f84964e805c0bcc8f07ea00b7880b04d3e2df6b7f5d7229a641e70d450c43cb6172859dbe7a8bdea26434163aad46526d80fac0788f5fb9a80158460d79cd1dc8d4b9aab4013e5056e23546f6a6e7c52018a94dfe7c73989b0db3bf6e847f4001757d98e4142c6386992b8c030f019b004689de0bc02b03cbab90f22d17a80a7818e2a0bf02df06395af599e920dca8b86fafcff7144ddaefe66f53b46c3ea46f572b3ec164583b5a98bd575868e4dd66c539f523b33353e260286a6c432f527b3e90eed53df502f323468b2357c0221ce519f5777a564f8a0fab9a1fcdd5673c3c711a249bdd2ea76888b8684a9d79242495de2d87704be3664845361a77a695d1b3e81101dea6386b257d2f8b055ed9a36c68f2344b7fab2ba6746091013a2d9d017ec53ff9951029488807aa27ab7fa9d95ed041b438032429c6e4864fe985102c48428a817aaaf1b129c9923404c88567581bad6b16f9134b6002522a0b6abf7ab3f94c487c617a08c105dea0a431234730488095130bc06b7320a98a98c557f95d7981084d25911b021ff97202727272727a776fc0ba5b9bbfe80bc84a80000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-07-04T07:20:09.070687+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda793000009cb4944415478daed9d7f8c5c5515c73fb3ddb60b5decf647e487d002a582a1688b28b6249a544353528218a09a58b52a5a5b412d8d3f48438d316ab5b44880c80f1512c50855aa11a54523d2aa296a0c080a56a5d44a7f4497fea2dddd76f7eb1fe74df7ce74db9dd94edf7b77def9249bed746667ee7bf73bf79c7bcebde782e3388ee3388ee3388ee3388ee3388ee3388ee3388ee338cd4629eb06a489248061c0a9c0b9c008a007d804ec04542a15ea96140349e59fc992be29e979497b24ed4f7e3f2de9664913caaf759a80a0e3c74b5a92747c9f06a657d23392e64b1ae3428898a0e3db24cd95b45ed241d546b7a475922e4ffe3eebcb71ea21e9f8164997497a58d2be1a3bbe9add92ee93343579bfac2fcd39165576fe3649db87d8f1217d92b64abac5fd839c1274fc3849370d62e7878afb0779439576fe3a491b54bb9d1f2add92d64a9a25f70fb223e9f861323bbf5a43b7f343c5fd832c08bef5e7a97176fe7870ff200d5469e717ebc4d8f9a1d22b0b24cd97d4e1426820aab4f3d72a1d3b3f54ba253d268b1f8c8c4504b90d7c2737b005781bf0196036302aeb76d5c01ee021e04ee019a02fcff985dcb52cf8e64c023e09bc0f4bdec4c67f80bb8107802d007914426e5a1474fc38e083c0c780d7e7a98d43a00f78165805ac017641be8490794b828e6f03e6003702d381d6acdbd6407a805f03b7024f02dd791141a6ad08ecfca5f4dbf9f6ac6fca09640ff043cc3ff80b39f00f32f9f42a3bbf08b3f3a7657a27d2652bfdfec1bf213bb390eaa756d9f90f6076fefcb4db9113fab0516015f063602fa42f84d43e2de8fc69c0d7809934979d1f2a3dc04f80cf029b215d11a4f24941e75f003c8889c0a9e4e7c04780ed690aa025c50b1c09dccc89ebfc5e6037665ff761436c4cccc66640a534a388698e00d3814781310d7efb2e601df023e0efd8eade33813701d761338ce1695c6703f817f02ee0c5ac67070d2589e77fea04c4df3b25dd20699482248c2a9347cb251dc83a5150230725cd538a23409a26a0a3c1efd7037c119b53bf5a2a950e3b4fc1bfff072cc3a65c3164675ab1fd0aa991a6001acd7a6c1e7dd4604af2ff5dc06dc00b5937388fc42a006173e7dd35be7e33e6273855c42a806e926ff460ce52f0fcd3c4610652255601f461d3be7ad8091ccabae1792356010c075e53e7dfec077664ddf0bc11b3002e05ea597ff704966efe3696957388570000efc1168c0c2a82645ad887f9018bb000d1e3d854b2d0c42c800b806f00af8323451004834e925492547608bb81b5c05ce006e039e20b1b378c9805007025f01de032a02de874809393e77f007c18e8288b2411c22bc03dc015c0d7816d595f4c16c49e8e2d01970317031b81a7b0d9413bf056e012cc599c0d5c03ac049e9474784996a42dc0526035b01813cd29595f5853917c2b97651d6897b44bd2bd92a668e0dc419ba439927e23a927a3362e5393e602f2c068e0a3c04f812f00a7a9d22c74013f03ae063e87059bc2dee802fe8145157f8565ef0e647d51b947f91901420e49fabd2cfbd6ae814784499256497a59d26f65bb93ce94edfc69937496a4ab643b861bb56329d511a0c802287340d22392664a6a0d6fbefa77214f9174baaaf6fd0542192be97699a8a21240d14cc040b401ef061ec6d6ed4f2e776c123fe82d954acf964aa56d61ca192ad2ce9d586afaf1ac2fa65e5c00fd8cc5e2028f024b8071aa6fa76f27700716728e06174025256032f055cc519c03b5451a13fe803989d1e0021898566006703df5c54a3a8197b26e7c3db8008ecd089afc1e35f5c53580b381f175bc7e34496e22165c00c76602c93e8663f901c17397603e4434b800fad98fd9efb0a74f063e416d7b19c6601b3ba2ca23b800fa37692ec03afb95aae7676173fc230a44068fc7025fc2125351117b36f078109602be07f82e56c6650436fdfb50f0ba566021b68b7915f04749e5d5c81d9889588cede889ee7e46d7e00631602127493dd8da80b7001706af6fc5468219c03f49f6f403138173886cd80f299a007ab0b5812b93dfe1ba003093381c78994a01943905989afc3405cd228057b1624c2f60c3fa24e022e03cec88983ee0afd810fe08899d4fbef5e5f798800dfdd7639b4b0b41ec0210f03b6039567c692fd6d9c3b0f9f85c6c01e82f816f9144e9ca1d9f747e3bb65a6831f6ad2f94631cbb007e8179eed575f87a654bbd5600f761c2385435dcb702efc0a66eb3b0fa05852366016cc2caaa0c588431792c82695d30dc4fc13cfbb9d814aeb0c42c8007b125dd83ee0f0c3afe74faedfc39595f401e8855005d98edafa7a0d23b81af006fc67c04877805b08bfeb978ad4cc3968a3b01b17abcad58d4ae08d77a4289f5a68c2629a532d86a9de0f98959373a8fa42980462e751d8eadddafd5844dc40a53c640bd750f8e8b3405b08dc68ae00a92ecdbd14601f51f16bd004be6e49d2e2c37911a690a600356c4b1518cc39671cf045a8e92a61d85057a1612473de2e7b13d8ea99166a1c816e0cbc0e71bfcb93bb01dc0abb1ad5a07b18e9f86cdf967616bfff34e0f7013b6b43cb57ac169178b7e2d56b3efaa067fb6b014ef0e6caf5e0776cc4c0c1d0f26dabbb052bafb9bae583454d8e933b010ee3c0a1e864dd88e25aa56027b9bb65c7c194fc41c661fb6137905f067323a3d24eb1343dab1e9dc62e08dc41b97a8874358187b05b697b00b0a726248358110cec21cb68f13d9bafa7a2e17ab667e2fb606b113b23f412c1753a360963015f3849bad4ccb4eecb0a8db49f60e66ddf165f2d10a2a46839158806709766a68bd31ff3cd10d3c862d34dd08f4e6a5e3cbe4ab355408a103782fe6289e4f5cfe412ff0276c4ebf868c0e84aa85fcb528a12a89b3083b652c8623645fc4f61a3c40527a2e8f1d1f0d41999619921e92b42feb9a3247e1bf92ee9274519d85259cc1506519b76b24ad57be8e91ef9474b54ca859dfaeba886a6c0a6eee38603e96e59b9475bbb0e5e66f07b6c436dcc7e458559f05b402cb29dc993c7686405402281308e139e0d3c0b598b7dd9575db62234a0194494470083b9a7d1eb6dcfb290a5cfdbb5ea21600548c06fb80ef61b985a5d874cc291ac18ce14249774bda9dc22c60b3a409b1cd00a00946806aaafc831b31ff602d169675aa683a0194094e075987859417605bc8dd3f08685a0140c568b00bb81fabfcb99c829e0e527812dfa045d2c592be2f694fd17d80c2211d713ac81392ba5d00052310c218490b25fd4d529f0ba06004423857d2ad92b6bb000a88fafd83e992564bdaeb022818c16870922cedbc41b5a59d5d00cd442084f1929648da34887fe00268460221bc41d21db2553f2e80a29188a05576b2d81ad949632e8022118c06ed92de2f69a3a45e1740c108847086a4a592b64a7ac9055030121194244d93748ba4536314405c2b187388fab7b509506c8b421dc7711cc7711cc7711cc7711cc7711cc7711cc7719ca6e4fffd74ee68eeb5cf9a0000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda793000014f54944415478daeddd79945f657dc7f1f78f9015210b104312a06a2d4231a28123205229202161915d014381b20b41564138b5caa2229b5628fb2204644951a141140a4882580e200141a4504802c56c33804926b37cfbc7f71973332499df76ef737ff77e5ee7e4842533b9f7ce3c9fb9cffa05111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111159a34aec0b90749919f8d77978f8b50bb03e3010e809bfda80c7807780e5958abe2dca425fe9824a34fc4d8103807d80bf01c6008358f9b537a0139807cc026e079e00962a08445a9099616643cd6c3f339b63665d56bd7633bbd3cc7632b36121484424ef42c31f66669f33b33b4263ae478f992d32b3ebcc6c3333ab280844722a34fc4a68acd79ad9c2d0881bd565662f99d9296636ceccd6511088e444a2e18f33b393cdecc51a5ff7abd561de95d8dfbc6b11fbd645cacd56ede73f1f1a69dada4ce30322f1241afe4e66363d34ca2cf58e0f5c6f1a1f10c986a5d7cfaf57977997639a7917444120d26cb66a3f7f9a99bd60e9f4f3ebd561de05d1f8804833d9aafdfcdf5b36fdfc7ab5994f3dee6c1a1f68195aea9543a1f10c05b6034e00f6c497f1b682c5c00ce03bc05cc0b4a230bff495c9115b75f9ee3781fd818d625f571dba813f0237007701f35110e492be22399068f863814380a3804f0003625f5b833a8197816f013381650a817cd15723b2c4ebfe24e07c606b7ca75e91b403bf04ae069e4241901bfa2a44121afe10607be0783c005aa59f5faf45f8f8c005687c2017f4f433d6a79f7f0e7020add9cfaf57eff8c04dc09d687c202a3df58c14b89f5faf4ee045e0dbc083a85b10859e780612affb9380f3800914af9f5faf763c00ae019e442712654a4f3a45a1e10f0676008ea3b5e6f3b3b610b817b8088d0f64464f380589d7fdf1c0d9c0c1c0c6b1afab0574e3d386370377006fa12048959e6c13251afe26c0978123812d296f3fbf5e9dc01c7c35e183a85b901a3dd52649f4f3f7c057f16d83faf98dd2f840caf4341bd4a79f7f2c3019f5f39b6d01700ff05d343ed0547a8a755a4d3fff206074eceb2ab06ee025e016343ed0347a7a355a4d3fff9f80ad503f3f2b9dc0f3c085f8fe02750b1aa0275783c4ebfe9ec0b9a89f1f531b1e00d7a1f181bae9895521d1f0b7078e01a60023625f97002bc7072ec6ab1ba95b50033da9b5503fbf65f4002f00b7e2e3036fa320a88a9ed06a241afe187cddfe11f8f2dd75625f9bac5527f07b7c35e17f021d0a81b5d3d3e9a34f3fff1ce0d3a89fdf6ada80fb811b81d92808d6484f25080d7f103e9f7f14b0373032f6754943160077b372fd000a825595fe69244eaf4daedb573fbf387af069c39fe0e70f687c20a1b44f21d1f037c1fbf953814fa17e7e517502cfe1b3051a1f084af90412fdfc49783fff33a89f5f164b8007f0f18159c08a320741a9ee3cd1cfdf11dfa9a77e7e792dc08f2cff1e251e1f28c51d27a6f536034ec397f0aa9f2fbde303b7e17b0c16962d040a7fb7a1f10fc457ef5d086c81d6edcbaabaf171812b8047a03c6f0385becbd0f83700be811fbdadd77d599bb9c049c02fa01c2150d83b4c14dc381f7fed1f1cfb9aa425ccc3eb31de0fc50f81424e7925a6f80e074e418d5faa371eef0a7c2ef68564a19001107c163803582ff68548cbf918f0756044d1cb9c172e001267f39d08fc5deceba9f736c2af76e00dbc7a4e27d015fbc24a645ffc0d922287c0bab12f202513f1453eada60d3f16fb21e0bdf0cf4f031f0276c56733b60576c2a734b578293debe2cbc26fc7170f1552a1022091d4bbd05af3fc9df8eab41f01cfe241d077bdfaab89158c6380fd81a3297779b1b46d8d2f0f7f34f685a4a5705d00fc44de5d625f440de60267e28df9914aa5b2a452a9ac76b34aa552a152a974e0dd822bf02dcb37032b62df44418d04fe118adb0d2862000cc10b70b682b7f0b18a2b81c5d54e398520303c3cce00be0ffc25f6cd14d417810d635f445a8a1800ebd21a23fff3f1c54975cf37878f69c377b8dd802f6d95e61a8bff5029a4220600e47f815317f0039ab0e22c7cec52bcccf6cf62df5801e5fd7ba921450d80bc9b0d4c87e6ac340b9f63113e8858d8116b693e0540f656e03bcffe9cc2e77e12f865ec1b94d6a100c8de6bf83c7f53d79987cfb51cb80f5816fb26a5352800b2f704f07f297efe27817762dfa4b4060540f65e01ba52dc65f63e0a00a99202207b694fd5b501cfc4be49690d0a806c75e11b7c5211de2a7ad01b8054490190ad01a4b84829b15cb5507b3c243d0a806c55f0538ad23414df2024d22f0540f6c602eba4b8b96419becee0797c97a1c81a2900b2f77952da5c9298597800988cef32fc037eeaadc8072800b2f7117c8f792a123b05e7033fc4b70cdf002c8e7de3923f0a80ec0dc7f7fe0f49738f792208de044e050ec42be5be1bfb01487e2800e2984c38b22ced832642102c03fe0b38022f7dfe223a5f505000c4b201be1d7857c8e6b499303eb00c9881770bbe01fc29f68390b81400f17c0cb8043fe0b3ae103033cc6ca0990dade6e3fb9c247429f055bc4aeea2d80f43e25000c4f569e07a600f60702d2110feec28bcf2d165c0e66656a92108009ec28f243b04af94abb3054b462bc6e2db023f7afa36e072335b002c5dd366a1d0c08701dbe38d771f7c85e1cef801a1d3cdec2d3e78aaf00784ffdf61660fe3fb0766e3e30413d049c3a550a8e38e42e31807fc162ff1d44abaf011fba7f0f3021ec50ffa1c841709e904b602b6c3ab1eed068ce8f3393af10540dfc10f06595eedaec34409f571c061c071f89465d9cdc3c3767e11eb0416ea8e5a3c00923af03303daf146de8387c1d8f0effd7ddddaf072d7d78667d151631080bf511c89bf618c8afd40225200b48a020540b3bc03fc141f23980bf4d4180483f141caaf017b53ce6e41a103408380c5f661bcdefdafc2ef23ab1d684c142179183806380baf5aa4a3c70b4401507c03808fe3eb0e6e027633b361b50401b010b81cef0e5c062c887d53d21c857aa75117a02aedf866a14bf19fe8fdce16f40acf7720f00ff88ac24978f9ac35e9c2ab1f2dc207369786ff3e06df14351c7f4b1914fba1ac45a1bb0085ba230540d50cf85fe06ae04efc9bbcd6201882d7cdfb16be9e2139a5dc85573c7a181f8c7c0f0f81deeec3403c38d603be00ec85cf6a6c10fbc1ac8602a05528006ad605bc84ef16bc1d5858c7b4e126c041c0b1f84124af015701b7028bfafb7c89750dbb03ff0a7c927c754d1500ad420150b76ebc4cd995f83a84657504c1e6f84cc133c02ca8beee41e2738c072e020e253f21a00068150a8086b5e14170151e0455770b9a217cfd36c4071c0f271fdf9f850e80bca4ace4c3087c83d05df81902e3aadd5fd00c891a87e701cfc57e1865a00090d5d914f81e3e5bb00f50f5b46193bc898f07b4c57e1045a700903519881f5d766bf8b5bb99d5b463b11e89d7ec07f1990449910240fab3017000bea4f8526ad8765cafde5d8af81b880a9da6480120d51a091c0fcc044ec7c707d23ecde809bc3b20295100482d06005b02df05fe035fcd97a63f03ff1dfba68b4c0120f518809f4bb0535a7f41e806ac00fe18fb668b4c01208dc862625c630029520048de653aff58360a0069c45048fd58f3b48ba9969a02401af105d6be1db86e2154d6053e1afb268b4c01208d180dac9fe2e71f056c1bfb268b4c01208dd81c3f3c342d5be2cb9225250a0069c460fc509041cd1c07481c38720c297531c42900a451fbe2877934653030f13976c16b184a8a1400b23a2bf033fc5eade2cf8e02cec5cf616896f1c0b729773d824c280024a91b5f797706f015e0de2a3f6e07fc249f518dbc05848f1d0d5c889f332829530008f8629bc5f8b1e17b003f0eff3e133fd5b73f15bc9cd815c0f85a3709853fdf7b24d825f8a124652c4292390580bc07dc83f7e5a7016f542a95ded37b9f08ffaf1a03f0b3fceec3cf06acea1091c451e37be167001c4a3e8e022b0555072eaf4ee04f7879f107e95391b852a96066ddc04ff0c1b88f57f139070013f14ac73381abccec25e07d12078d8646bf5ef835012f4fbe2fb071ec8752360a80f2e906fe005c0fccc05ff1d75633f069e087f86120d516f0d8003818f862f8fccf022f9b596f619061c0d6c03678919011b11f4a592900ca652170377031551403096f01e047824dc0ab0155db37afe073f82381bf0fffcd12ff4f724001500eedf86bfeb5c06c60798d475cbf0b5c8377051a396e5d0d3f671400c5d605bc88cfa9cfa4f6821fe0957fbe8c8fcc8f897d43d25c0a80fc32fc27ef7bf828f9a8f07b35ba8157805b80e9d457fb6f18de873f1b1fd8abf6ef9616a200c89777f191f999e19f9f035ec607c976c4abe94ec497de8e60f5afd44bf0053c17e0076ad6d3f0b7034ec4abffe6b160a7348902201f3af02abad701bfc317e1241bee5c604ea2814e04a6e2453b36c683a003f8393ebaff1beaabefb729f02fc07e68134e292800e27b13afc2331d68eb6f541e586a66bfc183e2667cd9ee5856beeeb7d532c097a8c73715f867600bb40aaf34140071bd8e97d5fe35545f4db7b7708699cd02e6e0fdf3be6f0d6b151afe50fc68ef138129e8fba174f4058fe735e0386a6cfc49e163deade56312affb3b005fc3a7f646c47e18128702208e0ee00734d0f86b151afe3a783fff60e024fc441f293105401c33f035f65936fe51f88ebd9380bf45fd7c410110433b7023f07eda8d3f316bb03d700a3019cde74b8202207bcf9272bdbb443f7f5be034bc9f3f3cf68d4bfe2800b2f718fe16d0747dfaf9070127039bc5be61c92f0540b67a8005906adf7f34be12701bd4cf977ee844a06cbd47fad56e0d9fdf57e3977e2900b2f517e07f52fe3b56e08b8244faa500c8d640d21f8c1b808ffc8bf44b0190adf581ad52fe3bb2081929080540b686e0076ca469309aeb972a2900b2f7499a5c4baf8f5d493f64a4201400d99b84afcc6baa1028bdc53af5062055296200187ee67d5e7d18ff29dd94629a7d6c871fe325cdd381afdf28a4220640273edf9e6787039f6dd6270b41321c5fefbf51ec9b2b98a781b6d81791962206401bfe45cbb38fe2876d6ed8e85b40e2e3a7025f8a7d6305d3896fd95e16fb42d252a80008cb6b3bf1d2d679ffa2ed8317e818596f08243eee00bc44b7fafecd350f7818b2d9b61d43a10220e171d25f72dba801c09178d9adcdcdac526b455d7c8fffe9c0bfa133fbd3f028303ff645a4a9a801f0367e606657ec0be9c7bac057800780e3814dfa0b82504a7b3d6037bcd2cfc5a8f1a7e16dbc24da8aa2fef48782966a0a0d6804f0ef78e5d956b01c2fda39037f8379155fd7df8107c510e043f80cc21ee1779dd99f8e2ebcaec20540b702a00585109808dc842fbe69153df840663bbe757821beb67f2c1e00a3d136ee34f5e047ac9f468d47acb7a2c2de5de2357a37bc8fbc45ec6b92dceb01ee004e051616bdf14371c70092a3b6bfc60b5efc8efc8f09483c1df8dbe2344ad2f8a1c06f00bd12e7e3f556b93d051d872d2b75e3632f5702f700ed6569fc508200e8950882edf182189351418cb27b131f28be1dafbf587565a5a228d7ddf281925827e141a041b57269c72b30ff0878921236fc5ee5bc6b56298a791870047e886661c74404f031a099c08ff1a9d6aa2b281755a9ef3e3153301e380b5f33303af67549d3f500cfe38bc36e031695bde1f7d253e0af413008d8119f319882c6078a620170175e827d2e14775d7f3df4241212876a4c01cec31710697ca035b5e1affbd703b3800e35fc0fd213e923315b30169f363c194d1bb6922ee0057c19ef03c07235fc35d3935983c4f8c0cef820e197f0dd77924fddf80ed09bf1d57cf329f1e87eb5f474fa91181fd8195f3fb017aaba93378bf1c1bdcbf0b97d35fc2ae929552904c1c6f8c93b870213d0f8406cddc02f80abf0a2ab85deba9b063dad1aac6659f1a978255ec9560f5e667d3abe67bf346bf79b4d4fad0e8920d8013801d81b55e3c9ca1bc07578c3d7b45e83f4e41a905856bc23bec9680a1a1f484b1bf033e01ae0b7a89fdf147a824d108260237c7ce068fcec010541737403f7e367273e8996ef36959e649324ba05e3f123bf0fc64341cfb83eddc0cbf8429edb503f3f157aa24d96e8167c0a1f249c8c570596ea18decfbf061fe42be536ddace8a9a62404c130fcf0ce6f029f41e7f6f7a71b3f94e312e019d4f053a7a79ba244b7600c7efcf751c027d0f8c09abc8d2fb87a550d3f1bdaff9ea24aa542a55231fc1bfb72bc3b701db028f6b5e55437f9afe854280a800c2482e04de0ebf800e10cfc204a91681400190a41b01c78049f2e3c0d9883ffe413c99c022082d0bf6d03aec637179d8b570212c9940220923edd82efe38b886ec477b68964420110590802f0556e27e0b305f7e265ce4552a5edac3911426085993d043c8d6f6f3d0a3f964cd386920abd01e44c0882c5783dc3bdf14544f3625f97149302208712e303f3f0f181afe2d56bda625f9b148b0220c71241f0287e5cf921c0cf8115b1af4d8a4101d00212eb071e028ec41713bd80aa1d4b8314002d24313e7035b0273e4ea06943a99b02a0c5f4191f3807d80fb8132f7829521305408b4a740b1ec7a70ba702cfa1f101a98102a0c5856ec132fc78ec29c019c04b687f815441015000896ec15bf8b8c024e01660097ec28ec86a29000aa4cffe8293f17266f7a16e81ac8102a08042102cc5c7078e06a6e1476c69da5056a10028b0303eb0043f60731f7cdbf1ebb1af4bf243015070896ec17cfcb0cdc3f165c54b625f9bc4a7002889c4b6e3d9c031f8b2e2fb50b7a0d414002513826019f02b7c7fc1e9f8f6e39ed8d726d953009454781b588497dcda0f381f9f3d901251009458a25b300fb8085f4d782b1a1f280d05802483e031e058e03060163a96acf01400f25721043a8099c081c099c08b6859b148b99819665631b3cdccec72335b60e99b6b66e342493511892d04c12033dbc5cc7e6a666d0a009192094130ccccf632b3a7cdac4301d0fa3406205509e3034b8107f0d38acf045e41e30322e512de06d6311f1fb8dacc169b598fde00444a2404c15033dbd9ccee32b3a50a009192094130dccc8e36b3e7cdac5301205222b672da7053333bd3cc5eaba35ba0001069658920d8d6cca65b6dd3860a009122b095d386bb9bd9dd56ddb4a10240a44842108c34b36966f6ac99752900444aa4cff8c0d966f6ba0240a464421060669f37b33bcc6c890240a4646ce5fa812966f678a25ba000102983c4dbc02666769699cd31b3371400222592181ff888999d6c662314002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222229227ff0f49c7af22e1c461990000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda793000021bd4944415478daeddd79b0dde57ddff1b72c89cd2004484804895580118bb1303608626417d3d471e22c6d324927b1bbb8d37fd2bd9d693b6dd34edb693c29ce241342d39810db1803766bd6c6c61888ca6204129bc426045a10921142421268b9d2ed1f8f540b215d9d7bceef77bebfe779deaf19fe0174cfe79e9fee7d3ee7fbfc9609a3a3a34892a4ba7c283a8024491a3e0b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b200489254210b80244915b2004865fb0a300a3c0c2c045e055e075601cb803b80cdc053c0d7a2c34a1a9e09a3a3a3d1192435e77ae093c0297bff19af116005f01cf0abd1df8ca4f65800a432bc089c049c084c68e86b6e03d602e7467f73929a670190f2f624301738aae5d7590d9c16fdcd4a6a8ee70048f95a0dcca3fdc51f6036b00bf8f3e86f5a52339c0048f95941fa343e31e8f5df25958f8f44bf1192fae70440cac79f013b8133895bfc018e01ce235d4d2029534e00a4ee5b06cc028e8b0e7210bb4945e0f4e82092c6c70980d46dab80f3e9e6e20f6912711ae9fc80bf880e23a9774e00a46e7a11380b98141d649cb602eb8139d141248dcd0980d42d37023b48d7dee7b6f8031c0b9c4dba7f80a40e73022075c332d29dfba6460769d008690be3ece820923ec80980146fdf3effd4e8200d9b44dac6d8097c233a8ca4f7730220c5590a9c034c8e0e3224ef003fd9fb3d4b0ae604401abe6f92f6f9e752cfe20f30857472a0e707481de004401a9ee748fbfc274607e9805da43b1a7a3741298813006938560117e0e2bfcf64d2dd047702b74687916ae404406ad733a44fb9358dfafbf136f026a914481a022700523b6e237dbabd0817ff5e9c40baf7c11bd141a45a3801909af50c699f7f5a74908ced025e215d1a29a9251600a9396b8053a343146404b817f8427410a94416006970cf92f6ae1df5b76323e9fc00af18901a640190fa7727f039d213f1d4be75a4ed15490db00048e3f704300b98111da442bb80e5a49b28491a8005401a1ff7f9bb61047800b8363a88942b0b80d49b674867a5e7f888de926d00d6031746079172630190c6f603e01a604274108d693d30333a8494130b8074708f0067e049673919015ec6f303a49e5800a40f729f3f6fa3c042e0eae82052975900a49f7a8ab497ec657d65584f7af4f0bce8205217590024b81ff84c7408b5c6f303a483b000a8660f027370dc5f8311e025d2239925610150bddce7afd7c3c055d121a4681600d566317031eef3d7ee0d601570797410298a0540b5780058101d429de3f305542d0b804a773f699fffb4e820eaacddc032d26448aa860540255b4d7a688fd4ab4781f9d121a461b000a8448b48d77e7f283a88b2b486747ec095d141a4365900549287804f458750313c3f4045f313924a7017f01a2efe6ad64cd2fd0396440791dae00440b9739f5fc3f263bc6c50057102a05c3d463a7bdbc55fc3f249d2a4e981e82052139c002837eef3ab0bde007e263a8434082700cac59dc00a5cfcd50da790ce0f78223a88d42f2700ca81f7ed57d73d4eda2290b2e104405db610d8838bbfbaef13c0abc07dd141a45e39015017fd15e9696d13a283487d584fba8450ea342700ea923b489fa27e16177fe56b06e90a9547a38348637102a0ae588b775d53991691b608a44e7102a068f793f6f95dfc55aacb4893ad1f440791f6e7044051dce7578dde044e8e0e218113000ddfffc67d7ed56b3a69e2f5507410c9098086693d7efa91f6e7f9010ae30440c3702f308a8bbf74a07de707dc1b1d44f57102a0363d005c8da37ea9171b8193a243a81e4e00d4866f939e9ab600177fa957279226655e2da0a17002a0a6bd094c8b0e2115c0f303d42a27006aca77499f5e5cfca5665c469aa4dd111d44657202a041fd88b4cf6f9994dab30938213a84cae22f6df5eb1bc04ae0d3f8f7486adb54d284cd69801ae30440fdd8889f46a428a3c08f812ba283286f7e72d3787c9bf4cbc7c55f8a3301b81c5805dc161d46f97202a05edc4fbaa4cfc22875cf66d21681342efe42d758be06ac063e837f57a4ae3a9e3499fb4e7410e5c509800ee52dd28d4924e56314780c981f1d44dde7a73a1de89ba45f222efe527e26904e0e5c4dfa59960ec90980f67980f488de89d1412435660b30253a84bac90980fe04789d74929f8bbf5496e348133daf16d0073801a89bfbfc523d468127f0f902dacb09409d6ec17d7ea9361348cf17580bdc181d46f19c00d46521e9042147fd92b692b6085429270075f843601d70152efe9292634993c0dba38328861380f2bd8d7709933436cf0fa89005a05c2f0073f013bfa4de795be18a5800cab40638353a84a42ced215d1a7c5a7410b5cb7300caf207a4519e8bbfa47e7d08980dbc161d44ed7202508e9b81df8c0e21a928ab7112502c0b40196e057e2d3a84a4226d00a6478750f3dc02c8df7fc4c55f527ba601af468750f32c0079fbe7c0bf8b0e21a97867000f478750b3dc02c8db6e2c719286e76ee017a243a81916807c3d047c2a3a84a4ea4c880ea066f8e9314fff13177f493196470750339c00e4e91d7c8887a438f7023f1f1d428399141d40e3f6235cfcbb62cfde7f4648d3b48978eb65d5617e74000dce2d80fc7c343a40a576edfde73e6007b093b4d84f068e068e2415ea95a4eba66f00b693eecc2895662a707d74080dc62d80bcfc29f0e5e81095791d5804fcf2005fe36bc095c079d1df8cd4a0978173a343a87f1680bcacc4db720ecba3b433e6fc217005704cf4372835c02b0232e616405e664407a8c07ad22fb5b6f638af013e0c2c89fe46a5067c3f3a80fa6701c8c7ef93f699d58e3dc0b78099437abd79a4a2f162f4372e0d60583f2f6a815b00f97801f790dbb20a383df0f59701e747bf09521f46808b48bf9f94192700f9782b3a40a19e2376f107984bbab993949b09a4079229434e00f2b11138213a4481ba7412d3bf027e2f3a84344eabf1e4e42c3901c8878b7fb39ea15b8b3fc057803f8a0e218dd3a9d101d41f2700f9f04035672bddbe9ba2e77b28375d2bd3ea8105201f1ea8e6e4f0cb6a35302b3a84d4a31c7ea67400b700549bbf880ed0a3d9d1012495cd02a09a6c02be141d621cee8a0e20a95c1600d5e477a3038cd32f921e4024498df31c807c78a006b3863cc7ea8b808f4787900ec3730032e40440b5b82d3a409f2e233d7a58921ae504201f1ea8febd4b7a004fae9e21dd6e55ea2a2700197202a01a2c8d0e30a09ba203482a8f05403578203ac080ae03764487905416b700f2e181ea5f09e3c975c08ce810d22194f033561d27002adddae8000d99141d4052592c002addbbd1011a726374004965b100a874a53ca9ecade80092cae23900f9f040f567197041748886f877405de53900197202a0d2ad8b0e20495d640150e9b6460790a42eb200a8745e3a274907610150e966450790a42eb200a874a55c05f0c5e80092ca620150e956440768c897a203482a8b9701e6c303d59fdc9f04b8bf55c0ece810d241781960869c00a874c700bf1d1da221a701ff1718890e22297f1600d5e06f470768d0cf0293815ba28348ca9b5b00f9f040f56f03303d3a444b9e022ec232af586e0164c802900f0fd4604aff05f50630333a84aa55facf5791fcd4a05a3c161da065a7ecfd1e7d6890a49e3801c887076a3023a4bdf31a3c0ccc8f0ea1aa3801c8901300d56212f068748821b992f40b790516474987e004201f1ea866d4f84965037052740815adc69fabec3901506d56470708300d78099f8c28693f1600d56616f040748800e701c7018f470791d40d1600d56801f52e849f248d6bef8b0e2229960540b5ba0cf84fd121025d4bba9be0b6e82092627812603e3c50cddb057c13f8bbd14182fd19f01ba4e72648fdf024c00c390150cd26037f87f8ed802f02cf05befedf273d31f199e0f741d2103901c88707aa5db703bf16f0badf07ae068e24ddc56f5af41b413a497241740865c50940862c00f9f040b56f07f07f805f1ed2eb2d05e61ef0ef464897ec5d10fc5edc472a01938273280f16800c5900f2e1811a9ec7802b5afcfa8f009773f85f9a4f904e568cf41de073c0d1c139d46d16800c5900f2e1811aae3dc022e078e0fc86bee6cbc06cd2b8bf57af926ee97b4df0fbb11c383b3883bacb0290210b403e3c5071b690deff5b807f388e3ff73dd20d78ce66f00711bd069c19fd46004f02f3a243a8732c0019b200e4c303d51def024f9116f5fd47f423c083a4fdfb535a78dd5da4ed8305c1dfff13a45233353887bac30290210b403e3c50da679474a6fe5f0bcef14dd29513b53c6659876601c89005201f1e281d6819696ffe0bc1399692b63a2646bf210a6301c89005201f1e281dca32e22f1b04781df899e8100a6101c89005201f1e281dce3ba4ab16223d0b9c85b715ae8d052043de0a582ac714d289827f1098e122d26d85bf43ba945252473901c887074ae3b1996e9ca5bf9274ef033f2196cde39b21270052998e2795c6a783739c0efc6be0ede83744d2fb3901c887074afd1a01d6107f23a195c0a9b47bb5c0ee31befe58ff4d8371029021270052f9260167005b817f1b98e3f4bd59ee6bf8ebbe4adaf258bef7eb4f38c43f5f26ddc408601d9ea3a0ca3901c887074a4d594bfa241e6d2170d5007f7e2970e180196e063e0b4c8f7e3332e704204316807c78a0d4b44781f9c1196e263d7eb9d7a70dbe02cc6929cb5adab985730d2c0019b200e4c303a536ec005e022e0ece710fa98c4c3dc47f7f8ff4fc8561149697807382df8fdc5800326401c887074a6d5a09ac023e159c632930f7807ff757c0d543cef17de0dae0f7222716800c5900f2e181d2306c044e8a0e412a232703f702bf1298631bded5b01716800c5900f2e181d230dd879f80f75945ba99910ecd0290210b403e3c508af034704974880e788d7419a30ece0290210b403e3c508ab202781cf88de820c1de018e8b0ed15116800c5900f2e18152b4ae9c1f10c99fc383b30064c83b014aead589a405f0d6e820816e8f0e2035c509403e3c50ea923dc043c067a28304580dcc8a0ed1314e00326401c887074a5df402707e748800bb7182ba3f0b4086fc0b2c69101f2195d3d7a3830cd95dd101a4413901c887074a5db78bf4d8e1b3a2830cc94e607274888e700290212700929a32193813d80e7c3d3acc10bc181d401a84054052d38e047e0b581f1da4653747079006e116403e3c50cad5cbc0b9d1215af236877e82614ddc02c8901300496d3b87f4509d25d1415af05a7400a95f160049c3700ce999025b811ba3c33468557400a95f6e01e4c303a5923c015c161da221fe6cba0590250b403e3c502ac908e55c42e7cfa605204b6e01488ab0393a4083b6440790fa61019014e1dde8000dda1a1d40ea8705405284d9d1011ab42d3a80d40f0b80240d66777400a91f160049114a7a78d0b1d101a47e5800244528e977cf31d101a47e7819603e3c502ac90ee0a8e8100df167d3cb00b354520b97948f238137a2434835b300488a72777480067c353a80d42f0b80a42857450768c025d101a47e5900244599151da001e7450790fa65019014e558e0e6e810033a253a80d42f0b80a448394f01be151d401a849701e6c303a512bd47bed7d16f053e1c1da223bc0c30434e0024453a1af8f3e8107d7812177f65ce09403e3c502ad5765211c8c936f29d5cb4c10940869c00488a7614b03c3ac438dc878bbf0a600190d4056703ff263a440f6e07ae890e2135c12d807c78a0d405db4897efdd057cbee1affd0e707cf4377818ef51ce330c9ae41640869c0048eac52ee07a7efae8dbafb4f01a5348e70374d5125cfc55102700f9f04029c26e600330f320ff6d0570660baff92c7071f4377e809dc0e4e8101de60420434e00241dca2a6012075ffcf7fdf7365c042c8dfee6f7338a8bbf0ae404201f1e280dcb7bc05a604e0fffef6adabb9bdf28f11f529e04e60567c88113800c45ff7049ea8e3dc0d74897b8f5b2f803fc6e8b7926005b4867de0fdbab7b5fdbc55fc57202900f0f94dab41138a9cf3fbb61803fdbab65c005437a2f9ea67be720749d13800c390190eaf63ae997f7200bf84d43c839977442e28a165fe3f7814db8f8ab124e00f2e18152937600eb81d31bfa7a8f019f1c52f69dc09dc0df6ae8eb3d079c0c4c1f52fe123901c89005201f1e28356114f836f09b2d7ced1dc01143fe7ede225d31b003b8b6c73ff32ce9d90313489731ba780dcef7304316807c78a0348851602170758baff1a7c09703bfc7ddc044e05d5231d8b4f7df4f05a69116fded78339f365800326401c887074afdfa09306348afb510b82afa1bd6d05900326401c887074ae3b586341effb921bfee30ae0a50b75800326401c887074ae3b118b834f0f52d0175b1006468527400498d19059ea21b37afb1b04a1de77d00a4326c24fd3c472ffedf212dfed3a2df104963730220e5ed4dd2cd712e0fceb110988f1f2aa46c5800a47c3d4fba435ea43f04fe26704af49b21697c2c00525e46490faa393b3a08e95afb13a34348ea8fe33aa977eb48379b590f5c077c9674f6f3be7f3e077c0bd84a1acbbfddf0eb6f22fdcc462ffeaf0123b8f84b59f332c07c78a0626c23dde7fe9a01bec633c04503fcf98dc04ae24ff0bb87744f013f38e8405e0698210b403e3c50c3b50598d2f0d7fc2ea9089c338e3fb306981dfc5ebc4aba9deed4e01cea2e0b40862c00f9f0400dc70bc0f92dbfc6ada407d74c1de3ff7910f874f49b41ba8db04fc9d3e1580032e4284f4a36939e07dff6e20ff0ebc009c04d07f96f5b48d7d2472ffe4b815db8f84bc57202900f0f547b369116e428a3c01ee0abc0bf087e2fee219ddc38393887f2e20420435e06a8da7d03f8ede00c5df9e5b98ee13d355052302700f9f040356f038eb8215dd6777a740865ad2b2556e3e03900aad5edb8f82f0676e0e22f55c909403e3c50cd7906f868748840b7035fc07d7e35c70940862c00f9f04035a7e65f562b81d3a243a83835ff4c65cb2d00d5e63f470708b28854225dfc25014e0072e2811adc0f80bf1e1d62c8d6e293fad43e2700197202a05aeca1aec5ff0660272efe920ec1fb00a8163f8e0e3044ef0247478790d46d6e01e4c303d5bf51ea98763d0ccc8f0ea12ab90590212700aac18ae8002d7b0dafe597344e357c2a92be1e1da0255f01b6e3e22fa90f6e01e4c303d59f3dc0c4e8102dd80c4c890e21ede51640869c00a874eba30334ec87a432e8e22f69209e03a0d21d1f1da021a3c008fecc4a6a88130095ee89e8000d72f197d4180b804af75fa30334647374004965b100a8749f8f0ed09065d1012495c502a0d2fd4e748086bc191d4052592c00521ede890e20a92c1600290f2747079054160b804af72fa30334644674004965b100a8749ba20334e4a3d1012495c502a0d2fd93e8000d79233a80a4b2580054ba91e8000d991c1d4052592c002addf4e8000d99161d4052592c002add29d1011a50eae38c2505b200a80637450718d0cf470790549e09a3a33e663e131ea8fead0766468718c00830313a84348609d101347e4e00548319c0ddd121fa74072efe925ae004201f1ea8c12c07ce890ed187dd58d4d56da3f877344b1eb47cf838d8c1cc890ed0871bf06754ddb72e3a80fae32f977c3c1f1da0002f460718a72f4507900e630ff0487408f5c702900f1f0633b87381af4687e8d14ae0c8e810d2618c02ff213a84fa6301c8c75f460728c43f8e0ed083eb80d3a243483d7801581a1d42fdf124c0bcecc1cb6d9ab015382e3ac4183cf14fb9780858101d42fdf1974c5edc6b6bc6b1c073d1210ec133aa959305d101d43f7fd1e4e59ee80005b980ee15aa77a30348e3b0323a8006e316407e3601c7478728c8f3c0dce810789f07e5e7ebc017a343a87f4e00f2f3727480c29c4fece2fb036057f49b208dd3565cfcb36701c8cf65c0f6e81005da0d2c19f26b3e0d7c169814fdcd4be3b4383a80066701c8d3f7a30314e843c025c0dba4cbf0daf41469ea7071f4372df5611d707574080dce7300f2b518f858748882ad01de003ed1e0d7dc467ab08f37f851aef600bf057c2b3a88066701c89b07af7d3b8145c006e097faf8f34f032700b3f01e0ecadfff027e353a849a6101c8db7f07fe5974888aec0476906e22b4187889340edd04cc243d76f842d25307b7933ee9bbe8ab14cfe2b655512c00f9fb1fc03f880e21a968eb49255705b10094e111e08ae810928ad4f55b67ab4f5e055086f9c083d1212415e72d5cfc8b650128c7a749e7044852139600d3a243a83d6e0194e756e057f0e63292faf73ae9ca1515cc0940797e1d980cfc65741049d9d90cfc0e2efe55700250bed5f8c32c696cdb49f7acb83c3a8886c70940f96603b790ae5f97a403bd0a1c8d8b7f759c00d4653170017044741049e1bcb6bf724e00ea328f7477ba35d1412485d905dc868b7ff59c00d4ed2de0c4e81092866227f00a30373a88bac10940dd4e02ee0246a283486ad54f48d33f177ffd7f1600fd22e9b2c19ba283486adc16d203a966440751f7b805a0036d243dbe5652be46817b805f880ea2ee7202a0039d08dc00bc111d44525f6e23fd6e77f1d7989c00682c8f90ae0df699f652f76dc2e99dc6c10980c6329ff477e4eee820920ee975d2cdbe5cfc352e4e00341eef92ee1826a91b9690eeef218d9b13008dc731c0bda4fb07488af343d2d69c8bbffae60440fd7a1cb808382a3a885491f748455c1a981300f5eb13a4ed8017a38348157813f8112efe6a9013003561117016de56586ada4e52c9be383a88cae304404db88c745be13f263d6844d2e05e20ddbed7c55fad7002a0362c07ce002646079132b401981e1d42e57302a036cc012691ae4f96d49b1dc075b8f86b489c00a86d2f00b3f1e425e9507603eb8059d141541727006adb47800f93ee5466db94deef35d2b4ccc55f43e70440c37617f0f9e81052b02dc05a52419642580014e54d605a740869c8f60037017f2f3a88640150a43b818fe1f85375d8024c890e21ed630150172c261501a9446b4827c24a9de24980ea8279a4079b3c191d446ad02bc01db8f8aba39c00a88b36e3a854797b04b8323a8434162700eaa2e38147f1b1c3cacb28e929991370f157069c00a8eb96931e3434213a883486b7f0aa1665c60980ba6e0ee9efe933d141a483580b3c8c8bbf32e4044039799074b580e707a80b960217468790fae504403959403a3fe0f748f74f97866d147889b425e5e2afac390150ced60133a243a81a1b8193a243484d7102a09ccd247d127b3e3a888ab603f8f7b8f8ab304e00548a5b80cb8133a283a828cf0373a343486db000a834f7039f890ea16278f9a98a650150a9160197e22f700dc6bf3f2a960540a57b8374ae80d40f0b808ae549802add29a4fb07ac8f0e22495de204403559047c3c3a84b2e20440c5b200a8463e5f40bdf2ef888ae516806a3407f823e09de8209214c509806af734703ae916c3d2819c00a858160029791138373a843ac702a062b9052025e7917ed92f8c0e2249c3600190deef53c01dc07bd14124a94d1600e9837e093806b80118890e23496df01c00e9f0d600a746875008cf0150b19c004887378bb4102c8e0e22494d7102208dcf8f808f906e31acf2390150b12c00527fee02fe0630313a885a650150b12c00d2609e234d042c0265b200a8581600a9193f01a6478750e32c002a9627014acd38197816d8141d44927a6101909a73317002e944c13dd16124692c6e0148ed7915380d8b76cedc0250b12c0052fbde018e8b0ea1be5800542c3f9948ed9b025c8fe70748ea102700d2703d09cc8b0ea19e390150b19c0048c375296951b92f3a88a4ba5900a418d792ee26b8233a88a43ab90520c5bb1bb81a38363a883ec02d0015cb022075c74bc039d121f43e160015cb2d00a93bce252d384ba283482a9f1300a99b9e00e600c74707a99c130015cb0980d44d1f07a602370223d1612495c7098094879781b3b0b40f9b130015cb0220e5e54d605a74888a5800542c3f4d4879990e2cc7fb07481a900540cacf39c051c0f700477892fae2168094bf0dc049d1210ae516808ae50440cadf34e03a604b741049f970022095e52ee04ae084e820857002a0625900a4322d012e890e51000b808ae5168054a68f9116afa7a38348ea260b8054b64b803b81edd14124758b5b00523d1e062e04a64407c9885b002a960540aacf2ba4db0aebf02c002a965b00527dce262d6caf45079114c70220d5eb4ce021605b741049c3670190eab6003816b81e6f2b2c55c5730024edcfa70dbe9fe700a8584e0024ed6f3a69d15b1d1d4452bb2c00920ee6346011b02b3a88a4765800241dca278023809ba383486a9ee70048ead593c0bce81043e639002a96130049bdba14f86fc086e8209206e70440523f7e487ae0d089d1415ae60440c5b200481ac462521128950540c5b200486ac272d22d864b630150b13c07405213e6007f0c6c8e0e22a9374e0024356d09a9101c1b1da4014e00542c0b80a4b6ac203d702867160015cb2d00496d398bb4802e8e0e22e9832c0092da76297027b03d3a88a49fb200481a862f0047037f828f1d963ac1730024455807cc880ed103cf0150b19c00488a3093b4b8be101d44aa95054052a4f381c7705b401a3a0b80a46857907e177d373a885413cf0190d435cf03e7d18dfdf72e64905ae1044052d79c0ffc53e0ade82052c99c0048eab227817389bbadb0130015cb022029078f039705bcae0540c5b20048cac91ae0d421be9e0540c5f21c0049399905fc17605b741029774e0024e56a0d301d38a2c5d77002a06239019094ab59c091c0d2e820528e2c0092727721e993fa8fa3834839b100482ac5e5c0bdc0eee820520e3c07405289be07fc1c698b60109e03a062590024956c0570e6007fde02a062b90520a964679116f1e7a283485d63019054838b8047a243485de21680a4da3c0e7c0c98d4c3ffeb16808a65019054ab5748e7078cb5c85b00542cb70024d5ea6ce01f019ba28348119c004852ba5a601630f9807fef0440c572022049e96a812380fba38348c3e20440923e682be924c1a3a283486de9e52c5849aacd1ce0b8e810529b9c0048925421cf019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942160049922a64019024a942ff0f518e23c341ccc41f0000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "makeApiCall": {
+      "id": 47844,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "{{if(connection.url, connection.url + parameters.url, 'https://api-free.deepl.com/v2' + parameters.url)}}",
+        "body": "{{ToJson(parameters.body)}}",
+        "type": "urlencoded",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "makeApiCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://api-free.deepl.com`. For example `/v2/usage`.",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "deepl",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"{{if(connection.url, connection.url + parameters.url, 'https://api-free.deepl.com/v2' + parameters.url)}}\",\n    \"method\": \"{{parameters.method}}\",\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"body\": \"{{ToJson(parameters.body)}}\",\n    \"type\": \"urlencoded\",\n    \"response\": {\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status Code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "deepl",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"help\": \"Enter a path relative to `https://api-free.deepl.com`. For example `/v2/usage`.\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"required\": true,\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ]\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n        \"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n        \"default\": [\n            {\n                \"key\": \"Content-Type\",\n                \"value\": \"application/x-www-form-urlencoded\"\n            }\n        ]\n    },\n    {\n        \"name\": \"qs\",\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n        \"type\": \"collection\"\n    },\n    {\n        \"name\": \"statusCode\",\n        \"label\": \"Status Code\",\n        \"type\": \"number\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "translateText": {
+      "id": 47845,
+      "api": {
+        "url": "/translate",
+        "body": {
+          "text": "{{parameters.text}}",
+          "formality": "{{parameters.formality}}",
+          "glossary_id": "{{parameters.glossary_id}}",
+          "ignore_tags": "{{parameters.ignore_tags}}",
+          "source_lang": "{{parameters.source_lang}}",
+          "target_lang": "{{parameters.target_lang}}",
+          "tag_handling": "{{parameters.tag_handling}}",
+          "splitting_tags": "{{parameters.splitting_tags}}",
+          "split_sentences": "{{parameters.split_sentencese_lang}}",
+          "outline_detection": "{{if(parameters.outline_detection, '1', '0')}}",
+          "non_splitting_tags": "{{parameters.non_splitting_tags}}",
+          "preserve_formatting": "{{if(parameters.preserve_formatting, '1', '0')}}"
+        },
+        "type": "urlencoded",
+        "method": "POST",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "translateText",
+      "epoch": null,
+      "flags": {},
+      "label": "Translate a Text",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Text to be translated. Only UTF8-encoded plain text is supported.",
+          "name": "text",
+          "type": "text",
+          "label": "Text",
+          "required": true
+        },
+        {
+          "name": "target_lang",
+          "type": "select",
+          "label": "Target Language",
+          "options": "rpc://app%23deepl@1/targetLanguages",
+          "required": true
+        },
+        {
+          "help": "If this parameter is omitted, the API will attempt to detect the language of the text and translate it.",
+          "name": "source_lang",
+          "type": "select",
+          "label": "Source Language",
+          "options": "rpc://app%23deepl@1/sourceLanguages"
+        },
+        {
+          "help": "Sets whether the translation engine should first split the input into sentences. When sending one sentence per text parameter, it is advisable to set `split_sentences=0`, in order to prevent the engine from splitting the sentence unintentionally.",
+          "name": "split_sentences",
+          "type": "select",
+          "label": "Split Sentences",
+          "options": [
+            {
+              "label": "Treat as One Sentence",
+              "value": "0"
+            },
+            {
+              "label": "Split on Punctuation and on Newlines",
+              "value": "1"
+            },
+            {
+              "label": "Split on Punctuation Only (Ignore Newlines)",
+              "value": "nonewlines"
+            }
+          ]
+        },
+        {
+          "help": "Sets whether the translation engine should respect the original formatting, even if it would usually correct some aspects.\nThe formatting aspects affected by this setting include:\n- Punctuation at the beginning and end of the sentence\n- Upper/lower case at the beginning of the sentence",
+          "name": "preserve_formatting",
+          "type": "boolean",
+          "label": "Preserve Formatting"
+        },
+        {
+          "help": "Specify the glossary to use for the translation. Important: This requires the `source_lang` parameter to be set and the language pair of the glossary has to match the language pair of the request.",
+          "name": "glossary_id",
+          "type": "select",
+          "label": "Glossary ID",
+          "options": "rpc://app%23deepl@1/glossaries"
+        },
+        {
+          "help": "Sets which kind of tags in the text should be handled.",
+          "name": "tag_handling",
+          "type": "select",
+          "label": "Tag Handling",
+          "options": [
+            {
+              "label": "XML",
+              "value": "xml"
+            }
+          ]
+        },
+        {
+          "help": "Comma-separated list of XML tags which never split sentences. For example `par,title`.",
+          "name": "non_splitting_tags",
+          "type": "text",
+          "label": "Non Splitting Tags"
+        },
+        {
+          "help": "The automatic detection of the XML structure won't yield best results in all XML files. You can disable this automatic mechanism altogether by setting the `outline_detection` parameter to `false` and selecting the tags that should be considered structure tags. This will split sentences using the `splitting_tags` parameter.",
+          "name": "outline_detection",
+          "type": "boolean",
+          "label": "Outline Detection"
+        },
+        {
+          "help": "Comma-separated list of XML tags which always cause splits. For example `par,title`.",
+          "name": "splitting_tags",
+          "type": "text",
+          "label": "Splitting Tags"
+        },
+        {
+          "help": "Comma-separated list of XML tags that indicate text not to be translated. For example `par,title`.",
+          "name": "ignore_tags",
+          "type": "text",
+          "label": "Ignored Tags"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "deepl",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/translate\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"text\": \"{{parameters.text}}\",\n        \"target_lang\": \"{{parameters.target_lang}}\",\n        \"source_lang\": \"{{parameters.source_lang}}\",\n        \"split_sentences\": \"{{parameters.split_sentencese_lang}}\",\n        \"preserve_formatting\": \"{{if(parameters.preserve_formatting, '1', '0')}}\",\n        \"formality\": \"{{parameters.formality}}\",\n        \"glossary_id\": \"{{parameters.glossary_id}}\",\n        \"tag_handling\": \"{{parameters.tag_handling}}\",\n        \"non_splitting_tags\": \"{{parameters.non_splitting_tags}}\",\n        \"outline_detection\": \"{{if(parameters.outline_detection, '1', '0')}}\",\n        \"splitting_tags\": \"{{parameters.splitting_tags}}\",\n        \"ignore_tags\": \"{{parameters.ignore_tags}}\"\n    },\n    \"type\": \"urlencoded\",\n    \"response\": {\n        \"output\": \"{{body}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "translations",
+          "spec": {
+            "spec": [
+              {
+                "name": "detected_source_language",
+                "type": "text",
+                "label": "Detected Source Language"
+              },
+              {
+                "name": "text",
+                "type": "text",
+                "label": "Text"
+              }
+            ],
+            "type": "collection"
+          },
+          "type": "array",
+          "label": "Translations"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "deepl",
+      "description": "Translates a text into specified language.",
+      "expectJsonc": "[\n    {\n        \"name\": \"text\",\n        \"type\": \"text\",\n        \"label\": \"Text\",\n        \"required\": true,\n        \"help\": \"Text to be translated. Only UTF8-encoded plain text is supported.\"\n    },\n    {\n        \"name\": \"target_lang\",\n        \"type\": \"select\",\n        \"label\": \"Target Language\",\n        \"options\": \"rpc://targetLanguages\",\n        \"required\": true\n    },\n    {\n        \"name\": \"source_lang\",\n        \"type\": \"select\",\n        \"label\": \"Source Language\",\n        \"options\": \"rpc://sourceLanguages\",\n        \"help\": \"If this parameter is omitted, the API will attempt to detect the language of the text and translate it.\"\n    },\n    {\n        \"name\": \"split_sentences\",\n        \"type\": \"select\",\n        \"label\": \"Split Sentences\",\n        \"options\": [\n            {\n                \"label\": \"Treat as One Sentence\",\n                \"value\": \"0\"\n            },\n            {\n                \"label\": \"Split on Punctuation and on Newlines\",\n                \"value\": \"1\"\n            },\n            {\n                \"label\": \"Split on Punctuation Only (Ignore Newlines)\",\n                \"value\": \"nonewlines\"\n            }\n        ],\n        \"help\": \"Sets whether the translation engine should first split the input into sentences. When sending one sentence per text parameter, it is advisable to set `split_sentences=0`, in order to prevent the engine from splitting the sentence unintentionally.\"\n    },\n    {\n        \"name\": \"preserve_formatting\",\n        \"label\": \"Preserve Formatting\",\n        \"type\": \"boolean\",\n        \"help\": \"Sets whether the translation engine should respect the original formatting, even if it would usually correct some aspects.\\nThe formatting aspects affected by this setting include:\\n- Punctuation at the beginning and end of the sentence\\n- Upper/lower case at the beginning of the sentence\"\n    },\n    {\n        \"name\": \"glossary_id\",\n        \"label\": \"Glossary ID\",\n        \"type\": \"select\",\n        \"options\": \"rpc://glossaries\",\n        \"help\": \"Specify the glossary to use for the translation. Important: This requires the `source_lang` parameter to be set and the language pair of the glossary has to match the language pair of the request.\"\n    },\n    {\n        \"name\": \"tag_handling\",\n        \"label\": \"Tag Handling\",\n        \"type\": \"select\",\n        \"options\": [\n            {\n                \"label\": \"XML\",\n                \"value\": \"xml\"\n            }\n        ],\n        \"help\": \"Sets which kind of tags in the text should be handled.\"\n    },\n    {\n        \"name\": \"non_splitting_tags\",\n        \"type\": \"text\",\n        \"label\": \"Non Splitting Tags\",\n        \"help\": \"Comma-separated list of XML tags which never split sentences. For example `par,title`.\"\n    },\n    {\n        \"name\": \"outline_detection\",\n        \"type\": \"boolean\",\n        \"label\": \"Outline Detection\",\n        \"help\": \"The automatic detection of the XML structure won't yield best results in all XML files. You can disable this automatic mechanism altogether by setting the `outline_detection` parameter to `false` and selecting the tags that should be considered structure tags. This will split sentences using the `splitting_tags` parameter.\"\n    },\n    {\n        \"name\": \"splitting_tags\",\n        \"type\": \"text\",\n        \"label\": \"Splitting Tags\",\n        \"help\": \"Comma-separated list of XML tags which always cause splits. For example `par,title`.\"\n    },\n    {\n        \"name\": \"ignore_tags\",\n        \"type\": \"text\",\n        \"label\": \"Ignored Tags\",\n        \"help\": \"Comma-separated list of XML tags that indicate text not to be translated. For example `par,title`.\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"translations\",\n        \"type\": \"array\",\n        \"spec\": {\n            \"type\": \"collection\",\n            \"spec\": [\n                {\n                    \"name\": \"detected_source_language\",\n                    \"type\": \"text\",\n                    \"label\": \"Detected Source Language\"\n                },\n                {\n                    \"name\": \"text\",\n                    \"type\": \"text\",\n                    \"label\": \"Text\"\n                }\n            ]\n        },\n        \"label\": \"Translations\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "deepl": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.authorization"
+          ]
+        },
+        "url": "{{if(parameters.url, parameters.url + '/usage', 'https://api-free.deepl.com/v2/usage')}}",
+        "headers": {
+          "authorization": "DeepL-Auth-Key {{parameters.apiKey}}"
+        },
+        "response": {
+          "error": {
+            "400": {
+              "message": "[{{statusCode}}] Bad request. Please check error message and your parameters."
+            },
+            "403": {
+              "message": "[{{statusCode}}] Authorization failed. Please supply a valid auth_key parameter."
+            },
+            "404": {
+              "message": "[{{statusCode}}] The requested resource could not be found."
+            },
+            "413": {
+              "message": "[{{statusCode}}] The request size exceeds the limit."
+            },
+            "414": {
+              "message": "[{{statusCode}}] The request URL is too long. You can avoid this error by using a POST request instead of a GET request, and sending the parameters in the HTTP body."
+            },
+            "429": {
+              "message": "[{{statusCode}}] Too many requests. Please wait and resend your request."
+            },
+            "456": {
+              "message": "[{{statusCode}}] Quota exceeded. The character limit has been reached."
+            },
+            "503": {
+              "message": "[{{statusCode}}] Resource currently unavailable. Try again later."
+            },
+            "529": {
+              "message": "[{{statusCode}}] Too many requests. Please wait and resend your request."
+            },
+            "message": "[{{statusCode}}] Something went wrong."
+          }
+        }
+      },
+      "rev": 6,
+      "name": "deepl",
+      "type": "basic",
+      "label": "DeepL",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "deepl",
+      "install": {},
+      "apiJsonc": "{\n    \"url\": \"{{if(parameters.url, parameters.url + '/usage', 'https://api-free.deepl.com/v2/usage')}}\",\n    \"headers\": {\n        \"authorization\": \"DeepL-Auth-Key {{parameters.apiKey}}\"\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] Something went wrong.\",\n            \"400\": {\n                \"message\": \"[{{statusCode}}] Bad request. Please check error message and your parameters.\"\n            },\n            \"403\": {\n                \"message\": \"[{{statusCode}}] Authorization failed. Please supply a valid auth_key parameter.\"\n            },\n            \"404\": {\n                \"message\": \"[{{statusCode}}] The requested resource could not be found.\"\n            },\n            \"413\": {\n                \"message\": \"[{{statusCode}}] The request size exceeds the limit.\"\n            },\n            \"414\": {\n                \"message\": \"[{{statusCode}}] The request URL is too long. You can avoid this error by using a POST request instead of a GET request, and sending the parameters in the HTTP body.\"\n            },\n            \"429\": {\n                \"message\": \"[{{statusCode}}] Too many requests. Please wait and resend your request.\"\n            },\n            \"456\": {\n                \"message\": \"[{{statusCode}}] Quota exceeded. The character limit has been reached.\"\n            },\n            \"503\": {\n                \"message\": \"[{{statusCode}}] Resource currently unavailable. Try again later.\"\n            },\n            \"529\": {\n                \"message\": \"[{{statusCode}}] Too many requests. Please wait and resend your request.\"\n            }\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.authorization\"\n        ]\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "help": "You may find your API Key at DeepL account settings.",
+          "name": "apiKey",
+          "type": "password",
+          "label": "API Key",
+          "editable": true,
+          "required": true
+        },
+        {
+          "help": "Select whether Pro or Free API will be used. Free API is used by default.",
+          "name": "url",
+          "type": "select",
+          "label": "API URL",
+          "options": [
+            {
+              "label": "Free API",
+              "value": "https://api-free.deepl.com/v2"
+            },
+            {
+              "label": "Pro API",
+              "value": "https://api.deepl.com/v2"
+            }
+          ],
+          "editable": true
+        }
+      ],
+      "scopeJsonc": null,
+      "installSpec": [],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\": \"apiKey\",\n\t\t\"type\": \"password\",\n\t\t\"label\": \"API Key\",\n\t\t\"help\": \"You may find your API Key at DeepL account settings.\",\n\t\t\"required\": true,\n\t\t\"editable\": true\n\t},\n\t{\n\t\t\"name\": \"url\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"API URL\",\n\t\t\"help\": \"Select whether Pro or Free API will be used. Free API is used by default.\",\n\t\t\"editable\": true,\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Free API\",\n\t\t\t\t\"value\": \"https://api-free.deepl.com/v2\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Pro API\",\n\t\t\t\t\"value\": \"https://api.deepl.com/v2\"\n\t\t\t}\n\t\t]\n\t}\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"{{if(connection.url, connection.url, 'https://api-free.deepl.com/v2')}}\",\n    \"headers\": {\n        \"authorization\": \"DeepL-Auth-Key {{connection.apiKey}}\"\n    },\n    \"response\": {\n        \"error\": {\n            \"message\": \"[{{statusCode}}] Something went wrong.\",\n            \"400\": {\n                \"message\": \"[{{statusCode}}] Bad request. {{body.message}}\"\n            },\n            \"403\": {\n                \"message\": \"[{{statusCode}}] Authorization failed. Please supply a valid auth_key parameter.\"\n            },\n            \"404\": {\n                \"message\": \"[{{statusCode}}] The requested resource could not be found.\"\n            },\n            \"413\": {\n                \"message\": \"[{{statusCode}}] The request size exceeds the limit.\"\n            },\n            \"414\": {\n                \"message\": \"[{{statusCode}}] The request URL is too long. You can avoid this error by using a POST request instead of a GET request, and sending the parameters in the HTTP body.\"\n            },\n            \"429\": {\n                \"message\": \"[{{statusCode}}] Too many requests. Please wait and resend your request.\"\n            },\n            \"456\": {\n                \"message\": \"[{{statusCode}}] Quota exceeded. The character limit has been reached.\"\n            },\n            \"503\": {\n                \"message\": \"[{{statusCode}}] Resource currently unavailable. Try again later.\"\n            },\n            \"529\": {\n                \"message\": \"[{{statusCode}}] Too many requests. Please wait and resend your request.\"\n            }\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            //\"request.headers.authorization\"\n        ]\n    }\n}",
+  "countries": [],
+  "_functions": {
+    "ToJson": {
+      "rev": 3,
+      "code": "function ToJson(any) {\n    if (any) {\n        return JSON.parse(any);\n    }\n}",
+      "name": "ToJson",
+      "test": null,
+      "appName": "deepl",
+      "arguments": "(any)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2022-07-04T07:20:16.297817+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Online translation service.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "63e80854ff61633c82aa782c31663324",
+  "versionFull": "1.1.5",
+  "compiledName": "deepl",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": null,
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": null
+}

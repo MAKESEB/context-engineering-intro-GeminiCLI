@@ -1,0 +1,1821 @@
+{
+  "rev": 29,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.authorization"
+      ]
+    },
+    "gzip": true,
+    "temp": {
+      "api": "{{get(split(parameters.recordTypeCategory, ':'), 1)}}",
+      "recordTypeCategory": "{{get(split(parameters.recordTypeCategory, ':'), 2)}}"
+    },
+    "baseUrl": "https://{{connection.server}}/{{temp.api}}/resources/11.13.18.05/",
+    "headers": {
+      "authorization": "Basic {{base64(connection.username + ':' + connection.password)}}",
+      "REST-Framework-Version": 9
+    },
+    "timeout": "{{common.timeout || 300000}}",
+    "response": {
+      "error": {
+        "401": {
+          "message": "[{{statusCode}}] {{statusMessage}}. The authentication credentials are missing or invalid."
+        },
+        "403": {
+          "message": "[{{statusCode}}] {{statusMessage}}. You don't have the authorization to perform this request. You may not have the necessary roles and privileges to use this resource."
+        },
+        "message": "[{{statusCode}}] {{statusMessage}}.\n{{body.o:errorDetails.1.detail}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": "",
+  "name": "oracle-fusion-cloud-sales",
+  "_rpcs": {
+    "listOfValues": {
+      "api": {
+        "qs": {
+          "limit": 300
+        },
+        "url": "{{decodeURL(parameters.href)}}",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item[parameters.label]}}",
+            "value": "{{item.@context.key}}"
+          },
+          "iterate": "{{body.items}}"
+        },
+        "encodeUrl": false
+      },
+      "rev": 2,
+      "name": "listOfValues",
+      "label": "List of Values",
+      "appName": "oracle-fusion-cloud-sales",
+      "apiJsonc": "{\n\t\"url\": \"{{decodeURL(parameters.href)}}\",\n\t\"encodeUrl\": false,\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"limit\": 300\n\t},\n\t\"response\": {\n\t\t\"limit\": 300,\n\t\t\"iterate\": \"{{body.items}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item[parameters.label]}}\",\n\t\t\t\"value\": \"{{item.@context.key}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "href",
+          "type": "text",
+          "label": "HREF",
+          "required": true
+        },
+        {
+          "name": "label",
+          "type": "text",
+          "label": "Label",
+          "required": true
+        }
+      ],
+      "accountName": "oracle-fusion-cloud-sales",
+      "altAccountName": null,
+      "parametersJsonc": "[\r\n    {\r\n        \"name\": \"href\",\r\n        \"type\": \"text\",\r\n        \"label\": \"HREF\",\r\n        \"required\": true\r\n    },\r\n    {\r\n        \"name\": \"label\",\r\n        \"type\": \"text\",\r\n        \"label\": \"Label\",\r\n        \"required\": true\r\n    }\r\n]"
+    },
+    "searchFilters": {
+      "api": [
+        {
+          "url": "/{{parsePath(parameters)}}/describe",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "fields": "{{getSearchAttributes(body, parameters)}}"
+            },
+            "output": [
+              {
+                "name": "queryBuilder",
+                "type": "select",
+                "label": "Query Builder",
+                "default": "builder",
+                "options": [
+                  {
+                    "label": "Builder",
+                    "value": "builder",
+                    "nested": [
+                      {
+                        "name": "filter",
+                        "type": "filter",
+                        "label": "Filter",
+                        "options": {
+                          "store": "{{getRecordTypeFields(temp.fields, 'filter')}}",
+                          "operators": [
+                            {
+                              "label": "String",
+                              "options": [
+                                {
+                                  "label": "Equal to",
+                                  "value": "string::="
+                                },
+                                {
+                                  "label": "Not equal to",
+                                  "value": "string::<>"
+                                },
+                                {
+                                  "label": "Like",
+                                  "value": "string::LIKE"
+                                },
+                                {
+                                  "label": "Like (Case Insensitive)",
+                                  "value": "string::LIKE::CI"
+                                },
+                                {
+                                  "label": "Not like",
+                                  "value": "string::NOT LIKE"
+                                },
+                                {
+                                  "label": "Not like (Case Insensitive)",
+                                  "value": "string::NOT LIKE::CI"
+                                },
+                                {
+                                  "label": "In (item1, item2, ...)",
+                                  "value": "string::IN"
+                                },
+                                {
+                                  "label": "Not in (item1, item2, ...)",
+                                  "value": "string::NOT IN"
+                                },
+                                {
+                                  "label": "Is null",
+                                  "value": "string::IS NULL"
+                                },
+                                {
+                                  "label": "Is not null",
+                                  "value": "string::IS NOT NULL"
+                                }
+                              ]
+                            },
+                            {
+                              "label": "Boolean",
+                              "options": [
+                                {
+                                  "label": "Equal to",
+                                  "value": "boolean::="
+                                },
+                                {
+                                  "label": "Not equal to",
+                                  "value": "boolean::<>"
+                                }
+                              ]
+                            },
+                            {
+                              "label": "Number",
+                              "options": [
+                                {
+                                  "label": "Equal to",
+                                  "value": "number::="
+                                },
+                                {
+                                  "label": "Not equal to",
+                                  "value": "number::<>"
+                                },
+                                {
+                                  "label": "Less than",
+                                  "value": "number::<"
+                                },
+                                {
+                                  "label": "Less than or equal to",
+                                  "value": "number::<="
+                                },
+                                {
+                                  "label": "Greater than",
+                                  "value": "number::>"
+                                },
+                                {
+                                  "label": "Greater than or equal to",
+                                  "value": "number::>="
+                                },
+                                {
+                                  "label": "Between (start, end)",
+                                  "value": "number::BETWEEN"
+                                },
+                                {
+                                  "label": "Not between (start, end)",
+                                  "value": "number::NOT BETWEEN"
+                                },
+                                {
+                                  "label": "In (item1, item2, ...)",
+                                  "value": "number::IN"
+                                },
+                                {
+                                  "label": "Not in (item1, item2, ...)",
+                                  "value": "number::NOT IN"
+                                },
+                                {
+                                  "label": "Is null",
+                                  "value": "number::IS NULL"
+                                },
+                                {
+                                  "label": "Is not null",
+                                  "value": "number::IS NOT NULL"
+                                }
+                              ]
+                            },
+                            {
+                              "label": "Integer",
+                              "options": [
+                                {
+                                  "label": "Equal to",
+                                  "value": "integer::="
+                                },
+                                {
+                                  "label": "Not equal to",
+                                  "value": "integer::<>"
+                                },
+                                {
+                                  "label": "Less than",
+                                  "value": "integer::<"
+                                },
+                                {
+                                  "label": "Less than or equal to",
+                                  "value": "integer::<="
+                                },
+                                {
+                                  "label": "Greater than",
+                                  "value": "integer::>"
+                                },
+                                {
+                                  "label": "Greater than or equal to",
+                                  "value": "integer::>="
+                                },
+                                {
+                                  "label": "Between (start, end)",
+                                  "value": "integer::BETWEEN"
+                                },
+                                {
+                                  "label": "Not between (start, end)",
+                                  "value": "integer::NOT BETWEEN"
+                                },
+                                {
+                                  "label": "In (item1, item2, ...)",
+                                  "value": "integer::IN"
+                                },
+                                {
+                                  "label": "Not in (item1, item2, ...)",
+                                  "value": "integer::NOT IN"
+                                },
+                                {
+                                  "label": "Is null",
+                                  "value": "integer::IS NULL"
+                                },
+                                {
+                                  "label": "Is not null",
+                                  "value": "integer::IS NOT NULL"
+                                }
+                              ]
+                            },
+                            {
+                              "label": "Date (YYYY-MM-DD)",
+                              "options": [
+                                {
+                                  "label": "Equal to",
+                                  "value": "date::="
+                                },
+                                {
+                                  "label": "Not equal to",
+                                  "value": "date::<>"
+                                },
+                                {
+                                  "label": "Less than",
+                                  "value": "date::<"
+                                },
+                                {
+                                  "label": "Less than or equal to",
+                                  "value": "date::<="
+                                },
+                                {
+                                  "label": "Greater than",
+                                  "value": "date::>"
+                                },
+                                {
+                                  "label": "Greater than or equal to",
+                                  "value": "date::>="
+                                },
+                                {
+                                  "label": "Between (start, end)",
+                                  "value": "date::BETWEEN"
+                                },
+                                {
+                                  "label": "Not between (start, end)",
+                                  "value": "date::NOT BETWEEN"
+                                },
+                                {
+                                  "label": "Is null",
+                                  "value": "date::IS NULL"
+                                },
+                                {
+                                  "label": "Is not null",
+                                  "value": "date::IS NOT NULL"
+                                }
+                              ]
+                            },
+                            {
+                              "label": "Datetime (YYYY-MM-DDTHH:mm:ssZ)",
+                              "options": [
+                                {
+                                  "label": "Equal to",
+                                  "value": "datetime::="
+                                },
+                                {
+                                  "label": "Not equal to",
+                                  "value": "datetime::<>"
+                                },
+                                {
+                                  "label": "Less than",
+                                  "value": "datetime::<"
+                                },
+                                {
+                                  "label": "Less than or equal to",
+                                  "value": "datetime::<="
+                                },
+                                {
+                                  "label": "Greater than",
+                                  "value": "datetime::>"
+                                },
+                                {
+                                  "label": "Greater than or equal to",
+                                  "value": "datetime::>="
+                                },
+                                {
+                                  "label": "Between (start, end)",
+                                  "value": "datetime::BETWEEN"
+                                },
+                                {
+                                  "label": "Not between (start, end)",
+                                  "value": "datetime::NOT BETWEEN"
+                                },
+                                {
+                                  "label": "Is null",
+                                  "value": "datetime::IS NULL"
+                                },
+                                {
+                                  "label": "Is not null",
+                                  "value": "datetime::IS NOT NULL"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Custom",
+                    "value": "custom",
+                    "nested": [
+                      {
+                        "help": "Provide a valid query string according to the [Oracle documentation](https://docs.oracle.com/en/cloud/saas/sales/faaps/ManageCollections.html).",
+                        "name": "q",
+                        "type": "text",
+                        "label": "Query String"
+                      }
+                    ]
+                  }
+                ],
+                "mappable": false,
+                "required": true
+              },
+              {
+                "name": "orderBy",
+                "spec": {
+                  "spec": [
+                    {
+                      "name": "field",
+                      "type": "select",
+                      "label": "Field",
+                      "options": "{{getRecordTypeFields(temp.fields, 'order')}}",
+                      "required": true
+                    },
+                    {
+                      "name": "direction",
+                      "type": "select",
+                      "label": "Direction",
+                      "default": "asc",
+                      "options": [
+                        {
+                          "label": "Ascending",
+                          "value": "asc"
+                        },
+                        {
+                          "label": "Descending",
+                          "value": "desc"
+                        }
+                      ]
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Order"
+                },
+                "type": "array",
+                "label": "Order By"
+              },
+              {
+                "help": "Select the fields to be returned. To improve performance, limit the amount of fields selected.",
+                "name": "fields",
+                "type": "select",
+                "label": "Fields",
+                "options": "{{getRecordTypeFields(temp.fields)}}",
+                "advanced": true,
+                "multiple": true
+              }
+            ]
+          },
+          "condition": "{{parameters.module === 'search'}}"
+        },
+        {
+          "url": "/{{parsePath(parameters)}}/describe",
+          "method": "GET",
+          "response": {
+            "temp": {
+              "fields": "{{getSearchAttributes(body, parameters)}}",
+              "hasDate": "{{hasCreationDate(getSearchAttributes(body, parameters))}}"
+            },
+            "output": [
+              {
+                "help": "Select the date field to trigger the module. It must be type `datetime`.",
+                "name": "dateField",
+                "type": "{{if(temp.hasDate,'select','hidden')}}",
+                "label": "Date Field",
+                "options": "{{getRecordTypeFields(temp.fields, 'datetime')}}",
+                "required": true
+              },
+              {
+                "help": "Select the label field to show if you choose where to start manually.",
+                "name": "labelField",
+                "type": "{{if(temp.hasDate,'select','hidden')}}",
+                "label": "Label Field",
+                "options": "{{getRecordTypeFields(temp.fields, 'label')}}",
+                "required": true
+              },
+              {
+                "help": "Select the fields to be returned. To improve performance, limit the amount of fields selected.",
+                "name": "fields",
+                "type": "{{if(temp.hasDate,'select','hidden')}}",
+                "label": "Fields",
+                "options": "{{getRecordTypeFields(temp.fields)}}",
+                "multiple": true
+              },
+              {
+                "type": "{{if(temp.hasDate,'hidden', 'html')}}",
+                "label": "<div class=\"i-exception\"><div class=\"i-exception-description\">Please choose a different record type, this one does not contain the required 'datetime' parameter.</div></div>"
+              }
+            ]
+          },
+          "condition": "{{parameters.module == 'trigger'}}"
+        }
+      ],
+      "rev": 4,
+      "name": "searchFilters",
+      "label": "Parameters: Search Filters",
+      "appName": "oracle-fusion-cloud-sales",
+      "apiJsonc": "[\n    //author: SM, updated by Ness and KB\n    {\n        //author: SM\n        \"condition\": \"{{parameters.module === 'search'}}\",\n        \"url\": \"/{{parsePath(parameters)}}/describe\",\n        \"method\": \"GET\",\n        \"response\": {\n            \"temp\": {\n                \"fields\": \"{{getSearchAttributes(body, parameters)}}\"\n            },\n            \"output\": [\n                {\n                    \"name\": \"queryBuilder\",\n                    \"type\": \"select\",\n                    \"label\": \"Query Builder\",\n                    \"required\": true,\n                    \"mappable\": false,\n                    \"default\": \"builder\",\n                    \"options\": [\n                        {\n                            \"label\": \"Builder\",\n                            \"value\": \"builder\",\n                            \"nested\": [\n                                {\n                                    \"name\": \"filter\",\n                                    \"label\": \"Filter\",\n                                    \"type\": \"filter\",\n                                    \"options\": {\n                                        \"store\": \"{{getRecordTypeFields(temp.fields, 'filter')}}\",\n                                        \"operators\": [\n                                            {\n                                                \"label\": \"String\",\n                                                \"options\": [\n                                                    {\n                                                        \"label\": \"Equal to\",\n                                                        \"value\": \"string::=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not equal to\",\n                                                        \"value\": \"string::<>\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Like\",\n                                                        \"value\": \"string::LIKE\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Like (Case Insensitive)\",\n                                                        \"value\": \"string::LIKE::CI\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not like\",\n                                                        \"value\": \"string::NOT LIKE\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not like (Case Insensitive)\",\n                                                        \"value\": \"string::NOT LIKE::CI\"\n                                                    },\n                                                    {\n                                                        \"label\": \"In (item1, item2, ...)\",\n                                                        \"value\": \"string::IN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not in (item1, item2, ...)\",\n                                                        \"value\": \"string::NOT IN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Is null\",\n                                                        \"value\": \"string::IS NULL\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Is not null\",\n                                                        \"value\": \"string::IS NOT NULL\"\n                                                    }\n                                                ]\n                                            },\n                                            {\n                                                \"label\": \"Boolean\",\n                                                \"options\": [\n                                                    {\n                                                        \"label\": \"Equal to\",\n                                                        \"value\": \"boolean::=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not equal to\",\n                                                        \"value\": \"boolean::<>\"\n                                                    }\n                                                ]\n                                            },\n                                            {\n                                                \"label\": \"Number\",\n                                                \"options\": [\n                                                    {\n                                                        \"label\": \"Equal to\",\n                                                        \"value\": \"number::=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not equal to\",\n                                                        \"value\": \"number::<>\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Less than\",\n                                                        \"value\": \"number::<\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Less than or equal to\",\n                                                        \"value\": \"number::<=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Greater than\",\n                                                        \"value\": \"number::>\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Greater than or equal to\",\n                                                        \"value\": \"number::>=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Between (start, end)\",\n                                                        \"value\": \"number::BETWEEN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not between (start, end)\",\n                                                        \"value\": \"number::NOT BETWEEN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"In (item1, item2, ...)\",\n                                                        \"value\": \"number::IN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not in (item1, item2, ...)\",\n                                                        \"value\": \"number::NOT IN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Is null\",\n                                                        \"value\": \"number::IS NULL\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Is not null\",\n                                                        \"value\": \"number::IS NOT NULL\"\n                                                    }\n                                                ]\n                                            },\n                                            {\n                                                \"label\": \"Integer\",\n                                                \"options\": [\n                                                    {\n                                                        \"label\": \"Equal to\",\n                                                        \"value\": \"integer::=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not equal to\",\n                                                        \"value\": \"integer::<>\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Less than\",\n                                                        \"value\": \"integer::<\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Less than or equal to\",\n                                                        \"value\": \"integer::<=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Greater than\",\n                                                        \"value\": \"integer::>\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Greater than or equal to\",\n                                                        \"value\": \"integer::>=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Between (start, end)\",\n                                                        \"value\": \"integer::BETWEEN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not between (start, end)\",\n                                                        \"value\": \"integer::NOT BETWEEN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"In (item1, item2, ...)\",\n                                                        \"value\": \"integer::IN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not in (item1, item2, ...)\",\n                                                        \"value\": \"integer::NOT IN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Is null\",\n                                                        \"value\": \"integer::IS NULL\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Is not null\",\n                                                        \"value\": \"integer::IS NOT NULL\"\n                                                    }\n                                                ]\n                                            },\n                                            {\n                                                \"label\": \"Date (YYYY-MM-DD)\",\n                                                \"options\": [\n                                                    {\n                                                        \"label\": \"Equal to\",\n                                                        \"value\": \"date::=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not equal to\",\n                                                        \"value\": \"date::<>\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Less than\",\n                                                        \"value\": \"date::<\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Less than or equal to\",\n                                                        \"value\": \"date::<=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Greater than\",\n                                                        \"value\": \"date::>\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Greater than or equal to\",\n                                                        \"value\": \"date::>=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Between (start, end)\",\n                                                        \"value\": \"date::BETWEEN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not between (start, end)\",\n                                                        \"value\": \"date::NOT BETWEEN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Is null\",\n                                                        \"value\": \"date::IS NULL\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Is not null\",\n                                                        \"value\": \"date::IS NOT NULL\"\n                                                    }\n                                                ]\n                                            },\n                                            {\n                                                \"label\": \"Datetime (YYYY-MM-DDTHH:mm:ssZ)\",\n                                                \"options\": [\n                                                    {\n                                                        \"label\": \"Equal to\",\n                                                        \"value\": \"datetime::=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not equal to\",\n                                                        \"value\": \"datetime::<>\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Less than\",\n                                                        \"value\": \"datetime::<\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Less than or equal to\",\n                                                        \"value\": \"datetime::<=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Greater than\",\n                                                        \"value\": \"datetime::>\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Greater than or equal to\",\n                                                        \"value\": \"datetime::>=\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Between (start, end)\",\n                                                        \"value\": \"datetime::BETWEEN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Not between (start, end)\",\n                                                        \"value\": \"datetime::NOT BETWEEN\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Is null\",\n                                                        \"value\": \"datetime::IS NULL\"\n                                                    },\n                                                    {\n                                                        \"label\": \"Is not null\",\n                                                        \"value\": \"datetime::IS NOT NULL\"\n                                                    }\n                                                ]\n                                            }\n                                        ]\n                                    }\n                                }\n                            ]\n                        },\n                        {\n                            \"label\": \"Custom\",\n                            \"value\": \"custom\",\n                            \"nested\": [\n                                {\n                                    \"name\": \"q\",\n                                    \"type\": \"text\",\n                                    \"label\": \"Query String\",\n                                    \"help\": \"Provide a valid query string according to the [Oracle documentation](https://docs.oracle.com/en/cloud/saas/sales/faaps/ManageCollections.html).\"\n                                }\n                            ]\n                        }\n                    ]\n                },\n                {\n                    \"name\": \"orderBy\",\n                    \"type\": \"array\",\n                    \"label\": \"Order By\",\n                    \"spec\": {\n                        \"type\": \"collection\",\n                        \"label\": \"Order\",\n                        \"spec\": [\n                            {\n                                \"name\": \"field\",\n                                \"type\": \"select\",\n                                \"label\": \"Field\",\n                                \"required\": true,\n                                \"options\": \"{{getRecordTypeFields(temp.fields, 'order')}}\"\n                            },\n                            {\n                                \"name\": \"direction\",\n                                \"type\": \"select\",\n                                \"label\": \"Direction\",\n                                \"default\": \"asc\",\n                                \"options\": [\n                                    {\n                                        \"label\": \"Ascending\",\n                                        \"value\": \"asc\"\n                                    },\n                                    {\n                                        \"label\": \"Descending\",\n                                        \"value\": \"desc\"\n                                    }\n                                ]\n                            }\n                        ]\n                    }\n                },\n                {\n                    \"name\": \"fields\",\n                    \"type\": \"select\",\n                    \"label\": \"Fields\",\n                    \"multiple\": true,\n                    \"help\": \"Select the fields to be returned. To improve performance, limit the amount of fields selected.\",\n                    \"options\": \"{{getRecordTypeFields(temp.fields)}}\",\n                    \"advanced\": true\n                }\n            ]\n        }\n    },\n    {\n        // author: Ness, updated by KB\n        \"condition\": \"{{parameters.module == 'trigger'}}\",\n        \"url\": \"/{{parsePath(parameters)}}/describe\",\n        \"method\": \"GET\",\n        \"response\": {\n            \"temp\": {\n                \"fields\": \"{{getSearchAttributes(body, parameters)}}\",\n                \"hasDate\": \"{{hasCreationDate(getSearchAttributes(body, parameters))}}\"\n            },\n            \"output\": [\n                {\n                    \"name\": \"dateField\",\n                    \"type\": \"{{if(temp.hasDate,'select','hidden')}}\",\n                    \"label\": \"Date Field\",\n                    \"required\": true,\n                    \"help\": \"Select the date field to trigger the module. It must be type `datetime`.\",\n                    \"options\": \"{{getRecordTypeFields(temp.fields, 'datetime')}}\"\n                },\n                {\n                    \"name\": \"labelField\",\n                    \"type\": \"{{if(temp.hasDate,'select','hidden')}}\",\n                    \"label\": \"Label Field\",\n                    \"required\": true,\n                    \"help\": \"Select the label field to show if you choose where to start manually.\",\n                    \"options\": \"{{getRecordTypeFields(temp.fields, 'label')}}\"\n                },\n                {\n                    \"name\": \"fields\",\n                    \"type\": \"{{if(temp.hasDate,'select','hidden')}}\",\n                    \"label\": \"Fields\",\n                    \"multiple\": true,\n                    \"help\": \"Select the fields to be returned. To improve performance, limit the amount of fields selected.\",\n                    \"options\": \"{{getRecordTypeFields(temp.fields)}}\"\n                },\n                {\n                    \"type\": \"{{if(temp.hasDate,'hidden', 'html')}}\",\n                    \"label\": \"<div class=\\\"i-exception\\\"><div class=\\\"i-exception-description\\\">Please choose a different record type, this one does not contain the required 'datetime' parameter.</div></div>\"\n                }\n            ]\n        }\n    }\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "oracle-fusion-cloud-sales",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "interfaceRecord": {
+      "api": {
+        "url": "/{{parsePath(parameters, 'desc')}}/describe",
+        "method": "GET",
+        "response": {
+          "output": "{{parseInterface(body.Resources[temp.recordTypeCategory], parameters)}}"
+        }
+      },
+      "rev": 3,
+      "name": "interfaceRecord",
+      "label": "Interface: Record",
+      "appName": "oracle-fusion-cloud-sales",
+      "apiJsonc": "\n{\n\t\"url\": \"/{{parsePath(parameters, 'desc')}}/describe\",\n\t\"method\": \"GET\",\n\t\"response\": {\n\t\t\"output\": \"{{parseInterface(body.Resources[temp.recordTypeCategory], parameters)}}\"\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [
+        {
+          "name": "recordType",
+          "type": "text",
+          "label": "Record Type",
+          "required": true
+        },
+        {
+          "name": "additionalFields",
+          "type": "array",
+          "label": "Additional Fields"
+        }
+      ],
+      "accountName": "oracle-fusion-cloud-sales",
+      "altAccountName": null,
+      "parametersJsonc": "[\r\n    {\r\n        \"name\": \"recordType\",\r\n        \"type\": \"text\",\r\n        \"label\": \"Record Type\",\r\n        \"required\": true\r\n    },\r\n    {\r\n        \"name\": \"additionalFields\",\r\n        \"type\": \"array\",\r\n        \"label\": \"Additional Fields\"\r\n    }\r\n]"
+    },
+    "listRecordChildren": {
+      "api": {
+        "url": "/{{parsePath(parameters, 'desc')}}/describe",
+        "method": "GET",
+        "response": {
+          "output": "{{getRecordChildrenOutput(body, parameters, temp)}}"
+        }
+      },
+      "rev": 2,
+      "name": "listRecordChildren",
+      "label": "List Record Children",
+      "appName": "oracle-fusion-cloud-sales",
+      "apiJsonc": "{\n    // author: KB\n    // lists all record types of selected group (parent and children) if the user has access to them in selected module\n    \"url\": \"/{{parsePath(parameters, 'desc')}}/describe\",\n    \"method\": \"GET\",\n    \"response\": {\n        \"output\": \"{{getRecordChildrenOutput(body, parameters, temp)}}\"\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "oracle-fusion-cloud-sales",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "getResourceAttributes": {
+      "api": [
+        {
+          "url": "/{{parsePath(parameters, 'desc')}}/describe",
+          "method": "GET",
+          "response": {
+            "output": "{{parseExpect(body.Resources[temp.recordTypeCategory], parameters)}}"
+          }
+        }
+      ],
+      "rev": 2,
+      "name": "getResourceAttributes",
+      "label": "Get Resource Attributes",
+      "appName": "oracle-fusion-cloud-sales",
+      "apiJsonc": "[\n    //author: KB\n    {\n        \"url\": \"/{{parsePath(parameters, 'desc')}}/describe\",\n        \"method\": \"GET\",\n        \"response\": {\n            \"output\": \"{{parseExpect(body.Resources[temp.recordTypeCategory], parameters)}}\"\n        }\n    }\n]",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "oracle-fusion-cloud-sales",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listRecordTypeCategories": {
+      "api": {
+        "temp": {
+          "resources": "{{merge(connection.resourcesF,connection.resourcesC)}}"
+        },
+        "response": {
+          "output": "{{prepareRecordTypes(temp.resources)}}"
+        }
+      },
+      "rev": 2,
+      "name": "listRecordTypeCategories",
+      "label": "List Record Type Categories",
+      "appName": "oracle-fusion-cloud-sales",
+      "apiJsonc": "{\n    //author: KB\n    // sales has two connections and two lists of resources\n    \"temp\": {\n        \"resources\": \"{{merge(connection.resourcesF,connection.resourcesC)}}\"\n    },\n    \"response\": {\n        \"output\": \"{{prepareRecordTypes(temp.resources)}}\"\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "oracle-fusion-cloud-sales",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "selectRecordTypeCategory": {
+      "api": {
+        "response": {
+          "output": {
+            "help": "Available record types and categories are based on record types supported by Make and your Oracle user rights at the time you created the connection. If your user rights change, go to your Connections page and click `Verify` next to your connection to update this list.",
+            "name": "recordTypeCategory",
+            "type": "select",
+            "label": "Record Type Category",
+            "nested": "rpc://app%23oracle-fusion-cloud-sales@1/listRecordChildren?module={{parameters.module}}",
+            "grouped": true,
+            "options": "rpc://app%23oracle-fusion-cloud-sales@1/listRecordTypeCategories",
+            "mappable": false,
+            "required": true
+          }
+        }
+      },
+      "rev": 3,
+      "name": "selectRecordTypeCategory",
+      "label": "Select Record Type Category",
+      "appName": "oracle-fusion-cloud-sales",
+      "apiJsonc": "{\n    //author: KB\n    // main selector for all record modules\n    // doesn't work in polling trigger. Any changes made here must be also done in Watch Records module.\n    \"response\": {\n        \"output\": {\n            \"name\": \"recordTypeCategory\",\n            \"label\": \"Record Type Category\",\n            \"type\": \"select\",\n            \"mappable\": false,\n            \"required\": true,\n            \"grouped\": true,\n            \"help\": \"Available record types and categories are based on record types supported by Make and your Oracle user rights at the time you created the connection. If your user rights change, go to your Connections page and click `Verify` next to your connection to update this list.\",\n            \"options\": \"rpc://listRecordTypeCategories\",\n            \"nested\": \"rpc://listRecordChildren?module={{parameters.module}}\"\n        }\n    }\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "oracle-fusion-cloud-sales",
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {},
+  "label": "Oracle Fusion Cloud Sales",
+  "theme": "#46423e",
+  "_hooks": {},
+  "global": true,
+  "groups": [
+    {
+      "label": "Records",
+      "modules": [
+        "watchRecords",
+        "searchRecords",
+        "createARecord",
+        "getARecord",
+        "updateARecord",
+        "deleteARecord"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "makeAnApiCall"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000001914944415458c3edd3bf6fcd511806f0cfadaba168a85b4def60200c1a93410c068b1189448c84c14262f05f34f197d8c5207e0c954622928a04d5e84087a2a494faf1357c9f6f7291987ad3c179926f4ebeef39e7799ff779df434141c1ff8ed65a135655f57b8256ebdffb0974710ac3a8f00537d1c131ac62008f702bc2cfe015a6b01327319abd999cbf8de5e4da811318cbff14eeb731886b98c79d107470013ff031f16d388727d88dd358c24b5cc457dc0bf912ae60ba47c0a58878981c0bd00e7107d723a2c141ecc5331cc51ebcc99df3b88143b89cfb937891bb5bffe8ccc6f07dc2047ee27123e07daaba9a60154b0731976ae6d28a491cc72c86e2d0041653e14c4f75c3381bfed5b4af8bd769cf48ef0c0ce170138cd2e958b6924bfbe3d6063c0fb1b8b43909c7236036b16ecf4c3dc0bec4e069bef545e3c0aeb8301f7bb6e043732655fcf5a4d602edac4792782c360ea807e55dc4dcc5e77e38d00858c401f53b1ec15b6c570fdfb87a38fb22a069c12836e1bb7ac89653f94ad6057ceb470b0a0a0a0a0a0ad61dbf00464867e188a41f5a0000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000004674944415478daed985b88565514c77f67e61b6d2c359bc9d12e4e8a5268d60c89d590d005ba934951582fbd584c6510584117122231e8216b428cb21a288220ba205d1ea2100baaa9042b0bcdd2714ca7cc711c359bf9fe3dac7574cfe953187bb0a6f583c377ced97bafbdd73a6badbdf607411004411004411004411004c1ff8b2cbf9194df1e073400230b7dcbc06fc0effe5c059c5ea15fdeb71be801c8b22c9da3044cf6f65d87696f008eafb0d66ea0c6e7dc02281f9be272aa5dce0915d6b70de8cdb28c5241f98b80fb81269f508581ddc08bc0f36ea895c074e0cf0a8bdd043c027c9cc80798072c03de0516027b93f6a9c003c0a5c08864fecc8d753b70033003b811e8aba03840a3eb71b9af336fa8023603b701bd00a564d079c0cbfef59e710552aa81f381878151ae7c03f015f002893701b5c0ddc013c03598e7009c013c08fc015c0fac065ef2b6066005300d780ef8be60809dc017c002a0de95a9c438e059e02c97b3b1f061ba800d83ace6d772493b255d92bf2b5a5752266991a4f59266495a27e9a9b47f22af55d20e4933fcb95ad232499d922e96f49aa4ef244df3f6059276499a7b84f991b452d2e79246a77d92f6f9927e9574b3a43192c616ae3192aaf2b1251f5f034c71ab7f0687e2f2a0e9b20cd9a8f780bbb0382efb579a044c97943fd70237b9bbed70115700b7024f021f01bb81b780452eaf098bebd595e61f023381b1c0a3eeada9a02ae01d7f5f4e0d2077cb3158d2e82b4a4dac5de742fb0a825b812b8101576e2bf01096371afc7e23f029708ef7fb10b805588525d7d1be869d47abbdcfbd1778d3e7ce4325cf691f90e6acc475164ada2f6989a47a4935856b84a4a99256497a5fd26449df2421305152bba47d929ef6e75cf66277cb79925648da2ea9cb43a45fd21a77dd1d92da244da8307f8da492874087a493fc396daf9274a1a42d92964a1ae7efd22b9783244aeeda00edee3ef700d761c922a51a73fb5dc01dfe9bbad7362cab6fe750965d0a34037702af602edf01bce163ca58f82c016663e1711f7019d0c9e05da80cb40107803381d781fec21a06b004f818b018b8d6d7a3a4df7ee071e0938321e046e801ee75779cc3dff7cf0157e06de0276c9f7e15589ff4e9c1b6be1fdccd9b8089d8eed20694b32cdb8ce58674bfaec66a8a76608d87d2c989dc7c1bfc12d8e76ba92eac2fc3c2a8c37558eb72c617fa7401dfe67a1f75a6391249be18544b1c2eb11533fe3f488041100c8d0c061d425a80d3b0626843a1df4ce04760cf708ad1b49e6e01e66205ce5558966fc6eaff5aecf0311e9824698ea413258d94345bd2b95eea1e6b7d864c29b9efc14ae251d849ad1e3b1d36625ed1eff7576315560be6111760257497bfff4f917ac0cfc07257b415db976bfc3a05db7ba760fb7a2f16165bdd707554fe5fe05f4f6a80b381f9580134809dcdeb5cd901ac12dbe44a1fc0be7e1576d86904261c6b658e8662126cc65c7f2df6656761a56327f607c52fc0a99827ac03f660ff23ec06be06068653820c8220088220088220088220088220088220088261c45fb114932bd93ddb730000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2023-06-20T17:14:33.769073+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000a554944415478daed9c798cdd5515c73f6fa67ba70b4b8b95ad800882cad2802008159094208a040541404d14d4a8c420a212e2127659d2404081464402b2c4802950312cb223b52008050a6899d642cb505a3a749999af7f9cf33abfbebeb553da267c3fc92ff37befdd7b7fe72ebf7bcf39f7dc01638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618b3c951aaf7a3a4f2ed60601cb039d0d644b92b81454017d0572a952acb6c03760046b628ef2ae00de06d40c5721bd4a104ec0c6c0bbc087402b4987f34301e18dea4ac3dc01c6048d6b5042c06e636fbec3af2008c4a799a69c312b00478adf2d935a5c8070d070e07be0aec058ca5c1a0497a898e7a04b8117802e82d954ae572470037010766da66e905e601b702d71183ac6663161aeb28e072601b6016f02de0d926f3ee0a7c0d38941840439a90b31db8133835eb7843b6e56dc06954bc14cd5090672270027044de0f6d263bf02be0ca7a755efda0bcb691344dd2320d8c37259d2da9a350f648490f0ea0cc5e49b748daaad030b5eab2bda4a72af2df5296a74ebe41924e94f4d23ac8375fd20159ce14492bf3fb9b25b5d593b98e3c25499f97f4b4a4be16e579a0565b0daaf1ccf1395abe909ffb88a9eb9fc0821c51f546db086037e093c4d2710ed0917f5756a45f4ebc2d6fd0787999004c2696a263819781b325adb51c6465db81ef039352aebefcee28e038e03a495459a2004e022e25663da57c33b31d7aa93d13b6018fe535600af21c09fc2edb4029c74ce07f4df4c79f52fec60fcb117a6e61942d9774b5a45df2ad40f5df9cf23556d209853768a9a4e3aacc006f499ad4c49b5c7e2b4f90f476e67d51d2b695790be9a764f992342febf16e7e9e2d69d71a79f794f45a61b6b95dd2de9286d4ab7f0db907340364191325cdca325648ba36651fd48a3ccd3e6c7749afe7c3fa245d2969c43a4e5b483a44526796779fa451595ed303a0a2cc6192a667de25920eacd189e325dd5fa8c7af258d96746b616abc46d2d072fec2543bb590e68e2cabe5861ee80028b4e1cf0af25cab3acb57ab549b720f269425805781cb80ee56959642fafb80ebf37e12b12cb4a2f855d24bff32d256598742c37c1b3828ef9f00ae2234e1df108a24c432705445be09c06179df95e9dfaca8d38664143025ef3b81ab090b6364cea4cd5ea56675807185fb2749d3615d2868fd7f037e409852bb014f554b5f16b05a4317843f08d83fefdfc846a94cb33ff01d62702c012e02e617eaf45be017d9b867e57773f3f7ed800fe7fdbf09ab6163753ec056841949ca7b19f57590359a8de8e387b3becb2b130c6a50c00206f6b696590874138ae0d81a826e41bc916325f5d5698ca3f32f84f2f89f8a34a3819fd0df893703d361f58014700df1567d1ad89b5014cfcaba76d06f5a2d04de5b0ff51f081dc0b0bc1f439895adb018389f2a9d0f8d07c096c45bd4c7c0d89c7e07ca3b557e2f11ce9d55c00f092ba411f711b67d5f61a6013899b091015e002e015656bcc10b800b08fb7c0cf00de05ee0afc032628919460cca61f9ddc66219b022ef9712964fb3fd51f647cc80eab358b501d055b8df87707efc775d242f74ca6462fa7a97f0c455a30fb896306b2e253c77657ab31144bc95d3898ead94eb13c0e984b36639308d982d2a2d0511ebe8f3c472b105f053c2cc9d4b0c90f272b53bf064a5b9b8017933ebb935f1369f966dd8de64fe6ea0a729d90b26d0fc82097461d9fc69858206bbafa457b2bc47246d56cb0a285c9f92f46441f35d925afc6724ed50367f2a9e355cd2f5853cb74bda4ed29da9857757b95616d2f748fab9a4f63417cbdc2469ccba68ddebd10a38a720cfe545cb65bd920f6b977459e181cb245da0f00c961a3db820f4f0acfcac2ce73d49a7a8811fa090ffa392ee52bf3fe21549c756366021fd89eaf75a76e62042d2a19216aa39e6e580dd27ef959d374de107695313e660c5605e1f7e809d253d9f65744bba54e1e16cd81f55e459e3b752b5c48419380df85c7edd0bcc26bc5bf369bc068d24a6e3fd08a5af8730c3ce22a6a491c05d8446df45ec37cc2c4f535ad324bb80f07d0f22f484f3092f657761eddf11f8336162f6111ec773b38c41c0978825a59adc7dc00184395822d6cc9389fd8f0b89a54084b2f930311df734a87f8958827e0fec01fc85d8507b0eb89dfa9ebbca72de237495fdb20dc7677fcc21f65a1a7bf8428f9b9f7dfa6eb37b013b49ba4de1791a08ef48ba48e119acb61750d3119469c72896a1ee4cbf5cd21592c6e5ef83b5a6e3e641a5e3a619b28c5d24bd90f95748fa9e62993955fd4eb156b923eb79f800db70f5be8562067c49adef059497b7a6668ce220182de964497767432c56b8741b5d6f4b9aa3583f8f504187c8724748ba273bf375497bd5122cd30f95f423490b14d3fc524937489aa098e2e7e5f7f3f379adba6b91f45dc560ed96f44c0e0a142ee0a9929e95b4a889ba2fcbbaef93f97794f4b8c205dd4cdb15cb99add0c98a72ee2ae93c4933151b6d8b1b5c4bb3ffb6acd626cdc6030c27b4d071c454d6a8755710dafc02c2b4a3627a6f033e0e6c46985ccf52676aca3c8333cfa882ec2f1266daf629d332e05fc0aa5634f62cbf8358b606e7d7b3490f60ca3b8ef02d74e4b36bb54179dfff39fa979ced52c67af9aa95d345582a7d15ed57224cebad898db746e57402af17fbc118638c31c618638c311f3caa7a050a0ea036c231d2430686d4732414f2ad7678d8f1b069b3564c60c1d3740871f8623a1155733cd0cc36e47ec0c5c41ebbd9c4a91550f959223863183100ba88e89baf57a4abc644e0185a3ff6653602b542c28e26226f4e2342b80613dba1ab43c424ed4e1c971a093c0ddc4f95b83349c38988a03db3cc19a45f9a1860938963674bf2b739e0a563a350d8713a5b1154714cee081683459074b0a4e714011b7f541ca2383d7f3b5ed2ab8a031b83249daf0866b851d2438a634a3b65da3373c7eb3a4933243d2ae923cdeee499f781ec98ad73bb756e6e655ea938e0513e89b2b7a493725bb724e92ac53efc10c5e99f57b38c03f2fec8cc37411116768e2262e861c5e18c7645bcc089aa72d2c7bc7facb5046494cd3ce204ed1e4418f261c01f805f1221d52f10c19667021f227486ae8af24444e88c262272ca871bb620b6755711cbc629c409e2c788c8dc4ecc06632d2550521b113eb51971a2e6124227b81bf8261146fd634229ec001ecf74d516ed762236e015229cf965602a615df402e71107383a89c39e77102793cc06a29a12d84e9c22194a28818b8830eb1144f0c6104271bb173823cb984cf501f07ce679147830cbfc22f0161164f2652218e40c62d0cd00f6051ed8d80df341a1da005845fcf386a94430e31cc2b4db9e889d5f48bcf15f21e2f73b88f30395073eda89a0c57b802b80bf13018d7b1027717a085fc31944c74f24ac88873676a37c90a815155c22ccb629c41abf8878e3ff414cdde5f3f91f039e210e538c27fe03c64e84de700b7192653471b67d527ebe3bcb291f073b9a387cd145440acfa2c97fff628c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c618638c31c66ce2fc1f23cb78e9ce5f5b940000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000017d94944415478daeddd779865459dc6f1efed493089198630c02841414451328ba88080b2ba22f2080a828b28c145cc181e75d9555911d3b222e600181003220690ac820e49042438226986344cce9ddefde35797ae3e7d6ef7bdddf7de6e67decff3f4c3d07def3975ea9caa73ea5775aac0cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc365095666d48124007300dd814d80a98d4c4b476034b81a78065c05a804aa5be4348e9ab00cf03b606d4c4b495ee32a5f7716011d05d6f5a87b5333d73385b022f077602d60173819b8175addc7f968671c4353093e65f0355ddc05d44fe026c07ec40ff732ae07ee0f1561f7783f9d3014c49f9333bfdbb992ac0c3c0033074f918df8403029801ec0b1c02ec0d6c0f4c4d07db2c023a8185c0ddc00dc075921ea0fec2d5019c02bc9db8885aad8ba8006e027e26e90fc09a665f90d979d80bf80cb01fb071cab345c0d781b325ad68e1be67a5fd1e9cd2f16c9a7f0d40543057032767bf7b23f07122bfab7a80f703173479ffc3cd9f69c01ec0ab803d890a7a5a3a9e66a900cb81534915404b0f4cd214494749ba52d25249bd6a9f4e49ff90f43949bb4aaa64995d2bbde3247db58d69acea95b458d277535af30ba359e7e2d992fe5063ff6b259d21a9a359fbad1e83a4e9924e4cfb5ed186bc5c24e935d9fe917466c9e7ba249ddccc7c1e661e4d927498a49fa7b4b7ba8c7c5bd2e4961d7796e92f90f4bd369df4c1f44a9a27e95445853458ba47ab02c8dd2c697f35a912c88eeb5392ba07d9ef23925eda8cfdaaef1ad84dd28f25ad6a53def54afaa2a409d563d018ac00b2fc9993d2bba84df97397a41736e31c0f76601549074bbaad4d0755af1529b3372b3b788d9d0a4092ee90b4a74678a2d477a11d2c69411dfbbd4cd28c26ecb322e9704977b639dfe64ada2e4fbfc65805909d933d255da3c12be5665a2be91435784dd51d03c836fa2ae07ca29d3fe8578820d43a9a1370ab001b0113290f5e4e054e07a60367485adc407b57c06afab721476a22d10e2f4bc48b81ff02de022c19e17e66031f26029b437925f066e0cb92ea0ea03e93497d81d4a3802f00db0cf1952e600dd03bc263ac10e7e773c04323dc56cb6465640fe02b443cace6c7695ef918075c015c0cf507c6a1f120e06ec0d90c5ef897037f067e0fdc4744ed9b11701b4f5cecbb00071085687249461c0f3c017c4252bd91efb5c0a7539a9b1594994104468f26a2d4c5841c0abc01f8c6080a2344813ea0e423bd699ff9863702de05dc08dc31ccfded97f2aa56e1ef240250d703b703f353fe8e34fab886b8ae1aceab369b4304626b15fe55c09dc0efd27f17d29cf2f100b0ac2579931e2b6648fad9208f20dd927e27e90849331b7d1469201d15c563fe9bd323614f495a964a7a539e060dde045821e9b5cd4c6f96d67d25dd5823cfae5404d186bbfdbd1581d0a21e49bf94747f8dfd7e5fd2d446f69bf6b795a4ab06b906fe26e93d929e25697cb3cfff20e93ab3242d6d6d02a4744c503443cb027d3d8a40e9d19266a98901d9761c1892de91da1965d6483a3f9df8d60420cad3b4ada40bd3c92e9a5b4d4ff69db655008574eea708c2153d21698f46f79bb6b9896a57c8772a8241a7a67353b44ad25bea3d57d9717ca0465e4bd2ef25edd38ef35f92b651ad00b2fc79a5a4a76ba4e5c276958f561cdc1c49b7d738f13d92ce9334addd0796d2b6b9a40b34f049a04bd2bbb293d3f60a204be3f81afb5d23e9d846f69b1dcb29350af76a45b75cf5a9edb21ae7ed76493b3650016ca7883297f9a35ad0bdd9407e8c850a608aa44b6b948f0bd275dad6bca9c7a08334b2041f44b4bdcb5c47c4059a3ec86428697f0b8941203715fe3c9e0856cd6a6ba2cad3d80ddccac0b6de2460f37ab7959d8f1702ef24daf445bf017e92febd14f83c111329da0d78373069b00b33fbdb6b819d4b3e329f0842de951def86681fca63317381ff04168ec5bca96794d646c0ab291fd2b9043887b80846d32344547a45e1f7bb02bb8f72daaa3a19180dafd078d07132f05ea212287a9808402dcf2eb69b80ef1223e38afb3e96e81918eace3d357dae2c68fc23e00fb06116fe2cdf0e2186f7e6d600e711e7654caaa7029841dc2dcacc05fe08a377f2b3fd5e0fdc56f8f326c0fea392b024bb409e4b740de6bae81bcf5eef765e43f41e147513437e6f2de44d37d125755bc9776602671091ebc1cc217a5d8a1e05be0ff46c88853f339d780228ba8518b65c01c6a526682b7fc66b8811b145f574038e23ee0065ae67e05d77b42c21de0f38b0f0fb5d88a798b5a398b61d8847e8a215c0bc06b6b32df001e2822bba01f80ed05b52181f01be485410d30a7f7b09701af07149b5dea9d889817737884ae5fe7666e4183513d8b1e4f7b3804fd2fa17cf206ee60f005f0656d6fba591bc0cb48231d2eeab542ad53be49dc480917c7cc0d6c4809cb65600592d3c0bf820f0a2928ffd0db8b7ce6d4d20daec65fdcb8b80cf122f1ed5ca9bcb80c3807f2f7c641c7002702570bdcac72454f3b0e87e22bf37745b52fe56df0bd24f3b7411d759dd851f465601ac23027063c9c294aebc029841149ebaa4c23283b8e04732826d223122ec64e20db96273ab1bf831f0741de9810830bd9981036a045c045c0be59571aa04d600e71277fce2dd6a36d114b8bb467acade5a13b0a0d63e37303319d8bc6bb75f12b19e968e041ceb7a69cee3d69ec04789d16e3dc3dcc64644847f0ae5a3e06e032e81ba4ed856c087802d4afef667e0ff80ae3ab67307f00de02c06568a870227029f95a4c2b6ca362cdaf368fbcf60b46bc087899eb8a58d56c623a900261077cab16416036be295343ed4f27aa2f07e9a18c6db6c8f138570d0de13f54db0713203631bd563fb12f0e0503b4c4f0122ee128790a2ff9909c45c09d7920512935544e59a3fc574009b55d3b9813f052ca33df34b941910fc6dc4482a8069c4ec3a578df605903d26efccc080e57ca23ba62ea9a0f4102f563c4a04cff6aef7fb757812f808f0abeafe86f02fc4042665e7eaa74433a291fc5f988e6977068e41d801781f708afa4f1eb220e561b19dfb7c463fc03a163c4154c69b167eff0fa259d52a1dc4cb51b582bf43aaa702e825fab0cb76fe32e09b8c8d0b602a311556d1fd34500140bfc0d98dc4ddf71ccadbf18de805fe4244852f63881396c5223e407937dd3f8847ff55f59ef8ecb8ae269e04de5f724c47103d0a5fcb2ad679c44b5ec50a601fe209e9be11e4cbfa6009713e9e5df8fd43c03b88aede56dd21bb89b8d7b0d453012c25da993b94fcede5c49de48f2d3ab846ec4bbca9965b4579fff790b2c27207f0366280cd5143e459f10dbc2ee2ce308f08d2fc803ae66acb0adef1c420aca24e22a0d703bc4f5285fadbe395f4bd6acf48f18dca8d89d7aa7f0fdc937e373ffd7babc2679f45746fde37da4f81a36c19f1087e60e1f77b11f1a4cb616c064beba900d610778cc31918389a4d5c2c7f95b47c340e30bb539ecec047b079c4608c61a91e8fa44789d7681710357aad891c1f047e082c260adad29486fb88aeba211fd3b2c2bf2bd13f5f165dbe81a84c6602c731bcd18e835518bba4fc7c2f51492c03ae228684e74f0ce388e6c95534f87af17a464419793bfde362d381ff00fec4d8eb31abf3c8e245871d25dd53e3459035923e2a69a3517a1164b2a44f4a5a574857afa4ff56935e06ca5ef8f898a42535f262b5a46f49da72b87991ede75b35f6b140310350f5b3c7485aaee65ba6ec956a49cf97f4408dcffe4cf1aa705bcf7f965f6796a4a9dd2f034d97f4eb9274744afa1fb5729ebe361c5c4551c86b4d6fb45cd2c7d5c63702b34cff84a4952569ba53d2ced5f4a8096f03a66d4c94749ca4f935f2a23b5d08bbabc1b7e3b2c27682cae75aec4917d3b8ecb31b2b261b6d859b256d9fe5dd592a9f7fa147d2c54ad375b5f342d7d8a900504c905b76de562a6e52239a8e6dd4a8ef95e0eb07b9585629de79de5b31136a2b337a92e21dfb1faafc95d835924ecb2f4635a102c8b65391f43a497f1d243f6e55dca9eb1e9b9db6bdbd6acfb73857310742f13bbba9f6e41f23d123e96ca5c93d243d371d57adcfce554c78315d6daa0834062a802c1d53245d54237fd62a5e173e5051698f8979011ae9069c4fcc63770103a39d10c1a4e3805710fde8574bba8f68fb8cb497a03a1fe06644dbf82022e0329b81d1d55ea27d7c21343ff092f5a75f4674ff9c4b04208bf604be4d0c28ba4452671d81bf0944aca1ac4dbf9ce88d287bb3ec0e6228f07b8876f970aeac8d89de86fc9ae8200607dd40bc66fc77e21af81a03e720ec207a05be49bc81780d708ba4c789606c33aff60a115c5d3ac4676602b3253573eefda1d27316f1ee44f1e5a049c0eb809712632dae2162670b193875db48f512ef7fac1deafaaf7fd6ccbe09218f26de311f6a42c8752953d631f24921212eec89c4f8835ac32e055c4a04b01e837e81bcea36be4c0c78c9ad245e8dbdbcc1958620c67a9f4544c3cbba0997a6fc3a971a732664db7a1dd1a75bf6e2cdb7d2710d5858247d7f2211801ace85246294e13788710745d701c71063183a88de8973281f9958d543bc2fb296e60f92e9242ad68bd3ff9f49544cc5635a4a9cdb5646a72be9183f448ccb807803f52bc4cdaa96ae943feb9a9cbe7144afdcdb80a79b7a03cc1e7f8f96f4700b1e3947a24bd124289d76492d9811487d4d92ad15cd9f5a53a6ad96f475d50894a56d6ca39856ab4c4be77bcf8ee31895b7613b257d48691ebb948fc7ab761ca4d5ae96b44596ee3347291d55972ab5efb39ffd25dd320a695922e948b5aa89a1be4ae000c5895837dc9436d1938a85314ad70468550550d8f6268a404fad85527a14d1f27e536765e93a53e5f3edad93f4ce969dd0fec73045316168997e0b8b282a83c314d381d59a27b0158abd202802d0a3e54145dcabac42dd55b170caea36a5a557d2b9ca164e69e5c5529d25f67d8a852e3adb9cf1bd8adaee5249872aa2f343a5b9657302aaaf4bf2fd929e1a24ddfd56064a3faf50ed853d2e559ba2c7292dfbaaf6d3dd65ca667c565f70f82392ee6dc335d0a5a828c7a97f057aa4466785aa4ec5f55f5a39abafa7ea04c58cd9ad5e41e92f9276521bae95fc0051ac4b7792a41f29a6865e9c0eb6339db466fcac4d27f9094937493a4751f0a7a98ebba3fa2a80f3536655b7dbad9846fcdf469a71d93edea42844dd25c7d193f2e80d8a27a9eac49dbd259f7b58a9b268e3f9ac280a596721fddd8aeeac5335f009a643d273d2df7e2ae9efe91a58ddc4f3dfab6822cdd1c0bbed34c574dc8b9bb8bfa17e7a245da1d414a9a38ccc5274137e53d145bd30e5e79a26fcac552c3f76423d6521d7940841b6c38d8948fdb644847e3acd79e55844a0650931befa3122c053f70b10ea0b62be9408dce581c92e2232fbf0488326d97ef64ffb293b1b1d4440edb7c4a8c27f257a39f2cf569779be86fa5ef56d8a94fe2d89c9438af340565f3eb99ac28accd9353099782b733ba2a7603acdb9ce2ac44223b740ffde9db4ef29446fcc739ab4bf21b38a08b6dd5d4ccf10793b8118b1fa2c22903e39a57724b57c85be19b1568fc521c76666666666666666666666666666666666666666666666666666666666666666666666666656aaa1c9c30af3bebd905844626b62318215c05dc49c6d0b0035717ebd7d801d89451eaea464710c336ba16c76d3ddd2ecbf0bd57fa1c8de340beced8a452346bc5a7036cbee79695f7f572cc231dad961b65ea86bc6deacc0ed4e2c51b53bb1f4d363c083c40cbbb38935037707ce23663efd92a4ba67ee1d229d1dc42cb5bef59bb593fa16bda8ae1ab34ad217146bc6cf483f73d2da00d545251e94b4e748eed61ab898c7a38a25b4463b4bccd60b8dccd9bf137070faf715c4628ccbb3c53797128b4b4e2656aadd969883ff3649c5453a499f9b42dcd9ab0b49ae83c657f4cdb6b9113095884974112bea76d7da5ef6bd49c4a2a3e388a79995c09ae1a4c5ec9f492315c06ca2d002dc4714ae67a465b3017e4cac063b19f873f5ef5961db1c3882580ce3b9c44209abd2362f072e9754f7e206d9a21007132b173f3fed7b59daff25926e043a4b1693980c1c02bc01d885a83cd602f713ab0c5f2e69952b01dba0a96fcdb8a7d3a3f86f246dd9c8a378dac6f324fd4a7d0b8aae95b45c7d6bca2d572cf438290b3ad66c02a4bf6fa658ee6b79fa4c570a4676a7ff7f52b1b2edc4c2f7264bfab4a465595a96a86f21c71592ce9634d54d0edba0a5023353d2755921bb54b14aeb4ca565a387f8fe34c5f2ddd518c2f724bd51b130e6c9a9f740697db7d70c5501a49f09923e930afbba54b99c28e97049a74b9a9bbeb724ed2befcd78532ae4bd92ae522c8dbd9f62a1c95fa45e8735c3596fcd6cbd92159a43140b5b56bbfd162b166cfc9ca463d31d7e52b1b0a4ef6e23e92b92ee4e01c4a9850279682aa84a85ba9e0ae0404577a4247d373d0de4dbdc597d6bb45fabbe956dc72b166994a4c724bdb8f0bd6d15cb3a5f998ecb15806dd8b2c2b197a48bd2a375f531bb373d423f28e93b925e963f1564df9da4584d757a5ea0d4b7c2f023697b17551fd987a800ce4abf7fa45a884bd27b5a4ae7d3925e923d397c277df78974e7a7f0333d55521dae006c7d557710308be2df0a9c4c8c043c007809b02bb1d2e976c009c02b808f023f50360e40d23ae02922eabe85a44d812d8800e341c4cac2103d034345dea6022f4eff5e4cacb63a5352febd1e22d0b78e58a57627e026a287e076e0786225dcf3814b803f01f38045a420a70380b63e6b78e9ee5420d648ba8518f63b9928c47b014702af2606049d430c14ba169e89ba6f02bc1e781551696c4e74dd6d3c8cb44c4adf8788e0ff609063dc88a8506665bfbf8418627c14b01bf022a2fbef09e04ee03aa217e0d1ecb8cdd62b0d5700555981580d3c24e921e097c049c06780ad880ae17a49bd44e1fb3cf046a2f0ae202a8805c468c2c781b711ef16346a19700f71c72f23a20278a6304b7a12389d58ebfeb54405b025d135b913d155792cf02ee076656319cc3618a9fd5b91b44b8ad8efafe842abf5d96d24cd4bedeb2b53f41f496f4d91fa5e493f4fdbda2ab5b5c729ba15ef4ddffbbefaba026bc5003691744dfafd758a9188d3d3eff39fe9d94fbf0065d6de9f9cbe7f90a4f7a6ed55e31bdf5313de6b301b8bea7d02e820eeec2711ede3b70037d4f8ec64e2911b62345df5aebc073091b8eb7f0cb8bb303a7006d1aeafd70ae05e22def01ca28d3fbf64b04fb589b11ae84cbfafa4df4d2106feaca8542aab25cd273dfa134d84dd8966c20ca26960b65ee9a8f3733dc423f644a27dff6e604e31720ecc044e25827a106de9d5e9dfbd651b56df2bbf4764dfab472ff16af00a600ed17c78e6c924fd77127006f05be0ab444501116c3c17b80638bbfabdacf2589aa53bafc4ccd62b433e0164437c7f051c4344eb0f27daf4571051f31e607be095c08169bbf3809f649bba9388becf267a08fe57d202a2d23892e85968b4917d2d7019705cfafe64e0e7e94e3e23a5f3a4b48fa5c092f4bd354425b06b4af77262c8f0622206712cf1c452ddc792a19362b69e2a8c01b8316b1f5747cbad56dfdc00bda92dfffa143ba87e77ab1413a87e6f91a4f9a97fbe5331b2f09e7a630059ba76947479da46af6274df938a41453de977374bdaa7f0c4b2b7a45bd376bb523a16a4eff5a663bc4ad24e1e0760ebabbaefb859017836f1247018314b4fb5bddf4544f3af052e06ee867e4f101011f6d3881781aa7dfe4fa6cf5f027c98e892fb05f0a9b4cd0ee083c48b3e8f0127024f15b63b9bb86bbf9ebe178c7a804788a7940b892792627a7601de4a744bce26de06ec4cc7f1ebf4bd47aadf335bdf347c55676df6e944ffff26e94f2b89413e4b81d24940d277c713856d4ba2903e4504d894b6398108ccadccbe3a8508daf5105d7ebd25c1be0af1d8bf05f16aefeab4edc575a467d3949e89447360d160c761666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666eb93ff07de60eada6f1419390000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000021454944415478daedddd175e346ba2ed06fee3aefc313c18123b02682a123b01c81e5082c47d07204dd8ec07204d644604e04a389c038115c4e047d1f8aba6ab74989000982d4bff75a5a6d5320518040d487aa42210100caf94b927cfcf871ee72000027f417953f00d4f37fe62e0000707a02000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014240000404102000014f45f731760a0ee939f73b6defcf49b9f397549963397610a7dda3e7e9cbb2027b0487293e4eb24579bffcf66db57497ecafcc7d92975b98cf3c0368fd97dccde0cf89c3eed6fcf708bb463e76aee820cf49076ce3b9abf7cfcf871ee8dda6591f6077a3ae95de5f9c47749d679fed2ff23a7ffd22e93fc36f74e98d03a6ddffe92b66ffbb90b7464df27b9cbebc7fe5d921fe72eec041669c7f0df37ff767bec8b73d527f92abb8fd12127e3d5e6b378dd32adfe783a8616731768843ec917c7fed0730c00cb24df26b9ce65fea15eb34e4b724f15d6d49679db01e073f76957c48f7317e408dea555ecfb7a48f2cddc853e92e566fbaff276ce03dfa51d9fbb0800c7739576f1789bb771fc7c9509ea8b731a037093e45f6995d54ddec61f6d9bc566fb7e4bf27b8635fbf1ba9bb4e3e8e75c6613f193a1957fd242f3fbb90b7e80c566bbff6fdaf76399b7731e58e5e5ca9fe358a61d3bffca7e2d6797e03e135d2c9e430bc032977fb23e549fd67c7b3fc1672f53ab05e053ebb4fdfa61ee820cd4a585c3b126b95a98d8be5d1d97ea8bbcde3da50560bc2ead1e59ce5d9023ebf372b7d141e66c01e8d22aa6df52bbf24f9e0fde7fc5be38a645da15f1bbb90b32d0cf4778ff62ee8dd8d355da39e0c3059579a81ff3f6c6a69c8b45daf7fbf7bcbdca3f99f8d8992b007c9b56d92d675affb9ba4adb2fb77317e48db9cbe195eaa9dce4f0ef4597cb083ddfe7ed9f07fa0cefca613f5d5a78bc9bbb2013b9cfc4dd46730480f79b8d5accb0ee4bb048db4797dc977b8e6e72fe21a0cbf12aeedb9c6fc5ba48fb5b7c98bb2027a0997e1a4f17915773176422eb9ce0ae9e53068045925fe3ea765fb76907f862ee82bc213739ef2be377396e17d03986c82ecf037ddf3a4dffd37897b77f11799263e754016091f6a5bf3ed1fade8aabb4fdb698bb206fc85dcef3caf826c7af14af725ecda35ddaf17c3577414ea0cf79edfbb762ccdd3197a6cf895ac74e1500aa7ce9a7701521e0d8cead2ba0cb742d13dfe73c069676a935e0f7bbb90bf00655a8fc9313761b9d622ae0f7397ee5bf4ebb0de67ff33c25ec3959a49de8becc712632b94adb8fa738a93ca4cd5878ae16799ed5ab1bf9195dda89e46eee8dd998b2925ea4059eb9fba27f3df2363e6e7e9ece01e7649dcbbb0df3dc5de778dfd775ceb7fe58e784c7f3d401e05d8ed7e7ff985631dde7fcbef0afb9caf35ceeddc8cfb8c9f37c0153fa772e67c29265c607ccefd39ad9d6336f4397e9c7c52c37ebf830d3361eeb2260953683e643e6ffbb713a5d0e6fb55ba7cd10ba8a70f6ff4dd905d0e538896d9576f5f2b7cde7f5d3ee92493ca69d80bf48bb8a1fbb0d7739cffeebb9acd28e8b31a16891f31888366692a6d588f71c7b80e1be6e7278c0f929c97fa79d07eea3f2afe6902ed03eedb8f9efb4f3e76aee8d392753068043679f5b27f9219739abd94beed382c0d82bf94b9ae4e554ee32ae7be4eb99cb3da652eed3e6fb5f0d7cdf22a71ffbd0e5b0b10dabb4efca6d54fa558d0daeebb4fae38bbcadfae3a8a60a00875e6d3ca65dd97d38edee38a9bbec373de8e7bab895729bfb0c0f55cbcc17a6ba8c6b21fb31ede4f65d86578acb9cf64e9c43ce033f66c22950b9085dc67d47fabcfdfae328a608005d0eaba07e499d2f7e9f76a03e0e7cdf5ccdb9e7ee2ec38f9beb99ca3aa685ec3ecfe333fab4a6f1a14ed582d4657c17cb77399f019acc67cc3c168f69e7d47eeec25f822902c0bb8c3fc1fc9276d258cfb33b66b14e0b3c8f03df77ce13dacc6968a578354319c78cfaeff3e7168ebb0c3f6e1639cdb133b6bbe1b547e652c332c3c3f963dab9743d77e12fc5b1034097f1a9fff180f75eba7586b77adcc458806dee33ec04d09db87c5dc637fdf75b5eff61c467dd66dac1a4ddc8cfff212a7f9aa121b58fca7fb0630780eb91efebd3063655b6cef003f876ee429fa1758605a9ff3971f9c6b490f5d95d31ae727e5d01635a187e8a3e5b9a2ec303a4ca7f84630780ef47becf9cd94d9f6103d9c6eeefb7eedf03965d9cb05c3719d7caf5da243e77197ef2eb324d805c8cd8c63efafc79363440fe10f5c728c70c00cb8c6b4ebd8f66bf4f7dc8feb7ad2c625e804bd165dc95f13ee1789d71b795becbf1c7405c8fdcc6f591cbc1e55a0e58b68f96a3d18e1900ae47be6ff2471e5ea021fbe47aeec29ea1bfce5d802dc6def37fb7e7b21f32ee7ee7633f3170e8dc0a7d5c00f06c9961df13f5c7018e1900fe3ee23dab68bad96695fd4777cf3d99cd39ba1ab06c7f82f22c33aee97fe8e4466326435ae6b85d01cb81cb3b81f3a9ab01cbf6111e0f72cc007035e23dbfccbd03ced8be0fe4e9624e804f7519b63ffe7382328db925ee3ec3afe8fb8cef0ae88eb09dcb0c1b53d1c7099c3f1a72413366f02b9f38c5d3005ff230f70e3863f7d9bfcf781927d22743fbd95727284f37f03d7dc65f197f48f2edc0752e729c27065e0d5c7e75e0fa787bae062cbbcedb1f03f59809c7c7cc190056536ed81bd06f7eba3d96dd67990aba0c6f6a7f9cb83c7723de77c85d31ebb4ae80a1330d2e73f81303bb81cb9ff363a739bd4586b5209dfad916a7b6cac48ff19ef26140af1972ab5655ffdc73b953dfcb7eae86567a7da6bd0a1d33ddef430e6fcd59655cebda21b37826c9970397ef0fdc4ede96abb90b7066c68ce91964ce00f038e3ba2fc5e39ecb75731774668bb4ab816ee0fb561396696cbffa9899fdb619f3b0a0450ebb2b603170f9c7236d2b6fc362ee029c9193cc8d336700987ce3de80f59ecb2de62ee88c966957da3723de3bd508f42ee346d61ff34bbf1eb97d3719dfafba18b0ecb1b693b763317701ce449f134d8c356700e075eb3d975bcc5dd0135be4b9e2ff2de39a0eef335d253476badfbb2397e343c6b5728c9d2678c87bfa236f2b97af9bbb006762d27eff4fcd7d17002f5bcf5d804f2cd39a8717731724c739514c75f57f9369a6fb3d643b9703dfd3a5859863754700fb39e9b4f802c079ebf65c6e7d82b2acd2fa957f1d50ae7335d597accbf807e14c519ee4f96141439f1b719b364a7f35e03debec1f10bb89b697cbd5cf5d8033d8febb53ae70ce2e806ec6755f8ac59ecbad4f549ec70c7f6cf1b9e933dd976cec3dff1f26dee6bb8cfb9b1d7b9ae04f2d26de66b834938ffaffdc9c016031e3ba2f45b7e772a798cdee499f16021e4fbc2f8e59f629dc64fc40c47ee2ed5e675c73fe558685a521dbb18873007fd4cf5d8019dd678689b1e60c00cb19d77d29f6bdafba3f71b9fa247fcb654dc5b94ef24da6d9578b8c6bfabfcfe966707cc8b813ccf7d93f88feefc0cfbe3ad1b67319fab90b30e376cff24c8c39c7008c797850258bec1f92563395f136ad621d53f99dd23ad3b65a8c69fa5fe7f45ffaef92fc2bc3aebc17d97f9ae0c7b46988f7751dd301f3accfb071243fe5bc064a8fb5ca4ce167ce00b048abe0563396e19c5d0f58b69fb19c77695fc229fb8b0fd167da710b5de6bfe77fc8bef829c303db32fb4d13fc38f073bfce719f44c8e57bccfe173e8ff10c94831cb30b603de23dd773ef8033b6ef53b1d699bf3ffe435af3fa7ae6727ceea7b4ae8a7ec2758c99eeb7cff403ff76b9cbb8e3659f568ea19fdb4557207f34648af821ad4d6c71cc0030e6c11edfc640a06dbaec1f8ef67d5ec0d41e327d65bbaf55da55ff6da60d2563a7fb3dd9441f3b8c1910b8c8ebad3ceb0c6fd17312e7530f03965d46803cc831bb00ee33fccbbc483b49dfcdbd23cecc9026da87b90bfb893ead72fb2da7bfcd739de4978c1fec365497c39ef4b7c8e5cda970bdf9797861997f66d849f926f37487709e1e336c1cc0bbe8461eed2f1f3f7e3cd6672d92fc9ee157f4eb9ccf95e339e8d2f6e3bebec8cbfb6e9961cdd43fe6f040b6481b38767de0e7bcb45debb493c5bf37ffae0e5cd750bf65f8d5479f76acaf37ffbfccb82e84397dbe0d9feb32ecf84d4ef0d8d30b31e464bccadbdd67f7197631f9558480518e3d06e09711ef5be4ed3fd779882115c27dce3338add3c6041c7a9be0435ac0d9f6f3b7b451ed1f72fa2fff4dc6353dfe983f569cab23eca353ebf2720b559fe17f8f650c06e4d9fdc0e5c73ebba2bc63cf03f030f27dcb9cffad64a7f03ec39a84c704ae53bacd61b7badda6ddb6d6cdbd219fe872dc7bfeef729e21ee25b77939008df99b8f1d4fc1dbb3cab010d9e57cef423a6bc70e00ab8cbf1abb4bed0141ef32ec2ae83197d1ec7597c31e2a739579c614ec3276badf5d95e23a334c017a042f5d75ad323cd42c725e7f67e635f4e2e6262e22079b6226c043aef8ee53b329f05d86f7bbcf3273d4481f72d8388f2ee3fadc8fed26d34cf7bbca790de6dc479797bfab638ecf2e4200cd7d869f2fee22040c32450058e5b093d9fbd4fa23becff0caff3e9757613ce6b00979bab4ca61ae63a31bb9eec7ecd7a7f95dce6f1e85d7bccbeee97cef33ae85aa8b104033a665ec2eba03f636d5b3007ec86127b3bb5cde2d5243756927badb11efbda4abff4ff5397c4adebbcc130286cc89ffa96ff65c6e9dcbfcbbbe74b21dbb3d5dda9d04952e04f8b355c685c8dbb4e3a79b7b03cedd5401a0cfe127b3ebcc7bc53795c5669bfe95f123c9fbb937e2007d5a087838e033eed202e2e24465ee729ae97e3fe432c6757c6a99ddfb6695c3ee72b84b3b912fe7de486633b665ac4b3b76860eac2e65caa7017ec8e1a3d4bb3c9f047ece65ff21976915ffef9b6d5a8cf88c87bc8d4993d66957c68784c4eb9cee0e81b1d3fdde8d78dfa57605743b7e779bc35a7cbab4fdff5bdaf88bc5dc1bcb49f5396c90ec6d9eeb8fabb937e6dc1c7322a06d1639fe49fa31edcae29f6927ca3ee77545bcf8e4e72aed91bed747d8077dc6f5a12f73fa898086b8cb61ad3c7d5a98789ca87c630668266dd0e3d832dda67539cc6591e115ed2abb27a6e972dc7efd55dad4e38f793e07ac4fb573266422a0ddee729cd6e03ecff5479fe14f209cdb3a473cd6a70e0089413dc7d067fc00ba65ce3b0024edcaee7d0efb12fe90e33f60a7cbf059ed923600ee126fedfb74bb873e36389b6dbedff1bbabb4e370e867be45bb66ef9cfc647c01d6d97dc7d07d6adf2a9ebc3ef3eb205376013ce933ede358dfba75da156e3f774126749fc38f9129ee1e19dbf47f8983f93edf86317df72f85b8c7b4bff17aee8d9bd9a58fe199da4bfbe726e73ff9d9948e7eec9c22002442c0587d0e1f357f291e73f8317297e30d0e1c3beaffad9ce03f8cd88e455e0e618fa91d02faccf718e84bd0e7f5fd73939a21a0cf042db3a70a004f1b2004ecaf4f9dcaff98db7c9dc3c79d7419f765bbcff079cccfd53ae3ba316ef3f2a8fdc7d47df8d7e7cf82e08ff61dd37093cb6f651b6a92f11ea70c00c9f393c42a26b8211e52f724d96fb6fd90dbc7ba1c36eee45dc6b522bcb593d22ae36e4b7cede12c7dea3dc1ed3e6f271c4e6168cbd95d0e9f6fe6524cd6aa78ea0090b43fd84ddad5c5241b75c1d66907f537a97160bfe4368755a85d5a4bc0edc0f7dd649ae97e2fd598db12bbbc3e1ea34f0b016f2d34eddad60adb39569f712d6e1ff2f62f94fa4c38287b8e00f0e43eed04a035a079483b983fcc5d90337297c31e24b4c8b0c181dd80653fd5e76dcccfb06bdbc6b4c6dc66bf097ceed24636bfe5f3c0bee170357741677248f3769f76fcbcd50bca49ef269a330024ed0f7693b77f0278c92aed0bf0d647fa8ff52187b788dc65bff9c1c73e92f6addf8ffd21e38ecd7de764efd3ce036fb15be03efb37fd573c07fe94e39cf7eef3dca2748ccf3b07f799f8fb30770078d2e78f41a09fbb40135ba71df85fe56d9ef48eed218737f5dde6e5c181cb8c6bfa3fd609ec9cad33ee4ae42ac35a465669df87a77142ebb937fc40eb0c6bfabf4fad73419fe3b69c3d7dde538bc0e3dc1b78e0b64cde6d748a8980c65aa69d90bfccdb98c2b14f9bbdec21cf33989dc232e73f11d0beba1c3ea9549fed77a38c7978489f5659ade7de312732e691cceb1c16deae373f7fcfe54d2636e6bbb4486b71a930e1cd4b13471d4b9776fc7c9d568f2ce6dee83d9d62df9c7500f8d422ed8f77b5f9efffc9b8e94a4f61bdf9f94fda49ef31a7adf03f7795618fc7fc25e73d5a7991d74799bf669d36b6a0dffcff75c64dbdfb532eefb1cc87e8d2f6fd50ffcc7142e522cfe7812ec95f73bea1609dfd9f04b9cd32edb8fc72ee0d99c8b18e89a1aed28e99abb4e3e9af73ef882dfe9d138d05bb940000001cd1b98c0100004e4800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082040000284800008082fe6bee0224596c7e9eac373f00c044e608008b243749be4e72953f56fe4fd6495649feb1f9b79fa19c435d25f97ecbebdfcd5d3000f8dc5f3e7efc78aa755d25799f6439e2bdf7497ecc7907816592dfb6bcfe97b90b06009f3bd51880ef93fc2be32affa4b518fc96e4fa44e5058037ed1401e0e7241f8ef0395d925f93dc9ea0cc00f0a64d3d06e05ddad5fb2eebb43efef5e6ff179b9fe50bef799fe471f33e00608429c70074497edff1bb555a9ffe6ac7ef1769cdfdef369ff3b93ec9df725e770b2c630c00001762ca2e80f73b5eff31c95779f90a7e9d36f0efabb4abfdcf7579b965010078c15401a0cbf6017bf749ee067c4e9fe49b6cbfd2ff7aaa9d02006fdd5401e06ac7ebbf8cf8ac3ec94f03d60100bc62aa4180dd8ed757233f6f95e4db1debe9077cce22ad65e2cbb43efbc527bf5b6f7efeb959dfd8b21ecb32ad95a3cb1fc3ce7ab3cdc79e246999e4ef9b755d7df6bb3ead2be69f491e66de2f001cc1548300efd206f07deebf33cfc0bd45da5c04b7d93ef3e0367dda7885fb3d975fe63883009769fb6eb9e7f2f7396c92a4a1eb1bba5f003843537501f43b5ebf9a611b97697723dc65ffca3f6957de3f677b9099c2226d9e83df326cc2a49bb449966e47acf3e711eb7bda2fef336c7f027046a60a008f3b5e3f75a5f16d5a0577c83aef327d0858e4b0990e1769fbf676c07b7ece617752dc66f79d1e009cb929e701f8bfd95ef13ea68decef27deb62eedca785b19d69b72fc23cf5d125779ee73dfe6b55b179719df05f0d255f8635adffb5339bfdc94756c399356f1ffbce377abcd7ee937ebbcdafc7cbb63f91f729c991e0138a12903c06d5ebe42bccfb40ff8d955a93ea43da16fbde37d77d97ec5bf4aab5c7759665c007897edb7463ea655aeab81e5ecf3fa2449bfe7cf01a2dfec975debeb36dbf7f9fbd669633b00b820533f0d709ffee5c7fcf1d1bfc7b0ccf6caf8c7ec370fc187fcf9d1beeb245f6477c5ba6b9d2f05802edb674b7cc8cb21e5c9555a2bc790eddc55ce6ff2fa08ff2edb5b55f6697500e08c4c1d00166995cdd580f7ac72f8ad788b3c375d7fbdf9779d5681efa3cbf68af96fd93dbe6199e101605b3f7c9f61d31cdfe5cf2d018f9bcfd8e6267f6efe5f67ffabf8dbb4ee80c724ffdefcfb38a0bc009c81a903c093bb8c1b48d7a75d95fe94c3bb0a161956496ddb31df65f7ed6fcb0c0f00db9ae25f5ac7aeedfa3d7fbe2adf15566e72580000e00d38c5e380931600bec8f09900bbb42bcedfd3c613740794613df1f2432db3bd1ffe7e4439b7edd7e580ed5ac46396014a395500485ae5769316045e1a6cb6cb6db60f429bc2f799fe76c5ab2daffd7be467f55b5efb72c7b2ab1dafbfcfeea72f02f0c64c3515f04bfab4abdcfbb44a7699e7e979af5e796f9736086dd7530287586c3eafdbfcf797799e2a787182fdb06d5b3f66dcbdf9db2afb6ec7b2ebb416836db7f5dd6d7e56791e87f118fdfb006fcea9c600ecab4b0b04dfe6e5bb07d6697ddcfd80cf5ee67940e055c655f2c71c03307406bea1faec1ef4d865586bca63fe180ad613961b8013386517c03efab40af6abbc3c666091fd67a17b973629d16f69dd08cb98c2b64fdbc7fd9ecb5fa5edbb5fd3c663fc1c5d050017eddc02c0a7fab4e6f05db7c45de7e58abc4beb2eb8cbb00a7f9d1a57b97d5ac81a3a19d322edeff27b4ef79c04008e6c8e3100433da6cd88b76deadaeb6c6f925fe4f526ee759e1f73fb9f3cdfcfde6f7eb7edd6ba536cebe3913e6bbde772779b9febec3f16e3d3f7262d440070412e210024ad92dff620a1ab1dcbef1acdbe4e9b536095f967ae5b6f79ed1fd96fa6c2293ce47926c045dabe5d26f97b5e1e337197e7b101005c8829024097dd73f0af0ff8dc75fe5c09fd75c7b2d75b5eeb33acdf7b6affbbe5b5ff99bb501bebfc3924dd6477b0ba8e00007051a60800cb6c6fae7fcc61cddb8b2daffd67cb6b57d95e497d97e17ddd53dab62fae37e53c47f76995fcb667017c1d1309015c942906013eee78fdfa80cfecb2bd42eeb7bcb66db975865da15e65fa00f0b0a3eccb89d77b883edbefcce8e62e1800c34c1500d65b5eff3ee32b8a5db7fc3d4e50fea7b24e6d9deda164ccc8fa5fd3aecc7fcdf380be6ecb728bb4a6fcf779bea5ef6386df25b1cf6b009cb1a96e03dc7695b8c8b8a97cdf67779ffe6ac7ebdbd6bddc737d5dc6cdc637c6b6d1f3cb0c0b013769fbe76af3efbbb4ca7dd7f6be4f6baebfcef3df62c8fabedef2dae3d43b0a80e39a2a007cc8f6abc22e2d04dce4e520b048abc07ecfeebee55db79ef53bd6bded2e82cf2db37d36bfa9acb23dc4dc65bf4af9db6c6f1de9b3fdf6c875b657d6b7d9af0fff5db6df7931f4214f00cc6ccaa9806ff3fa6c7dabb4caea6944fc5fb3df54bd8fd9fdbcfba405906dcdf87d5a70785a6ff27ccbdbf7797d9cc2b11f079c3c4f58b46d7bfb4d597f49abbcd7790e475f67f755fe987266f39e7fe4793e84459e9f8ff06db657fe7dceebee0a00f630f5b300ee72fcd9e2fabc5ee174d95da9eee33edb6f679c220024ad82fdf548fbe7a7bc7e35ff21c71be7f04db60f6804e08c4d3d15f05d8e3b4bdc2afb3d04a84f9b3d708cfec865dec7438e7315bd4fe59fcd323f1db8ae755a207a9870bf003091533c0be02e6dcef9d5019fd1a755365f65ff11e7f7195ea9ae46bce7589ed63da63fbddfbcf776c07b6e337c6e84cfcb7a7faa9d03c0719dfa71c05d5ac5f3655e1f95dfa7f5473fe4b0f0d06dd6f57d764f1dbccaf3d880271f36e5fcd4e7cb7cea2adbc73c7c75c07e7a9a86779bf566dffc72e0fe49daa0cca73efec58e65fa1ce7ef01c019387500f8dc55fe5ce1acb37b24ffa116f963853ae5ba8e59e62ecffb69fd49b9a7d0e58f7768f49fac13803762ee000000cce01463000080332300004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041020000142400004041ff0fe258a71e6d1e43360000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": null,
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "getARecord": {
+      "id": 103228,
+      "api": {
+        "qs": {
+          "expand": "{{parameters.expand}}"
+        },
+        "url": "/{{parsePath(parameters)}}/{{parameters.id}}",
+        "method": "GET",
+        "response": {
+          "output": "{{parseResponse(body)}}"
+        },
+        "encodeUrl": false
+      },
+      "rev": 5,
+      "crud": "read",
+      "name": "getARecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Record",
+      "scope": [],
+      "expect": [
+        "rpc://app%23oracle-fusion-cloud-sales@1/selectRecordTypeCategory?module=get",
+        {
+          "help": "Enter the name of a child record to include its details in the response. Use a comma to separate multiple child records. For example, `Employees,Localizations`. Use the following format for nested children: `Child.NestedChild`. For example, `Employees.Managers`. If a nested child is provided, the relevant child will be processed implicitly - `Employees.Managers` is the same as `Employees,Employees.Managers`.",
+          "name": "expand",
+          "type": "text",
+          "label": "Expand"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "oracle-fusion-cloud-sales",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/{{parsePath(parameters)}}/{{parameters.id}}\",\n    \"method\": \"GET\",\n    \"encodeUrl\": false,\n    \"qs\": {\n        \"expand\": \"{{parameters.expand}}\"\n    },\n    \"response\": {\n        \"output\": \"{{parseResponse(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23oracle-fusion-cloud-sales@1/interfaceRecord"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "oracle-fusion-cloud-sales",
+      "description": "Retrieves the details of a record by its ID.",
+      "expectJsonc": "[\n    //author: KB\n     \"rpc://selectRecordTypeCategory?module=get\",\n    {\n        \"name\": \"expand\",\n        \"type\": \"text\",\n        \"label\": \"Expand\",\n        \"help\": \"Enter the name of a child record to include its details in the response. Use a comma to separate multiple child records. For example, `Employees,Localizations`. Use the following format for nested children: `Child.NestedChild`. For example, `Employees.Managers`. If a nested child is provided, the relevant child will be processed implicitly - `Employees.Managers` is the same as `Employees,Employees.Managers`.\"\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    \"rpc://interfaceRecord\"\n]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchRecords": {
+      "id": 103645,
+      "api": {
+        "qs": {
+          "limit": "100",
+          "fields": "{{if(length(parameters.fields) > 0, join(deduplicate(add(parameters.fields, parameters.labelField, parameters.dateField)), ','), undefined)}}",
+          "orderBy": "{{parameters.dateField}}:desc",
+          "onlyData": true
+        },
+        "url": "/{{parsePath(parameters)}}",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{parseResponse(item)}}",
+          "iterate": "{{body.items}}",
+          "trigger": {
+            "id": "{{item.@context.key}}",
+            "date": "{{item[parameters.dateField]}}",
+            "type": "date",
+            "order": "desc"
+          }
+        },
+        "encodeUrl": false,
+        "pagination": {
+          "qs": {
+            "offset": "{{(pagination.page - 1) * 100}}"
+          },
+          "condition": "{{parameters.limit > 100 && body.hasMore}}"
+        }
+      },
+      "rev": 4,
+      "crud": "read",
+      "name": "watchRecords",
+      "epoch": {
+        "qs": {
+          "fields": "{{parameters.dateField}},{{parameters.labelField}}"
+        },
+        "response": {
+          "limit": 300,
+          "output": {
+            "date": "{{item[parameters.dateField]}}",
+            "label": "{{item[parameters.labelField] || item[parameters.dateField]}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Records",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "oracle-fusion-cloud-sales",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/{{parsePath(parameters)}}\",\n    \"method\": \"GET\",\n    \"encodeUrl\": false,\n    \"qs\": {\n        \"orderBy\": \"{{parameters.dateField}}:desc\",\n        \"fields\": \"{{if(length(parameters.fields) > 0, join(deduplicate(add(parameters.fields, parameters.labelField, parameters.dateField)), ','), undefined)}}\",\n        \"onlyData\": true,\n        \"limit\": \"100\"\n    },\n    \"response\": {\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": \"{{parseResponse(item)}}\",\n        \"iterate\": \"{{body.items}}\",\n        \"trigger\": {\n            \"id\": \"{{item.@context.key}}\",\n            \"date\": \"{{item[parameters.dateField]}}\",\n            \"type\": \"date\",\n            \"order\": \"desc\"\n        }\n    },\n    \"pagination\": {\n        \"condition\": \"{{parameters.limit > 100 && body.hasMore}}\",\n        \"qs\": {\n            \"offset\": \"{{(pagination.page - 1) * 100}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23oracle-fusion-cloud-sales@1/interfaceRecord"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": "{\n    \"qs\": {\n        \"fields\": \"{{parameters.dateField}},{{parameters.labelField}}\"\n    },\n    \"response\": {\n        \"limit\": 300,\n        \"output\": {\n            \"date\": \"{{item[parameters.dateField]}}\",\n            \"label\": \"{{item[parameters.labelField] || item[parameters.dateField]}}\"\n        }\n    }\n}",
+      "parameters": [
+        {
+          "help": "Available record types are based on your Oracle user rights at the time you created the connection. If your user rights have changed, go to your Connections page and click `Verify` next to your connection to update this list.",
+          "name": "recordTypeCategory",
+          "type": "select",
+          "label": "Record Type Category",
+          "nested": "rpc://app%23oracle-fusion-cloud-sales@1/listRecordChildren?module=trigger",
+          "grouped": true,
+          "options": "rpc://app%23oracle-fusion-cloud-sales@1/listRecordTypeCategories",
+          "mappable": false,
+          "required": true
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 2,
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "accountName": "oracle-fusion-cloud-sales",
+      "description": "Triggers when records are created.",
+      "expectJsonc": null,
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    \"rpc://interfaceRecord\"\n]",
+      "parametersJsonc": "[\n    // RPC here is breaking epoch (bug in platform), the parameter must be hardcoded\n    {\n        \"name\": \"recordTypeCategory\",\n        \"label\": \"Record Type Category\",\n        \"type\": \"select\",\n        \"mappable\": false,\n        \"required\": true,\n        \"grouped\": true,\n        \"help\": \"Available record types are based on your Oracle user rights at the time you created the connection. If your user rights have changed, go to your Connections page and click `Verify` next to your connection to update this list.\",\n        \"options\": \"rpc://listRecordTypeCategories\",\n        \"nested\": \"rpc://listRecordChildren?module=trigger\"\n    },\n    {\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 2,\n        \"required\": true\n    }\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "createARecord": {
+      "id": 103226,
+      "api": {
+        "url": "/{{parsePath(parameters)}}",
+        "body": "{{encodePayload(omit(parameters, 'parentId', 'recordTypeCategory', 'recordType'))}}",
+        "method": "POST",
+        "response": {
+          "output": "{{parseResponse(body)}}"
+        }
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "createARecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Record",
+      "scope": [],
+      "expect": [
+        "rpc://app%23oracle-fusion-cloud-sales@1/selectRecordTypeCategory?module=create"
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "oracle-fusion-cloud-sales",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/{{parsePath(parameters)}}\",\n    \"method\": \"POST\",\n    \"body\": \"{{encodePayload(omit(parameters, 'parentId', 'recordTypeCategory', 'recordType'))}}\",\n    \"response\": {\n        \"output\": \"{{parseResponse(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23oracle-fusion-cloud-sales@1/interfaceRecord"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "oracle-fusion-cloud-sales",
+      "description": "Creates a new record.",
+      "expectJsonc": "[\n    \"rpc://selectRecordTypeCategory?module=create\"\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    \"rpc://interfaceRecord\"\n]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deleteARecord": {
+      "id": 103227,
+      "api": {
+        "url": "/{{parsePath(parameters)}}/{{parameters.id}}",
+        "method": "DELETE",
+        "response": {
+          "output": null
+        },
+        "encodeUrl": false
+      },
+      "rev": 4,
+      "crud": null,
+      "name": "deleteARecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Delete a Record",
+      "scope": [],
+      "expect": [
+        "rpc://app%23oracle-fusion-cloud-sales@1/selectRecordTypeCategory?module=delete"
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "oracle-fusion-cloud-sales",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/{{parsePath(parameters)}}/{{parameters.id}}\",\n    \"method\": \"DELETE\",\n    \"encodeUrl\": false,\n    \"response\": {\n        \"output\": null\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23oracle-fusion-cloud-sales@1/interfaceRecord"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "oracle-fusion-cloud-sales",
+      "description": "Deletes a record by its ID.",
+      "expectJsonc": "[\n    \"rpc://selectRecordTypeCategory?module=delete\"\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\r\n    \"rpc://interfaceRecord\"\r\n]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "makeAnApiCall": {
+      "id": 103229,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://{{connection.server}}/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 5,
+      "crud": null,
+      "name": "makeAnApiCall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://<servername>`, e.g. `/crmRestApi/resources/11.13.18.05/latest/opportunities`.",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "REST-Framework-Version",
+              "value": 9
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "oracle-fusion-cloud-sales",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"url\": \"https://{{connection.server}}/{{parameters.url}}\",\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"method\": \"{{parameters.method}}\",\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"body\": \"{{body}}\",\n            \"headers\": \"{{headers}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "oracle-fusion-cloud-sales",
+      "description": "Performs an arbitrary authorized API Call.",
+      "expectJsonc": "[\n    {\n        \"help\": \"Enter a path relative to `https://<servername>`, e.g. `/crmRestApi/resources/11.13.18.05/latest/opportunities`.\",\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ],\n        \"required\": true\n    },\n    {\n        \"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"name\": \"headers\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"type\": \"text\",\n                \"label\": \"Key\"\n            },\n            {\n                \"name\": \"value\",\n                \"type\": \"text\",\n                \"label\": \"Value\"\n            }\n        ],\n        \"type\": \"array\",\n        \"label\": \"Headers\",\n        \"default\": [\n            {\n                \"key\": \"Content-Type\",\n                \"value\": \"application/json\"\n            },\n            {\n                \"key\": \"REST-Framework-Version\",\n                \"value\": 9\n            }\n        ]\n    },\n    {\n        \"name\": \"qs\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"type\": \"text\",\n                \"label\": \"Key\"\n            },\n            {\n                \"name\": \"value\",\n                \"type\": \"text\",\n                \"label\": \"Value\"\n            }\n        ],\n        \"type\": \"array\",\n        \"label\": \"Query String\"\n    },\n    {\n        \"name\": \"body\",\n        \"type\": \"any\",\n        \"label\": \"Body\"\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"body\",\n        \"type\": \"any\",\n        \"label\": \"Body\"\n    },\n    {\n        \"name\": \"headers\",\n        \"type\": \"collection\",\n        \"label\": \"Headers\"\n    },\n    {\n        \"name\": \"statusCode\",\n        \"type\": \"number\",\n        \"label\": \"Status code\"\n    }\n]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "searchRecords": {
+      "id": 103230,
+      "api": {
+        "qs": {
+          "q": "{{ifempty(parameters.q, encodeSearchFilter(parameters.filter))}}",
+          "limit": "{{min(parameters.limit, 100)}}",
+          "fields": "{{ifempty(join(parameters.fields, ','), undefined)}}",
+          "orderBy": "{{encodeOrderBy(parameters.orderBy)}}",
+          "onlyData": true,
+          "effectiveDate": "{{if(parameters.effectiveDate, formatDate(parameters.effectiveDate, 'YYYY-MM-DD'))}}"
+        },
+        "url": "/{{parsePath(parameters)}}",
+        "gzip": true,
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{parseResponse(item)}}",
+          "iterate": "{{body.items}}"
+        },
+        "encodeUrl": false,
+        "pagination": {
+          "qs": {
+            "offset": "{{(pagination.page - 1) * 100}}"
+          },
+          "condition": "{{(!parameters.limit || parameters.limit > 100) && body.hasMore }}"
+        }
+      },
+      "rev": 5,
+      "crud": "read",
+      "name": "searchRecords",
+      "epoch": null,
+      "flags": {},
+      "label": "Search Records",
+      "scope": [],
+      "expect": [
+        "rpc://app%23oracle-fusion-cloud-sales@1/selectRecordTypeCategory?module=search",
+        {
+          "name": "effectiveDate",
+          "type": "date",
+          "label": "Effective Date",
+          "advanced": true
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "number",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "oracle-fusion-cloud-sales",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/{{parsePath(parameters)}}\",\n    \"method\": \"GET\",\n    \"encodeUrl\": false,\n    \"gzip\": true,\n    \"qs\": {\n        \"q\": \"{{ifempty(parameters.q, encodeSearchFilter(parameters.filter))}}\",\n        \"orderBy\": \"{{encodeOrderBy(parameters.orderBy)}}\",\n        \"fields\": \"{{ifempty(join(parameters.fields, ','), undefined)}}\",\n        \"effectiveDate\": \"{{if(parameters.effectiveDate, formatDate(parameters.effectiveDate, 'YYYY-MM-DD'))}}\",\n        \"onlyData\": true,\n        \"limit\": \"{{min(parameters.limit, 100)}}\"\n    },\n    \"response\": {\n        \"limit\": \"{{parameters.limit}}\",\n        \"output\": \"{{parseResponse(item)}}\",\n        \"iterate\": \"{{body.items}}\"\n    },\n    \"pagination\": {\n        \"condition\": \"{{(!parameters.limit || parameters.limit > 100) && body.hasMore }}\",\n        \"qs\": {\n            \"offset\": \"{{(pagination.page - 1) * 100}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23oracle-fusion-cloud-sales@1/interfaceRecord"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "oracle-fusion-cloud-sales",
+      "description": "Retrieves a list of records filtered by criteria.",
+      "expectJsonc": "[\n    \"rpc://selectRecordTypeCategory?module=search\",\n    {\n        \"name\": \"effectiveDate\",\n        \"type\": \"date\",\n        \"label\": \"Effective Date\",\n        \"advanced\": true\n    },\n    {\n        \"name\": \"limit\",\n        \"type\": \"number\",\n        \"label\": \"Limit\",\n        \"default\": 10,\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\"\n    }\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    \"rpc://interfaceRecord\"\n]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "updateARecord": {
+      "id": 103231,
+      "api": {
+        "url": "/{{parsePath(parameters)}}/{{parameters.id}}",
+        "body": "{{encodePayload(omit(parameters, 'parentId', 'id', 'recordTypeCategory', 'recordType'))}}",
+        "method": "PATCH",
+        "response": {
+          "output": "{{parseResponse(body)}}"
+        },
+        "encodeUrl": false
+      },
+      "rev": 5,
+      "crud": null,
+      "name": "updateARecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Update a Record",
+      "scope": [],
+      "expect": [
+        "rpc://app%23oracle-fusion-cloud-sales@1/selectRecordTypeCategory?module=update"
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "oracle-fusion-cloud-sales",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/{{parsePath(parameters)}}/{{parameters.id}}\",\n    \"method\": \"PATCH\",\n    \"encodeUrl\": false,\n    \"body\": \"{{encodePayload(omit(parameters, 'parentId', 'id', 'recordTypeCategory', 'recordType'))}}\",\n    \"response\": {\n        \"output\": \"{{parseResponse(body)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        "rpc://app%23oracle-fusion-cloud-sales@1/interfaceRecord"
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[]",
+      "accountName": "oracle-fusion-cloud-sales",
+      "description": "Updates a record by its ID.",
+      "expectJsonc": "[\n    \"rpc://selectRecordTypeCategory?module=update\"\n]",
+      "samplesJsonc": "{}",
+      "altAccountName": null,
+      "interfaceJsonc": "[\r\n    \"rpc://interfaceRecord\"\r\n]",
+      "parametersJsonc": "[]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "oracle-fusion-cloud-sales": {
+      "api": [
+        {
+          "qs": {
+            "metadataMode": "list"
+          },
+          "log": {
+            "sanitize": [
+              "request.headers.authorization"
+            ]
+          },
+          "url": "https://{{parameters.server}}/fscmRestApi/resources/11.13.18.05/describe",
+          "temp": {
+            "supported": [
+              "FlexFndDffDescriptiveFlexfieldContexts",
+              "FlexFndPvsCharacterIdCharacterValues",
+              "FlexFndPvsNumberIdCharacterValues",
+              "compensationPlans",
+              "contractAssetTransactions",
+              "contracts",
+              "creditCategories",
+              "currenciesLOV",
+              "debriefs",
+              "incentiveCompensationBusinessUnitsLOV",
+              "incentiveCompensationCalculationSimulations",
+              "incentiveCompensationCreditDetails",
+              "incentiveCompensationEarnings",
+              "incentiveCompensationEligiblePayGroupsLOV",
+              "incentiveCompensationEstimationInsights",
+              "incentiveCompensationExpressionDetailItemsLOV",
+              "incentiveCompensationExpressionUsagesLOV",
+              "incentiveCompensationExpressions",
+              "incentiveCompensationParticipants",
+              "incentiveCompensationParticipantsLOV",
+              "incentiveCompensationPayGroups",
+              "incentiveCompensationPaymentPlans",
+              "incentiveCompensationPerformanceIntervalsLOV",
+              "incentiveCompensationPerformanceMeasures",
+              "incentiveCompensationPeriodsLOV",
+              "incentiveCompensationPlanDocumentTemplatesLOV",
+              "incentiveCompensationRoles",
+              "incentiveCompensationRuleAttributeValuesLOV",
+              "incentiveCompensationRuleAttributesLOV",
+              "incentiveCompensationRuleHierarchies",
+              "incentiveCompensationRuleTypesLOV",
+              "incentiveCompensationSummarizedCredits",
+              "incentiveCompensationSummarizedEarnings",
+              "incentiveCompensationSummarizedEarningsPerInterval",
+              "incentiveCompensationSummarizedTeamCredits",
+              "incentiveCompensationTransactions",
+              "languagesLOV",
+              "partItemsLOV",
+              "partRequirementLines",
+              "participantCompensationPlans",
+              "partsShippingMethodsLOV",
+              "paybatchParticipantPlanComponentsLOV",
+              "paymentBatches",
+              "paymentTransactions",
+              "paysheets",
+              "planComponents",
+              "rateDimensions",
+              "rateTables",
+              "returnRoutingRules",
+              "serviceActivitiesLOV",
+              "servicePartReturns",
+              "standardLookupsLOV",
+              "stockingLocations",
+              "technicianSubinventories",
+              "territoriesLOV",
+              "timezonesLOV",
+              "trunkStocks"
+            ]
+          },
+          "headers": {
+            "authorization": "Basic {{base64(parameters.username + ':' + parameters.password)}}",
+            "REST-Framework-Version": 9
+          },
+          "timeout": 300000,
+          "response": {
+            "data": {
+              "resourcesF": "{{userScope(body.Resources,'fscmRestApi', temp.supported, parameters.scope)}}"
+            },
+            "error": {
+              "401": {
+                "message": "401 Unauthorized. The authentication credentials are missing or invalid."
+              },
+              "403": {
+                "message": "403 Forbidden. You don't have the authorization to perform this request. You may not have the necessary roles and privileges to use this resource."
+              },
+              "message": "[{{statusCode}}] {{statusMessage}}. \n{{body.o:errorDetails.1.detail}}"
+            }
+          }
+        },
+        {
+          "qs": {
+            "metadataMode": "list"
+          },
+          "log": {
+            "sanitize": [
+              "request.headers.authorization"
+            ]
+          },
+          "url": "https://{{parameters.server}}/crmRestApi/resources/11.13.18.05/describe",
+          "temp": {
+            "supported": [
+              "accessGroupExtensionRules",
+              "accessGroupRelationships",
+              "accessGroupRules",
+              "accessGroups",
+              "accounts",
+              "actionEvents",
+              "actionplans",
+              "actions",
+              "actionstatusconditions",
+              "actiontemplates",
+              "activities",
+              "activityFunctionLookups",
+              "activitySubtypesLOV",
+              "activityTemplates",
+              "activityTypeLookupsLOV",
+              "addressStyleFormats",
+              "applicationRoles",
+              "assessmentTemplatesLOV",
+              "assets",
+              "attributePredictions",
+              "benefitListTypeValuesLOV",
+              "billingAdjustments",
+              "bulkExportActivities",
+              "businessPlans",
+              "campaignMembers",
+              "campaigns",
+              "cases",
+              "catalogProductGroups",
+              "catalogProductItems",
+              "categories",
+              "channels",
+              "chatAuthenticate",
+              "chatConversations",
+              "chatInteractions",
+              "chatTranscript",
+              "classCodes",
+              "collaborationActions",
+              "collaborationRecipientLookups",
+              "collaborations",
+              "competitorAccounts",
+              "competitors",
+              "contactContentAssociations",
+              "contacts",
+              "contestScores",
+              "contests",
+              "conversationMessages",
+              "conversations",
+              "copyMaps",
+              "countryCodes",
+              "crmBusinessUnits",
+              "cssIdpRoleMappings",
+              "customCascadingLookups",
+              "customLookups",
+              "customerSelfServiceUsers",
+              "customerWorkOrders",
+              "daaSSmartData",
+              "deals",
+              "deletedRecords",
+              "deviceTokens",
+              "dynamicLinkPatterns",
+              "dynamicLinkValues",
+              "emailTemplates",
+              "emailVerification",
+              "entitlements",
+              "feedConfigurations",
+              "feedTypesLOV",
+              "feedbackRatingsLOV",
+              "fieldGroups",
+              "fndCommonSetIdLookups",
+              "fndCurrencies",
+              "fndStaticLookups",
+              "fndTerritories",
+              "geoZones",
+              "geographies",
+              "geographiesLOV",
+              "getConfigs",
+              "goalMetrics",
+              "goals",
+              "households",
+              "hrHelpDeskRequests",
+              "hrSRResolveOutcomeLookups",
+              "hubOrganizations",
+              "hubPersons",
+              "hubSourceSystemReferences",
+              "hzLookups",
+              "importActivities",
+              "importExportObjectMetadata",
+              "importMappings",
+              "inboundMessages",
+              "inboundMsgFilters",
+              "industriesLOV",
+              "interactions",
+              "internalSRResolveOutcomeLookups",
+              "internalServiceRequests",
+              "keyPerformanceIndicators",
+              "leads",
+              "lightboxDocumentTypesLOV",
+              "lightboxDocuments",
+              "lookupProperties",
+              "loyEventsLOV",
+              "loyPointTypesLOV",
+              "mappedProductTemplates",
+              "mdfBudgets",
+              "mdfClaims",
+              "mdfRequests",
+              "milestones",
+              "multiChannelAdapterEvents",
+              "multiChannelAdapterToolbars",
+              "mySelfServiceRoles",
+              "nameAndIdTypes",
+              "navigatorMetadata",
+              "nonDuplicates",
+              "noteTypes",
+              "notificationFollowers",
+              "objectCapacities",
+              "objectLinkTypes",
+              "objectLinks",
+              "omniChannelEvents",
+              "omniChannelProps",
+              "opportunities",
+              "optyStatusesLOV",
+              "orchestrationSupportedObjects",
+              "orchestrations",
+              "outboundMessages",
+              "partnerContactManagersLOV",
+              "partnerContacts",
+              "partnerEnrolledProgramsLOV",
+              "partnerProgramBenefits",
+              "partnerPrograms",
+              "partnerProgramsLOV",
+              "partnerResourceRolesLOV",
+              "partnerStatusesLOV",
+              "partnerTiers",
+              "partnerTypesLOV",
+              "partners",
+              "partnersLOV",
+              "partyUsages",
+              "passiveBeaconProviderStatus",
+              "phoneVerification",
+              "presentationSessionFeedback",
+              "presentationSessions",
+              "priceBookHeaders",
+              "processMetadata",
+              "productGroupUsages",
+              "productGroups",
+              "productSpecialitiesLOV",
+              "productStatuses",
+              "productStructures",
+              "productTemplateMappings",
+              "productTemplates",
+              "productUnitOfMeasures",
+              "products",
+              "programEnrollments",
+              "programTiersLOV",
+              "proposals",
+              "queues",
+              "ratedCurrencies",
+              "recentItems",
+              "relationshipTypes",
+              "resolutionLinks",
+              "resolutionRequests",
+              "resourceCapacities",
+              "resourceLoads",
+              "resourcePresences",
+              "resourceUsers",
+              "resources",
+              "revenueSalesChannels",
+              "roleBasedLookups",
+              "rollups",
+              "salesContents",
+              "salesForecastAdjustments",
+              "salesForecastDimensions",
+              "salesForecastMetricSourceItems",
+              "salesForecastMetrics",
+              "salesForecastParams",
+              "salesForecastParticipants",
+              "salesForecastPeriods",
+              "salesForecastQuotas",
+              "salesGLEndPeriodTimesLOV",
+              "salesGLPeriodTypes",
+              "salesGLStartPeriodTimesLOV",
+              "salesMLModels",
+              "salesMLUsecases",
+              "salesMethodsLOV",
+              "salesObjectiveTypes",
+              "salesObjectives",
+              "salesOrderCPQIntegrationConfigurations",
+              "salesOrderLines",
+              "salesOrders",
+              "salesPromotions",
+              "salesStagesLOV",
+              "salesSuggestions",
+              "salesTerritories",
+              "scoringModels",
+              "screenPopPages",
+              "screenPopTokens",
+              "selfRegistrations",
+              "selfServiceRoles",
+              "selfServiceUsers",
+              "sensingAgentConfigurations",
+              "sensingAgentSynonyms",
+              "serviceBusinessUnits",
+              "serviceChannelTypesLOV",
+              "serviceDependentLookupsLOV",
+              "serviceDetails",
+              "serviceProviders",
+              "serviceRequestStatusesLOV",
+              "serviceRequests",
+              "setupAssistants",
+              "setupSalesCatalogs",
+              "signatures",
+              "similarSRs",
+              "smartTextFolderAndTexts",
+              "smartTextFolders",
+              "smartTextHistory",
+              "smartTextObjects",
+              "smartTextUserVariables",
+              "smartTextVariables",
+              "smartTexts",
+              "socialPosts",
+              "socialUsers",
+              "sourcecodes",
+              "structureHierarchies",
+              "subscriptionAccountRoles",
+              "subscriptionAccounts",
+              "subscriptionAiFeatures",
+              "subscriptionAssetTransactions",
+              "subscriptionBalanceCodes",
+              "subscriptionBalanceCriteria",
+              "subscriptionBalanceObjects",
+              "subscriptionBalanceProfiles",
+              "subscriptionBalanceRegisters",
+              "subscriptionCoverageExceptions",
+              "subscriptionCoverageHeaders",
+              "subscriptionCoverageSchedules",
+              "subscriptionCustomerAssetsLOV",
+              "subscriptionEntitlementAssignments",
+              "subscriptionMetrics",
+              "subscriptionOrderTransactions",
+              "subscriptionProducts",
+              "subscriptionProfiles",
+              "subscriptionUsageEventBatches",
+              "subscriptionUsageEventTypes",
+              "subscriptionUsageEvents",
+              "subscriptions",
+              "surveyConfigurations",
+              "surveyRequests",
+              "surveys",
+              "svcResolveOutcomeLookups",
+              "svcWoAreas",
+              "svcWoCapacities",
+              "svcWoDAAvailableResources",
+              "svcWoIntegrationConfigs",
+              "svcWoLinkTemplates",
+              "svcWoLinkTemplatesLOV",
+              "svcWoTypeMapLookups",
+              "svcWorkOrderLinks",
+              "tags",
+              "territories",
+              "territoryForecasts",
+              "timeCodeUnits",
+              "universalWorkObjects",
+              "userContextDataSources",
+              "userContextObjectTypes",
+              "userFavorites",
+              "userRelevantItems",
+              "validationReport",
+              "webActivities",
+              "webActivityRules",
+              "woStatusCodeLookups",
+              "wrapUps"
+            ]
+          },
+          "headers": {
+            "authorization": "Basic {{base64(parameters.username + ':' + parameters.password)}}",
+            "REST-Framework-Version": 9
+          },
+          "timeout": 300000,
+          "response": {
+            "data": {
+              "resourcesC": "{{userScope(body.Resources,'crmRestApi', temp.supported, parameters.scope)}}"
+            },
+            "error": {
+              "401": {
+                "message": "401 Unauthorized. The authentication credentials are missing or invalid."
+              },
+              "403": {
+                "message": "403 Forbidden. You don't have the authorization to perform this request. You may not have the necessary roles and privileges to use this resource."
+              },
+              "message": "[{{statusCode}}] {{statusMessage}}. \n{{body.o:errorDetails.1.detail}}"
+            }
+          }
+        }
+      ],
+      "rev": 4,
+      "name": "oracle-fusion-cloud-sales",
+      "type": "basic",
+      "label": "Oracle Fusion Cloud Sales",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "install": {},
+      "apiJsonc": "[\n    {\n        \"url\": \"https://{{parameters.server}}/fscmRestApi/resources/11.13.18.05/describe\",\n        \"headers\": {\n            \"authorization\": \"Basic {{base64(parameters.username + ':' + parameters.password)}}\",\n            \"REST-Framework-Version\": 9\n        },\n        \"qs\": {\n            \"metadataMode\": \"list\"\n        },\n        \"timeout\": 300000,\n        \"log\": {\n            \"sanitize\": [\n                \"request.headers.authorization\"\n            ]\n        },\n        \"response\": {\n            \"data\": {\n                \"resourcesF\": \"{{userScope(body.Resources,'fscmRestApi', temp.supported, parameters.scope)}}\"\n            },\n            \"error\": {\n                \"401\": {\n                    \"message\": \"401 Unauthorized. The authentication credentials are missing or invalid.\"\n                },\n                \"403\": {\n                    \"message\": \"403 Forbidden. You don't have the authorization to perform this request. You may not have the necessary roles and privileges to use this resource.\"\n                },\n                \"message\": \"[{{statusCode}}] {{statusMessage}}. \\n{{body.o:errorDetails.1.detail}}\"\n            }\n        },\n        \"temp\": {\n            \"supported\": [\n                \"FlexFndDffDescriptiveFlexfieldContexts\",\n                \"FlexFndPvsCharacterIdCharacterValues\",\n                \"FlexFndPvsNumberIdCharacterValues\",\n                \"compensationPlans\",\n                \"contractAssetTransactions\",\n                \"contracts\",\n                \"creditCategories\",\n                \"currenciesLOV\",\n                \"debriefs\",\n                \"incentiveCompensationBusinessUnitsLOV\",\n                \"incentiveCompensationCalculationSimulations\",\n                \"incentiveCompensationCreditDetails\",\n                \"incentiveCompensationEarnings\",\n                \"incentiveCompensationEligiblePayGroupsLOV\",\n                \"incentiveCompensationEstimationInsights\",\n                \"incentiveCompensationExpressionDetailItemsLOV\",\n                \"incentiveCompensationExpressionUsagesLOV\",\n                \"incentiveCompensationExpressions\",\n                \"incentiveCompensationParticipants\",\n                \"incentiveCompensationParticipantsLOV\",\n                \"incentiveCompensationPayGroups\",\n                \"incentiveCompensationPaymentPlans\",\n                \"incentiveCompensationPerformanceIntervalsLOV\",\n                \"incentiveCompensationPerformanceMeasures\",\n                \"incentiveCompensationPeriodsLOV\",\n                \"incentiveCompensationPlanDocumentTemplatesLOV\",\n                \"incentiveCompensationRoles\",\n                \"incentiveCompensationRuleAttributeValuesLOV\",\n                \"incentiveCompensationRuleAttributesLOV\",\n                \"incentiveCompensationRuleHierarchies\",\n                \"incentiveCompensationRuleTypesLOV\",\n                \"incentiveCompensationSummarizedCredits\",\n                \"incentiveCompensationSummarizedEarnings\",\n                \"incentiveCompensationSummarizedEarningsPerInterval\",\n                \"incentiveCompensationSummarizedTeamCredits\",\n                \"incentiveCompensationTransactions\",\n                \"languagesLOV\",\n                \"partItemsLOV\",\n                \"partRequirementLines\",\n                \"participantCompensationPlans\",\n                \"partsShippingMethodsLOV\",\n                \"paybatchParticipantPlanComponentsLOV\",\n                \"paymentBatches\",\n                \"paymentTransactions\",\n                \"paysheets\",\n                \"planComponents\",\n                \"rateDimensions\",\n                \"rateTables\",\n                \"returnRoutingRules\",\n                \"serviceActivitiesLOV\",\n                \"servicePartReturns\",\n                \"standardLookupsLOV\",\n                \"stockingLocations\",\n                \"technicianSubinventories\",\n                \"territoriesLOV\",\n                \"timezonesLOV\",\n                \"trunkStocks\"\n            ]\n        }\n    },\n    {\n        \"url\": \"https://{{parameters.server}}/crmRestApi/resources/11.13.18.05/describe\",\n        \"headers\": {\n            \"authorization\": \"Basic {{base64(parameters.username + ':' + parameters.password)}}\",\n            \"REST-Framework-Version\": 9\n        },\n        \"qs\": {\n            \"metadataMode\": \"list\"\n        },\n        \"timeout\": 300000,\n        \"log\": {\n            \"sanitize\": [\n                \"request.headers.authorization\"\n            ]\n        },\n        \"response\": {\n            \"data\": {\n                \"resourcesC\": \"{{userScope(body.Resources,'crmRestApi', temp.supported, parameters.scope)}}\"\n            },\n            \"error\": {\n                \"401\": {\n                    \"message\": \"401 Unauthorized. The authentication credentials are missing or invalid.\"\n                },\n                \"403\": {\n                    \"message\": \"403 Forbidden. You don't have the authorization to perform this request. You may not have the necessary roles and privileges to use this resource.\"\n                },\n                \"message\": \"[{{statusCode}}] {{statusMessage}}. \\n{{body.o:errorDetails.1.detail}}\"\n            }\n        },\n        \"temp\": {\n            \"supported\": [\n                \"accessGroupExtensionRules\",\n                \"accessGroupRelationships\",\n                \"accessGroupRules\",\n                \"accessGroups\",\n                \"accounts\",\n                \"actionEvents\",\n                \"actionplans\",\n                \"actions\",\n                \"actionstatusconditions\",\n                \"actiontemplates\",\n                \"activities\",\n                \"activityFunctionLookups\",\n                \"activitySubtypesLOV\",\n                \"activityTemplates\",\n                \"activityTypeLookupsLOV\",\n                \"addressStyleFormats\",\n                \"applicationRoles\",\n                \"assessmentTemplatesLOV\",\n                \"assets\",\n                \"attributePredictions\",\n                \"benefitListTypeValuesLOV\",\n                \"billingAdjustments\",\n                \"bulkExportActivities\",\n                \"businessPlans\",\n                \"campaignMembers\",\n                \"campaigns\",\n                \"cases\",\n                \"catalogProductGroups\",\n                \"catalogProductItems\",\n                \"categories\",\n                \"channels\",\n                \"chatAuthenticate\",\n                \"chatConversations\",\n                \"chatInteractions\",\n                \"chatTranscript\",\n                \"classCodes\",\n                \"collaborationActions\",\n                \"collaborationRecipientLookups\",\n                \"collaborations\",\n                \"competitorAccounts\",\n                \"competitors\",\n                \"contactContentAssociations\",\n                \"contacts\",\n                \"contestScores\",\n                \"contests\",\n                \"conversationMessages\",\n                \"conversations\",\n                \"copyMaps\",\n                \"countryCodes\",\n                \"crmBusinessUnits\",\n                \"cssIdpRoleMappings\",\n                \"customCascadingLookups\",\n                \"customLookups\",\n                \"customerSelfServiceUsers\",\n                \"customerWorkOrders\",\n                \"daaSSmartData\",\n                \"deals\",\n                \"deletedRecords\",\n                \"deviceTokens\",\n                \"dynamicLinkPatterns\",\n                \"dynamicLinkValues\",\n                \"emailTemplates\",\n                \"emailVerification\",\n                \"entitlements\",\n                \"feedConfigurations\",\n                \"feedTypesLOV\",\n                \"feedbackRatingsLOV\",\n                \"fieldGroups\",\n                \"fndCommonSetIdLookups\",\n                \"fndCurrencies\",\n                \"fndStaticLookups\",\n                \"fndTerritories\",\n                \"geoZones\",\n                \"geographies\",\n                \"geographiesLOV\",\n                \"getConfigs\",\n                \"goalMetrics\",\n                \"goals\",\n                \"households\",\n                \"hrHelpDeskRequests\",\n                \"hrSRResolveOutcomeLookups\",\n                \"hubOrganizations\",\n                \"hubPersons\",\n                \"hubSourceSystemReferences\",\n                \"hzLookups\",\n                \"importActivities\",\n                \"importExportObjectMetadata\",\n                \"importMappings\",\n                \"inboundMessages\",\n                \"inboundMsgFilters\",\n                \"industriesLOV\",\n                \"interactions\",\n                \"internalSRResolveOutcomeLookups\",\n                \"internalServiceRequests\",\n                \"keyPerformanceIndicators\",\n                \"leads\",\n                \"lightboxDocumentTypesLOV\",\n                \"lightboxDocuments\",\n                \"lookupProperties\",\n                \"loyEventsLOV\",\n                \"loyPointTypesLOV\",\n                \"mappedProductTemplates\",\n                \"mdfBudgets\",\n                \"mdfClaims\",\n                \"mdfRequests\",\n                \"milestones\",\n                \"multiChannelAdapterEvents\",\n                \"multiChannelAdapterToolbars\",\n                \"mySelfServiceRoles\",\n                \"nameAndIdTypes\",\n                \"navigatorMetadata\",\n                \"nonDuplicates\",\n                \"noteTypes\",\n                \"notificationFollowers\",\n                \"objectCapacities\",\n                \"objectLinkTypes\",\n                \"objectLinks\",\n                \"omniChannelEvents\",\n                \"omniChannelProps\",\n                \"opportunities\",\n                \"optyStatusesLOV\",\n                \"orchestrationSupportedObjects\",\n                \"orchestrations\",\n                \"outboundMessages\",\n                \"partnerContactManagersLOV\",\n                \"partnerContacts\",\n                \"partnerEnrolledProgramsLOV\",\n                \"partnerProgramBenefits\",\n                \"partnerPrograms\",\n                \"partnerProgramsLOV\",\n                \"partnerResourceRolesLOV\",\n                \"partnerStatusesLOV\",\n                \"partnerTiers\",\n                \"partnerTypesLOV\",\n                \"partners\",\n                \"partnersLOV\",\n                \"partyUsages\",\n                \"passiveBeaconProviderStatus\",\n                \"phoneVerification\",\n                \"presentationSessionFeedback\",\n                \"presentationSessions\",\n                \"priceBookHeaders\",\n                \"processMetadata\",\n                \"productGroupUsages\",\n                \"productGroups\",\n                \"productSpecialitiesLOV\",\n                \"productStatuses\",\n                \"productStructures\",\n                \"productTemplateMappings\",\n                \"productTemplates\",\n                \"productUnitOfMeasures\",\n                \"products\",\n                \"programEnrollments\",\n                \"programTiersLOV\",\n                \"proposals\",\n                \"queues\",\n                \"ratedCurrencies\",\n                \"recentItems\",\n                \"relationshipTypes\",\n                \"resolutionLinks\",\n                \"resolutionRequests\",\n                \"resourceCapacities\",\n                \"resourceLoads\",\n                \"resourcePresences\",\n                \"resourceUsers\",\n                \"resources\",\n                \"revenueSalesChannels\",\n                \"roleBasedLookups\",\n                \"rollups\",\n                \"salesContents\",\n                \"salesForecastAdjustments\",\n                \"salesForecastDimensions\",\n                \"salesForecastMetricSourceItems\",\n                \"salesForecastMetrics\",\n                \"salesForecastParams\",\n                \"salesForecastParticipants\",\n                \"salesForecastPeriods\",\n                \"salesForecastQuotas\",\n                \"salesGLEndPeriodTimesLOV\",\n                \"salesGLPeriodTypes\",\n                \"salesGLStartPeriodTimesLOV\",\n                \"salesMLModels\",\n                \"salesMLUsecases\",\n                \"salesMethodsLOV\",\n                \"salesObjectiveTypes\",\n                \"salesObjectives\",\n                \"salesOrderCPQIntegrationConfigurations\",\n                \"salesOrderLines\",\n                \"salesOrders\",\n                \"salesPromotions\",\n                \"salesStagesLOV\",\n                \"salesSuggestions\",\n                \"salesTerritories\",\n                \"scoringModels\",\n                \"screenPopPages\",\n                \"screenPopTokens\",\n                \"selfRegistrations\",\n                \"selfServiceRoles\",\n                \"selfServiceUsers\",\n                \"sensingAgentConfigurations\",\n                \"sensingAgentSynonyms\",\n                \"serviceBusinessUnits\",\n                \"serviceChannelTypesLOV\",\n                \"serviceDependentLookupsLOV\",\n                \"serviceDetails\",\n                \"serviceProviders\",\n                \"serviceRequestStatusesLOV\",\n                \"serviceRequests\",\n                \"setupAssistants\",\n                \"setupSalesCatalogs\",\n                \"signatures\",\n                \"similarSRs\",\n                \"smartTextFolderAndTexts\",\n                \"smartTextFolders\",\n                \"smartTextHistory\",\n                \"smartTextObjects\",\n                \"smartTextUserVariables\",\n                \"smartTextVariables\",\n                \"smartTexts\",\n                \"socialPosts\",\n                \"socialUsers\",\n                \"sourcecodes\",\n                \"structureHierarchies\",\n                \"subscriptionAccountRoles\",\n                \"subscriptionAccounts\",\n                \"subscriptionAiFeatures\",\n                \"subscriptionAssetTransactions\",\n                \"subscriptionBalanceCodes\",\n                \"subscriptionBalanceCriteria\",\n                \"subscriptionBalanceObjects\",\n                \"subscriptionBalanceProfiles\",\n                \"subscriptionBalanceRegisters\",\n                \"subscriptionCoverageExceptions\",\n                \"subscriptionCoverageHeaders\",\n                \"subscriptionCoverageSchedules\",\n                \"subscriptionCustomerAssetsLOV\",\n                \"subscriptionEntitlementAssignments\",\n                \"subscriptionMetrics\",\n                \"subscriptionOrderTransactions\",\n                \"subscriptionProducts\",\n                \"subscriptionProfiles\",\n                \"subscriptionUsageEventBatches\",\n                \"subscriptionUsageEventTypes\",\n                \"subscriptionUsageEvents\",\n                \"subscriptions\",\n                \"surveyConfigurations\",\n                \"surveyRequests\",\n                \"surveys\",\n                \"svcResolveOutcomeLookups\",\n                \"svcWoAreas\",\n                \"svcWoCapacities\",\n                \"svcWoDAAvailableResources\",\n                \"svcWoIntegrationConfigs\",\n                \"svcWoLinkTemplates\",\n                \"svcWoLinkTemplatesLOV\",\n                \"svcWoTypeMapLookups\",\n                \"svcWorkOrderLinks\",\n                \"tags\",\n                \"territories\",\n                \"territoryForecasts\",\n                \"timeCodeUnits\",\n                \"universalWorkObjects\",\n                \"userContextDataSources\",\n                \"userContextObjectTypes\",\n                \"userFavorites\",\n                \"userRelevantItems\",\n                \"validationReport\",\n                \"webActivities\",\n                \"webActivityRules\",\n                \"woStatusCodeLookups\",\n                \"wrapUps\"\n            ] }\n    }\n]",
+      "authorId": 671322,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "type": "html",
+          "label": "<div class=\"i-exception\"><div class=\"i-exception-description\"><h5>Slow connection</h5><p class=\"text-muted\">The connection may take up to 5 minutes to establish, please leave this window open until the connection is successful.</p></div></div>"
+        },
+        {
+          "help": "For example `servername.fa.us2.oraclecloud.com`.",
+          "name": "server",
+          "type": "text",
+          "label": "Server Name",
+          "required": true
+        },
+        {
+          "name": "username",
+          "type": "text",
+          "label": "Username",
+          "required": true
+        },
+        {
+          "name": "password",
+          "type": "password",
+          "label": "Password",
+          "required": true
+        },
+        {
+          "help": "You can limit the scope if you are getting the data limit error: `data.collection is too big`.",
+          "name": "scope",
+          "type": "select",
+          "label": "Scope",
+          "default": [
+            "standard",
+            "custom"
+          ],
+          "options": [
+            {
+              "label": "Standard Records",
+              "value": "standard"
+            },
+            {
+              "label": "Custom Records",
+              "value": "custom"
+            },
+            {
+              "label": "LOV Records",
+              "value": "lov"
+            }
+          ],
+          "multiple": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": "[]",
+      "installSpec": [],
+      "scopesJsonc": "{}",
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"type\": \"html\",\n        \"label\": \"<div class=\\\"i-exception\\\"><div class=\\\"i-exception-description\\\"><h5>Slow connection</h5><p class=\\\"text-muted\\\">The connection may take up to 5 minutes to establish, please leave this window open until the connection is successful.</p></div></div>\"\n    },\n    {\n        \"name\": \"server\",\n        \"type\": \"text\",\n        \"label\": \"Server Name\",\n        \"required\": true,\n        \"help\": \"For example `servername.fa.us2.oraclecloud.com`.\"\n    },\n    {\n        \"name\": \"username\",\n        \"type\": \"text\",\n        \"label\": \"Username\",\n        \"required\": true\n    },\n    {\n        \"name\": \"password\",\n        \"type\": \"password\",\n        \"label\": \"Password\",\n        \"required\": true\n    },\n    {\n        \"name\": \"scope\",\n        \"type\": \"select\",\n        \"label\": \"Scope\",\n        \"multiple\": true,\n        \"required\": true,\n        \"default\":  [\"standard\",\"custom\"],\n        \"help\": \"You can limit the scope if you are getting the data limit error: `data.collection is too big`.\",\n        \"options\": [\n            {\n                \"label\": \"Standard Records\",\n                \"value\": \"standard\"\n            },\n            {\n                \"label\": \"Custom Records\",\n                \"value\": \"custom\"\n            },\n            {\n                \"label\": \"LOV Records\",\n                \"value\": \"lov\"\n            }\n            \n        ]\n    }\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://{{connection.server}}/{{temp.api}}/resources/11.13.18.05/\",\n    \"gzip\": true,\n    \"headers\": {\n        \"authorization\": \"Basic {{base64(connection.username + ':' + connection.password)}}\",\n        \"REST-Framework-Version\": 9\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.headers.authorization\"\n        ]\n    },\n    \"timeout\": \"{{common.timeout || 300000}}\",\n    \"response\": {\n        \"error\": {\n            \"401\": {\n                \"message\": \"[{{statusCode}}] {{statusMessage}}. The authentication credentials are missing or invalid.\"\n            },\n            \"403\": {\n                \"message\": \"[{{statusCode}}] {{statusMessage}}. You don't have the authorization to perform this request. You may not have the necessary roles and privileges to use this resource.\"\n            },\n            \"message\": \"[{{statusCode}}] {{statusMessage}}.\\n{{body.o:errorDetails.1.detail}}\"\n        }\n    },\n    \"temp\": {\n        \"api\": \"{{get(split(parameters.recordTypeCategory, ':'), 1)}}\",\n        \"recordTypeCategory\": \"{{get(split(parameters.recordTypeCategory, ':'), 2)}}\"\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "parsePath": {
+      "rev": 2,
+      "code": "function parsePath(parameters, describe) {\n    // author KB\n    // create url path for modules and RPCs, 'describe' is for interface\n\n    const {recordTypeCategory, recordType, parentId} = parameters;\n    let parent = recordTypeCategory.split(':')[1]\n\n    //parent in module's url or RPC for parents\n    if (recordType === parent || !parentId || describe) return parent; \n   \n    // child recordType\n    if(parentId) return `${parent}/${parentId}/child/${recordType}`;\n}",
+      "name": "parsePath",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(parameters, describe)",
+      "appVersion": 1
+    },
+    "sortByKey": {
+      "rev": 2,
+      "code": "function sortByKey(key, direction = 'asc') {\n    if (typeof key !== \"string\" || key === \"\") return undefined;\n\n    switch (direction) {\n        case \"desc\":\n            return (a, b) => a[key] < b[key] ? 1 : a[key] > b[key] ? -1 : 0;\n        default:\n            return (a, b) => a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0;\n    }\n}",
+      "name": "sortByKey",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(key, direction = 'asc')",
+      "appVersion": 1
+    },
+    "userScope": {
+      "rev": 3,
+      "code": "function userScope(body, api, supported = [], scope = [\"standard\", \"custom\"]) {\n    // author: KB+Ness\n    // parse resources from connection and api prefix\n\n    const recordTypes = Object.keys(body);\n    if (recordTypes.length === 0) {\n        throw new Error(\"\\nuserScope: Unable to get record types for the specified user.\");\n    }\n\n    if (typeof api !== \"string\" || !api) {\n        throw new Error(\"\\nuserScope: 'api' is not a string.\");\n    }\n\n    const isSupported = (key) => supported.length === 0 || supported.includes(key);\n    const isLov = (key) => typeof key === \"string\" && /L(ov|OV)(V\\d+)?$/.test(key);\n    const isCustom = (key) => typeof key === \"string\" && /_c$/.test(key);\n\n    return scope\n        .flatMap(s => {\n            switch (s) {\n                case \"standard\":\n                    return recordTypes.filter(key => isSupported(key) && !isLov(key));\n\n                case \"custom\":\n                    return recordTypes.filter(key => isCustom(key));\n\n                case \"lov\":\n                    return recordTypes.filter(key => isSupported(key) && isLov(key));\n            }\n        })\n        .map(key => `${api}:${key}`);\n\n}\n",
+      "name": "userScope",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(body, api, supported = [], scope = [\"standard\", \"custom\"])",
+      "appVersion": 1
+    },
+    "validDate": {
+      "rev": 2,
+      "code": "function validDate(input) {\n    if (input instanceof Date) return true;\n    if (typeof input === \"string\") return /^\\d{4}-\\d{2}-\\d{2}(?:T\\d{2}:\\d{2}:\\d{2}Z)?$/.test(input);\n    return false;\n}",
+      "name": "validDate",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(input)",
+      "appVersion": 1
+    },
+    "nameToLabel": {
+      "rev": 4,
+      "code": "function nameToLabel(str) {\n    if (typeof str !== \"string\") return str;\n    //author: KB and Ness\n    // used in parseInterface, parseExpect and custom Record types for label\n\n    // attribute names\n    const abrv = ['Id', 'Url', 'Dff', 'Gdf', 'Dm', 'Uri', 'Fsa', 'Erp'];\n    const name = str\n        // custom records type labels and children labels\n        .replace(/_c$/, '').replaceAll('_', ' ').replaceAll('-', ' - ')\n\n    const nameArr = name.split(/(?<=[a-z\\d])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-z])(?=[\\d])|\\s/);\n\n    return nameArr.map(word => {\n        if (abrv.includes(word)) return word.toUpperCase(); // Capitalize abbreviations\n        return word.replace(word.charAt(0), word.charAt(0).toUpperCase()); // Capitalize the first character\n    }).join(' ');\n}",
+      "name": "nameToLabel",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(str)",
+      "appVersion": 1
+    },
+    "parseExpect": {
+      "rev": 7,
+      "code": "function parseExpect(resources, parameters) {\n    //author: Ness, edit: KB\n\n  \n    let { attributes, item: { links }, children } = resources;\n    if (!Array.isArray(attributes)) {\n        throw new Error(\"parseExpect: Invalid metadata.\");\n    };\n\n    const { recordTypeCategory, recordType, module } = parameters;\n    const category = recordTypeCategory.split(':')[1];\n    const isChild = category !== recordType;\n\n    if(isChild) {\n        attributes = children[recordType].attributes;\n        links = children[recordType].item.links;\n    };\n    const recordId = {\n        \"name\": \"id\",\n        \"type\": \"text\",\n        \"label\": \"ID\",\n        \"required\": true,\n        \"help\": \"Different record types use different parameters as ID. When mapping this value, use the `@context.key` value.\"\n    };\n    const ParentId = {\n        \"name\": \"parentId\",\n        \"type\": \"text\",\n        \"label\": \"Parent ID\",\n        \"required\": true,\n        \"help\": \"Different record types use different parameters as ID. When mapping this value, use the `@context.key` value.\"\n    };\n    let IDs = [recordId];\n\n    if (isChild) IDs = [ParentId, recordId]\n\n    if ([\"get\", \"delete\"].includes(module)) return IDs;\n\n    // Search and Trigger modules\n    if ([\"search\", \"trigger\"].includes(module)) {\n        if (isChild) return [ParentId, `rpc://searchFilters?module=${module}`];\n        return `rpc://searchFilters?module=${module}`\n    };\n\n    const typeMap = {\n        \"string\": \"text\",\n        \"long text\": \"text\",\n        \"datetime\": \"date\",\n        \"attachment\": \"text\"\n    };\n    const multilineMap = {\n        \"long text\": true\n    };\n   /*  const isRequired = (attr, module) => {\n        // All \"inputRequired\" field is required in create \n        // some required parameters with allowChanges:\"inCreate\" are problematic (Sales>Accounts)\n        if (module === \"create\" && attr.inputRequired && attr.allowChanges !== \"inCreate\") return true;\n        return undefined;\n    } */\n    const getHelp = (attr) => {\n        const helpMsgs = [];\n        if (attr.format === \"BigInt\") {\n            helpMsgs.push(\"This field only accepts integer.\");\n        }\n        if (attr.format === \"BigDecimal\") {\n            helpMsgs.push(\"This field only accepts decimal.\");\n        }\n        if (attr?.annotations?.description) {\n            helpMsgs.push(attr?.annotations?.description || attr?.properties?.TOOLTIP);\n        }\n        return helpMsgs.join(\"\\n\");\n    };\n    const isValidate = (attr) => {\n        // In Framework 9, high precision numbers are treated as string\n        // Check if user is sending numbers \n        if (attr.format === \"BigInt\") {\n            return { pattern: \"^\\\\d+$\" };\n        }\n        if (attr.format === \"BigDecimal\") {\n            return { pattern: \"^\\\\d+(?:\\\\.\\\\d+)?$\" };\n        }\n        return undefined;\n    };\n   /*  const getRPC = (attr) => {\n        if (attr.lov?.childRef) {\n            const { href } = links.find(link => link.name === attr.lov.childRef) ?? {};\n            if (!href) return undefined;\n            // If href contains {somePathParameters} then the RPC is not useful at all\n            if (href.indexOf(\"{\") > -1) return undefined;\n            const [label] = attr.lov?.displayAttributes;\n            if (!label) return undefined;\n            // We have to encode the href and decode in the RPC or else it won't work\n            return `rpc://listOfValues?href=${encodeURIComponent(href)}&label=${label}`;\n        }\n        return undefined;\n    } */\n\n    const output = attributes\n        .filter(attr => {\n            // allowChanges: ['always', 'never', 'inCreate']\n            // Read only attributes are not needed in expect\n            if (attr.allowChanges === \"never\") return false;\n            // inCreate attribute is not needed in update\n            if (module === \"update\" && attr.allowChanges !== \"always\") return false;\n            // skip parameters type: object\n            if (attr.type === \"object\") return false;\n            return true;\n        })\n        .map(attr => ({\n            name: attr.name,\n            type: typeMap[attr.type] || attr.type,\n            label: iml.nameToLabel(attr.name),\n           // required: isRequired(attr, module),\n            help: getHelp(attr),\n            multiline: multilineMap[attr.type],\n            validate: isValidate(attr)\n            //options: getRPC(attr)\n        }))\n        .map(item => {\n            if (item.options) {\n                item.spec = { type: item.type };\n                item.type = \"select\";\n                if (module === \"update\") item.mode = \"edit\";\n            }\n            return item;\n        })\n        .sort(iml.sortByKey(\"label\"));\n\n    out = [\n        ...output.filter(i => i.required),\n        ...output.filter(i => !i.required)\n    ];\n\n    if (module === 'update') return [...IDs, ...out]; //  Update module\n    if (module === 'create' && isChild) return [ParentId, ...out]; //  Create child module\n\n    return out;  //  Create module parent\n}",
+      "name": "parseExpect",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(resources, parameters)",
+      "appVersion": 1
+    },
+    "encodeOrderBy": {
+      "rev": 2,
+      "code": "function encodeOrderBy(orderBy) {\n    if (!Array.isArray(orderBy)) return undefined;\n    return orderBy\n        .map(order => `${order.field}:${order.direction}`)\n        .join(\",\");\n}",
+      "name": "encodeOrderBy",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(orderBy)",
+      "appVersion": 1
+    },
+    "encodePayload": {
+      "rev": 2,
+      "code": "function encodePayload(input) {\n    if (Array.isArray(input)) return input.map(item => encodePayload(item));\n    if (typeof parameters !== \"object\" || parameters === null) return input;\n    return Object.entries(input).reduce((acc, [key, value]) => {\n        if (value instanceof Date) {\n            acc[key] = iml.formatDate(value, 'YYYY-MM-DDTHH:mm:ss.SSS\\\\Z', 'UTC');\n            return acc;\n        }\n        if (typeof value === \"object\" && value !== null) {\n            acc[key] = encodePayload(value);\n            return acc;\n        }\n        acc[key] = value;\n        return;\n    }, {});\n}",
+      "name": "encodePayload",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(input)",
+      "appVersion": 1
+    },
+    "parseChildren": {
+      "rev": 2,
+      "code": "function parseChildren(resource, parameters) {\n    // author: KB\n    // get a list of parent and children availabla for specific module\n\n    if (!resource) return;\n    //return resource;\n\n    function getActions(meta) {\n        // authors: KB + Alex\n        return meta.collection.actions\n            .filter(item => [\"get\", \"create\", \"update\", \"delete\"].includes(item.name))\n            .map(item => {\n                item.name === 'get' ? item.name = 'search' : item.name;\n                return item.name;\n            })\n            .concat(meta.item.actions\n                .filter(item => [\"get\", \"create\", \"update\", \"delete\"].includes(item.name))\n                .map(item => item.name))\n    };\n\n    let { recordTypeCategory, module } = parameters;\n    if (module === 'trigger') module = 'search';\n    const category = recordTypeCategory.split(':')[1];\n    const parentActions = getActions(resource);\n\n    if (!parentActions.includes(module)) return; // no user rights to this resource\n\n    const parent = {\n        value: category,\n        label: iml.nameToLabel(category),\n        default: true\n    }\n\n    if (!resource.children) return [parent];\n\n    const children = Object.entries(resource.children)\n        .map(([key, meta]) => ({\n            name: key,\n            actions: getActions(meta)\n        }))\n        .filter(item => item.actions.includes(module))\n        .map(item => ({\n            value: item.name,\n            label: iml.nameToLabel(item.name)\n        }));\n        \n    return [parent, ...children];\n}",
+      "name": "parseChildren",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(resource, parameters)",
+      "appVersion": 1
+    },
+    "parseResponse": {
+      "rev": 2,
+      "code": "function parseResponse(parameters) {\n\tif (typeof parameters !== 'object' || parameters === null) {\n\t\treturn parameters;\n\t}\n\n\tif (Array.isArray(parameters)) {\n\t\treturn parameters.map(item => iml.parseResponse(item));\n\t}\n\n\tlet params = Object.assign({}, parameters);\n\n\tObject.entries(parameters).forEach(([key, value]) => {\n\t\tif (Array.isArray(value)) {\n\t\t\tparams[key] = value.map(item => iml.parseResponse(item));\n\t\t\treturn;\n\t\t}\n\n\t\tif (typeof value === 'object' && value !== null) {\n\t\t\tparams[key] = iml.parseResponse(value);\n\t\t\treturn;\n\t\t}\n\t\t\n\t\tconst ISO_8601 = /^\\d{4}(-\\d\\d(-\\d\\d(T\\d\\d:\\d\\d(:\\d\\d)?(\\.\\d+)?(([+-]\\d\\d:?\\d\\d)|Z)?)?)?)?$/i;\n\t\tconst isNumeric = /^-?\\d+$/;\n\t\t\n\t\tif (typeof value === 'string' && ISO_8601.test(value) && !isNumeric.test(value)) {\n\t\t\tparams[key] = new Date(value.replace(/\\s+/g, ''));\n\t\t\treturn;\n\t\t}\n\t});\n\n\treturn params;\n}",
+      "name": "parseResponse",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(parameters)",
+      "appVersion": 1
+    },
+    "parseInterface": {
+      "rev": 4,
+      "code": "function parseInterface(body, parameters) {\n    //author: KB and Ness\n    if (!body) return;\n    const { recordTypeCategory, recordType } = parameters;\n    const category = recordTypeCategory.split(':').at(-1);\n    const isChild = category !== recordType;\n    let attributes = isChild ? body.children[recordType].attributes : body.attributes\n\n    const typeMap = {\n        \"string\": \"text\",\n        \"long text\": \"text\",\n        \"datetime\": \"date\",\n        \"attachment\": \"text\"\n    };\n\n    const output = attributes.map(attr => ({\n        name: attr.name,\n        type: typeMap[attr.type] || attr.type,\n        label: iml.nameToLabel(attr.name),\n    }));\n\n    return output;\n}",
+      "name": "parseInterface",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(body, parameters)",
+      "appVersion": 1
+    },
+    "hasCreationDate": {
+      "rev": 2,
+      "code": "function hasCreationDate(attr) {\n    // author: KB\n    // used in polling trigger (rpc Parameters: Search Filter) to see if the record type has creationDate\n    return attr.some(field => field.type === 'datetime');\n}",
+      "name": "hasCreationDate",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(attr)",
+      "appVersion": 1
+    },
+    "encodeSearchFilter": {
+      "rev": 3,
+      "code": "function encodeSearchFilter(filter, custom) {\n    if (custom) return custom;\n    if (!Array.isArray(filter)) return undefined;\n    const FilterError = (reason) => Error(`\\nencodeSearchFilter: ${reason}`);\n    const complFilter = filter.map(or => or.flatMap(and => {\n        const { a, o, b } = and;\n        if (!a) {\n            return null;\n        }\n        const [fieldType, field] = a.split(\"::\");\n        const [opType, operator, ci] = o.split(\"::\");\n\n        if (fieldType !== opType) {\n            throw FilterError(`Type '${fieldType}' for '${field}' does not match the operator type '${opType}'.`);\n        }\n\n        if ([\"IS NULL\", \"IS NOT NULL\"].includes(operator)) {\n            return [field, operator].join(\" \");\n        }\n        if (b === undefined || b === null) {\n            return null;\n        }\n        const criterion = [ci ? `UPPER(${field})` : field, operator];\n        switch (opType) {\n            case \"string\":\n                switch (operator) {\n                    case \"IN\":\n                    case \"NOT IN\":\n                        const items = (Array.isArray(b) ? b : b.split(\",\")).filter(i => !!i);\n                        if (items.length === 0) throw FilterError(`At least one item is required for ${field} ${operator}.`);\n                        criterion.push(`(${items.map(i => `'${i}'`).join(\",\")})`);\n                        break;\n\n                    default:\n                        criterion.push(ci ? `UPPER('${b}')` : `'${b}'`);\n                }\n                break;\n\n            case \"boolean\":\n                if (typeof b === \"boolean\") criterion.push(b);\n                else {\n                    if (b === '') return null;\n                    if ([\"true\", \"'true'\", \"Y\", \"'Y'\"].includes(b)) {\n                        criterion.push(true);\n                        break;\n                    }\n                    if ([\"false\", \"'false'\", \"N\", \"'N'\"].includes(b)) {\n                        criterion.push(false);\n                        break;\n                    }\n                    throw FilterError(`Invalid input '${b}' for ${field} ${operator}.`);\n                }\n                break;\n\n            case \"number\":\n            case \"integer\":\n                if (b === '') return null;\n                switch (operator) {\n                    case \"IN\":\n                    case \"NOT IN\":\n                    case \"BETWEEN\":\n                    case \"NOT BETWEEN\":\n                        const items = (Array.isArray(b) ? b : b.split(\",\")).filter(i => !!i);\n                        if (items.length === 0) throw FilterError(`At least one item is required for ${field} ${operator}.`);\n                        if (items.some(i => isNaN(i))) throw FilterError(`Some item in '${b}' is not number for ${field} ${operator}.`);\n                        if ([\"IN\", \"NOT IN\"].includes(operator)) criterion.push(`(${items.join(\",\")})`);\n                        if ([\"BETWEEN\", \"NOT BETWEEN\"].includes(operator)) {\n                            if (items.length !== 2) throw FilterError(`Exactly two items are required for ${field} ${operator}.`);\n                            criterion.push(items.join(\" AND \"));\n                        }\n                        break;\n\n                    default:\n                        const item = Number(b);\n                        if (isNaN(item)) throw FilterError(`Invalid input '${b}' for ${field} ${operator}.`);\n                        criterion.push(item);\n                }\n                break;\n\n            case \"date\":\n            case \"datetime\":\n                if (b === '') return null;\n                switch (operator) {\n                    case \"BETWEEN\":\n                    case \"NOT BETWEEN\":\n                        const items = (Array.isArray(b) ? b : b.split(\",\")).filter(i => !!i);\n                        if (items.some(i => !iml.validDate(i))) throw FilterError(`Some item in '${b}' is not date for ${field} ${operator}.`);\n                        if (items.length !== 2) throw FilterError(`Exactly two items are required for ${field} ${operator}.`);\n                        criterion.push(\"'\" + items.map(i => iml.formatDate(i, opType === \"datetime\" ? 'YYYY-MM-DDTHH:mm:ss.SSSZ' : 'YYYY-MM-DD') + \"'\").join(\" AND \"));\n                        break;\n\n                    default:\n                        if (!iml.validDate(b)) throw FilterError(`Invalid input '${b}' for ${field} ${operator}.`);\n                        criterion.push(\"'\" + iml.formatDate(b, opType === \"datetime\" ? \"YYYY-MM-DDTHH:mm:ss.SSSZ\" : \"YYYY-MM-DD\") + \"'\");\n                }\n                break;\n\n            default:\n                criterion.push(b);\n        }\n        return criterion.join(\" \");\n\n    }).join(\" AND \")).join(\" OR \");\n\n    return complFilter === '' ? null : complFilter;\n}",
+      "name": "encodeSearchFilter",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(filter, custom)",
+      "appVersion": 1
+    },
+    "prepareRecordTypes": {
+      "rev": 3,
+      "code": "function prepareRecordTypes(resources) {\n    //author: Ness\n    if (!Array.isArray(resources)) {\n        throw new Error(\"\\nprepareRecordTypes: 'resources' is not an array.\");\n    };\n    //author: KB\n    // function to prepare the list of record types for each module\n    // based on dynamically fetched resources accessible to the user\n    \n    return  [\n        {\n            label: \"Standard Records\",\n            options: resources.filter(item => !/L(ov|OV)(V\\d+)?$/.test(item))\n                .map(item => ({\n                    value: item,\n                    label: iml.nameToLabel(item.split(':').at(-1))\n                }))\n                .sort(iml.sortByKey(\"label\")),\n\n        },\n        {\n            label: \"Custom Records\",\n            options: resources.filter(item => item.endsWith('_c')).map(item => ({  // custom records\n                value: item,\n                label: iml.nameToLabel(item.split(':').at(-1))\n            }))\n                .sort(iml.sortByKey(\"label\"))\n        },\n        {\n            label: \"LOV Records\",\n            options: resources.filter(item => /L(ov|OV)(V\\d+)?$/.test(item))\n                .map(item => ({\n                    value: item,\n                    label: iml.nameToLabel(item.split(':').at(-1))\n                }))\n                .sort(iml.sortByKey(\"label\")),\n        }\n    ].filter(group => group.options.length > 0);\n\n} ",
+      "name": "prepareRecordTypes",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(resources)",
+      "appVersion": 1
+    },
+    "getRecordTypeFields": {
+      "rev": 3,
+      "code": "function getRecordTypeFields(fields, output) {\n    //Author: Ness Li\n    if (!Array.isArray(fields)) {\n        throw new Error(\"\\nfilterRecordTypeFields: 'fields' is not an array.\");\n    }\n    switch (output) {\n        case \"filter\":\n            return fields\n                .filter(field => field.queryable === true)\n                .map(item => {\n                    const type = [\"BigInt\", \"BigDecimal\"].includes(item.format) ? \"number\" : item.type;\n                    return {\n                        label: `${iml.nameToLabel(item.name)} [${iml.startcase(type)}]`,\n                        value: `${type}::${item.name}`\n                    };\n                }).sort(iml.sortByKey(\"label\"));\n\n        case \"order\":\n            return fields\n                .filter(field => field.sortable !== false)\n                .map(item => ({\n                    label: iml.nameToLabel(item.name),\n                    value: item.name\n                })).sort(iml.sortByKey(\"label\"));\n\n        case \"datetime\":\n            return fields\n                .filter(field => field.type === 'datetime')\n                .map(item => ({\n                    label: iml.nameToLabel(item.name),\n                    value: item.name\n                })).sort(iml.sortByKey(\"label\"));\n        \n        case \"label\":\n            return fields\n                .filter(item => ['date', 'string'].includes(item.type))\n                .map(item => ({\n                    label: iml.nameToLabel(item.name),\n                    value: item.name\n                })).sort(iml.sortByKey(\"label\"));\n\n        default:\n            return fields\n                .map(item => ({\n                    label: iml.nameToLabel(item.name),\n                    value: item.name\n                })).sort(iml.sortByKey(\"label\"));\n    }\n}",
+      "name": "getRecordTypeFields",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(fields, output)",
+      "appVersion": 1
+    },
+    "getSearchAttributes": {
+      "rev": 2,
+      "code": "function getSearchAttributes(body, parameters) {\n    //author KB\n    //returns attributes of parent or child for Search and Trigger module rpc SearchFilters\n\n    if (!body) return;\n\n    const { recordTypeCategory, recordType } = parameters;\n    const category = recordTypeCategory.split(':')[1];\n    const isChild = (category !== recordType);\n\n    if (!isChild) return body.Resources[category].attributes;\n\n    return body.Resources[category].children[recordType].attributes;\n\n}",
+      "name": "getSearchAttributes",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(body, parameters)",
+      "appVersion": 1
+    },
+    "getRecordChildrenOutput": {
+      "rev": 4,
+      "code": "function getRecordChildrenOutput(body, parameters, temp) {\n    //Author: Alexey\n    const baner = \t{\n        \"type\": \"html\",\n        \"label\": \"<center><div style=\\\"padding: 10px\\\" class=\\\"i-exception\\\">This action is not supported in this category.</div></center>\"\n    };\n    const recordTypeParam = {\n            \"name\": \"recordType\",\n            \"label\": \"Record Type\",\n            \"type\": \"select\",\n            \"mappable\": false,\n            \"required\": true,\n            \"options\": iml.parseChildren(body.Resources[temp.recordTypeCategory], parameters),\n            \"nested\": `rpc://getResourceAttributes?module=${parameters.module}`,\n            \"help\": \"If no record types are shown, you do not have adequate user rights for the Record Type Category selected above.\"\n    };\n\n    return recordTypeParam.options ? recordTypeParam : baner\n}",
+      "name": "getRecordChildrenOutput",
+      "test": null,
+      "appName": "oracle-fusion-cloud-sales",
+      "arguments": "(body, parameters, temp)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2023-07-12T13:17:41.099739+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Oracle Fusion Cloud Sales identifies the best sales opportunities, guides sellers through each step of closing a deal.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "d7c714180428f8930185712167d3c52e",
+  "versionFull": "1.0.11",
+  "compiledName": "oracle-fusion-cloud-sales",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{ }",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": null
+}

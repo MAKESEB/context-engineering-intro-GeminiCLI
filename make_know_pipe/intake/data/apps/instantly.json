@@ -1,0 +1,1485 @@
+{
+  "rev": 16,
+  "base": {
+    "qs": {
+      "api_key": "{{connection.apiKey}}"
+    },
+    "log": {
+      "sanitize": [
+        "request.qs.api_key"
+      ]
+    },
+    "baseUrl": "https://api.instantly.ai/api/v1",
+    "timeout": "{{parameters.timeout || 100000}}",
+    "response": {
+      "error": {
+        "429": {
+          "type": "RateLimitError",
+          "message": "[{{statusCode}}] {{body.error}} {{body.message}}"
+        },
+        "message": "[{{statusCode}}] {{body.error}} {{body.message}}"
+      }
+    }
+  },
+  "beta": false,
+  "docs": null,
+  "name": "instantly",
+  "_rpcs": {
+    "listLeads": {
+      "api": {
+        "qs": {},
+        "url": "/api/users",
+        "body": {},
+        "method": "GET",
+        "headers": {},
+        "response": {
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body.users}}"
+        }
+      },
+      "rev": 1,
+      "name": "listLeads",
+      "label": "List leads",
+      "appName": "instantly",
+      "apiJsonc": "{\n\t\"url\": \"/api/users\",\n\t\"method\": \"GET\",\n\t\"qs\": {},\n\t\"body\": {},\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"iterate\": \"{{body.users}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "instantly",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listCampaigns": {
+      "api": {
+        "qs": {
+          "limit": 100
+        },
+        "url": "/campaign/list",
+        "method": "GET",
+        "response": {
+          "limit": 300,
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.id}}"
+          },
+          "iterate": "{{body}}"
+        },
+        "pagination": {
+          "qs": {
+            "skip": "{{(pagination.page - 1) * 100}}"
+          }
+        }
+      },
+      "rev": 2,
+      "name": "listCampaigns",
+      "label": "List Campaigns",
+      "appName": "instantly",
+      "apiJsonc": "{\n\t\"url\": \"/campaign/list\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"limit\": 100\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body}}\",\n\t\t\"limit\": 300,\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.id}}\"\n\t\t}\n\t},\n\t\"pagination\": {\n\t\t\"qs\": {\n\t\t\t\"skip\": \"{{(pagination.page - 1) * 100}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 1,
+      "parameters": [],
+      "accountName": "instantly",
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "flags": {
+    "sandboxes": [
+      {
+        "allowed": true,
+        "version": 1
+      },
+      {
+        "allowed": false,
+        "version": 2
+      }
+    ]
+  },
+  "label": "Instantly",
+  "theme": "#0073ff",
+  "_hooks": {
+    "instantly": {
+      "api": {
+        "output": "{{body}}"
+      },
+      "rev": 4,
+      "name": "instantly",
+      "type": "web",
+      "flags": {},
+      "label": "Events",
+      "scope": [],
+      "attach": null,
+      "detach": null,
+      "update": null,
+      "aliasTo": null,
+      "appName": "instantly",
+      "apiJsonc": "{\n\t\"output\": \"{{body}}\"  // Returns webhook's response body as an output bundle.\n}",
+      "authorId": 42,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": null,
+      "attachJsonc": "{\n\t//\t// Uncomment and update the following lines to implement the \"attach\" method.\n\t//\n\t//\t// Request\n\t//\t\"url\": \"https://www.example.com/api/v2/webhook\",\n\t//\t\"method\": \"POST\",\n\t//\t\"body\": {\n\t//\t\t\"url\": \"{{webhook.url}}\"\n\t//\t},\n\t//\n\t//\t// Response handling\n\t//\t\"response\": {\n\t//\t\t\"data\": {\n\t//\t\t\t\"externalHookId\": \"{{body.id}}\",  // Stores the webhook's ID to be used in the detach remote procedure. It is accessible via \"{{webhook.externalHookId}}\".\n\t//\t\t\t\"token\": \"{{body.token}}\"         // Stores the webhook's token to be used in the detach remote procedure. It is accessible via \"{{webhook.token}}\".\n\t//\t\t}\n\t//\t}\n}",
+      "detachJsonc": "{\n\t// // Uncomment and update the following lines to implement the \"detach\" method.\n\t//\n\t// \"url\": \"https://www.example.com/api/v2/webhook/{{webhook.externalHookId}}\",\n\t// \"method\": \"DELETE\"\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": null
+    }
+  },
+  "global": true,
+  "groups": [
+    {
+      "label": "Leads",
+      "modules": [
+        "addLeadToCampaign",
+        "addMultipleLeadsToCamp",
+        "searchLead",
+        "updateLeadStatus",
+        "deleteLeadFromCamp"
+      ]
+    },
+    {
+      "label": "Blocklist",
+      "modules": [
+        "addEntriesToBlocklist",
+        "deleteEntriesFromBlocklist"
+      ]
+    },
+    {
+      "label": "Other",
+      "modules": [
+        "watchEvents",
+        "universal"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af40000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000001a14944415458c3ed953d4b1c5114869f71d568d8c61401bb2076f65609c18f2ecd42b0335d0acbad54ec13ff809026a9f22bc45f20821601f3d108411b41932511dd90ddc7c25b5c06d79959673729f685e9e69ce73de79e732f0c34d03f5652344005a800d51cb9057e01ed24b91d35dc051ce025b09a5140053800ea40a39476a9a893ea9ed93a576b21a63438ea86dace80ff51d7d4a414786460463dca51fd47b55a367c587d9703beab3ee945ebe7d5b30cf8b1fabc083cef1654b999e64777fcd306de0387c0e3603e019ac04f804eab98a7fa57ea5546f5ad301f87ea67f58bfa495deefa380aae5d5a97ea5bf5e17de079d72ead8b10f7a0eb41b4d8dac5faadaeaba3f7850fa95b21e9dff0b532bad150ebea485e78d2c9003002cc0113dc3c2a2d601158e990eb07b00e7c005a85273e474750373b547ea6be0e5d2b0f9c3230aeeedc023f0dabd61b7864605afd9e829fa84b96f9e8dc61a0a63623f8b1653eb71970d43711fc487dd1737864604cdd0ef0afea625fe09181a970fedfd4677d8347066aeabefab4aff0c8c0823adb0b78e6759506967ac30df43fe81a2fd4924e905901340000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000002b84944415478daed9abd6b144118877f9b7841124ce2170414cf4a501b118b08a26861a17f806093424811041524fe019246101bb549716821768a766a914604414144048b807a65c4f809de713e16bb0763486eef36efdd7edc3cf5ddec3cbf99bd9977e6248fc7e3f1783c1e8fa72f097af520a0f9bc0dc64dd725290892a95877a695bc249d913425e9af41b30392be4a9a9554ed85c7ba0200cac01b6cb90d6c7402ce1e91bc80abc6f2cf80894ccb3b011c04aa86f28bc0a166b89925eae010503194ff069ccd8bbc805351a72d680073c060a6e59d00c6812786a3ff10d89c177901d340cd48fe2db03ff353df09a08cddb2b7049cce93bce5b25703668120f3f24e0096cbde1d60539ee42d97bd17c0ae3cc95b2e7b55e0185d7eefad8ba1714917258d1ab45591f45ad25833e016fc96544f52119a94c34ee7a625dd94545a6f93923e4afa12d3c74061397c45d242d292d82400ba53edc551036e0163a9fd4ed0bd6a2f8e3fc035602435792700eb6a2f8e5f8435c17016e4adabbd387e0297815216e4adabbd7cc83b0158577bb992b7aef65ab10c5cc884bc134099de2c7b4bc039b27208e28cfe5c8fe4a7e8622598742b3c246959e176b5b1c66706249d90b43be1333e2bdc563f90446abbbc244433a4043c4a38f29fc8cb01488b0076001ffa4ede09e038e18ead131609f7153d9337bf1b743a7e40d270075f7d2f6946d28294fcb23375a2d11b04ee7730f2ef80c3b99ef62b029888a4dae115305908792780a3c08f36e49f03fb8a262fe0529bf27b0b23ef04d0cefb5f3c792780b8f7ff29b0a770f24e004780ef6bc83f263ae72faabc80f3ab8837086f76771652de096000b8b78a7c05d85e587927806dfc7f46d094df5258f115014c129edef4a5bc809948be0eccf785bc134000dc8d46fe0630da17f24e005b8197c075d2beb048298011e02479f93383c7e3f1783c9ebee71fe26d02d5856998420000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2023-11-27T15:18:09.139954+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda7930000056a4944415478daed9d4f8c5e5318c67fd391418534f13724822025a954a24b1222162c2c2ac28a05124194151269c4a241c28a4463212434511be98a22d15a49edb416a34d2445ca42a712a533f358dc3372d374a6dfb4f7def39e739f5f32cbe977e63ccf79dff3dc73ee5730c618638c31c618638c31c618638c31c618638c31c618638c31c618634ca94ce51e401f485afadbee076e0516738f6919fe013e040e4f4de591e29cdc33d023eb813780eb730f64058e017b80c3b906b026f70c744d5afdd3c0b3c4167f01781fd8977310551920890f7007b039f7784ec36ee055e078aef20f951920b116780eb824f7405660167809f83df740aa31406bf56f06eece3d9e1598035e01be07c8b9faa12203242e039e02cecf3d90655804de043e82fce243250668adfec7814db9c7b3029f03ef008b11c4874a0c90b8097834f0dfb41f789e007dbf4dd4c99a984262df111af10f408cd2bf44d1062824f69d005ea729ffa1c487c20d90881efb7600ef028a263e146c804262df5e602bf05744f1a160032422c7be23c0cbc0a1dc035989220d5040ecfb9be631ef3710afefb729d20089a8b16f01782ffd84c9fbcb116df24e4b01b12fc421cfa414658002625f98439e4929ca0089a8b12fd421cfa4146380e0b12fdc21cfa414638044d4d817ee9067528a3040f0d8b70f788682fa7e9b220c908818fb8ed06cfa66a1acd2bf44a4c93c258163dfd221cf1750a6f810dc00c1635fe8439e2a9084a4b5923e532cf648bab665d062095b0102c7be9f8117097ec83329d1df0c8a18fbf600dfd1ccdd54875560810c3132a40182c7befb805dc0bf74f76ee534f035f09aa441f714210d908818fb00d6d14f4bfa11187c5311ce0081635f5f2c029f00db60f838196a75058f7d7d300f7c006c017ecb1127c35500e29ef675cd3cb01d78013896eb5942980a1038f6f54108f12190011211635fd784111f82b480e0b1af4b8e026fa59fece243100324a2c6beae98a37982b81d5888203e0498ec91c4be399a921f4a7cc86c8091c4beb0e243800a40ddb12fb4f890d10023887de1c587fc15a0d6d85784f890c90095c7be3f28447cc81b036b8c7dbfd23cd7df492157c4079ffc8a63df21e0699a93bd22c487812b40c5b1ef27e009e02b28eb86708ef25b5bec2b567c18d000add5ff00f5c4bea2c587e1378153c09dc0799cf99d3aa5df9b26ef06722fcd6eff5b28537c18f03f8c6855801b68367f6773ff4dc043342922075fd2acfc8350aef8c5925e187958d27c869742764bba2e8d21f7549c35c565f0d6a4df46d30686a4ba955f9c011217d0186048aa131fca35c0d5c08d037e5e95e243b906b805b874a0cfaa567c28cc00adfebf81fefbff22f029f018958a0fb1ee044eca0cb0b1e7cf58a039d0d942a61736cc2948d1eb1a49077b8c792724bd2de9e21a62dee928b102dc0c5cd9d3bf1deacefe1014b30768adc64dc0b93d7cc4e8c487820c9098a19f1b44a314bf287aecff7f4ada2ae9a231f4fc624906b857d2f10ec53f2ae94949d36315bf8816d053ff2fe6e6eee849ab7f46d22eaffc11d271ffb7f8a5d161ffb7f827117e0fd061ff77cf2f918efaff2f921ef1ca2f900efaff61490f4aeaf25b3dcd509c65ff9f95748fc55f9ed087412dd136b2fafe5ffc9dfd2108bf094c63dcb0cadfb1f83590caff55920eaca2ecef9774972ab9b63d6acea0ffef96b4dee24f4ed83dc019f4ffaa2f6f8e8eb48ad748fa78c2955fcddb3a86ff0d70b9a41f2cfe084982de2ee998c51f194b824ada62f147c804fddfe2d7cc0afd7f41d24e35670316bf5696e9fff3927648bac2c257cc32fd7f546feb8c9a53f4ff25f12fb4f823e0a4febf68f1474632c03a49db256d935fd8e895700fcc5b624fd37c1b58315fbb6a8c31c618638c31c618638c31c618638c31c6181381ff00f4438df8ecd457fc0000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a8660000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda793000008f64944415478daedddbfab5d591906e037131bc9a8690c335849d4d222205a4fa3838c202a5888852836234c255888c594367653083601511904098a95ff8020821653181b4193b14c061b936571ce756e667273cffebdd65ecf03215deece49bef7ac6f7d7bef950000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000407bae6c7d010c574a4992ab493e7afc9d711e25f977924757aef4590a1fd8fa0218edf3497e92e4835b5f48c3fe93e4b524bfdbfa42b622001a73fcf6bf96e4bb493eb9f5f5ecc067d271003cb7f50570ba63f127c92b495edafa7a76e061923f6d7d115b1200edb999e4f524cf6f7d218d2b49ee24f9c3d617b22501d08873dffedf48f289adafa77125c99b39f4ffeff4ba0198980234e318003793fc3e0260aabf25f94292bb3d177f6205d084731b7fafe710028c773fc90f92dcddfa426a2000daf1520e9b7f7d7f654df7460ecbfff4feed9f180356efdcb7ffb763e36f8ab3beff8d44f19fb102a898b1dfaceee6b0f47f5bf1bf4b00d4cfd86f3a7dff050440a58cfd66f33087719fbeff290440dd6ee610008c7376b3cf9d44f13f8d00a890b1df6cee26f9613abfd9e7590440bd8cfda6d1f79f400054c6d86f16fafe1309808a18fbcd42df3f804fa722eef79fecec669f5763de7f122b804a18fbcdc2cd3e030980ba18fb8d67d36f0401500163bf5978c867040f03d5c3d86f1c0ff94c6005b03163bfc9f4fd1308800d19fb4da6ef9f48646ec8d86f928749be93e41789a5ff5856001b31f69bc4cd3e33f1c96dc4b7ff245eea39132b800d18fb4da2ef9f9100d88eb1df701ef29999005899b1df68fafe0508801519fb8de6249f85f8245764e36f349b7e0bb1025889b1df6836fd162400d6e569bfe13ce4b3200f03adc0d86f140ff9acc00a603dc67ec378c86705026061c67ea3e8fb5722001664ec378a9b7d56240096e76cbfd3b9d96765026021c67ea338c96765026059c67ea7d3f76f40002cc0d86fb0fb39bccb5fdfbf3201b01c63bfd3b9d967236e049a99b1df206ef6d99815c08c8cfd0673b3cfc604c0fc8cfd4e63d3af02026026c67e83e9fb2b600f605ec67e97d3f757c4a73f83731b7f3f4df2f5f85c9fc5cb3d2aa205988fb1dfe5f4fd9511001319fb9dcc433e1512001318fb9dcc433e95f22f3181977c9eecb749be15f3feea58018c64ec77b20739ecf82bfe0a0980698cfd4e732d792234a984481ec1d86fb07f25b99de49dd4fd595d395ee3ed24f77a58b1b811683c63bfd3bd98e4fb5b5fc4403fdefa02d6a00518c8d88f3db10218c0d86ff71e27f96b925f6f7d216bb17c1dc0d86fd71e27f94b926f1e7f2f3dec0168014e64ecb76b5d167f22008632f6db9f6e8b3f110027f192cfdd3a7b34f9cb39f4fe5d157f6213700863bf7d392bfeefa5e3bb14ad002e61ecb74b67c5ff6a3a2efe44003c93b1df2e29fe73fafedb5fc2d86f7714ff7b58015cc0d86f7714ff5308806733f6db07c57f015380a730f6db958739bc89e8b528fef711001733f66bdffd1c0aff4e1c39fe5402e03d8cfd76c389c327b007708eb1df6e28fe13f964ce31f6db05c53f8015c091b1df2e28fe8104c0938cfddaa5f847100031f6db01c53f92007897b15f9b14ff04dd0780b15fd314ff445d0780b15fd314ff0cbafed48cfd9aa5f867d2ed0ac0d8af598a7f46dd06c091b15f5b14ffccba0c0063bf2629fe0574190047c67e6d7894e4ef39bcbc53f1cfacbba7018dfd9a727654d7d93bfb15ffccba5a0118fb35a5eb033bd6d2d5276aecd70cc5bf926e5600c67ecde8feb49e35f5b60760ec5737a7f5acac8b1580b15f13bcb977035d04c091b15fbd14ff46761f00c67ed553fc1bda750018fb554ff16f6cd79fb8b15fd5147f057a98027c258abf364eeba9440f01f0560effe1f4ff75705a4f4576fde91f5b800fe5b001f8911c969d5b7a9ce4b3495ececef75f2ee089becaf81758d131906e24f959922f6e7d3d2b53fc15eaf15b6833c7fff46f27f9e3d6d7b232c55f2901b0a273f724dcdafa5a56a4f82b2600d6773dfd0480e2af9c0058dfad1c4260ef147f0304c0fa6e65ff2349c5df0801b0928efa7fc5df1001b0aeebd9770028fec6088075edb9ff57fc0d1200ebda6bffaff81b250056b0f3fe5ff1374c00ace77af615000eecd8811e9e06acc5b52457b7be889938b06327ac00d6f3a5242f6e7d1133f0cefe1d11000b3bf75ab21b5b5fcb0c14ffce088075bc90c30aa0650eecd8217b00ebf8f0f157ab1cd8b1535600eb68b9fff7f2ce1d13000bda41ffaff8774e002cafd5fe5ff17740002cafc5fe5ff17742002cafb5fe5ff17744002ca4d1fe5ff177c61870592df5ff4eebe9900058562bfdbfd37a3a250096d542ffef71de8ed903584043fdbfe2ef9c00584eedfdbfe247002ca8e6fe5ff19344002ca9d6fe5ff1f37f02606695f7ff8a9f27088065d4d8ff2b7ede47002ca3b6fe5ff1f35402601935f5ff8a9f0b09801955d8ff2b7e9e4900ccaf96fe5ff173290130bf1afa7fc5cf4904c0fcb6ecff9dd6c3201e069a4905fdbfd37a18cc0a605e5bf5ff0eec60140130af2dfa7fc5cf6802605e6bf7ff4eeb61127b0033d8a8ff775a0fd4a0949252ca0ba594b7ca3a1e97527e554ab9712e7c60302dc07cae26b9b6c2cff1e65e662300e6732bc9f5857f86e2675602603eb7923cbfe09faff8999d0098e8d8835fcb210016fb3151fc509fe306e0a74a29ff5c68c3ef4129e5e736fc588231e03c969aff3bb08345098009169eff7ba20f6ab6e0fcff5e29e5abc73f7febbf263b661370bab9e7ffbef9598d00986ecef9bfe267550260bab9e6ff8a9fd5098091669eff2b7e68c97183ee63a5947fd8f083ce1c0bf695e38d3a8a9f266901a699d2ff5bf6438b8edfd8d74a29bff1cd0f9d99d8ff2b7e68d984fe5ff153157b00e30dedfff5fcd0ba11fdff7f4b29774b295ff3cd0f8d1bd8ff3f2aa5fcb994f2e952ca15c50f8d1bd0ff2b7eaa670f609ccbfa7fa7f5c0de9cd8ff3f2ea5fcb294f2f152ca73bef961274ee8ff1dd8017b7549ffaff861cf8e01f023c50f9d7946ffaff861ef2ee8ff153ff4a0bcff0dc08a9fe6194e9fe858e45792bc9ce473491e24b99de49e193f000000000000000000000000000000000000000000000000000000000000000000c09efc0f9b804b50cf3eb7490000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa0000000467414d410000b18f0bfc610500000006624b474400ff00ff00ffa0bda79300000df14944415478daedddcb72dc46164551a883ffffcbea816c9912595540211f37f3ac35ec11236cebec9ba0dbc70100c4f9711cc7f1f3e7cfd93f070030d00fe30f0079fe37fb070000c6130000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040200100008104000004120000104800004020010000810400000412000010480000402001000081040000041200001048000040a08fd93f0084fa39fb0780e3387eccfe0198c70b008c67fca9c2df8bc104000004120030968b0b2841000040200100e3b8fea9c62f010613003086f1074a110000995cffe10400f4e7faa71ae38f00000863fc398e4300406fae7f2a31fefc260000209000807e5cff54e2fae70f0200fa30fe5462fcf9420000eccdf8f32d0100edb9fe81f20400c0be5cff3c2400a02dd73f55187f9e120000fb31febc2400a01dd73fb00c01006d187faa70fd738a0000d887f1e7340100f7b9fea9c0f873890000589ff1e7320100f7b8fe8125090080b5b9fe798b0080f7b9fe99cdf8f3360100ef31fec0d20400c09a5cffdc2200e03ad73fb3197f6e1300006b31fe342100e01ad73f33197f9a110000104800c079ae7f6672fdd3940080738c3f33197f9a130000b5197fba1000f09aeb9f598c3fdd080000082400e039d73fb3b8fee94a0000d463fce94e00c063ae7f6630fe0c2100e07bc61fd89a0000a8c3f5cf300200be72fd3383f167280100309ff1673801007f72fd03110400c05cae7fa61000f01fd73fa3197fa61100f08bf16734e3cf540200603ce3cf7402005cff402001003096eb9f120400e95cff8c64fc294300004020014032d73f23b9fe29450090caf83392f1a71c0100d097f1a724014022d73fa3187fca12000010480090c6f5cf28ae7f4a130000ed197fca13002471fd3382f16709028014c69f118c3fcb10000010480090c0f5cf08ae7f96220000ee33fe2c4700b03bd73fbd197f962400002090006067ae7f7a73fdb32c01c0ae8c3fbd197f96260000ae33fe2c4f00b023d73fc00b0200e01ad73f5b1000ecc6f54f4fc69f6d080080738c3f5b1100ecc4f54f2fc69fed08007661fc012e100000cfb9fed992006007ae7f7a31fe6c4b0000402001c0ea5cfff4e2fa676b0200e02be3cff604002b73fdd383f12782006055c69f1e8c3f310400c02fc69f28028015b9fe016e120000ae7f02090056e3faa735e34f2401002433fec41200acc4f50fd088006015c69fd65cff4413004022e34f3c01c00a5cffb464fce1100000104900509deb9f965cfff00f0100a430fef08900a032d73fad187ff88b00a02ae30fd091000076e7fa876f08002a72fdd38af187070400b02be30f4f0800aa71fdd382f1871704000004120054e2faa705d73f9c2000a8c2f8d382f187930400b00be30f1708002a70fd030c2600801db8fee12201c06cae7f80090400b003210917090066f287362df9fb092ef898fd0310cb1fd6f4e0efab3efc8ec586bc0000f08ab0da900060067f98004c2600002090006034d73f400102008057fc12e086040023b9fe018af0af01328af187f5b8fc37e60500000279016004d73facc5e51fc00b000004f202406fae7f5887cb3f8817000008e405809e5cffb006977f202f00f462fc610dc63f940000c865fc8309007a70fd437dc63f9c0000c863fc110034e7fa87da8c3fc77108008024c69fdf04002db9fea12ee3cf1f0400ad187fa8cbf8f3850000d89bf1e75b0280165cff5093f1e7210100b027e3cf530280bb5cff508ff1e7250100b017e3cf2902803b5cff508bf1e73401c0bb8c3fd462fcb9e463f60f00c02d869fb77801e01dae7fa8c1f8f3360100b026e3cf2d0280ab5cff309ff1e7360100b016e34f1302802b5cff3097f1a71901c059c61fe632fe34250000ea33fe34270038c3f50ff3187fba10000075197fba1100bce2fa87398c3f5d0900807a8c3fdd09009e71fdc378c69f2104008f187f18cff8338c0000a8c1f8339400e03bae7f18cbf8339c000098cbf8338500e06fae7f18c7f8338d000098c3f8339500e033d73f8c61fc994e00f02fe30f63187f4a100000e3187fca10001c87eb1f4630fe94220000fa33fe94230070fd435fc69f920400403fc69fb2044036d73ff463fc294d00e432fed08ff1a73c0100d096f16709022093eb1ffa30fe2ce363f60f00b001c3cf72bc00e471fd03e00500e006973fcbf20290c5f50fc0711c5e0092187f68c7e5cff2bc000040202f00195cffd086cb9f6d78010038c7f8b31501b03fd73fdc67fcd98e000078cef8b32501b037d73fdc63fcd99600d897f1877b8c3f5b1300005f197fb62700f6e4fa87f7197f22080080ff187f620880fdb8fee13dc69f280200c0f8134800ecc5f50fd7197f2209807d187fb8cef8134b0000a98c3fd104c01e5cff708df1279e0000d2187f388ee363f60f003088e1874fbc00ecc11f6cf09c7f46e02f0200d89df1876ff804b00f7fc83de6972473f9e7021ef00240022390c95f7778420090c21864f1d71b5e1000c06e8c3f9c2000809d187f38490000bb30fe70810020857f13606fc61f2e1200c0ea8c3fbc4100002b33fef0260100accaf8c30d028004beffefc7f8c34d0200588df187060400b012e30f8d08006015c61f1a1200eccef7ff3d187f684c0000d5197fe840000095197fe844000055197fe84800b033dfffd765fca13301005463fc610001005462fc611001005461fc612001c0ae7cff5f8bf187c10400309bf1870904003093f187493e66ff004024c30f9379010080405e00d8915f00accbe50f4578010080405e0080115cfe508c17000008e40580ddf8fe5f8bcb1f8af20200f462fca1300100f460fca1380100b466fc610102809df8fe3f9ff187450800a015e30f0b1100400bc61f16230080bb8c3f2c4800b00bdfffe730feb0280100bccbf8c3c20400f00ee30f8b1300c055c61f362000d881efffe3187fd8840000ce32feb01101009c61fc6133020078c5f8c3860400abf3fdbf2fe30f9b1200c023c61f36f631fb0700ca31fc10c00b00f099f18710028095f9fedf96f187200200380ee30f71040060fc219000806cc61f42090056e5fbff7dc61f820900c864fc219c00803cc61f100010c6f803c7710800d6e4fbff7b8c3ff09b00800cc61ff8830080fd197fe00b01007b33fec0b70400abf1fdff3ce30f3c2400604fc61f784a00c07e8c3ff0920080bd187fe01401c04a7cff7fcef803a70900d883f1072e1100b03ee30f5c2600606dc61f788b006015beff7f65fc81b709005893f1076e1100b01ee30fdc2600602dc61f684200b002dfff7f31fe40330200d660fc81a63e66ff00c053861fe8c20b000004f2024075a9dfff5dfe40575e000020901700a8c5e50f0ce1050000027901a0b2a4efff2e7f60282f00309ff1078613003097f107a61000308ff107a6110054b5fbf77fe30f4c2500603ce30f4c2700602ce30f942000601ce30f942100600ce30f942200a868b75f0034fe40390200fa32fe40490200fa31fe40590200fa30fe406902806a76f8fe6ffc81f20400b465fc8125080068c7f803cbf898fd03c027ab3eff1b7e60395e00e01ee30f2c4900c0fb8c3fb02c0100ef31fec0d2040055acf4fddff803cb1300708df107b62000e03ce30f6c4300c039c61fd88a0080d78c3fb01d014005957f01d0f8035b1200f098f107b62500e07bc61fd89a0080af8c3fb03d01c06cd5beff1b7f20820080ff187f208600805f8c3f10450080f10702090066aaf0fddff803910400c98c3f104b0090caf803d10400898c3f104f0030cbacefffc61fe010006431fe00ff1000a430fe009f080012187f80bf08006618f9fddff8037c4300b033e30ff080006057c61fe00901c08e8c3fc00b0280d17a7fff37fe00277cccfe01a011c30f708117000008e40580d5b9fc01dee005809166fdffff03f0172f00accae50f708317000008e40580d5b8fc011af002c0282dbeff1b7f80460400ab30fe000d09005660fc011a13005467fc013a10008cf0eef77fe30fd08900a02ae30fd09100a022e30fd09900a01ae30f308000a0b72bdfff8d3fc02002802a8c3fc04002800a8c3fc0600280d98c3fc0040280998c3fc0240280de7e5cfcdf0118c07f0e98118c3d40315e000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008240000209000008040020000020900000824000020900000804002000002090000082400002090000080400200000209000008f47f2330a1c4edb2a2a30000000049454e44ae426082",
+  "install": {
+    "common": {
+      "timeout": "{{parameters.timeout}}"
+    }
+  },
+  "ipmRepo": null,
+  "ipmTags": null,
+  "version": 1,
+  "website": null,
+  "_modules": {
+    "universal": {
+      "id": 120900,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://api.instantly.ai/api/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 3,
+      "crud": null,
+      "name": "universal",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://api.instantly.ai/api`, e.g. `/v1/campaign/list` ",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "instantly",
+      "samples": null,
+      "apiJsonc": "{\n    \"qs\": {\n        \"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n    },\n    \"url\": \"https://api.instantly.ai/api/{{parameters.url}}\", // Defines the fixed base URL and maps the relative path URL from the user.\n    \"body\": \"{{parameters.body}}\",\n    \"type\": \"text\",\n    \"method\": \"{{parameters.method}}\",\n    \"headers\": {\n        \"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n    },\n    \"response\": {\n        \"output\": {\n            \"body\": \"{{body}}\",\n            \"headers\": \"{{headers}}\",\n            \"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "instantly",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n\t{\n\t\t\"help\": \"Enter a path relative to `https://api.instantly.ai/api`, e.g. `/v1/campaign/list` \",  // Gives instructions to the user about the relative path.\n\t\t\"name\": \"url\",                                                                        // Makes value accesible via \"{{parameters.url}}\"\".\n\t\t\"type\": \"text\",\n\t\t\"label\": \"URL\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"method\",          // Allows the user to select the method by themselves.\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Method\",\n\t\t\"default\": \"GET\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"GET\",\n\t\t\t\t\"value\": \"GET\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"POST\",\n\t\t\t\t\"value\": \"POST\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PUT\",\n\t\t\t\t\"value\": \"PUT\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"PATCH\",\n\t\t\t\t\"value\": \"PATCH\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"DELETE\",\n\t\t\t\t\"value\": \"DELETE\"\n\t\t\t}\n\t\t],\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"headers\",         // Allows the user to add headers by themselves.\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"key\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Key\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"value\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Value\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Headers\",\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"name\": \"qs\",              // Allows the user to set Query String by themselves.\n\t\t\"spec\": [\n\t\t\t{\n\t\t\t\t\"name\": \"key\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Key\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\": \"value\",\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"label\": \"Value\"\n\t\t\t}\n\t\t],\n\t\t\"type\": \"array\",\n\t\t\"label\": \"Query String\"\n\t},\n\t{\n\t\t\"name\": \"body\",            // Allows the user to set Body by themselves.\n\t\t\"type\": \"any\",\n\t\t\"label\": \"Body\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "searchLead": {
+      "id": 120848,
+      "api": {
+        "qs": {
+          "email": "{{parameters.email}}",
+          "campaign_id": "{{parameters.campaign_id}}"
+        },
+        "url": "/lead/get",
+        "method": "GET",
+        "response": {
+          "limit": "{{parameters.limit}}",
+          "output": "{{item}}",
+          "iterate": "{{body}}"
+        }
+      },
+      "rev": 3,
+      "crud": "read",
+      "name": "searchLead",
+      "epoch": null,
+      "flags": {},
+      "label": "Search Leads",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Email address of the lead.",
+          "name": "email",
+          "type": "email",
+          "label": "Lead Email",
+          "required": true
+        },
+        {
+          "help": "If left blank, all leads matching the email will be returned.",
+          "name": "campaign_id",
+          "type": "select",
+          "label": "Campaign ID",
+          "options": "rpc://app%23instantly@1/listCampaigns"
+        },
+        {
+          "help": "Maximum number of returned results (bundles).",
+          "name": "limit",
+          "type": "number",
+          "label": "Limit",
+          "default": 10
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "instantly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/lead/get\",\n\t\"method\": \"GET\",\n\t\"qs\": {\n\t\t\"campaign_id\": \"{{parameters.campaign_id}}\",\n\t\t\"email\": \"{{parameters.email}}\"\n\t},\n\t\"response\": {\n\t\t\"iterate\": \"{{body}}\",\n\t\t\"output\": \"{{item}}\",\n\t\t\"limit\": \"{{parameters.limit}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "timestamp_created",
+          "type": "date",
+          "label": "Timestamp Created"
+        },
+        {
+          "name": "campaign",
+          "type": "text",
+          "label": "Campaign"
+        },
+        {
+          "name": "status",
+          "type": "number",
+          "label": "Status"
+        },
+        {
+          "name": "contact",
+          "type": "email",
+          "label": "Contact"
+        },
+        {
+          "name": "email_opened",
+          "type": "boolean",
+          "label": "Email Opened"
+        },
+        {
+          "name": "email_replied",
+          "type": "boolean",
+          "label": "Email Replied"
+        },
+        {
+          "name": "subsequence_id",
+          "type": "text",
+          "label": "Subsequence ID"
+        },
+        {
+          "name": "status_summary_subseq",
+          "type": "text",
+          "label": "Status Summary Subseq"
+        },
+        {
+          "name": "verification_status",
+          "type": "text",
+          "label": "Verification Status"
+        },
+        {
+          "name": "pl_value_lead",
+          "type": "text",
+          "label": "Pl Value Lead"
+        },
+        {
+          "name": "email_clicked",
+          "type": "text",
+          "label": "Email Clicked"
+        },
+        {
+          "name": "timestamp_added_subsequence",
+          "type": "date",
+          "label": "Timestamp Added Subsequence"
+        },
+        {
+          "name": "timestamp_last_contact",
+          "type": "date",
+          "label": "Timestamp Last Contact"
+        },
+        {
+          "name": "timestamp_last_open",
+          "type": "date",
+          "label": "Timestamp Last Open"
+        },
+        {
+          "name": "timestamp_last_reply",
+          "type": "date",
+          "label": "Timestamp Last Reply"
+        },
+        {
+          "name": "timestamp_last_interest_change",
+          "type": "date",
+          "label": "Timestamp Last Interest Change"
+        },
+        {
+          "name": "email_open_count",
+          "type": "number",
+          "label": "Email Open Count"
+        },
+        {
+          "name": "email_reply_count",
+          "type": "number",
+          "label": "Email Reply Count"
+        },
+        {
+          "name": "timestamp_last_click",
+          "type": "date",
+          "label": "Timestamp Last Click"
+        },
+        {
+          "name": "email_click_count",
+          "type": "number",
+          "label": "Email Click Count"
+        },
+        {
+          "name": "lead_data",
+          "spec": [
+            {
+              "name": "email",
+              "type": "email",
+              "label": "Email"
+            },
+            {
+              "name": "lastName",
+              "type": "text",
+              "label": "Last Name"
+            },
+            {
+              "name": "firstName",
+              "type": "text",
+              "label": "First Name"
+            }
+          ],
+          "type": "collection",
+          "label": "Lead Data"
+        },
+        {
+          "name": "campaign_name",
+          "type": "text",
+          "label": "Campaign Name"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "instantly",
+      "description": "Searches for leads.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Lead Email\",\n\t\t\"required\": true,\n\t\t\"help\": \"Email address of the lead.\"\n\t},\n\t{\n\t\t\"name\": \"campaign_id\",\n\t\t\"type\": \"select\",\n\t\t\"options\": \"rpc://listCampaigns\",\n\t\t\"label\": \"Campaign ID\",\n\t\t\"help\": \"If left blank, all leads matching the email will be returned.\"\n\t},\n\t{\n\t\t\"name\": \"limit\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Limit\",\n\t\t\"default\": 10,\n\t\t\"help\": \"Maximum number of returned results (bundles).\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"timestamp_created\",\n        \"label\": \"Timestamp Created\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"campaign\",\n        \"label\": \"Campaign\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"status\",\n        \"label\": \"Status\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"contact\",\n        \"label\": \"Contact\",\n        \"type\": \"email\"\n    },\n    {\n        \"name\": \"email_opened\",\n        \"label\": \"Email Opened\",\n        \"type\": \"boolean\"\n    },\n    {\n        \"name\": \"email_replied\",\n        \"label\": \"Email Replied\",\n        \"type\": \"boolean\"\n    },\n    {\n        \"name\": \"subsequence_id\",\n        \"label\": \"Subsequence ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"status_summary_subseq\",\n        \"label\": \"Status Summary Subseq\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"verification_status\",\n        \"label\": \"Verification Status\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"pl_value_lead\",\n        \"label\": \"Pl Value Lead\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"email_clicked\",\n        \"label\": \"Email Clicked\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"timestamp_added_subsequence\",\n        \"label\": \"Timestamp Added Subsequence\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"timestamp_last_contact\",\n        \"label\": \"Timestamp Last Contact\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"timestamp_last_open\",\n        \"label\": \"Timestamp Last Open\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"timestamp_last_reply\",\n        \"label\": \"Timestamp Last Reply\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"timestamp_last_interest_change\",\n        \"label\": \"Timestamp Last Interest Change\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"email_open_count\",\n        \"label\": \"Email Open Count\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"email_reply_count\",\n        \"label\": \"Email Reply Count\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"timestamp_last_click\",\n        \"label\": \"Timestamp Last Click\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"email_click_count\",\n        \"label\": \"Email Click Count\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"lead_data\",\n        \"label\": \"Lead Data\",\n        \"type\": \"collection\",\n        \"spec\": [\n            {\n                \"name\": \"email\",\n                \"label\": \"Email\",\n                \"type\": \"email\"\n            },\n            {\n                \"name\": \"lastName\",\n                \"label\": \"Last Name\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"firstName\",\n                \"label\": \"First Name\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"campaign_name\",\n        \"label\": \"Campaign Name\",\n        \"type\": \"text\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "updateLead": {
+      "id": 172894,
+      "api": {
+        "qs": {},
+        "url": "/api/users/{{parameters.id}}",
+        "method": "GET",
+        "headers": {},
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 1,
+      "crud": "update",
+      "name": "updateLead",
+      "epoch": null,
+      "flags": {},
+      "label": "Update a lead",
+      "scope": [],
+      "expect": [
+        {
+          "name": "id",
+          "type": "uinteger",
+          "label": "User ID",
+          "required": true
+        }
+      ],
+      "public": false,
+      "typeId": 4,
+      "appName": "instantly",
+      "samples": null,
+      "apiJsonc": "{\n\t// Request to API endpoint with parameter \"id\" defined in Mappable parameters.\n\t\"url\": \"/users/{{parameters.id}}\",     // Relative to base URL\n\t\"method\": \"PUT\",\n\t\"headers\": {},                         // Additional HTTP headers\n\t\"qs\": {},                              // Query string\n\t\"body\": \"{{omit(parameters, 'id')}}\",  // Request body omitting the ID that is already being sent in URL.\n\n\t// Response handling\n\t\"response\": {\n\t\t\"output\": \"{{undefined}}\"  // Returns no output bundle as no API output is expected.\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uinteger",
+          "label": "User ID"
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email address"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "instantly",
+      "description": "Updates a lead.",
+      "expectJsonc": "// Defines \"id\", \"email\" and \"name\" as module input parameters.\n[\n\t{\n\t\t\"name\": \"id\",        // Makes value accesible via \"{{parameters.id}}\".\n\t\t\"type\": \"uinteger\",  // Sends the value as unsigned integer.\n\t\t\"label\": \"User ID\",  // Sets the user friendly label visible in the module.\n\t\t\"required\": true     // Sets the parameter as mandatory.\n\t},\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"label\": \"Email address\"\n\t},\n\t{\n\t\t\"name\": \"name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Name\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "// Expects an empty API response.\n[\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "watchEvents": {
+      "id": 120897,
+      "api": {
+        "response": {
+          "output": "{{payload}}"
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "watchEvents",
+      "epoch": null,
+      "flags": {},
+      "label": "Watch Events",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "instantly",
+      "samples": null,
+      "apiJsonc": "{\n    \"response\": {\n        \"output\": \"{{payload}}\"\n    }\n}",
+      "approved": false,
+      "hookName": "instantly",
+      "learning": false,
+      "interface": [
+        {
+          "name": "timestamp",
+          "type": "date",
+          "label": "Timestamp"
+        },
+        {
+          "name": "event_type",
+          "type": "text",
+          "label": "Event Type"
+        },
+        {
+          "name": "workspace",
+          "type": "text",
+          "label": "Workspace"
+        },
+        {
+          "name": "campaign_id",
+          "type": "text",
+          "label": "Campaign ID"
+        },
+        {
+          "name": "unibox_url",
+          "type": "url",
+          "label": "Unibox URL"
+        },
+        {
+          "name": "campaign_name",
+          "type": "text",
+          "label": "Campaign Name"
+        },
+        {
+          "name": "lead_email",
+          "type": "email",
+          "label": "Lead Email"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": null,
+      "description": "Triggers when a configured event is triggered.",
+      "expectJsonc": null,
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"timestamp\",\n        \"label\": \"Timestamp\",\n        \"type\": \"date\"\n    },\n    {\n        \"name\": \"event_type\",\n        \"label\": \"Event Type\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"workspace\",\n        \"label\": \"Workspace\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"campaign_id\",\n        \"label\": \"Campaign ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"unibox_url\",\n        \"label\": \"Unibox URL\",\n        \"type\": \"url\"\n    },\n    {\n        \"name\": \"campaign_name\",\n        \"label\": \"Campaign Name\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"lead_email\",\n        \"label\": \"Lead Email\",\n        \"type\": \"email\"\n    }\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "updateLeadStatus": {
+      "id": 120849,
+      "api": {
+        "url": "/lead/update/status",
+        "body": {
+          "email": "{{parameters.email}}",
+          "new_status": "{{parameters.new_status}}",
+          "campaign_id": "{{parameters.campaign_id}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{undefined}}"
+        }
+      },
+      "rev": 5,
+      "crud": "update",
+      "name": "updateLeadStatus",
+      "epoch": null,
+      "flags": {},
+      "label": "Update a Lead Status",
+      "scope": [],
+      "expect": [
+        {
+          "mode": "edit",
+          "name": "campaign_id",
+          "type": "select",
+          "label": "Campaign ID",
+          "options": "rpc://app%23instantly@1/listCampaigns",
+          "required": true
+        },
+        {
+          "help": "Email address of the lead.",
+          "name": "email",
+          "type": "email",
+          "label": "Lead Email",
+          "required": true
+        },
+        {
+          "help": "Setting the status to one of the `Additional types` values will also mark the sequence as `Completed` for the lead.",
+          "name": "new_status",
+          "type": "select",
+          "label": "New Status",
+          "grouped": true,
+          "options": [
+            {
+              "label": "Basic types",
+              "options": [
+                {
+                  "label": "Active",
+                  "value": "Active"
+                },
+                {
+                  "label": "Completed",
+                  "value": "Completed"
+                },
+                {
+                  "label": "Unsubscribed",
+                  "value": "Unsubscribed"
+                }
+              ]
+            },
+            {
+              "label": "Additional types",
+              "options": [
+                {
+                  "label": "Interested",
+                  "value": "Interested"
+                },
+                {
+                  "label": "Meeting Booked",
+                  "value": "Meeting Booked"
+                },
+                {
+                  "label": "Meeting Completed",
+                  "value": "Meeting Completed"
+                },
+                {
+                  "label": "Closed",
+                  "value": "Closed"
+                },
+                {
+                  "label": "Out of Office",
+                  "value": "Out of Office"
+                },
+                {
+                  "label": "Out of Office",
+                  "value": "Out of Office"
+                },
+                {
+                  "label": "Not Interested",
+                  "value": "Not Interested"
+                },
+                {
+                  "label": "Wrong Person",
+                  "value": "Wrong Person"
+                }
+              ]
+            }
+          ],
+          "required": true,
+          "validate": false
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "instantly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/lead/update/status\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"campaign_id\": \"{{parameters.campaign_id}}\",\n\t\t\"email\": \"{{parameters.email}}\",\n\t\t\"new_status\": \"{{parameters.new_status}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{undefined}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "instantly",
+      "description": "Updates status for a lead.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"campaign_id\",\n\t\t\"type\": \"select\",\n\t\t\"mode\": \"edit\",\n\t\t\"options\": \"rpc://listCampaigns\",\n\t\t\"label\": \"Campaign ID\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"help\": \"Email address of the lead.\",\n\t\t\"label\": \"Lead Email\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"new_status\",\n\t\t\"type\": \"select\",\n\t\t\"grouped\": true,\n\t\t\"validate\": false,\n\t\t\"help\": \"Setting the status to one of the `Additional types` values will also mark the sequence as `Completed` for the lead.\",\n\t\t\"options\": [\n\t\t\t{\n\t\t\t\t\"label\": \"Basic types\",\n\t\t\t\t\"options\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Active\",\n\t\t\t\t\t\t\"value\": \"Active\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Completed\",\n\t\t\t\t\t\t\"value\": \"Completed\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Unsubscribed\",\n\t\t\t\t\t\t\"value\": \"Unsubscribed\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"label\": \"Additional types\",\n\t\t\t\t\"options\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Interested\",\n\t\t\t\t\t\t\"value\": \"Interested\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Meeting Booked\",\n\t\t\t\t\t\t\"value\": \"Meeting Booked\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Meeting Completed\",\n\t\t\t\t\t\t\"value\": \"Meeting Completed\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Closed\",\n\t\t\t\t\t\t\"value\": \"Closed\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Out of Office\",\n\t\t\t\t\t\t\"value\": \"Out of Office\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Out of Office\",\n\t\t\t\t\t\t\"value\": \"Out of Office\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Not Interested\",\n\t\t\t\t\t\t\"value\": \"Not Interested\"\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"label\": \"Wrong Person\",\n\t\t\t\t\t\t\"value\": \"Wrong Person\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"required\": true,\n\t\t\"label\": \"New Status\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "addLeadToCampaign": {
+      "id": 120879,
+      "api": {
+        "url": "/lead/add",
+        "body": {
+          "leads": [
+            {
+              "email": "{{parameters.email}}",
+              "phone": "{{parameters.phone}}",
+              "website": "{{parameters.website}}",
+              "last_name": "{{parameters.last_name}}",
+              "first_name": "{{parameters.first_name}}",
+              "company_name": "{{parameters.company_name}}",
+              "personalization": "{{parameters.personalization}}",
+              "custom_variables": "{{toCollection(parameters.custom_variables, 'key', 'value')}}"
+            }
+          ],
+          "campaign_id": "{{parameters.campaign_id}}",
+          "skip_if_in_workspace": "{{parameters.skip_if_in_workspace}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{omit(body, 'status')}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "addLeadToCampaign",
+      "epoch": null,
+      "flags": {},
+      "label": "Add a Lead to a Campaign",
+      "scope": [],
+      "expect": [
+        {
+          "name": "campaign_id",
+          "type": "select",
+          "label": "Campaign ID",
+          "options": "rpc://app%23instantly@1/listCampaigns",
+          "required": true
+        },
+        {
+          "help": "Email address of the lead.",
+          "name": "email",
+          "type": "email",
+          "label": "Lead Email",
+          "required": true
+        },
+        {
+          "name": "first_name",
+          "type": "text",
+          "label": "First Name"
+        },
+        {
+          "name": "last_name",
+          "type": "text",
+          "label": "Last Name"
+        },
+        {
+          "name": "company_name",
+          "type": "text",
+          "label": "Company Name"
+        },
+        {
+          "help": "Add your customized message.",
+          "name": "personalization",
+          "type": "text",
+          "label": "Personalization"
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "label": "Phone"
+        },
+        {
+          "name": "website",
+          "type": "url",
+          "label": "Website"
+        },
+        {
+          "name": "custom_variables",
+          "spec": {
+            "spec": [
+              {
+                "name": "key",
+                "type": "text",
+                "label": "Custom Variable Key"
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Custom Variable Value"
+              }
+            ],
+            "type": "collection",
+            "label": "Custom Variable"
+          },
+          "type": "array",
+          "label": "Custom Variables"
+        },
+        {
+          "help": "Skip lead if it exists in any campaigns in the workspace.",
+          "name": "skip_if_in_workspace",
+          "type": "boolean",
+          "label": "Skip if in Workspace",
+          "advanced": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "instantly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/lead/add\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"campaign_id\": \"{{parameters.campaign_id}}\",\n\t\t\"skip_if_in_workspace\": \"{{parameters.skip_if_in_workspace}}\",\n\t\t\"leads\": [\n\t\t\t{\n\t\t\t\t\"email\": \"{{parameters.email}}\",\n\t\t\t\t\"first_name\": \"{{parameters.first_name}}\",\n\t\t\t\t\"last_name\": \"{{parameters.last_name}}\",\n\t\t\t\t\"company_name\": \"{{parameters.company_name}}\",\n\t\t\t\t\"personalization\": \"{{parameters.personalization}}\",\n\t\t\t\t\"phone\": \"{{parameters.phone}}\",\n\t\t\t\t\"website\": \"{{parameters.website}}\",\n\t\t\t\t\"custom_variables\": \"{{toCollection(parameters.custom_variables, 'key', 'value')}}\"\n\t\t\t}\n\t\t]\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{omit(body, 'status')}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "total_sent",
+          "type": "number",
+          "label": "Total Sent"
+        },
+        {
+          "name": "leads_uploaded",
+          "type": "number",
+          "label": "Leads Uploaded"
+        },
+        {
+          "name": "in_blocklist",
+          "type": "number",
+          "label": "In Blocklist"
+        },
+        {
+          "name": "blocklist_used",
+          "type": "text",
+          "label": "Blocklist Used"
+        },
+        {
+          "name": "already_in_campaign",
+          "type": "number",
+          "label": "Already in Campaign"
+        },
+        {
+          "name": "invalid_email_count",
+          "type": "number",
+          "label": "Invalid Email Count"
+        },
+        {
+          "name": "duplicate_email_count",
+          "type": "number",
+          "label": "Duplicate Email Count"
+        },
+        {
+          "name": "remaining_in_plan",
+          "type": "number",
+          "label": "Remaining in Plan"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "instantly",
+      "description": "Adds a new lead to the selected campaign.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"campaign_id\",\n\t\t\"type\": \"select\",\n\t\t\"options\": \"rpc://listCampaigns\",\n\t\t\"label\": \"Campaign ID\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"email\",\n\t\t\"type\": \"email\",\n\t\t\"help\": \"Email address of the lead.\",\n\t\t\"label\": \"Lead Email\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"first_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"First Name\"\n\t},\n\t{\n\t\t\"name\": \"last_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Last Name\"\n\t},\n\t{\n\t\t\"name\": \"company_name\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Company Name\"\n\t},\n\t{\n\t\t\"name\": \"personalization\",\n\t\t\"type\": \"text\",\n\t\t\"help\": \"Add your customized message.\",\n\t\t\"label\": \"Personalization\"\n\t},\n\t{\n\t\t\"name\": \"phone\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Phone\"\n\t},\n\t{\n\t\t\"name\": \"website\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Website\"\n\t},\n\t{\n\t\t\"name\": \"custom_variables\",\n\t\t\"type\": \"array\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"collection\",\n    \t\t\"label\": \"Custom Variable\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"key\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Custom Variable Key\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"value\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Custom Variable Value\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"label\": \"Custom Variables\"\n\t},\n\t{\n\t\t\"name\": \"skip_if_in_workspace\",\n\t\t\"type\": \"boolean\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Skip lead if it exists in any campaigns in the workspace.\",\n\t\t\"label\": \"Skip if in Workspace\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"total_sent\",\n        \"label\": \"Total Sent\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"leads_uploaded\",\n        \"label\": \"Leads Uploaded\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"in_blocklist\",\n        \"label\": \"In Blocklist\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"blocklist_used\",\n        \"label\": \"Blocklist Used\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"already_in_campaign\",\n        \"label\": \"Already in Campaign\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"invalid_email_count\",\n        \"label\": \"Invalid Email Count\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"duplicate_email_count\",\n        \"label\": \"Duplicate Email Count\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"remaining_in_plan\",\n        \"label\": \"Remaining in Plan\",\n        \"type\": \"number\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deleteLeadFromCamp": {
+      "id": 120881,
+      "api": {
+        "url": "/lead/delete",
+        "body": {
+          "campaign_id": "{{parameters.campaign_id}}",
+          "delete_list": [
+            "{{parameters.lead}}"
+          ],
+          "delete_all_from_company": "{{parameters.delete_all_from_company}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{undefined}}"
+        }
+      },
+      "rev": 3,
+      "crud": "delete",
+      "name": "deleteLeadFromCamp",
+      "epoch": null,
+      "flags": {},
+      "label": "Remove a Lead from a Campaign",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Email address of the lead.",
+          "name": "lead",
+          "type": "email",
+          "label": "Lead Email",
+          "required": true
+        },
+        {
+          "help": "If not provided, matching lead will be deleted across all campaigns.",
+          "name": "campaign_id",
+          "type": "select",
+          "label": "Campaign",
+          "options": "rpc://app%23instantly@1/listCampaigns"
+        },
+        {
+          "help": "Set to true if you would like to remove all leads with matching domain.",
+          "name": "delete_all_from_company",
+          "type": "boolean",
+          "label": "Delete All from Company"
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "instantly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/lead/delete\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"campaign_id\": \"{{parameters.campaign_id}}\",\n\t\t\"delete_all_from_company\": \"{{parameters.delete_all_from_company}}\",\n\t\t\"delete_list\": [\"{{parameters.lead}}\"]\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{undefined}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "instantly",
+      "description": "Removes a lead from the campaign(s).",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"lead\",\n\t\t\"required\": true,\n\t\t\"type\": \"email\",\n\t\t\"help\": \"Email address of the lead.\",\n\t\t\"label\": \"Lead Email\"\n\t},\n\t{\n\t\t\"name\": \"campaign_id\",\n\t\t\"type\": \"select\",\n\t\t\"help\": \"If not provided, matching lead will be deleted across all campaigns.\",\n\t\t\"options\": \"rpc://listCampaigns\",\n\t\t\"label\": \"Campaign\"\n\t},\n\t{\n\t\t\"name\": \"delete_all_from_company\",\n\t\t\"type\": \"boolean\",\n\t\t\"help\": \"Set to true if you would like to remove all leads with matching domain.\",\n\t\t\"label\": \"Delete All from Company\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "addEntriesToBlocklist": {
+      "id": 120863,
+      "api": {
+        "url": "/blocklist/add/entries",
+        "body": {
+          "entries": "{{parameters.entries}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": {
+            "blocklist_id": "{{body.blocklist_id}}",
+            "entries_added": "{{body.entries_added}}",
+            "already_in_blocklist": "{{body.already_in_blocklist}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": "create",
+      "name": "addEntriesToBlocklist",
+      "epoch": null,
+      "flags": {},
+      "label": "Add Entries to the Blocklist",
+      "scope": [],
+      "expect": [
+        {
+          "name": "entries",
+          "spec": {
+            "help": "For example, `abc@xyz.com` or `domain.com`.",
+            "type": "text",
+            "label": "Entry"
+          },
+          "type": "array",
+          "label": "Entries",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "instantly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/blocklist/add/entries\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"entries\": \"{{parameters.entries}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"entries_added\": \"{{body.entries_added}}\",\n\t\t\t\"already_in_blocklist\": \"{{body.already_in_blocklist}}\",\n\t\t\t\"blocklist_id\": \"{{body.blocklist_id}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "blocklist_id",
+          "type": "text",
+          "label": "Blocklist ID"
+        },
+        {
+          "name": "entries_added",
+          "type": "number",
+          "label": "Entries Added"
+        },
+        {
+          "name": "already_in_blocklist",
+          "type": "number",
+          "label": "Already in Blocklist"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "instantly",
+      "description": "Adds entries to the blocklist.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"entries\",\n\t\t\"type\": \"array\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"text\",\n\t\t\t\"help\": \"For example, `abc@xyz.com` or `domain.com`.\",\n\t\t\t\"label\": \"Entry\"\n\t\t},\n\t\t\"label\": \"Entries\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"blocklist_id\",\n        \"label\": \"Blocklist ID\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"entries_added\",\n        \"label\": \"Entries Added\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"already_in_blocklist\",\n        \"label\": \"Already in Blocklist\",\n        \"type\": \"number\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "addMultipleLeadsToCamp": {
+      "id": 120880,
+      "api": {
+        "url": "/lead/add",
+        "body": {
+          "leads": "{{formatMultipleLeadsRequest(parameters.leads)}}",
+          "campaign_id": "{{parameters.campaign_id}}",
+          "skip_if_in_workspace": "{{parameters.skip_if_in_workspace}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": "{{omit(body, 'status')}}"
+        }
+      },
+      "rev": 4,
+      "crud": "create",
+      "name": "addMultipleLeadsToCamp",
+      "epoch": null,
+      "flags": {},
+      "label": "Add Multiple Leads to a Campaign",
+      "scope": [],
+      "expect": [
+        {
+          "name": "campaign_id",
+          "type": "select",
+          "label": "Campaign ID",
+          "options": "rpc://app%23instantly@1/listCampaigns",
+          "required": true
+        },
+        {
+          "name": "leads",
+          "spec": {
+            "spec": [
+              {
+                "help": "Email address of the lead.",
+                "name": "email",
+                "type": "email",
+                "label": "Lead Email",
+                "required": true
+              },
+              {
+                "name": "first_name",
+                "type": "text",
+                "label": "First Name"
+              },
+              {
+                "name": "last_name",
+                "type": "text",
+                "label": "Last Name"
+              },
+              {
+                "name": "company_name",
+                "type": "text",
+                "label": "Company Name"
+              },
+              {
+                "help": "Add your customized message.",
+                "name": "personalization",
+                "type": "text",
+                "label": "Personalization"
+              },
+              {
+                "name": "phone",
+                "type": "text",
+                "label": "Phone"
+              },
+              {
+                "name": "website",
+                "type": "url",
+                "label": "Website"
+              },
+              {
+                "name": "custom_variables",
+                "spec": {
+                  "spec": [
+                    {
+                      "name": "key",
+                      "type": "text",
+                      "label": "Custom Variable Key"
+                    },
+                    {
+                      "name": "value",
+                      "type": "text",
+                      "label": "Custom Variable Value"
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Custom Variable"
+                },
+                "type": "array",
+                "label": "Custom Variables"
+              }
+            ],
+            "type": "collection",
+            "label": "Lead"
+          },
+          "type": "array",
+          "label": "Leads",
+          "required": true
+        },
+        {
+          "help": "Skip lead if it exists in any campaigns in the workspace.",
+          "name": "skip_if_in_workspace",
+          "type": "boolean",
+          "label": "Skip if in Workspace",
+          "advanced": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "instantly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/lead/add\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"campaign_id\": \"{{parameters.campaign_id}}\",\n\t\t\"skip_if_in_workspace\": \"{{parameters.skip_if_in_workspace}}\",\n\t\t\"leads\": \"{{formatMultipleLeadsRequest(parameters.leads)}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": \"{{omit(body, 'status')}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "total_sent",
+          "type": "number",
+          "label": "Total Sent"
+        },
+        {
+          "name": "leads_uploaded",
+          "type": "number",
+          "label": "Leads Uploaded"
+        },
+        {
+          "name": "in_blocklist",
+          "type": "number",
+          "label": "In Blocklist"
+        },
+        {
+          "name": "blocklist_used",
+          "type": "text",
+          "label": "Blocklist Used"
+        },
+        {
+          "name": "already_in_campaign",
+          "type": "number",
+          "label": "Already in Campaign"
+        },
+        {
+          "name": "invalid_email_count",
+          "type": "number",
+          "label": "Invalid Email Count"
+        },
+        {
+          "name": "duplicate_email_count",
+          "type": "number",
+          "label": "Duplicate Email Count"
+        },
+        {
+          "name": "remaining_in_plan",
+          "type": "number",
+          "label": "Remaining in Plan"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "instantly",
+      "description": "Adds multiple leads to the selected campaign.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"campaign_id\",\n\t\t\"type\": \"select\",\n\t\t\"options\": \"rpc://listCampaigns\",\n\t\t\"label\": \"Campaign ID\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"leads\",\n\t\t\"type\": \"array\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"collection\",\n    \t\t\"label\": \"Lead\",\n\t\t\t\"spec\": [\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"email\",\n\t\t\t\t\t\"type\": \"email\",\n\t\t\t\t\t\"help\": \"Email address of the lead.\",\n\t\t\t\t\t\"label\": \"Lead Email\",\n\t\t\t\t\t\"required\": true\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"first_name\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"First Name\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"last_name\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Last Name\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"company_name\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Company Name\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"personalization\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"help\": \"Add your customized message.\",\n\t\t\t\t\t\"label\": \"Personalization\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"phone\",\n\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\"label\": \"Phone\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"website\",\n\t\t\t\t\t\"type\": \"url\",\n\t\t\t\t\t\"label\": \"Website\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"name\": \"custom_variables\",\n\t\t\t\t\t\"type\": \"array\",\n\t\t\t\t\t\"spec\": {\n\t\t\t\t\t\t\"type\": \"collection\",\n\t\t\t\t\t\t\"label\": \"Custom Variable\",\n\t\t\t\t\t\t\"spec\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"key\",\n\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\"label\": \"Custom Variable Key\"\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"value\",\n\t\t\t\t\t\t\t\t\"type\": \"text\",\n\t\t\t\t\t\t\t\t\"label\": \"Custom Variable Value\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t},\n\t\t\t\t\t\"label\": \"Custom Variables\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t\"label\": \"Leads\",\n\t\t\"required\": true\n\t},\n\t{\n\t\t\"name\": \"skip_if_in_workspace\",\n\t\t\"type\": \"boolean\",\n\t\t\"advanced\": true,\n\t\t\"help\": \"Skip lead if it exists in any campaigns in the workspace.\",\n\t\t\"label\": \"Skip if in Workspace\"\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"total_sent\",\n        \"label\": \"Total Sent\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"leads_uploaded\",\n        \"label\": \"Leads Uploaded\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"in_blocklist\",\n        \"label\": \"In Blocklist\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"blocklist_used\",\n        \"label\": \"Blocklist Used\",\n        \"type\": \"text\"\n    },\n    {\n        \"name\": \"already_in_campaign\",\n        \"label\": \"Already in Campaign\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"invalid_email_count\",\n        \"label\": \"Invalid Email Count\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"duplicate_email_count\",\n        \"label\": \"Duplicate Email Count\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"remaining_in_plan\",\n        \"label\": \"Remaining in Plan\",\n        \"type\": \"number\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "deleteEntriesFromBlocklist": {
+      "id": 120867,
+      "api": {
+        "url": "/blocklist/delete/entries",
+        "body": {
+          "entries": "{{parameters.entries}}"
+        },
+        "method": "POST",
+        "response": {
+          "output": {
+            "entries_deleted": "{{body.entries_deleted}}",
+            "not_in_blocklist": "{{body.not_in_blocklist}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": "delete",
+      "name": "deleteEntriesFromBlocklist",
+      "epoch": null,
+      "flags": {},
+      "label": "Remove Entries from the Blocklist",
+      "scope": [],
+      "expect": [
+        {
+          "name": "entries",
+          "spec": {
+            "help": "For example, `abc@xyz.com` or `domain.com`.",
+            "type": "text",
+            "label": "Entry"
+          },
+          "type": "array",
+          "label": "Entries",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "instantly",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/blocklist/delete/entries\",\n\t\"method\": \"POST\",\n\t\"body\": {\n\t\t\"entries\": \"{{parameters.entries}}\"\n\t},\n\t\"response\": {\n\t\t\"output\": {\n\t\t\t\"entries_deleted\": \"{{body.entries_deleted}}\",\n\t\t\t\"not_in_blocklist\": \"{{body.not_in_blocklist}}\"\n\t\t}\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "entries_deleted",
+          "type": "number",
+          "label": "Entries Deleted"
+        },
+        {
+          "name": "not_in_blocklist",
+          "type": "number",
+          "label": "Not in Blocklist"
+        }
+      ],
+      "appVersion": 1,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": "[\n]",
+      "accountName": "instantly",
+      "description": "Removes entries from the blocklist.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"entries\",\n\t\t\"type\": \"array\",\n\t\t\"spec\": {\n\t\t\t\"type\": \"text\",\n\t\t\t\"help\": \"For example, `abc@xyz.com` or `domain.com`.\",\n\t\t\t\"label\": \"Entry\"\n\t\t},\n\t\t\"label\": \"Entries\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    {\n        \"name\": \"entries_deleted\",\n        \"label\": \"Entries Deleted\",\n        \"type\": \"number\"\n    },\n    {\n        \"name\": \"not_in_blocklist\",\n        \"label\": \"Not in Blocklist\",\n        \"type\": \"number\"\n    }\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 42,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "instantly": {
+      "api": {
+        "qs": {
+          "api_key": "{{parameters.apiKey}}"
+        },
+        "log": {
+          "sanitize": [
+            "request.qs.api_key"
+          ]
+        },
+        "url": "https://api.instantly.ai/api/v1/authenticate",
+        "response": {
+          "error": {
+            "message": "[{{statusCode}}] {{body.error}}"
+          }
+        }
+      },
+      "rev": 6,
+      "name": "instantly",
+      "type": "basic",
+      "label": "Instantly",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "instantly",
+      "install": {},
+      "apiJsonc": "{\n\t\"url\": \"https://api.instantly.ai/api/v1/authenticate\",\n\t\"qs\": {\n\t\t\"api_key\": \"{{parameters.apiKey}}\"\n\t},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"message\": \"[{{statusCode}}] {{body.error}}\"\n\t\t}\n\t},\n\t\"log\": {\n\t\t\"sanitize\": [\n\t\t\t\"request.qs.api_key\"\n\t\t]\n\t}\n}",
+      "authorId": 42,
+      "appVersion": 1,
+      "parameters": [
+        {
+          "help": "For information on how to obtain your API Key, see the [Instantly API documentation](https://developer.instantly.ai/introduction).",
+          "name": "apiKey",
+          "type": "password",
+          "label": "API Key",
+          "editable": true,
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "installSpec": [],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"apiKey\",\n        \"type\": \"password\",\n        \"help\": \"For information on how to obtain your API Key, see the [Instantly API documentation](https://developer.instantly.ai/introduction).\",\n        \"label\": \"API Key\",\n        \"required\": true,\n        \"editable\": true\n    }\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    },
+    "instantly2": {
+      "api": {},
+      "rev": 3,
+      "name": "instantly2",
+      "type": "basic",
+      "label": "Instantly API key V2",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "instantly",
+      "install": {},
+      "apiJsonc": null,
+      "authorId": 42,
+      "appVersion": 1,
+      "parameters": [],
+      "scopeJsonc": null,
+      "installSpec": [],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": null,
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n    \"baseUrl\": \"https://api.instantly.ai/api/v1\",\n    \"qs\": {\n        \"api_key\": \"{{connection.apiKey}}\"\n    },\n    \"timeout\": \"{{parameters.timeout || 100000}}\",\n    \"response\": {\n        \"error\": {\n            \"429\": {\n                \"type\": \"RateLimitError\",\n                \"message\": \"[{{statusCode}}] {{body.error}} {{body.message}}\"\n            },\n            \"message\": \"[{{statusCode}}] {{body.error}} {{body.message}}\"\n        }\n    },\n    \"log\": {\n        \"sanitize\": [\n            \"request.qs.api_key\"\n        ]\n    }\n}",
+  "countries": null,
+  "_functions": {
+    "formatMultipleLeadsRequest": {
+      "rev": 2,
+      "code": "function formatMultipleLeadsRequest(leadsArr) {\n    if (!leadsArr) return undefined;\n\n    if (!Array.isArray(leadsArr)) return leadsArr;\n\n    leadsArr.forEach((element) => {\n        if (!element.custom_variables || !Array.isArray(element.custom_variables)) return;\n        element.custom_variables = iml.toCollection(element.custom_variables, 'key', 'value');\n    });\n\n    return leadsArr;\n}",
+      "name": "formatMultipleLeadsRequest",
+      "test": "it('should return undefined if input does not exist or false', () => {\r\n    assert.strictEqual(formatMultipleLeadsRequest(undefined), undefined);\r\n    assert.strictEqual(formatMultipleLeadsRequest(null), undefined);\r\n    assert.strictEqual(formatMultipleLeadsRequest(false), undefined);\r\n    assert.strictEqual(formatMultipleLeadsRequest(''), undefined);\r\n});\r\n\r\nit('should return leadsArr if input is not an array', () => {\r\n    assert.deepStrictEqual(formatMultipleLeadsRequest({ key: 'notAnArray' }), { key: 'notAnArray' });\r\n    assert.strictEqual(formatMultipleLeadsRequest(true), true);\r\n    assert.strictEqual(formatMultipleLeadsRequest(123), 123);\r\n    assert.strictEqual(formatMultipleLeadsRequest('notAnArray'), 'notAnArray');\r\n    assert.deepStrictEqual(formatMultipleLeadsRequest({}), {});\r\n});\r\n\r\nit('should not change input array if input is correct lead array without custom fields', () => {\r\n    const input = [\r\n        {\r\n            email: \"temp@mail.me\",\r\n            first_name: \"Test1\"\r\n        },\r\n        {\r\n            email: \"temp1@mail.me\",\r\n            first_name: \"Test2\"\r\n        }\r\n    ]\r\n\r\n    const exptectedOutput = [\r\n        {\r\n            email: \"temp@mail.me\",\r\n            first_name: \"Test1\"\r\n        },\r\n        {\r\n            email: \"temp1@mail.me\",\r\n            first_name: \"Test2\"\r\n        }\r\n    ]\r\n\r\n    assert.deepStrictEqual(formatMultipleLeadsRequest(input), exptectedOutput);\r\n});\r\n\r\nit('should return formatted output if input is correct lead array with custom fields', () => {\r\n    const input = [\r\n        {\r\n            email: \"temp@mail.me\",\r\n            custom_variables: [\r\n                {\r\n                    key: \"testKey2\",\r\n                    value: \"testVal1\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            email: \"temp1@mail.me\",\r\n            custom_variables: [\r\n                {\r\n                    key: \"testKey2\",\r\n                    value: \"testVal2\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n\r\n    const exptectedOutput = [\r\n        {\r\n            email: \"temp@mail.me\",\r\n            custom_variables: {\r\n                testKey2: \"testVal1\"\r\n            }\r\n        },\r\n        {\r\n            email: \"temp1@mail.me\",\r\n            custom_variables: {\r\n                testKey2: \"testVal2\"\r\n            }\r\n        }\r\n    ]\r\n\r\n    assert.deepStrictEqual(formatMultipleLeadsRequest(input), exptectedOutput);\r\n});",
+      "appName": "instantly",
+      "arguments": "(leadsArr)",
+      "appVersion": 1
+    }
+  },
+  "approvedAt": "2023-11-29T12:47:32.131207+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": "Instantly helps you scale your outreach campaigns through unlimited email sending accounts, unlimited warmup, and smart AI.",
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [
+    {
+      "name": "timeout",
+      "type": "uinteger",
+      "label": "Module Timeout",
+      "default": 100000,
+      "required": true
+    }
+  ],
+  "inviteToken": "4e1776d3211f3d5f4ed2cf4aca2c981d",
+  "versionFull": "1.0.6",
+  "compiledName": "instantly",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": "{\n    \"common\": {\n        \"timeout\": \"{{parameters.timeout}}\"\n    }\n}",
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": "[\n    {\n        \"name\": \"timeout\",\n        \"label\": \"Module Timeout\",\n        \"type\": \"uinteger\",\n        \"required\": true,\n        \"default\": 100000\n    }\n]"
+}

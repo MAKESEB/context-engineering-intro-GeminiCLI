@@ -1,0 +1,1895 @@
+{
+  "rev": 18,
+  "base": {
+    "log": {
+      "sanitize": [
+        "request.headers.X-Knack-Application-Id",
+        "request.headers.X-Knack-REST-API-Key"
+      ]
+    },
+    "gzip": true,
+    "baseUrl": "https://{{ifempty(ifempty(connection.apiServer, connection.appServer), 'api.knack.com')}}/v1",
+    "headers": {
+      "X-Knack-REST-API-Key": "{{connection.apiKey}}",
+      "X-Knack-Application-Id": "{{connection.applicationId}}"
+    },
+    "timeout": 120000
+  },
+  "beta": false,
+  "docs": "",
+  "name": "knack",
+  "_rpcs": {
+    "Views": {
+      "api": {
+        "qs": {},
+        "url": "/views",
+        "body": {},
+        "method": "GET",
+        "headers": {},
+        "response": {
+          "error": {
+            "type": "DataError",
+            "message": "{{getErrorMessage(statusCode, body)}}"
+          },
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.key}}"
+          },
+          "iterate": "{{body.views}}"
+        }
+      },
+      "rev": 2,
+      "name": "Views",
+      "label": "Views",
+      "appName": "knack",
+      "apiJsonc": "{\n\t\"url\": \"/views\",\n\t\"method\": \"GET\",\n\t\"qs\": {},\n\t\"body\": {},\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"type\": \"DataError\",\n\t\t\t\"message\": \"{{getErrorMessage(statusCode, body)}}\"\n\t\t},\n\t\t\"iterate\": \"{{body.views}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.key}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 2,
+      "parameters": [],
+      "accountName": "knack",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "Fields": {
+      "api": {
+        "qs": {},
+        "url": "/objects/{{parameters.object_id}}/fields",
+        "body": {},
+        "method": "GET",
+        "headers": {},
+        "response": {
+          "error": {
+            "type": "DataError",
+            "message": "{{getErrorMessage(statusCode, body)}}"
+          },
+          "output": {
+            "label": "{{item.label}}",
+            "value": "{{item.key}}"
+          },
+          "iterate": "{{body.fields}}"
+        }
+      },
+      "rev": 2,
+      "name": "Fields",
+      "label": "Fields",
+      "appName": "knack",
+      "apiJsonc": "{\n\t\"url\": \"/objects/{{parameters.object_id}}/fields\",\n\t\"method\": \"GET\",\n\t\"qs\": {},\n\t\"body\": {},\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"type\": \"DataError\",\n\t\t\t\"message\": \"{{getErrorMessage(statusCode, body)}}\"\n\t\t},\n\t\t\"iterate\": \"{{body.fields}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.label}}\",\n\t\t\t\"value\": \"{{item.key}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 2,
+      "parameters": [],
+      "accountName": "knack",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "Objects": {
+      "api": {
+        "qs": {},
+        "url": "/objects",
+        "body": {},
+        "method": "GET",
+        "headers": {},
+        "response": {
+          "error": {
+            "type": "DataError",
+            "message": "{{getErrorMessage(statusCode, body)}}"
+          },
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.key}}"
+          },
+          "iterate": "{{body.objects}}"
+        }
+      },
+      "rev": 2,
+      "name": "Objects",
+      "label": "Objects",
+      "appName": "knack",
+      "apiJsonc": "{\n\t\"url\": \"/objects\",\n\t\"method\": \"GET\",\n\t\"qs\": {},\n\t\"body\": {},\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"type\": \"DataError\",\n\t\t\t\"message\": \"{{getErrorMessage(statusCode, body)}}\"\n\t\t},\n\t\t\"iterate\": \"{{body.objects}}\",\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.name}}\",\n\t\t\t\"value\": \"{{item.key}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 2,
+      "parameters": [],
+      "accountName": "knack",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "listForms": {
+      "api": {
+        "qs": {},
+        "url": "/forms",
+        "body": {},
+        "method": "GET",
+        "headers": {},
+        "response": {
+          "output": {
+            "label": "{{item.name}}",
+            "value": "{{item.key}}"
+          },
+          "iterate": "{{body.forms}}"
+        }
+      },
+      "rev": 3,
+      "name": "listForms",
+      "label": "list Forms",
+      "appName": "knack",
+      "apiJsonc": "{\n    \"url\": \"/forms\",\n    \"method\": \"GET\",\n    \"qs\": {},\n    \"body\": {},\n    \"headers\": {},\n    \"response\": {\n        \"iterate\": \"{{body.forms}}\",\n        \"output\": {\n            \"label\": \"{{item.name}}\",\n            \"value\": \"{{item.key}}\"\n        }\n    }\n}",
+      "appVersion": 2,
+      "parameters": [],
+      "accountName": "knack",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "RecordExpect": {
+      "api": {
+        "qs": {},
+        "url": "/objects/{{parameters.object_id}}/fields",
+        "body": {},
+        "method": "GET",
+        "headers": {},
+        "response": {
+          "error": {
+            "type": "DataError",
+            "message": "{{getErrorMessage(statusCode, body)}}"
+          },
+          "output": "{{getRecordExpect(body.fields, parameters.type)}}"
+        }
+      },
+      "rev": 3,
+      "name": "RecordExpect",
+      "label": "Record Expect",
+      "appName": "knack",
+      "apiJsonc": "{\n   // fetches metadata for mappable parameters\n   // For Get/Search/Watch module it will output only multiplechoice parameters with type:hidden and default:true\n    \"url\": \"/objects/{{parameters.object_id}}/fields\",\n    \"method\": \"GET\",\n    \"qs\": {},\n    \"body\": {},\n    \"headers\": {},\n    \"response\": {\n        \"error\": {\n            \"type\": \"DataError\",\n            \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n        },\n        \"output\": \"{{getRecordExpect(body.fields, parameters.type)}}\" //parameters.type=hidden for Get/Search/Watch\n    }\n}",
+      "appVersion": 2,
+      "parameters": [],
+      "accountName": "knack",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "RecordInterface": {
+      "api": {
+        "qs": {},
+        "url": "/objects/{{parameters.object_id}}/fields",
+        "body": {},
+        "method": "GET",
+        "headers": {},
+        "response": {
+          "error": {
+            "type": "DataError",
+            "message": "{{getErrorMessage(statusCode, body)}}"
+          },
+          "output": "{{getRecordInterface(body.fields, parameters.mode)}}"
+        }
+      },
+      "rev": 2,
+      "name": "RecordInterface",
+      "label": "Record Interface",
+      "appName": "knack",
+      "apiJsonc": "{\n\t\"url\": \"/objects/{{parameters.object_id}}/fields\",\n\t\"method\": \"GET\",\n\t\"qs\": {},\n\t\"body\": {},\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"type\": \"DataError\",\n\t\t\t\"message\": \"{{getErrorMessage(statusCode, body)}}\"\n\t\t},\n\t\t\"output\": \"{{getRecordInterface(body.fields, parameters.mode)}}\"\n\t}\n}",
+      "appVersion": 2,
+      "parameters": [],
+      "accountName": "knack",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "webhookInterface": {
+      "api": [
+        {
+          "response": {
+            "output": [
+              {
+                "name": "id",
+                "type": "text",
+                "label": "Form ID"
+              },
+              {
+                "name": "fields",
+                "spec": [],
+                "type": "collection",
+                "label": "Form Fields"
+              }
+            ]
+          },
+          "condition": "{{webhook.formKey}}"
+        },
+        {
+          "response": {
+            "output": [
+              {
+                "name": "id",
+                "type": "text",
+                "label": "Record ID"
+              },
+              {
+                "name": "fields",
+                "spec": [],
+                "type": "collection",
+                "label": "Record Fields"
+              }
+            ]
+          },
+          "condition": "{{!webhook.formKey}}"
+        }
+      ],
+      "rev": 2,
+      "name": "webhookInterface",
+      "label": "Webhook Interface",
+      "appName": "knack",
+      "apiJsonc": "[\n    {\n        \"condition\": \"{{webhook.formKey}}\",\n        /*  this endpoint doesn't return all fields - unreliable for interface.\n       \"url\": \"/views/{{webhook.formKey}}/fields\",\n        \"method\": \"GET\",\n        \"response\": {\n            \"output\": \"{{getFormInterface(body.fields)}}\"\n        } */\n        \n        // static interface for forms\n        \"response\": {\n            \"output\": [\n                {\n                    \"name\": \"id\",\n                    \"type\": \"text\",\n                    \"label\": \"Form ID\"\n                },\n                {\n                    \"name\": \"fields\",\n                    \"type\": \"collection\",\n                    \"label\": \"Form Fields\",\n                    \"spec\": []\n                }\n            ]\n        }\n    },\n    // static interface for records\n    {\n        \"condition\": \"{{!webhook.formKey}}\",\n        \"response\": {\n            \"output\": [\n                {\n                    \"name\": \"id\",\n                    \"type\": \"text\",\n                    \"label\": \"Record ID\"\n                },\n                {\n                    \"name\": \"fields\",\n                    \"type\": \"collection\",\n                    \"label\": \"Record Fields\",\n                    \"spec\": []\n                }\n            ]\n        }\n    }\n]",
+      "appVersion": 2,
+      "parameters": [],
+      "accountName": "knack",
+      "altAccountName": null,
+      "parametersJsonc": null
+    },
+    "AutoincrementFields": {
+      "api": {
+        "qs": {},
+        "url": "/objects/{{parameters.object_id}}/fields",
+        "body": {},
+        "method": "GET",
+        "headers": {},
+        "response": {
+          "error": {
+            "type": "DataError",
+            "message": "{{getErrorMessage(statusCode, body)}}"
+          },
+          "output": {
+            "label": "{{item.label}}",
+            "value": "{{item.key}}"
+          },
+          "iterate": {
+            "condition": "{{item.type === 'auto_increment'}}",
+            "container": "{{body.fields}}"
+          }
+        }
+      },
+      "rev": 3,
+      "name": "AutoincrementFields",
+      "label": "Autoincrement Fields",
+      "appName": "knack",
+      "apiJsonc": "{\n\t\"url\": \"/objects/{{parameters.object_id}}/fields\",\n\t\"method\": \"GET\",\n\t\"qs\": {},\n\t\"body\": {},\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"type\": \"DataError\",\n\t\t\t\"message\": \"{{getErrorMessage(statusCode, body)}}\"\n\t\t},\n\t\t\"iterate\": {\n            \"container\": \"{{body.fields}}\",\n            \"condition\": \"{{item.type === 'auto_increment'}}\"\n        },\n\t\t\"output\": {\n\t\t\t\"label\": \"{{item.label}}\",\n\t\t\t\"value\": \"{{item.key}}\"\n\t\t}\n\t}\n}",
+      "appVersion": 2,
+      "parameters": [
+        {
+          "name": "object_id",
+          "type": "text",
+          "label": "object_id"
+        }
+      ],
+      "accountName": "knack",
+      "altAccountName": null,
+      "parametersJsonc": "[\n\t{\n\t\t\"name\":\"object_id\",\n\t\t\"type\":\"text\",\n\t\t\"label\":\"object_id\"\n\t}\n]"
+    }
+  },
+  "flags": {},
+  "label": "Knack",
+  "theme": "#7e195c",
+  "_hooks": {
+    "knack": {
+      "api": {
+        "output": {
+          "id": "{{body.id}}",
+          "fields": "{{omit(body, 'id')}}"
+        }
+      },
+      "rev": 11,
+      "name": "knack",
+      "type": "web",
+      "flags": {},
+      "label": "Knack New Event",
+      "scope": [],
+      "attach": {
+        "qs": {
+          "key": "{{ifempty(parameters.key, parameters.object_id)}}"
+        },
+        "url": "/hooks",
+        "body": {
+          "event": "{{parameters.event}}",
+          "target_url": "{{webhook.url}}"
+        },
+        "method": "POST",
+        "response": {
+          "data": {
+            "formKey": "{{parameters.key}}",
+            "externalHookId": "{{body.id}}"
+          },
+          "error": {
+            "type": "DataError",
+            "message": "{{getErrorMessage(statusCode, body)}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "/hooks/{{webhook.externalHookId}}",
+        "method": "DELETE"
+      },
+      "update": null,
+      "aliasTo": null,
+      "appName": "knack",
+      "apiJsonc": "{\n    \"output\": {\n        \"id\": \"{{body.id}}\",\n        \"fields\": \"{{omit(body, 'id')}}\"\n    }\n}",
+      "authorId": 671322,
+      "appVersion": 2,
+      "parameters": [
+        {
+          "name": "event",
+          "type": "select",
+          "label": "Event",
+          "options": [
+            {
+              "label": "Record created",
+              "value": "record_created",
+              "nested": [
+                {
+                  "name": "object_id",
+                  "type": "select",
+                  "label": "Object",
+                  "options": "rpc://app%23knack@2/Objects",
+                  "mappable": true,
+                  "required": true
+                }
+              ]
+            },
+            {
+              "label": "Record updated",
+              "value": "record_updated",
+              "nested": [
+                {
+                  "name": "object_id",
+                  "type": "select",
+                  "label": "Object",
+                  "options": "rpc://app%23knack@2/Objects",
+                  "mappable": true,
+                  "required": true
+                }
+              ]
+            },
+            {
+              "label": "Record deleted",
+              "value": "record_deleted",
+              "nested": [
+                {
+                  "name": "object_id",
+                  "type": "select",
+                  "label": "Object",
+                  "options": "rpc://app%23knack@2/Objects",
+                  "mappable": true,
+                  "required": true
+                }
+              ]
+            },
+            {
+              "label": "Form Submitted",
+              "value": "form_submitted",
+              "nested": [
+                {
+                  "name": "key",
+                  "type": "select",
+                  "label": "Form",
+                  "options": "rpc://app%23knack@2/listForms",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "accountName": "knack",
+      "attachJsonc": "{\n    \"url\": \"/hooks\",\n    \"method\": \"POST\",\n    \"qs\": {\n        \"key\": \"{{ifempty(parameters.key, parameters.object_id)}}\"\n    },\n    \"body\": {\n        \"target_url\": \"{{webhook.url}}\",\n        \"event\": \"{{parameters.event}}\"\n    },\n    \"response\": {\n        \"error\": {\n            \"type\": \"DataError\",\n            \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n        },\n        \"data\": {\n            \"externalHookId\": \"{{body.id}}\",\n            \"formKey\": \"{{parameters.key}}\" //for interface\n        }\n    }\n}",
+      "detachJsonc": "{\n    \"url\": \"/hooks/{{webhook.externalHookId}}\",\n    \"method\": \"DELETE\"\n}",
+      "updateJsonc": null,
+      "altAccountName": null,
+      "parametersJsonc": "[\n    {\n        \"name\": \"event\",\n        \"label\": \"Event\",\n        \"type\": \"select\",\n        \"required\": true,\n        \"options\": [\n            {\n                \"label\": \"Record created\",\n                \"value\": \"record_created\",\n                \"nested\": [\n                    {\n                        \"name\": \"object_id\",\n                        \"label\": \"Object\",\n                        \"type\": \"select\",\n                        \"required\": true,\n                        \"mappable\": true,\n                        \"options\": \"rpc://Objects\"\n                    }\n                ]\n            },\n            {\n                \"label\": \"Record updated\",\n                \"value\": \"record_updated\",\n                \"nested\": [\n                    {\n                        \"name\": \"object_id\",\n                        \"label\": \"Object\",\n                        \"type\": \"select\",\n                        \"required\": true,\n                        \"mappable\": true,\n                        \"options\": \"rpc://Objects\"\n                    }\n                ]\n            },\n            {\n                \"label\": \"Record deleted\",\n                \"value\": \"record_deleted\",\n                \"nested\": [\n                    {\n                        \"name\": \"object_id\",\n                        \"label\": \"Object\",\n                        \"type\": \"select\",\n                        \"required\": true,\n                        \"mappable\": true,\n                        \"options\": \"rpc://Objects\"\n                    }\n                ]\n            },\n            {\n                \"label\": \"Form Submitted\",\n                \"value\": \"form_submitted\",\n                \"nested\": [\n                    {\n                        \"name\": \"key\",\n                        \"label\": \"Form\",\n                        \"type\": \"select\",\n                        \"options\": \"rpc://listForms\",\n                        \"required\": true\n                    }\n                ]\n            }\n        ]\n    }\n]"
+    }
+  },
+  "global": true,
+  "groups": [
+    {
+      "label": "Other",
+      "modules": [
+        "CreateRecord",
+        "DeleteRecord",
+        "GetRecord",
+        "NewEvent",
+        "SearchForRecords",
+        "UpdateRecord",
+        "UploadFile",
+        "WatchRecords",
+        "MakeAPICall"
+      ]
+    }
+  ],
+  "icon32": "\\x89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000006624b474400ff00ff00ffa0bda793000003194944415458c3c5974f88d55514c73f6f1a669c242d9d10924cc22c28235cd8c24d910b75a1966d04094a10240d42a4850b17052d12425741614d2b1174278e20a40b43632a0d4324b08532fe4fa718d3c7ccfbb8f89df1fdfacdefbef77e3ad217eee69e73cf39f7fcbd17fe67d4aa1e5027cecd06e6c4f615e00660ad564d6425ee503e1bd802bc0d3c13a461e018f03d300450d5908e94abddea6eb56139f6045fc772bb2adab10058dbc273e7aa5eacbbeca639e31a05773e093c91905507ce14f8ab79209477012b812f80f905a34680db0959b7803f27f8633da5beaebeaa4e6b199e20d6d40fd46b11d31fd4977302e7a86713f1ff4dedcfc959a61e55ff0e7903eabc5223720ade542f17049f52df087a5f18558641b5479dae6e55af96f0ec5367a40c98a61e4808bfa06e089e8104cf37ea7341bf9be0a9abef4ff2426cbca40e9bc6a8ba4bfd3a413fa21eb73d06c393930c58a28eb4393c163cc53ed050c74df7873c86e3b293aa6038562b3c06cc60721fa885ac4eeaaf0f985b568617819dc0f5ce2ab812ee00a742febbc0c9541976a94bcd5aeaa50e5d9a4243bda87ea7ae529fb65d9bb6598eddea227587faabfa6f45e5a3ea97eac2b854759fd96c288b2373aba0aefea87eacbed0ca885a5169e071e0156015b01a5808f43c40ec1bc005e020b017f809b80bb97991737b6fb8fd23f5b0fad743e6401123ea57ea2c4b7a00ea87663d7b7c0a951631ae6e33978cf93214e8a7fd1bc15865fb8d3667bb80b780defb1bb9d93d04dcec20a6a7816b25b47f8001e0529524c9dff6f7489214eaa16033305a42ef05f601eb805f5ac839412462d377cd3c586ef32d90c775f513b369f89a7a2311e38d216781badf6c76e471d6ac379404b0d909df53cfdb1c3043eacaa0a1ae303d6e3fcb5d6696d9f4bc13b42bea3b76f82a7ad1ec65b45e9d9b138abaa945967f5be0ed53b7ab3fab6b42769514290dd3ee16061c327b15e5cff4d8620e7457b4a397ac2ba6f09f328c0aab535e3540f57f413ff07c8236060c86c2a947b870a6fa6964f344728d99bd723eb7ecc1d9060ff237ac91fd091701cf9235a0d3c01fc0d894ff091f35ee01650023b7fa1882780000000049454e44ae426082",
+  "icon64": "\\x89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000006974944415478daed9b5b6c54551486bfd2d642114a8082150c14ad041f04215c448d89280121514308a2d1f84048789018638c2626c610822f1a34d1077d124140d02017f112118c20280a2255a4a00868b90828d07ba7bf0f6b979e4ee7b4e79c993343913f399964e6ecbdd6faf76d5df6c0555cc5ff1a79d9142609a010e80f0c014a9d0ea780e3c039a009202f2f3baac52ec5190dd0179806cc026e050603c54e871ae00450096c02b600c700658b88d88c77cf4849eb24d5ab6b34493a28e95549233c04763f38e3874ada1ac0f054581037013de2341e9bde0b81bb2374d1081c89d5fa380970280766476c7b02a8eaee048c04ca22b63d0254777702ca80a2886df763a743b726a00648446c7b386ee30313e039cefa4b9a2f697ceb775de018501b41af7ae02788df212a0862bcc36dc022cc99a9029e023e95d4999217b1dd3c2cfec53cc3ae74ba0e18872db53ae047e020d09811e23c237fbfa4aaa433fa2f498f49ca4b35133c3e4095c263afa401c9fd7af4e92369a1a47d1ee72a21e984a46592c6049ca1818c9f2ae9a88fa2679c22453ecaf694f479040236482af4f6e9d16794a4b5921a3b697f58d28cc8247884dd22697f17cad64a7a5952490a85f325ad8940c09b5ee53d7d3d28a932601fbf499a188904d7a897a415018535495a2e9bf2243d8b2210f06c521f25925e94742e643f5b240d0a458047e84c491743086b91b4cdcbba7be68554ba59d21cb50fa4d63a92c32221e939859905eee542492b230894a423921e777d205b8b0d21dad7499ae2da4e976d88e9e080a4e17e04f8f901c380c9e1778f4b6ddf005e010602bf03ff84685f87f9010b817781d111f568450530b5757083ce80a96e24d24142d2679266c9e2fba0b8203b396ad294efc53a259d2aadf073844a816bd264be07709f1bc130f1406f600a99cd568d068662b3b18392a9500bb46448f820a024c4fb791936be5587f2543ff811700cb8906125728962600274dc07fc08f819f83ad75a67104dd8b2ee00bf3da016588ab13638d7da47440316526f053603bb52bd9472ada92d9f371b580cdc946b6b02a209380a7c096c00be054ed2497add77b3f1ac9551c0022c9f5f46968b290120e06f6007f001f015b687b5040989bb7cc31191ef8898e388a820402e2166346285948fdcf30bd010360f10f86dcfb2b81e98eec89808f4c9a2d1c29225db81e5c017c069c85e29cd1be4f496f9ec6fc9f205cd19f4dcfcf0872c502a56ba090f87b468f32c8fe1c04ce049e0c618f96fc0a6fac7c01a6c0934a533fa9958c779402f2cf0e915a3f1602ef518ccb59d8715515749da860bb862db035ae1997625c09dc05ce05eccddccc509510ffc00ac0236620595c055e5406f798c2ec2aa3dd38007b0d128ce81d1a99070c6af0756037b08901deef45767780116e3df83adf349b45d6cb85c71163b1a97e0ea8b811d21cfc6d69a149906dc85dde8c8cfb56521b11d780238e44742bb6f9cf165c08bcef021e4dee14917cb80f9f83849a9a2c152ccdb1b7605180fb6574df4fb311501d5586dfe4a4109703ba4ce09a622e00cae309943c83d9942b9df0fa90868017667d8a05aac501ae6fd4dd8b5b94cc0f7c46a47806793d89e41e1d5c00bd88587a02800de061e05f6654007dfbb067e29b14accbb4a177b304ff13dec9e60501461d376339694791f778132026a80ef21f531e847c045ac2811a5b60fd00c7c083c0c6c030660b142180c719f0731bf7f09703e822ebb09bba45da8d957d2c60821eb79498b25f5f384ce93dcf761b04656116eeda3c085c28742f4512be991d0a1b347e87885bbe07058d25c79aa30ae9f8714beb8b9cb0d42b24e9324ed0cd8c70ab9dc41687804ce90153c3b43b3ac0c36561debfa487a3aa4f1921535cbbcca7bfa2b97b45e567ef3c377922a944ee22489f54f94baca7b5a76076060b2304ffba51108382b695cb2f29e3e4b25bde6a353a5d339fdac9147603fd9f47e47d237b2bb00af4bba436eadfab4cd97b43a02010d92a6f919e0fa2e96f492dadf63d8216942468cf711da437649a9cbbc9cdaaed6ed8940c0a58b125df45f28bb547ddc0dceb0588c4f83b05192aa23102049cf042439dfc9b936ace1d988f62a303f200a4674f582736e1258b23434e2be2e0f96312e8c4b4eba88fbae701e30368df69146f57222a03701a6b10f4e61f5be58ab3e711370037073c4b62b81bd31eb173b01f55856b621449b04b0160b7e12ddf65f631e076aa0a4d932d7f5a4fcddd74649bf4a7adef90e5939cbb3f9bfc19ed89138192ba89463717f1d7000d889adf93fc9e2ff05b33ebfd456662fc4ea0c095cdea1db4ef7abe8c6f80f1e01b4f4ef7e7eca0000000049454e44ae426082",
+  "origin": "eu1.make.com",
+  "public": true,
+  "compile": false,
+  "created": "2022-08-31T14:34:48.003694+00:00",
+  "icon128": "\\x89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda79300000e554944415478daed9d7bb0556519879fe3390738887010546eca4585121133c54c2b2f64184ede9149279dca7be9a4339653463999d3454bb2b2b434251aaf815866e8a4900aa1a828a309e205f00a88873bfb9cf3eb8ff73beec5e95cf65a7bad6fadbd59cfcc1e06d86b7fb7dffaaeeffb7e90939393939393939393939393b31351937606924612c02e403d301018090c05f6076addd75a81d78065c01bc03aa01968ada9a9ee2aaacad2b94607d81d180f9c0a7c1c180e0c021a305104cbdf026c04de06566282b8075802bc0fa81ac55055250a34fc9ec089c0f9c05860d78865dd88f508f7020f6362d804508d62a8682421a946d271929e9054507cb44afa50d2df249d2b69904b2bed62e7c0478d5f2be97c496fc7d8f01db15dd28b92ce71e9a65dfc9d9bb6469074817b4b7db154d25e952e805dd2ce4039042aff18601ad0d763f2abb039424553d1027034025701833da7fb1fdc84b092a9580104defe73806353c8c216a8fcd540c50ac03100984a7143c7179b804569173e0e2a5d0007b98f6f5e029e4ebbf07150e902d817dbd5f3cdbbc086b40b1f07152980c0f87f28e9ec66be889d15543c152900473db04f0ae936030ba0f2278050d902488bf5d841515550c90210504821dd0dc0dab40b1f17952c8066e0e514d27d1db317a80a121580dba36f90b48ffb3396df0d8cbd6f265c3f1df11cb039857413211101044ec9860137004f003f01fac67c78b202bfc3402bf00c54c70410a02eee1f54d1046b22700d30015baa5d84cddcbf2fe97d88a512e53ebe2860d64171d615d84e66f0656cc1c496b8d06215802b50237019f00dcc062f98d6f9c008e0126085a4720bb8056b941e89d6529175c430ecb87aea018cc1f6328e77f526ec6579077808582ce935a025d33d4ee04c7ea4a4bbd4bd35ce93928e2ac7a0c23d3b5ad26a8f36008b24f52f33cfb5928e9474aba477253577904eabccf0e40d49bf9074a8a45d32697b1068fc7d253d1aa232974b3a36aa08dc73fd242df028803992eac2e637504703245d2b694dc874574bfa5e9bf832238440c146856cfca008262b82ba03694ff728809f876d80403e8f943457d16d150b9266bbbace86085c46f690194b46658da44b24f5882882691e05705184c6ef25e94249ab62cac323991081cb406f49bf95d45266a1364aba4ed26e112af86a4f8dbf5dd2a452f2a7e25b3f4cd2cd9236c79c978794a63d62a080174bda1253a10a926e91345425aadb7d6faa3a9e48c54d93ac1b2f254f35b249ee7cd9842e6e5a255daf08f391381bff1049af2750b847248d51092270df394cd20709e4a33d6f481ade559eb463979ff4eaa449d2574ba9a72404d0205bee25c51249c7745738f7ff8324bd9c70654bf636f7e9283f2abe144324fd46d2260ff9916c123d56650820d4567020a1e380c909ea6c1cf047cce0b3bbc9e13acc7d2b69d6015bbba89309c09f810b81de1ef20366117519d033aa08a29c053400e761fe76493202b809f82930b08bdea015d89e705ec0ec0077b00272f9a973f5711f7034fe2d94a6029f0be427145104f049e0b39e0ad707db52be13f84427856c065ef590978fccc003626c047e045c8f1d7ca5c16ed8d67aa417b26401042afecbaee0bea80526017703a701b56d7909ec8fbfeb211f6bdbd5c361c00ce00aac11d2e433c021511e0cdb030c003e955221f703fe005c0bb45f2abe40b2c34081622f530b9c02ccc4e641b19fa846a03f7016841f06c20a601c1659232dfa0157027f020e0cfcfb2bc09a84d36e057a01dfc226a8fba5580f1d710416fc221461057008362ea7490db60ab90f38dd95a1ed5838299ab1a013d7033fc6ef10582a070027847da8a4ee2bd0adf8f4beed8ed1c0add80cf8566c1e303ca1b4eab0861f4436bafccef27810587b956a3f10a63035a46387df15fdb055c278a06782e9d493de2c3f0c476171914a365a0d3304d4027ba55dc22e0a9e868f60d6f8181613a964c2f400cd5804ad2c92617b29aff4c2e62a2553520f10184f56a65dc29c2ea9c336ea4a5e0e865d05548d474c1573142136a6c20a6031e61b97935d461162ae164500f3d22e614e97ec89ad8a4a22ac00b602b75345ae515584b089fa7b84085e116af6ec2616bd813bb083999cf429609b600bb003b3a5c07f29d199248a00c0022fdf43c835674e6cb462710a17611e448fb9bf6f8370ee64a1d7cf01111c0d4cc70e887292a7157bd31f07e6038f60ceb1cd10dd8730d25301118c01aec32273d7a75d4355888026cc23f961e041ec4e8302c4e3381af917da1d104d012ec6b6637dc7ecab3684d936bc00fc15ebde9f27a130f5e5fb6717853014381338173ba94bf270a61a2900ab812731e3d2453857f4243d8363fb6527841a600fe024cc746c02fe2c642b950dc0426016d6c5bf8db36ef2e1121e7b0a811ea10ff079cc68e30bd831657e6863b460e72ab3b159fc7cdcde8aef380089a6a66220847158af3005b365cfaa5145d26cc1c6f33b817f62b3f8542fa6f292726078180a9c8c992e7d9a6c9a56c55e7ce003e0df9815f15cdc794a16a27e78cd416078e889ed239c810d13c3a8ec90759df10e36a1bb177896081b3549935a4e9c186ab121e1646c0531161b32b25343e5f117e03bd8786fdd60861a1f3250d1815e612fcc98e14c2cc2d89e54fe5ca18005965c8cf911cc2343dd3f644000419c187a0243307fbb2bf017012c69366313c019c03fb078c3a95f469999372cd013f4c07a82f154d7bca037e6bc3101eb15660373243d458a7383d47b0015034b0ec65cae4e030e279d8b207cb31edbea9d8d6d02ad01bf4248450081b7bd01f368390bf8223bef1ec176ec1c7f167017e687d85c913b815d1168f83d802381af609e3dfd7de725a3b4625bc10f62c61d0b49f8aee2c42b3dd0e8f5c0c1d89b7e02e6ef5f2d13bcb81136697c1cb81f9883997a65ef34b0d31214a3670cc7fcd74fc276ff42392ee450c08687d958afb00c28c42584580510d8f21d824de4be845dea38989d736c8f9356ac17b80fb3c47a05caef11e2b407e88f45be9e8475f1fb9277f14920ec10e95acc38b7ac48e2e59884d5606bdb83b1717d2216b4213ffff74313b6cdfc7bca1041c94f051abd3fe6857a32162ee640ec542f9fc5fba7896210ad48c341b74f040e6d0ec0c6f45331f7a37ea53c9f9338cb30a39b25490a60221697677029cfe478e70eec36966d614550ea5efb20f7c91b3f9b9c48c261e21613e3654939b1b33b66849b5898b875e46ee159e72022440b2d55006bb1c9464e7619458271020bd8e58f39d965203032ec43dd0a2030ab7c0e3f51b973a2514b84edf63016372b7027523b312dd850b82ded8cc4451801bc8ef9ab6599f52e9f49d102fcd07db2f632b4bafc85228c00b693ed79c04ae0722c704552f4c0965cd7613e0d73697789448abc87199a86226c9cc0f9840843ea91a731eba23bb053c82419edfe9c87ddd6311dd89876056043d3eab00f85b5ba5d8a6d0a658566cccc7a0a665c594bf257d98ca1e8fabe0eb80abb197d45ca75b1820eee34ea8eb002d88459a6841e6b126003769fd0c514bbbedd493ea0f548ece28cb69e713b26c233b0281e69d4cd162c9844683f83920510f8e159386b94147913b81498066c08e46d00268224e949c0d02590f662ccbaf966fc2f975fc286c1d04471bc5805fc8ef4263ff330f7b1dbf97fd3e9bd317b852469a45de8f89a9a9a3621ac05be8d196af83a3b69056e23e2aa24940002953d138b4be79302d6e867b7a5dd41775743f227960dd8ae5b67f5b309b8d1e5f3790ff5b20478a093fae896a8ae57ef033fc32c527cb01e9b6c7d13581978e3da3384e48d4feb70f7157574f2e6f2d58a0580381d73f448aab7dc8a89edcda83f105a00818a7f08b885e4273dcf6381a77e096ceca8e1030d310c3f360be3e8a2ee02025d0e5ce0ea29893b8d1ec04cc5fdfb15ba6bdb1a25dd9dd0bdb80549b3248d56697708d748baddd39dbd7f97545fcad9bbcb5b1f49974b5a13631e96cb2ef0f67b7974bb822169a4a44763aee0f5927e201358a9b788f796f4af841abc3d8f4bdab5d48a77f9db45d26449afc6907e93a4b34ba91b5f22d84fd25cd9bdf6e5f292a43324d585ace06131556e292c9334344ce507ea6aa2a4a565a4bd4dd27725d58649df8708864abad1a9330adb25cd9034462195edbe7f80a4773c09e0434947846d80405d8d95345b36cc85a120e9570ad1fbf81642bda42992162a5c6fb04cd20592768b523097f6f192b67a12408ba473cac82b92fa49fa75081114dcf723d5914f11b475c7974a7a4ad2a60ec4d0ea0ab44ad274d9db1b793c73cf4e96f522be98564e43b83cf7957493ac5bef8acdb2deb56fdc8d1feb9ab96d29226915764a36035b328dc3dcc18760c6144bb160c8cf5266308440858cc76fc4f29ab6f4233964d835f44dd8cee16bc0d598b34d7bd600d7604bc9ad69c7148a848ab3e07ab9c95d5c4a76bf55275b32fae48638cae17ea356d2d725bdd52e8d259226b9ba4bbb19b3898afb110b3d0be07ec53413d78e2b8465b2e171a6a4fde3105957548bcf7e7f6c78f14923763258f6055a6e3800bb05642a6673f020d09474975f2d02188d3ba3f7c80897662c37a8051afa19f7f14245c7e10b748d07e33facdc40b2779b7a682a5a008e1aec1633dff422c415ad59a51a0450471e782a32d52080462c6e816fb6e162f85532d52080b1c0fe29a4fb16e95b02974d3508603cc99b8277c40bd8458e154dc50a20b00248da08b43316921dafa0c854ac001c0dd819836f9663fe1199b9f8212a952e807db0e094be9949fabe11b1500d0248da11a43d8f62277315fff643e50bc0871f409065c09598734c5550e9025882bd8daf90fc846c01f0359c736c35bcfd158f8a76067b4b3a4fd26332eb9938d928e9364923923e9acd8948e03cbd51d22992ee92b4d29dab47b1546e91f481a439924e94d450ad0d5f55fd58a091ea3137ee03b18b2a0ec7b68c07623104feef51ccc57a2d669e753f768dfb5252bad4d917d5592a7610431dd6f0fdb12bdb46613b870dd81c680be6ebf80c3697588bc51ea8da460f52fd256c47675df9ced0d83939393939393939393900fc0f18ae54a0b03b25f50000000049454e44ae426082",
+  "icon256": "\\x89504e470d0a1a0a0000000d49484452000001000000010008060000005c72a86600000006624b474400ff00ff00ffa0bda79300001d2a4944415478daed9d77945e55b9879f2f249006494c99104293455ba082e8854b134368094d082282284ab920c4c6d56bb962f75e1b8a58105151aa14c1429122a0742c5745440d35844c420ac9909064e6dbf78fdff9989dc9f4f9cedefb9cf33e6bcd32ce5accd9fb9cb37fe7ddef7e0b18866118866118866118866118866118866118866118866118866118866118866118866118866118869136b5d80330f2c739d7f8e72860023d3f7707accc7ea8d5ecf5283bf6844b46b6d8870193818d803d8037a0c5bd33b067f6fbee68071e03fe0a2c03ee049e055667ffdf44a164d8d32c38de82df06381218078c050ecbfebd59f63350eac052600df0047037128835c0cd48243a4c108a8d3dbd02922dfae1c04460776006f016605b7afeba378b3af01cf00be0e7c05fc8b60d2606c5c39e5881f0f6f25b0273d1a29fcce0bef0cd60055afc7f042e027e03bc6442501cec4915806ce1d780d70047034701bb21d33f15da90cfe041e001e061cc2a481e7b3a89932dfe89c0c9c0fbd0d73fa585bfc1909155700f70311284c540ddc4203dec89248a67ee6f0b7c0539f886c71ed70059092c00ae04ae40270a2f9b10a4833d8904f116ff91c0c7813752ec67d5013c0fdc055c0adc01381382f8d813480c6ff1cf012e045a628fa9c9b402ef017e051657109b94f79295a3028b9f6c4e1f40310a46644c0012c15bfc4750dec5df604714ac6444c604202db6023e46b9173f288a7045ec4118260049907dfdc7015f02f68a3d9e9c590b5c45967064c4c50420329ee97f348aec2b3b8b515e81390013c004200da60227011bc71e48001cb02ef6200c61021091eceb3f1af85fe0c0d8e331aa8709407ca60307519d988c3528a3d04800138048787bff1380cd638f2720b7a2602023014c00e2b2157062ec4104a40db8054b0c4a061380b81c8a927daac253283bd048041380b86c4ef132fc86c24dc0a2d883303a31018880b7ff1f137b2c81590576fe9f122600f1988ad27d0d231a2600f1184fb532e256020fc51e84b13e2600f1380015f4ac0a0b51f15023214c00e2d142fe25bc53e22624024642980018a1b0ce420962026084602df074ec41181b620260846009706fec41181b62026084a0832c06c0480b13807854694174a03a0046629800c4e31e641a5781fb2a34d7426102108ff9c0ead88308c4df80357602901e2600f170c8342e3b2b813fc41e84d13d85cf44cb126b36055e95fd6a29c5e84afb02f05b60ebd803c9991781bfc41e84d13d85b600b2c53f05f5a67f20fbb90898e265dc2547264e6b817fc51e4b001ec77a00244b212d806c71d7804380b9d9ff36c4ec6dd9bcce76ce2d2a80255076ee43568091208513806cf14f044e063e8cd26a7d6aa8b71e64220016821a910eb0fb9f2a851100efabbf0bf029e0a85ec6df10819148241e77cea5d88e3add7d4af3a882a3b3b0144200b2c53f162dfacf035bd2b7ffa206cc0676023e0a5ce79c4bed4b54f660a0e5680b9024de47e555c07ec0eef45cb27c1d7027ea6bd896d87b3468921600cf913715f81aaaa03390325ac380ed816fa1077d6d6222f022d04ee2cf6108b42127603264efd4705491f920740a3313d899de3b16d7810f01bf031e74ce3d80e21b1661558e9b8f730ee75ccd39b79b73ee16e75cdd0d8d85ceb9539d739ba5704290cd6f6fe7dc9221ce2b651e75ceb52474bf8739e75eed9cfb9273ee49e7dcda41ceabee9c5bee9cfb8773ee24e7dc94ec6fc79e6639c81e16ceb9e39c734f3be73a9af442ae76ce5d993db014e6b8a573eed9b06b32285fcbe619fb3ed79c737b38e7beec9c9be79c6b6fe21c5738e71e77ce7dd639b755ecf9161ed7b9f8e7387db59b4ddd39f753175904b2394e74ce3d9cc31c53e1bc04eef178e7dc99ceb967dcd0adc8dee870ce3de09c3bc6393726e6bc0742528140aed329733c70212a9bd56c1a270417123f6068097047cc01e44c941300d7f915de1a05867d1d398ef3dca80f03f6047e0c5c0c4c7505b006921100ef46cd012e209fc5dfa02102df01a6c578489ed3e84fc0cbc107903fcb91c32c28d9b31c051c0bdc889e73c8b6eb63d007ec6ae0706f4c464fb8fccdfe9ea83be76e70cebdde699f1863de65f5033ceb9cdb22d43d759def508b73ee52a7bd796c163abdd3c98a40740bc0bb3147939fd9df133574b4d8f852c47850656d95bd8e40814eae73eb380bb81c38092588c5a605bdd3b1dead3e897afeecdd901d80f308bbf81bd480e9c03791a978b573aeddce7587cc1d04e80398bd43638023d05e3fc63bd41b0d11a801d7b8b4e250e25b0068f15d00bc2ef2385a806fa048c3f129aa75c1980fe42aa4ae331bf4e2ec27b5c5dfa0057d608ef5c69d04d104c075e6f17f1965f3a5208b135176e1e78050012c55290cd234b23d750d380cf80972ba8d1dda5fcd9d16f471d9b9318714882200dee4df8ae2fb536224701652ec29011c38cb2967c59c5c44cd33f98f077e081c4c1a966c7fd801f82a1b66b04623e68d9b85147154ec9bd00d3564ae5d8ee2c5f33c215885124ccac44a9adc07d013e2a9a46ff2f7440d38147877634eb1092e00d9a42701ef25ed07380c2589fc849cf66edefeb86c59812b80479bf5c7bcfb7e383a5f2f82c9df1335b4cd4ce26420a80078933d13eddf8a40c38bfb5660e39c1ed8adc0e2d8136d220e1d030efd0f7506f61c0f7c1fd89fe298fc3dd1824e2cf68d3d901837725fe00cd270faf5971614527a01f9380717016b624fb289fc1f4d280396dde716e0bb14d3e4ef8d2d8073810931ad806002e0396f3e984dbe688c074ec7730e369155c053b127d8441e660845333c2fff81c025a413d8d36c66032734e61c83d016c00ce4542b2a8d1c82ef023bb9e6e5802f4325c22b8feb2cd8711c72c2cea6f8267f4f0c47e216ed8318e4c67a5fff5329aef3a6410d1d5dde8cf6a51b0d4504bcaf6499b600839a8b67f27f05f836e532f97b622fe00bc0e818564048659d91fd948161c036c827f04532bf406c8f6e222c464ecd7ee399fc87a2b3fd7350505615a8a13c98fd635c3c7701f0befea751fcaf7f57262147cec5a8f6e05044a02cd1806b18400e8077bf8e057e844e87ca6af2f7c466d9fc8787fe8884bad13b2053a78c34aa0f5f8b947cb022f047144053195c678f878fa0c2ad5530f97be258b2a3f1902290ab00781399034c0e36abf00c035e8b0a8c7c8cc19d123c4a455a6879dba52968afffb9ecdf556602f03e605cc88b86b00076263beaa80053d1cb7c21032f09152c7f3e673a7a9b87e7e59f0d5c813e0e652d8b3e507621709e4008013802d836e4a422d3c823186849a80ee0a5d8836f02f7a15a871b90dd87c9c8717a293ae7afda7ebf37a6a244b460be80dc6ebe37816941669216c39057f762e03d407f7a112c047e117be04de071ba1c037631f9bf851a6c54c5cb3f508e01760c75b1bcd5777394f55755a6a2c8c1ab80437ada1278b100cb620fb85934e6d4a55cd715c83a2a52187868a6a3ed5110f21680bd2966d86f331985bcbbdfa7efacc23be8c17c2e225d8ef87e8099fcfd656b2048a7a15c1e8637f0d701a3739f4531988eccdfd3e9794b301f581d7ba0cdc08beafb0cb282aa7cc437506601db85b8509e6a3c0e590046278dba839700db953c7ab05107ef13245401a7206c039c42be8568807c05602c019d190562249d516f8710e02107641dd08ada6cff001df1d97e7f70cc2180d564fbb138d4505d841f029fa4d34fd24eb183811c4a90ba11f93d6cf10f9e51c046795f244f01b087df379b2301b816c54bb432c0449ac4d8183880fcfbf0558109c01bf3be489e02b00d4a02327a6718ca93b818780bb0807244041a43630c990f2dcf2d629e02f07a5445c7e81f8dd257ef8e3d1023198e2467076a9e023006330307ca14943b61f7cd006da5f6c9f302790a40c896cc8651464603bbe679813c05a0c8de6cc3a804790a4090eeb0865172a6936376609e02b004589be3df378c2a702039164bb14020c3489bcd80adf2fae3790a80b5bd368ca133117540ce251e20ef2dc07d39fe7dc3a80a33516460d3c94500b262106b507518c33086c6b6e494569fb70fe07e4a54e0c2302231822259001e77023fcbf91a8651765ac8a9b45e6e02906d03da513cc0cb795dc7302ac2fec0d8663b02431c03de8239030d63a8ac05eacdfea3210460392a0dd516e05a8651365e06e6a1a2b2abbc0ad24d21f7ac33af39e81528bdd1308cde5906fc122dfca7d0367a01502f9c00c02b22300bd589b3eab086b13e75b4e85f04ee428ef3db8035cd5ef05d092900002702176195820c03b42d5e005c0fdc003c0d2c05d6e6bdf01b042b3c9189c068d441f71d21af6d1809b112780c1d913f02dc8bb2669b6edef787a057f4fac35d88958c36aa41c3bc6f438bfd4a742ab60c703116bd4ff0ab7b1d623f892c81a0fdd00d2310ab90797f03aafafc0c3a115b1d7bd1fb44194926029ba04ea8e7638e41a31c74a0d0f70781cb81dfa2aecf51ccfbfe106d545ed7d80351bbe883b1fa0446f170a8fcddddc03dc04da8c7e3ca5417bd4ff4116642301538036d09b621404714c3180275e4ad7f04ede7ef017e0fb41561d1fb2431da4c0486a1c5ff1ee054722c83641883a4031dd55d85f6f5ff248b702ddac26f90d4a8bb6c0b0e064e42edb30c2326cf039701cf01bf029e20e17dfd404872069e101c8a44605f64118c8c3d36a31274008b9143ef56e07694d416fdd8aed9243d9b4c0846a263c36390b3700bcc5968e4431d1ddd5d077c1b1ddbbd4049bef6dd518859793e825d9155b02fda26e45226c9a81ccb9069ff67e4c5ff07b0aeac8bdea77033ccc4605360367036b03daa9c6a2707c64058813cf90fa2fd7d90e49bd428e46cbde4a2f1a873cae9a8b5f6346c7b60f44e1bf077e07f5068ee8b24169d1792c2cf3a138311c00ec061c07ec00c606cecb119c950079e4469b6bfcb7e965242a7de4029d5ec3331188bfc03a7037ba0edc1f0d86333a2b01239f5ae42a1b9f328b1436f3094f24e787e82a9e8e4e0f0ecdfe627a8066b5064def9281e7f31b6f0bba5d477c43b469c8e9c86d35151120b2e2a270b5084deef819bd1c22f6c945e082a7367ba04179d06ec85828bcc2a28366b504cfeedd9cfbdd8debedf54ee2e79454ab740c145b381ddb1326545a31dc5e57f0df8290ad8b1affd00a9ecddf28e1227006f465b83fd90d3d08e12d3e72ee04cd47fd2bef883c4ee1aeb5905db0327a398822db1ed41ca2c43defdf3815614d86316c000b1bbe59109c17094967c3412812380ad303148917664fa3f8a1ad13e848a6dbe6442d03fec2ef580977ff06a54bff0cdc028b465b02d429ab401bf017e849c8176fcd7077667fac00b2eda0c1d239e819c87e3638fcde8919750479d6b81ab919fc084a01bec8e0c804c0c3602de894a9b8f8a3d26a357ea4808ae4716c1ed14b06c579ed89de8075e0cc1447452f00ee41bb010e3e2d0d81e14a25a6f28aa3dfb3ee892757814700eb0131633506456a1aabd3701bfa6a4957efa4b3567dd075e08f116a8a3f1112872d04cfe72b11075eab997c82dba62519d99f6032f1e601a964454251a4d3a2f4582f034151182f2cfb00f3c337f1a7002b037f0ef589e4015e94075036e448d3e4a1f5350de99f5819732bc39ca07380a39f8ec8cdf804ea7e1f7808751c05147d9c4a05cb3e9075e5fc2fd514dc13d8149d8d7dee89e4651911f53c2ed413966d1075da2fa8e0276435ffd09b1c76614067f7b703f2a22baa2e84250ecd1f78217b4331945f1bd1d3519d906fbda1b436315da1e7c176d0f9600ed451483e28db80fbcaffdd6c8a9f74eb4d79f8c05ee18cd6505ca37b81e89c153146c7b509c91f68217a937053804782d32f5b7c5bef646fe74a0c5ff73144f5098ed41fa23ec01cfc49f84a2f30e4465c177c57a081af158858e0f2f43e5c75b49787b90e6a87ac10bd6d916380e381e6801c615713e46695985220daf4765cb9e87f40a96a4359a1ee8b2e80f4561b9fb62c77746fad491257011ea3ff8624a2290ce48bae055e7998c22f34e04f6c116bd514c56a356e35f46c788492420c51f8187e7c19f8cbef287013391896fadbe8c32b000783f700dc4df124417806e9c7987a17a7cd3d0f19d61948d5614857a2dc415816857f64a6d6d8f4a6c1d8739f38cea90840804bbaa67de4f410ebc5d51f3cebd805761493846f5882e02b95ed173e44dca7ede8a8eeda6617b7ac3007802d59d78ac3402e065dc1d84926e66a2fdbc79f00d6343ae41d5a697851681a65dad4b0cfe4128b7de32ee0ca36fda810fa32e4741b702cd1680d9c03751fdfc11c1666118c5671e3a01fb674801688ae32d5bfc238039285acf16bf610c8ced80cf0063bc3275b9d34ccffb5860876023378cf2f12654893a18cd148065a890a2611883637354b8865056405304c0dbb33c84fab2198631384e44a5eb82d0ece09b8791256018c6e0d80e35a2098245df19465ad408d879bad902b00a554e350c63f0bc061815c20fd06c015806dc93fba80da3dcec89f26372a76902e03902578418b861949811048aa0cdc3077013ca72320c6370b400b3425c280f01780a7824c4e00da3c4046945df5401c8b6016de838d0308cc4c9eb18b023f6c40cc3e89bbc04e041e0c5d893330ca377f21280bfa27eea8671276a99558f3d106343f21280565403dd30ee06de055c8dfc434642345d003247601d3548b4c4a0a1b100759d2df2766a240a103b0d3815781cf311f58775212e92672e8025060d8d56602ef0796065ecc10c811d81d1e863f053d4daedf282cf296f96027785b8509e02d086d4de181875144c7522701d2ab4323cf6a086c06ea8d703b55acda13891ff004e01fe84f906ba631981726af214801781db434ca24438b4e84f01eec87e77006a95565436c97e8057b688abb3791e816ae287ab81550c6e2550346d2e02e0e505fc32d4444ac042e013a851c422ef1eb650ec52ea135173d757a8d56a8d77643edae67c05581c7ba009b108a887280e9a773d8027519520a3673a507388b9c017587ff1978191f4502b329b672bf05fc07bb3fb600e425813ea42b90940f6705f42a6ac9978ddd330f96766fffb8af5e4e58297a168cbd82e737a05efd4c8bf0f557e5f1602b784ba588897eb57c073a1265420d60197a02fff93b55aad3b936f1cb04fec813681c3504fc86ec9b604756431ce45e5b117c61e74246e07fe16ea622104e059e4d5363a59089c87bac1b4f662f28f45c76845671cfde815e16d093e857c21558b1978197d30d786da06e62a00d924d6005fa7ba8ade95a7d1cbfd4522f4824b1def7e5c0f1c42b5b6048b80df85bc60a8fde5339833d0a198f8b7a197bb3f3de01aadd38b4e8d01748bcab6040e89e539a879667bec4904e036029f86e42e009e33f042aa6b052c07be079c0e3c50abd55c3fbffcbba228baa2331ed87da0ff51768f160167011fa5dc47ca4f0117006b0ad71bb09fdc065c1cf07aa9d08a22dfe6d2fb7ebfcc8c017619cc7f98ddaf252856e01ce4282c63f4e0b5c09f435f348800782ffda5a80b6a1570a82ec2292813aedf8e9d90cd210332e86026efbe5d071c4cf9fc024bd00732686b70087fc63c0ff816e5dfcf35cef7df06dc0c837eb065eab23c01062f6ede51e1bf902570015a3865e07254372138c104a08b15705b8cc90662213ac73e1b78ca0b7b1d2835b2249a92300b983ad43fe21d159e8ba2079fa1d85b827948ccda636c0f835a00d904972287601963bf5bd1d7e9530c7dbfbf410c7dc11945932c9aecbeb6a3f4e223509c4911b704abd17170b46d71ac30d39b299743b08ec237df459790de21b0094a042a0b9368625463767f1d729c9d4a76b45a306e4522167cefdf20789e79ad56c36923f80d607b600e32778bca12e032a4e455f5f2f787913439aad1cb9b6805de9ffdfa188af13e3d077c155819f39d89620178e7bbefa733efbd88b4a233ea7369fee2df9240cd218a8e975a7c16f0df1423dee4fb048efaeb8ed899660b808f23474e91a823e17a3759945a0e2a3e03f9014a471ec79cde47e5f328e6623e69fa051c7a67beed8d3b1ad104c09bf843c087284e94571b3ad77f3b99f329a78758a623c006b936bcf49ec3b5c051c08da427024fa08f5e12751fa2d69acbfc01a007360c9d0ea45cfe6a11f041e006e0a53c1e60763f46005bc79e6c0e34b20273ab78db700e3ae7fe009c81acb563624f3ca3158534ff33f6401ac4de027455ed0f90a6255047517da7a1a08d5c16bfc764e04db1279d03af25506c83b72538179d10c4b604dad0f1f035def8a29344b5d9cc12a8a3c5b516a50f4f8b3dae8c3654dbf0c3a8b64188875703368e3df11c6821607253f65e3d099c899ee33164d58902b30ebdd33f6a8c2b15a25b000dba580227a0d0c898115e7594a1d56868f1ec10a2fa06ca088a71943550c6a2a3df607896c09968fb16ba659d4316c8f9c0cb292d7e48480060bde08e7b8093904737c6914ee3a11d8a0235f236f9bbb20bb0598479e7cd38e0df425f347b76ab5009b69351d056882d81431fb4b9c0d2d4163f242600b05ec9e8e7814fa298fac750b9a4bc69d4a5fb340ae97dbc875a7d79b33bb069e88b06623c84cf78f492896e46c7b779671436167fd732ef49919c0034f06ed8cf50b5d8ff245f07613bf2eecf023e0b2c8cf8d08adc07a02ff621e7e3c0def03e2eef25bfa6248558fc908813b0271a25a39d730b501af13c143a3c13d882e62c948687ff3274bebf24e5075602b6468ec0687d2333e7e022b440a1b9e1e88559fc90b80034f0ce766f4611785b211fc1db91100cc6b3bc127d092e45ded905deb5a2e099c5650c024a8a2e22e0d009c150d7c34bc877742e0558fc50504f73b65086a1fcf2fd819d50f799bd51d2c924d6b70e3a50fa713bf047efe7feecf731f6f93dcd6b1c7a8966c41e4f4ecc47c54e9f4be89e4f44273d1fa497fe057dd08a8e8aaf23bcd378d01463947d903dc451686f391135a2188d94bd8694f997a861e90a74269cd479ac378f5d51738832a502fbcc47750ee6a772ff3dcbeb38e09b0cecded7b3399d4b62413efda1105b80bef03aceae46a6fc5f628f6908cca2bc8b1fb4bd198f164d127821e9d764bffa3afd0b4473c8717c1ef068e36f1589644f012a4cd95380479060a9b32e8168ef001ea6f740b4e5a8d4fb59c05f0750ea3d294c0012c13343cb7afedf601cca09480e2f10ed4ee414ecee98b08ed2d74b51eadd04202d260107c41e44ce6cc4e01d6db9e305a2cd47c160be08344cfed9284234580fbfbc28850fa04494ad0e604f34ce7593dd337bc7847381bf23dfcc6dc83f50e8afbe8f09405a6c4235acb22dd0bb97747f884c0416a234de0b50f0524759163f54e3652b123349d83c6e22079076e1975768e410d46ab5176ab55aa9163f98002481e700dc8e6a5865a390b56344c604201da6a07d6615d88c41360b359a8b09403a340264aac0a60ca25db8d17c4c00d2613ae50f02f22973ca7361300148870329691f00235d4c00d2c152808de098001846853101888c57dba00ae7ff46629800a4c1e6c021b10711905564e9b3465c4c00d2603f141e5b1596018fc41e84610210152f02704754caac2a3c81aa331991310188cf18608fd88308ccdd44ac0a6c746202109ff1542b2aee650a5a3eab8c980018a17901b837f6200c61026084e649b2aacc467c4c00e2f37aaa9304d4862aead8fe3f114c0022e1f5327827717ad6c7e037c0ad60fbff54300188cb14d425a70aac426dd80ad335a70a9800c4e5d5e818b00adc0edc127b10c6fa9800c4650faab1ff6f052ec2befec9610210972a7cfd5b5107de9b620fc4d8101300236fbe839a6b98e32f41aa508136653a620f20471c5af8df015bfca96216405cee02fe45ef4d288bc85ad43aeb6c60912dfe74b1271309af10c88ec0e1c09ea861c6048a2dcc0b81cf005702cb6df1a78d3d9d04c8c46034b02b701c7034ea4f3f3af6d8064007b2663e0e5c0766f617017b4209e159052da849c84750b5a0d42305db805f001f039e069c2dfe62604f2941bad409dc0ff5a27f236aa891126dc88f71110af3b573fe82614f2b61bc8a419b02fb201fc16c606be289411d580adc0f5c02dc01b4d9c22f26f6d40a8267154c02f606764375048f24ff8ac21dc073c0afd13eff36e01fd8c22f3cf6f40a4a2608235032d14c6006b02dfa428f430d3807cb6af49507e5efdf045c033c03acb5455f1eec49161c6f9b3001851677006f405b8619e8340114f4d5f871741e353ab4e03b50a1cedb803fa0ba7ded288b6f199857bf8cd8132d219928d450afc14d90a530d6fbe9c87e4ff6eff9c04a601db018a8db62370cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3300cc3488fff076865961a4fd213100000000049454e44ae426082",
+  "icon512": "\\x89504e470d0a1a0a0000000d4948445200000200000002000806000000f478d4fa00000006624b474400ff00ff00ffa0bda79300001e344944415478daedddbf8e1d49961fe05f095df4d6291a729784809da2b9cebec0184bee1b2cd89807d0000b96390fd18d85f4020b12f308ec31e4ca584090c9560302cb5ea3e9c86b1a25e3f24e158bf5e7fec9cc9311f17d00d183194cf3dc7b23334e9e1311990000c3394992abababea380080059d98fc01603cffa93a00006079120000189004000006240100800149000060401200001890040000062401008001490000604012000018900400000624010080014900006040120000189004000006240100800149000060401200001890040000062401008001490000604012000018900400000624010080014900006040120000189004000006240180fe9c26394ff236c9d5917fde2679f3e5df0774e4e4eaeaaa3a06e0381517f145921fab3f387038150068c759928ff9f629bdc20f77c4f1a6fa0b0276a70200eb739ae49724cfaa0399d0ab243f5507015c9300c0baf47e414a046025240050ef63fa7adadfc56592e7d541c0c8ac0180e5bdccd7bdf3d126ff7cf9cc6b58cb00c3faae3a00188c89ee7edbefe6a43a1018810a002c63bb279fc7a908c0022400309f9ba5fed7d5c134e8f6814467d501414f2c028479b8b0e6a34500135001806929f5cf6f5b1550118023a800c034ce92fc5a1dc4c05405604f2a0070bcf398fcab6dab02a7d581402b2400709c37493e5407c15ffd96eb4583c003b400e0702e9ef573e220dc4302008771e1b4c51a01b8450b00f667f26f8fdf0c6e9100c07e4c24ed7a591d00ac891600eccec5d23ead00f84205007663f207ba220180c799fc81ee4800e0616faa030098833500703fc7fbf6e545929fab8380b59000c0fd5c1c7db100106ed00280bb99fcfb72511d00ac8d0400bea5efdf9fff5e1d00ac8d16007ccb45d11fe57fb8450500be765e1d00c0125400e06b2e883ea900c02d2a0070cde40f0c4302001b1fab0300589216006cb810faa60500b7a80000c0802400e0e9bf77afaa038035d202000940ef94ffe10e2a008ccee40f0c490200f4ccd33fdc4302c0c8de56070050c51a004666f0f7ed32c9f3ea2060ad24008ccce0efdb93249fab8380b59200303283bf6ffafff0006b00006040120000189004805129ff0343930000c0802400408f2eab0380b5930030a2f3ea0098dddf5507006b270160447faa0e80d9d9ff0f8f700e002332e8fbe70c0078840a00d09b17d501400b5400189141df374fffb00315000018900400000624010080014900809e5c540700ad9000003df94b7500d00abb00189141df2f3b0060472a000030200900000c480200000392003022af8a058627016044ffad3a0066f1ae3a0068895d008ce834c96fd54130b9a7493e550701ad9000302a03bf3fb600c21eb4000060401200a007faffb0270900d0833f570700ad9100302a4f8c7df9a93a00688d4580eb74f6e59f5634cfcbe0ef870580b0a7efaa03e02bf74d486e6e004c4a0b603dae0efcdf6074afaa0380166901acc3ae3f824ac0b40cfe3e3c49f2b93a08688d04a0d6215fbe24603a067f1f5c1370002d803a874e3e262d008e260158dedb1c3f894b0200388a5d00cb9a72e2be4af222c9cfd51f0a80f6a8002ce365e6796aff90e4bcfac301d01e1580f9cd5daeff90e432c9f3ea0fdaa0cb24cfaa83e0284e748403a900cce72ccbf5ea9f2df877c19afc4b75009dd9deb78efdf3a6fa83f038db00e751f9a5da12b5bb8f5101689df13e8db7495ecff4eff61bad940ac0f4aa33aaeabfbf25ffb33a00287096ebdd48db3f734dfeb9f5f7bccdf5bb4e28260198ce5c0bfd0e7195e4b43a8806fcefea006041db7bd4af9977c27fc8eb2f7fff3621709f2a240198c6cb24efab83b8e5b72f7171bfbf5407c0512eab0368c855d6778f4a36f729158122d6001caf852f500fee6ea7d9dc80689373301e769ecd2ea1963c8dd7a02f4605e0382d4cfe2dc5b9342f90699bc9ff6e6fb2b9e65b9bfc93ebf680aac00254000ed7e217a712f0ad167f47368ce76ff5349e2f92fc581d44cf54000ed3ea45d66adc7372900c3dd83ef5f7e4875828382b1580fdf5f0857972ba76964dd991f618c71b3ddc9376e1f79e980ac0ee963cd96f6ebd7c8e29587044ab7aba27ed62a4cfba0809c0ee7a7b4ab4d086968ddeba799bfeee49bbb88aedcd93d102d84dcf5f926d37eb3cc781873dc9b8bb387abe1fed434be0481280c78df005b990c6f89d7b32e298f5ee8a6f8d380e26a305f0b05126056fef8275bb8ac9ff2ea3dca367a10270bf51bf985133ea517fef568d324e5b3ccdafc228e36152df5507b052234f06577131c11a8c7c1fda97fbd601b400bef5b63a801570e361cd2eaa0358806b707fbeb33d69017c4db9ed6b23bd6cc585d08ede9ff48cc5e38cbc43642f2a00d75ec6e47fdb87d8730b4bb98ac97f0adef0b92315800dc7c13ece53176bd1e35834fea6d7e33899940ac086c9ff71b609c2f4463bce77491fab03583b150017dfbe7acdaa8d8376f432068db9f98db48e696fa35700f4b7f7d7eb4d6bf4b3e55956afd7d1da58c7f480d12b00437ff823f5f214b6e57d00ed687decb9ef2caff531338b912b002ec2e35c65b36db217ffa33a0076d272a5c62aff3ad603dc61d404c045388d0fe9e7c2b26fb80d7fae0ee040ee39b5bc47e10e232600a7d50174e659dcdc58cebf5707b0a797717dac85dfe19611d7000cf78117d47a9fcdd858bf96c698f1b44e2d8da1598d5601e8a55cbd56addff05e550740375abf167ae6b7f962a404e02cfa404b68f9e2faa93a00bad0f235300a2f7dcb580980d3fe9673151718e3f918937f2b5e5707b006a3ac01781b3f7895d6fa6d435c108d7a9ae4537510f7306edad4dafd6952a354004cfe75dc1899caffab0ee01ec678bb86ae548e9000b838ebb5f41b5c5407c0bdd6765683927ffb867e381c2101601daeb25988b976ff561d004db88a45c5bd18f64da7bdaf01e8fac335aa85b7731937ebb4967eadf1d19fb58cad45a900b0b40fd9dc409dc8486bdec4e4dfab217fd79e2b00dd7eb08eac7555b7b1b34e954f69c644ff2e933caf0e62492a0054fa35ded5cd6e2a4f6934f98f61b8351dbd5600bafc509d5b530fcef8599f8af1611c8c67a82a408f1500bde5365d2539af0e02be30f98f69a82a408f09c06fd50170b00f910450cfe43fb661b605f69800d0b60fa93f9deb5df5974089f398fc497ea80e6029bd25001694f5e1756a6fc47faefe0258dcdb6c924f480649047b5b04d8d5872149cde2afb3787be4dacc390edc37b8cbab74fe8af09e120037ed7e55acccede6c2e8c45c0980df9987ac6977d2f41faea304a09b0fc2bd96bc188da77599fab73f8f923f8feb3a01f8ae3a808958393e86ab747e41b208c91dbb3acdfade4239995e1601cae4c771158b3d4733d5ae0c67f9b3afaeb795f7d202e8e243b0370bc3c630c53b233e66b0435e98cc45921fab8398830480d6cd95049ca6f3ecbf214f725c19d6fd816375d97aeca105a0ff3fb6b95a02ddf6fd1a64f2a75a97f34c0f1580e63f009399faf5c2c6d63a1cf2f465953f53ebae0a2001a047535da8c6d63aecfb7bfadd9843770940eb2d802ecb321cede344ff9e8bea0fc2de4cfeb0a3d62b004d07cfeca6c8d88db17abbfe8e7e2be6d4ddd1c012007a77ecba0063acde63098063c0594a576d80965b00a7d501d0845fe3e0a09e5dc5e4cf72ba9a775a4e007e5f1d00cd781f4ff23df29bb2b4aece06693901785f1d00cd718c701f4e63f2a74e378bcf5b4e00e010ef230968d9793a7b0aa339dd9c2f21016044ef33dd5641e675732be69b7474f3856abdbc0e18f6f52c5e2fdc82bfcfa662a3e507136b791b60b381b34af72502de2207dcd6c5838316006c5c655362beed9faa030356e7ac3a8029a800c0b76e67f7c61a705bf35580562b00dd6cc360954cf840f75a4d00feb13a00ba77330978571d0cc0d45a6d015898c5522e92fc501d04b04a4db7012400007098a61380565b000050ade9f568ad56009a0c1a80ee345b05500100800149000060401200001850ab09c065750000d0b2561300e7b303c0115a4d00fea33a0000c8dd2f116b42abdb00135b0101588726b702b65a0100008e20010080e39c560770080900001ce78fd5011cc21a0000385e73eb0054000060402d2700efaa0300802f9adb0ed8720be02cc9afd54100c0174db5015a4e0012eb0000588fa61280965b0000c0815a4f00bc1408000ed07a02f0bc3a0000f8e2bc3a807db49e0024c94575000090e4437500fb687d11e056171f0280e635b310b0870a0000acc5597500bbea250178551d0000a4a1f3697a690124da0000d4bb4c230bd47ba90024aa0000d46b62f24ffaaa0024aa0000d4b208b0c893ea0000185633937fd25f02f0b93a0000867291cdc4dfd4e49f24df550730839368050030bd7749beaf0e622a3d26000030b527e9accadc5b0b60abb9520c00ab73b3bcdfd5e49ff45d01d00a00601f17497eac0e62293d270049f2340d9dca044089a7493e5507b1b45e5b005b9fb2399509006e7a91ebf2fe70937fd27f029034742a1300b37997eb09ff24c9cfd50155ebbd05b0653d00c0982c0abfc70815802d8300600c379ff6b9c7480940b2190cd60400f4e5229b7dfadb49bf9bc37ae6d4dbcb8076f536c9ebea200038ca8be8e51f6cd4042049ce628b20406b5e25f9a93a881e8c9c006c0dff050034403f7f62a3ad01b88b750100ebf43416f3cd4605e09a9600403d93fd425400ae7d8a810750c1b6bd02a31c04b48fed00541a0198cf8b24ff371dbe65af152a00f7938d024ceb55be3e8ad7e45f4805e0712749ce937ca80e04a05143be6d6fed540076f373ec1600d8c765ae57f19bfc57c82e80c3f9e200bea66dda101580c319e800d7dc131b230138ce7631cbbbea40001676b3c46ff26f9016c0f4de24f9a13a0880193c8995fbdd500198de8fd9ec6f05e8c545364ff926ff8ea800cceb6592f7d541001cc8eb763b260158962f1b58b37749beaf0e8265380868590e1502d6ca42bec15803b0bceda14217d58100c37b97eb95fc0c460b601d540580a598ec49a202b016aa02c0dcb6afdc85242a006ba522004cc58b78b89304a00d7e24601f9ef4799416401b4eb2c9e2011e62411f3b530168cf59925fab830056c5a4cfde2400edf303c298f4f6398a1640fbbc8d10c6b23d97dfe4cf515400fa729ae49724cfaa0301267791cdcbc660121280be9d26f9ad3a08e0605ec6c36cb400faf6391607418bb687f698fc998d04600c27499e24b9ac0e04b8d7b6b77f126fe463015a00e3f2c3c33ae8ed53c2eb80c7b56d0dbc49f243753030282d3acaa800b0e5fd03b08ccb24cfab8300090077f9185b09612e0ef061152c02e42ecfb3294dbeaa0e043af46b92b7d541800a00bb7899e47d7510d0216b0028a302c02e7ecaf55642603a5737febcac0e86b1a800700c0b07613eaa03cc4a02c014bca218e6231160165a004ce153363729270dc2f4b62d82f3ea40e88b0480296d770f6cff5c5407041df9904d22f0b13a10faa005c012de26795d1d0474c8db0239980480a5783531ccc73a01f6a605c0523ec7364298cbcded8467d5c1d00609004bfaa53a0018c0aff1b64f762001606ee7b97e32f17e01588e038678903500ccc5c23f581f2f22e2af24004ccd7b03a00d160e0e4e0b80a9bccca6dc68f287365830383815008ef5317afbd003670a0c46058043bc8d857dd09bed49839e0a07f15d750034c7cd01fa7795cdbb3d9e5707c27c540078cc6936657e4f0630966771dd774d0580fbb8e881ad9bf703bb073aa102c06ddbd5fc00775115e8840a00c9a6ccff4b2ce80376b74d029e64f3ae0f1a631be0d8fcf8c094b4071aa20530a6eda23e80295d65737fa1011280b16cf7ef2bf50373b9b97be0b43a18eea705d0b7d324bf55070110270dae8e04a04f267e60ad2c1a5c0909407ffca0400b2402c5ac0168dfd5ad3f002df82dd7f7ad97d5c18c4805a05ddec207f4c636c2053908a82d7afb40cfb64fa44f937caa0ea6775a00ebf726d76532933f30825f737ddf3baf0ea6575a00ebf536c9ebea200056c2a2c189a900accbf6a09eab98fc016eda2e1ab46070222a00f5fc0000877995e4a7ea205a2501a8719ee4437510009db07be0005a00cbdabe84c7e40f301dad81034800e6759eaf0fe9b16f1f601eef2311d88b16c03c1cd203504b5be0112a00d3b9f9b46ff207a87595cdce2aeea10270b8d324bfcfa6ec04c07aa906dcc151c0fb3bcbe6942a00da701549c0372400bb71063f40db2401b75803f0b0edc97c267f80f6e979dfa002f0354ffa007d5309f8420560e3653ce9038c4225206357002ce60318d7f09580912a00b74fe533f9038c6de84a40ef15003d7d001e326c25a0d70ac0f669dfe40fc063ceab03a8d0cb49802fe3443e000e375c15a0e51680f23e005319ae15d06a0be06d4cfe004c6ba89707b5d202384bf2af495e57070240d786a902acbd05a0cc0fc092866905acbd0560f207606967d5012c61cd09c0103f0000ab33c441716b4e00fe501d0000c36a6281dc31d6bc0870b581013084aed702acb902f0ae3a0000e8d59a2b0076000050addb2ac09a2b009fab03006078a7d501cc65cd1580c43a0000ea75590558730520499e560700c0f0baac02ac3d01f8541d0000c3fba53a8039acbd059068030050afbb36c0da2b0000c00c24000030200900000ca88504e0a23a000086f7b13a80a9b5b008d0898000ac41570b015b4800123b0100a8d75502d0420b0000989804000076735e1dc0945a49005e540700c0f03e540730a556d60024d6010050af9b7500ad5400008009b59400783320004ca4a51640a20d00402d2d0000a05d120000189004000006d45a02f0ae3a0000e8416b8b00cfd3d9410c0034a59b4580ad2500899d0000d4e9260168ad050070db493aba29c3525a4c005e550700ac922400f6d0620b20d10600aedd9ef8dd1f98533789668b150080876809c00e5a4d00bc1780b530d9d43bbbe7bf3f4972591d1cac55ab09c0a7ea002026feb5f8c303ffdbf3244faa03a41b17d5014ca9d50400aa99fcdbf139aa014ce3dfaa039852ab8b00130b7da87199cd53e56dc663ad7d1232bf1587ea2af16fb902603b204b7b92bb27fff3eac0d8cb491c2b0e4d570012993ccb7928f37f9be4757580833bf4c9cc3d845dbd4af2537510539200c0e31e9b5c8cc37a4f73f8e260bf1fbbe8aafc9fb4dd02489217d501d0b5cb7478d177ea1f8ef8fffa8d1952eb158044f6ce3c2c2a6bcfb113f9cb24efab3f04abd55da22801806fed7ba11b83eb30d50ddaefc95dba4b005a6f01240ef9605add5de4eccd186008df55073081cfd501d005377d6eda8e07d500924eb79df7d00248928f499e550741b38e9dfcbbb8883a70cc4e8087f87de9f201a187164092fc5d7500346b8a8563acc3ff9ae9dfdbe5cd9f9d757b68542f15804496ce7ede25f97e827f8f71b72e734ed6a7497eabfe802caedb04b0970a40d27196c6e42e33cde4cf58b62f15822ef45401483c8df1b8279976e1a831b72e4b4dd0d61d8da1bbe37f6fea2d01384bf26b7510acd61c934357175007967e42f7fbf7adeb8a4f4f2d80649e15c0b4cf91beccc5b8a259bd250070dbbbdcfd0adf29780d308924a057ddaf2bebad05b0d5e587626f73df988db3f5997a8dc73e8c87be749fd8f55a01b8ac0e8072dd5fbcdce98f857ff74906786a1c449727ffddd66b023057c997f57b1793ffc8febef8efff3e9b1309695bb72bff6feab50590d81130222bc049d693001a1f6daa6c232daae7042071018ea4e2a235bed6692d0940628cb4684de36756bdb600b6bc2ab87fdb2d7e4364ec34e7245a022d196afd58ef098049a16f17b1de83f5fb94819e2a1b37d4fde4bbea0016701265b81ebd48f273e1df7f5afd05d01cf7a275bba80e6069bd5700b66ccde9cb496a27ff24f99bea2f817badf980a6930c38d134e2c7ea0096d6fb22c09b86f9a09d5b4b29f53cc987ea20b8d75ac6c97dbc5a785d8659f97fd3281580c4429cd63dc9fa6feab02baf165e97e126ff64ac04c08b82dab5c655fe7faa0e802e9c649053e7566cd8446ca416c0d6701fb8716bbd388da3755bebb8b98f96528d5719e4d4bfbb8c5401d87a511d003b6bed26ce7abcac0e604f3fc7b92515869dfc93312b0089a7b7b56b61418e31b47ead2690c6d6325a1d1f9319b10290f8e1d76c8dfd7e58922ae5fc6c0dcfb81580ada13ffcca5ca4ad7db8c6cefab59ee81b63f3697d6c4c628493001ff224f6e2ae416b17a3530059c249928f499e5507d2196b2dbe18b505b0f539b6e0546b6df24f923f5607c0309ec78435352dc62f466f016cbd49f2437510036a71f24f94665bd1eaf8ba8f7177bcdec6c4512400d77c11cba97e91cfb18c9536f478b337f60ed7e37838cae82d809b0c8e65ace1453e8ce1ac3a80197899d0611c057f0715806ff942e6d34b92658cb4a1f753de8cc3ddf572ef99940ac0b70c94e99da49fefb5c7a74adad4cb353537dfd33d240077b3ea763abd95defe501d00dc60727b98efe7011280bb7d8ed3b8a67092fedec268b7483bfeb93a8085d8ca7c370f728f9000dcefe7c81e0f7511df1df55e5707b0909fe27abbed22f6fb3f6af493007771128b6df6f134fd3df5430bdcab365a3b56bc8c5d00bbf3453d6e84a710e3a02d238cc9db463e3ef85d92efab83688516c0ee4ee20d52f7e969953f7d79591d4081e7e96ff1edae4cfe7b9000ece7fb587073db4813bf2d80edf95d7500453e65bc7bd548f7a24968011c6ef42faef5e37c0ff132c9fbea20d8dbe813c308f7aad17fe383580478b8936c9e087fad0ea4e8b38f68946d65f4657bbdf69a088c7a3f3a9a0ac03446fa1247bed846fa9d7b32f298bda9c70716bfed11ac0198c64992cbea2016f88c2e365a745e1dc04a7c4a5f87e3b81f1d4902309de7e9f34d5d2fe242a36dff581dc08a7c4e1fd7730f9fa19c16c03c7a29b539d4e76b2e96769930bed5ea787e12a7fc4d4205601e9fd2f60de75dfa3cc71fb8d6e23dea2426ffc94800e6b5ed9bb7d216d89ee1ef300d18434b49404bb136410b60796bfcc22fb359c3c0c3d6f8dbb11b93c7c3d63eb6fd7e33500158de49d6b512f72426ff5d3805909ead7582bd5c716ccd9300d4d8aec43d49cd719d4f635bdfbefea13a0098d9dade77f2221e4e66a505b03e6749fe35d3bdcbfc32c93f65bc637ba7e642699b647777e7493e14c760a5ff022400eb779ae4bf64f70bd2d6bd79b850da2601d85fd598f75b2d4402008f5bc31311c7f144b9bfd324bf2dfc779afc17640d003ccee4dfbebfa90ea0414b9e1af86ac1bf8b2f2400c0082ce23cdcdc13f349929faa3fe4882400003c66ae1d029efa0b490000d8c5f7992e09d81e374e218b00e161150ba198debb38e27a4ac74c1c26fe959000c0c3ec00e88789675a874c1e7e8315d1028087fda93a0058a97d2673abfc574805001ee602e98709681e8f5d23bef795520100e0180fbddccce4bf621200008eb13d30e86936ef1e49362ff231f9af9c16003ccc05d28f17f1522cf82b150060147f5b1d00ac890400eef7b63a0026f5be3a0058132d00b89f8ba33ffad2f0850a00000c480200773bad0e80599c5507006b210180bbfd521d00b3f05a60f8420200777b561d00b3f8e7ea00602d2c0284bbb930fa652120440500008624010080014900e05b6faa0300989b3500f02d1745dfac0180a80000c09024000030200900000c4802000003920000c080240000302009007ced657500004b700e007ccd05d1b7cb24cfab83803550010046f25fab0380b59000c035e5fffefd7b7500b0165a0070cdc5d03fc700c3172a000030200900308a8bea00604db40060e33cc987ea209895f23fdc2001808d8f499e5507c1ac240070830400365c08fd9300c00dd600002378551d00ac8d0a006cb810fae6e91f6e510100800149000060401200a077f6ffc31dac01800d1742bff4ffe10e2a0060f2efd993ea0060ad54004002d0334fff700f150046f7b13a0066e3e91f1ea002c0e85c00fdf2f40f0f50016064a7d501309b17d501c0da490018d9efab0360363f5707006b27016064bfab0e805928fdc30eac0160645e01dc270900ec4002c0c80cfefe98fc61475a00402f4cfeb0070900d003933fec490200b4cee40f07900000c080240040cb3cfdc381240040ab4cfe70040900237b571d000733f9c3919c03c0e85c00ed31f9c304540018dd49bc38a6151731f9c3645400e05b8e085e1f133f4c4c0500bef53c9b09e7a23a109298fc61162a00f0b8f3241faa8318d06536c91830030900ece76592f7d5410cc0533fcc4c02008771e1ccc7e40f0bb006000e73123b08a6b6fd4e81054800e0383f673369bdaa0ea461267e28a00500d3b38d70374f937caa0e0246250180794906bee5691f56400b00e6b53d53e0697520c55e45a91f56450200cbf894eb0970fba7e78386b6c7f66efffc541d10f0352d00a8f736c9ebea2026e2091f1aa10200f5becf66e27c9236ab02175f6237f943435400a01dd517eb45921fabbf04601a2a00d08e6d3ffd4992770bfc7d97d91c74b4fd7b4dfed0111500e8c75992fffce53fffed977ffeeecb3fffcf8dff7c97bf24f98fd8970fc3900000c080b40000604012000018900400000624010080014900006040120000189004000006240100800149000060401200001890040000062401008001490000604012000018900400000624010080014900006040120000189004000006240100800149000060401200001890040000062401008001fd7fc8bfbe97aaa46fa00000000049454e44ae426082",
+  "install": {},
+  "ipmRepo": "https://ipm.integromat.com",
+  "ipmTags": null,
+  "version": 2,
+  "website": null,
+  "_modules": {
+    "NewEvent": {
+      "id": 60664,
+      "api": {},
+      "rev": 5,
+      "crud": null,
+      "name": "NewEvent",
+      "epoch": null,
+      "flags": {},
+      "label": "New Event",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 10,
+      "appName": "knack",
+      "samples": null,
+      "apiJsonc": null,
+      "approved": false,
+      "hookName": "knack",
+      "learning": false,
+      "interface": [
+        "rpc://app%23knack@2/webhookInterface"
+      ],
+      "appVersion": 2,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": null,
+      "description": "Triggers when a new record is created, updated or deleted or when a form is submitted.",
+      "expectJsonc": null,
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n    \"rpc://webhookInterface\"\n]",
+      "parametersJsonc": "[\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "GetRecord": {
+      "id": 60665,
+      "api": [
+        {
+          "qs": {},
+          "url": "/objects/{{parameters.object_id}}/fields",
+          "body": {},
+          "method": "GET",
+          "headers": {},
+          "response": {
+            "temp": {
+              "output": "{{body.fields}}"
+            },
+            "error": {
+              "type": "DataError",
+              "message": "{{getErrorMessage(statusCode, body)}}"
+            },
+            "output": ""
+          },
+          "condition": "{{!parameters.metadataExists}}"
+        },
+        {
+          "qs": {},
+          "url": "/objects/{{parameters.object_id}}/records/{{parameters.record_id}}",
+          "method": "GET",
+          "headers": {},
+          "response": {
+            "error": {
+              "type": "DataError",
+              "message": "{{getErrorMessage(statusCode, body)}}"
+            },
+            "output": "{{wrapMultipleChoiceRawInArray(getRecordOutput(body, parameters.mode), temp.output)}}"
+          },
+          "condition": "{{!parameters.metadataExists}}"
+        },
+        {
+          "qs": {},
+          "url": "/objects/{{parameters.object_id}}/records/{{parameters.record_id}}",
+          "method": "GET",
+          "headers": {},
+          "response": {
+            "error": {
+              "type": "DataError",
+              "message": "{{getErrorMessage(statusCode, body)}}"
+            },
+            "output": "{{wrapMultipleChoiceRawInArray(getRecordOutput(body, parameters.mode), metadata.expect)}}"
+          },
+          "condition": "{{parameters.metadataExists}}"
+        }
+      ],
+      "rev": 4,
+      "crud": "read",
+      "name": "GetRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Get a Record",
+      "scope": [],
+      "expect": [
+        {
+          "name": "object_id",
+          "type": "select",
+          "label": "Object",
+          "nested": [
+            "rpc://app%23knack@2/RecordExpect?type=hidden"
+          ],
+          "options": "rpc://app%23knack@2/Objects",
+          "required": true
+        },
+        {
+          "name": "record_id",
+          "type": "text",
+          "label": "Record ID",
+          "required": true
+        },
+        {
+          "name": "mode",
+          "type": "select",
+          "label": "Returned data",
+          "options": [
+            {
+              "label": "formatted and raw",
+              "value": "both"
+            },
+            {
+              "label": "only formatted",
+              "value": "formatted"
+            },
+            {
+              "label": "only raw",
+              "value": "raw"
+            }
+          ],
+          "advanced": true,
+          "required": false
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "knack",
+      "samples": null,
+      "apiJsonc": "[\n    /* \n        Old version was using /objects/{{parameters.object_id}}/fields to get the metadata needed for wrapMultipleChoiceRawInArray\n        new version is using metadata.expect instead of calling the API everytime, but it is present only if the old module was refreshed\n        for compatibitly with old scenarios, we still need to call the API metadata\n        New or refreshed modules will not make the additiona call\n        Updated by Kat Ben\n   */\n    {\n        // API metadata for old scenarios\n        \"condition\": \"{{!parameters.metadataExists}}\",\n        \"url\": \"/objects/{{parameters.object_id}}/fields\",\n        \"method\": \"GET\",\n        \"qs\": {},\n        \"body\": {},\n        \"headers\": {},\n        \"response\": {\n            \"error\": {\n                \"type\": \"DataError\",\n                \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n            },\n            \"temp\": {\n                \"output\": \"{{body.fields}}\"\n            },\n            \"output\": \"\"\n        }\n    },\n    {\n        // old scenarios using API metadata\n        \"condition\": \"{{!parameters.metadataExists}}\",\n        \"url\": \"/objects/{{parameters.object_id}}/records/{{parameters.record_id}}\",\n        \"method\": \"GET\",\n        \"qs\": {},\n        \"headers\": {},\n        \"response\": {\n            \"error\": {\n                \"type\": \"DataError\",\n                \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n            },\n            // wrap item's \"multiple_select\" type single value fields in an array for the interface mapping to work correctly on make\n            \"output\": \"{{wrapMultipleChoiceRawInArray(getRecordOutput(body, parameters.mode), temp.output)}}\"\n        }\n    },\n    {\n        // new or refreshed scenarios using metadata.expect \n        \"condition\": \"{{parameters.metadataExists}}\",\n        \"url\": \"/objects/{{parameters.object_id}}/records/{{parameters.record_id}}\",\n        \"method\": \"GET\",\n        \"qs\": {},\n        \"headers\": {},\n        \"response\": {\n            \"error\": {\n                \"type\": \"DataError\",\n                \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n            },\n            // wrap item's \"multiple_select\" type single value fields in an array for the interface mapping to work correctly on make\n            \"output\": \"{{wrapMultipleChoiceRawInArray(getRecordOutput(body, parameters.mode), metadata.expect)}}\"\n        }\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Record ID"
+        },
+        "rpc://app%23knack@2/RecordInterface"
+      ],
+      "appVersion": 2,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "knack",
+      "description": "Returns details about a record specified by its ID.",
+      "expectJsonc": "[\n    {\n        \"name\": \"object_id\",\n        \"type\": \"select\",\n        \"label\": \"Object\",\n        \"required\": true,\n        \"options\": \"rpc://Objects\",\n        \"nested\": [\n            \"rpc://RecordExpect?type=hidden\"\n        ]\n    },\n    {\n        \"name\": \"record_id\",\n        \"type\": \"text\",\n        \"label\": \"Record ID\",\n        \"required\": true\n    },\n    {\n        \"name\": \"mode\",\n        \"type\": \"select\",\n        \"label\": \"Returned data\",\n        \"required\": false,\n        \"advanced\": true,\n        \"options\": [\n            {\n                \"value\": \"both\",\n                \"label\": \"formatted and raw\"\n            },\n            {\n                \"value\": \"formatted\",\n                \"label\": \"only formatted\"\n            },\n            {\n                \"value\": \"raw\",\n                \"label\": \"only raw\"\n            }\n        ]\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Record ID\"\n\t},\n\t\"rpc://RecordInterface\"\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "UploadFile": {
+      "id": 60666,
+      "api": {
+        "qs": {},
+        "url": "/applications/{{connection.applicationId}}/assets/{{if(parameters.isImage, 'image', 'file')}}/upload",
+        "body": {
+          "files": {
+            "value": "{{parameters.data}}",
+            "options": {
+              "filename": "{{parameters.fileName}}"
+            }
+          }
+        },
+        "type": "multipart/form-data",
+        "method": "POST",
+        "headers": {},
+        "response": {
+          "error": {
+            "type": "DataError",
+            "message": "{{getErrorMessage(statusCode, body)}}"
+          },
+          "output": "{{body}}"
+        }
+      },
+      "rev": 2,
+      "crud": "create",
+      "name": "UploadFile",
+      "epoch": null,
+      "flags": {},
+      "label": "Upload a File",
+      "scope": [],
+      "expect": [
+        {
+          "name": "fileName",
+          "type": "filename",
+          "label": "File name",
+          "required": true,
+          "semantic": "file:name"
+        },
+        {
+          "name": "data",
+          "type": "buffer",
+          "label": "Data",
+          "required": true,
+          "semantic": "file:data"
+        },
+        {
+          "name": "isImage",
+          "type": "boolean",
+          "label": "This file is an image.",
+          "required": false
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "knack",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/applications/{{connection.applicationId}}/assets/{{if(parameters.isImage, 'image', 'file')}}/upload\",\n\t\"method\": \"POST\",\n\t\"qs\": {},\n\t\"type\": \"multipart/form-data\",\n\t\"body\": {\n\t\t\"files\": {\n\t\t\t\"value\": \"{{parameters.data}}\",\n            \"options\": {\n\t\t\t\t\"filename\": \"{{parameters.fileName}}\"\n            }\n        }\n    },\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"type\": \"DataError\",\n\t\t\t\"message\": \"{{getErrorMessage(statusCode, body)}}\"\n\t\t},\n\t\t\"output\": \"{{body}}\"\n\t}\n}\n",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "File ID"
+        },
+        {
+          "name": "filename",
+          "type": "filename",
+          "label": "File name"
+        },
+        {
+          "name": "public_url",
+          "type": "url",
+          "label": "Public URL"
+        },
+        {
+          "name": "size",
+          "type": "number",
+          "label": "Size"
+        },
+        {
+          "name": "thumb_url",
+          "type": "url",
+          "label": "Thumb URL"
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "label": "Type"
+        }
+      ],
+      "appVersion": 2,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "knack",
+      "description": "Uploads a file or image.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"fileName\",\n\t\t\"type\": \"filename\",\n\t\t\"label\": \"File name\",\n\t\t\"required\": true,\n\t\t\"semantic\": \"file:name\"\n\t},\n\t{\n\t\t\"name\": \"data\",\n\t\t\"type\": \"buffer\",\n\t\t\"label\": \"Data\",\n\t\t\"required\": true,\n\t\t\"semantic\": \"file:data\"\n\t},\n\t{\n\t\t\"name\": \"isImage\",\n\t\t\"type\": \"boolean\",\n\t\t\"label\": \"This file is an image.\",\n\t\t\"required\": false\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"File ID\"\n\t},\n\t{\n\t\t\"name\": \"filename\",\n\t\t\"type\": \"filename\",\n\t\t\"label\": \"File name\"\n\t},\n\t{\n\t\t\"name\": \"public_url\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Public URL\"\n\t},\n\t{\n\t\t\"name\": \"size\",\n\t\t\"type\": \"number\",\n\t\t\"label\": \"Size\"\n\t},\n\t{\n\t\t\"name\": \"thumb_url\",\n\t\t\"type\": \"url\",\n\t\t\"label\": \"Thumb URL\"\n\t},\n\t{\n\t\t\"name\": \"type\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Type\"\n\t}\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "MakeAPICall": {
+      "id": 60667,
+      "api": {
+        "qs": {
+          "{{...}}": "{{toCollection(parameters.qs, 'key', 'value')}}"
+        },
+        "url": "https://{{ifempty(ifempty(connection.apiServer, connection.appServer), 'api.knack.com')}}/{{parameters.url}}",
+        "body": "{{parameters.body}}",
+        "type": "text",
+        "method": "{{parameters.method}}",
+        "headers": {
+          "{{...}}": "{{toCollection(parameters.headers, 'key', 'value')}}"
+        },
+        "response": {
+          "output": {
+            "body": "{{body}}",
+            "headers": "{{headers}}",
+            "statusCode": "{{statusCode}}"
+          }
+        }
+      },
+      "rev": 2,
+      "crud": null,
+      "name": "MakeAPICall",
+      "epoch": null,
+      "flags": {},
+      "label": "Make an API Call",
+      "scope": [],
+      "expect": [
+        {
+          "help": "Enter a path relative to `https://api.knack.com` (or custom domain). For example: `/v1/objects`.",
+          "name": "url",
+          "type": "text",
+          "label": "URL",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "select",
+          "label": "Method",
+          "default": "GET",
+          "options": [
+            {
+              "label": "GET",
+              "value": "GET"
+            },
+            {
+              "label": "POST",
+              "value": "POST"
+            },
+            {
+              "label": "PUT",
+              "value": "PUT"
+            },
+            {
+              "label": "PATCH",
+              "value": "PATCH"
+            },
+            {
+              "label": "DELETE",
+              "value": "DELETE"
+            }
+          ],
+          "required": true
+        },
+        {
+          "help": "You don't have to add authorization headers; we already did that for you.",
+          "name": "headers",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Headers",
+          "default": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "name": "qs",
+          "spec": [
+            {
+              "name": "key",
+              "type": "text",
+              "label": "Key"
+            },
+            {
+              "name": "value",
+              "type": "text",
+              "label": "Value"
+            }
+          ],
+          "type": "array",
+          "label": "Query String"
+        },
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        }
+      ],
+      "public": true,
+      "typeId": 12,
+      "appName": "knack",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"https://{{ifempty(ifempty(connection.apiServer, connection.appServer), 'api.knack.com')}}/{{parameters.url}}\",\n    \"method\": \"{{parameters.method}}\",\n    \"qs\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.qs, 'key', 'value')}}\"\n\t},\n    \"headers\": {\n\t\t\"{{...}}\": \"{{toCollection(parameters.headers, 'key', 'value')}}\"\n\t},\n\t\"body\": \"{{parameters.body}}\",\n\t\"type\": \"text\",\n    \"response\": {\n        \"output\": {\n            \"headers\": \"{{headers}}\",\n            \"body\": \"{{body}}\",\n\t\t\t\"statusCode\": \"{{statusCode}}\"\n        }\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "body",
+          "type": "any",
+          "label": "Body"
+        },
+        {
+          "name": "headers",
+          "type": "collection",
+          "label": "Headers"
+        },
+        {
+          "name": "statusCode",
+          "type": "number",
+          "label": "Status code"
+        }
+      ],
+      "appVersion": 2,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "knack",
+      "description": "Performs an arbitrary authorized API call.",
+      "expectJsonc": "[\n    {\n        \"name\": \"url\",\n        \"type\": \"text\",\n        \"label\": \"URL\",\n        \"help\": \"Enter a path relative to `https://api.knack.com` (or custom domain). For example: `/v1/objects`.\",\n        \"required\": true\n    },\n    {\n        \"name\": \"method\",\n        \"type\": \"select\",\n        \"label\": \"Method\",\n        \"required\": true,\n        \"default\": \"GET\",\n        \"options\": [\n            {\n                \"label\": \"GET\",\n                \"value\": \"GET\"\n            },\n            {\n                \"label\": \"POST\",\n                \"value\": \"POST\"\n            },\n            {\n                \"label\": \"PUT\",\n                \"value\": \"PUT\"\n            },\n            {\n                \"label\": \"PATCH\",\n                \"value\": \"PATCH\"\n            },\n            {\n                \"label\": \"DELETE\",\n                \"value\": \"DELETE\"\n            }\n        ]\n    },\n    {\n        \"name\": \"headers\",\n        \"label\": \"Headers\",\n\t\t\"help\": \"You don't have to add authorization headers; we already did that for you.\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ],\n\t\t\"default\": [\n\t\t\t{\n\t\t\t\t\"key\": \"Content-Type\",\n\t\t\t\t\"value\": \"application/json\"\n\t\t\t}\n\t\t]\n    },\n    {\n        \"name\": \"qs\",\n        \"label\": \"Query String\",\n        \"type\": \"array\",\n        \"spec\": [\n            {\n                \"name\": \"key\",\n                \"label\": \"Key\",\n                \"type\": \"text\"\n            },\n            {\n                \"name\": \"value\",\n                \"label\": \"Value\",\n                \"type\": \"text\"\n            }\n        ]\n    },\n    {\n        \"name\": \"body\",\n        \"label\": \"Body\",\n        \"type\": \"any\"\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"body\",\n\t\t\"label\": \"Body\",\n\t\t\"type\": \"any\"\n\t},\n\t{\n\t\t\"name\": \"headers\",\n\t\t\"label\": \"Headers\",\n\t\t\"type\": \"collection\"\n\t},\n\t{\n\t\t\"name\": \"statusCode\",\n\t\t\"label\": \"Status code\",\n\t\t\"type\": \"number\"\n\t}\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "CreateRecord": {
+      "id": 60668,
+      "api": {
+        "qs": {},
+        "url": "/objects/{{parameters.object_id}}/records",
+        "body": "{{getRecordInput(parameters)}}",
+        "method": "POST",
+        "headers": {},
+        "response": {
+          "error": {
+            "type": "DataError",
+            "message": "{{getErrorMessage(statusCode, body)}}"
+          },
+          "output": "{{wrapMultipleChoiceRawInArray(getRecordOutput(body, parameters.mode), metadata.expect)}}"
+        }
+      },
+      "rev": 5,
+      "crud": "create",
+      "name": "CreateRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Create a Record",
+      "scope": [],
+      "expect": [
+        {
+          "name": "object_id",
+          "type": "select",
+          "label": "Object",
+          "options": {
+            "store": "rpc://app%23knack@2/Objects",
+            "nested": [
+              "rpc://app%23knack@2/RecordExpect"
+            ]
+          },
+          "mappable": false,
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "knack",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/objects/{{parameters.object_id}}/records\",\n    \"method\": \"POST\",\n    \"qs\": {},\n    \"body\": \"{{getRecordInput(parameters)}}\",\n    \"headers\": {},\n    \"response\": {\n        \"error\": {\n            \"type\": \"DataError\",\n            \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n        },\n        \"output\": \"{{wrapMultipleChoiceRawInArray(getRecordOutput(body, parameters.mode), metadata.expect)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Record ID"
+        },
+        "rpc://app%23knack@2/RecordInterface"
+      ],
+      "appVersion": 2,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "knack",
+      "description": "Creates a new record.",
+      "expectJsonc": "[\n    {\n        \"name\": \"object_id\",\n        \"type\": \"select\",\n        \"label\": \"Object\",\n        \"required\": true,\n        \"mappable\":false,\n        \"options\": {\n            \"store\": \"rpc://Objects\",\n            \"nested\": [\n                \"rpc://RecordExpect\"\n            ]\n        }\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Record ID\"\n\t},\n\t\"rpc://RecordInterface\"\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "DeleteRecord": {
+      "id": 60669,
+      "api": {
+        "qs": {},
+        "url": "/objects/{{parameters.object_id}}/records/{{parameters.record_id}}",
+        "method": "DELETE",
+        "headers": {},
+        "response": {
+          "error": {
+            "type": "DataError",
+            "message": "{{getErrorMessage(statusCode, body)}}"
+          },
+          "output": null
+        }
+      },
+      "rev": 2,
+      "crud": "delete",
+      "name": "DeleteRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Delete a Record",
+      "scope": [],
+      "expect": [
+        {
+          "name": "object_id",
+          "type": "select",
+          "label": "Object",
+          "options": "rpc://app%23knack@2/Objects",
+          "required": true
+        },
+        {
+          "name": "record_id",
+          "type": "text",
+          "label": "Record ID",
+          "required": true
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "knack",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/objects/{{parameters.object_id}}/records/{{parameters.record_id}}\",\n\t\"method\": \"DELETE\",\n\t\"qs\": {},\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"error\": {\n\t\t\t\"type\": \"DataError\",\n\t\t\t\"message\": \"{{getErrorMessage(statusCode, body)}}\"\n\t\t},\n\t\t\"output\": null\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [],
+      "appVersion": 2,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "knack",
+      "description": "Deletes a record specified by its ID.",
+      "expectJsonc": "[\n\t{\n\t\t\"name\": \"object_id\",\n\t\t\"type\": \"select\",\n\t\t\"label\": \"Object\",\n\t\t\"required\": true,\n\t\t\"options\": \"rpc://Objects\"\n\t},\n\t{\n\t\t\"name\": \"record_id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Record ID\",\n\t\t\"required\": true\n\t}\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "UpdateRecord": {
+      "id": 60670,
+      "api": {
+        "qs": {},
+        "url": "/objects/{{parameters.object_id}}/records/{{parameters.record_id}}",
+        "body": "{{getRecordInput(parameters)}}",
+        "method": "PUT",
+        "headers": {},
+        "response": {
+          "error": {
+            "type": "DataError",
+            "message": "{{getErrorMessage(statusCode, body)}}"
+          },
+          "output": "{{wrapMultipleChoiceRawInArray(getRecordOutput(body, parameters.mode), metadata.expect)}}"
+        }
+      },
+      "rev": 4,
+      "crud": "update",
+      "name": "UpdateRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Update a Record",
+      "scope": [],
+      "expect": [
+        {
+          "name": "object_id",
+          "type": "select",
+          "label": "Object",
+          "options": {
+            "store": "rpc://app%23knack@2/Objects",
+            "nested": [
+              {
+                "name": "record_id",
+                "type": "text",
+                "label": "Record ID",
+                "required": true
+              },
+              "rpc://app%23knack@2/RecordExpect"
+            ]
+          },
+          "required": true
+        },
+        {
+          "name": "mode",
+          "type": "select",
+          "label": "Returned data",
+          "options": [
+            {
+              "label": "formatted and raw",
+              "value": "both"
+            },
+            {
+              "label": "only formatted",
+              "value": "formatted"
+            },
+            {
+              "label": "only raw",
+              "value": "raw"
+            }
+          ],
+          "advanced": true,
+          "required": false
+        }
+      ],
+      "public": true,
+      "typeId": 4,
+      "appName": "knack",
+      "samples": null,
+      "apiJsonc": "{\n    \"url\": \"/objects/{{parameters.object_id}}/records/{{parameters.record_id}}\",\n    \"method\": \"PUT\",\n    \"qs\": {},\n    \"body\": \"{{getRecordInput(parameters)}}\",\n    \"headers\": {},\n    \"response\": {\n        \"error\": {\n            \"type\": \"DataError\",\n            \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n        },\n        \"output\": \"{{wrapMultipleChoiceRawInArray(getRecordOutput(body, parameters.mode), metadata.expect)}}\"\n    }\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Record ID"
+        },
+        "rpc://app%23knack@2/RecordInterface"
+      ],
+      "appVersion": 2,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "knack",
+      "description": "Updates a record specified by its ID.",
+      "expectJsonc": "[\n    {\n        \"name\": \"object_id\",\n        \"type\": \"select\",\n        \"label\": \"Object\",\n        \"required\": true,\n        \"options\": {\n            \"store\": \"rpc://Objects\",\n            \"nested\": [\n                {\n                    \"name\": \"record_id\",\n                    \"type\": \"text\",\n                    \"label\": \"Record ID\",\n                    \"required\": true\n                },\n                \"rpc://RecordExpect\"\n            ]\n        }\n    },\n    {\n        \"name\": \"mode\",\n        \"type\": \"select\",\n        \"label\": \"Returned data\",\n        \"required\": false,\n        \"advanced\": true,\n        \"options\": [\n            {\n                \"value\": \"both\",\n                \"label\": \"formatted and raw\"\n            },\n            {\n                \"value\": \"formatted\",\n                \"label\": \"only formatted\"\n            },\n            {\n                \"value\": \"raw\",\n                \"label\": \"only raw\"\n            }\n        ]\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Record ID\"\n\t},\n\t\"rpc://RecordInterface\"\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "UpsertRecord": {
+      "id": 60671,
+      "api": {
+        "qs": {},
+        "url": "/api/users/create",
+        "body": {
+          "name": "{{parameters.name}}",
+          "email": "{{lower(parameters.email)}}"
+        },
+        "method": "POST",
+        "headers": {},
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "rev": 2,
+      "crud": "create",
+      "name": "UpsertRecord",
+      "epoch": null,
+      "flags": {},
+      "label": "Upsert a Record",
+      "scope": [],
+      "expect": [
+        {
+          "name": "email",
+          "type": "email",
+          "label": "Email address",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name",
+          "required": true
+        }
+      ],
+      "public": false,
+      "typeId": 4,
+      "appName": "knack",
+      "samples": null,
+      "apiJsonc": "{\n\t\"url\": \"/api/users/create\",\n\t\"method\": \"POST\",\n\t\"qs\": {},\n\t\"body\": {\n\t\t\"name\": \"{{parameters.name}}\",\n\t\t\"email\": \"{{lower(parameters.email)}}\"\n\t},\n\t\"headers\": {},\n\t\"response\": {\n\t\t\"output\": \"{{body}}\"\n\t}\n}",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "uinteger",
+          "label": "User ID"
+        }
+      ],
+      "appVersion": 2,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "knack",
+      "description": "Creates or updates a record.",
+      "expectJsonc": null,
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": null,
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "WatchRecords": {
+      "id": 60672,
+      "api": [
+        {
+          "qs": {},
+          "url": "/objects/{{parameters.object_id}}/fields",
+          "body": {},
+          "method": "GET",
+          "headers": {},
+          "response": {
+            "temp": {
+              "output": "{{body.fields}}"
+            },
+            "error": {
+              "type": "DataError",
+              "message": "{{getErrorMessage(statusCode, body)}}"
+            },
+            "output": ""
+          },
+          "condition": "{{!parameters.metadataExists}}"
+        },
+        {
+          "qs": {
+            "page": 1,
+            "sort_field": "{{parameters.autoincrement_id}}",
+            "sort_order": "desc",
+            "rows_per_page": 1000
+          },
+          "url": "/objects/{{parameters.object_id}}/records",
+          "body": {},
+          "method": "GET",
+          "headers": {},
+          "response": {
+            "error": {
+              "type": "DataError",
+              "message": "{{getErrorMessage(statusCode, body)}}"
+            },
+            "limit": "{{parameters.limit}}",
+            "output": "{{wrapMultipleChoiceRawInArray(getRecordOutput(item, parameters.mode || undefined), temp.output)}}",
+            "iterate": "{{body.records}}",
+            "trigger": {
+              "id": "{{getId(item, parameters)}}",
+              "type": "id",
+              "order": "desc"
+            }
+          },
+          "condition": "{{!parameters.metadataExists}}",
+          "pagination": {
+            "qs": {
+              "page": "{{getPage(body)}}"
+            }
+          }
+        },
+        {
+          "qs": {
+            "page": 1,
+            "{{...}}": "{{data}}",
+            "sort_field": "{{parameters.autoincrement_id}}",
+            "sort_order": "desc",
+            "rows_per_page": 1000
+          },
+          "url": "/objects/{{parameters.object_id}}/records",
+          "body": {},
+          "method": "GET",
+          "headers": {},
+          "response": {
+            "error": {
+              "type": "DataError",
+              "message": "{{getErrorMessage(statusCode, body)}}"
+            },
+            "limit": "{{parameters.limit}}",
+            "output": "{{wrapMultipleChoiceRawInArray(getRecordOutput(item, parameters.mode || undefined), parameters)}}",
+            "iterate": "{{body.records}}",
+            "trigger": {
+              "id": "{{getId(item, parameters)}}",
+              "type": "id",
+              "order": "desc"
+            }
+          },
+          "condition": "{{parameters.metadataExists}}",
+          "pagination": {
+            "qs": {
+              "page": "{{getPage(body)}}"
+            }
+          }
+        }
+      ],
+      "rev": 5,
+      "crud": "read",
+      "name": "WatchRecords",
+      "epoch": {
+        "qs": {
+          "rows_per_page": 100
+        },
+        "response": {
+          "limit": 100,
+          "output": {
+            "id": "{{getId(item, parameters)}}",
+            "label": "#{{getId(item, parameters)}}"
+          }
+        }
+      },
+      "flags": {},
+      "label": "Watch Records",
+      "scope": [],
+      "expect": [],
+      "public": true,
+      "typeId": 1,
+      "appName": "knack",
+      "samples": null,
+      "apiJsonc": "[\n    /* \n        Old version was using /objects/{{parameters.object_id}}/fields to get the metadata needed for wrapMultipleChoiceRawInArray\n        new version is using metadata.expect instead of calling the API everytime, but it is present only if the old module was refreshed\n        for compatibitly with old scenarios, we still need to call the API metadata\n        New or refreshed modules will not make the additiona call\n        Updated by Kat Ben\n   */\n    {\n        // API metadata for old scenarios\n        \"condition\": \"{{!parameters.metadataExists}}\",\n        \"url\": \"/objects/{{parameters.object_id}}/fields\",\n        \"method\": \"GET\",\n        \"qs\": {},\n        \"body\": {},\n        \"headers\": {},\n        \"response\": {\n            \"error\": {\n                \"type\": \"DataError\",\n                \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n            },\n            \"temp\": {\n                \"output\": \"{{body.fields}}\"\n            },\n            \"output\": \"\"\n        }\n    },\n    {\n        // old scenarios using API metadata\n        \"condition\": \"{{!parameters.metadataExists}}\",\n        \"url\": \"/objects/{{parameters.object_id}}/records\",\n        \"method\": \"GET\",\n        \"qs\": {\n            \"sort_field\": \"{{parameters.autoincrement_id}}\",\n            \"sort_order\": \"desc\",\n            \"page\": 1,\n            \"rows_per_page\": 1000\n        },\n        \"body\": {},\n        \"headers\": {},\n        \"response\": {\n            \"error\": {\n                \"type\": \"DataError\",\n                \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n            },\n            \"iterate\": \"{{body.records}}\",\n            \"trigger\": {\n                \"id\": \"{{getId(item, parameters)}}\",\n                \"type\": \"id\",\n                \"order\": \"desc\"\n            },\n            \"output\": \"{{wrapMultipleChoiceRawInArray(getRecordOutput(item, parameters.mode || undefined), temp.output)}}\",\n            \"limit\": \"{{parameters.limit}}\"\n        },\n        \"pagination\": {\n            \"qs\": {\n                \"page\": \"{{getPage(body)}}\"\n            }\n        }\n    },\n    {\n        // new or refreshed scenarios using metadata.expect \n        \"condition\": \"{{parameters.metadataExists}}\",\n        \"url\": \"/objects/{{parameters.object_id}}/records\",\n        \"method\": \"GET\",\n        \"qs\": {\n            \"sort_field\": \"{{parameters.autoincrement_id}}\",\n            \"sort_order\": \"desc\",\n            \"page\": 1,\n            \"rows_per_page\": 1000,\n            \"{{...}}\": \"{{data}}\"\n        },\n        \"body\": {},\n        \"headers\": {},\n        \"response\": {\n            \"error\": {\n                \"type\": \"DataError\",\n                \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n            },\n            \"iterate\": \"{{body.records}}\",\n            \"trigger\": {\n                \"id\": \"{{getId(item, parameters)}}\",\n                \"type\": \"id\",\n                \"order\": \"desc\"\n            },\n            \"output\": \"{{wrapMultipleChoiceRawInArray(getRecordOutput(item, parameters.mode || undefined), parameters)}}\",\n            \"limit\": \"{{parameters.limit}}\"\n        },\n        \"pagination\": {\n            \"qs\": {\n                \"page\": \"{{getPage(body)}}\"\n            }\n        }\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Record ID"
+        },
+        "rpc://app%23knack@2/RecordInterface"
+      ],
+      "appVersion": 2,
+      "deprecated": false,
+      "epochJsonc": "{\n    \"qs\": {\n        \"rows_per_page\": 100\n    },\n    \"response\": {\n        \"limit\": 100,\n        \"output\": {\n            \"label\": \"#{{getId(item, parameters)}}\",\n            \"id\": \"{{getId(item, parameters)}}\"\n        }\n    }\n}",
+      "parameters": [
+        {
+          "name": "object_id",
+          "type": "select",
+          "label": "Object",
+          "options": {
+            "store": "rpc://app%23knack@2/Objects",
+            "nested": [
+              {
+                "help": "Every form must include at least one field of auto increment type.",
+                "name": "autoincrement_id",
+                "type": "select",
+                "label": "Auto increment field",
+                "options": "rpc://app%23knack@2/AutoincrementFields",
+                "required": true
+              },
+              "rpc://app%23knack@2/RecordExpect?type=hidden"
+            ]
+          },
+          "required": true
+        },
+        {
+          "name": "mode",
+          "type": "select",
+          "label": "Returned data",
+          "options": [
+            {
+              "label": "formatted and raw",
+              "value": "both"
+            },
+            {
+              "label": "only formatted",
+              "value": "formatted"
+            },
+            {
+              "label": "only raw",
+              "value": "raw"
+            }
+          ],
+          "advanced": true,
+          "required": false
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 2,
+          "required": true
+        }
+      ],
+      "scopeJsonc": null,
+      "accountName": "knack",
+      "description": "Triggers when a new record is added.",
+      "expectJsonc": null,
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Record ID\"\n\t},\n\t\"rpc://RecordInterface\"\n]",
+      "parametersJsonc": "[\n    {\n        \"name\": \"object_id\",\n        \"type\": \"select\",\n        \"label\": \"Object\",\n        \"required\": true,\n        \"options\": {\n            \"store\": \"rpc://Objects\",\n            \"nested\": [\n                {\n                    \"name\": \"autoincrement_id\",\n                    \"type\": \"select\",\n                    \"label\": \"Auto increment field\",\n                    //\"help\": \"Every form must include at least one field of auto increment type. For more information, please see the appropriate [Help section](kb://pkg/knack/index.html).\",\n                    // the link doesn't work\n                    \"help\": \"Every form must include at least one field of auto increment type.\",\n                    \"required\": true,\n                    \"options\": \"rpc://AutoincrementFields\"\n                },\n                \"rpc://RecordExpect?type=hidden\"\n            ]\n        }\n    },\n    {\n        \"name\": \"mode\",\n        \"type\": \"select\",\n        \"label\": \"Returned data\",\n        \"required\": false,\n        \"advanced\": true,\n        \"options\": [\n            {\n                \"value\": \"both\",\n                \"label\": \"formatted and raw\"\n            },\n            {\n                \"value\": \"formatted\",\n                \"label\": \"only formatted\"\n            },\n            {\n                \"value\": \"raw\",\n                \"label\": \"only raw\"\n            }\n        ]\n    },\n    {\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 2,\n        \"required\": true\n    }\n]",
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    },
+    "SearchForRecords": {
+      "id": 60673,
+      "api": [
+        {
+          "qs": {},
+          "url": "/objects/{{parameters.object_id}}/fields",
+          "body": {},
+          "method": "GET",
+          "headers": {},
+          "response": {
+            "temp": {
+              "output": "{{body.fields}}"
+            },
+            "error": {
+              "type": "DataError",
+              "message": "{{getErrorMessage(statusCode, body)}}"
+            },
+            "output": ""
+          },
+          "condition": "{{!parameters.metadataExists}}"
+        },
+        {
+          "qs": {
+            "page": 1,
+            "filters": "{{buildFilters(parameters.filters, environment.timezone, parameters.match)}}",
+            "sort_field": "{{parameters.sort_field}}",
+            "sort_order": "{{parameters.sort_order}}",
+            "rows_per_page": "{{min(parameters.limit, 1000)}}"
+          },
+          "url": "/objects/{{parameters.object_id}}/records",
+          "body": {},
+          "method": "GET",
+          "headers": {},
+          "response": {
+            "error": {
+              "type": "DataError",
+              "message": "{{getErrorMessage(statusCode, body)}}"
+            },
+            "limit": "{{parameters.limit}}",
+            "output": "{{wrapMultipleChoiceRawInArray(getRecordOutput(item, parameters.mode), temp.output)}}",
+            "iterate": "{{body.records}}"
+          },
+          "condition": "{{!parameters.metadataExists}}",
+          "pagination": {
+            "qs": {
+              "page": "{{getPage(body)}}"
+            },
+            "condition": "{{isPagination(body, parameters.limit)}}"
+          }
+        },
+        {
+          "qs": {
+            "page": 1,
+            "filters": "{{buildFilters(parameters.filters, environment.timezone, parameters.match)}}",
+            "sort_field": "{{parameters.sort_field}}",
+            "sort_order": "{{parameters.sort_order}}",
+            "rows_per_page": "{{min(parameters.limit, 1000)}}"
+          },
+          "url": "/objects/{{parameters.object_id}}/records",
+          "body": {},
+          "method": "GET",
+          "headers": {},
+          "response": {
+            "error": {
+              "type": "DataError",
+              "message": "{{getErrorMessage(statusCode, body)}}"
+            },
+            "limit": "{{parameters.limit}}",
+            "output": "{{wrapMultipleChoiceRawInArray(getRecordOutput(item, parameters.mode), metadata.expect)}}",
+            "iterate": "{{body.records}}"
+          },
+          "condition": "{{parameters.metadataExists}}",
+          "pagination": {
+            "qs": {
+              "page": "{{getPage(body)}}"
+            },
+            "condition": "{{isPagination(body, parameters.limit)}}"
+          }
+        }
+      ],
+      "rev": 6,
+      "crud": "read",
+      "name": "SearchForRecords",
+      "epoch": null,
+      "flags": {},
+      "label": "Search for Records",
+      "scope": [],
+      "expect": [
+        {
+          "name": "object_id",
+          "type": "select",
+          "label": "Object",
+          "options": {
+            "store": "rpc://app%23knack@2/Objects",
+            "nested": [
+              {
+                "help": "For column type *Connection*, enter the ID of the connected record.",
+                "name": "filters",
+                "type": "filter",
+                "label": "Filter",
+                "grouped": false,
+                "options": {
+                  "logic": "and",
+                  "store": "rpc://app%23knack@2/Fields",
+                  "operators": [
+                    {
+                      "label": "Common",
+                      "options": [
+                        {
+                          "label": "Contains",
+                          "value": "text:contains"
+                        },
+                        {
+                          "label": "Does not contain",
+                          "value": "text:does not contain"
+                        },
+                        {
+                          "label": "Is",
+                          "value": "text:is"
+                        },
+                        {
+                          "label": "Is not",
+                          "value": "text:is not"
+                        },
+                        {
+                          "label": "Starts with",
+                          "value": "text:starts with"
+                        },
+                        {
+                          "label": "Ends with",
+                          "value": "text:ends with"
+                        },
+                        {
+                          "label": "Is blank",
+                          "value": "text:is blank"
+                        },
+                        {
+                          "label": "Is not blank",
+                          "value": "text:is not blank"
+                        },
+                        {
+                          "label": "Is near (address)",
+                          "value": "text:near"
+                        },
+                        {
+                          "label": "Is any",
+                          "value": "text:is any"
+                        }
+                      ]
+                    },
+                    {
+                      "label": "Number",
+                      "options": [
+                        {
+                          "label": "Is",
+                          "value": "number:is"
+                        },
+                        {
+                          "label": "Is not",
+                          "value": "number:is not"
+                        },
+                        {
+                          "label": "Higher than",
+                          "value": "number:higher than"
+                        },
+                        {
+                          "label": "Lower than",
+                          "value": "number:lower than"
+                        },
+                        {
+                          "label": "Is blank",
+                          "value": "number:is blank"
+                        },
+                        {
+                          "label": "Is not blank",
+                          "value": "number:is not blank"
+                        }
+                      ]
+                    },
+                    {
+                      "label": "Date and time",
+                      "options": [
+                        {
+                          "label": "Is",
+                          "value": "date:is"
+                        },
+                        {
+                          "label": "Is not",
+                          "value": "date:is not"
+                        },
+                        {
+                          "label": "Is blank",
+                          "value": "date:is blank"
+                        },
+                        {
+                          "label": "Is not blank",
+                          "value": "date:is not blank"
+                        },
+                        {
+                          "label": "Is before",
+                          "value": "date:is before"
+                        },
+                        {
+                          "label": "Is after",
+                          "value": "date:is after"
+                        },
+                        {
+                          "label": "Is today",
+                          "value": "date:is today"
+                        },
+                        {
+                          "label": "Is today or before",
+                          "value": "date:is today or before"
+                        },
+                        {
+                          "label": "Is today or after",
+                          "value": "date:is today or after"
+                        },
+                        {
+                          "label": "Is before today",
+                          "value": "date:is before today"
+                        },
+                        {
+                          "label": "Is after today",
+                          "value": "date:is after today"
+                        },
+                        {
+                          "label": "Is before current time",
+                          "value": "date:is before current time"
+                        },
+                        {
+                          "label": "Is after current time",
+                          "value": "date:is after current time"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "required": false
+              },
+              {
+                "help": "Select if the search should match all the filters (as 'and') or only some of the filters (as 'or'). Default is 'and' - matching all filters.",
+                "name": "match",
+                "type": "select",
+                "label": "Match Filters",
+                "options": [
+                  {
+                    "label": "Match All Filters",
+                    "value": "and",
+                    "default": true
+                  },
+                  {
+                    "label": "Match Any Filter",
+                    "value": "or"
+                  }
+                ]
+              },
+              {
+                "name": "sort_field",
+                "type": "select",
+                "label": "Sort field",
+                "options": {
+                  "store": "rpc://app%23knack@2/Fields",
+                  "nested": [
+                    {
+                      "name": "sort_order",
+                      "type": "select",
+                      "label": "Sort order",
+                      "options": [
+                        {
+                          "label": "ASC",
+                          "value": "asc"
+                        },
+                        {
+                          "label": "DESC",
+                          "value": "desc"
+                        }
+                      ],
+                      "required": true
+                    }
+                  ]
+                },
+                "required": false
+              },
+              "rpc://app%23knack@2/RecordExpect?type=hidden"
+            ]
+          },
+          "required": true
+        },
+        {
+          "help": "The maximum number of results to be worked with during one execution cycle.",
+          "name": "limit",
+          "type": "uinteger",
+          "label": "Limit",
+          "default": 100,
+          "required": true
+        },
+        {
+          "name": "mode",
+          "type": "select",
+          "label": "Returned data",
+          "options": [
+            {
+              "label": "formatted and raw",
+              "value": "both"
+            },
+            {
+              "label": "only formatted",
+              "value": "formatted"
+            },
+            {
+              "label": "only raw",
+              "value": "raw"
+            }
+          ],
+          "advanced": true,
+          "required": false
+        }
+      ],
+      "public": true,
+      "typeId": 9,
+      "appName": "knack",
+      "samples": null,
+      "apiJsonc": "[\n     /* \n        Old version was using /objects/{{parameters.object_id}}/fields to get the metadata needed for wrapMultipleChoiceRawInArray\n        new version is using metadata.expect instead of calling the API everytime, but it is present only if the old module was refreshed\n        for compatibitly with old scenarios, we still need to call the API metadata\n        New or refreshed modules will not make the additiona call\n        Updated by Kat Ben\n   */\n    {\n        // API metadata for old scenarios\n        \"condition\": \"{{!parameters.metadataExists}}\",\n        \"url\": \"/objects/{{parameters.object_id}}/fields\",\n        \"method\": \"GET\",\n        \"qs\": {},\n        \"body\": {},\n        \"headers\": {},\n        \"response\": {\n            \"error\": {\n                \"type\": \"DataError\",\n                \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n            },\n            \"temp\": {\n                \"output\": \"{{body.fields}}\"\n            },\n            \"output\": \"\"\n        }\n    },\n    {\n        // old scenarios using API metadata\n        \"condition\": \"{{!parameters.metadataExists}}\",\n        \"url\": \"/objects/{{parameters.object_id}}/records\",\n        \"method\": \"GET\",\n        \"qs\": {\n            \"filters\": \"{{buildFilters(parameters.filters, environment.timezone, parameters.match)}}\",\n            \"sort_field\": \"{{parameters.sort_field}}\",\n            \"sort_order\": \"{{parameters.sort_order}}\",\n            \"page\": 1,\n            \"rows_per_page\": \"{{min(parameters.limit, 1000)}}\"\n        },\n        \"body\": {},\n        \"headers\": {},\n        \"response\": {\n            \"error\": {\n                \"type\": \"DataError\",\n                \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n            },\n            \"limit\": \"{{parameters.limit}}\",\n            \"output\": \"{{wrapMultipleChoiceRawInArray(getRecordOutput(item, parameters.mode), temp.output)}}\",\n            \"iterate\": \"{{body.records}}\"\n        },\n        \"pagination\": {\n            \"condition\": \"{{isPagination(body, parameters.limit)}}\",\n            \"qs\": {\n                \"page\": \"{{getPage(body)}}\"\n            }\n        }\n    },\n    {\n        // new or refreshed scenarios using metadata.expect \n        \"condition\": \"{{parameters.metadataExists}}\",\n        \"url\": \"/objects/{{parameters.object_id}}/records\",\n        \"method\": \"GET\",\n        \"qs\": {\n            \"filters\": \"{{buildFilters(parameters.filters, environment.timezone, parameters.match)}}\",\n            \"sort_field\": \"{{parameters.sort_field}}\",\n            \"sort_order\": \"{{parameters.sort_order}}\",\n            \"page\": 1,\n            \"rows_per_page\": \"{{min(parameters.limit, 1000)}}\"\n        },\n        \"body\": {},\n        \"headers\": {},\n        \"response\": {\n            \"error\": {\n                \"type\": \"DataError\",\n                \"message\": \"{{getErrorMessage(statusCode, body)}}\"\n            },\n            \"limit\": \"{{parameters.limit}}\",\n            \"output\": \"{{wrapMultipleChoiceRawInArray(getRecordOutput(item, parameters.mode), metadata.expect)}}\",\n            \"iterate\": \"{{body.records}}\"\n        },\n        \"pagination\": {\n            \"condition\": \"{{isPagination(body, parameters.limit)}}\",\n            \"qs\": {\n                \"page\": \"{{getPage(body)}}\"\n            }\n        }\n    }\n]",
+      "approved": false,
+      "hookName": null,
+      "learning": false,
+      "interface": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Record ID"
+        },
+        "rpc://app%23knack@2/RecordInterface"
+      ],
+      "appVersion": 2,
+      "deprecated": false,
+      "epochJsonc": null,
+      "parameters": [],
+      "scopeJsonc": null,
+      "accountName": "knack",
+      "description": "Searches for a record.",
+      "expectJsonc": "[\n    {\n        \"name\": \"object_id\",\n        \"type\": \"select\",\n        \"label\": \"Object\",\n        \"required\": true,\n        \"options\": {\n            \"store\": \"rpc://Objects\",\n            \"nested\": [\n                {\n                    \"name\": \"filters\",\n                    \"label\": \"Filter\",\n                    \"type\": \"filter\",\n                    \"required\": false,\n                    \"grouped\": false,\n                    \"help\": \"For column type *Connection*, enter the ID of the connected record.\",\n                    \"options\": {\n                        \"logic\": \"and\",\n                        \"store\": \"rpc://Fields\",\n                        \"operators\": [\n                            {\n                                \"label\": \"Common\",\n                                \"options\": [\n                                    {\n                                        \"label\": \"Contains\",\n                                        \"value\": \"text:contains\"\n                                    },\n                                    {\n                                        \"label\": \"Does not contain\",\n                                        \"value\": \"text:does not contain\"\n                                    },\n                                    {\n                                        \"label\": \"Is\",\n                                        \"value\": \"text:is\"\n                                    },\n                                    {\n                                        \"label\": \"Is not\",\n                                        \"value\": \"text:is not\"\n                                    },\n                                    {\n                                        \"label\": \"Starts with\",\n                                        \"value\": \"text:starts with\"\n                                    },\n                                    {\n                                        \"label\": \"Ends with\",\n                                        \"value\": \"text:ends with\"\n                                    },\n                                    {\n                                        \"label\": \"Is blank\",\n                                        \"value\": \"text:is blank\"\n                                    },\n                                    {\n                                        \"label\": \"Is not blank\",\n                                        \"value\": \"text:is not blank\"\n                                    },\n                                    {\n                                        \"label\": \"Is near (address)\",\n                                        \"value\": \"text:near\"\n                                    },\n                                    {\n                                        \"label\": \"Is any\",\n                                        \"value\": \"text:is any\"\n                                    }\n                                ]\n                            },\n                            {\n                                \"label\": \"Number\",\n                                \"options\": [\n                                    {\n                                        \"label\": \"Is\",\n                                        \"value\": \"number:is\"\n                                    },\n                                    {\n                                        \"label\": \"Is not\",\n                                        \"value\": \"number:is not\"\n                                    },\n                                    {\n                                        \"label\": \"Higher than\",\n                                        \"value\": \"number:higher than\"\n                                    },\n                                    {\n                                        \"label\": \"Lower than\",\n                                        \"value\": \"number:lower than\"\n                                    },\n                                    {\n                                        \"label\": \"Is blank\",\n                                        \"value\": \"number:is blank\"\n                                    },\n                                    {\n                                        \"label\": \"Is not blank\",\n                                        \"value\": \"number:is not blank\"\n                                    }\n                                ]\n                            },\n                            {\n                                \"label\": \"Date and time\",\n                                \"options\": [\n                                    {\n                                        \"label\": \"Is\",\n                                        \"value\": \"date:is\"\n                                    },\n                                    {\n                                        \"label\": \"Is not\",\n                                        \"value\": \"date:is not\"\n                                    },\n                                    {\n                                        \"label\": \"Is blank\",\n                                        \"value\": \"date:is blank\"\n                                    },\n                                    {\n                                        \"label\": \"Is not blank\",\n                                        \"value\": \"date:is not blank\"\n                                    },\n                                    {\n                                        \"label\": \"Is before\",\n                                        \"value\": \"date:is before\"\n                                    },\n                                    {\n                                        \"label\": \"Is after\",\n                                        \"value\": \"date:is after\"\n                                    },\n                                    {\n                                        \"label\": \"Is today\",\n                                        \"value\": \"date:is today\"\n                                    },\n                                    {\n                                        \"label\": \"Is today or before\",\n                                        \"value\": \"date:is today or before\"\n                                    },\n                                    {\n                                        \"label\": \"Is today or after\",\n                                        \"value\": \"date:is today or after\"\n                                    },\n                                    {\n                                        \"label\": \"Is before today\",\n                                        \"value\": \"date:is before today\"\n                                    },\n                                    {\n                                        \"label\": \"Is after today\",\n                                        \"value\": \"date:is after today\"\n                                    },\n                                    {\n                                        \"label\": \"Is before current time\",\n                                        \"value\": \"date:is before current time\"\n                                    },\n                                    {\n                                        \"label\": \"Is after current time\",\n                                        \"value\": \"date:is after current time\"\n                                    }\n                                ]\n                            }\n                        ]\n                    }\n                },\n                {\n                    \"name\": \"match\",\n                    \"label\": \"Match Filters\",\n                    \"type\": \"select\",\n                    \"options\": [\n                        {\n                            \"label\": \"Match All Filters\",\n                            \"value\": \"and\",\n                            \"default\": true\n                        },\n                        {\n                            \"label\": \"Match Any Filter\",\n                            \"value\": \"or\"\n                        }\n                    ],\n                    \"help\": \"Select if the search should match all the filters (as 'and') or only some of the filters (as 'or'). Default is 'and' - matching all filters.\"\n                },\n                {\n                    \"name\": \"sort_field\",\n                    \"label\": \"Sort field\",\n                    \"type\": \"select\",\n                    \"required\": false,\n                    \"options\": {\n                        \"store\": \"rpc://Fields\",\n                        \"nested\": [\n                            {\n                                \"name\": \"sort_order\",\n                                \"label\": \"Sort order\",\n                                \"type\": \"select\",\n                                \"required\": true,\n                                \"options\": [\n                                    {\n                                        \"label\": \"ASC\",\n                                        \"value\": \"asc\"\n                                    },\n                                    {\n                                        \"label\": \"DESC\",\n                                        \"value\": \"desc\"\n                                    }\n                                ]\n                            }\n                        ]\n                    }\n                },\n                \"rpc://RecordExpect?type=hidden\"\n            ]\n        }\n    },\n    {\n        \"help\": \"The maximum number of results to be worked with during one execution cycle.\",\n        \"name\": \"limit\",\n        \"type\": \"uinteger\",\n        \"label\": \"Limit\",\n        \"default\": 100,\n        \"required\": true\n    },\n    {\n        \"name\": \"mode\",\n        \"type\": \"select\",\n        \"label\": \"Returned data\",\n        \"required\": false,\n        \"advanced\": true,\n        \"options\": [\n            {\n                \"value\": \"both\",\n                \"label\": \"formatted and raw\"\n            },\n            {\n                \"value\": \"formatted\",\n                \"label\": \"only formatted\"\n            },\n            {\n                \"value\": \"raw\",\n                \"label\": \"only raw\"\n            }\n        ]\n    }\n]",
+      "samplesJsonc": null,
+      "altAccountName": null,
+      "interfaceJsonc": "[\n\t{\n\t\t\"name\": \"id\",\n\t\t\"type\": \"text\",\n\t\t\"label\": \"Record ID\"\n\t},\n\t\"rpc://RecordInterface\"\n]",
+      "parametersJsonc": null,
+      "centicreditsFormula": null,
+      "centicreditsFormulaDescription": null,
+      "centicreditsFormulaDocumentationUrl": null
+    }
+  },
+  "approved": true,
+  "authorId": 671322,
+  "billable": true,
+  "inReview": false,
+  "keywords": null,
+  "language": "en",
+  "_accounts": {
+    "knack": {
+      "api": {
+        "log": {
+          "sanitize": [
+            "request.headers.X-Knack-Application-Id",
+            "request.headers.X-Knack-REST-API-Key"
+          ]
+        },
+        "url": "https://{{ifempty(ifempty(connection.apiServer, connection.appServer), 'api.knack.com')}}/v1/objects",
+        "headers": {
+          "X-Knack-REST-API-Key": "{{connection.apiKey}}",
+          "X-Knack-Application-Id": "{{connection.applicationId}}"
+        }
+      },
+      "rev": 8,
+      "name": "knack",
+      "type": "basic",
+      "label": "Knack",
+      "scope": [],
+      "scopes": {},
+      "aliasTo": null,
+      "appName": "knack",
+      "install": {},
+      "apiJsonc": "{\n\t\"url\": \"https://{{ifempty(ifempty(connection.apiServer, connection.appServer), 'api.knack.com')}}/v1/objects\",\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.X-Knack-Application-Id\", \"request.headers.X-Knack-REST-API-Key\"]\n\t},\n\t\"headers\": {\n        \"X-Knack-Application-Id\": \"{{connection.applicationId}}\",\n        \"X-Knack-REST-API-Key\": \"{{connection.apiKey}}\"\n     }\n}",
+      "authorId": 671322,
+      "appVersion": 2,
+      "parameters": [
+        {
+          "name": "applicationId",
+          "type": "text",
+          "label": "Application ID",
+          "editable": true,
+          "required": true
+        },
+        {
+          "name": "apiKey",
+          "type": "password",
+          "label": "API key",
+          "editable": true,
+          "required": true
+        },
+        {
+          "help": "Default server is 'api.knack.com'.",
+          "name": "apiServer",
+          "type": "text",
+          "label": "Private API server domain",
+          "advanced": true,
+          "required": false
+        }
+      ],
+      "scopeJsonc": null,
+      "installSpec": [],
+      "scopesJsonc": null,
+      "installJsonc": null,
+      "depAccountName": null,
+      "depAccountScope": null,
+      "parametersJsonc": "[\n\t{\n        \"name\": \"applicationId\",\n        \"label\": \"Application ID\",\n        \"type\": \"text\",\n        \"required\": true,\n        \"editable\": true\n     },\n     {\n\t\t\"name\": \"apiKey\",\n        \"label\": \"API key\",\n        \"type\": \"password\",\n        \"required\": true,\n        \"editable\": true\n     },\n     {\n\t\t\"name\": \"apiServer\",\n        \"label\": \"Private API server domain\",\n        \"type\": \"text\",\n        \"help\": \"Default server is 'api.knack.com'.\",\n        \"required\": false,\n        \"advanced\": true\n     }\n]",
+      "installSpecJsonc": null,
+      "connectedSystemName": null,
+      "depAccountScopeJsonc": null
+    }
+  },
+  "baseJsonc": "{\n\t\"baseUrl\": \"https://{{ifempty(ifempty(connection.apiServer, connection.appServer), 'api.knack.com')}}/v1\",\n\t\"log\": {\n\t\t\"sanitize\": [\"request.headers.X-Knack-Application-Id\", \"request.headers.X-Knack-REST-API-Key\"]\n\t},\n\t\"timeout\": 120000,\n\t\"gzip\": true,\n\t\"headers\": {\n        \"X-Knack-Application-Id\": \"{{connection.applicationId}}\",\n        \"X-Knack-REST-API-Key\": \"{{connection.apiKey}}\"\n     }\n}",
+  "countries": null,
+  "_functions": {
+    "getId": {
+      "rev": 12,
+      "code": "function getId(item, parameters) {\n  if (\n    item &&\n    parameters.autoincrement_id &&\n    item[parameters.autoincrement_id]\n  ) {\n    return item[parameters.autoincrement_id];\n  } else {\n    return null;\n  }\n}\n",
+      "name": "getId",
+      "test": "const validInputItem = {\r\n  id: '65747c40977ffd002707b388',\r\n  account_status: 'active',\r\n  approval_status: 'approved',\r\n  utility_key: '1702132800547237efko',\r\n  profile_keys: 'Business Owners',\r\n  profile_keys_raw: [\r\n    {\r\n      id: 'profile_4',\r\n      identifier: 'Business Owners'\r\n    }\r\n  ],\r\n  field_12: 'Some Account',\r\n  field_12_raw: {\r\n    first: 'Some',\r\n    middle: 'Random',\r\n    last: 'Account',\r\n    title: 'New Account',\r\n    full: 'Some Account'\r\n  },\r\n  field_13: '',\r\n  field_13_raw: '',\r\n  field_14: '*********',\r\n  field_14_raw: '**********',\r\n  field_32: '<span class=\"profile_4\">Business Owners</span>',\r\n  field_32_raw: ['profile_4'],\r\n  field_33: 'active',\r\n  field_33_raw: 'active',\r\n  field_42: 8,\r\n  field_42_raw: 8\r\n};\r\n\r\nconst validInputParameters = {\r\n  object_id: 'object_2',\r\n  mode: null,\r\n  limit: 15,\r\n  autoincrement_id: 'field_42'\r\n};\r\n\r\nit('should return valid output for valid item and valid parameters', () => {\r\n  assert.deepEqual(8, getId(validInputItem, validInputParameters));\r\n});\r\n\r\nit('should return null if item or parameters are not valid', () => {\r\n  assert.deepEqual(null, getId(null, null));\r\n});\r\n",
+      "appName": "knack",
+      "arguments": "(item, parameters)",
+      "appVersion": 2
+    },
+    "getPage": {
+      "rev": 2,
+      "code": "function getPage(body) {\n\treturn Number(body.current_page) + 1\n}",
+      "name": "getPage",
+      "test": null,
+      "appName": "knack",
+      "arguments": "(body)",
+      "appVersion": 2
+    },
+    "buildFilters": {
+      "rev": 3,
+      "code": "function buildFilters(filters, timezone, match) {\n  if(!filters) return;\n\tconst rules = []\n    ;(filters || []).forEach(filter => {\n      // \"a\":\"Id\",\"b\":\"1\",\"o\":\"text:equals\"\n      filter.forEach(cond => {\n        const [, operator] = cond.o.split(':')\n        switch (cond.o) {\n          case 'text:is':\n          case 'text:is not':\n          case 'text:contains':\n          case 'text:does not contain':\n          case 'text:starts with':\n          case 'text:ends with':\n          case 'text:is any':\n          case 'text:near': {\n            rules.push({\n              field: cond.a,\n              operator,\n              value: cond.b\n            })\n            break\n          }\n\t\t  case 'number:is':\n          case 'number:is not':\n          case 'number:higher than':\n          case 'number:lower than':\n          case 'number:is blank':\n          case 'number:is not blank': {\n            rules.push({\n              field: cond.a,\n              operator,\n              value: cond.b\n            })\n            break\n          }\n          case 'text:is blank':\n          case 'text:is not blank':\n          case 'date:is blank':\n          case 'date:is not blank':\n          case 'date:is today':\n          case 'date:is today or before':\n          case 'date:is today or after':\n          case 'date:is before today':\n          case 'date:is after today':\n          case 'date:is before current time':\n          case 'date:is after current time': {\n            rules.push({\n              field: cond.a,\n              operator\n            })\n            break\n          }\n          case 'date:is':\n          case 'date:is not':\n          case 'date:is before':\n          case 'date:is after': {\n\t\t  \trules.push({\n              field: cond.a,\n              operator,\n              value: cond.b\n            })\n            break\n          }\n        }\n      })\n    })\n\treturn JSON.stringify({\n        match: match ? match: 'and',\n        rules\n    })\n}",
+      "name": "buildFilters",
+      "test": null,
+      "appName": "knack",
+      "arguments": "(filters, timezone, match)",
+      "appVersion": 2
+    },
+    "isPagination": {
+      "rev": 2,
+      "code": "function isPagination(body, limit) {\n\t// limit mensi nez 1000, vse se nacte napoprve\n\tif (limit <= 1000) {\n\t\treturn false\n\t}\n\tif (!body.records) {\n\t\treturn false\n\t}\n\t// na strance neni 1000 zaznamu, nema smysl pokracovat\n\t// if (body.records.length < 1000) {\n\t//\treturn false\n\t// }\n\tconst current = Number(body.current_page)\n\tconst total = Number(body.total_pages)\n\t// pocet stranek je vice nez je aktualni stranka\n\treturn total > current\n\t\n}",
+      "name": "isPagination",
+      "test": null,
+      "appName": "knack",
+      "arguments": "(body, limit)",
+      "appVersion": 2
+    },
+    "getRepeatSpec": {
+      "rev": 2,
+      "code": "function getRepeatSpec() {\n\treturn [\n\t\t{\n\t\t\tlabel: 'Frequency',\n\t\t\tname: 'frequency',\n\t\t\ttype: 'select',\n\t\t\toptions: [\n\t\t\t\t{\n\t\t\t\t\tlabel: 'daily',\n\t\t\t\t\tvalue: 'daily'\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tlabel: 'weekly',\n\t\t\t\t\tvalue: 'weekly'\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tlabel: 'monthly',\n\t\t\t\t\tvalue: 'monthly'\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tlabel: 'yearly',\n\t\t\t\t\tvalue: 'yearly'\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\tlabel: 'Interval',\n\t\t\tname: 'interval',\n\t\t\ttype: 'number'\n\t\t},\n\t\t/*\n\t\t{\n\t\t\tlabel: 'Monday',\n\t\t\tname: 'MO',\n\t\t\ttype: 'boolean'\n\t\t},\n\t\t{\n\t\t\tlabel: 'Tuesday',\n\t\t\tname: 'TU',\n\t\t\ttype: 'boolean'\n\t\t},\n\t\t{\n\t\t\tlabel: 'Wednesday',\n\t\t\tname: 'WE',\n\t\t\ttype: 'boolean'\n\t\t},\n\t\t{\n\t\t\tlabel: 'Thursday',\n\t\t\tname: 'TH',\n\t\t\ttype: 'boolean'\n\t\t},\n\t\t{\n\t\t\tlabel: 'Friday',\n\t\t\tname: 'FR',\n\t\t\ttype: 'boolean'\n\t\t},\n\t\t{\n\t\t\tlabel: 'Saturday',\n\t\t\tname: 'SA',\n\t\t\ttype: 'boolean'\n\t\t},\n\t\t{\n\t\t\tlabel: 'Sunday',\n\t\t\tname: 'SU',\n\t\t\ttype: 'boolean'\n\t\t},\n\t\t*/\n\t\t{\n\t\t\tlabel: 'Start date',\n\t\t\tname: 'start_date',\n\t\t\ttype: 'text',\n\t\t\thelp: 'Use the exact date format as in your Knack app settings for this field.'\n\t\t},\n\t\t{\n\t\t\tlabel: 'Ends',\n\t\t\tname: 'endson',\n\t\t\ttype: 'select',\n\t\t\toptions: [\n\t\t\t\t{\n\t\t\t\t\tlabel: 'Never',\n\t\t\t\t\tvalue: 'never'\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tlabel: 'After X occurrences',\n\t\t\t\t\tvalue: 'limit',\n\t\t\t\t\tnested: [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tlabel: 'Count',\n\t\t\t\t\t\t\tname: 'end_count',\n\t\t\t\t\t\t\ttype: 'number'\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tlabel: 'Date',\n\t\t\t\t\tvalue: 'date',\n\t\t\t\t\tnested: [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tlabel: 'End date',\n\t\t\t\t\t\t\tname: 'end_date',\n\t\t\t\t\t\t\ttype: 'text',\n\t\t\t\t\t\t\thelp: 'Use the exact date format as in your Knack app settings for this field.'\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}",
+      "name": "getRepeatSpec",
+      "test": null,
+      "appName": "knack",
+      "arguments": "()",
+      "appVersion": 2
+    },
+    "getRecordInput": {
+      "rev": 2,
+      "code": "function getRecordInput(parameters) {\n\t// backward compatibility, dates\n\tconst dates = {};\n\tObject.keys(parameters)\n\t\t.filter(param => param.endsWith('_datetype') && parameters[param] !== 'simple')\n\t\t.forEach(param => {\n\t\t\tdates[param.substr(0, param.length - '_datetype'.length)] = parameters[param]\n\t\t});\n\n\tconst body = {};\n\tObject.keys(parameters)\n\t\t.filter(param => param !== 'object_id' && !param.endsWith('_datetype'))\n\t\t.forEach(param => {\n\t\t\tconst value = parameters[param];\n\t\t\tif (Array.isArray(value)) {\n\t\t\t\t// if multiple select is a one selection send it as a string\n\t\t\t\tbody[param] = value.length == 1 ? value.pop() : value;\n\t\t\t\t//body[param] = value;\n\n\t\t\t} else if (value !== null && typeof value === 'object' && Object.keys(value).length === 0) {\n\t\t\t\t// remove empty object from request\n\t\t\t} else if (dates[param]) {\n\t\t\t\tif (dates[param] === 'fromTo') {\n\t\t\t\t\tbody[param] = {\n\t\t\t\t\t\tdate: value.from,\n\t\t\t\t\t\tto: {\n\t\t\t\t\t\t\tdate: value.to\n\t\t\t\t\t\t}\n\t\t\t\t\t};\n\t\t\t\t} else if (dates[param] === 'repeat') {\n\t\t\t\t\tconst spec = {\n\t\t\t\t\t\tdate: value.from\n\t\t\t\t\t};\n\t\t\t\t\tif (value.to) {\n\t\t\t\t\t\tspec.to = value.to;\n\t\t\t\t\t}\n\t\t\t\t\tif (value.repeat) {\n\t\t\t\t\t\tspec.repeat = value.repeat;\n\t\t\t\t\t}\n\t\t\t\t\tbody[param] = spec;\n\t\t\t\t}\n\t\t\t} else {\n\t\t\t\tbody[param] = value;\n\t\t\t}\n\t\t});\n\n\treturn body;\n}",
+      "name": "getRecordInput",
+      "test": null,
+      "appName": "knack",
+      "arguments": "(parameters)",
+      "appVersion": 2
+    },
+    "getErrorMessage": {
+      "rev": 2,
+      "code": "function getErrorMessage(code, body) {\n\tlet message = null\n\tif (!body) {\n\t\tmessage = 'Error'\n\t} else if (typeof body === 'string') {\n\t\tmessage = body\n\t} else if (typeof body === 'object') {\n\t\tif (body.error) {\n\t\t\tmessage = body.error\n\t\t} else {\n\t\t\tmessage = JSON.stringify(body)\n\t\t}\n\t}\n\treturn `${code}: ${message}`\n}",
+      "name": "getErrorMessage",
+      "test": null,
+      "appName": "knack",
+      "arguments": "(code, body)",
+      "appVersion": 2
+    },
+    "getRecordExpect": {
+      "rev": 22,
+      "code": "function getRecordExpect(fields, type) {\n\tconst intf = [];\n\t(fields || []).filter(field => field.type !== 'auto_increment').forEach(field => {\n\t\tconst raw = {\n\t\t\tlabel: field.label,\n\t\t\tname: field.key,\n\t\t\ttype: 'text'\n\t\t};\n\t\tswitch (field.type) {\n\t\t\tcase 'user_roles':\n\t\t\t\traw.type = 'select';\n\t\t\t\traw.multiple = true;\n\t\t\t\traw.options = (Object.keys(field.choices) || []).map(choice => ({ label: field.choices[choice], value: choice }));\n\t\t\t\tbreak;\n\t\t\tcase 'multiple_choice': {\n\t\t\t\traw.type = 'select';\n\t\t\t\traw.multiple = true;\n\t\t\t\traw.help = 'Can be a single or multiple select, depending on your Knack settings.';\n\t\t\t\traw.options = (field.choices || []).map(choice => {\n\t\t\t\t\treturn {\n\t\t\t\t\t\tlabel: choice,\n\t\t\t\t\t\tvalue: choice\n\t\t\t\t\t};\n\t\t\t\t});\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tcase 'boolean': {\n\t\t\t\traw.type = 'boolean';\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tcase 'name': {\n\t\t\t\traw.type = 'collection';\n\t\t\t\traw.spec = [\n\t\t\t\t\t{ label: 'Title', name: 'title', type: 'text' },\n\t\t\t\t\t{ label: 'First', name: 'first', type: 'text' },\n\t\t\t\t\t{ label: 'Middle', name: 'middle', type: 'text' },\n\t\t\t\t\t{ label: 'Last', name: 'last', type: 'text' }\n\t\t\t\t];\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tcase 'link': {\n\t\t\t\traw.type = 'collection';\n\t\t\t\traw.spec = [\n\t\t\t\t\t{ label: 'Label', name: 'label', type: 'text' },\n\t\t\t\t\t{ label: 'URL', name: 'url', type: 'url' }\n\t\t\t\t];\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tcase 'address': {\n\t\t\t\traw.type = 'collection';\n\t\t\t\traw.spec = [\n\t\t\t\t\t{ label: 'Longitude', name: 'longitude', type: 'text' },\n\t\t\t\t\t{ label: 'Latitude', name: 'latitude', type: 'text' },\n\t\t\t\t\t{ label: 'Zip', name: 'zip', type: 'text' },\n\t\t\t\t\t{ label: 'State', name: 'state', type: 'text' },\n\t\t\t\t\t{ label: 'City', name: 'city', type: 'text' },\n\t\t\t\t\t{ label: 'Street', name: 'street', type: 'text' },\n\t\t\t\t\t{ label: 'Street2', name: 'street2', type: 'text' },\n\t\t\t\t\t{ label: 'Country', name: 'country', type: 'text' }\n\t\t\t\t];\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tcase 'email': {\n\t\t\t\t/*\n\t\t\t\traw.type = 'email'\n\t\t\t\tbreak\n\t\t\t\t*/\n\t\t\t\traw.type = 'collection';\n\t\t\t\traw.spec = [\n\t\t\t\t\t{ label: 'Label', name: 'label', type: 'text' },\n\t\t\t\t\t{ label: 'Email', name: 'email', type: 'email' }\n\t\t\t\t];\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tcase 'image':\n\t\t\tcase 'file': {\n\t\t\t\traw.help = 'Use Upload a File module first and set the file ID here. ';\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tcase 'connection': {\n\t\t\t\traw.type = 'array';\n\t\t\t\traw.help = 'Set the record IDs.';\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tcase 'date_time': {\n\t\t\t\traw.type = 'select';\n\t\t\t\traw.label = `${raw.label} (type)`;\n\t\t\t\traw.name = `${raw.name}_datetype`;\n\t\t\t\traw.placeholder = 'simple';\n\t\t\t\traw.help = 'Select the date type depending on your Knack settings.'\n\t\t\t\traw.options = [\n\t\t\t\t\t{\n\t\t\t\t\t\tlabel: 'Simple date',\n\t\t\t\t\t\tvalue: 'simple',\n\t\t\t\t\t\tdefault: true,\n\t\t\t\t\t\tnested: [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\tlabel: field.label,\n\t\t\t\t\t\t\t\tname: field.key,\n\t\t\t\t\t\t\t\ttype: 'text',\n\t\t\t\t\t\t\t\thelp: 'Use the exact date format as in your Knack app settings for this field.'\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\tlabel: 'From-to date',\n\t\t\t\t\t\tvalue: 'fromTo',\n\t\t\t\t\t\tnested: [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\tlabel: field.label,\n\t\t\t\t\t\t\t\tname: field.key,\n\t\t\t\t\t\t\t\ttype: 'collection',\n\t\t\t\t\t\t\t\tspec: [\n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\tlabel: 'From',\n\t\t\t\t\t\t\t\t\t\tname: 'from',\n\t\t\t\t\t\t\t\t\t\ttype: 'text',\n\t\t\t\t\t\t\t\t\t\thelp: 'Use the exact date format as in your Knack app settings for this field.'\n\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\tlabel: 'To',\n\t\t\t\t\t\t\t\t\t\tname: 'to',\n\t\t\t\t\t\t\t\t\t\ttype: 'text',\n\t\t\t\t\t\t\t\t\t\thelp: 'Use the exact date format as in your Knack app settings for this field.'\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\tlabel: 'Repeat',\n\t\t\t\t\t\tvalue: 'repeat',\n\t\t\t\t\t\tnested: [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\tlabel: field.label,\n\t\t\t\t\t\t\t\tname: field.key,\n\t\t\t\t\t\t\t\ttype: 'collection',\n\t\t\t\t\t\t\t\tspec: [\n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\tlabel: 'From',\n\t\t\t\t\t\t\t\t\t\tname: 'from',\n\t\t\t\t\t\t\t\t\t\ttype: 'text',\n\t\t\t\t\t\t\t\t\t\thelp: 'Use the exact date format as in your Knack app settings for this field.'\n\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\tlabel: 'To',\n\t\t\t\t\t\t\t\t\t\tname: 'to',\n\t\t\t\t\t\t\t\t\t\ttype: 'text',\n\t\t\t\t\t\t\t\t\t\thelp: 'Use the exact date format as in your Knack app settings for this field.'\n\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\tlabel: 'Repeat specification',\n\t\t\t\t\t\t\t\t\t\tname: 'repeat',\n\t\t\t\t\t\t\t\t\t\ttype: 'collection',\n\t\t\t\t\t\t\t\t\t\tspec: iml.getRepeatSpec()\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t];\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t\tintf.push(raw);\n\t});\n\t// for Get, Search and Watch module return only multichoice parameters and set them hidden\n\t// used in function wrapMultipleChoiceRawInArray\n\tif (type === 'hidden') {\n\t\treturn intf.filter(item => item.multiple).map(item => ({\n\t\t\tname: item.name,\n\t\t\ttype: 'hidden',\n\t\t\tdefault:true\n\t\t})).concat([{ \"name\": \"metadataExists\", \"type\": \"hidden\", \"default\":true }]);\n\t}\n\n\treturn intf;\n}\n",
+      "name": "getRecordExpect",
+      "test": "it('should return mappable parameters for Create/Update module', () => {\r\n    const fields = [\r\n        {\r\n            \"label\": \"Name\",\r\n            \"key\": \"field_39\",\r\n            \"required\": false,\r\n            \"type\": \"name\"\r\n        },\r\n        {\r\n            \"label\": \"Email\",\r\n            \"key\": \"field_40\",\r\n            \"required\": false,\r\n            \"type\": \"email\"\r\n        },\r\n        {\r\n            \"label\": \"Password\",\r\n            \"key\": \"field_41\",\r\n            \"required\": false,\r\n            \"type\": \"password\"\r\n        },\r\n        {\r\n            \"label\": \"User Status\",\r\n            \"key\": \"field_42\",\r\n            \"required\": false,\r\n            \"type\": \"multiple_choice\",\r\n            \"choices\": [\r\n                \"active\",\r\n                \"inactive\",\r\n                \"pending approval\"\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"User Roles\",\r\n            \"key\": \"field_43\",\r\n            \"required\": false,\r\n            \"type\": \"user_roles\",\r\n            \"choices\": {\r\n                \"profile_7\": \"Admin\",\r\n                \"profile_8\": \"Support Agent\",\r\n                \"profile_9\": \"Employee\"\r\n            }\r\n        },\r\n        {\r\n            \"label\": \"Department\",\r\n            \"key\": \"field_45\",\r\n            \"required\": false,\r\n            \"type\": \"connection\",\r\n            \"relationship\": {\r\n                \"has\": \"one\",\r\n                \"object\": \"object_5\",\r\n                \"belongs_to\": \"many\"\r\n            }\r\n        }\r\n    ];\r\n\r\n    const output = [\r\n        {\r\n            \"label\": \"Name\",\r\n            \"name\": \"field_39\",\r\n            \"type\": \"collection\",\r\n            \"spec\": [\r\n                {\r\n                    \"label\": \"Title\",\r\n                    \"name\": \"title\",\r\n                    \"type\": \"text\"\r\n                },\r\n                {\r\n                    \"label\": \"First\",\r\n                    \"name\": \"first\",\r\n                    \"type\": \"text\"\r\n                },\r\n                {\r\n                    \"label\": \"Middle\",\r\n                    \"name\": \"middle\",\r\n                    \"type\": \"text\"\r\n                },\r\n                {\r\n                    \"label\": \"Last\",\r\n                    \"name\": \"last\",\r\n                    \"type\": \"text\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"Email\",\r\n            \"name\": \"field_40\",\r\n            \"type\": \"collection\",\r\n            \"spec\": [\r\n                {\r\n                    \"label\": \"Label\",\r\n                    \"name\": \"label\",\r\n                    \"type\": \"text\"\r\n                },\r\n                {\r\n                    \"label\": \"Email\",\r\n                    \"name\": \"email\",\r\n                    \"type\": \"email\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"Password\",\r\n            \"name\": \"field_41\",\r\n            \"type\": \"text\"\r\n        },\r\n        {\r\n            \"label\": \"User Status\",\r\n            \"name\": \"field_42\",\r\n            \"type\": \"select\",\r\n            \"multiple\": true,\r\n            \"help\": \"Can be a single or multiple select, depending on your Knack settings.\",\r\n            \"options\": [\r\n                {\r\n                    \"label\": \"active\",\r\n                    \"value\": \"active\"\r\n                },\r\n                {\r\n                    \"label\": \"inactive\",\r\n                    \"value\": \"inactive\"\r\n                },\r\n                {\r\n                    \"label\": \"pending approval\",\r\n                    \"value\": \"pending approval\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"User Roles\",\r\n            \"name\": \"field_43\",\r\n            \"type\": \"select\",\r\n            \"multiple\": true,\r\n            \"options\": [\r\n                {\r\n                    \"label\": \"Admin\",\r\n                    \"value\": \"profile_7\"\r\n                },\r\n                {\r\n                    \"label\": \"Support Agent\",\r\n                    \"value\": \"profile_8\"\r\n                },\r\n                {\r\n                    \"label\": \"Employee\",\r\n                    \"value\": \"profile_9\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"Department\",\r\n            \"name\": \"field_45\",\r\n            \"type\": \"array\",\r\n            \"help\": \"Set the record IDs.\"\r\n        }\r\n    ]\r\n    assert.deepStrictEqual(getRecordExpect(fields), output)\r\n});\r\n\r\nit('should return hidden mappable parameters for Search/Get/Watch module', () => {\r\n    const fields = [\r\n        {\r\n            \"label\": \"Password\",\r\n            \"key\": \"field_41\",\r\n            \"required\": false,\r\n            \"type\": \"password\"\r\n        },\r\n        {\r\n            \"label\": \"User Status\",\r\n            \"key\": \"field_42\",\r\n            \"required\": false,\r\n            \"type\": \"multiple_choice\",\r\n            \"choices\": [\r\n                \"active\",\r\n                \"inactive\",\r\n                \"pending approval\"\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"User Roles\",\r\n            \"key\": \"field_43\",\r\n            \"required\": false,\r\n            \"type\": \"user_roles\",\r\n            \"choices\": {\r\n                \"profile_7\": \"Admin\",\r\n                \"profile_8\": \"Support Agent\",\r\n                \"profile_9\": \"Employee\"\r\n            }\r\n        }\r\n    ];\r\n\r\n    const output = [\r\n        {\r\n            \"name\": \"field_42\",\r\n            \"type\": \"hidden\",\r\n            \"default\":true\r\n        },\r\n        {\r\n            \"name\": \"field_43\",\r\n            \"type\": \"hidden\",\r\n            \"default\":true\r\n        },\r\n        {\r\n            \"name\": \"metadataExists\",\r\n            \"type\": \"hidden\",\r\n            \"default\": true\r\n        }\r\n\r\n    ]\r\n    assert.deepStrictEqual(getRecordExpect(fields, 'hidden'), output)\r\n});\r\n\r\nit('should return default hidden parameter for empty input in Search/Get/Watch module', () => {\r\n    assert.deepStrictEqual(getRecordExpect(undefined, 'hidden'), [{ \"name\": \"metadataExists\", \"type\": \"hidden\", \"default\": true }])\r\n});\r\n\r\nit('should return empty array for empty input in Create/Update module', () => {\r\n    assert.deepStrictEqual(getRecordExpect(undefined), [])\r\n});\r\n\r\n",
+      "appName": "knack",
+      "arguments": "(fields, type)",
+      "appVersion": 2
+    },
+    "getRecordOutput": {
+      "rev": 14,
+      "code": "function getRecordOutput(body, mode = 'both') {\n  if (typeof body !== 'object')\n    throw TypeError('\"body\" is expected to be an object.');\n  if (typeof mode !== 'string')\n    throw TypeError('\"mode\" is expected to be a string.');\n\n  return Object.entries(body).reduce((acc, [key, value]) => {\n    if (key.startsWith('field_')) {\n      const valueToReturn =\n        typeof value === 'string' && value === '' ? null : value;\n\n      if (mode === 'raw' && !key.endsWith('_raw')) {\n        return acc;\n      }\n      if (mode === 'formatted' && key.endsWith('_raw')) {\n        return acc;\n      }\n      return { ...acc, [key]: valueToReturn };\n    }\n\n    // leave this condition after refactoring just in case it was placed here intentionally\n    // and some of the fields that don't meet the conditions should be skipped\n    if (key === 'id') {\n      return { ...acc, [key]: value };\n    }\n\n    return acc;\n  }, {});\n}\n",
+      "name": "getRecordOutput",
+      "test": "it('should throw an error if \"body\" is not an object', () => {\n    assert.throws(() => {\n        getRecordOutput('not an object'),\n            TypeError,\n            '\"body\" is expected to be an object.';\n    });\n});\n\nit('should thrown an error if \"mode\" is not a string', () => {\n    assert.throws(() => {\n        getRecordOutput({}, 123),\n            TypeError,\n            '\"mode\" is expected to be a string.';\n    });\n});\n\nconst validBodyInput = {\n    id: '65019d4e1630850027182f7c',\n    field_1: '09/14/2023',\n    field_1_raw: {\n        date: '09/14/2023',\n        date_formatted: '09/14/2023',\n        hours: '12',\n        minutes: '00',\n        am_pm: 'AM',\n        unix_timestamp: 1694649600000,\n        iso_timestamp: '2023-09-14T00:00:00.000Z',\n        timestamp: '09/14/2023 12:00 am',\n        time: 720,\n    },\n    field_2: 'short text1 value',\n    field_2_raw: 'short text1 value',\n    field_3: '$150.00',\n    field_3_raw: '150.00',\n    field_4: 'street address 1<br />street address 2<br />city, province 12345',\n    field_4_raw: {\n        street: 'street address 1',\n        street2: 'street address 2',\n        city: 'city',\n        state: 'province',\n        zip: '12345',\n        country: null,\n        longitude: null,\n        latitude: null,\n        full: 'street address 1 street address 2 city, province 12345',\n    },\n};\n\nconst validModes = {\n    both: 'both',\n    raw: 'raw',\n    formatted: 'formatted',\n};\n\nit('should not throw an error if valid arguments are provided', () => {\n    assert.doesNotThrow(() => {\n        getRecordOutput(validBodyInput, validModes.both);\n        getRecordOutput(validBodyInput, validModes.raw);\n        getRecordOutput(validBodyInput, validModes.formatted);\n    });\n});\n\nconst bothModeOutput = {\n    id: '65019d4e1630850027182f7c',\n    field_1: '09/14/2023',\n    field_1_raw: {\n        date: '09/14/2023',\n        date_formatted: '09/14/2023',\n        hours: '12',\n        minutes: '00',\n        am_pm: 'AM',\n        unix_timestamp: 1694649600000,\n        iso_timestamp: '2023-09-14T00:00:00.000Z',\n        timestamp: '09/14/2023 12:00 am',\n        time: 720,\n    },\n    field_2: 'short text1 value',\n    field_2_raw: 'short text1 value',\n    field_3: '$150.00',\n    field_3_raw: '150.00',\n    field_4: 'street address 1<br />street address 2<br />city, province 12345',\n    field_4_raw: {\n        street: 'street address 1',\n        street2: 'street address 2',\n        city: 'city',\n        state: 'province',\n        zip: '12345',\n        country: null,\n        longitude: null,\n        latitude: null,\n        full: 'street address 1 street address 2 city, province 12345',\n    },\n};\n\nconst rawModeOutput = {\n    id: '65019d4e1630850027182f7c',\n    field_1_raw: {\n        date: '09/14/2023',\n        date_formatted: '09/14/2023',\n        hours: '12',\n        minutes: '00',\n        am_pm: 'AM',\n        unix_timestamp: 1694649600000,\n        iso_timestamp: '2023-09-14T00:00:00.000Z',\n        timestamp: '09/14/2023 12:00 am',\n        time: 720,\n    },\n    field_2_raw: 'short text1 value',\n    field_3_raw: '150.00',\n    field_4_raw: {\n        street: 'street address 1',\n        street2: 'street address 2',\n        city: 'city',\n        state: 'province',\n        zip: '12345',\n        country: null,\n        longitude: null,\n        latitude: null,\n        full: 'street address 1 street address 2 city, province 12345',\n    },\n};\n\nconst formattedModeOutput = {\n    id: '65019d4e1630850027182f7c',\n    field_1: '09/14/2023',\n    field_2: 'short text1 value',\n    field_3: '$150.00',\n    field_4: 'street address 1<br />street address 2<br />city, province 12345',\n};\n\nit('should return valid outputs for each of the modes when valid input is provided', () => {\n    const bothModeFuncRes = getRecordOutput(validBodyInput, validModes.both);\n    const rawModeFuncRes = getRecordOutput(validBodyInput, validModes.raw);\n    const formattedModeFuncRes = getRecordOutput(\n        validBodyInput,\n        validModes.formatted\n    );\n\n    assert.deepEqual(bothModeOutput, bothModeFuncRes);\n    assert.deepEqual(rawModeOutput, rawModeFuncRes);\n    assert.deepEqual(formattedModeOutput, formattedModeFuncRes);\n});\n\nit('should return valid outputs for \"both\" mode if \"mode\" argument is not provided', () => {\n    const bothModeFuncRes = getRecordOutput(validBodyInput);\n\n    assert.deepEqual(bothModeOutput, bothModeFuncRes);\n});\n",
+      "appName": "knack",
+      "arguments": "(body, mode = 'both')",
+      "appVersion": 2
+    },
+    "getFormInterface": {
+      "rev": 2,
+      "code": "function getFormInterface(body) {\n// author KB\n// not used\n// intended for dynamic mapping of the form fields for the webhook interface, but the endpoint is not reliable\n    let spec = [];\n\n    body.forEach(e => {\n        let field = {};\n        field.label = e.label;\n        field.name = e.key;\n        field.type = 'text';\n\n        spec.push(field)\n    });\n\n    const out = [\n        {\n            \"name\": \"id\",\n            \"type\": \"text\",\n            \"label\": \"Form Key\"\n        },\n        {\n            \"name\": \"fields\",\n            \"type\": \"collection\",\n            \"label\": \"Form Fields\",\n            \"spec\": spec\n        }\n    ]\n    return out;\n}",
+      "name": "getFormInterface",
+      "test": null,
+      "appName": "knack",
+      "arguments": "(body)",
+      "appVersion": 2
+    },
+    "getRecordInterface": {
+      "rev": 3,
+      "code": "function getRecordInterface(fields, mode) {\n\tconst TYPE_DATE = [\n\t\t{ label: 'Date', name: 'date', type: 'text' },\n\t\t{ label: 'Date formatted', name: 'date_formatted', type: 'text' },\n\t\t{ label: 'Hours', name: 'hours', type: 'text' },\n\t\t{ label: 'Minutes', name: 'minutes', type: 'text' },\n\t\t{ label: 'AM/PM', name: 'am_pm', type: 'text' },\n\t\t{ label: 'Unix timestamp', name: 'unix_timestamp', type: 'text' },\n\t\t{ label: 'ISO timestamp', name: 'iso_timestamp', type: 'date' },\n\t\t{ label: 'Timestamp', name: 'timestamp', type: 'text' },\n\t\t{ label: 'Time', name: 'time', type: 'text' }\n\t]\n\tconst TYPE_DATE_CPL = []\n\tTYPE_DATE_CPL.push(...TYPE_DATE)\n\tTYPE_DATE_CPL.push({ label: 'To', name: 'to', type: 'collection', spec: TYPE_DATE})\n\tTYPE_DATE_CPL.push({ label: 'Repeat', name: 'repeat', type: 'collection', spec: [\n\t\t{ label: 'Start date', name: 'start_date', type: 'text' },\n\t\t{ label: 'End date', name: 'end_date', type: 'text' },\n\t\t{ label: 'End timestamp', name: 'end_timestamp', type: 'number' },\n\t\t{ label: 'Frequency', name: 'frequency', type: 'text' },\n\t\t{ label: 'Interval', name: 'interval', type: 'number' },\n\t\t{ label: 'Ends', name: 'endson', type: 'text' },\n\t\t{ label: 'Count', name: 'end_count', type: 'text' },\n\t]})\n\t\n\tconst TYPE_FILE = [\n\t\t{ label: 'ID', name: 'id', type: 'text' },\n\t\t{ label: 'Application ID', name: 'application_id', type: 'text' },\n\t\t{ label: 'S3', name: 's3', type: 'boolean' },\n\t\t{ label: 'Type', name: 'type', type: 'text' },\n\t\t{ label: 'Filename', name: 'filename', type: 'text' },\n\t\t{ label: 'URL', name: 'url', type: 'url' },\n\t\t{ label: 'Thumb URL', name: 'thumb_url', type: 'url' },\n\t\t{ label: 'Size', name: 'size', type: 'number' },\n\t\t{ label: 'Field key', name: 'field_key', type: 'text' }\n\t]\n\tconst TYPE_TIMES = [\n\t\t{ label: 'From', name: 'from', type: 'collection', spec: TYPE_DATE },\n\t\t{ label: 'To', name: 'to', type: 'collection', spec: TYPE_DATE }\n\t]\n\n\tconst intf = []\n\t;(fields || []).forEach(field => {\n\t\tconst formated = {\n\t\t\tlabel: field.label,\n\t\t\tname: field.key,\n\t\t\ttype: 'text'\n\t\t}\n\t\tconst raw = {\n\t\t\tlabel: formated.label + ' (raw)',\n\t\t\tname: formated.name + '_raw',\n\t\t\ttype: 'text'\n\t\t}\n\t\tswitch (field.type) {\n\t\t\tcase 'multiple_choice': {\n\t\t\t\traw.type = 'array'\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tcase 'boolean': {\n\t\t\t\traw.type = 'boolean'\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tcase 'name': {\n\t\t\t\traw.type = 'collection'\n\t\t\t\traw.spec = [\n\t\t\t\t\t{ label: 'Title', name: 'title', type: 'text' },\n\t\t\t\t\t{ label: 'First', name: 'first', type: 'text' },\n\t\t\t\t\t{ label: 'Midle', name: 'midle', type: 'text' },\n\t\t\t\t\t{ label: 'Last', name: 'last', type: 'text' }\n\t\t\t\t]\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tcase 'link': {\n\t\t\t\traw.type = 'collection'\n\t\t\t\traw.spec = [\n\t\t\t\t\t{ label: 'Label', name: 'label', type: 'text' },\n\t\t\t\t\t{ label: 'URL', name: 'url', type: 'url' }\n\t\t\t\t]\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tcase 'signature': {\n\t\t\t\traw.type = 'collection'\n\t\t\t\traw.spec = [\n\t\t\t\t\t{ label: 'Base30', name: 'base30', type: 'text' },\n\t\t\t\t\t{ label: 'SVG', name: 'svg', type: 'text' }\n\t\t\t\t]\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tcase 'phone': {\n\t\t\t\traw.type = 'collection'\n\t\t\t\traw.spec = [\n\t\t\t\t\t{ label: 'Area', name: 'area', type: 'text' },\n\t\t\t\t\t{ label: 'Number', name: 'number', type: 'text' },\n\t\t\t\t\t{ label: 'Full', name: 'full', type: 'text' },\n\t\t\t\t\t{ label: 'Formatted', name: 'formatted', type: 'text' }\n\t\t\t\t]\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tcase 'address': {\n\t\t\t\traw.type = 'collection'\n\t\t\t\traw.spec =  [\n\t\t\t\t\t{ label: 'Longitude', name: 'longitude', type: 'text' },\n\t\t\t\t\t{ label: 'Latitude', name: 'latitude', type: 'text' },\n\t\t\t\t\t{ label: 'Zip', name: 'zip', type: 'text' },\n\t\t\t\t\t{ label: 'State', name: 'state', type: 'text' },\n\t\t\t\t\t{ label: 'City', name: 'city', type: 'text' },\n\t\t\t\t\t{ label: 'Street', name: 'street', type: 'text' },\n\t\t\t\t\t{ label: 'Street2', name: 'street2', type: 'text' },\n\t\t\t\t\t{ label: 'Country', name: 'country', type: 'text' }\n\t\t\t\t]\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tcase 'email': {\n\t\t\t\traw.type = 'collection'\n\t\t\t\traw.spec = [\n\t\t\t\t\t{ label: 'Label', name: 'label', type: 'text' },\n\t\t\t\t\t{ label: 'Email', name: 'email', type: 'email' }\n\t\t\t\t]\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tcase 'image':\n\t\t\tcase 'file': {\n\t\t\t\traw.type = 'collection'\n\t\t\t\traw.spec =  TYPE_FILE\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tcase 'timer': {\n\t\t\t\traw.type = 'collection'\n\t\t\t\traw.spec = [\n\t\t\t\t\t{ label: 'Total time', name: 'total_time', type: 'number' },\n\t\t\t\t\t{ label: 'Times', name: 'times', type: 'array', spec: TYPE_TIMES }\n\t\t\t\t]\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tcase 'connection': {\n\t\t\t\traw.type = 'array'\n\t\t\t\traw.spec = [\n\t\t\t\t\t{ label: 'ID', name: 'id', type: 'text' },\n\t\t\t\t\t{ label: 'Identifier', name: 'identifier', type: 'text' }\n\t\t\t\t]\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tcase 'date_time': {\n\t\t\t\traw.type = 'collection'\n\t\t\t\traw.spec = TYPE_DATE_CPL\n\t\t\t\tbreak\n\t\t\t}\n\t\t}\n\t\tif (!mode) {\n\t\t\tmode = 'both'\n\t\t}\n\t\tif (mode === 'both' || mode === 'formatted') {\n\t\t\tintf.push(formated)\n\t\t}\n\t\tif (mode === 'both' || mode === 'raw') {\n\t\t\tintf.push(raw)\n\t\t}\n\t}) \n\treturn intf\n}",
+      "name": "getRecordInterface",
+      "test": null,
+      "appName": "knack",
+      "arguments": "(fields, mode)",
+      "appVersion": 2
+    },
+    "wrapMultipleChoiceRawInArray": {
+      "rev": 9,
+      "code": "function wrapMultipleChoiceRawInArray(input, fields) {\n\t/* \tconverts a single value of type text to an array in the output of most modules\n\t\tOnly for parameters that are \"type\": \"multiple_choice\" in the Knack API\n\t\t\"input\" is the response from the module's API (\"type\": \"multiple_choice\")\n\t\t\"fields\" can be response from Get Fields API or metadata.expect from Make module or collection of parameters from Watch Module\n\t\tmetadata.expect can have \"multiple\": true (Create/Update modules) or \"type\":\"hidden\" (Search/Get modules), \n\t\tupdated by: Kat Ben\n\t*/\n\n\tif (!input) return;\n\tif (typeof fields !== 'object') return\n\n\tfunction updateObj(obj, keys) {\n\t\tkeys.forEach(i => {\n\t\t\t// check if it's not array then make it array\n\t\t\t// all raw multiple_choise field should be array due to interface mapping\n\t\t\tif (!Array.isArray(obj[i])) {\n\t\t\t\tobj[i] = [obj[i]];\n\t\t\t}\n\t\t});\n\t\treturn obj;\n\t}\n\n\tlet arrayfields = [];\n\t//New Watch module has only collection of parameters\n\tif (!Array.isArray(fields)) {\n\t\tarrayfields = Object.keys(fields)\n\t\t\t.filter(item => /^field_\\d+?/.test(item))\n\t\t\t.map(item => item + '_raw');\n\t}\n\n\t//array of field keys/names that should be converted in old and new modules\n\tif (Array.isArray(fields)) {\n\t\tarrayfields = fields.filter(item => item.type == \"multiple_choice\" || item.multiple || item.type === 'hidden')\n\t\t\t.map(item => item.name ? item.name + '_raw' : item.key + '_raw');\n\t}\n\n\tconst matches = Object.keys(input).filter(i => arrayfields.includes(i));\n\treturn updateObj(input, matches);\n}",
+      "name": "wrapMultipleChoiceRawInArray",
+      "test": "it('should convert text to array for parameters with multiple:true',()=> {\r\n    // for Create/Update modules\r\n    const item = {\r\n        \"id\": \"67f808e6ff3c0602cec4d6c1\",\r\n        \"field_2_raw\": \"text\",\r\n        \"field_2\": \"text\",\r\n        \"field_3\": \"Resolved\",\r\n        \"field_3_raw\": \"Resolved\",\r\n        \"field_4\": \"Low, Medium\",\r\n        \"field_4_raw\": [\"Low\",\r\n                    \"Medium\"],\r\n        \"field_46\": \"\",\r\n        \"field_46_raw\": [],\r\n        \"field_48\": \"04/10/2025\",\r\n        \"field_48_raw\": {\r\n            \"date\": \"04/10/2025\",\r\n            \"date_formatted\": \"04/10/2025\"\r\n        }\r\n    };\r\n    //metadata.expect including helping parameters \r\n    const fields =[\r\n        {\r\n            \"name\": \"object_id\", //not part of the payload\r\n            \"type\": \"select\",\r\n            \"label\": \"Object\",\r\n            \"required\": true\r\n        },\r\n        {\r\n            \"name\": \"field_1\",\r\n            \"type\": \"text\",\r\n            \"label\": \"Title\"\r\n        },\r\n        {\r\n            \"name\": \"field_3\",\r\n            \"type\": \"select\",\r\n            \"label\": \"Status\",\r\n            \"multiple\": true,\r\n            \"validate\": {\r\n                \"enum\": [\r\n                    \"Open\",\r\n                    \"In Progress\",\r\n                    \"Resolved\",\r\n                    \"Closed\"\r\n                ]\r\n            }\r\n        },\r\n        {\r\n            \"name\": \"field_4\",\r\n            \"type\": \"select\",\r\n            \"label\": \"Priority\",\r\n            \"multiple\": true,\r\n            \"validate\": {\r\n                \"enum\": [\r\n                    \"Low\",\r\n                    \"Medium\",\r\n                    \"High\"\r\n                ]\r\n            }\r\n        },\r\n        {\r\n            \"name\": \"field_18\",\r\n            \"spec\": {\r\n                \"name\": \"value\",\r\n                \"type\": \"text\"\r\n            },\r\n            \"type\": \"array\",\r\n            \"label\": \"Category\"\r\n        },\r\n        {\r\n            \"name\": \"field_48_datetype\", //not part of the payload\r\n            \"type\": \"select\",\r\n            \"label\": \"Date (type)\",\r\n            \"validate\": {\r\n                \"enum\": [\r\n                    \"simple\",\r\n                    \"fromTo\",\r\n                    \"repeat\"\r\n                ]\r\n            }\r\n        },\r\n        {\r\n            \"name\": \"field_48\",\r\n            \"type\": \"text\",\r\n            \"label\": \"Date\"\r\n        }\r\n    ];\r\n    const output ={\r\n        \"id\": \"67f808e6ff3c0602cec4d6c1\",\r\n        \"field_2_raw\": \"text\",\r\n        \"field_2\": \"text\",\r\n        \"field_3\": \"Resolved\",\r\n        \"field_3_raw\": [\"Resolved\"],\r\n        \"field_4\": \"Low, Medium\",\r\n        \"field_4_raw\": [\"Low\",\r\n                    \"Medium\"],\r\n        \"field_46\": \"\",\r\n        \"field_46_raw\": [],\r\n        \"field_48\": \"04/10/2025\",\r\n        \"field_48_raw\": {\r\n            \"date\": \"04/10/2025\",\r\n            \"date_formatted\": \"04/10/2025\"\r\n        }\r\n    }\r\n\r\n    assert.deepStrictEqual(wrapMultipleChoiceRawInArray(item, fields),output); \r\n});\r\n\r\nit('should convert text to array for parameters type \"hidden\"',()=> {\r\n    //for Search/Get modules\r\n    const item = {\r\n        \"id\": \"67f808e6ff3c0602cec4d6c1\",\r\n        \"field_2_raw\": \"text\",\r\n        \"field_2\": \"text\",\r\n        \"field_3\": \"Resolved\",\r\n        \"field_3_raw\": \"Resolved\",\r\n        \"field_4\": \"Low, Medium\",\r\n        \"field_4_raw\": [\"Low\",\r\n                    \"Medium\"],\r\n        \"field_46\": \"\",\r\n        \"field_46_raw\": [],\r\n        \"field_48\": \"04/10/2025\",\r\n        \"field_48_raw\": {\r\n            \"date\": \"04/10/2025\",\r\n            \"date_formatted\": \"04/10/2025\"\r\n        }\r\n    };\r\n    //metadata.expect including helping parameters \r\n    const fields = [\r\n        {\r\n            \"name\": \"object_id\",\r\n            \"type\": \"select\",\r\n            \"label\": \"Object\",\r\n            \"required\": true\r\n        },\r\n        {\r\n            \"name\": \"record_id\",\r\n            \"type\": \"text\",\r\n            \"label\": \"Record ID\",\r\n            \"required\": true\r\n        },\r\n        {\r\n            \"name\": \"field_3\",\r\n            \"type\": \"hidden\"\r\n        },\r\n        {\r\n            \"name\": \"field_4\",\r\n            \"type\": \"hidden\"\r\n        },\r\n        {\r\n            \"name\": \"metadataExists\",\r\n            \"type\": \"hidden\",\r\n            \"default\":true\r\n        }\r\n    ]\r\n    const output ={\r\n        \"id\": \"67f808e6ff3c0602cec4d6c1\",\r\n        \"field_2_raw\": \"text\",\r\n        \"field_2\": \"text\",\r\n        \"field_3\": \"Resolved\",\r\n        \"field_3_raw\": [\"Resolved\"],\r\n        \"field_4\": \"Low, Medium\",\r\n        \"field_4_raw\": [\"Low\",\r\n                    \"Medium\"],\r\n        \"field_46\": \"\",\r\n        \"field_46_raw\": [],\r\n        \"field_48\": \"04/10/2025\",\r\n        \"field_48_raw\": {\r\n            \"date\": \"04/10/2025\",\r\n            \"date_formatted\": \"04/10/2025\"\r\n        }\r\n    }\r\n\r\n    assert.deepStrictEqual(wrapMultipleChoiceRawInArray(item, fields),output); \r\n});\r\n\r\nit('should convert text to array for collection of parameters in Watch module\" ',()=> {\r\n    const item = {\r\n        \"id\": \"67f808e6ff3c0602cec4d6c1\",\r\n        \"field_2_raw\": \"text\",\r\n        \"field_2\": \"text\",\r\n        \"field_3\": \"Resolved\",\r\n        \"field_3_raw\": \"Resolved\",\r\n        \"field_4\": \"Low, Medium\",\r\n        \"field_4_raw\": [\"Low\",\r\n                    \"Medium\"],\r\n        \"field_46\": \"\",\r\n        \"field_46_raw\": [],\r\n        \"field_48\": \"04/10/2025\",\r\n        \"field_48_raw\": {\r\n            \"date\": \"04/10/2025\",\r\n            \"date_formatted\": \"04/10/2025\"\r\n        }\r\n    };\r\n    //all parameters\r\n    const fields = {\r\n        \"page\": 1,\r\n        \"mode\": \"both\",\r\n        \"limit\": 2,\r\n        \"field_4\": true,\r\n        \"field_3\": true,\r\n        \"object_id\": \"object_5\",\r\n        \"metadataExists\": true,\r\n        \"autoincrement_id\": \"field_73\",\r\n        \"sort_field\": \"field_73\",\r\n        \"sort_order\": \"desc\",\r\n        \"rows_per_page\": 1000\r\n    };\r\n    const output ={\r\n        \"id\": \"67f808e6ff3c0602cec4d6c1\",\r\n        \"field_2_raw\": \"text\",\r\n        \"field_2\": \"text\",\r\n        \"field_3\": \"Resolved\",\r\n        \"field_3_raw\": [\"Resolved\"],\r\n        \"field_4\": \"Low, Medium\",\r\n        \"field_4_raw\": [\"Low\",\r\n                    \"Medium\"],\r\n        \"field_46\": \"\",\r\n        \"field_46_raw\": [],\r\n        \"field_48\": \"04/10/2025\",\r\n        \"field_48_raw\": {\r\n            \"date\": \"04/10/2025\",\r\n            \"date_formatted\": \"04/10/2025\"\r\n        }\r\n    }\r\n\r\n    assert.deepStrictEqual(wrapMultipleChoiceRawInArray(item, fields),output); \r\n});\r\n\r\nit('should convert text to array for parameters type \"multiple_choice\"',()=> {\r\n    //for old scenarios with additional call for metadata\r\n    const item = {\r\n        \"id\": \"67f808e6ff3c0602cec4d6c1\",\r\n        \"field_2_raw\": \"text\",\r\n        \"field_2\": \"text\",\r\n        \"field_3\": \"Resolved\",\r\n        \"field_3_raw\": \"Resolved\",\r\n        \"field_4\": \"Low, Medium\",\r\n        \"field_4_raw\": [\"Low\",\r\n                    \"Medium\"],\r\n        \"field_46\": \"\",\r\n        \"field_46_raw\": [],\r\n        \"field_48\": \"04/10/2025\",\r\n        \"field_48_raw\": {\r\n            \"date\": \"04/10/2025\",\r\n            \"date_formatted\": \"04/10/2025\"\r\n        }\r\n    };\r\n    //response from fields endpoint\r\n    const fields = [\r\n        {\r\n            \"label\": \"Title\",\r\n            \"key\": \"field_1\",\r\n            \"required\": false,\r\n            \"type\": \"short_text\"\r\n        },\r\n        {\r\n            \"label\": \"Description\",\r\n            \"key\": \"field_2\",\r\n            \"required\": false,\r\n            \"type\": \"rich_text\"\r\n        },\r\n        {\r\n            \"label\": \"Status\",\r\n            \"key\": \"field_3\",\r\n            \"required\": false,\r\n            \"type\": \"multiple_choice\",\r\n            \"choices\": [\r\n                \"Open\",\r\n                \"In Progress\",\r\n                \"Resolved\",\r\n                \"Closed\"\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"Priority\",\r\n            \"key\": \"field_4\",\r\n            \"required\": false,\r\n            \"type\": \"multiple_choice\",\r\n            \"choices\": [\r\n                \"Low\",\r\n                \"Medium\",\r\n                \"High\"\r\n            ]\r\n        }\r\n    ]; \r\n    const output ={\r\n        \"id\": \"67f808e6ff3c0602cec4d6c1\",\r\n        \"field_2_raw\": \"text\",\r\n        \"field_2\": \"text\",\r\n        \"field_3\": \"Resolved\",\r\n        \"field_3_raw\": [\"Resolved\"],\r\n        \"field_4\": \"Low, Medium\",\r\n        \"field_4_raw\": [\"Low\",\r\n                    \"Medium\"],\r\n        \"field_46\": \"\",\r\n        \"field_46_raw\": [],\r\n        \"field_48\": \"04/10/2025\",\r\n        \"field_48_raw\": {\r\n            \"date\": \"04/10/2025\",\r\n            \"date_formatted\": \"04/10/2025\"\r\n        }\r\n    }\r\n\r\n    assert.deepStrictEqual(wrapMultipleChoiceRawInArray(item, fields),output); \r\n});\r\n",
+      "appName": "knack",
+      "arguments": "(input, fields)",
+      "appVersion": 2
+    }
+  },
+  "approvedAt": "2022-08-31T14:34:55.322447+00:00",
+  "categories": [],
+  "opensource": false,
+  "description": null,
+  "iconColor32": null,
+  "iconColor64": null,
+  "installSpec": [],
+  "inviteToken": "9acc248c11db366a800761f2dc2e902e",
+  "versionFull": "2.2.10",
+  "compiledName": "knack",
+  "iconColor128": null,
+  "iconColor256": null,
+  "iconColor512": null,
+  "installJsonc": null,
+  "manifestVersion": 2,
+  "compilationError": null,
+  "installSpecJsonc": null
+}
